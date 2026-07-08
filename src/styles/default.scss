@@ -1,0 +1,77 @@
+$whiteSmoke: #f5f5f5;
+$navText: #111827;
+$skeletonBg: #e8ecef;
+$vectorBlue: #9babfd;
+$greyText: #848b9e;
+$primaryBlue: #2a67ff;
+$primaryBlueHover: #2758d4;
+$lightCyanBlue: #e4e9ee;
+$topicalBlue: #cbdafa;
+$paleRed: #e74c3c;
+$brinkPink: #f3a69e;
+$lightRed: #ffe8e6;
+$paleGray: #f7fafc;
+$darkIndigo: #0a193e;
+$white: #fff;
+$lightGrey: #d8dce1;
+$sunFlowerYellow: #f9df00;
+$goldenRod: #f1c40f;
+$greenishTeal: #2ecc71;
+$black: #000000;
+$darkBlue: #041f61;
+$cardBorder: #f6f3f3;
+$outlineBlue: #bfd1ff;
+$cardDarkBg: #f0f5fa;
+$success: #e2f3e9;
+$error: #fd371e;
+$errorBg: #fff6f5;
+$errorBorder: #ffe4e1;
+
+$font8: 8px;
+$font9: 9px;
+$font10: 10px;
+$font11: 11px;
+$font12: 12px;
+$font13: 13px;
+$font14: 14px;
+$font15: 15px;
+$font16: 16px;
+$font18: 18px;
+$font20: 20px;
+$font22: 22px;
+$font24: 24px;
+$font28: 28px;
+$font30: 30px;
+$font32: 32px;
+$font34: 34px;
+$font36: 36px;
+$font44: 44px;
+$font45: 45px;
+$font56: 56px;
+$font58: 58px;
+
+// ── Breakpoints ───────────────────────────────────────────────────────────────
+$sm: 640px;
+$md: 768px;
+$lg: 1024px;
+$xl: 1280px;
+$xxl: 1536px;
+
+// ── KingStake: Slate Black palette ────────────────────────────────────────────
+$appBg:        #0a0a0c;   // near-black, barely slate
+$appCard:      #111318;   // dark slate surface
+$appSecondary: #1a1d24;   // mid slate surface
+$appMuted:     #07080a;   // deep black trough
+$appBorder:    rgba(255, 255, 255, 0.07);
+
+// ── KingStake Gold (Primary Accent) ───────────────────────────────────────────
+$gold:         #f0b90b;
+$goldHover:    #d4a009;
+$goldMuted:    rgba(240, 185, 11, 0.1);
+$goldGlow:     rgba(240, 185, 11, 0.18);
+
+// ── Electric Cyan (Interactions / Active Turn) ─────────────────────────────────
+$cyan:         #00d4ff;
+$cyanHover:    #00b8e0;
+$cyanMuted:    rgba(0, 212, 255, 0.1);
+$cyanGlow:     rgba(0, 212, 255, 0.18);

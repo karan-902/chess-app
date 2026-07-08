@@ -1,0 +1,23 @@
+@use '../../../styles/default.scss' as *;
+
+.popover-content {
+    background: $appCard;
+    border: 1px solid $appBorder;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    animation: popover-in 0.12s ease;
+    max-width: 320px;
+
+    &:focus { outline: none; }
+}
+
+.popover-arrow {
+    fill: $appCard;
+}
+
+@keyframes popover-in {
+    from { opacity: 0; transform: scale(0.96); }
+    to   { opacity: 1; transform: scale(1); }
+}

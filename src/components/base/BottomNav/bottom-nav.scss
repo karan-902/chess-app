@@ -1,0 +1,52 @@
+@use '../../../styles/default.scss' as *;
+
+.bottom-nav {
+  height: 60px;
+  border-top: 1px solid rgba($white, 0.06);
+  background: rgba($appCard, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: flex;
+  align-items: stretch;
+  flex-shrink: 0;
+  z-index: 20;
+
+  // Hidden on md+ — sidebar nav (icon rail or full) takes over
+  @media (min-width: $md) { display: none; }
+
+  .bottom-nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    color: rgba($white, 0.28);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    position: relative;
+
+    &:active { transform: scale(0.92); }
+
+    &.active { color: $gold; }
+  }
+
+  .bottom-nav-label {
+    font-size: $font9;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-family: var(--font-mono);
+  }
+
+  .bottom-nav-indicator {
+    position: absolute;
+    top: 0;
+    width: 2rem;
+    height: 2px;
+    background: $gold;
+    border-radius: 0 0 0.125rem 0.125rem;
+    box-shadow: 0 0 8px rgba($gold, 0.6);
+  }
+}

@@ -1,0 +1,57 @@
+@use '../../../styles/default.scss' as *;
+
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.radio-item-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+}
+
+.radio-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.125rem;
+    height: 1.125rem;
+    border-radius: 50%;
+    border: 1.5px solid rgba($white, 0.25);
+    background: transparent;
+    cursor: pointer;
+    outline: none;
+    flex-shrink: 0;
+    transition: all 0.15s ease;
+
+    &[data-state='checked'] {
+        border-color: $gold;
+    }
+
+    &:hover:not([data-disabled]) {
+        border-color: rgba($gold, 0.5);
+    }
+
+    &[data-disabled] {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+}
+
+.radio-indicator {
+    display: block;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: $gold;
+}
+
+.radio-label {
+    font-family: var(--font-outfit);
+    font-size: $font13;
+    color: rgba($white, 0.7);
+    cursor: pointer;
+    user-select: none;
+}

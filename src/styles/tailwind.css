@@ -1,0 +1,26 @@
+@import 'tailwindcss' source(none);
+@source '../**/*.{js,ts,jsx,tsx}';
+
+@import 'tw-animate-css';
+
+/* ── Aceternity UI keyframes ─────────────────────────────────────────────── */
+
+@keyframes shimmer-slide {
+  to { transform: translateX(calc(100cqw - 100%)); }
+}
+
+@keyframes spin-around {
+  0%           { transform: translateZ(0) rotate(0); }
+  15%, 35%     { transform: translateZ(0) rotate(90deg); }
+  65%, 85%     { transform: translateZ(0) rotate(270deg); }
+  100%         { transform: translateZ(0) rotate(360deg); }
+}
+
+@keyframes ace-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes ace-bounce {
+  0%, 100% { transform: translateY(0);    opacity: 0.5; }
+  50%       { transform: translateY(-5px); opacity: 1;   }
+}

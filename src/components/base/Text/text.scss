@@ -1,0 +1,685 @@
+@use '../../../styles/default.scss' as *;
+
+.text {
+  // ── Font families ──────────────────────────────────────────────────────────
+  &.font-anybody  { font-family: var(--font-anybody); }
+  &.font-inter    { font-family: var(--font-inter); }
+  &.font-outfit   { font-family: var(--font-outfit); }
+  &.font-mono     { font-family: var(--font-mono); }
+  &.font-rajdhani { font-family: var(--font-outfit); letter-spacing: 0.04em; }
+
+  // ── Font sizes ─────────────────────────────────────────────────────────────
+  &.size-9  { font-size: $font9; }
+  &.size-10 { font-size: $font10; }
+  &.size-11 { font-size: $font11; }
+  &.size-12 { font-size: $font12; }
+  &.size-13 { font-size: $font13; }
+  &.size-14 { font-size: $font14; }
+  &.size-16 { font-size: $font16; }
+  &.size-18 { font-size: $font18; }
+  &.size-20 { font-size: $font20; }
+  &.size-22 { font-size: $font22; }
+  &.size-24 { font-size: $font24; }
+  &.size-28 { font-size: $font28; }
+  &.size-32 { font-size: $font32; }
+  &.size-36 { font-size: $font36; }
+
+  // ── Font weights ───────────────────────────────────────────────────────────
+  &.w-300 { font-weight: 300; }
+  &.w-400 { font-weight: 400; }
+  &.w-500 { font-weight: 500; }
+  &.w-600 { font-weight: 600; }
+  &.w-700 { font-weight: 700; }
+  &.w-800 { font-weight: 800; }
+
+  // ── Colors ─────────────────────────────────────────────────────────────────
+  &.color-white   { color: $white; }
+  &.color-primary { color: $primaryBlue; }
+  &.color-muted   { color: rgba($white, 0.38); }
+  &.color-accent  { color: $greenishTeal; }
+  &.color-danger  { color: $brinkPink; }
+  &.color-gold    { color: $gold; }
+  &.color-cyan    { color: $cyan; }
+
+  // ── Utilities ──────────────────────────────────────────────────────────────
+  &.uppercase { text-transform: uppercase; letter-spacing: 0.12em; }
+  &.truncate  { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block; }
+
+  // ── Custom variants (customClass) ──────────────────────────────────────────
+  &.section-title {
+    font-size: $font10;
+    color: rgba($white, 0.35);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-family: var(--font-mono);
+  }
+
+  &.wager-amount {
+    font-size: $font13;
+    font-weight: 700;
+    color: $gold;
+    font-family: var(--font-mono);
+    letter-spacing: 0.03em;
+  }
+
+  &.wager-label {
+    font-size: $font12;
+    color: rgba($white, 0.4);
+    font-family: var(--font-outfit);
+  }
+
+  &.wager-diff {
+    font-family: var(--font-mono);
+    font-size: $font10;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    padding: 0.125rem 0.5rem;
+    border-radius: 9999px;
+    border: 1px solid;
+    margin-left: auto;
+    text-transform: uppercase;
+
+    &.wager-diff--easy   { color: $greenishTeal; border-color: rgba($greenishTeal, 0.35); background: rgba($greenishTeal, 0.1); }
+    &.wager-diff--medium { color: $gold;         border-color: rgba($gold, 0.35);         background: rgba($gold, 0.1); }
+    &.wager-diff--hard   { color: $brinkPink;    border-color: rgba($brinkPink, 0.35);    background: rgba($brinkPink, 0.1); }
+  }
+
+  &.live-label {
+    font-size: $font10;
+    color: $greenishTeal;
+    font-family: var(--font-mono);
+    margin-left: auto;
+    letter-spacing: 0.1em;
+  }
+
+  &.player-name-text {
+    font-size: $font14;
+    font-weight: 600;
+    color: $white;
+    font-family: var(--font-inter);
+  }
+
+  &.player-rating-text {
+    font-size: $font11;
+    color: rgba($white, 0.35);
+    font-family: var(--font-mono);
+  }
+
+  &.timer-text {
+    font-size: $font18;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    color: rgba($white, 0.28);
+    flex-shrink: 0;
+    letter-spacing: 0.05em;
+    line-height: 1;
+
+    &.active {
+      color: $cyan;
+      text-shadow: 0 0 12px rgba($cyan, 0.45);
+    }
+
+    &.low-time {
+      color: $brinkPink;
+      text-shadow: 0 0 12px rgba($brinkPink, 0.5);
+      animation: timer-pulse 0.6s ease-in-out infinite alternate;
+    }
+  }
+
+  @keyframes timer-pulse {
+    from { opacity: 0.7; }
+    to   { opacity: 1; }
+  }
+
+  &.input-helper-text {
+    font-family: var(--font-mono);
+    font-size: $font11;
+    color: $paleRed;
+    letter-spacing: 0.02em;
+    line-height: 1.4;
+    padding-left: 0.25rem;
+  }
+
+  &.balance-amount-text {
+    font-size: $font36;
+    font-weight: 700;
+    color: $gold;
+    font-family: var(--font-mono);
+    letter-spacing: -0.02em;
+  }
+
+  &.balance-currency-text {
+    font-size: $font18;
+    color: rgba($gold, 0.5);
+    font-family: var(--font-mono);
+  }
+
+  &.balance-usd-text {
+    font-size: $font13;
+    color: rgba($white, 0.32);
+    font-family: var(--font-mono);
+  }
+
+  &.balance-profit-text {
+    font-size: $font12;
+    color: $greenishTeal;
+    font-family: var(--font-mono);
+    letter-spacing: 0.03em;
+  }
+
+  // ── Lobby ──────────────────────────────────────────────────────────────────
+
+  &.lobby-hero-icon {
+    font-size: 3.25rem;
+    color: $gold;
+    line-height: 1;
+    flex-shrink: 0;
+    animation: lobby-king-pulse 3s ease-in-out infinite alternate;
+    text-shadow: 0 0 24px rgba($gold, 0.5);
+
+    @media (min-width: $md) { font-size: 4rem; }
+  }
+
+  @keyframes lobby-king-pulse {
+    from { text-shadow: 0 0 16px rgba($gold, 0.3); }
+    to   { text-shadow: 0 0 48px rgba($gold, 0.75), 0 0 12px rgba($gold, 0.4); }
+  }
+
+  &.lobby-hero-title {
+    font-family: var(--font-outfit);
+    font-size: $font28;
+    font-weight: 800;
+    color: $white;
+    letter-spacing: 0.06em;
+    line-height: 1;
+    margin: 0;
+
+    @media (min-width: $md) { font-size: $font36; }
+  }
+
+  &.lobby-hero-sub {
+    font-family: var(--font-mono);
+    font-size: $font11;
+    color: rgba($white, 0.35);
+    letter-spacing: 0.08em;
+    margin: 0;
+
+    @media (min-width: $md) { font-size: $font12; }
+  }
+
+  &.lobby-block-label {
+    font-family: var(--font-mono);
+    font-size: $font10;
+    color: rgba($white, 0.35);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding-left: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba($white, 0.06);
+      display: block;
+    }
+  }
+
+  &.lmc-title {
+    font-family: var(--font-outfit);
+    font-size: $font16;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+
+    @media (min-width: $md) { font-size: $font18; }
+  }
+
+  &.lmc-desc {
+    font-family: var(--font-mono);
+    font-size: $font10;
+    opacity: 0.5;
+    text-align: center;
+    line-height: 1.5;
+    max-width: 12rem;
+  }
+
+  &.lmc-badge {
+    position: absolute;
+    top: 0.625rem;
+    right: 0.625rem;
+    font-family: var(--font-mono);
+    font-size: $font9;
+    letter-spacing: 0.06em;
+    border-radius: 9999px;
+    padding: 0.15rem 0.5rem;
+    pointer-events: none;
+
+    &.lmc-badge--soon {
+      color: $cyan;
+      border: 1px solid rgba($cyan, 0.4);
+      background: rgba($cyan, 0.08);
+      box-shadow: 0 0 10px rgba($cyan, 0.35), 0 0 4px rgba($cyan, 0.2);
+      animation: soon-glow 2s ease-in-out infinite alternate;
+    }
+
+    &.lmc-badge--active {
+      color: $gold;
+      border: 1px solid rgba($gold, 0.3);
+      background: rgba($gold, 0.1);
+    }
+  }
+
+  @keyframes soon-glow {
+    from { box-shadow: 0 0 6px rgba($cyan, 0.25), 0 0 2px rgba($cyan, 0.15); }
+    to   { box-shadow: 0 0 14px rgba($cyan, 0.55), 0 0 6px rgba($cyan, 0.3); }
+  }
+
+  &.ldc-label {
+    font-family: var(--font-outfit);
+    font-size: $font16;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    line-height: 1;
+  }
+
+  &.ldc-rating {
+    font-family: var(--font-mono);
+    font-size: $font10;
+    opacity: 0.55;
+    letter-spacing: 0.04em;
+  }
+
+  &.ldc-desc {
+    font-family: var(--font-mono);
+    font-size: $font9;
+    opacity: 0.38;
+    line-height: 1.4;
+    margin-top: 0.125rem;
+  }
+
+  &.ltc-label {
+    font-family: var(--font-outfit);
+    font-size: $font15;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    line-height: 1;
+  }
+
+  &.ltc-duration {
+    font-family: var(--font-mono);
+    font-size: $font11;
+    opacity: 0.65;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  &.ltc-desc {
+    font-family: var(--font-mono);
+    font-size: $font9;
+    opacity: 0.38;
+    line-height: 1.4;
+    margin-top: 0.1rem;
+  }
+
+  &.lobby-start-arrow {
+    font-size: $font20;
+    line-height: 1;
+  }
+
+  // ── Game Over Screen ────────────────────────────────────────────────────────
+
+  &.gos-title {
+    font-family: var(--font-outfit);
+    font-size: $font32;
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    font-style: italic;
+
+    &.gos-title--win  { color: $cyan;   text-shadow: 0 0 18px rgba($cyan, 0.6); }
+    &.gos-title--lose { color: #ff5a5a; text-shadow: 0 0 18px rgba(255, 90, 90, 0.5); }
+    &.gos-title--draw { color: rgba($white, 0.8); }
+  }
+
+  &.gos-stat-label {
+    font-family: var(--font-mono);
+    font-size: $font10;
+    letter-spacing: 0.14em;
+    color: rgba($white, 0.45);
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);
+  }
+
+  &.gos-stat-value {
+    font-family: var(--font-outfit);
+    font-size: $font30;
+    font-weight: 700;
+    color: $white;
+    line-height: 1;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
+  }
+
+  &.gos-rating--win  { color: $cyan !important;             text-shadow: 0 0 10px rgba($cyan, 0.5), 0 2px 8px rgba(0,0,0,0.9) !important; }
+  &.gos-rating--lose { color: #ff5a5a !important;           text-shadow: 0 0 10px rgba(255,90,90,0.4), 0 2px 8px rgba(0,0,0,0.9) !important; }
+  &.gos-rating--draw { color: rgba($white, 0.6) !important; text-shadow: 0 2px 8px rgba(0,0,0,0.9) !important; }
+  &.gos-accuracy     { color: $gold !important;             text-shadow: 0 0 10px rgba($gold, 0.4), 0 2px 8px rgba(0,0,0,0.9) !important; }
+
+  &.gos-match-label {
+    font-family: var(--font-mono);
+    font-size: $font11;
+    letter-spacing: 0.18em;
+    color: rgba($white, 0.6);
+  }
+
+  &.gos-reason {
+    font-family: var(--font-outfit);
+    font-size: 2.8rem;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    font-style: italic;
+    line-height: 1;
+    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.8);
+
+    &.gos-reason--win  { color: $gold;   text-shadow: 0 0 28px rgba($gold, 0.5), 0 2px 12px rgba(0,0,0,0.8); }
+    &.gos-reason--lose { color: #ff5a5a; text-shadow: 0 0 20px rgba(255,90,90,0.4), 0 2px 12px rgba(0,0,0,0.8); }
+    &.gos-reason--draw { color: rgba($white, 0.6); }
+  }
+
+  &.gos-opponent-icon {
+    font-size: $font14;
+    color: rgba($white, 0.35);
+  }
+
+  &.gos-opponent-name {
+    font-family: var(--font-mono);
+    font-size: $font12;
+    color: rgba($white, 0.5);
+  }
+
+  &.gos-btn-icon {
+    font-size: $font16;
+    line-height: 1;
+  }
+
+  // ── Move history ─────────────────────────────────────────────────────────────
+
+  &.history-reviewing-label {
+    font-family: var(--font-mono);
+    font-size: $font10;
+    color: $gold;
+    letter-spacing: 0.08em;
+    margin-left: 0.5rem;
+    animation: reviewing-pulse 1.5s ease-in-out infinite alternate;
+  }
+
+  &.history-empty {
+    padding: 0.5rem 0.25rem;
+    color: rgba($white, 0.25);
+    font-family: var(--font-mono);
+    font-size: $font11;
+  }
+
+  &.move-num {
+    color: rgba($white, 0.28);
+    width: 1.5rem;
+    flex-shrink: 0;
+    font-family: var(--font-mono);
+    font-size: $font12;
+    line-height: 1.6;
+  }
+
+  // ── Auth layout ─────────────────────────────────────────────────────────────
+
+  &.auth-queen-icon {
+    font-size: 2.75rem;
+    line-height: 1;
+    color: $gold;
+    filter: drop-shadow(0 0 24px rgba(240,185,11,0.5));
+  }
+
+  &.auth-brand-name {
+    font-family: var(--font-outfit);
+    font-size: 1.375rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: $gold;
+  }
+
+  &.auth-brand-sub {
+    font-family: var(--font-mono);
+    font-size: $font12;
+    color: rgba($white, 0.35);
+    letter-spacing: 0.08em;
+  }
+
+  &.auth-title {
+    font-family: var(--font-outfit);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: $white;
+    letter-spacing: 0.04em;
+    margin: 0 0 0.25rem;
+    display: block;
+  }
+
+  &.auth-subtitle {
+    font-family: var(--font-mono);
+    font-size: $font13;
+    color: rgba($white, 0.4);
+    margin: 0;
+    display: block;
+  }
+
+  &.auth-divider-text {
+    font-family: var(--font-mono);
+    font-size: $font11;
+    color: rgba($white, 0.25);
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+  }
+
+  &.auth-social-icon {
+    font-size: 1rem;
+    line-height: 1;
+  }
+
+  &.auth-wallet-name {
+    font-size: $font11;
+    color: rgba($white, 0.5);
+  }
+
+  &.auth-footer-text {
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: $font13;
+    color: rgba($white, 0.35);
+    margin: 0;
+    display: block;
+
+    a {
+      color: $gold;
+      font-weight: 600;
+      text-decoration: none;
+      &:hover { text-decoration: underline; }
+    }
+  }
+
+  &.phone-flag {
+    font-size: $font16;
+    line-height: 1;
+  }
+
+  &.phone-dial {
+    font-family: var(--font-mono);
+    font-size: $font13;
+    color: rgba($white, 0.6);
+  }
+
+  &.otp-resend-text {
+    font-family: var(--font-mono);
+    font-size: $font12;
+    color: rgba($white, 0.35);
+  }
+
+  &.auth-divider-text {
+    font-family: var(--font-mono);
+    font-size: $font11;
+    color: rgba($white, 0.25);
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+  }
+
+  &.auth-verified-email-text {
+    font-family: var(--font-mono);
+    font-size: $font13;
+    color: rgba($white, 0.6);
+  }
+
+  &.auth-google-btn-label {
+    font-family: var(--font-outfit);
+    font-size: $font14;
+    font-weight: 500;
+    color: rgba($white, 0.75);
+    letter-spacing: 0.01em;
+  }
+
+  // ── Auth left panel ──────────────────────────────────────────────────────────
+
+  &.auth-left-queen {
+    position: absolute;
+    bottom: -2rem;
+    right: -3rem;
+    font-size: 22rem;
+    line-height: 1;
+    color: rgba($gold, 0.04);
+    pointer-events: none;
+    user-select: none;
+    filter: blur(2px);
+  }
+
+  &.auth-left-logo {
+    font-size: 2rem;
+    color: $gold;
+    filter: drop-shadow(0 0 20px rgba($gold, 0.5));
+    line-height: 1;
+  }
+
+  &.auth-left-name {
+    font-family: var(--font-outfit);
+    font-size: $font22;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: $gold;
+  }
+
+  &.auth-left-tagline {
+    font-family: var(--font-mono);
+    font-size: $font11;
+    color: rgba($white, 0.3);
+    letter-spacing: 0.1em;
+    margin: 0;
+  }
+
+  &.auth-left-h2 {
+    font-family: var(--font-outfit);
+    font-size: $font44;
+    font-weight: 700;
+    color: $white;
+    line-height: 1.1;
+    letter-spacing: 0.02em;
+    margin: 0 0 0.75rem;
+    display: block;
+  }
+
+  &.auth-left-desc {
+    font-family: var(--font-outfit);
+    font-size: $font15;
+    color: rgba($white, 0.4);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  &.auth-left-feature-title {
+    font-family: var(--font-outfit);
+    font-size: $font14;
+    font-weight: 600;
+    color: $white;
+  }
+
+  &.auth-left-feature-sub {
+    font-family: var(--font-mono);
+    font-size: $font11;
+    color: rgba($white, 0.35);
+  }
+
+  &.auth-left-quote-text {
+    font-family: var(--font-outfit);
+    font-size: $font14;
+    color: rgba($white, 0.7);
+    line-height: 1.7;
+    font-style: italic;
+    margin: 0 0 0.875rem;
+  }
+
+  &.auth-left-quote-author {
+    font-family: var(--font-outfit);
+    font-size: $font13;
+    font-weight: 600;
+    color: $white;
+  }
+
+  &.auth-left-quote-title {
+    font-family: var(--font-mono);
+    font-size: $font11;
+    color: rgba($white, 0.35);
+  }
+
+  // ── Register ─────────────────────────────────────────────────────────────────
+
+  &.reg-method-title {
+    font-family: var(--font-outfit);
+    font-size: $font14;
+    font-weight: 600;
+    color: $white;
+    display: block;
+  }
+
+  &.reg-method-sub {
+    font-family: var(--font-mono);
+    font-size: $font11;
+    color: rgba($white, 0.35);
+    display: block;
+  }
+
+  &.reg-method-arrow {
+    color: rgba($white, 0.2);
+    flex-shrink: 0;
+    transition: color 0.15s ease;
+  }
+
+  &.field-required {
+    font-size: $font11;
+    color: rgba($gold, 0.6);
+    margin-left: 0.25rem;
+  }
+
+  &.wallet-connected-text {
+    font-family: var(--font-outfit);
+    font-size: $font13;
+    font-weight: 500;
+    color: #22c55e;
+  }
+
+  &.wallet-connected-addr {
+    font-family: var(--font-mono);
+    font-size: $font12;
+    color: rgba($white, 0.3);
+    margin-left: auto;
+  }
+}
+
+@keyframes reviewing-pulse {
+  from { opacity: 0.6; }
+  to   { opacity: 1; }
+}

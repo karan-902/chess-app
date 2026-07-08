@@ -1,0 +1,10 @@
+@use '../../../styles/default.scss' as *;
+
+.label {
+    font-family: var(--font-outfit);
+    font-size: $font13;
+    font-weight: 500;
+    color: rgba($white, 0.65);
+    cursor: pointer;
+    user-select: none;
+}

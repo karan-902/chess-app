@@ -1,0 +1,41 @@
+@use '../../../styles/default.scss' as *;
+
+.collapsible-root {
+    width: 100%;
+}
+
+.collapsible-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: $appCard;
+    border: 1px solid $appBorder;
+    border-radius: 0.75rem;
+    font-family: var(--font-outfit);
+    font-size: $font14;
+    color: rgba($white, 0.75);
+    cursor: pointer;
+    outline: none;
+    transition: all 0.15s ease;
+
+    &:hover { color: $white; border-color: rgba($white, 0.12); }
+}
+
+.collapsible-content {
+    overflow: hidden;
+
+    &[data-state='open']   { animation: collapsible-open 0.2s ease; }
+    &[data-state='closed'] { animation: collapsible-close 0.15s ease; }
+}
+
+@keyframes collapsible-open {
+    from { height: 0; opacity: 0; }
+    to   { height: var(--radix-collapsible-content-height); opacity: 1; }
+}
+
+@keyframes collapsible-close {
+    from { height: var(--radix-collapsible-content-height); opacity: 1; }
+    to   { height: 0; opacity: 0; }
+}

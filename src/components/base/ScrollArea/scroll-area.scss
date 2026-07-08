@@ -1,0 +1,51 @@
+@use '../../../styles/default.scss' as *;
+
+.scroll-area-root {
+    overflow: hidden;
+    width: 100%;
+}
+
+.scroll-area-viewport {
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+}
+
+.scroll-area-scrollbar {
+    display: flex;
+    user-select: none;
+    touch-action: none;
+    padding: 2px;
+    background: rgba($white, 0.03);
+    transition: background 0.15s ease;
+
+    &:hover { background: rgba($white, 0.06); }
+
+    &[data-orientation='vertical'] {
+        width: 6px;
+    }
+
+    &[data-orientation='horizontal'] {
+        flex-direction: column;
+        height: 6px;
+    }
+}
+
+.scroll-area-thumb {
+    flex: 1;
+    background: rgba($white, 0.18);
+    border-radius: 9999px;
+    position: relative;
+
+    &:hover { background: rgba($white, 0.28); }
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: -2px;
+    }
+}
+
+.scroll-area-corner {
+    background: rgba($white, 0.03);
+}

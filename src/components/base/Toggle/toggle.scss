@@ -1,0 +1,34 @@
+@use '../../../styles/default.scss' as *;
+
+.toggle-root {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.25rem;
+    padding: 0 0.75rem;
+    border-radius: 0.5rem;
+    border: 1px solid $appBorder;
+    background: transparent;
+    font-family: var(--font-outfit);
+    font-size: $font13;
+    color: rgba($white, 0.5);
+    cursor: pointer;
+    outline: none;
+    transition: all 0.15s ease;
+
+    &[data-state='on'] {
+        background: rgba($gold, 0.1);
+        border-color: rgba($gold, 0.35);
+        color: $gold;
+    }
+
+    &:hover:not([data-disabled]) {
+        color: rgba($white, 0.8);
+        border-color: rgba($white, 0.15);
+    }
+
+    &[data-disabled] {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+}

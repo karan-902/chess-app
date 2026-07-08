@@ -1,0 +1,161 @@
+@use "./default.scss" as *;
+
+:root {
+    --font-anybody:  'Outfit', sans-serif;
+    --font-outfit:   'Outfit', sans-serif;
+    --font-inter:    'Outfit', sans-serif;
+    --font-mono:     'Outfit', sans-serif;
+
+    --background: #{$appBg};
+    --foreground: #{$white};
+    --card: #{$appCard};
+    --card-foreground: #{$white};
+    --primary: #{$gold};
+    --primary-foreground: #{$appBg};
+    --secondary: #{$appSecondary};
+    --secondary-foreground: #{$white};
+    --muted: #{$appMuted};
+    --muted-foreground: rgba(255,255,255,0.4);
+    --accent: #{$cyan};
+    --accent-foreground: #{$appBg};
+    --destructive: #{$paleRed};
+    --destructive-foreground: #{$white};
+    --border: #{$appBorder};
+    --input-background: #{$appMuted};
+    --ring: #{$cyanGlow};
+}
+
+body {
+    margin: 0;
+    background-color: $appBg;
+    color: $white;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+#root {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.section-title {
+    font-size: $font10;
+    color: rgba($white, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-family: var(--font-mono);
+}
+
+
+.live-dot {
+    width: 0.375rem;
+    height: 0.375rem;
+    border-radius: 50%;
+    background: $greenishTeal;
+    flex-shrink: 0;
+    animation: blink 1.5s infinite;
+    box-shadow: 0 0 6px rgba($greenishTeal, 0.7);
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+::-webkit-scrollbar { width: 3px; height: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background-color: rgba($gold, 0.2); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background-color: rgba($gold, 0.4); }
+* { scrollbar-width: thin; scrollbar-color: rgba($gold, 0.2) transparent; }
+
+// ── Sonner toast theme ────────────────────────────────────────────────────────
+[data-sonner-toaster] {
+    --normal-bg:      #{$appCard};
+    --normal-border:  #{$appBorder};
+    --normal-text:    #{$white};
+    --success-bg:     #{$appCard};
+    --success-border: #{$appCard};
+    --success-text:   #{$white};
+    --error-bg:       #{$appCard};
+    --error-border:   #{$appCard};
+    --error-text:     #{$white};
+    --warning-bg:     #{$appCard};
+    --warning-border: #{$appCard};
+    --warning-text:   #{$white};
+    --info-bg:        #{$appCard};
+    --info-border:    #{$appCard};
+    --info-text:      #{$white};
+    --border-radius:  0.875rem;
+    font-family:      'Outfit', sans-serif;
+}
+
+[data-sonner-toast] {
+    padding: 0.875rem 1rem !important;
+    gap: 0.625rem !important;
+    border: 1px solid rgba($white, 0.07) !important;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.55) !important;
+
+    &[data-type="error"] {
+        border-color: rgba($paleRed, 0.28) !important;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba($paleRed, 0.1) !important;
+
+        [data-icon] svg { color: $paleRed !important; }
+    }
+
+    &[data-type="success"] {
+        border-color: rgba($greenishTeal, 0.28) !important;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba($greenishTeal, 0.1) !important;
+
+        [data-icon] svg { color: $greenishTeal !important; }
+    }
+
+    &[data-type="warning"] {
+        border-color: rgba($gold, 0.28) !important;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba($gold, 0.1) !important;
+
+        [data-icon] svg { color: $gold !important; }
+    }
+
+    &[data-type="info"] {
+        border-color: rgba($cyan, 0.28) !important;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba($cyan, 0.1) !important;
+
+        [data-icon] svg { color: $cyan !important; }
+    }
+
+    [data-title] {
+        font-size: $font14 !important;
+        font-weight: 600 !important;
+        color: $white !important;
+        line-height: 1.35 !important;
+    }
+
+    [data-description] {
+        font-size: $font13 !important;
+        font-weight: 400 !important;
+        color: rgba($white, 0.52) !important;
+        line-height: 1.55 !important;
+        margin-top: 0.25rem !important;
+    }
+
+    [data-close-button] {
+        background: rgba($white, 0.05) !important;
+        border: 1px solid rgba($white, 0.08) !important;
+        color: rgba($white, 0.45) !important;
+        border-radius: 50% !important;
+        transition: background 0.15s, color 0.15s !important;
+
+        &:hover {
+            background: rgba($white, 0.1) !important;
+            color: $white !important;
+        }
+    }
+}

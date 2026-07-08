@@ -1,0 +1,614 @@
+@use '../../../styles/default.scss' as *;
+
+@keyframes btn-spin {
+  to { transform: rotate(360deg); }
+}
+
+.btn-spinner {
+  animation: btn-spin 0.65s linear infinite;
+  flex-shrink: 0;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  font-family: var(--font-outfit);
+  gap: 0.5rem;
+  letter-spacing: 0.02em;
+
+  &:active  { transform: scale(0.97); }
+  &:disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
+  &.btn--loading { cursor: wait; }
+
+  // ── Variants ──────────────────────────────────────────────────────────────────
+
+  &.primary {
+    background: $gold;
+    color: $appBg;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    box-shadow: 0 4px 16px rgba($gold, 0.3);
+    &:hover { background: $goldHover; box-shadow: 0 4px 20px rgba($gold, 0.4); }
+  }
+
+  &.ghost {
+    background: rgba($white, 0.04);
+    border: 1px solid rgba($white, 0.08);
+    color: rgba($white, 0.55);
+    &:hover { color: $white; border-color: rgba($white, 0.15); background: rgba($white, 0.07); }
+  }
+
+  &.outline {
+    background: transparent;
+    border: 1px solid rgba($gold, 0.28);
+    color: $gold;
+    &:hover { background: $goldMuted; }
+  }
+
+  &.danger {
+    background: rgba($white, 0.04);
+    border: 1px solid rgba($white, 0.08);
+    color: rgba($white, 0.55);
+    &:hover { border-color: rgba($paleRed, 0.4); color: $brinkPink; background: rgba($paleRed, 0.06); }
+  }
+
+  // ── Sizes ─────────────────────────────────────────────────────────────────────
+
+  &.sm  { height: 2.5rem;  padding: 0 0.875rem; font-size: $font13; }
+  &.md  { height: 2.75rem; padding: 0 1rem;     font-size: $font14; }
+  &.lg  { height: 3rem;    padding: 0 1.25rem;  font-size: $font15; }
+  &.full-width { width: 100%; }
+
+  // ── Chess-specific variants ───────────────────────────────────────────────────
+
+  &.history-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    background: rgba($appCard, 0.7);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba($white, 0.06);
+    color: rgba($white, 0.4);
+    font-family: var(--font-mono);
+    font-size: $font11;
+    font-weight: 400;
+
+    &:active { transform: none; }
+    &:hover  { background: rgba($appSecondary, 0.8); color: rgba($white, 0.65); }
+  }
+
+  &.cta-close {
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    background: rgba($white, 0.07);
+    border: 1px solid rgba($white, 0.1);
+    color: rgba($white, 0.5);
+    padding: 0;
+    flex-shrink: 0;
+    &:active { transform: scale(0.9); }
+    &:hover  { color: $white; }
+  }
+
+  &.max-btn {
+    height: 3rem;
+    padding: 0 1rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba($gold, 0.22);
+    background: rgba($gold, 0.06);
+    font-size: $font12;
+    color: $gold;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    &:hover { background: rgba($gold, 0.1); }
+  }
+
+  &.network-btn {
+    flex: 1;
+    height: 2.75rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba($white, 0.08);
+    background: rgba($white, 0.03);
+    font-size: $font13;
+    color: rgba($white, 0.45);
+    font-family: var(--font-mono);
+    font-weight: 400;
+    transition: all 0.15s ease;
+
+    &.active {
+      border-color: rgba($gold, 0.35);
+      background: rgba($gold, 0.08);
+      color: $gold;
+      font-weight: 600;
+    }
+  }
+
+  &.filter-chip-btn {
+    height: 2.125rem;
+    padding: 0 0.875rem;
+    border-radius: 9999px;
+    border: 1px solid rgba($white, 0.08);
+    background: rgba($appCard, 0.7);
+    font-size: $font12;
+    color: rgba($white, 0.45);
+    font-family: var(--font-mono);
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    text-transform: uppercase;
+    flex-shrink: 0;
+
+    &.active {
+      border-color: rgba($gold, 0.35);
+      background: rgba($gold, 0.08);
+      color: $gold;
+      font-weight: 600;
+      box-shadow: 0 0 10px rgba($gold, 0.1);
+    }
+  }
+
+  // ── Lobby start (Button component) ────────────────────────────────────────
+
+  &.lobby-start-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    width: 100%;
+    height: 3.5rem;
+    border-radius: 9999px;
+    border: none;
+    background: linear-gradient(135deg, $gold 0%, $goldHover 100%);
+    color: #1a0e00;
+    font-family: var(--font-outfit);
+    font-size: $font16;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s, filter 0.15s;
+    box-shadow: 0 4px 28px rgba($gold, 0.4), 0 2px 10px rgba(0, 0, 0, 0.4);
+
+    &:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 32px rgba($gold, 0.5);
+      filter: brightness(1.06);
+    }
+
+    &:active:not(:disabled) { transform: scale(0.98); }
+
+    &.lobby-start-btn--disabled,
+    &:disabled {
+      opacity: 0.38;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+  }
+}
+
+// ── Move history nav buttons ──────────────────────────────────────────────────
+
+.history-nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 0.375rem;
+  border: 1px solid rgba($white, 0.08);
+  background: rgba($white, 0.04);
+  color: rgba($white, 0.45);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  flex-shrink: 0;
+
+  &:hover:not(:disabled) {
+    background: rgba($white, 0.09);
+    color: $white;
+    border-color: rgba($white, 0.15);
+  }
+  &:disabled { opacity: 0.25; cursor: not-allowed; }
+
+  &--live { margin-left: auto; }
+}
+
+.move-cell {
+  background: transparent;
+  border: none;
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.25rem;
+  font-family: var(--font-mono);
+  font-size: $font12;
+  color: rgba($white, 0.65);
+  cursor: pointer;
+  width: 3.5rem;
+  text-align: left;
+  flex-shrink: 0;
+  transition: background 0.12s, color 0.12s;
+
+  &:hover { background: rgba($white, 0.07); color: $white; }
+
+  &--active {
+    background: rgba($gold, 0.15);
+    color: $gold;
+    font-weight: 600;
+  }
+}
+
+// ── Lobby native buttons ───────────────────────────────────────────────────────
+
+.lobby-mode-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  padding: 2rem 1.25rem 1.875rem;
+  border-radius: 1.25rem;
+  border: 1.5px solid rgba($white, 0.08);
+  background: rgba($appCard, 0.8);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s, transform 0.15s;
+  color: rgba($white, 0.45);
+  text-align: center;
+  min-height: 11rem;
+  justify-content: center;
+  overflow: hidden;
+
+  @media (min-width: $md) { min-height: 12rem; }
+
+  &:hover:not(:disabled) {
+    border-color: rgba($gold, 0.22);
+    color: rgba($white, 0.8);
+    background: rgba($appCard, 1);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+
+    .lmc-icon-wrap {
+      background: rgba($white, 0.1);
+      border-color: rgba($white, 0.14);
+    }
+  }
+
+  &:active:not(:disabled) { transform: scale(0.98) translateY(0); }
+
+  &:disabled { cursor: not-allowed; opacity: 0.38; }
+
+  &--locked {
+    pointer-events: none;
+    cursor: default;
+    border-color: rgba($white, 0.05) !important;
+    background: rgba($appCard, 0.45) !important;
+    box-shadow: none !important;
+    transform: none !important;
+    color: rgba($white, 0.2) !important;
+
+    .lmc-icon-wrap { opacity: 0.3; }
+  }
+
+  &.active {
+    border-color: rgba($gold, 0.55);
+    background: rgba($gold, 0.06);
+    color: $gold;
+    box-shadow: 0 0 30px rgba($gold, 0.12), 0 4px 20px rgba(0,0,0,0.4);
+    transform: translateY(-1px);
+
+    .lmc-icon-wrap {
+      background: rgba($gold, 0.12);
+      border-color: rgba($gold, 0.2);
+      color: $gold;
+    }
+  }
+}
+
+.lobby-diff-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 1.25rem 0.625rem 1.375rem;
+  border-radius: 1.125rem;
+  border: 1.5px solid rgba($white, 0.08);
+  background: rgba($appCard, 0.8);
+  cursor: pointer;
+  transition: border-color 0.18s, background 0.18s, box-shadow 0.18s, transform 0.15s;
+  color: rgba($white, 0.45);
+  text-align: center;
+  min-height: 7.5rem;
+  justify-content: center;
+
+  @media (min-width: $md) {
+    padding: 1.5rem 0.75rem 1.625rem;
+    min-height: 8.5rem;
+  }
+
+  &:hover { border-color: rgba($white, 0.16); color: rgba($white, 0.75); transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,0,0,0.25); }
+  &:active { transform: scale(0.97) translateY(0); }
+
+  &.ldc--green.active { border-color: rgba($greenishTeal, 0.6); background: rgba($greenishTeal, 0.08); color: $greenishTeal; box-shadow: 0 0 24px rgba($greenishTeal, 0.15); transform: translateY(-1px); }
+  &.ldc--gold.active  { border-color: rgba($gold, 0.6);         background: rgba($gold, 0.08);         color: $gold;         box-shadow: 0 0 24px rgba($gold, 0.15);         transform: translateY(-1px); }
+  &.ldc--red.active   { border-color: rgba($paleRed, 0.6);      background: rgba($paleRed, 0.08);      color: $brinkPink;    box-shadow: 0 0 24px rgba($paleRed, 0.15);      transform: translateY(-1px); }
+
+  &.ldc--featured {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    text-align: left;
+    gap: 1.25rem;
+    padding: 1.5rem 1.75rem;
+    align-items: center;
+    min-height: 6rem;
+    justify-content: flex-start;
+  }
+}
+
+// ── Lobby time control cards ──────────────────────────────────────────────────
+
+.lobby-time-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 1.125rem 0.625rem 1.25rem;
+  border-radius: 1.125rem;
+  border: 1.5px solid rgba($white, 0.08);
+  background: rgba($appCard, 0.8);
+  cursor: pointer;
+  transition: border-color 0.18s, background 0.18s, box-shadow 0.18s, transform 0.15s;
+  color: rgba($white, 0.45);
+  text-align: center;
+  min-height: 6.5rem;
+  justify-content: center;
+
+  @media (min-width: $md) {
+    padding: 1.375rem 0.75rem 1.5rem;
+    min-height: 7.5rem;
+  }
+
+  &:hover { border-color: rgba($white, 0.16); color: rgba($white, 0.75); transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,0,0,0.25); }
+  &:active { transform: scale(0.97) translateY(0); }
+
+  &.ltc--red.active    { border-color: rgba($paleRed, 0.6);      background: rgba($paleRed, 0.08);      color: $brinkPink;    box-shadow: 0 0 24px rgba($paleRed, 0.15);      transform: translateY(-1px); }
+  &.ltc--gold.active   { border-color: rgba($gold, 0.6);         background: rgba($gold, 0.08);         color: $gold;         box-shadow: 0 0 24px rgba($gold, 0.15);         transform: translateY(-1px); }
+  &.ltc--cyan.active   { border-color: rgba($cyan, 0.6);         background: rgba($cyan, 0.08);         color: $cyan;         box-shadow: 0 0 24px rgba($cyan, 0.15);         transform: translateY(-1px); }
+  &.ltc--green.active  { border-color: rgba($greenishTeal, 0.6); background: rgba($greenishTeal, 0.08); color: $greenishTeal; box-shadow: 0 0 24px rgba($greenishTeal, 0.15); transform: translateY(-1px); }
+}
+
+// ── Auth native buttons ────────────────────────────────────────────────────────
+
+.auth-social-btn {
+  width: 100% !important;
+  height: 2.875rem !important;
+  border-radius: 0.75rem !important;
+  border: 1px solid rgba($white, 0.1) !important;
+  background: $appSecondary !important;
+  color: rgba($white, 0.7) !important;
+  font-family: var(--font-outfit) !important;
+  font-size: $font13 !important;
+  font-weight: 500 !important;
+  box-shadow: none !important;
+  gap: 0.625rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background: rgba($white, 0.07) !important;
+    border-color: rgba($white, 0.18) !important;
+    color: $white !important;
+    box-shadow: none !important;
+  }
+  &:active { transform: scale(0.98); }
+}
+
+.auth-wallet-btn {
+  flex: 1;
+  height: 2.875rem !important;
+  border-radius: 0.75rem !important;
+  border: 1px solid rgba($white, 0.1) !important;
+  background: $appSecondary !important;
+  color: rgba($white, 0.7) !important;
+  font-family: var(--font-outfit) !important;
+  font-size: $font13 !important;
+  font-weight: 500 !important;
+  box-shadow: none !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0.5rem !important;
+
+  &:hover {
+    background: rgba($white, 0.07) !important;
+    border-color: rgba($white, 0.18) !important;
+    color: $white !important;
+    box-shadow: none !important;
+  }
+  &:active { transform: scale(0.98); }
+}
+
+.auth-submit-btn {
+  width: 100% !important;
+  height: 3.25rem !important;
+  margin-top: 0.25rem;
+  border-radius: 9999px !important;
+  border: none !important;
+  font-family: var(--font-outfit) !important;
+  font-size: $font15 !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  color: #1a0e00 !important;
+  background: linear-gradient(135deg, #f0b90b 0%, #d4a009 100%) !important;
+  box-shadow: 0 4px 24px rgba(240,185,11,0.35), 0 2px 8px rgba(0,0,0,0.4) !important;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover { transform: translateY(-1px); }
+  &:active { transform: scale(0.98); }
+}
+
+.auth-google-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  width: 100%;
+  height: 3rem;
+  border-radius: 0.875rem;
+  border: 1.5px solid rgba($white, 0.1);
+  background: rgba($white, 0.04);
+  cursor: pointer;
+  transition: border-color 0.18s, background 0.18s, transform 0.15s;
+
+  &:hover {
+    border-color: rgba($white, 0.2);
+    background: rgba($white, 0.07);
+    transform: translateY(-1px);
+  }
+  &:active { transform: scale(0.98); }
+}
+
+.otp-resend-btn {
+  background: transparent;
+  border: none;
+  font-family: var(--font-mono);
+  font-size: $font12;
+  color: $gold;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 0.15s ease;
+
+  &:hover { opacity: 0.75; }
+}
+
+.reg-method-row {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  width: 100%;
+  padding: 0.875rem 1rem;
+  background: $appSecondary;
+  border: 1px solid rgba($white, 0.08);
+  border-radius: 0.875rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+  text-align: left;
+
+  &:hover {
+    border-color: rgba($gold, 0.35);
+    background: rgba($gold, 0.03);
+
+    .reg-method-arrow { color: $gold; }
+  }
+  &:active { transform: scale(0.99); }
+
+}
+
+.reg-back-link {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-family: var(--font-mono);
+  font-size: $font12;
+  color: rgba($white, 0.35);
+  cursor: pointer;
+  transition: color 0.15s ease;
+  width: fit-content;
+
+  &:hover { color: $gold; }
+}
+
+.auth-left-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: rgba($white, 0.2);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.2s ease, width 0.2s ease;
+
+  &--active {
+    width: 20px;
+    background: $gold;
+  }
+}
+
+// ── Game Over Screen native buttons ───────────────────────────────────────────
+
+.gos-icon-btn {
+  background: rgba($white, 0.08);
+  border: 1px solid rgba($white, 0.1);
+  border-radius: 50%;
+  width: 2.25rem;
+  height: 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba($white, 0.55);
+  font-size: $font15;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+
+  &:hover { background: rgba($white, 0.14); color: $white; }
+}
+
+.gos-btn-primary {
+  width: 100%;
+  padding: 1.05rem;
+  border-radius: 0.875rem;
+  border: none;
+  background: linear-gradient(135deg, $gold 0%, $goldHover 100%);
+  color: #1a0e00;
+  font-family: var(--font-outfit);
+  font-size: $font18;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 20px rgba($gold, 0.3);
+  transition: transform 0.15s, box-shadow 0.15s;
+
+  &:hover  { transform: translateY(-1px); box-shadow: 0 6px 26px rgba($gold, 0.4); }
+  &:active { transform: scale(0.98); }
+}
+
+.gos-btn-secondary {
+  flex: 1;
+  padding: 0.9rem;
+  border-radius: 0.875rem;
+  border: 1px solid rgba($white, 0.1);
+  background: rgba($white, 0.07);
+  color: rgba($white, 0.75);
+  font-family: var(--font-outfit);
+  font-size: $font16;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  transition: background 0.15s, border-color 0.15s;
+
+  &:hover {
+    background: rgba($white, 0.11);
+    border-color: rgba($white, 0.16);
+    color: $white;
+  }
+}

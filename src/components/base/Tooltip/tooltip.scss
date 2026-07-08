@@ -1,0 +1,23 @@
+@use '../../../styles/default.scss' as *;
+
+.tooltip-content {
+    background: $appSecondary;
+    border: 1px solid $appBorder;
+    border-radius: 0.5rem;
+    padding: 0.35rem 0.7rem;
+    font-size: $font12;
+    font-family: var(--font-outfit);
+    color: rgba($white, 0.8);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    animation: tooltip-in 0.12s ease;
+    z-index: 9999;
+}
+
+.tooltip-arrow {
+    fill: $appSecondary;
+}
+
+@keyframes tooltip-in {
+    from { opacity: 0; transform: scale(0.95); }
+    to   { opacity: 1; transform: scale(1); }
+}

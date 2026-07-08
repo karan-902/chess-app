@@ -1,0 +1,121 @@
+@use '../../../styles/default.scss' as *;
+
+
+.input-field {
+    width: 100%;
+    background: $appSecondary;
+    border: 1px solid $appBorder;
+    border-radius: 0.75rem;
+    font-family: var(--font-outfit);
+    color: $white;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+    &::placeholder { color: rgba($white, 0.18); }
+
+    &:focus {
+        border-color: rgba($gold, 0.5);
+        box-shadow: 0 0 0 3px rgba($gold, 0.09);
+    }
+
+    &.error {
+        border-color: rgba($paleRed, 0.6);
+
+        &:focus {
+            border-color: rgba($paleRed, 0.8);
+            box-shadow: 0 0 0 3px rgba($paleRed, 0.1);
+        }
+    }
+
+    &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+
+    // ── Sizes ─────────────────────────────────────────────────────────────
+    &.sm { height: 2.5rem;  padding: 0 0.75rem; font-size: $font13; }
+    &.md { height: 3rem;    padding: 0 1rem;    font-size: $font14; }
+    &.lg { height: 3.25rem; padding: 0 1.125rem; font-size: $font15; }
+
+    &.has-toggle { padding-right: 2.75rem; }
+
+    // ── Variants ──────────────────────────────────────────────────────────
+    &.filled {
+        background: rgba($white, 0.05);
+        border-color: transparent;
+
+        &:focus {
+            border-color: rgba($gold, 0.4);
+            background: $appSecondary;
+        }
+    }
+}
+
+// ── Auth inputs ───────────────────────────────────────────────────────────────
+
+.auth-input {
+    height: 3rem;
+    background: $appSecondary;
+    border: 1px solid $appBorder;
+    border-radius: 0.75rem;
+    padding: 0 1rem;
+    font-size: $font14;
+    font-family: var(--font-outfit);
+    color: $white;
+    outline: none;
+    width: 100%;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+    &::placeholder { color: rgba($white, 0.18); }
+
+    &:focus {
+        border-color: rgba($gold, 0.5);
+        box-shadow: 0 0 0 3px rgba($gold, 0.09);
+    }
+}
+
+.otp-box {
+    width: 3rem;
+    height: 3.25rem;
+    background: $appSecondary;
+    border: 1px solid $appBorder;
+    border-radius: 0.75rem;
+    text-align: center;
+    font-family: var(--font-outfit);
+    font-size: $font22;
+    font-weight: 700;
+    color: $white;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    caret-color: $gold;
+
+    &:focus {
+        border-color: rgba($gold, 0.55);
+        box-shadow: 0 0 0 3px rgba($gold, 0.09);
+    }
+
+    &:not(:placeholder-shown) {
+        border-color: rgba($gold, 0.3);
+        color: $gold;
+    }
+}
+
+.input-eye-btn {
+    position: absolute;
+    right: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: rgba($white, 0.4);
+    opacity: 1;
+    transition: color 0.15s ease;
+    padding: 0;
+    flex-shrink: 0;
+
+    &:hover { color: rgba($white, 0.85); }
+}

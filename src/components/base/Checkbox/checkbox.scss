@@ -1,0 +1,37 @@
+@use '../../../styles/default.scss' as *;
+
+.checkbox-root {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.125rem;
+    height: 1.125rem;
+    border-radius: 0.3rem;
+    border: 1.5px solid rgba($white, 0.25);
+    background: transparent;
+    cursor: pointer;
+    outline: none;
+    flex-shrink: 0;
+    transition: all 0.15s ease;
+
+    &[data-state='checked'] {
+        background: $gold;
+        border-color: $gold;
+    }
+
+    &:hover:not([data-disabled]) {
+        border-color: rgba($gold, 0.5);
+    }
+
+    &[data-disabled] {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+}
+
+.checkbox-indicator {
+    color: $appBg;
+    font-size: $font10;
+    font-weight: 700;
+    line-height: 1;
+}

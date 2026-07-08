@@ -1,0 +1,35 @@
+@use '../../../styles/default.scss' as *;
+
+.avatar {
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  flex-shrink: 0;
+
+  // primary = active player (cyan)
+  &.primary {
+    background: rgba($cyan, 0.1);
+    border: 1px solid rgba($cyan, 0.3);
+    color: $cyan;
+  }
+
+  // danger = opponent (red)
+  &.danger {
+    background: rgba($paleRed, 0.1);
+    border: 1px solid rgba($paleRed, 0.25);
+    color: $brinkPink;
+  }
+
+  // neutral
+  &.neutral {
+    background: rgba($white, 0.05);
+    border: 1px solid rgba($white, 0.1);
+    color: rgba($white, 0.5);
+  }
+
+  &.sm { width: 1.75rem; height: 1.75rem; font-size: $font12; }
+  &.md { width: 2.25rem; height: 2.25rem; font-size: $font14; }
+  &.lg { width: 2.75rem; height: 2.75rem; font-size: $font16; }
+}

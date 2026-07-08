@@ -1,0 +1,36 @@
+@use '../../../styles/default.scss' as *;
+
+.stat-card {
+  background: rgba($appCard, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba($white, 0.06);
+  border-radius: 0.875rem;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  .stat-card-icon {
+    color: rgba($white, 0.3);
+    margin-bottom: 0.125rem;
+  }
+
+  .stat-card-value {
+    font-size: $font16;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    color: $white;
+    letter-spacing: 0.02em;
+
+    &.val-primary { color: $cyan; }
+    &.val-accent  { color: $gold; }
+  }
+
+  .stat-card-label {
+    font-size: $font10;
+    color: rgba($white, 0.3);
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+}

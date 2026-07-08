@@ -1,0 +1,56 @@
+@use '../../../styles/default.scss' as *;
+
+.dropdown-content {
+    background: $appCard;
+    border: 1px solid $appBorder;
+    border-radius: 0.75rem;
+    padding: 0.3rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    min-width: 160px;
+    animation: dropdown-in 0.1s ease;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    font-family: var(--font-outfit);
+    font-size: $font13;
+    color: rgba($white, 0.7);
+    cursor: pointer;
+    outline: none;
+    transition: background 0.1s ease, color 0.1s ease;
+
+    &[data-highlighted] {
+        background: $appSecondary;
+        color: $white;
+    }
+
+    &[data-disabled] {
+        opacity: 0.4;
+        pointer-events: none;
+    }
+}
+
+.dropdown-label {
+    padding: 0.3rem 0.75rem;
+    font-size: $font11;
+    font-family: var(--font-mono);
+    color: rgba($white, 0.35);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.dropdown-separator {
+    height: 1px;
+    background: $appBorder;
+    margin: 0.3rem 0;
+}
+
+@keyframes dropdown-in {
+    from { opacity: 0; transform: scale(0.96); }
+    to   { opacity: 1; transform: scale(1); }
+}
