@@ -5,5 +5,4 @@ build/
 .DS_Store
 *.logdist/
 dist/
-public/stockfish/stockfish-18-single.wasm
-public/stockfish/stockfish-18-single.js
+public/stockfish/
