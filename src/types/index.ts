@@ -13,6 +13,7 @@ export type IRegisterEmailBody = {
 export type ISSOBody = {
     signup_method: "google";
     google_token: string;
+    redirect_uri: string;
 };
 
 // POST /login
@@ -24,6 +25,7 @@ export type ILoginBody = {
 // POST /generate-token
 export type IGenerateTokenBody = {
     refresh_token: string;
+    source?: string;
 };
 
 // POST /verify-user

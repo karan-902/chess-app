@@ -387,6 +387,13 @@
         }
     }
 
+    // currency picker — 3-pill row
+    &.currency-picker {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
     // wallet stats: 2-col on xs, 4-col on sm+
     &.wallet-stats-grid {
         display: grid;
@@ -460,6 +467,27 @@
         display: flex;
         gap: 0.5rem;
     }
+    &.draw-offer-banner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        padding: 0.625rem 0.875rem;
+        border-radius: 0.75rem;
+        background: rgba(#eab308, 0.08);
+        border: 1px solid rgba(#eab308, 0.25);
+
+        .draw-offer-text {
+            font-family: var(--font-outfit);
+            font-size: $font13;
+            color: rgba(#eab308, 0.9);
+        }
+    }
+    &.draw-offer-actions {
+        display: flex;
+        gap: 0.375rem;
+        flex-shrink: 0;
+    }
     &.section-header {
         display: flex;
         align-items: center;
@@ -527,6 +555,13 @@
         display: flex;
         align-items: baseline;
         gap: 0.375rem;
+    }
+    &.balance-currency-tag {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        color: var(--currency-color, #{$gold});
+        opacity: 0.7;
     }
     &.field-group {
         display: flex;

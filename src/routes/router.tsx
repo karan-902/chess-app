@@ -13,6 +13,7 @@ import Matchmaking from "@/pages/matchmaking";
 import Play from "@/pages/play";
 import Register from "@/pages/register";
 import Wallet from "@/pages/wallet";
+import ProfilePage from "@/pages/profile";
 
 function IndexRedirect() {
     const [params] = useSearchParams();
@@ -52,6 +53,7 @@ export const router = createBrowserRouter([
                     { path: "/wallet",       element: <Wallet />      },
                     { path: "/leaderboard",  element: <Leaderboard /> },
                     { path: "/play",         element: <Play />        },
+                    { path: "/profile",      element: <ProfilePage /> },
                 ],
             },
         ],

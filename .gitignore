@@ -1,8 +1,8 @@
 node_modules/
 build/
+dist/
 .env
 .env.development
 .DS_Store
-*.logdist/
-dist/
+*.log
 public/stockfish/

@@ -13,6 +13,10 @@ export default function Lobby() {
     const navigate = useNavigate();
 
     const handleModeSelect = (m: GameMode) => {
+        if (m === "pvp") {
+            navigate("/matchmaking");
+            return;
+        }
         setMode(m);
         setDifficulty(null);
         setTimeControl(null);

@@ -5,6 +5,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Toaster } from "sonner";
 import { store, persistor } from "./store";
 import { SocketProvider } from "./context/SocketContext";
+import { CurrencyProvider } from "./context/CurrencyContext";
 
 import "./styles/index.css";
 import "./styles/main.scss";
@@ -15,15 +16,18 @@ createRoot(document.getElementById("root")!).render(
         <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
                 <SocketProvider>
-                    <App />
-                    <Toaster
-                        position="top-right"
-                        theme="dark"
-                        closeButton
-                        duration={5000}
-                    />
+                    <CurrencyProvider>
+                        <App />
+                        <Toaster
+                            position="top-right"
+                            theme="dark"
+                            swipeDirections={["top", "right"]}
+                            closeButton
+                            duration={5000}
+                        />
+                    </CurrencyProvider>
                 </SocketProvider>
             </PersistGate>
         </Provider>
-    </GoogleOAuthProvider>
+    </GoogleOAuthProvider>,
 );

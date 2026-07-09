@@ -1,15 +1,30 @@
-import axios, { AxiosHeaders, type AxiosRequestConfig, type Method } from "axios";
+import axios, {
+    AxiosHeaders,
+    type AxiosRequestConfig,
+    type Method,
+} from "axios";
 import sessionService from "@/store/sessionService";
 import type { IGenerateTokenBody } from "@/types/index";
 import type { IGenerateTokenResponse } from "@/types/utils";
 
-const OPEN_API_ENDPOINTS = ["/register", "/login", "/sso-register", "/sso-login", "/generate-token", "/verify-user", "/forgot-password", "/reset-password"];
+const OPEN_API_ENDPOINTS = [
+    "/register",
+    "/login",
+    "/sso-register",
+    "/sso-login",
+    "/generate-token",
+    "/verify-user",
+    "/forgot-password",
+    "/reset-password",
+];
 const errorStatusCodes = [400, 401, 403, 404, 409, 422, 429];
 const serverErrorStatusCodes = [500, 502, 503, 504];
 
 let refreshPromise: Promise<string> | null = null;
 
-export async function generateToken(): Promise<string> {
+export async function generateToken(
+    source = "api_interceptor",
+): Promise<string> {
     if (refreshPromise) return refreshPromise;
 
     refreshPromise = (async () => {
@@ -19,6 +34,7 @@ export async function generateToken(): Promise<string> {
             IGenerateTokenResponse
         >("POST", "/generate-token", {
             refresh_token: session?.refresh_token ?? "",
+            source,
         });
         if (session) {
             await sessionService.saveSession({ ...session, access_token });
@@ -46,7 +62,7 @@ export async function getHeaders<TPayload = undefined>(
     }
 
     return {
-        baseURL: import.meta.env.VITE_API_URL ?? "http://localhost:3000",
+        baseURL: (import.meta.env.VITE_API_URL ?? "http://localhost:3000").trim(),
         method,
         url: path,
         data,
@@ -54,7 +70,24 @@ export async function getHeaders<TPayload = undefined>(
     };
 }
 
-export const callAPIInterface = async <TPayload = undefined, TResponse = unknown>(
+/** Returns username if set, otherwise "First Last" */
+export function getDisplayName(
+    user:
+        | { username?: string; first_name?: string; last_name?: string }
+        | null
+        | undefined,
+): string {
+    const name = user?.username?.trim();
+    if (name) return name;
+    return (
+        `${user?.first_name ?? ""} ${user?.last_name ?? ""}`.trim() || "Unknown"
+    );
+}
+
+export const callAPIInterface = async <
+    TPayload = undefined,
+    TResponse = unknown,
+>(
     method: Method,
     path: string,
     data?: TPayload,
@@ -73,7 +106,7 @@ export const callAPIInterface = async <TPayload = undefined, TResponse = unknown
             const errorData = err.response?.data;
             const errorType = errorData?.type;
             const errorStatus = err.response?.status;
-
+            console.error(err);
             console.error("API Error:", err.response || err);
 
             if (errorType === "token_expired") {

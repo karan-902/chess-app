@@ -7,6 +7,7 @@ import {
     type ReactNode,
 } from "react";
 import { toast } from "sonner";
+import type { Socket } from "socket.io-client";
 import { connectSocket, disconnectSocket } from "@/lib/socket";
 import { useReduxSelector } from "@/store/hooks";
 import { generateToken } from "@/utils";
@@ -22,6 +23,7 @@ interface IUserCounts {
 interface ISocketContext {
     userCounts: IUserCounts;
     myStatus: "active" | "inactive";
+    socket: Socket | null;
 }
 
 const DEFAULT_COUNTS: IUserCounts = { active: 0, inactive: 0, total: 0 };
@@ -29,54 +31,44 @@ const DEFAULT_COUNTS: IUserCounts = { active: 0, inactive: 0, total: 0 };
 const SocketContext = createContext<ISocketContext>({
     userCounts: DEFAULT_COUNTS,
     myStatus: "inactive",
+    socket: null,
 });
-
-const TOKEN_ERRORS = [
-    "Invalid or expired token",
-    "Session has expired",
-    "Authentication required",
-    "Session is not active",
-];
 
 export function SocketProvider({ children }: { children: ReactNode }) {
     const session = useReduxSelector((state) => state.auth.session);
     const isLoggedIn = useReduxSelector((state) => state.auth.isLoggedIn);
     const [userCounts, setUserCounts] = useState<IUserCounts>(DEFAULT_COUNTS);
     const [myStatus, setMyStatus] = useState<"active" | "inactive">("inactive");
+    const [socket, setSocket] = useState<Socket | null>(null);
     const activityTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const refreshingRef = useRef(false);
 
     useEffect(() => {
         if (!isLoggedIn || !session?.access_token) {
             disconnectSocket();
+            setSocket(null);
             setUserCounts(DEFAULT_COUNTS);
             setMyStatus("inactive");
             return;
         }
 
-        const socket = connectSocket(session.access_token);
+        const sock = connectSocket(session.access_token);
+        setSocket(sock);
 
         const onUserCounts = (counts: IUserCounts) => {
             setUserCounts(counts);
         };
 
-        const onStatusChanged = ({ status }: { status: "active" | "inactive" }) => {
-            setMyStatus(status);
-        };
-
-        const onConnectError = async (err: Error) => {
-            if (TOKEN_ERRORS.includes(err.message) && !refreshingRef.current) {
-                refreshingRef.current = true;
+        const onConnectError = async (err: any) => {
+            if (err.data?.type === "token_expired") {
                 try {
-                    const access_token = await generateToken();
-                    socket.auth = { token: access_token };
-                    socket.connect();
+                    const access_token =
+                        await generateToken("socket_reconnect");
+                    sock.auth = { token: access_token };
+                    sock.connect();
                 } catch {
                     console.warn(
                         "[Socket] token refresh failed — session expired",
                     );
-                } finally {
-                    refreshingRef.current = false;
                 }
             } else {
                 console.warn("[Socket] connect error:", err.message);
@@ -93,14 +85,14 @@ export function SocketProvider({ children }: { children: ReactNode }) {
             router.navigate("/login", { replace: true });
         };
 
-        socket.on("user_counts", onUserCounts);
-        socket.on("status_changed", onStatusChanged);
-        socket.on("connect_error", onConnectError);
-        socket.on("session_terminated", onSessionTerminated);
+        sock.on("user_counts", onUserCounts);
+
+        sock.on("connect_error", onConnectError);
+        sock.on("session_terminated", onSessionTerminated);
 
         const emitActivity = () => {
             if (activityTimerRef.current) return;
-            socket.emit("activity");
+            sock.emit("activity");
             activityTimerRef.current = setTimeout(() => {
                 activityTimerRef.current = null;
             }, 1000);
@@ -111,10 +103,10 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         document.addEventListener("click", emitActivity);
 
         return () => {
-            socket.off("user_counts", onUserCounts);
-            socket.off("status_changed", onStatusChanged);
-            socket.off("connect_error", onConnectError);
-            socket.off("session_terminated", onSessionTerminated);
+            sock.off("user_counts", onUserCounts);
+
+            sock.off("connect_error", onConnectError);
+            sock.off("session_terminated", onSessionTerminated);
             document.removeEventListener("mousemove", emitActivity);
             document.removeEventListener("keypress", emitActivity);
             document.removeEventListener("click", emitActivity);
@@ -126,7 +118,7 @@ export function SocketProvider({ children }: { children: ReactNode }) {
     }, [isLoggedIn, session?.access_token]);
 
     return (
-        <SocketContext.Provider value={{ userCounts, myStatus }}>
+        <SocketContext.Provider value={{ userCounts, myStatus, socket }}>
             {children}
         </SocketContext.Provider>
     );

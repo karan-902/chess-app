@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import clsx from "clsx";
+import { toast } from "sonner";
 import Box from "../../components/base/Box/Box";
 import Text from "../../components/base/Text/Text";
+import Button from "../../components/base/Button/Button";
 import GameOverScreen from "./GameOverScreen";
 import WagerBadge from "./WagerBadge";
 import PlayerRow from "./PlayerRow";
@@ -24,7 +26,12 @@ import { useBoardReview } from "@/hooks/useBoardReview";
 import { useComputerOpponent } from "@/hooks/useComputerOpponent";
 import { useInactivityTimeout } from "@/hooks/useInactivityTimeout";
 import { fenToBoard } from "@/utils/fenToBoard";
+import { callAPIInterface, getDisplayName } from "@/utils";
 import { useReduxSelector } from "@/store/hooks";
+import { getSocket } from "@/lib/socket";
+import { useSocket } from "@/context/SocketContext";
+import type { IgameEndedResponse, IopponentMoveResponse, IdrawOfferedResponse, IinactivityTimeoutResponse } from "@/types/types";
+import type { IGameRestoreResponse } from "@/types/utils";
 
 interface IPlayViewProps {
     mode: GameMode;
@@ -33,6 +40,9 @@ interface IPlayViewProps {
     playerColor?: "white" | "black";
     opponentName?: string;
     opponentRating?: number;
+    gameId?: string;
+    opponentId?: string;
+    initialInactivitySeconds?: number;
     onNewGame: () => void;
 }
 
@@ -66,12 +76,16 @@ export default function PlayGamePage({
     playerColor,
     opponentName: opponentNameProp,
     opponentRating: opponentRatingProp,
+    gameId,
+    opponentId,
+    initialInactivitySeconds,
     onNewGame,
 }: IPlayViewProps) {
     const session = useReduxSelector((s) => s.auth.session);
-    const userName = session
-        ? `${session.first_name} ${session.last_name}`.trim()
-        : "You";
+    const { socket: ctxSocket } = useSocket();
+    const gameRestoredRef = useRef(false);
+    const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
+    const userName = getDisplayName(session) || "You";
     const userLetter = session?.first_name?.[0]?.toUpperCase() ?? "?";
 
     // playerSide: "w" for pvc (always white) or when color=white; "b" when color=black
@@ -96,17 +110,186 @@ export default function PlayGamePage({
     const [resigned, setResigned] = useState(false);
     const [drawClaimed, setDrawClaimed] = useState(false);
     const [panelTab, setPanelTab] = useState<"moves" | "chat">("moves");
+    const [pvpEnded, setPvpEnded]                     = useState<{ result: GameResult; reason: string } | null>(null);
+    const [pvpInactivityWarning, setPvpInactivityWarning] = useState<number | null>(null);
+    const [drawOffered, setDrawOffered]               = useState(false);
+
+    // ── Game restore on mount (PvP only) ─────────────────────────────────────
+    // Runs when ctxSocket becomes available (handles page refresh timing).
+    // gameRestoredRef prevents double-restore if socket instance changes.
+    useEffect(() => {
+        if (mode !== "pvp" || !gameId || !ctxSocket || gameRestoredRef.current) return;
+        gameRestoredRef.current = true;
+        ctxSocket.emit("rejoin_game", { game_id: gameId });
+        callAPIInterface<undefined, IGameRestoreResponse>("GET", `/game/${gameId}`)
+            .then(data => {
+                if (data.status !== "ONGOING") { onNewGame(); return; }
+
+                // If we refreshed right after making a move the DB write may not
+                // have committed yet. Use the local buffer if it's ahead of the DB.
+                const bufKey = `pvp_moves_${gameId}`;
+                const bufRaw = sessionStorage.getItem(bufKey);
+                const localBuf: Array<{ from: string; to: string; promotion: string | null }> | null =
+                    bufRaw ? JSON.parse(bufRaw) : null;
+
+                const movesToRestore =
+                    localBuf && localBuf.length > data.moves.length
+                        ? localBuf
+                        : data.moves;
+
+                if (movesToRestore.length > 0) game.restoreGame(movesToRestore);
+
+                // If DB has caught up with our local buffer, we can drop it
+                if (!localBuf || data.moves.length >= localBuf.length) {
+                    sessionStorage.removeItem(bufKey);
+                }
+            })
+            .catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [ctxSocket, mode, gameId]);
+
+    // ── Initial countdown for white (before first move is made) ──────────────
+    useEffect(() => {
+        if (mode !== "pvp" || playerColor !== "white" || !initialInactivitySeconds || !ctxSocket) return;
+        if (countdownRef.current) return; // already running (e.g. strict-mode double-fire)
+        let secs = initialInactivitySeconds;
+        setPvpInactivityWarning(secs);
+        countdownRef.current = setInterval(() => {
+            secs -= 1;
+            if (secs <= 0) {
+                clearInterval(countdownRef.current!);
+                countdownRef.current = null;
+                setPvpInactivityWarning(null);
+            } else {
+                setPvpInactivityWarning(secs);
+            }
+        }, 1000);
+        return () => {
+            if (countdownRef.current) {
+                clearInterval(countdownRef.current);
+                countdownRef.current = null;
+            }
+            setPvpInactivityWarning(null);
+        };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [ctxSocket, mode, playerColor]);
+
+    // ── PvP socket listeners ──────────────────────────────────────────────────
+    useEffect(() => {
+        if (mode !== "pvp") return;
+        const socket = ctxSocket ?? getSocket();
+        if (!socket) return;
+
+        const stopCountdown = () => {
+            if (countdownRef.current) {
+                clearInterval(countdownRef.current);
+                countdownRef.current = null;
+            }
+            setPvpInactivityWarning(null);
+        };
+
+        const onGameEnded = (data: IgameEndedResponse) => {
+            stopCountdown();
+            if (gameId) sessionStorage.removeItem(`pvp_moves_${gameId}`);
+            const result: GameResult =
+                data.winner_id === null ? "draw"
+                : data.winner_id === session?.id ? "win"
+                : "lose";
+            setPvpEnded({ result, reason: data.reason ?? "Game over" });
+            setDrawOffered(false);
+        };
+
+        const onOpponentMove = (data: IopponentMoveResponse) => {
+            game.applyOpponentMove(data.from, data.to, data.promotion ?? null, data.fen);
+            // Mirror opponent's move into the local buffer so a refresh
+            // won't lose it even if the DB hasn't committed yet.
+            if (gameId) {
+                const key = `pvp_moves_${gameId}`;
+                const buf: Array<{ from: string; to: string; promotion: string | null }> =
+                    JSON.parse(sessionStorage.getItem(key) ?? "[]");
+                buf.push({ from: data.from, to: data.to, promotion: data.promotion ?? null });
+                sessionStorage.setItem(key, JSON.stringify(buf));
+            }
+            // Start visible countdown so player knows how long they have to move.
+            if (data.inactivity_timeout_seconds) {
+                stopCountdown();
+                let secs = data.inactivity_timeout_seconds;
+                setPvpInactivityWarning(secs);
+                countdownRef.current = setInterval(() => {
+                    secs -= 1;
+                    if (secs <= 0) {
+                        stopCountdown();
+                    } else {
+                        setPvpInactivityWarning(secs);
+                    }
+                }, 1000);
+            }
+        };
+
+        const onOpponentDisconnected = () => {
+            toast.warning("Opponent disconnected", {
+                description: "Waiting for them to reconnect (45s)…",
+                id: "opp-disconnected",
+                duration: 45_000,
+            });
+        };
+
+        const onOpponentReconnected = () => {
+            toast.dismiss("opp-disconnected");
+            toast.success("Opponent reconnected!");
+        };
+
+        const onInactivityTimeout = (data: IinactivityTimeoutResponse) => {
+            if (!pvpEnded) {
+                const result: GameResult = data.loser_id === session?.id ? "lose" : "win";
+                setPvpEnded({ result, reason: "Inactivity" });
+                setPvpInactivityWarning(null);
+            }
+        };
+
+        const onDrawOffered = (_data: IdrawOfferedResponse) => {
+            setDrawOffered(true);
+            toast.info("Opponent offered a draw");
+        };
+
+        const onDrawRejected = () => {
+            toast.info("Draw offer declined");
+        };
+
+        socket.on("game_ended",             onGameEnded);
+        socket.on("opponent_move",           onOpponentMove);
+        socket.on("inactivity_timeout",      onInactivityTimeout);
+        socket.on("draw_offered",            onDrawOffered);
+        socket.on("draw_rejected",           onDrawRejected);
+        socket.on("opponent_disconnected",   onOpponentDisconnected);
+        socket.on("opponent_reconnected",    onOpponentReconnected);
+
+        return () => {
+            socket.off("game_ended",            onGameEnded);
+            socket.off("opponent_move",          onOpponentMove);
+            socket.off("inactivity_timeout",     onInactivityTimeout);
+            socket.off("draw_offered",           onDrawOffered);
+            socket.off("draw_rejected",          onDrawRejected);
+            socket.off("opponent_disconnected",  onOpponentDisconnected);
+            socket.off("opponent_reconnected",   onOpponentReconnected);
+            if (countdownRef.current) {
+                clearInterval(countdownRef.current);
+                countdownRef.current = null;
+            }
+            setPvpInactivityWarning(null);
+        };
+    }, [mode, session?.id, pvpEnded, ctxSocket]);
 
     // ── Game-end hooks ────────────────────────────────────────────────────────
     const baseEnded = game.isGameOver || resigned || drawClaimed;
     const clock = useGameClock(timeControl, baseEnded, game.turn);
     const inactivity = useInactivityTimeout(
-        baseEnded || !!clock.timedOut,
+        mode === "pvp" ? true : (baseEnded || !!clock.timedOut),
         game.turn,
         game.fenHistory.length,
         playerSide,
     );
-    const gameEnded = baseEnded || !!clock.timedOut || inactivity.inactiveOut;
+    const gameEnded = baseEnded || !!clock.timedOut || inactivity.inactiveOut || !!pvpEnded;
 
     // ── Computer opponent ─────────────────────────────────────────────────────
     const review = useBoardReview(game.fenHistory);
@@ -141,7 +324,27 @@ export default function PlayGamePage({
             setFrom(null);
             setLegalMoves([]);
         } else if (legalMoves.includes(square)) {
-            game.makeMove(from, square);
+            const result = game.makeMove(from, square);
+            if (mode === "pvp" && gameId && opponentId && result) {
+                getSocket()?.emit("move_made", {
+                    game_id: gameId,
+                    from,
+                    to:      square,
+                    ...(result.promotion && { promotion: result.promotion }),
+                });
+                if (countdownRef.current) {
+                    clearInterval(countdownRef.current);
+                    countdownRef.current = null;
+                }
+                setPvpInactivityWarning(null);
+                // Buffer locally so a refresh before the DB write completes
+                // doesn't lose this move (see restore effect).
+                const key = `pvp_moves_${gameId}`;
+                const buf: Array<{ from: string; to: string; promotion: string | null }> =
+                    JSON.parse(sessionStorage.getItem(key) ?? "[]");
+                buf.push({ from, to: square, promotion: result.promotion ?? null });
+                sessionStorage.setItem(key, JSON.stringify(buf));
+            }
             setFrom(null);
             setLegalMoves([]);
         } else {
@@ -163,6 +366,9 @@ export default function PlayGamePage({
         setFlashSquare(null);
         setResigned(false);
         setDrawClaimed(false);
+        setPvpEnded(null);
+        setPvpInactivityWarning(null);
+        setDrawOffered(false);
         clock.reset();
         inactivity.reset();
         onNewGame();
@@ -188,7 +394,7 @@ export default function PlayGamePage({
     const checkSquare = game.inCheck ? game.kingSquare() : null;
     const stalemateSquare = game.isStalemate ? game.kingSquare() : null;
 
-    const { result: gameOverResult, reason: gameOverReason } = getGameOverInfo(
+    const { result: localResult, reason: localReason } = getGameOverInfo(
         inactivity.inactiveOut,
         resigned,
         drawClaimed,
@@ -198,6 +404,8 @@ export default function PlayGamePage({
         game.turn,
         playerSide,
     );
+    const gameOverResult = pvpEnded?.result ?? localResult;
+    const gameOverReason = pvpEnded?.reason ?? localReason;
     const lastRecord = game.moveHistory[game.moveHistory.length - 1];
     const totalMoves =
         game.moveHistory.length * 2 - (lastRecord?.b === "" ? 1 : 0);
@@ -217,25 +425,64 @@ export default function PlayGamePage({
     const playerRow = (
         <PlayerRow
             name={userName}
-            rating={2534}
+            rating={session?.elo_rating ?? 1200}
             letter={userLetter}
             variant="primary"
             timer={playerTimer}
             timerActive={playerTimerActive}
-            inactivityWarning={inactivity.secsLeft}
+            inactivityWarning={
+                mode === "pvp"
+                    ? (game.turn === playerSide ? pvpInactivityWarning : null)
+                    : inactivity.secsLeft
+            }
         />
     );
+    const handleResign = () => {
+        if (gameEnded) return;
+        if (mode === "pvp" && gameId) {
+            getSocket()?.emit("resign_game", { game_id: gameId });
+        } else {
+            setResigned(true);
+        }
+    };
+
+    const handleDraw = () => {
+        if (gameEnded) return;
+        if (mode === "pvp" && gameId) {
+            getSocket()?.emit("offer_draw", { game_id: gameId });
+        } else {
+            setDrawClaimed(true);
+        }
+    };
+
+    const handleAcceptDraw = () => {
+        if (gameId) getSocket()?.emit("accept_draw", { game_id: gameId });
+        setDrawOffered(false);
+    };
+
+    const handleDeclineDraw = () => {
+        if (gameId) getSocket()?.emit("reject_draw", { game_id: gameId });
+        setDrawOffered(false);
+    };
+
     const actionButtons = (
-        <ActionButtons
-            onNewGame={handleNewGame}
-            onResign={() => {
-                if (!gameEnded) setResigned(true);
-            }}
-            onDraw={() => {
-                if (!gameEnded) setDrawClaimed(true);
-            }}
-            disabled={gameEnded}
-        />
+        <>
+            {drawOffered && !gameEnded && (
+                <Box customClass="draw-offer-banner">
+                    <Text as="span" customClass="draw-offer-text">Opponent offered a draw</Text>
+                    <Box customClass="draw-offer-actions">
+                        <Button variant="primary" size="sm" onClick={handleAcceptDraw}>Accept</Button>
+                        <Button variant="ghost"   size="sm" onClick={handleDeclineDraw}>Decline</Button>
+                    </Box>
+                </Box>
+            )}
+            <ActionButtons
+                onNewGame={handleNewGame}
+                onResign={handleResign}
+                onDraw={handleDraw}
+                disabled={gameEnded}
+            />
+        </>
     );
     const panel = (
         <>

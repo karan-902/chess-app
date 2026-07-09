@@ -3,6 +3,7 @@ import { X } from "lucide-react";
 import Box from "../../components/base/Box/Box";
 import Text from "../../components/base/Text/Text";
 import Button from "../../components/base/Button/Button";
+import { formatAmount, formatTimeControl, CATEGORY_META } from "@/constants/currencies";
 import type { Pool } from "@/types/types";
 import type { MatchmakingStatus } from "@/hooks/useMatchmaking";
 
@@ -26,6 +27,10 @@ function useElapsed() {
 export default function SearchingScreen({ pool, status, onCancel }: ISearchingScreenProps) {
     const elapsed = useElapsed();
     const isFound = status === "found";
+    const stake = formatAmount(pool.stake, pool.currency);
+    const prize = formatAmount(pool.prize, pool.currency);
+    const timeLabel = formatTimeControl(pool.time);
+    const cat = CATEGORY_META[pool.category];
 
     return (
         <Box customClass="searching-screen">
@@ -46,7 +51,7 @@ export default function SearchingScreen({ pool, status, onCancel }: ISearchingSc
                 <Text as="p" customClass="searching-sub">
                     {isFound
                         ? "Starting game now"
-                        : `Searching for ${elapsed} · ${pool.stake} stake`}
+                        : `Searching for ${elapsed} · ${stake} stake`}
                 </Text>
             </Box>
 
@@ -54,15 +59,15 @@ export default function SearchingScreen({ pool, status, onCancel }: ISearchingSc
             <Box customClass="searching-chips">
                 <Box customClass="searching-chip">
                     <Text as="span" customClass="searching-chip-label">Stake</Text>
-                    <Text as="span" customClass="searching-chip-value">{pool.stake}</Text>
+                    <Text as="span" customClass="searching-chip-value">{stake}</Text>
                 </Box>
                 <Box customClass="searching-chip">
                     <Text as="span" customClass="searching-chip-label">Prize</Text>
-                    <Text as="span" customClass="searching-chip-value searching-chip-value--gold">{pool.prize}</Text>
+                    <Text as="span" customClass="searching-chip-value searching-chip-value--gold">{prize}</Text>
                 </Box>
                 <Box customClass="searching-chip">
-                    <Text as="span" customClass="searching-chip-label">Time</Text>
-                    <Text as="span" customClass="searching-chip-value">{pool.time}</Text>
+                    <Text as="span" customClass="searching-chip-label">{cat.emoji} {cat.label}</Text>
+                    <Text as="span" customClass="searching-chip-value">{timeLabel}</Text>
                 </Box>
             </Box>
 
