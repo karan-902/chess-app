@@ -10,9 +10,10 @@ export function useChessGame() {
     const [moveHistory, setMoveHistory] = useState<MoveRecord[]>([]);
     const [lastMove, setLastMove] = useState<{ from: string; to: string } | null>(null);
 
-    const makeMove = (from: string, to: string) => {
+    // Returns { fen, promotion? } on success, null on invalid move
+    const makeMove = (from: string, to: string, promotion = "q"): { fen: string; promotion?: string } | null => {
         try {
-            const move = chess.move({ from, to, promotion: "q" });
+            const move = chess.move({ from, to, promotion });
             if (move) {
                 setLastMove({ from, to });
                 const newFen = chess.fen();
@@ -24,11 +25,33 @@ export function useChessGame() {
                     records.push({ n: i / 2 + 1, w: history[i], b: history[i + 1] ?? "" });
                 }
                 setMoveHistory(records);
-                return true;
+                return { fen: newFen, promotion: move.promotion };
             }
-            return false;
+            return null;
         } catch {
-            return false;
+            return null;
+        }
+    };
+
+    const restoreGame = (moves: Array<{ from: string; to: string; promotion: string | null }>) => {
+        chess.reset();
+        const fenHist = [chess.fen()];
+        for (const m of moves) {
+            chess.move({ from: m.from, to: m.to, promotion: m.promotion ?? "q" });
+            fenHist.push(chess.fen());
+        }
+        const restoredFen = chess.fen();
+        const history = chess.history();
+        const records: MoveRecord[] = [];
+        for (let i = 0; i < history.length; i += 2) {
+            records.push({ n: i / 2 + 1, w: history[i], b: history[i + 1] ?? "" });
+        }
+        setFen(restoredFen);
+        setFenHistory(fenHist);
+        setMoveHistory(records);
+        if (moves.length > 0) {
+            const last = moves[moves.length - 1];
+            setLastMove({ from: last.from, to: last.to });
         }
     };
 
@@ -63,6 +86,39 @@ export function useChessGame() {
         return { from: m.from, to: m.to };
     };
 
+    // Apply opponent's move using local chess.js (for history), then override the
+    // displayed FEN with the server-authoritative value in case they ever diverge.
+    const applyOpponentMove = (
+        from: string,
+        to: string,
+        promotion: string | null,
+        serverFen: string,
+    ) => {
+        try {
+            const move = chess.move({ from, to, promotion: promotion ?? "q" });
+            if (move) {
+                setLastMove({ from, to });
+                // Capture history before chess.load() wipes it
+                const history = chess.history();
+                const records: MoveRecord[] = [];
+                for (let i = 0; i < history.length; i += 2) {
+                    records.push({ n: i / 2 + 1, w: history[i], b: history[i + 1] ?? "" });
+                }
+                // Sync to server FEN only if there's a discrepancy
+                if (chess.fen() !== serverFen) chess.load(serverFen);
+                setFen(serverFen);
+                setFenHistory(prev => [...prev, serverFen]);
+                setMoveHistory(records);
+            }
+        } catch {
+            // Fallback: just load the server FEN if local move fails entirely
+            chess.load(serverFen);
+            setFen(serverFen);
+            setFenHistory(prev => [...prev, serverFen]);
+            setLastMove({ from, to });
+        }
+    };
+
     const resetGame = () => {
         chess.reset();
         const startFen = chess.fen();
@@ -95,7 +151,9 @@ export function useChessGame() {
         fen,
         fenHistory,
         makeMove,
+        applyOpponentMove,
         resetGame,
+        restoreGame,
         getLegalMoves,
         getRandomMove,
         getAttackedSquares,

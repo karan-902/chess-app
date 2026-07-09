@@ -8,7 +8,7 @@ interface IProps {
     turn: "w" | "b";
     gameEnded: boolean;
     bestMove: string | null;
-    makeMove: (from: string, to: string) => boolean;
+    makeMove: (from: string, to: string) => { fen: string; promotion?: string } | null;
     getRandomMove: () => { from: string; to: string } | null;
 }
 

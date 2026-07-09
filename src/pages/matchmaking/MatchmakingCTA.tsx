@@ -2,6 +2,7 @@ import Box from '../../components/base/Box/Box'
 import Card from '../../components/base/Card/Card'
 import Button from '../../components/base/Button/Button'
 import Text from '../../components/base/Text/Text'
+import { formatAmount } from '@/constants/currencies'
 import type { Pool } from '../../types/types'
 
 interface IMatchmakingCTAProps {
@@ -11,16 +12,19 @@ interface IMatchmakingCTAProps {
 }
 
 export default function MatchmakingCTA({ pool, onJoin, onClose }: IMatchmakingCTAProps) {
+    const stake = formatAmount(pool.stake, pool.currency);
+    const prize = formatAmount(pool.prize, pool.currency);
+
     return (
         <Box customClass="cta-sticky">
             <Card customClass="matchmaking-cta">
                 <Box customClass="cta-header">
                     <div>
                         <Text font="rajdhani" size={16} weight={700} color="primary" customClass="cta-stake">
-                            Wager {pool.stake}
+                            Wager {stake}
                         </Text>
                         <Text font="mono" size={11} color="muted" customClass="cta-fee">
-                            Win {pool.prize} · 5% platform fee
+                            Win {prize} · 10% platform fee
                         </Text>
                     </div>
                     <Button customClass="cta-close" onClick={onClose}>✕</Button>

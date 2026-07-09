@@ -16,8 +16,8 @@ const FILTERS: { id: PoolCategory; label: string }[] = [
 interface IPoolListProps {
     pools: Pool[];
     loading: boolean;
-    selectedPool: number | null;
-    onSelect: (id: number | null) => void;
+    selectedPool: string | null;
+    onSelect: (id: string | null) => void;
 }
 
 function PoolList({ pools, loading, selectedPool, onSelect }: IPoolListProps) {

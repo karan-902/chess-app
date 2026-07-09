@@ -17,6 +17,7 @@ export function useGoogleAuth(
             const res = await callAPIInterface<ISSOBody, ILoginResponse>("POST", endpoint, {
                 signup_method: "google",
                 google_token: code,
+                redirect_uri: window.location.origin,
             });
             await sessionService.saveSession(res);
             navigate("/lobby");

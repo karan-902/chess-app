@@ -10,12 +10,12 @@ import { usePools } from "../../hooks/usePools";
 import { useSocket } from "../../context/SocketContext";
 
 export default function Matchmaking() {
-    const [selectedPool, setSelectedPool] = useState<number | null>(null);
+    const [selectedPool, setSelectedPool] = useState<string | null>(null);
     const { status, queuedPool, joinQueue, leaveQueue } = useMatchmaking();
-    const { pools, loading, games, liquidity } = usePools();
+    const { pools, stats, loading } = usePools();
     const { userCounts } = useSocket();
 
-    const pool = pools.find(p => p.id === selectedPool);
+    const pool = pools.find(p => p.id === selectedPool) ?? null;
     const isSearching = status === "queued" || status === "found";
 
     return (
@@ -35,8 +35,7 @@ export default function Matchmaking() {
                 <>
                     <MatchStats
                         online={userCounts.active}
-                        games={games}
-                        liquidity={liquidity}
+                        stats={stats}
                     />
                     <PoolList
                         pools={pools}

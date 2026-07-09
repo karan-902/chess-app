@@ -204,13 +204,31 @@
                 0 4px 24px rgba(0, 0, 0, 0.3);
         }
 
+        .pool-category-row {
+            margin-bottom: 0.5rem;
+        }
+
+        .pool-category-badge {
+            font-size: $font9;
+            font-weight: 700;
+            font-family: var(--font-mono);
+            letter-spacing: 0.1em;
+            color: rgba($white, 0.35);
+            text-transform: uppercase;
+        }
+
+        .pool-stake-row {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
         .pool-stake {
             font-size: $font16;
             font-weight: 700;
             color: $gold;
             font-family: var(--font-mono);
             letter-spacing: 0.02em;
-            display: block;
         }
 
         .pool-meta {
