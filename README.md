@@ -1,7 +1,4 @@
 
-  # PVP Chess Platform
-
-  This is a code bundle for PVP Chess Platform. The original project is available at https://www.figma.com/design/P88nt15IqCMMlLi1XxRWKC/PVP-Chess-Platform.
 
   ## Running the code
 
