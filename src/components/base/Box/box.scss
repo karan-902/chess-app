@@ -1,673 +1,28 @@
 @use "../../../styles/default.scss" as *;
 
-.box {
-    // ── App shell ──────────────────────────────────────────────────────────────
-    &.app-shell {
-        display: flex;
-        flex-direction: column;
-        height: 100dvh;
-        overflow: hidden;
-        background: $appBg;
-        color: $white;
-        background-image:
-            radial-gradient(
-                ellipse 70% 35% at 50% 0%,
-                rgba(40, 44, 56, 0.55) 0%,
-                transparent 70%
-            ),
-            radial-gradient(
-                ellipse 50% 25% at 85% 100%,
-                rgba($gold, 0.04) 0%,
-                transparent 60%
-            );
-
-        // xs/mobile only — narrow centered pill
-        @media (max-width: #{$sm - 1px}) {
-            max-width: 28rem;
-            margin: 0 auto;
-        }
-
-        // sm+ — full viewport width
-        @media (min-width: $sm) {
-            max-width: 100%;
-        }
-    }
-    // ── App body (sidebar + scrollable content) ────────────────────────────────
-    &.app-body {
-        display: flex;
-        flex-direction: row;
-        flex: 1;
-        overflow: hidden;
-    }
-
-    // ── App content ────────────────────────────────────────────────────────────
-    &.app-content {
-        flex: 1;
-        overflow-y: auto;
-        overscroll-behavior: contain;
-        // xs
-        padding: 0.875rem;
-        padding-bottom: 72px; // bottom nav clearance
-
-        @media (min-width: $sm) {
-            padding: 1rem 1.25rem;
-            padding-bottom: 72px;
-        }
-
-        @media (min-width: $md) {
-            padding: 1.25rem 1.5rem;
-            padding-bottom: 1.25rem; // no bottom nav from md+
-        }
-
-        @media (min-width: $lg) {
-            padding: 1.5rem 2rem;
-            padding-bottom: 1.5rem;
-        }
-
-        @media (min-width: $xl) {
-            padding: 2rem 2.5rem;
-            padding-bottom: 2rem;
-        }
-
-        @media (min-width: $xxl) {
-            padding: 2rem 3rem;
-            max-width: 1500px;
-        }
-    }
-
-    // ── Page containers ────────────────────────────────────────────────────────
-    &.play-view {
-        display: flex;
-        flex-direction: column;
-        gap: 0.625rem;
-        @media (min-width: $sm) {
-            gap: 0.75rem;
-        }
-        @media (min-width: $xl) {
-            gap: 1rem;
-        }
-    }
-    &.matchmaking-view {
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-        max-width: 960px;
-        margin: 0 auto;
-        width: 100%;
-        @media (min-width: $xl) {
-            gap: 1rem;
-        }
-    }
-    &.wallet-view {
-        display: flex;
-        flex-direction: column;
-        gap: 0.875rem;
-        max-width: 960px;
-        margin: 0 auto;
-        width: 100%;
-        @media (min-width: $xl) {
-            gap: 1.25rem;
-        }
-    }
-    &.leaderboard-view {
-        display: flex;
-        flex-direction: column;
-        gap: 0.875rem;
-        max-width: 720px;
-        margin: 0 auto;
-        width: 100%;
-        @media (min-width: $xl) {
-            gap: 1.25rem;
-        }
-    }
-
-    // ── Play view — responsive 2-column ───────────────────────────────────────
-    // mobile top section (wager + opponent) — hidden on md+
-    &.play-top-bar {
-        display: flex;
-        flex-direction: column;
-        gap: 0.625rem;
-        @media (min-width: $md) {
-            display: none;
-        }
-    }
-
-    // mobile bottom section (engine + you + actions + history) — hidden on md+
-    &.play-bottom-bar {
-        display: flex;
-        flex-direction: column;
-        gap: 0.625rem;
-        @media (min-width: $md) {
-            display: none;
-        }
-    }
-
-    // outer wrapper — stacked on mobile, row on md+
-    &.play-main {
-        display: flex;
-        flex-direction: column;
-        gap: 0.625rem;
-
-        @media (min-width: $md) {
-            flex-direction: row;
-            align-items: flex-start;
-            gap: 1rem;
-        }
-        @media (min-width: $lg) {
-            gap: 1.5rem;
-        }
-        @media (min-width: $xl) {
-            gap: 2rem;
-        }
-    }
-
-    // board column — full width on mobile, constrained on md+
-    &.check-badge {
-        position: absolute;
-        top: 12px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 20;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.4rem 1.1rem;
-        border-radius: 999px;
-        background: rgba(10, 6, 2, 0.82);
-        border: 1px solid rgba(220, 50, 50, 0.55);
-        backdrop-filter: blur(6px);
-        box-shadow: 0 0 18px rgba(220, 50, 50, 0.35), 0 2px 8px rgba(0,0,0,0.5);
-        white-space: nowrap;
-        animation: check-badge-pulse 0.9s ease-in-out infinite alternate;
-
-        .check-icon {
-            font-size: 1rem;
-            line-height: 1;
-        }
-
-        .check-text {
-            font-family: var(--font-outfit);
-            font-size: 0.82rem;
-            font-weight: 700;
-            letter-spacing: 0.12em;
-            color: #ff5555;
-            text-transform: uppercase;
-        }
-    }
-
-    &.game-over-overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.82);
-        backdrop-filter: blur(6px);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 9999;
-        padding: 1rem;
-    }
-
-    &.game-over-modal {
-        background: #111318;
-        border: 1px solid rgba(255,255,255,0.09);
-        border-radius: 1.25rem;
-        padding: 2.5rem 2rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.875rem;
-        min-width: 280px;
-        max-width: 340px;
-        width: 100%;
-        box-shadow: 0 24px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(240,185,11,0.08);
-        animation: gameover-in 0.25s ease;
-    }
-
-    &.game-over-icon {
-        font-size: 3.5rem;
-        line-height: 1;
-        margin-bottom: 0.25rem;
-    }
-
-    &.game-over-victor {
-        font-family: var(--font-outfit);
-        font-size: 1.75rem;
-        font-weight: 700;
-        color: #fff;
-        letter-spacing: 0.04em;
-        text-align: center;
-        margin: 0;
-        text-shadow: 0 0 24px rgba(240,185,11,0.4);
-    }
-
-    &.game-over-message {
-        font-family: var(--font-mono);
-        font-size: 0.8125rem;
-        color: rgba(255,255,255,0.4);
-        text-align: center;
-        margin: 0;
-    }
-
-    &.game-over-actions {
-        display: flex;
-        flex-direction: column;
-        gap: 0.625rem;
-        width: 100%;
-        margin-top: 0.625rem;
-    }
-
-    &.game-over-btn-primary {
-        width: 100%;
-        padding: 0.8rem 1.5rem;
-        border-radius: 9999px;
-        border: none;
-        background: linear-gradient(135deg, #f0b90b 0%, #d4a009 100%);
-        color: #1a0e00;
-        font-family: var(--font-outfit);
-        font-size: 1rem;
-        font-weight: 700;
-        letter-spacing: 0.06em;
-        cursor: pointer;
-        box-shadow: 0 4px 20px rgba(240,185,11,0.3);
-        transition: transform 0.15s ease;
-
-        &:hover { transform: translateY(-1px); }
-        &:active { transform: scale(0.98); }
-    }
-
-    &.game-over-btn-ghost {
-        width: 100%;
-        padding: 0.75rem 1.5rem;
-        border-radius: 9999px;
-        border: 1px solid rgba(255,255,255,0.1);
-        background: transparent;
-        color: rgba(255,255,255,0.45);
-        font-family: var(--font-outfit);
-        font-size: 0.875rem;
-        cursor: pointer;
-        transition: border-color 0.15s ease, color 0.15s ease;
-
-        &:hover {
-            border-color: rgba(255,255,255,0.22);
-            color: rgba(255,255,255,0.7);
-        }
-    }
-
-    &.thinking-badge {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.4rem 0.875rem;
-        background: rgba(0,212,255,0.08);
-        border: 1px solid rgba(0,212,255,0.2);
-        border-radius: 9999px;
-        margin: 0 auto;
-    }
-
-    &.thinking-dot {
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
-        background: #00d4ff;
-        display: block;
-        animation: thinking-pulse 1.2s ease-in-out infinite;
-    }
-
-    &.thinking-text {
-        font-family: var(--font-mono);
-        font-size: 0.75rem;
-        color: #00d4ff;
-        letter-spacing: 0.06em;
-    }
-
-    @keyframes gameover-in {
-        from { opacity: 0; transform: scale(0.92) translateY(12px); }
-        to   { opacity: 1; transform: scale(1) translateY(0); }
-    }
-
-    @keyframes thinking-pulse {
-        0%, 100% { opacity: 1; transform: scale(1); }
-        50%       { opacity: 0.4; transform: scale(0.7); }
-    }
-
-    &.play-board-col {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        gap: 0.375rem;
-
-        @media (min-width: $md) {
-            flex: 0 0 auto;
-            width: min(50%, 400px);
-        }
-        @media (min-width: $lg) {
-            width: min(52%, 480px);
-        }
-        @media (min-width: $xl) {
-            width: min(54%, 560px);
-        }
-        @media (min-width: $xxl) {
-            width: min(55%, 640px);
-        }
-    }
-
-    // right panel — hidden on mobile (top/bottom-bar cover it), flex on md+
-    &.play-panel-col {
-        display: none;
-
-        @media (min-width: $md) {
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-            min-width: 0;
-            gap: 0.625rem;
-        }
-        @media (min-width: $lg) {
-            gap: 0.75rem;
-        }
-    }
-
-    // ── Grid layouts ───────────────────────────────────────────────────────────
-    &.grid-3 {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 0.5rem;
-    }
+// Root class: .common-{componentName}
+// Sub-parts and variants (e.g. &.variant-name) nest inside it via SCSS &.
+// Anything rendered as a DOM sibling (not descendant) stays a flat top-level class.
+.common-box {
     &.grid-2 {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 0.5rem;
+        gap: 0.6rem;
     }
-    &.podium-grid {
+
+    &.grid-3 {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 0.5rem;
-        @media (min-width: $xl) {
-            gap: 0.875rem;
-        }
+        gap: 0.6rem;
     }
 
-    // currency picker — 3-pill row
-    &.currency-picker {
-        display: flex;
-        gap: 0.5rem;
-        flex-wrap: wrap;
-    }
-
-    // wallet stats: 2-col on xs, 4-col on sm+
-    &.wallet-stats-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 0.5rem;
-
-        @media (min-width: $sm) {
-            grid-template-columns: repeat(4, 1fr);
-        }
-        @media (min-width: $xl) {
-            gap: 0.75rem;
-        }
-    }
-
-    // wallet action + transactions: stacked on mobile, side-by-side on md+
-    &.wallet-main {
-        display: flex;
-        flex-direction: column;
-        gap: 0.875rem;
-
-        @media (min-width: $md) {
-            flex-direction: row;
-            align-items: flex-start;
-            gap: 1.25rem;
-            > *:first-child {
-                flex: 0 0 340px;
-            }
-            > *:last-child {
-                flex: 1;
-                min-width: 0;
-            }
-        }
-        @media (min-width: $xl) {
-            gap: 1.5rem;
-            > *:first-child {
-                flex: 0 0 380px;
-            }
-        }
-    }
-
-    // pool list: single col on sm, 2-col on md+
-    &.pool-list {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-
-        @media (min-width: $md) {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0.75rem;
-        }
-        @media (min-width: $xl) {
-            grid-template-columns: repeat(3, 1fr);
-        }
-    }
-
-    &.pool-empty {
-        grid-column: 1 / -1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 3rem 1rem;
-
-        .pool-empty-text {
-            text-align: center;
-        }
-    }
-
-    // ── Flex helpers ───────────────────────────────────────────────────────────
-    &.play-actions {
-        display: flex;
-        gap: 0.5rem;
-    }
-    &.draw-offer-banner {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 0.75rem;
-        padding: 0.625rem 0.875rem;
-        border-radius: 0.75rem;
-        background: rgba(#eab308, 0.08);
-        border: 1px solid rgba(#eab308, 0.25);
-
-        .draw-offer-text {
-            font-family: var(--font-outfit);
-            font-size: $font13;
-            color: rgba(#eab308, 0.9);
-        }
-    }
-    &.draw-offer-actions {
-        display: flex;
-        gap: 0.375rem;
-        flex-shrink: 0;
-    }
-    &.section-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-    &.live-indicator {
-        display: flex;
-        align-items: center;
-        gap: 0.375rem;
-    }
-    &.tx-section {
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-    }
-    &.tx-list {
-        display: flex;
-        flex-direction: column;
-        gap: 0.25rem;
-    }
-    &.cta-sticky {
-        position: sticky;
-        bottom: 0;
-        padding-top: 0.5rem;
-        padding-bottom: 0.25rem;
-    }
-    &.filter-row {
-        display: flex;
-        gap: 0.5rem;
-        overflow-x: auto;
-        padding-bottom: 0.125rem;
-        scrollbar-width: none;
-        &::-webkit-scrollbar {
-            display: none;
-        }
-    }
-
-    // ── Card inner layouts ─────────────────────────────────────────────────────
-    &.player-meta {
-        display: flex;
-        flex-direction: column;
-        gap: 0.25rem;
-        flex: 1;
-        min-width: 0;
-    }
-    &.player-name-row {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-    &.engine-meta {
-        display: flex;
-        flex-direction: column;
-        gap: 0.25rem;
-        flex: 1;
-        min-width: 0;
-    }
-    &.engine-top-row {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        flex-wrap: wrap;
-    }
-    &.balance-row {
-        display: flex;
-        align-items: baseline;
-        gap: 0.375rem;
-    }
-    &.balance-currency-tag {
-        display: flex;
-        align-items: center;
-        gap: 0.25rem;
-        color: var(--currency-color, #{$gold});
-        opacity: 0.7;
-    }
-    &.field-group {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-    &.amount-row {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-    &.network-options {
-        display: flex;
-        gap: 0.5rem;
-    }
-    &.cta-header {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        margin-bottom: 0.75rem;
-    }
-    &.player-details {
-        display: flex;
-        flex-direction: column;
-        gap: 0.125rem;
-        flex: 1;
-        min-width: 0;
-    }
-    &.player-streak {
-        display: flex;
-        align-items: center;
-        gap: 0.25rem;
-    }
-    &.pool-card-top {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        margin-bottom: 0.625rem;
-    }
-    &.pool-card-bottom {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-    }
-    &.pool-stat {
-        display: flex;
-        align-items: center;
-        gap: 0.25rem;
-    }
-    &.pool-right {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        gap: 0.125rem;
-    }
-    &.pool-volume-bars {
-        display: flex;
-        align-items: flex-end;
-        gap: 0.125rem;
-        margin-left: auto;
-    }
-    &.tx-info {
-        display: flex;
-        flex-direction: column;
-        gap: 0.125rem;
-        flex: 1;
-        min-width: 0;
-    }
-    &.tx-amounts {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        gap: 0.125rem;
-    }
-
-    // ── Eval bar ───────────────────────────────────────────────────────────────
-    &.eval-bar {
-        height: 0.3rem;
-        width: 100%;
-        border-radius: 9999px;
-        overflow: hidden;
-        display: flex;
-        box-shadow: 0 0 8px rgba($cyan, 0.15);
-
-        .eval-dark {
-            height: 100%;
-            background: rgba($white, 0.06);
-            transition: flex 0.7s ease;
-        }
-        .eval-light {
-            height: 100%;
-            background: linear-gradient(90deg, $cyan, $gold);
-            transition: flex 0.7s ease;
-        }
-    }
-
-    // ── Chess board ────────────────────────────────────────────────────────────
+    // ── Chess board (ChessBoard component) ──────────────────────────────────
     &.chess-board {
         width: 100%;
         user-select: none;
-        // Wooden frame border
-        background: #5c3310;
-        padding: 5px;
         border-radius: 4px;
         box-shadow:
-            0 0 0 1px #3b2009,
+            0 0 0 1px rgba($gold, 0.15),
             0 8px 40px rgba(0, 0, 0, 0.75),
             0 2px 8px rgba(0, 0, 0, 0.5);
     }
@@ -690,1385 +45,2156 @@
         cursor: pointer;
         transition: background-color 0.2s ease;
 
-        // ── Corner labels (rank & file inside the square) ────────────────────
-        .sq-corner-label {
-            position: absolute;
-            font-family: var(--font-mono);
-            font-size: clamp(7px, 1.1vw, 11px);
-            font-weight: 700;
-            line-height: 1;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .sq-rank {
-            top: 2px;
-            left: 3px;
-        }
-        .sq-file {
-            bottom: 2px;
-            right: 3px;
-        }
-
-        .label-on-light {
-            color: #b58863;
-        }
-        .label-on-dark {
-            color: #f0d9b5;
-        }
-
-        // ── Piece image ──────────────────────────────────────────────────────
-        .chess-piece-img {
-            width: 90%;
-            height: 90%;
-            object-fit: contain;
-            pointer-events: none;
-            position: relative;
-            z-index: 2;
-            filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.4));
-            transition: opacity 0.15s ease, transform 0.15s ease;
-
-            &:hover {
-                transform: scale(1.08);
-            }
-        }
-
-        // ── Legal move dot (empty square) ────────────────────────────────────
-        .legal-dot {
-            position: absolute;
-            width: 30%;
-            height: 30%;
-            border-radius: 50%;
-            background: rgba(0, 0, 0, 0.18);
-            pointer-events: none;
-            z-index: 3;
-        }
-
-        // ── Legal capture ring (square has a piece) ──────────────────────────
-        .legal-capture-ring {
-            position: absolute;
-            inset: 0;
-            border: 4px solid rgba(0, 0, 0, 0.18);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 3;
-        }
-
-        // ── Water drop ripple (piece under attack) ───────────────────────────
-        .water-drop-ripple {
-            position: absolute;
-            inset: 0;
-            border-radius: 50%;
-            background: rgba(220, 50, 50, 0.25);
-            pointer-events: none;
-            z-index: 3;
-            animation: water-ripple 1.4s ease-out infinite;
-        }
-
-        // ── Danger pulse on piece under attack ───────────────────────────────
-        .piece-danger {
-            animation: piece-danger-pulse 1.4s ease-in-out infinite !important;
-        }
-
-        // ── King in check glow ────────────────────────────────────────────────
-        .piece-in-check {
-            animation: king-check-pulse 0.8s ease-in-out infinite alternate !important;
-        }
-
-        // ── King in stalemate glow (yellow) ───────────────────────────────────
-        .piece-in-stalemate {
-            animation: king-stalemate-pulse 0.9s ease-in-out infinite alternate !important;
+        &.square-selected {
+            box-shadow: inset 0 0 0 2px $gold;
         }
     }
 
-    @keyframes king-stalemate-pulse {
-        from { filter: drop-shadow(0 0 4px rgba(240,185,11,0.6)); }
-        to   { filter: drop-shadow(0 0 14px rgba(240,185,11,1)) drop-shadow(0 0 6px rgba(240,185,11,0.8)); }
+    // ── Lobby page ────────────────────────────────────────────────────────────
+    &.lobby-page {
+        padding-bottom: 2rem;
+
+        @media (min-width: $lg) {
+            padding-left: 2.5rem;
+            padding-right: 2.5rem;
+        }
     }
 
-    // ── Game status banner ─────────────────────────────────────────────────────
-    &.game-status-banner {
+    &.lobby-heading {
+        padding: 1.6rem 1.1rem 0.4rem;
+    }
+
+    &.lobby-livebar {
+        margin: 1.6rem 1.1rem 0;
+        padding: 0.7rem 0.9rem;
         display: flex;
-        justify-content: center;
-        padding: 0.375rem 0;
+        justify-content: space-between;
+        align-items: center;
+        background: $appSecondary;
+        border: 1px solid $appBorder;
+        border-radius: $radiusMd;
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        color: rgba($white, 0.55);
 
-        .status-label {
-            font-family: var(--font-mono);
-            font-size: $font12;
-            color: $cyan;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
+        b {
+            color: $white;
+        }
 
-            &.game-over {
-                color: $gold;
-                font-size: $font14;
-                font-weight: 700;
-                text-shadow: 0 0 12px rgba($gold, 0.5);
+        &.lobby-livebar--mobile {
+            @media (min-width: $lg) {
+                display: none;
             }
         }
     }
-}
 
-// ── Lobby ─────────────────────────────────────────────────────────────────────
+    &.lobby-section {
+        padding: 1.4rem 1.1rem 0;
+    }
 
-.lobby-page {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    padding: 2.5rem 1.5rem 4rem;
-    max-width: 760px;
-    margin: 0 auto;
-    width: 100%;
-    box-sizing: border-box;
+    // Mobile: mode cards, then wins/top-ranked, stacked in DOM order (livebar
+    // above covers the online/liquidity stats). Desktop ($lg+): reflows into
+    // the Command Rail pattern — mode cards + a Live Activity stat row as the
+    // main column, Live Wins + Top Ranked as a sticky right rail.
+    &.lobby-dashboard-grid {
+        display: flex;
+        flex-direction: column;
 
-    @media (min-width: $md) { padding: 3.5rem 2.5rem 5rem; }
-}
+        @media (min-width: $lg) {
+            display: grid;
+            grid-template-columns: 1fr 20rem;
+            column-gap: 1.75rem;
+            max-width: 66rem;
+            margin: 0 auto;
+            width: 100%;
+        }
+    }
 
-// ── Page heading ──────────────────────────────────────────────────────────────
+    &.lobby-rail-col {
+        @media (min-width: $lg) {
+            align-self: start;
+            position: sticky;
+            top: 1.5rem;
+        }
+    }
 
-.lobby-heading {
-    display: flex;
-    flex-direction: column;
-    gap: 0.375rem;
-    margin-bottom: 0.25rem;
-}
+    &.lobby-live-activity {
+        display: none;
 
-.lobby-heading-title {
-    font-family: var(--font-outfit);
-    font-size: $font28;
-    font-weight: 700;
-    color: $white;
-    letter-spacing: -0.02em;
-    line-height: 1.1;
-    margin: 0;
-}
+        @media (min-width: $lg) {
+            display: block;
 
-.lobby-heading-sub {
-    font-family: var(--font-outfit);
-    font-size: $font14;
-    color: rgba($white, 0.38);
-    margin: 0;
-}
+            // The StatCard reused here is sized for a mobile 3-up row —
+            // give it real desktop presence in this wider column.
+            .common-statcard {
+                padding: 1.1rem;
+                gap: 0.35rem;
 
-// ── Blocks ────────────────────────────────────────────────────────────────────
+                .statcard-value {
+                    font-size: 1.3rem;
+                }
 
-.lobby-block {
-    display: flex;
-    flex-direction: column;
-    gap: 0.875rem;
-    width: 100%;
+                .statcard-label {
+                    font-size: 0.66rem;
+                }
+            }
+        }
+    }
 
-    &--anim { animation: lobby-block-in 0.22s ease; }
-}
+    &.mode-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+    }
 
-@keyframes lobby-block-in {
-    from { opacity: 0; transform: translateY(-8px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
+    &.wins-ticker {
+        overflow: hidden;
+        border-radius: $radiusMd;
+        background: $appSecondary;
+        border: 1px solid $appBorder;
+        padding: 0.15rem 0;
 
-// ── Mode grid ─────────────────────────────────────────────────────────────────
+        &.wins-ticker--empty {
+            padding: 0.9rem;
+            text-align: center;
+        }
+    }
 
-.lobby-mode-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.875rem;
+    &.wins-track {
+        display: flex;
+        gap: 1.75rem;
+        padding: 0.5rem 0.9rem;
+        animation: wins-scroll 26s linear infinite;
+        white-space: nowrap;
+        width: max-content;
+    }
 
-    @media (min-width: $md) { gap: 1.125rem; }
-}
+    &.lb-teaser {
+        border-radius: $radiusLg;
+        background: $appCard;
+        border: 1px solid $appBorder;
+        overflow: hidden;
+    }
 
-// mode card icon wrapper
-.lmc-icon-wrap {
-    width: 3rem;
-    height: 3rem;
-    border-radius: 0.875rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba($white, 0.06);
-    border: 1px solid rgba($white, 0.08);
-    margin-bottom: 0.75rem;
-    transition: background 0.2s, border-color 0.2s;
-}
-
-// soon badge
-.lmc-soon-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
-    margin-top: 0.625rem;
-    padding: 0.2rem 0.6rem;
-    border-radius: 9999px;
-    background: rgba($white, 0.06);
-    border: 1px solid rgba($white, 0.1);
-    font-family: var(--font-mono);
-    font-size: $font10;
-    color: rgba($white, 0.35);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-}
-
-// active dot indicator
-.lmc-active-dot {
-    display: block;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: $gold;
-    box-shadow: 0 0 8px rgba($gold, 0.7);
-    margin-top: 0.625rem;
-}
-
-// ── Diff grid ─────────────────────────────────────────────────────────────────
-
-.lobby-diff-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.875rem;
-
-    @media (min-width: $md) { gap: 1rem; }
-}
-
-.ldc-icon-wrap {
-    width: 2.25rem;
-    height: 2.25rem;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    background: rgba($white, 0.06);
-    border: 1px solid rgba($white, 0.08);
-
-    &--green { color: $greenishTeal; background: rgba($greenishTeal, 0.1); border-color: rgba($greenishTeal, 0.15); }
-    &--gold  { color: $gold;         background: rgba($gold, 0.1);         border-color: rgba($gold, 0.15); }
-    &--red   { color: $brinkPink;    background: rgba($brinkPink, 0.1);    border-color: rgba($brinkPink, 0.15); }
-
-    &--featured { width: 3rem; height: 3rem; border-radius: 0.75rem; }
-}
-
-.ldc-text-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
-    text-align: left;
-    flex: 1;
-    min-width: 0;
-}
-
-// ── Time grid ─────────────────────────────────────────────────────────────────
-
-.lobby-time-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.875rem;
-
-    @media (min-width: 480px) { grid-template-columns: repeat(4, 1fr); }
-    @media (min-width: $md)   { gap: 1rem; }
-}
-
-.ltc-icon-wrap {
-    width: 2.25rem;
-    height: 2.25rem;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 0.5rem;
-    background: rgba($white, 0.06);
-    border: 1px solid rgba($white, 0.08);
-
-    &--red   { color: $brinkPink;    background: rgba($brinkPink, 0.1);    border-color: rgba($brinkPink, 0.15); }
-    &--gold  { color: $gold;         background: rgba($gold, 0.1);         border-color: rgba($gold, 0.15); }
-    &--cyan  { color: $cyan;         background: rgba($cyan, 0.1);         border-color: rgba($cyan, 0.15); }
-    &--green { color: $greenishTeal; background: rgba($greenishTeal, 0.1); border-color: rgba($greenishTeal, 0.15); }
-}
-
-// ── Game Setup Modal ──────────────────────────────────────────────────────────
-
-.gsm-backdrop {
-    position: fixed;
-    inset: 0;
-    z-index: 9000;
-    background: rgba(0, 0, 0, 0.72);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1.25rem;
-}
-
-.gsm-panel {
-    background: #111318;
-    border: 1px solid rgba($white, 0.1);
-    border-radius: 1.375rem;
-    width: 100%;
-    max-width: 460px;
-    box-shadow:
-        0 32px 80px rgba(0, 0, 0, 0.6),
-        0 0 0 1px rgba($gold, 0.06);
-    overflow: hidden;
-}
-
-.gsm-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1.125rem 1.375rem;
-    border-bottom: 1px solid rgba($white, 0.07);
-
-    .gsm-header-left {
+    &.lb-row {
         display: flex;
         align-items: center;
-        gap: 0.625rem;
+        gap: 0.7rem;
+        padding: 0.65rem 0.9rem;
+        border-bottom: 1px solid $appBorder;
     }
 
-    .gsm-header-icons {
+    // ── Game setup modal (GameSetupModal component) ──────────────────────────
+    &.gsm-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 1.1rem;
+        border-bottom: 1px solid $appBorder;
+    }
+
+    &.gsm-header-left {
+        display: flex;
+        align-items: center;
+    }
+
+    &.gsm-header-icons {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: rgba($white, 0.55);
+    }
+
+    &.gsm-body {
+        padding: 1.1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+
+    &.gsm-section {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &.gsm-diff-row {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    &.gsm-time-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+    }
+
+    &.gsm-footer {
+        padding: 20px;
+    }
+
+    &.device-conflict-actions {
+        display: flex;
+        gap: 0.75rem;
+    }
+
+    &.device-conflict-icon {
+        width: 3rem;
+        height: 3rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        background: rgba($gold, 0.12);
+        color: $gold;
+    }
+
+    // ── Matchmaking page ──────────────────────────────────────────────────────
+    &.matchmaking-page {
+        padding-bottom: 2rem;
+
+        @media (min-width: $lg) {
+            padding-left: 2.5rem;
+            padding-right: 2.5rem;
+        }
+    }
+
+    // Mobile: stats + pool list stacked, CTA becomes a fixed bottom bar (see
+    // .cta-sticky) whenever a pool is selected — the rail column itself stays
+    // empty/invisible so it never grows the page. Desktop ($lg+): reflows into
+    // the Rail Queue pattern — pool grid as the main column, a sticky "Your
+    // Queue" rail on the right showing the CTA card or an empty placeholder.
+    &.matchmaking-dashboard-grid {
+        display: flex;
+        flex-direction: column;
+
+        @media (min-width: $lg) {
+            display: grid;
+            grid-template-columns: 1fr 20rem;
+            column-gap: 1.75rem;
+            max-width: 66rem;
+            margin: 0 auto;
+            width: 100%;
+        }
+    }
+
+    // Mobile: hidden while searching/found, so the rail's SearchingScreen can
+    // take over the full page exactly like the confirmed mobile design (pool
+    // browsing disappears during a search). Desktop: always visible — the
+    // confirmed Rail Queue concept keeps the pool grid up while only the rail
+    // swaps to the searching ring, so you can keep browsing while queued.
+    &.matchmaking-main-col {
+        .matchmaking-page--searching & {
+            display: none;
+
+            @media (min-width: $lg) {
+                display: block;
+            }
+        }
+    }
+
+    &.matchmaking-rail-col {
+        @media (min-width: $lg) {
+            align-self: start;
+            position: sticky;
+            // Matches .lobby-section's padding-top in the main column, so the
+            // rail card lines up with the stats grid instead of starting higher.
+            top: 1.5rem;
+            margin-top: 1.4rem;
+        }
+    }
+
+    &.matchmaking-rail-empty {
+        display: none;
+
+        @media (min-width: $lg) {
+            display: block;
+            padding: 1.5rem 1.1rem;
+            text-align: center;
+            border-radius: $radiusLg;
+            background: $appCard;
+            border: 1px solid $appBorder;
+        }
+    }
+
+    &.section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.7rem;
+        margin-bottom: 0.7rem;
+    }
+
+    &.live-indicator {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        flex-shrink: 0;
+    }
+
+    &.filter-row {
+        display: flex;
+        gap: 0.4rem;
+        overflow-x: auto;
+        padding-bottom: 0.2rem;
+        margin-bottom: 0.9rem;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
+    &.pool-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+    }
+
+    &.pool-empty {
+        padding: 2rem 1rem;
+        text-align: center;
+    }
+
+    &.pool-category-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+    }
+
+    &.pool-hot-badge {
+        display: flex;
+        align-items: center;
+        gap: 0.2rem;
+        padding: 0.1rem 0.4rem;
+        border-radius: 999px;
+        color: $paleRed;
+        background: rgba($paleRed, 0.14);
+        border: 1px solid rgba($paleRed, 0.3);
+    }
+
+    &.pool-card-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+    }
+
+    &.pool-stake-row {
         display: flex;
         align-items: center;
         gap: 0.3rem;
     }
 
-    .gsm-header-icon { color: $gold; }
-
-    .gsm-title {
-        font-family: var(--font-outfit);
-        font-size: $font16;
-        font-weight: 600;
-        color: $white;
+    &.pool-right {
+        text-align: right;
     }
 
-    .gsm-header-vs {
-        font-family: var(--font-outfit);
-        font-size: $font16;
-        font-weight: 700;
-        color: rgba($white, 0.4);
-        letter-spacing: 0.04em;
+    &.pool-card-bottom {
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+        margin-top: 0.6rem;
     }
 
-    .gsm-title {
-        font-family: var(--font-outfit);
-        font-size: $font16;
-        font-weight: 600;
-        color: $white;
+    &.pool-stat {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        color: rgba($white, 0.32);
     }
 
-    .gsm-close {
-        width: 1.75rem;
-        height: 1.75rem;
-        border-radius: 0.5rem;
+    &.pool-volume-bars {
+        display: flex;
+        align-items: flex-end;
+        gap: 2px;
+        margin-left: auto;
+        height: 0.9rem;
+    }
+
+    &.pool-volume-bar {
+        width: 3px;
+        border-radius: 1px;
+    }
+
+    // Mobile: still the last element in normal flow (now inside
+    // .matchmaking-rail-col instead of directly in the page), so sticky
+    // reserves its own space exactly as before — no overlap with the pool
+    // list above it. Desktop ($lg+): sits as a normal card in the rail.
+    &.cta-sticky {
+        position: sticky;
+        bottom: 0;
+        margin: 1.3rem 0 0;
+        padding: 1rem 1.1rem 1.25rem;
+        background: linear-gradient(180deg, transparent 0%, $appBg 30%);
+
+        @media (min-width: $lg) {
+            position: static;
+            margin: 0;
+            padding: 0;
+            background: none;
+        }
+    }
+
+    &.cta-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 0.75rem;
+    }
+
+    &.searching-screen {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 3rem 1.5rem 2rem;
+
+        @media (min-width: $lg) {
+            padding: 1.4rem 0.75rem;
+        }
+    }
+
+    &.searching-ring-wrap {
+        position: relative;
+        width: 7rem;
+        height: 7rem;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: rgba($white, 0.35);
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        transition: background 0.15s, color 0.15s;
+        margin-bottom: 1.75rem;
 
-        &:hover {
-            background: rgba($white, 0.07);
-            color: rgba($white, 0.75);
+        @media (min-width: $lg) {
+            width: 5rem;
+            height: 5rem;
+            margin-bottom: 1.2rem;
         }
     }
-}
 
-.gsm-body {
-    display: flex;
-    flex-direction: column;
-    gap: 1.375rem;
-    padding: 1.375rem;
-}
+    &.searching-ring {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        border: 1.5px solid rgba($gold, 0.4);
+        animation: ring-pulse 2.2s ease-out infinite;
 
-.gsm-section {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
-
-// ── Difficulty buttons ─────────────────────────────────────────────────────────
-
-.gsm-diff-row {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.625rem;
-}
-
-.gsm-diff-btn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.375rem;
-    padding: 0.875rem 0.5rem;
-    border-radius: 0.875rem;
-    border: 1px solid rgba($white, 0.08);
-    background: rgba($white, 0.03);
-    cursor: pointer;
-    transition: all 0.15s ease;
-
-    // featured card: full width row, horizontal layout
-    &--featured {
-        grid-column: 1 / -1;
-        flex-direction: row;
-        justify-content: flex-start;
-        gap: 0.875rem;
-        padding: 1rem 1.25rem;
-
-        .gsm-diff-icon {
-            width: 2.5rem;
-            height: 2.5rem;
-            border-radius: 0.75rem;
-            background: rgba($white, 0.05);
-            border: 1px solid rgba($white, 0.1);
-            flex-shrink: 0;
-            justify-content: center;
+        &--delay {
+            animation-delay: 1.1s;
         }
 
-        .gsm-diff-text {
+        .searching-screen.found & {
+            border-color: rgba($greenishTeal, 0.45);
+            animation: none;
+            opacity: 0;
+        }
+    }
+
+    &.searching-ring-inner {
+        width: 4.4rem;
+        height: 4.4rem;
+        border-radius: 50%;
+        background: $appCard;
+        border: 1px solid rgba($gold, 0.45);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 24px rgba($gold, 0.25);
+
+        .searching-screen.found & {
+            border-color: rgba($greenishTeal, 0.55);
+            box-shadow: 0 0 28px rgba($greenishTeal, 0.35);
+        }
+
+        @media (min-width: $lg) {
+            width: 3.1rem;
+            height: 3.1rem;
+        }
+    }
+
+    &.searching-text-group {
+        margin-bottom: 1.75rem;
+
+        @media (min-width: $lg) {
+            margin-bottom: 1.2rem;
+        }
+    }
+
+    &.searching-chips {
+        display: flex;
+        gap: 0.5rem;
+        width: 100%;
+        margin-bottom: 1.75rem;
+
+        // Confirmed rail concept doesn't show these — the "Xs left · stake"
+        // subtitle already carries the key info compactly in that context.
+        @media (min-width: $lg) {
+            display: none;
+        }
+    }
+
+    &.searching-chip {
+        flex: 1;
+        padding: 0.65rem 0.5rem;
+        border-radius: $radiusMd;
+        background: $appCard;
+        border: 1px solid $appBorder;
+    }
+
+    // ── Play page shell ──────────────────────────────────────────────────────
+    &.play-view {
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+    }
+
+    &.play-top-bar {
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+        padding: 0.9rem 1.1rem 0;
+
+        @media (min-width: $md) {
+            display: none;
+        }
+    }
+
+    &.play-bottom-bar {
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+        padding: 0.9rem 1.1rem;
+
+        @media (min-width: $md) {
+            display: none;
+        }
+    }
+
+    &.play-main {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 0.9rem 1.1rem 0;
+        width: 60rem !important;
+        height: 50rem;
+        @media (min-width: $md) {
+            width: 56.6rem; // 45rem board + 0.6rem gap + 11rem notation col
+            margin: 0 auto;
+
+            .wager-badge {
+                align-self: normal;
+            }
+        }
+    }
+
+    &.play-board-row {
+        @media (min-width: $md) {
+            display: flex;
+            align-items: stretch;
+            gap: 0.6rem;
+        }
+    }
+
+    &.play-board-col {
+        position: relative;
+
+        @media (min-width: $md) {
+            display: flex;
             align-items: flex-start;
-        }
-    }
-
-    &--green {
-        &.active {
-            border-color: rgba($greenishTeal, 0.4);
-            background: rgba($greenishTeal, 0.08);
-            .gsm-diff-icon { color: $greenishTeal; border-color: rgba($greenishTeal, 0.2); }
-        }
-        &:hover:not(.active) { border-color: rgba($greenishTeal, 0.2); }
-    }
-    &--gold {
-        &.active {
-            border-color: rgba($gold, 0.4);
-            background: rgba($gold, 0.08);
-            .gsm-diff-icon { color: $gold; border-color: rgba($gold, 0.2); }
-        }
-        &:hover:not(.active) { border-color: rgba($gold, 0.2); }
-    }
-    &--red {
-        &.active {
-            border-color: rgba($brinkPink, 0.4);
-            background: rgba($brinkPink, 0.08);
-            .gsm-diff-icon { color: $brinkPink; border-color: rgba($brinkPink, 0.2); }
-        }
-        &:hover:not(.active) { border-color: rgba($brinkPink, 0.2); }
-    }
-
-    .gsm-diff-icon {
-        color: rgba($white, 0.3);
-        display: flex;
-        align-items: center;
-        transition: color 0.15s, border-color 0.15s;
-    }
-
-    .gsm-diff-text {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.15rem;
-    }
-
-    .gsm-diff-label {
-        font-family: var(--font-outfit);
-        font-size: $font13;
-        font-weight: 600;
-        color: $white;
-    }
-
-    .gsm-diff-rating {
-        font-family: var(--font-mono);
-        font-size: $font10;
-        color: rgba($white, 0.35);
-    }
-}
-
-// ── Time buttons ───────────────────────────────────────────────────────────────
-
-.gsm-time-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.625rem;
-}
-
-.gsm-time-btn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.375rem;
-    padding: 0.875rem 0.5rem;
-    border-radius: 0.875rem;
-    border: 1px solid rgba($white, 0.08);
-    background: rgba($white, 0.03);
-    cursor: pointer;
-    transition: all 0.15s ease;
-
-    // featured: full width, horizontal layout
-    &--featured {
-        grid-column: 1 / -1;
-        flex-direction: row;
-        justify-content: flex-start;
-        gap: 0.875rem;
-        padding: 1rem 1.25rem;
-
-        .gsm-time-icon {
-            width: 2.5rem;
-            height: 2.5rem;
-            border-radius: 0.75rem;
-            background: rgba($white, 0.05);
-            border: 1px solid rgba($white, 0.1);
+            gap: 0.5rem;
+            width: 45rem;
             flex-shrink: 0;
-            justify-content: center;
         }
-
-        .gsm-time-text { align-items: flex-start; }
     }
 
-    &--red {
-        &.active {
-            border-color: rgba($brinkPink, 0.4);
-            background: rgba($brinkPink, 0.08);
-            .gsm-time-icon { color: $brinkPink; border-color: rgba($brinkPink, 0.2); }
+    &.play-notation-col {
+        display: none;
+
+        @media (min-width: $md) {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            width: 12rem;
+            flex-shrink: 0;
+
+            .history-panel {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                min-height: 0;
+            }
+
+            .history-list {
+                flex: 1;
+                max-height: none;
+            }
+
+            .play-actions {
+                flex-direction: column;
+            }
         }
-        &:hover:not(.active) { border-color: rgba($brinkPink, 0.2); }
-    }
-    &--gold {
-        &.active {
-            border-color: rgba($gold, 0.4);
-            background: rgba($gold, 0.08);
-            .gsm-time-icon { color: $gold; border-color: rgba($gold, 0.2); }
-        }
-        &:hover:not(.active) { border-color: rgba($gold, 0.2); }
-    }
-    &--cyan {
-        &.active {
-            border-color: rgba($cyan, 0.4);
-            background: rgba($cyan, 0.08);
-            .gsm-time-icon { color: $cyan; border-color: rgba($cyan, 0.2); }
-        }
-        &:hover:not(.active) { border-color: rgba($cyan, 0.2); }
-    }
-    &--green {
-        &.active {
-            border-color: rgba($greenishTeal, 0.4);
-            background: rgba($greenishTeal, 0.08);
-            .gsm-time-icon { color: $greenishTeal; border-color: rgba($greenishTeal, 0.2); }
-        }
-        &:hover:not(.active) { border-color: rgba($greenishTeal, 0.2); }
     }
 
-    .gsm-time-icon {
-        color: rgba($white, 0.3);
+    &.cta-btn-row {
+        display: flex;
+        gap: 0.625rem;
+    }
+
+    &.draw-offer-banner {
         display: flex;
         align-items: center;
-        transition: color 0.15s, border-color 0.15s;
+        justify-content: space-between;
+        gap: 0.6rem;
+        padding: 0.6rem 0.85rem;
+        border-radius: $radiusMd;
+        background: rgba($gold, 0.08);
+        border: 1px solid rgba($gold, 0.3);
+        margin-bottom: 0.5rem;
     }
 
-    .gsm-time-text {
+    &.draw-offer-actions {
+        display: flex;
+        gap: 0.4rem;
+        flex-shrink: 0;
+    }
+
+    // ── Play: player row parts ───────────────────────────────────────────────
+    &.player-avatar-wrap {
+        position: relative;
+        flex-shrink: 0;
+    }
+
+    &.player-meta {
+        min-width: 0;
+    }
+
+    &.player-name-row {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    &.captured-pieces-row {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.3rem;
+        margin-top: 0.25rem;
+    }
+
+    &.captured-piece-chip {
+        display: flex;
+        align-items: center;
+        gap: 0.18rem;
+        padding: 0.14rem 0.35rem 0.14rem 0.22rem;
+        border-radius: 999px;
+        background: rgba($white, 0.06);
+    }
+
+    &.player-row-right {
+        margin-left: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0.25rem;
+    }
+
+    &.turn-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 0.15rem 0.45rem;
+        border-radius: 999px;
+
+        &.turn-badge--primary {
+            background: rgba($cyan, 0.16);
+            color: $cyan;
+        }
+        &.turn-badge--danger {
+            background: rgba($paleRed, 0.16);
+            color: $paleRed;
+        }
+        &.turn-badge--thinking {
+            background: rgba($white, 0.08);
+            color: rgba($white, 0.5);
+        }
+    }
+
+    &.thinking-dots {
+        display: flex;
+        align-items: center;
+        gap: 0.15rem;
+
+        span {
+            width: 0.2rem;
+            height: 0.2rem;
+            border-radius: 50%;
+            background: currentColor;
+            animation: thinking-bounce 1s ease-in-out infinite;
+
+            &:nth-child(2) {
+                animation-delay: 0.15s;
+            }
+            &:nth-child(3) {
+                animation-delay: 0.3s;
+            }
+        }
+    }
+
+    &.turn-badge-dot {
+        width: 0.3rem;
+        height: 0.3rem;
+        border-radius: 50%;
+        background: currentColor;
+        box-shadow: 0 0 5px currentColor;
+    }
+
+    &.inactivity-banner {
+        flex-basis: 100%;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        margin-top: 0.4rem;
+        padding: 0.3rem 0.55rem;
+        border-radius: $radiusSm;
+        background: rgba($paleRed, 0.08);
+        border: 1px solid rgba($paleRed, 0.25);
+
+        &.inactivity-banner--critical {
+            background: rgba($paleRed, 0.14);
+            border-color: rgba($paleRed, 0.4);
+        }
+    }
+
+    &.play-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    // ── Play: eval bar ────────────────────────────────────────────────────────
+    &.eval-bar {
+        width: 0.5rem;
+        border-radius: 999px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column-reverse;
+        background: $appSecondary;
+        flex-shrink: 0;
+    }
+
+    &.eval-light {
+        background: $white;
+    }
+
+    &.eval-dark {
+        background: #2a2d33;
+    }
+
+    // ── Play: engine panel ────────────────────────────────────────────────────
+    &.engine-meta {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &.engine-top-row {
+        display: flex;
+        align-items: baseline;
+        gap: 0.5rem;
+    }
+
+    // ── Play: move history ────────────────────────────────────────────────────
+    &.history-nav {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 0.5rem 0.6rem;
+        border-bottom: 1px solid $appBorder;
+    }
+
+    &.history-list {
+        max-height: 6.5rem;
+        overflow-y: auto;
+        padding: 0.3rem 0.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+    }
+
+    &.move-row {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+    // ── Play: game over screen ────────────────────────────────────────────────
+    &.gos-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 65;
+        display: flex;
+        flex-direction: column;
+        background: $appBg;
+
+        &.gos-overlay--win {
+            background:
+                radial-gradient(
+                    ellipse at 50% -10%,
+                    rgba($gold, 0.16) 0%,
+                    transparent 55%
+                ),
+                $appBg;
+        }
+        &.gos-overlay--lose {
+            background:
+                radial-gradient(
+                    ellipse at 50% -10%,
+                    rgba($paleRed, 0.14) 0%,
+                    transparent 55%
+                ),
+                $appBg;
+        }
+    }
+
+    &.gos-inner {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    &.gos-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 1.1rem;
+    }
+
+    &.gos-icon-btn {
+        flex-shrink: 0;
+        width: 1.9rem;
+        height: 1.9rem;
+    }
+
+    &.gos-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 0 1.1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    &.gos-stats-row {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &.gos-stat {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+
+        &.gos-stat--right {
+            align-items: flex-end;
+        }
+    }
+
+    &.gos-reason-block {
         display: flex;
         flex-direction: column;
         align-items: center;
+        gap: 0.75rem;
+        padding: 1.25rem 0;
+        text-align: center;
+    }
+
+    &.gos-result-badge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 3rem;
+        height: 3rem;
+        border-radius: 50%;
+
+        &.gos-result-badge--win {
+            background: rgba($gold, 0.18);
+            color: $gold;
+        }
+        &.gos-result-badge--lose {
+            background: rgba($paleRed, 0.18);
+            color: $paleRed;
+        }
+        &.gos-result-badge--draw {
+            background: rgba($white, 0.12);
+            color: rgba($white, 0.7);
+        }
+    }
+
+    &.gos-streak-banner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.6rem;
+        border-radius: $radiusMd;
+        background: rgba($gold, 0.1);
+        border: 1px solid rgba($gold, 0.3);
+    }
+
+    &.gos-accuracy-solo {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    &.gos-opponent-row {
+        display: flex;
+        justify-content: center;
+    }
+
+    &.gos-opponent {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    &.gos-progress {
+        height: 1px;
+        background: $appBorder;
+        overflow: hidden;
+    }
+
+    &.gos-progress-bar {
+        height: 100%;
+        width: 60%;
+
+        &.gos-progress-bar--win {
+            background: $gold;
+        }
+        &.gos-progress-bar--lose {
+            background: $paleRed;
+        }
+        &.gos-progress-bar--draw {
+            background: rgba($white, 0.4);
+        }
+    }
+
+    &.gos-actions {
+        padding: 1.1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+    }
+
+    &.gos-rematch {
+        display: flex;
+    }
+
+    &.gos-rematch-waiting {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 0.75rem 1rem;
+    }
+
+    // ── Two-tab lock overlay ──────────────────────────────────────────────────
+    &.tab-lock-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 9000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba($appBg, 0.82);
+        backdrop-filter: blur(8px);
+    }
+
+    &.tab-lock-panel {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.625rem;
+        padding: 2rem 1.75rem 1.75rem;
+        background: $appCard;
+        border: 1px solid rgba($white, 0.1);
+        border-radius: 1.25rem;
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.65);
+        max-width: 320px;
+        width: 90%;
+        text-align: center;
+    }
+
+    &.tab-lock-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+
+    &.promo-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 30;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &.promo-overlay__backdrop {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.65);
+        backdrop-filter: blur(2px);
+    }
+
+    &.promo-overlay__panel {
+        position: relative;
+        z-index: 1;
+        background: $appCard;
+        border: 1px solid rgba($gold, 0.25);
+        border-radius: 1rem;
+        padding: 1.25rem 1rem 1rem;
+        box-shadow:
+            0 12px 40px rgba(0, 0, 0, 0.7),
+            0 0 0 1px rgba($gold, 0.08);
+        min-width: 220px;
+        text-align: center;
+    }
+
+    &.promo-overlay__options {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.5rem;
+    }
+
+    &.profile-view {
+        display: flex;
+        flex-direction: column;
+        gap: 0.875rem;
+        padding-bottom: 2rem;
+    }
+
+    &.profile-id-strip {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        margin: 0 1.1rem;
+        padding: 0.85rem;
+        border-radius: $radiusLg;
+        background: $appCard;
+        border: 1px solid $appBorder;
+    }
+
+    &.profile-avatar-edit-wrap {
+        position: relative;
+        flex-shrink: 0;
+    }
+
+    &.profile-avatar-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    &.profile-elo-badge {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 0.3rem 0.55rem;
+        border-radius: 999px;
+        background: rgba($gold, 0.14);
+        border: 1px solid rgba($gold, 0.32);
+        color: $gold;
+    }
+
+    &.profile-avatar-picker-grid {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 0.5rem;
+        margin: 0.9rem 1.1rem 0;
+    }
+
+    // Streak + Ratings side by side, Personal Info spans both columns —
+    // matches the confirmed Dashboard Grid mockup's single unified grid.
+    &.profile-dashboard-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.6rem;
+        margin: 1rem 1.1rem 0;
+    }
+
+    &.profile-widget {
+        padding: 0.85rem;
+        border-radius: $radiusLg;
+        background: $appCard;
+        border: 1px solid $appBorder;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
+    &.profile-widget-full {
+        grid-column: 1 / -1;
+        padding: 1.1rem;
+        gap: 0.8rem;
+
+        .profile-field-row,
+        .profile-field {
+            margin-top: 0;
+        }
+    }
+
+    &.profile-streak-big {
+        display: flex;
+        align-items: baseline;
+        gap: 0.4rem;
+        color: $gold;
+    }
+
+    &.profile-field-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.6rem;
+
+        @media (max-width: $sm) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    &.profile-field {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &.profile-rating-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.25rem 0;
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        color: rgba($white, 0.55);
+    }
+
+    &.wallet-view {
+        display: flex;
+        flex-direction: column;
+        padding-bottom: 2rem;
+
+        @media (min-width: $lg) {
+            padding-left: 2.5rem;
+            padding-right: 2.5rem;
+        }
+    }
+
+    // Mobile: balance/actions then transactions, stacked in DOM order.
+    // Desktop ($lg+): reflows into the Split Ledger pattern — a fixed-width
+    // sticky balance+stats rail on the left, transactions as the main
+    // column on the right.
+    &.wallet-dashboard-grid {
+        display: flex;
+        flex-direction: column;
+
+        @media (min-width: $lg) {
+            display: grid;
+            grid-template-columns: 18rem 1fr;
+            column-gap: 1.75rem;
+            align-items: start;
+            max-width: 62rem;
+            // margin: 0 auto;
+            width: 100%;
+        }
+    }
+
+    &.wallet-balance-col {
+        @media (min-width: $lg) {
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+            position: sticky;
+            top: 1.5rem;
+        }
+    }
+
+    // Mobile: 3-up compact stat row below the deposit/withdraw buttons.
+    // Desktop ($lg+): stacked single column inside the balance rail.
+    &.wallet-summary-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.6rem;
+        margin-top: 1rem;
+
+        @media (min-width: $lg) {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            margin-top: 0;
+        }
+    }
+
+    &.wallet-empty-hero {
+        padding: 1.6rem 1.1rem 0;
+        text-align: center;
+
+        @media (min-width: $lg) {
+            max-width: 26rem;
+            margin: 0 auto;
+        }
+    }
+
+    &.wallet-empty-icon {
+        width: 3.4rem;
+        height: 3.4rem;
+        margin: 0 auto 0.9rem;
+        border-radius: 50%;
+        background: rgba($gold, 0.12);
+        border: 1px solid rgba($gold, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        color: $gold;
+    }
+
+    &.wallet-action-buttons {
+        display: flex;
+        gap: 0.6rem;
+        margin-top: 1rem;
+    }
+
+    &.wallet-empty-actions {
+        @media (min-width: $lg) {
+            max-width: 26rem;
+            margin: 0 auto;
+        }
+    }
+
+    &.field-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
+    &.withdrawable-stat {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+        padding: 0.9rem 1rem;
+        border-radius: $radiusMd;
+        background: $appSecondary;
+        border: 1px solid $appBorder;
+    }
+
+    // Desktop-only left panel (brand/tagline, or the steps guide once opened) —
+    // on mobile the same content stays inline (.deposit-mobile-brand) or as a
+    // full overlay (.deposit-steps-overlay), matching the confirmed mobile design.
+    &.deposit-side-panel {
+        display: none;
+
+        @media (min-width: $lg) {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            padding: 1.5rem 1.25rem;
+            background: $appCard;
+            border-right: 1px solid $appBorder;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+
+            .deposit-steps-list {
+                text-align: left;
+                width: 100%;
+                padding: 0;
+            }
+
+            .deposit-howto-link {
+                align-self: center;
+                margin-top: 0;
+            }
+
+            .deposit-side-steps-header {
+                display: flex;
+                align-items: center;
+                gap: 0.4rem;
+                width: 100%;
+                margin-bottom: 0.4rem;
+            }
+        }
+    }
+
+    // Right column of the desktop split — matches the confirmed reference
+    // exactly: white surface with dark text, not the app's own dark theme.
+    // Mobile is untouched (stays the app's normal dark bottom sheet).
+    &.deposit-main-col {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+
+        @media (min-width: $lg) {
+            background: #fff;
+
+            .gsm-header {
+                border-bottom: 1px solid #ece7db;
+            }
+
+            .gsm-modal-title {
+                color: #141413;
+            }
+
+            .gsm-close {
+                background: transparent;
+                border: none;
+                color: #8a8580;
+
+                &:hover {
+                    background: rgba(0, 0, 0, 0.05);
+                    border-color: transparent;
+                    color: #141413;
+                }
+            }
+
+            .field-label {
+                color: #a3a09a;
+            }
+
+            .deposit-amount-group {
+                align-items: center;
+                text-align: center;
+            }
+
+            .deposit-address-text,
+            .deposit-scan-hint,
+            .deposit-expiry-text {
+                color: #141413;
+            }
+
+            .deposit-scan-hint,
+            .deposit-expiry-text {
+                color: #8a8580;
+            }
+
+            .deposit-address-row {
+                background: #fff;
+                border: 1px solid #e3ded2;
+                border-radius: $radiusMd;
+                padding: 0.6rem 0.75rem;
+            }
+
+            .common-button.primary {
+                background: $gold;
+                color: #1a0f00;
+
+                &:disabled {
+                    background: #d8d4cb;
+                    color: #a3a09a;
+                    opacity: 1;
+                    box-shadow: none;
+                }
+            }
+
+            .gsm-footer .common-button.ghost {
+                width: auto;
+                margin: 0 auto;
+                color: #8a8580;
+
+                &:hover {
+                    color: #141413;
+                    background: transparent;
+                }
+            }
+
+            .deposit-success-title {
+                color: #141413;
+            }
+
+            .deposit-success-desc {
+                color: #6b6660;
+            }
+        }
+    }
+
+    &.deposit-amount-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        margin-top: 0.5rem;
+        justify-content: center;
+    }
+
+    &.deposit-btc-warning {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+        padding: 0.7rem 0.85rem;
+        border-radius: $radiusMd;
+        background: rgba($cyan, 0.1);
+        border: 1px solid rgba($cyan, 0.25);
+        color: $cyan;
+        font-family: var(--font-mono);
+        font-size: 0.68rem;
+        line-height: 1.5;
+
+        svg {
+            flex-shrink: 0;
+            margin-top: 0.1rem;
+        }
+
+        @media (min-width: $lg) {
+            background: #eaf1ff;
+            border-color: #d3e2fb;
+            color: #3b66d8;
+        }
+    }
+
+    &.deposit-speed-badge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        font-family: var(--font-mono);
+        font-size: 0.68rem;
+        color: rgba($white, 0.4);
+
+        .deposit-speed-logo-img {
+            height: 1.5rem;
+            width: auto;
+        }
+    }
+
+    // Tagline/speed-badge/how-to link inline in the mobile form body — the
+    // desktop side panel shows the same content instead, so this hides there.
+    &.deposit-mobile-brand {
+        display: contents;
+
+        @media (min-width: $lg) {
+            display: none;
+        }
+    }
+
+    &.deposit-qr-wrap {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        border-radius: $radiusMd;
+        background: $white;
+    }
+
+    &.deposit-address-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    &.deposit-success-screen {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 2.5rem 1.5rem;
+        text-align: center;
+    }
+
+    &.deposit-success-icon {
+        width: 3.4rem;
+        height: 3.4rem;
+        margin-bottom: 0.4rem;
+        border-radius: 50%;
+        background: rgba($greenishTeal, 0.14);
+        border: 1px solid rgba($greenishTeal, 0.35);
+        color: $greenishTeal;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &.deposit-steps-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 5;
+        background: $appSecondary;
+        border-radius: inherit;
+        display: flex;
+        flex-direction: column;
+
+        @media (min-width: $lg) {
+            display: none;
+        }
+    }
+
+    &.deposit-steps-panel {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    &.deposit-steps-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.9rem;
+        padding: 1.1rem;
+        overflow-y: auto;
+    }
+
+    &.deposit-step {
+        display: flex;
+        gap: 0.7rem;
+    }
+
+    &.deposit-step-text {
+        display: flex;
+        flex-direction: column;
         gap: 0.15rem;
     }
 
-    .gsm-time-label {
-        font-family: var(--font-outfit);
-        font-size: $font13;
-        font-weight: 600;
-        color: $white;
+    &.tx-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.7rem;
+        margin-bottom: 0.7rem;
+        position: relative;
+
+        .section-title {
+            margin-bottom: 0px;
+
+            &::after {
+                display: none;
+            }
+        }
     }
 
-    .gsm-time-dur {
-        font-family: var(--font-mono);
-        font-size: $font10;
-        color: rgba($white, 0.35);
+    &.tx-tools {
+        display: flex;
+        gap: 0.4rem;
+    }
+
+    &.tx-tool-wrap {
+        position: relative;
+    }
+
+    &.tx-tool-menu {
+        position: absolute;
+        top: calc(100% + 0.4rem);
+        right: 0;
+        z-index: 20;
+        background: $appSecondary;
+        border: 1px solid $appBorder;
+        border-radius: $radiusMd;
+        padding: 0.3rem;
+        min-width: 8.5rem;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+        display: flex;
+        flex-direction: column;
+    }
+
+    &.tx-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    &.tx-item-row {
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        width: 100%;
+    }
+
+    &.tx-icon {
+        width: 2.1rem;
+        height: 2.1rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+        flex-shrink: 0;
+
+        &.pos {
+            background: rgba($greenishTeal, 0.14);
+            color: $greenishTeal;
+        }
+        &.neg {
+            background: rgba($paleRed, 0.14);
+            color: $paleRed;
+        }
+    }
+
+    &.tx-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    &.tx-amounts {
+        flex-shrink: 0;
+        text-align: right;
+    }
+
+    // ── History page ──────────────────────────────────────────────────────────
+    &.history-view {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-height: 0;
+
+        @media (min-width: $lg) {
+            padding-left: 2.5rem;
+            padding-right: 2.5rem;
+        }
+    }
+
+    &.history-heading-row {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 0.7rem;
+    }
+
+    // Win Rate / Games / Net P&L above the list — visible on every
+    // breakpoint, desktop just gets a bigger StatCard treatment.
+    &.history-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.6rem;
+        margin: 1.4rem 1.1rem 0;
+
+        @media (min-width: $lg) {
+            gap: 0.8rem;
+            max-width: 60rem;
+            margin: 1.75rem auto 0;
+            width: 100%;
+
+            .common-statcard {
+                padding: 1.1rem;
+                gap: 0.35rem;
+
+                .statcard-value {
+                    font-size: 1.3rem;
+                }
+
+                .statcard-label {
+                    font-size: 0.66rem;
+                }
+            }
+        }
+    }
+
+    &.game-history-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 1.1rem 1.1rem 1.75rem;
+        flex: 1;
+        min-height: 0;
+
+        @media (min-width: $lg) {
+            max-width: 60rem;
+            margin: 0 auto;
+            width: 100%;
+        }
+    }
+
+    &.history-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    &.history-amounts {
+        flex-shrink: 0;
+        text-align: right;
+    }
+
+    &.history-loading-more {
+        display: flex;
+        justify-content: center;
+        padding: 1rem 0;
+    }
+
+    &.history-empty {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 3rem 1.5rem;
+        text-align: center;
+    }
+
+    &.history-icon {
+        width: 2.1rem;
+        height: 2.1rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+
+        &.pos {
+            background: rgba($greenishTeal, 0.14);
+            color: $greenishTeal;
+        }
+        &.neg {
+            background: rgba($paleRed, 0.14);
+            color: $paleRed;
+        }
+        &.draw {
+            background: rgba($white, 0.1);
+            color: rgba($white, 0.55);
+        }
+    }
+
+    &.f-opt-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        margin-bottom: 0.9rem;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    &.leaderboard-view {
+        display: flex;
+        flex-direction: column;
+        padding-bottom: 2rem;
+    }
+
+    &.leaderboard-state {
+        padding: 3rem 1.1rem;
+        text-align: center;
+    }
+
+    &.leaderboard-header {
+        display: flex;
+        align-items: center;
+        padding: 0.6rem 0.85rem;
+        border-bottom: 1px solid $appBorder;
+    }
+
+    &.leaderboard-row {
+        display: flex;
+        align-items: center;
+        padding: 0.7rem 0.85rem;
+        border-bottom: 1px solid $appBorder;
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        &.you {
+            background: rgba($gold, 0.06);
+            border-left: 2px solid $gold;
+        }
+    }
+
+    &.leaderboard-row--skeleton {
+        height: 3rem;
+        border-bottom: 1px solid $appBorder;
+
+        &:last-child {
+            border-bottom: none;
+        }
+    }
+
+    &.player-details {
+        min-width: 0;
+    }
+
+    // ── Leaderboard podium ────────────────────────────────────────────────────
+    &.podium-wrap {
+        display: flex;
+        align-items: flex-end;
+        gap: 0.5rem;
+        padding-top: 0.5rem;
+    }
+
+    &.podium-step--skeleton {
+        flex: 1;
+        border-radius: $radiusLg $radiusLg 0 0;
+        background: $appCard;
+        border: 1px solid $appBorder;
+
+        &.podium-step--1 {
+            height: 8.5rem;
+            order: 2;
+        }
+        &.podium-step--2 {
+            height: 6.5rem;
+            order: 1;
+        }
+        &.podium-step--3 {
+            height: 5rem;
+            order: 3;
+        }
+    }
+
+    // ── Skill Level (Vertical Ladder) ───────────────────────────────────────
+    &.skill-level-page {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 2rem;
+        min-height: 100%;
+        max-width: 30rem;
+        margin: 0 auto;
+        padding: 2.5rem 1.1rem 2rem;
+        box-sizing: border-box;
+    }
+
+    &.skill-ladder {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        position: relative;
+
+        &::before {
+            content: "";
+            position: absolute;
+            left: 1.55rem;
+            top: 1.5rem;
+            bottom: 1.5rem;
+            width: 1px;
+            background: $appBorder;
+        }
+    }
+
+    &.skill-rung-dot {
+        position: relative;
+        z-index: 1;
+        width: 3.1rem;
+        height: 3.1rem;
+        border-radius: 50%;
+        background: $appCard;
+        border: 1px solid $appBorder;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: rgba($white, 0.55);
+        flex-shrink: 0;
+
+        .skill-rung.active & {
+            border-color: $gold;
+            background: rgba($gold, 0.16);
+            color: $gold;
+        }
+    }
+
+    &.skill-rung-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    // ── Auth shell (Split Hero) ─────────────────────────────────────────────
+    &.auth-page {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        min-height: 100vh;
+        background: $appBg;
+
+        @media (max-width: $md) {
+            grid-template-columns: 1fr;
+        }
+
+        &.auth-page--centered {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    &.auth-brand-mini {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.6rem;
+    }
+
+    &.auth-left {
+        position: relative;
+        padding: 2.5rem;
+        background: linear-gradient(160deg, #1a1409 0%, $appCard 60%);
+        border-right: 1px solid $appBorder;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        overflow: hidden;
+
+        @media (max-width: $md) {
+            display: none;
+        }
+    }
+
+    &.auth-mobile-logo {
+        display: none;
+
+        @media (max-width: $md) {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+
+            span span {
+                text-transform: uppercase;
+            }
+        }
+    }
+
+    &.auth-left-glow {
+        position: absolute;
+        top: -30%;
+        right: -30%;
+        width: 70%;
+        height: 70%;
+        border-radius: 50%;
+        background: radial-gradient(
+            circle,
+            rgba($gold, 0.1) 0%,
+            transparent 70%
+        );
+        pointer-events: none;
+
+        &.auth-left-glow--register {
+            background: radial-gradient(
+                circle,
+                rgba($cyan, 0.1) 0%,
+                transparent 70%
+            );
+        }
+    }
+
+    &.auth-left-content {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        flex: 1;
+        gap: 2rem;
+    }
+
+    &.auth-left-brand {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    &.auth-left-headline {
+        margin: 1.5rem 0 0;
+
+        @media (max-width: $md) {
+            margin: 0.75rem 0 0;
+        }
+    }
+
+    &.auth-left-features {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+        margin-top: 1.6rem;
+
+        @media (max-width: $md) {
+            display: none;
+        }
+    }
+
+    &.auth-left-feature {
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+    }
+
+    &.auth-left-feature-icon {
+        width: 2rem;
+        height: 2rem;
+        border-radius: $radiusSm;
+        background: rgba($gold, 0.12);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+        flex-shrink: 0;
+    }
+
+    &.auth-left-feature-text {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &.auth-left-quote {
+        position: relative;
+        padding-top: 1.3rem;
+        border-top: 1px solid $appBorder;
+        margin-top: 1.6rem;
+
+        @media (max-width: $md) {
+            display: none;
+        }
+    }
+
+    &.auth-left-quote-body {
+        opacity: 1;
+        transition: opacity 0.3s ease;
+
+        &.auth-left-quote-body--fade {
+            opacity: 0;
+        }
+    }
+
+    &.auth-left-quote-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 0.1rem;
+    }
+
+    &.auth-left-quote-dots {
+        display: flex;
+        gap: 0.4rem;
+        margin-top: 0.9rem;
+    }
+
+    &.auth-right {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 2.5rem;
+
+        @media (max-width: $md) {
+            padding: 2.5rem 1.5rem 3rem;
+        }
+    }
+
+    &.auth-card {
+        width: 100%;
+        max-width: 24rem;
+        margin: 0 auto;
+    }
+
+    &.auth-heading {
+        margin-bottom: 1.5rem;
+    }
+
+    &.login-form-wrap {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 20px;
+    }
+
+    &.auth-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    &.auth-field {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
+    &.auth-forgot {
+        text-align: right;
+        margin: -0.5rem 0 0.25rem;
+
+        a {
+            font-family: var(--font-outfit);
+            font-size: 0.76rem;
+            color: $cyan;
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    &.auth-verified-email {
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+    &.auth-divider {
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        margin: 1.25rem 0;
+
+        &::before,
+        &::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: $appBorder;
+        }
+    }
+
+    &.otp-heading {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        margin-bottom: 0.25rem;
+    }
+
+    // ── Register method select ───────────────────────────────────────────────
+    &.reg-method-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.7rem;
+    }
+
+    &.reg-method-icon {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: $radiusMd;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        background: rgba($white, 0.06);
+        color: rgba($white, 0.6);
+
+        &.email-icon {
+            background: rgba($gold, 0.12);
+            color: $gold;
+        }
+    }
+
+    &.reg-method-text {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-width: 0;
     }
 }
 
-// ── Footer ─────────────────────────────────────────────────────────────────────
-
-.gsm-footer {
-    padding: 0 1.375rem 1.375rem;
-}
-
-// ── Game Over Screen — Box-level styles ───────────────────────────────────────
-
-.gos-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    display: flex;
-    flex-direction: column;
-}
-
-.gos-canvas {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 0;
-}
-
-.gos-inner {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    overflow-y: auto;
-    animation: gos-in 0.3s cubic-bezier(0.34, 1.4, 0.64, 1);
-}
-
-@keyframes gos-in {
-    from { opacity: 0; transform: scale(0.95); }
-    to   { opacity: 1; transform: scale(1); }
-}
-
-.gos-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid rgba($white, 0.1);
-    flex-shrink: 0;
-    background: rgba($appBg, 0.88);
-    backdrop-filter: blur(10px);
-}
-
-.gos-body {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 0 1.5rem;
-    gap: 1.25rem;
-}
-
-.gos-stats-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 1.25rem 0.25rem 0;
-}
-
-.gos-stat {
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
-
-    &--right { align-items: flex-end; }
-}
-
-.gos-piece-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.gos-piece-box {
-    width: 100%;
-    max-width: 290px;
-    aspect-ratio: 1 / 1;
-    background: radial-gradient(ellipse at 50% 30%, #1a1205 0%, #060806 60%, #020302 100%);
-    border-radius: 0.75rem;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.7);
-}
-
-.gos-piece-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    position: relative;
-    z-index: 1;
-    border-radius: 0.75rem;
-}
-
-.gos-match-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 0.6rem 0;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.75) 0%, transparent 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 2;
-}
-
-.gos-opponent-row {
-    display: flex;
-    justify-content: center;
-}
-
-.gos-opponent {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1.25rem;
-    background: rgba(0, 0, 0, 0.45);
-    border: 1px solid rgba($white, 0.08);
-    border-radius: 9999px;
-    backdrop-filter: blur(8px);
-}
-
-.gos-progress {
-    height: 3px;
-    background: rgba($white, 0.08);
-    border-radius: 9999px;
-    overflow: hidden;
-    margin: 0 0.5rem;
-}
-
-.gos-progress-bar {
-    height: 100%;
-    border-radius: 9999px;
-    animation: gos-bar 0.9s 0.2s ease both;
-
-    &--win  { width: 85%; background: linear-gradient(90deg, $gold, #ffe066); }
-    &--lose { width: 28%; background: linear-gradient(90deg, #ff5a5a, #ff8a8a); }
-    &--draw { width: 50%; background: linear-gradient(90deg, rgba($white, 0.3), rgba($white, 0.5)); }
-}
-
-@keyframes gos-bar {
-    from { width: 0; }
-}
-
-.gos-actions {
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.625rem;
-    padding: 1rem 1.5rem 2rem;
-}
-
-.gos-btn-row {
-    display: flex;
-    gap: 0.625rem;
-}
-
-@keyframes king-check-pulse {
-    from {
-        filter: drop-shadow(0 0 6px rgba(255, 50, 50, 0.9)) drop-shadow(0 2px 3px rgba(0,0,0,0.4));
-        transform: scale(1);
-    }
-    to {
-        filter: drop-shadow(0 0 14px rgba(255, 50, 50, 1)) drop-shadow(0 2px 3px rgba(0,0,0,0.4));
-        transform: scale(1.08);
-    }
-}
-
-@keyframes square-flash {
-    0%   { background-color: rgba(220, 50, 50, 0.85) !important; }
-    50%  { background-color: rgba(220, 50, 50, 0.3) !important; }
-    100% { background-color: rgba(220, 50, 50, 0.85) !important; }
-}
-
-.box.square-flash {
-    animation: square-flash 0.5s ease !important;
-}
-
-@keyframes water-ripple {
-    0% {
-        transform: scale(0.6);
-        opacity: 0.7;
-    }
-    70% {
-        transform: scale(1.3);
-        opacity: 0;
-    }
+@keyframes thinking-bounce {
+    0%,
     100% {
-        transform: scale(0.6);
-        opacity: 0;
-    }
-}
-
-@keyframes piece-danger-pulse {
-    0%, 100% {
-        transform: scale(1);
-        filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.4));
+        transform: translateY(0);
+        opacity: 0.4;
     }
     50% {
-        transform: scale(1.15);
-        filter: drop-shadow(0 0 8px rgba(220, 50, 50, 0.8)) drop-shadow(0 2px 3px rgba(0, 0, 0, 0.4));
+        transform: translateY(-2px);
+        opacity: 1;
     }
 }
 
-// ── Move history layout ───────────────────────────────────────────────────────
-
-.history-nav {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    padding: 0.5rem 0.75rem;
-    border-bottom: 1px solid rgba($white, 0.06);
-}
-
-.history-list {
-    display: flex;
-    flex-direction: column;
-    max-height: 14rem;
-    overflow-y: auto;
-    padding: 0.375rem 0.5rem;
-
-    &::-webkit-scrollbar { width: 3px; }
-    &::-webkit-scrollbar-track { background: transparent; }
-    &::-webkit-scrollbar-thumb { background: rgba($white, 0.12); border-radius: 9999px; }
-}
-
-// ── Auth layout — Box-level styles ────────────────────────────────────────────
-
-.auth-page {
-    min-height: 100dvh;
-    display: flex;
-    flex-direction: row;
-    background-color: $appBg;
-}
-
-.auth-right {
-    flex: 1;
-    min-height: 100dvh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2.5rem 2rem;
-    background: $appCard;
-    border-left: 1px solid $appBorder;
-
-    @media (max-width: $md) { border-left: none; }
-}
-
-.auth-card {
-    width: 100%;
-    max-width: 400px;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.auth-brand {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.25rem;
-    text-align: center;
-}
-
-.auth-heading {
-    text-align: center;
-}
-
-.auth-divider {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.auth-divider-line {
-    flex: 1;
-    height: 1px;
-    background: $appBorder;
-    display: block;
-}
-
-.auth-socials {
-    display: flex;
-    flex-direction: column;
-    gap: 0.625rem;
-}
-
-.auth-wallets {
-    display: flex;
-    gap: 0.625rem;
-}
-
-.auth-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.auth-field {
-    display: flex;
-    flex-direction: column;
-    gap: 0.375rem;
-}
-
-.auth-verified-email {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.625rem 0.875rem;
-    background: rgba($white, 0.04);
-    border: 1px solid rgba($white, 0.08);
-    border-radius: 0.75rem;
-}
-
-.auth-forgot {
-    text-align: right;
-    margin-top: -0.25rem;
-
-    a {
-        font-family: var(--font-mono);
-        font-size: $font12;
-        color: rgba($white, 0.35);
-        text-decoration: none;
-        transition: color 0.15s ease;
-        &:hover { color: $gold; }
+@keyframes wins-scroll {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-50%);
     }
 }
 
-.login-form-wrap {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-}
-
-.auth-divider {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin: 1.25rem 0;
-
-    &::before,
-    &::after {
-        content: '';
-        flex: 1;
-        height: 1px;
-        background: rgba($white, 0.08);
+@keyframes ring-pulse {
+    from {
+        transform: scale(0.7);
+        opacity: 1;
     }
-}
-
-.auth-google-wrap {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    overflow: hidden;
-    border-radius: 0.875rem;
-}
-
-.phone-input-row {
-    display: flex;
-    gap: 0.5rem;
-    align-items: stretch;
-}
-
-.phone-country-code {
-    display: flex;
-    align-items: center;
-    gap: 0.375rem;
-    padding: 0 0.875rem;
-    height: 3rem;
-    background: $appSecondary;
-    border: 1px solid $appBorder;
-    border-radius: 0.75rem;
-    flex-shrink: 0;
-}
-
-.phone-number-input { flex: 1; }
-
-.otp-input-row {
-    display: flex;
-    gap: 0.5rem;
-    justify-content: center;
-    margin-top: 0.25rem;
-}
-
-.otp-resend-row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.375rem;
-    margin-top: 0.5rem;
-}
-
-// ── Input container + wrapper ─────────────────────────────────────────────────
-
-.input-container {
-    display: flex;
-    flex-direction: column;
-    gap: 0.375rem;
-
-    &.full-width { width: 100%; }
-}
-
-.input-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-    width: 100%;
-}
-
-// ── Auth left panel — Box-level styles ────────────────────────────────────────
-
-.auth-left {
-    position: relative;
-    flex: 0 0 42%;
-    min-height: 100dvh;
-    background: $appBg;
-    overflow: hidden;
-    display: flex;
-    align-items: stretch;
-
-    @media (max-width: $md) { display: none; }
-}
-
-.auth-left-glow {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-
-    &--login {
-        background:
-            radial-gradient(ellipse 65% 50% at 20% 15%, rgba($cyan, 0.09) 0%, transparent 60%),
-            radial-gradient(ellipse 55% 45% at 85% 80%, rgba($gold, 0.07) 0%, transparent 55%),
-            radial-gradient(ellipse 80% 60% at 50% 50%, rgba(#6366f1, 0.04) 0%, transparent 70%);
-    }
-
-    &--register {
-        background:
-            radial-gradient(ellipse 70% 55% at 30% 20%, rgba($gold, 0.10) 0%, transparent 60%),
-            radial-gradient(ellipse 50% 40% at 80% 80%, rgba($cyan, 0.06) 0%, transparent 55%),
-            radial-gradient(ellipse 90% 60% at 50% 50%, rgba(#a78bfa, 0.05) 0%, transparent 70%);
-    }
-}
-
-.auth-left-content {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    padding: 3rem 2.75rem 3rem 3rem;
-    width: 100%;
-    justify-content: center;
-}
-
-.auth-left-brand {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-}
-
-.auth-left-features {
-    display: flex;
-    flex-direction: column;
-    gap: 0.625rem;
-}
-
-.auth-left-feature {
-    display: flex;
-    align-items: center;
-    gap: 0.875rem;
-    padding: 0.75rem 1rem;
-    background: rgba($white, 0.03);
-    border: 1px solid rgba($white, 0.06);
-    border-radius: 0.875rem;
-    backdrop-filter: blur(12px);
-    transition: border-color 0.2s ease, background 0.2s ease;
-
-    &:hover {
-        border-color: rgba($gold, 0.2);
-        background: rgba($gold, 0.03);
-    }
-}
-
-.auth-left-feature-icon {
-    width: 2.25rem;
-    height: 2.25rem;
-    border-radius: 0.625rem;
-    background: rgba($gold, 0.1);
-    border: 1px solid rgba($gold, 0.15);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    font-size: $font16;
-    color: $gold;
-}
-
-.auth-left-feature-text {
-    display: flex;
-    flex-direction: column;
-    gap: 0.125rem;
-}
-
-.auth-left-quote {
-    padding: 1.25rem;
-    background: rgba($white, 0.04);
-    border: 1px solid rgba($white, 0.08);
-    border-radius: 1rem;
-    backdrop-filter: blur(20px);
-}
-
-.auth-left-quote-body {
-    transition: opacity 0.3s ease;
-    opacity: 1;
-    min-height: 5rem;
-
-    &--fade { opacity: 0; }
-}
-
-.auth-left-quote-meta {
-    display: flex;
-    flex-direction: column;
-    gap: 0.125rem;
-}
-
-.auth-left-quote-dots {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 0.375rem;
-    margin-top: 1rem;
-}
-
-// ── Register — Box-level styles ───────────────────────────────────────────────
-
-.reg-method-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.reg-method-icon {
-    width: 2.375rem;
-    height: 2.375rem;
-    border-radius: 0.625rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-
-    &.email-icon    { background: rgba($gold, 0.1);    color: $gold; }
-    &.wallet-icon   { background: rgba(#a78bfa, 0.12); color: #a78bfa; }
-    &.google-icon   { background: rgba($white, 0.06);  color: $white; }
-    &.metamask-icon { background: rgba(#E27625, 0.12); color: #E27625; }
-    &.wc-icon       { background: rgba(#3B99FC, 0.12); color: #3B99FC; }
-}
-
-.reg-method-text {
-    display: flex;
-    flex-direction: column;
-    gap: 0.125rem;
-    flex: 1;
-    min-width: 0;
-}
-
-.wallet-connected-badge {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.625rem 0.875rem;
-    background: rgba(#22c55e, 0.08);
-    border: 1px solid rgba(#22c55e, 0.25);
-    border-radius: 0.75rem;
-}
-
-.wallet-connected-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #22c55e;
-    display: block;
-    flex-shrink: 0;
-    box-shadow: 0 0 8px rgba(#22c55e, 0.6);
-}
-
-
-// ── Searching screen ──────────────────────────────────────────────────────────
-.searching-screen {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.5rem;
-    padding: 2.5rem 1rem;
-}
-
-.searching-ring-wrap {
-    position: relative;
-    width: 7rem;
-    height: 7rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.searching-ring {
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    border: 2px solid rgba($gold, 0.5);
-    animation: searching-pulse 1.8s ease-out infinite;
-
-    &--delay { animation-delay: 0.9s; }
-}
-
-.searching-ring-inner {
-    width: 4rem;
-    height: 4rem;
-    border-radius: 50%;
-    background: rgba($gold, 0.08);
-    border: 1px solid rgba($gold, 0.25);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.searching-ring-icon {
-    font-size: 1.5rem;
-    line-height: 1;
-}
-
-.searching-text-group {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    gap: 0.375rem;
-}
-
-.searching-title {
-    font-size: $font20;
-    font-weight: 700;
-    color: $white;
-    margin: 0;
-}
-
-.searching-sub {
-    font-size: $font13;
-    color: rgba($white, 0.45);
-    margin: 0;
-}
-
-.searching-chips {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.searching-chip {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.2rem;
-    padding: 0.5rem 0.875rem;
-    border-radius: 0.625rem;
-    background: rgba($white, 0.04);
-    border: 1px solid rgba($white, 0.07);
-}
-
-.searching-chip-label {
-    font-size: $font10;
-    color: rgba($white, 0.35);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-}
-
-.searching-chip-value {
-    font-size: $font13;
-    font-weight: 600;
-    color: $white;
-
-    &--gold { color: $gold; }
-}
-
-@keyframes searching-pulse {
-    0%   { transform: scale(0.8); opacity: 0.9; }
-    100% { transform: scale(1.6); opacity: 0; }
-}
-
-// ── Game panel tabs (Moves | Chat) ────────────────────────────────────────────
-.game-tabs {
-    display: flex;
-    gap: 0.25rem;
-    padding: 0.25rem;
-    background: rgba($white, 0.04);
-    border-radius: 0.625rem;
-    border: 1px solid rgba($white, 0.06);
-    flex-shrink: 0;
-
-    .game-tab {
-        flex: 1;
-        padding: 0.375rem 0.5rem;
-        border-radius: 0.375rem;
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        transition: all 0.15s ease;
-
-        .game-tab-label {
-            font-size: $font11;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: rgba($white, 0.35);
-        }
-
-        &.active {
-            background: rgba($gold, 0.12);
-            border: 1px solid rgba($gold, 0.2);
-
-            .game-tab-label { color: $gold; }
-        }
-
-        &:not(.active):hover {
-            background: rgba($white, 0.05);
-            .game-tab-label { color: rgba($white, 0.6); }
-        }
-    }
-}
-
-// ── Chat panel ────────────────────────────────────────────────────────────────
-.chat-panel {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 8rem;
-}
-
-.chat-empty {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-
-    .chat-empty-icon { color: rgba($white, 0.15); }
-
-    .chat-empty-text {
-        font-size: $font12;
-        color: rgba($white, 0.25);
-    }
-}
-
-// ── History page ──────────────────────────────────────────────────────────────
-.history-view {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    padding: 1rem;
-    max-width: 640px;
-    margin: 0 auto;
-    width: 100%;
-}
-
-.history-empty {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    padding: 4rem 1rem;
-
-    .history-empty-icon { color: rgba($white, 0.12); }
-
-    .history-empty-text {
-        font-size: $font13;
-        color: rgba($white, 0.25);
+    to {
+        transform: scale(1.35);
+        opacity: 0;
     }
 }
