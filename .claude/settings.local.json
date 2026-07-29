@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(find /Users/dhakadkaranrakeshbhai/Desktop/ecommerce-users-app/src -name \"AlertMessage*\" 2>/dev/null)",
-      "Read(//Users/dhakadkaranrakeshbhai/Desktop/ecommerce-users-app/src/**)"
-    ]
-  }
-}
