@@ -1,12 +1,30 @@
-import { LoaderTwo } from "@/components/ui/loader";
-import { cn } from "@/lib/utils";
+import clsx from "clsx";
+import { LoaderIcon, Loader2Icon } from "lucide-react";
 
 interface ILoaderProps {
-  size?: number;
-  color?: string;
-  className?: string;
+    size?: number;
+    color?: string;
+    variant?: "burst" | "ring";
+    customClass?: string;
 }
 
-export default function Loader({ color = "#f0b90b", className }: ILoaderProps) {
-  return <LoaderTwo color={color} className={cn(className)} />;
+function Loader({
+    size = 16,
+    color = "currentColor",
+    variant = "ring",
+    customClass,
+}: ILoaderProps) {
+    const Icon = variant === "burst" ? LoaderIcon : Loader2Icon;
+
+    return (
+        <Icon
+            role="status"
+            aria-label="Loading"
+            size={size}
+            color={color}
+            className={clsx("animate-spin", customClass)}
+        />
+    );
 }
+
+export default Loader;

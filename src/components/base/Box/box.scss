@@ -250,6 +250,24 @@
         color: $gold;
     }
 
+    &.rejoin-stats {
+        display: flex;
+        gap: 0.6rem;
+        margin-top: 0.5rem;
+    }
+
+    &.rejoin-stat {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+        padding: 0.6rem 0.7rem;
+        border-radius: $radiusMd;
+        background: $appSecondary;
+        border: 1px solid $appBorder;
+        text-align: center;
+    }
+
     // ── Matchmaking page ──────────────────────────────────────────────────────
     &.matchmaking-page {
         padding-bottom: 2rem;
@@ -574,14 +592,28 @@
         flex-direction: column;
         gap: 0.5rem;
         padding: 0.9rem 1.1rem 0;
-        width: 60rem !important;
-        height: 50rem;
+
+        // WagerBadge/opponent-row/player-row here are desktop-only — mobile
+        // already renders its own copies via .play-top-bar/.play-bottom-bar.
+        // Direct-child selector so it doesn't touch those mobile copies,
+        // which sit in separate sibling Boxes, not inside .play-main.
+        > .wager-badge,
+        > .player-row {
+            display: none;
+        }
+
         @media (min-width: $md) {
-            width: 56.6rem; // 45rem board + 0.6rem gap + 11rem notation col
+            max-width: 56.6rem; // 45rem board + 0.6rem gap + 11rem notation col
+            width: 100%;
             margin: 0 auto;
 
-            .wager-badge {
-                align-self: normal;
+            > .wager-badge,
+            > .player-row {
+                display: flex;
+            }
+
+            > .wager-badge {
+                align-self: flex-start;
             }
         }
     }
@@ -597,12 +629,15 @@
     &.play-board-col {
         position: relative;
 
+        // flex:1 (not a fixed rem width) so the board shrinks gracefully on
+        // any $md+ window narrower than the full 56.6rem layout, instead of
+        // overflowing it — the notation column is the only fixed-width part.
         @media (min-width: $md) {
             display: flex;
             align-items: flex-start;
             gap: 0.5rem;
-            width: 45rem;
-            flex-shrink: 0;
+            flex: 1 1 0;
+            min-width: 0;
         }
     }
 
@@ -613,7 +648,7 @@
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
-            width: 12rem;
+            width: 11rem;
             flex-shrink: 0;
 
             .history-panel {
@@ -1324,9 +1359,6 @@
         }
     }
 
-    // Right column of the desktop split — matches the confirmed reference
-    // exactly: white surface with dark text, not the app's own dark theme.
-    // Mobile is untouched (stays the app's normal dark bottom sheet).
     &.deposit-main-col {
         display: flex;
         flex-direction: column;
@@ -1334,6 +1366,19 @@
 
         @media (min-width: $lg) {
             background: #fff;
+            min-height: 0;
+            justify-content: center;
+
+            .gsm-body {
+                flex: 1;
+                min-height: 0;
+                justify-content: center;
+            }
+
+            .deposit-qr-body {
+                justify-content: flex-start;
+                overflow-y: auto;
+            }
 
             .gsm-header {
                 border-bottom: 1px solid #ece7db;

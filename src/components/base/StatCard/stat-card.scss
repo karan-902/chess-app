@@ -1,36 +1,46 @@
-@use '../../../styles/default.scss' as *;
+@use "../../../styles/default.scss" as *;
 
-.stat-card {
-  background: rgba($appCard, 0.7);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba($white, 0.06);
-  border-radius: 0.875rem;
-  padding: 0.75rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
+.common-statcard {
+    position: relative;
+    background: $appCard;
+    border: 1px solid $appBorder;
+    border-radius: $radiusMd;
+    padding: 0.7rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
 
-  .stat-card-icon {
-    color: rgba($white, 0.3);
-    margin-bottom: 0.125rem;
-  }
+    .statcard-icon {
+        color: rgba($white, 0.3);
+        margin-bottom: 0.125rem;
+    }
 
-  .stat-card-value {
-    font-size: $font16;
-    font-weight: 700;
-    font-family: var(--font-mono);
-    color: $white;
-    letter-spacing: 0.02em;
+    .statcard-value {
+        font-size: 0.95rem;
+        font-weight: 700;
+        font-family: var(--font-mono);
+        color: $white;
+        letter-spacing: 0.02em;
 
-    &.val-primary { color: $cyan; }
-    &.val-accent  { color: $gold; }
-  }
+        &.val-primary {
+            color: $cyan;
+        }
+        &.val-accent {
+            color: $gold;
+        }
+        &.val-positive {
+            color: $greenishTeal;
+        }
+        &.val-negative {
+            color: $paleRed;
+        }
+    }
 
-  .stat-card-label {
-    font-size: $font10;
-    color: rgba($white, 0.3);
-    font-family: var(--font-mono);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
+    .statcard-label {
+        font-size: 0.6rem;
+        color: rgba($white, 0.32);
+        font-family: var(--font-outfit);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+    }
 }

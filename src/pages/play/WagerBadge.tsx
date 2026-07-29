@@ -1,40 +1,40 @@
-import { useCurrency } from "@/context/CurrencyContext";
+import { STAKE_CURRENCY } from "@/constants/config";
+import { formateAmount } from "@/utils/formate";
 import { Difficulty, GameMode } from "@/types/components";
 import Card from "../../components/base/Card/Card";
 import Text from "../../components/base/Text/Text";
+import {
+    playWagerBadgePractice,
+    playWagerBadgeVsComputerNoWager,
+    playWagerBadgeWageredEachSide,
+    playWagerBadgeLive,
+    playWagerBadgeDifficultyLabels,
+} from "@/components/messages";
 
-const DIFF_LABEL: Record<Difficulty, string> = {
-    easy:   "Easy",
-    medium: "Medium",
-    hard:   "Hard",
-};
+const DIFF_LABEL: Record<Difficulty, string> = playWagerBadgeDifficultyLabels;
 
 const DIFF_COLOR: Record<Difficulty, string> = {
-    easy:   "wager-diff--easy",
+    easy: "wager-diff--easy",
     medium: "wager-diff--medium",
-    hard:   "wager-diff--hard",
+    hard: "wager-diff--hard",
 };
 
-const DEFAULT_WAGER: Record<string, string> = {
-    BTC:  "0.001 BTC",
-    USDT: "10 USDT",
-    USDC: "10 USDC",
-};
+const DEFAULT_WAGER = formateAmount(10, STAKE_CURRENCY);
 
 interface IWagerBadgeProps {
     mode: GameMode;
     difficulty?: Difficulty;
-    stakeAmount?: string;
+    stakeAmount?: number;
 }
 
 function WagerBadge({ mode, difficulty, stakeAmount }: IWagerBadgeProps) {
-    const { currency } = useCurrency();
-
     if (mode === "pvc") {
         return (
             <Card customClass="wager-badge">
-                <Text customClass="wager-amount">Practice</Text>
-                <Text customClass="wager-label">vs Computer · no wager</Text>
+                <Text customClass="wager-amount">{playWagerBadgePractice}</Text>
+                <Text customClass="wager-label">
+                    {playWagerBadgeVsComputerNoWager}
+                </Text>
                 {difficulty && (
                     <Text customClass={`wager-diff ${DIFF_COLOR[difficulty]}`}>
                         {DIFF_LABEL[difficulty]}
@@ -45,10 +45,16 @@ function WagerBadge({ mode, difficulty, stakeAmount }: IWagerBadgeProps) {
     }
 
     return (
-        <Card customClass="wager-badge">
-            <Text customClass="wager-amount">{stakeAmount ?? DEFAULT_WAGER[currency]}</Text>
-            <Text customClass="wager-label">wagered each side</Text>
-            <Text customClass="live-label">LIVE</Text>
+        <Card customClass="wager-badge wager-badge--pvp">
+            <Text customClass="wager-amount">
+                {stakeAmount !== undefined
+                    ? formateAmount(stakeAmount, STAKE_CURRENCY)
+                    : DEFAULT_WAGER}
+            </Text>
+            <Text customClass="wager-label">
+                {playWagerBadgeWageredEachSide}
+            </Text>
+            <Text customClass="live-label">{playWagerBadgeLive}</Text>
             <span className="live-dot" />
         </Card>
     );

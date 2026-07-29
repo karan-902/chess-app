@@ -1,37 +1,80 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import { object, string, ref } from "yup";
 import { Mail, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 import Box from "../../components/base/Box/Box";
+import Card from "../../components/base/Card/Card";
 import Button from "../../components/base/Button/Button";
-import Label from "../../components/base/Label/Label";
+import { Label } from "../../components/base/Label/label";
 import Input from "../../components/base/Input/Input";
 import Text from "../../components/base/Text/Text";
-import CountrySelect from "../../components/base/CountrySelect/CountrySelect";
-import GoogleIcon from "../../components/icons/GoogleIcon";
+import Select from "@/components/base/Select/Select";
+import { GoogleIcon } from "@/components/constants";
+import { COUNTRY_OPTIONS } from "@/constants/config";
+
 import { callAPIInterface } from "../../utils";
 import { useGoogleAuth } from "../../hooks/useGoogleAuth";
-import type { IRegisterEmailBody } from "../../types/index";
-import type { IRegisterResponse } from "../../types/utils";
+import sessionService from "../../store/sessionService";
+import { useReduxDispatch } from "../../store/hooks";
+import { showLoader, hideLoader } from "../../store/loader.slice";
+import type { IRegisterEmailBody, ILoginBody } from "../../types/index";
+import type { IRegisterResponse, ILoginResponse } from "../../types/utils";
 import { useNavigate } from "react-router";
+import EmailVerificationScreen from "./EmailVerificationScreen";
+import {
+    authBackLink,
+    authConfirmPasswordLabel,
+    authEmailLabel,
+    authEmailPlaceholder,
+    authPasswordLabel,
+    authPasswordPlaceholder,
+    authRegisterCountryLabel,
+    authRegisterCreateAccountButton,
+    authRegisterEmailMethodSub,
+    authRegisterEmailMethodTitle,
+    authRegisterFirstNameLabel,
+    authRegisterFirstNamePlaceholder,
+    authRegisterGoogleMethodSub,
+    authRegisterGoogleMethodTitle,
+    authRegisterLastNameLabel,
+    authRegisterLastNamePlaceholder,
+    authRegisterRegistrationFailed,
+    authValidationConfirmPasswordRequired,
+    authValidationCountryRequired,
+    authValidationEmailInvalid,
+    authValidationEmailRequired,
+    authValidationFirstNameRequired,
+    authValidationLastNameRequired,
+    authValidationPasswordMinLength,
+    authValidationPasswordRequired,
+    authValidationPasswordsMustMatch,
+    countrySelectSelectPlaceholder,
+    countrySelectSearchPlaceholder,
+} from "@/components/messages";
 
 const emailSchema = object({
-    first_name: string().required("First name is required"),
-    last_name: string().required("Last name is required"),
-    email: string().required("Email is required").email("Enter a valid email"),
+    first_name: string().required(authValidationFirstNameRequired),
+    last_name: string().required(authValidationLastNameRequired),
+    email: string()
+        .required(authValidationEmailRequired)
+        .email(authValidationEmailInvalid),
     password: string()
-        .required("Password is required")
-        .min(8, "Password must be at least 8 characters"),
+        .required(authValidationPasswordRequired)
+        .min(8, authValidationPasswordMinLength),
     confirm: string()
-        .required("Please confirm your password")
-        .oneOf([ref("password")], "Passwords do not match"),
-    country: string().required("Country is required"),
+        .required(authValidationConfirmPasswordRequired)
+        .oneOf([ref("password")], authValidationPasswordsMustMatch),
+    country: string().required(authValidationCountryRequired),
 });
 
-function EmailRegisterForm({ onBack }: { onBack: () => void }) {
-    const navigate = useNavigate();
-
+function EmailRegisterForm({
+    onBack,
+    onRegistered,
+}: {
+    onBack: () => void;
+    onRegistered: (email: string, password: string) => void;
+}) {
     const {
         handleSubmit,
         handleChange,
@@ -68,10 +111,11 @@ function EmailRegisterForm({ onBack }: { onBack: () => void }) {
                     "/register",
                     payload,
                 );
-                toast.success("Account created! Please log in.");
-                navigate("/login");
+                onRegistered(values.email, values.password);
             } catch (err: any) {
-                const msg = err?.response?.data?.message ?? "Registration failed. Please try again.";
+                const msg =
+                    err?.response?.data?.message ??
+                    authRegisterRegistrationFailed;
                 toast.error(msg);
             } finally {
                 setSubmitting(false);
@@ -91,113 +135,196 @@ function EmailRegisterForm({ onBack }: { onBack: () => void }) {
     });
 
     return (
-        <form className="auth-form" onSubmit={handleSubmit}>
-            <button type="button" className="reg-back-link" onClick={onBack}>
-                ← Back
-            </button>
+        <Box
+            as="form"
+            customClass="auth-form"
+            onSubmit={handleSubmit as React.FormEventHandler<HTMLElement>}
+        >
+            <Button
+                type="button"
+                variant="ghost"
+                customClass="reg-back-link"
+                onClick={onBack}
+            >
+                {authBackLink}
+            </Button>
 
             <Box customClass="auth-field">
-                <Label htmlFor="first_name">First Name</Label>
-                <Input {...field("first_name")} placeholder="Karan" />
+                <Label htmlFor="first_name">{authRegisterFirstNameLabel}</Label>
+                <Input
+                    {...field("first_name")}
+                    placeholder={authRegisterFirstNamePlaceholder}
+                />
             </Box>
 
             <Box customClass="auth-field">
-                <Label htmlFor="last_name">Last Name</Label>
-                <Input {...field("last_name")} placeholder="Dhakad" />
+                <Label htmlFor="last_name">{authRegisterLastNameLabel}</Label>
+                <Input
+                    {...field("last_name")}
+                    placeholder={authRegisterLastNamePlaceholder}
+                />
             </Box>
 
             <Box customClass="auth-field">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{authEmailLabel}</Label>
                 <Input
                     {...field("email")}
                     type="email"
-                    placeholder="you@example.com"
+                    placeholder={authEmailPlaceholder}
                 />
             </Box>
 
             <Box customClass="auth-field">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">{authPasswordLabel}</Label>
                 <Input
                     {...field("password")}
                     type="password"
-                    placeholder="••••••••"
+                    placeholder={authPasswordPlaceholder}
                 />
+                {/* <PasswordStrength password={values.password} /> */}
             </Box>
 
             <Box customClass="auth-field">
-                <Label htmlFor="confirm">Confirm Password</Label>
+                <Label htmlFor="confirm">{authConfirmPasswordLabel}</Label>
                 <Input
                     {...field("confirm")}
                     type="password"
-                    placeholder="••••••••"
+                    placeholder={authPasswordPlaceholder}
                 />
             </Box>
 
             <Box customClass="auth-field">
-                <Label htmlFor="country">Country</Label>
-                <CountrySelect
+                <Label htmlFor="country">{authRegisterCountryLabel}</Label>
+                <Select
                     value={values.country}
-                    onChange={v => {
+                    onChange={(v) => {
                         setFieldValue("country", v);
                         setFieldTouched("country", true, false);
                     }}
+                    options={COUNTRY_OPTIONS}
+                    searchable
+                    placeholder={countrySelectSelectPlaceholder}
+                    searchPlaceholder={countrySelectSearchPlaceholder}
                     isError={touched.country && Boolean(errors.country)}
                 />
                 {touched.country && errors.country && (
-                    <Text as="span" customClass="auth-field-error">{errors.country}</Text>
+                    <Text as="span" customClass="input-helper-text">
+                        {errors.country}
+                    </Text>
                 )}
             </Box>
 
             <Button
                 customClass="auth-submit-btn"
+                fullWidth
                 type="submit"
-                disabled={!isValid || !dirty || isSubmitting}
+                isLoading={isSubmitting}
+                disabled={!isValid || !dirty}
             >
-                {isSubmitting ? "Creating account…" : "Create Account"}
+                {authRegisterCreateAccountButton}
             </Button>
-        </form>
+        </Box>
     );
 }
 
 export default function RegisterForm() {
     const [path, setPath] = useState<"email" | null>(null);
-    const { googleLogin } = useGoogleAuth("/sso-register", "register");
+    const [pending, setPending] = useState<{
+        email: string;
+        password: string;
+    } | null>(null);
+    const navigate = useNavigate();
+    const dispatch = useReduxDispatch();
+    const { googleLogin, isProcessing } = useGoogleAuth(
+        "/sso-register",
+        "register",
+    );
+
+    useEffect(() => {
+        if (isProcessing)
+            dispatch(showLoader({ text: "Signing in with Google..." }));
+        else dispatch(hideLoader());
+        return () => {
+            dispatch(hideLoader());
+        };
+    }, [isProcessing]);
+
+    const handleVerified = async () => {
+        if (!pending) {
+            navigate("/login");
+            return;
+        }
+        dispatch(showLoader({ text: "Setting up your account..." }));
+        try {
+            const res = await callAPIInterface<ILoginBody, ILoginResponse>(
+                "POST",
+                "/login",
+                { email: pending.email, password: pending.password },
+            );
+            await sessionService.saveSession(res);
+            navigate(res.skill_level === null ? "/skill-level" : "/lobby", {
+                replace: true,
+            });
+        } catch {
+            navigate("/login", { replace: true });
+        } finally {
+            dispatch(hideLoader());
+            setPending(null);
+        }
+    };
+
+    if (pending) {
+        return (
+            <EmailVerificationScreen
+                email={pending.email}
+                onVerified={handleVerified}
+                onBack={() => setPending(null)}
+            />
+        );
+    }
 
     if (path === "email") {
-        return <EmailRegisterForm onBack={() => setPath(null)} />;
+        return (
+            <EmailRegisterForm
+                onBack={() => setPath(null)}
+                onRegistered={(email, password) =>
+                    setPending({ email, password })
+                }
+            />
+        );
     }
 
     return (
         <Box customClass="reg-method-list">
-            <button className="reg-method-row" onClick={() => setPath("email")}>
+            <Card customClass="reg-method-row" onClick={() => setPath("email")}>
                 <Box customClass="reg-method-icon email-icon">
                     <Mail size={18} />
                 </Box>
                 <Box customClass="reg-method-text">
                     <Text as="span" customClass="reg-method-title">
-                        Email
+                        {authRegisterEmailMethodTitle}
                     </Text>
                     <Text as="span" customClass="reg-method-sub">
-                        Username · password
+                        {authRegisterEmailMethodSub}
                     </Text>
                 </Box>
                 <ChevronRight size={16} className="reg-method-arrow" />
-            </button>
+            </Card>
 
-            <button className="reg-method-row" onClick={() => googleLogin()}>
+            <Card customClass="reg-method-row" onClick={() => googleLogin()}>
                 <Box customClass="reg-method-icon google-icon">
                     <GoogleIcon size={18} />
                 </Box>
                 <Box customClass="reg-method-text">
                     <Text as="span" customClass="reg-method-title">
-                        Google
+                        {authRegisterGoogleMethodTitle}
                     </Text>
                     <Text as="span" customClass="reg-method-sub">
-                        One-tap sign up
+                        {authRegisterGoogleMethodSub}
                     </Text>
                 </Box>
                 <ChevronRight size={16} className="reg-method-arrow" />
-            </button>
+            </Card>
         </Box>
     );
 }

@@ -10,8 +10,25 @@ export const TIME_SECONDS: Record<TimeControl, number> = {
     classical: 1800,
 };
 
-export const DIFFICULTY_CONFIG: Record<Difficulty, { rating: number; depth: number; elo: number }> = {
-    easy:   { rating: 100,  depth: 2,  elo: 100  },
-    medium: { rating: 1600, depth: 8,  elo: 1600 },
-    hard:   { rating: 3000, depth: 18, elo: 3000 },
+export function secondsToTimeControl(seconds: number): TimeControl {
+    const match = (
+        Object.entries(TIME_SECONDS) as [TimeControl, number][]
+    ).find(([, s]) => s === seconds);
+    return match?.[0] ?? "rapid";
+}
+
+export function getInactivitySeconds(timeSeconds: number): number {
+    if (timeSeconds <= 60) return 15; // bullet
+    if (timeSeconds <= 180) return 30; // blitz
+    if (timeSeconds <= 600) return 60; // rapid
+    return 90;
+}
+
+export const DIFFICULTY_CONFIG: Record<
+    Difficulty,
+    { rating: number; depth: number; elo: number }
+> = {
+    easy: { rating: 100, depth: 2, elo: 100 },
+    medium: { rating: 1600, depth: 8, elo: 1600 },
+    hard: { rating: 3000, depth: 18, elo: 3000 },
 };

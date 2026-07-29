@@ -1,55 +1,139 @@
-import { useState } from "react";
-import clsx from "clsx";
-import { useCurrency } from "@/context/CurrencyContext";
-import { CURRENCIES, CURRENCY_META } from "@/constants/currencies";
 import Box from "../../components/base/Box/Box";
 import Text from "../../components/base/Text/Text";
-import StatCard from "../../components/base/StatCard/StatCard";
+import Button from "../../components/base/Button/Button";
+import StatCard from "@/components/base/StatCard/StatCard";
 import BalanceCard from "./BalanceCard";
-import ActionCard from "./ActionCard";
 import TransactionList from "./TransactionList";
+import { useWallet } from "@/hooks/useWallet";
+import { useWalletActionModal } from "@/context/WalletActionModalContext";
+import { formateAmount } from "@/utils/formate";
+import {
+    walletEyebrow,
+    walletTitle,
+    walletSubtitle,
+    walletActionCardDepositTab,
+    walletActionCardWithdrawTab,
+    walletEmptyTitle,
+    walletEmptyDesc,
+    walletStatsDeposited,
+    walletStatsWithdrawn,
+    walletStatsNetPayouts,
+} from "@/components/messages";
 
 export default function Wallet() {
-    const [tab, setTab] = useState<"deposit" | "withdraw">("deposit");
-    const { currency, setCurrency } = useCurrency();
+    const walletActionModal = useWalletActionModal();
+
+    const {
+        usdValue,
+        withdrawableUsd,
+        balanceLoading,
+        stats,
+        transactions,
+        transactionsLoading,
+        loadingMore,
+        hasMore,
+        loadMoreTransactions,
+    } = useWallet();
+
+    const isEmpty =
+        !balanceLoading &&
+        !transactionsLoading &&
+        usdValue === 0 &&
+        transactions.length === 0;
 
     return (
         <Box customClass="wallet-view">
             <Box customClass="lobby-heading">
-                <Text as="h1" customClass="lobby-heading-title">Wallet</Text>
-                <Text as="p" customClass="lobby-heading-sub">Manage your funds and track performance</Text>
+                <Text as="p" customClass="lobby-eyebrow">
+                    {walletEyebrow}
+                </Text>
+                <Text as="h1" customClass="lobby-heading-title">
+                    {walletTitle}
+                </Text>
+                <Text as="p" customClass="lobby-heading-sub">
+                    {walletSubtitle}
+                </Text>
             </Box>
 
-            {/* Currency picker */}
-            <Box customClass="currency-picker">
-                {CURRENCIES.map((c) => {
-                    const meta = CURRENCY_META[c];
-                    return (
-                        <button
-                            key={c}
-                            className={clsx("currency-pill", currency === c && "active")}
-                            style={{ "--currency-color": meta.color } as React.CSSProperties}
-                            onClick={() => setCurrency(c)}
-                        >
-                            <span className="currency-pill-dot" />
-                            <span className="currency-pill-id">{c}</span>
-                            <span className="currency-pill-name">{meta.name}</span>
-                        </button>
-                    );
-                })}
-            </Box>
+            {isEmpty ? (
+                <>
+                    <Box customClass="wallet-empty-hero">
+                        <Box customClass="wallet-empty-icon">♛</Box>
+                        <Text as="p" customClass="wallet-empty-title">
+                            {walletEmptyTitle}
+                        </Text>
+                        <Text as="p" customClass="wallet-empty-desc">
+                            {walletEmptyDesc}
+                        </Text>
+                    </Box>
+                    <Box customClass="lobby-section wallet-empty-actions">
+                        <Box customClass="wallet-action-buttons">
+                            <Button
+                                variant="primary"
+                                fullWidth
+                                onClick={walletActionModal.openDeposit}
+                            >
+                                {walletActionCardDepositTab}
+                            </Button>
+                        </Box>
+                    </Box>
+                </>
+            ) : (
+                <Box customClass="wallet-dashboard-grid">
+                    <Box customClass="lobby-section wallet-balance-col">
+                        <BalanceCard
+                            usdValue={usdValue}
+                            withdrawableUsd={withdrawableUsd}
+                            loading={balanceLoading}
+                        />
+                        <Box customClass="wallet-action-buttons">
+                            <Button
+                                variant="primary"
+                                fullWidth
+                                onClick={walletActionModal.openDeposit}
+                            >
+                                {walletActionCardDepositTab}
+                            </Button>
+                            <Button
+                                variant="outline"
+                                fullWidth
+                                onClick={walletActionModal.openWithdraw}
+                            >
+                                {walletActionCardWithdrawTab}
+                            </Button>
+                        </Box>
+                        <Box customClass="wallet-summary-stats">
+                            <StatCard
+                                label={walletStatsDeposited}
+                                value={`+${formateAmount(stats.deposited, "USD")}`}
+                                valueColor="positive"
+                            />
+                            <StatCard
+                                label={walletStatsWithdrawn}
+                                value={`-${formateAmount(Math.abs(stats.withdrawn), "USD")}`}
+                                valueColor="negative"
+                            />
+                            <StatCard
+                                label={walletStatsNetPayouts}
+                                value={`${stats.netPayouts >= 0 ? "+" : "-"}${formateAmount(Math.abs(stats.netPayouts), "USD")}`}
+                                valueColor={
+                                    stats.netPayouts >= 0
+                                        ? "positive"
+                                        : "negative"
+                                }
+                            />
+                        </Box>
+                    </Box>
 
-            <BalanceCard />
-            <Box customClass="wallet-stats-grid">
-                <StatCard label="USD Value"    value={CURRENCY_META[currency].id === "BTC" ? "≈ $3,492" : `$${currency === "USDT" ? "1,240" : "845"}`} valueColor="accent" />
-                <StatCard label="All-time P&L" value={currency === "BTC" ? "+0.012 BTC" : `+${currency === "USDT" ? "320" : "210"} ${currency}`} valueColor="accent" />
-                <StatCard label="Total Wins"   value="47" valueColor="accent" />
-                <StatCard label="Win Rate"     value="68%" valueColor="accent" />
-            </Box>
-            <Box customClass="wallet-main">
-                <ActionCard tab={tab} onTabChange={setTab} />
-                <TransactionList />
-            </Box>
+                    <TransactionList
+                        transactions={transactions}
+                        loading={transactionsLoading}
+                        loadingMore={loadingMore}
+                        hasMore={hasMore}
+                        onLoadMore={loadMoreTransactions}
+                    />
+                </Box>
+            )}
         </Box>
     );
 }

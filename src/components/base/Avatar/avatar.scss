@@ -1,35 +1,91 @@
-@use '../../../styles/default.scss' as *;
+@use "../../../styles/default.scss" as *;
 
-.avatar {
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  flex-shrink: 0;
+.common-avatar {
+    position: relative;
+    display: inline-flex;
+    flex-shrink: 0;
 
-  // primary = active player (cyan)
-  &.primary {
-    background: rgba($cyan, 0.1);
-    border: 1px solid rgba($cyan, 0.3);
-    color: $cyan;
-  }
+    .avatar {
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        font-weight: 700;
+        font-family: var(--font-outfit);
+        flex-shrink: 0;
+        transition: box-shadow 0.15s ease;
 
-  // danger = opponent (red)
-  &.danger {
-    background: rgba($paleRed, 0.1);
-    border: 1px solid rgba($paleRed, 0.25);
-    color: $brinkPink;
-  }
+        &.primary {
+            background: rgba($cyan, 0.1);
+            border: 1px solid rgba($cyan, 0.3);
+            color: $cyan;
+        }
 
-  // neutral
-  &.neutral {
-    background: rgba($white, 0.05);
-    border: 1px solid rgba($white, 0.1);
-    color: rgba($white, 0.5);
-  }
+        &.danger {
+            background: rgba($paleRed, 0.1);
+            border: 1px solid rgba($paleRed, 0.25);
+            color: $brinkPink;
+        }
 
-  &.sm { width: 1.75rem; height: 1.75rem; font-size: $font12; }
-  &.md { width: 2.25rem; height: 2.25rem; font-size: $font14; }
-  &.lg { width: 2.75rem; height: 2.75rem; font-size: $font16; }
+        &.neutral {
+            background: rgba($white, 0.05);
+            border: 1px solid rgba($white, 0.1);
+            color: rgba($white, 0.5);
+        }
+
+        &.sm {
+            width: 1.75rem;
+            height: 1.75rem;
+            font-size: $font12;
+        }
+        &.md {
+            width: 2.25rem;
+            height: 2.25rem;
+            font-size: $font14;
+        }
+        &.lg {
+            width: 2.75rem;
+            height: 2.75rem;
+            font-size: $font16;
+        }
+    }
+
+    .avatar-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: inherit;
+    }
+
+    .avatar-fallback {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &.common-avatar--ringed .avatar {
+        box-shadow: 0 0 0 2px $appBg, 0 0 0 3.5px var(--avatar-ring-color);
+    }
+
+    .avatar-status-dot {
+        position: absolute;
+        right: -1px;
+        bottom: -1px;
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 50%;
+        background: $greenishTeal;
+        border: 2px solid $appBg;
+        box-shadow: 0 0 6px rgba($greenishTeal, 0.7);
+    }
+
+    // ── Profile identity strip ───────────────────────────────────────────────
+    &.profile-avatar-ring .avatar {
+        background: $appSecondary;
+        border: 1px solid rgba($gold, 0.35);
+        color: $gold;
+    }
 }

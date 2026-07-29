@@ -1,9 +1,16 @@
-import { Activity, Users } from "lucide-react";
+import { Activity, Users, Flame } from "lucide-react";
 import clsx from "clsx";
 import Card from "../../components/base/Card/Card";
 import Box from "../../components/base/Box/Box";
 import Text from "../../components/base/Text/Text";
-import { formatAmount, formatTimeControl, CATEGORY_META, CURRENCY_META } from "@/constants/currencies";
+import { CATEGORY_META, CURRENCY_META } from "@/constants/config";
+import { formateAmount, formateTimeControl } from "@/utils/formate";
+import {
+    matchmakingPoolCardHot,
+    matchmakingPoolCardPrizeLabel,
+    matchmakingPoolCardQueued,
+    matchmakingPoolCardActive,
+} from "@/components/messages";
 import type { Pool } from "@/types/types";
 
 interface IPoolCardProps {
@@ -13,11 +20,12 @@ interface IPoolCardProps {
 }
 
 function PoolCard({ pool: p, selected, onSelect }: IPoolCardProps) {
-    const stake = formatAmount(p.stake, p.currency);
-    const prize = formatAmount(p.prize, p.currency);
-    const timeLabel = formatTimeControl(p.time);
+    const stake = formateAmount(p.stake, p.currency);
+    const prize = formateAmount(p.prize, p.currency);
+    const timeLabel = formateTimeControl(p.time);
     const cat = CATEGORY_META[p.category];
-    const meta = CURRENCY_META[p.currency];
+    // Pools are always staked in USD now.
+    const meta = CURRENCY_META.USD;
     const CurrencyIcon = meta.icon;
 
     return (
@@ -30,26 +38,55 @@ function PoolCard({ pool: p, selected, onSelect }: IPoolCardProps) {
                 <Text font="mono" size={10} customClass="pool-category-badge">
                     {cat.emoji} {cat.label}
                 </Text>
+                {p.hot && (
+                    <Box customClass="pool-hot-badge">
+                        <Flame size={10} strokeWidth={2.5} />
+                        <Text as="span" font="mono" size={9} weight={700}>
+                            {matchmakingPoolCardHot}
+                        </Text>
+                    </Box>
+                )}
             </Box>
 
             <Box customClass="pool-card-top">
                 <Box>
                     <Box customClass="pool-stake-row">
-                        <CurrencyIcon size={13} strokeWidth={2} style={{ color: meta.color, flexShrink: 0 }} />
-                        <Text font="mono" size={16} weight={700} color="white" customClass="pool-stake">
+                        <CurrencyIcon
+                            size={13}
+                            strokeWidth={2}
+                            style={{ color: meta.color, flexShrink: 0 }}
+                        />
+                        <Text
+                            font="mono"
+                            size={16}
+                            weight={700}
+                            color="white"
+                            customClass="pool-stake"
+                        >
                             {stake}
                         </Text>
                     </Box>
-                    <Text font="mono" size={11} color="muted" customClass="pool-meta">
+                    <Text
+                        font="mono"
+                        size={11}
+                        color="muted"
+                        customClass="pool-meta"
+                    >
                         {timeLabel}
                     </Text>
                 </Box>
                 <Box customClass="pool-right">
-                    <Text font="mono" size={14} weight={700} color="accent" customClass="pool-prize">
+                    <Text
+                        font="mono"
+                        size={14}
+                        weight={700}
+                        color="accent"
+                        customClass="pool-prize"
+                    >
                         {prize}
                     </Text>
                     <Text font="mono" size={10} color="muted">
-                        prize
+                        {matchmakingPoolCardPrizeLabel}
                     </Text>
                 </Box>
             </Box>
@@ -58,13 +95,13 @@ function PoolCard({ pool: p, selected, onSelect }: IPoolCardProps) {
                 <Box customClass="pool-stat">
                     <Users size={10} />
                     <Text font="mono" size={11} color="muted">
-                        {p.players} queued
+                        {matchmakingPoolCardQueued(p.players)}
                     </Text>
                 </Box>
                 <Box customClass="pool-stat">
                     <Activity size={10} />
                     <Text font="mono" size={11} color="muted">
-                        {p.active} active
+                        {matchmakingPoolCardActive(p.active)}
                     </Text>
                 </Box>
                 <Box customClass="pool-volume-bars">
@@ -73,10 +110,17 @@ function PoolCard({ pool: p, selected, onSelect }: IPoolCardProps) {
                             key={i}
                             customClass="pool-volume-bar"
                             style={{
-                                height: Math.max(4, Math.min(14, (p.players / 200) * 3 - i * 1.5)),
-                                background: i < Math.floor(p.players / 200)
-                                    ? "rgba(42,103,255,0.75)"
-                                    : "rgba(42,103,255,0.15)",
+                                height: Math.max(
+                                    4,
+                                    Math.min(
+                                        14,
+                                        (p.players / 200) * 3 - i * 1.5,
+                                    ),
+                                ),
+                                background:
+                                    i < Math.floor(p.players / 200)
+                                        ? "#39ff88"
+                                        : "rgba(57,255,136,0.25)",
                             }}
                         />
                     ))}

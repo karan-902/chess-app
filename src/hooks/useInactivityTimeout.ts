@@ -2,10 +2,13 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import { getSocket } from "@/lib/socket";
+import { inactivityTimeoutRemovedTitle, inactivityTimeoutTimedOutDescription, inactivityTimeoutDisconnectedDescription } from "@/components/messages";
 
-const INACTIVITY_MS = Number(import.meta.env.VITE_INACTIVITY_TIMEOUT_MS) || 180_000;
 
-export function useInactivityTimeout(paused: boolean, turn: "w" | "b", fenHistoryLength: number, playerSide: "w" | "b" = "w") {
+const DEFAULT_INACTIVITY_MS = Number(import.meta.env.VITE_INACTIVITY_TIMEOUT_MS) || 180_000;
+
+export function useInactivityTimeout(paused: boolean, turn: "w" | "b", fenHistoryLength: number, playerSide: "w" | "b" = "w", inactivitySeconds?: number) {
+    const inactivityMs = inactivitySeconds ? inactivitySeconds * 1000 : DEFAULT_INACTIVITY_MS;
     const [inactiveOut, setInactiveOut] = useState(false);
     const [secsLeft, setSecsLeft] = useState<number | null>(null);
     const lastMoveAtRef = useRef(Date.now());
@@ -23,7 +26,7 @@ export function useInactivityTimeout(paused: boolean, turn: "w" | "b", fenHistor
         let active = true;
         const id = setInterval(() => {
             if (!active) return;
-            const remaining = INACTIVITY_MS - (Date.now() - lastMoveAtRef.current);
+            const remaining = inactivityMs - (Date.now() - lastMoveAtRef.current);
             if (remaining <= 0) {
                 active = false;
                 clearInterval(id);
@@ -34,17 +37,17 @@ export function useInactivityTimeout(paused: boolean, turn: "w" | "b", fenHistor
             setSecsLeft(Math.ceil(remaining / 1000));
         }, 1000);
         return () => { active = false; clearInterval(id); };
-    }, [turn, paused, playerSide]);
+    }, [turn, paused, playerSide, inactivityMs]);
 
     // Server-side notification when a player is removed for inactivity
     useEffect(() => {
         const socket = getSocket();
         if (!socket) return;
         const onPlayerOffline = ({ reason }: { reason: string }) => {
-            toast.error("You were removed", {
+            toast.error(inactivityTimeoutRemovedTitle, {
                 description: reason === "inactivity_timeout"
-                    ? "No move for 3 minutes. The game has ended."
-                    : "You were disconnected from the game.",
+                    ? inactivityTimeoutTimedOutDescription
+                    : inactivityTimeoutDisconnectedDescription,
                 duration: 5000,
             });
             navigate("/lobby", { replace: true });

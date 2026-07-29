@@ -76,7 +76,7 @@ const Input = React.forwardRef<HTMLInputElement, IInputProps>(
                 className="pointer-events-none absolute -bottom-px inset-x-0 h-px"
                 style={{
                   background:
-                    'linear-gradient(90deg, transparent, #f0b90b, transparent)',
+                    'linear-gradient(90deg, transparent, #f7931a, transparent)',
                 }}
                 initial={{ opacity: 0, scaleX: 0.4 }}
                 animate={{ opacity: 1, scaleX: 1 }}
@@ -95,7 +95,7 @@ const Input = React.forwardRef<HTMLInputElement, IInputProps>(
                 className="pointer-events-none absolute inset-0 rounded-xl"
                 style={{
                   background:
-                    'radial-gradient(ellipse 90% 60% at 50% 130%, rgba(240,185,11,0.18) 0%, transparent 70%)',
+                    'radial-gradient(ellipse 90% 60% at 50% 130%, rgba(247,147,26,0.18) 0%, transparent 70%)',
                 }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -110,13 +110,13 @@ const Input = React.forwardRef<HTMLInputElement, IInputProps>(
             ref={ref}
             type={resolvedType}
             className={cn(
-              'w-full rounded-xl font-[Outfit] text-white outline-none transition-all duration-200',
-              'bg-[#1e2130] border placeholder:text-white/20',
+              'w-full rounded-[0.3rem] font-[var(--font-outfit)] text-white outline-none transition-all duration-200',
+              'bg-[#14171c] border placeholder:text-white/20',
               // border states
               isError
-                ? 'border-red-500/60 focus:border-red-500/80 shadow-[0_0_0_3px_rgba(231,76,60,0.1)]'
-                : 'border-white/[0.09] focus:border-[rgba(240,185,11,0.5)] focus:shadow-[0_0_0_3px_rgba(240,185,11,0.09)]',
-              variant === 'filled' && 'bg-white/[0.05] border-transparent focus:border-[rgba(240,185,11,0.4)] focus:bg-[#1e2130]',
+                ? 'border-[#ff5c5c]/60 focus:border-[#ff5c5c]/80 shadow-[0_0_0_3px_rgba(255,92,92,0.1)]'
+                : 'border-white/[0.09] focus:border-[rgba(247,147,26,0.5)] focus:shadow-[0_0_0_3px_rgba(247,147,26,0.09)]',
+              variant === 'filled' && 'bg-white/[0.05] border-transparent focus:border-[rgba(247,147,26,0.4)] focus:bg-[#14171c]',
               isPassword && 'pr-[2.75rem]',
               sizeStyles[size],
               'disabled:opacity-40 disabled:cursor-not-allowed',

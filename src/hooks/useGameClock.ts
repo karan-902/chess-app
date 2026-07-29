@@ -48,6 +48,18 @@ export function useGameClock(timeControl: TimeControl, paused: boolean, turn: "w
         timedOutRef.current = null;
     };
 
+    // Re-syncs the visual clock to the server's authoritative values (pvp
+    // `clock_update`, sent on every move). The local per-second countdown
+    // above is just interpolation between syncs — this corrects any drift
+    // and, since a fresh sync only ever arrives while the game is still
+    // ongoing, also clears any locally-guessed timedOut state.
+    const syncClock = (whiteMs: number, blackMs: number) => {
+        setWhiteTime(Math.round(whiteMs / 1000));
+        setBlackTime(Math.round(blackMs / 1000));
+        setTimedOut(null);
+        timedOutRef.current = null;
+    };
+
     const fmt = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
     const fmtElapsed = (s: number) => {
         const m = Math.floor(s / 60);
@@ -60,5 +72,6 @@ export function useGameClock(timeControl: TimeControl, paused: boolean, turn: "w
         timedOut,
         elapsedFormatted: fmtElapsed(elapsed),
         reset,
+        syncClock,
     };
 }

@@ -1,16 +1,19 @@
-import { useState } from "react";
 import Box from "../../components/base/Box/Box";
 import Text from "../../components/base/Text/Text";
 import Button from "../../components/base/Button/Button";
 import PoolCard from "./PoolCard";
+import PoolCardSkeleton from "./PoolCardSkeleton";
+import { matchmakingFilterAll, matchmakingFilterBullet, matchmakingFilterBlitz, matchmakingFilterRapid, matchmakingFilterClassical, matchmakingPoolListSectionTitle, matchmakingPoolListLive, matchmakingPoolListEmptyAll, matchmakingPoolListEmptyCategory } from "@/components/messages";
 import type { Pool, PoolCategory } from "@/types/types";
 
+const SKELETON_COUNT = 6;
+
 const FILTERS: { id: PoolCategory; label: string }[] = [
-    { id: "all", label: "All" },
-    { id: "bullet", label: "⚡ Bullet" },
-    { id: "blitz", label: "🔥 Blitz" },
-    { id: "rapid", label: "⏱ Rapid" },
-    { id: "classical", label: "🏛 Classical" },
+    { id: "all", label: matchmakingFilterAll },
+    { id: "bullet", label: matchmakingFilterBullet },
+    { id: "blitz", label: matchmakingFilterBlitz },
+    { id: "rapid", label: matchmakingFilterRapid },
+    { id: "classical", label: matchmakingFilterClassical },
 ];
 
 interface IPoolListProps {
@@ -18,24 +21,19 @@ interface IPoolListProps {
     loading: boolean;
     selectedPool: string | null;
     onSelect: (id: string | null) => void;
+    category: PoolCategory;
+    onCategoryChange: (category: PoolCategory) => void;
 }
 
-function PoolList({ pools, loading, selectedPool, onSelect }: IPoolListProps) {
-    const [category, setCategory] = useState<PoolCategory>("all");
-
-    const filtered =
-        category === "all"
-            ? pools
-            : pools.filter((p) => p.category === category);
-
+function PoolList({ pools, loading, selectedPool, onSelect, category, onCategoryChange }: IPoolListProps) {
     return (
         <>
             <Box customClass="section-header">
-                <Text customClass="section-title">Stake Pools</Text>
+                <Text customClass="section-title">{matchmakingPoolListSectionTitle}</Text>
                 <Box customClass="live-indicator">
                     <Text as="span" customClass="live-dot" />
                     <Text font="mono" size={10} color="muted">
-                        Live
+                        {matchmakingPoolListLive}
                     </Text>
                 </Box>
             </Box>
@@ -46,7 +44,7 @@ function PoolList({ pools, loading, selectedPool, onSelect }: IPoolListProps) {
                         key={f.id}
                         variant={category === f.id ? "primary" : "ghost"}
                         customClass="filter-chip-btn"
-                        onClick={() => setCategory(f.id)}
+                        onClick={() => onCategoryChange(f.id)}
                     >
                         {f.label}
                     </Button>
@@ -55,19 +53,19 @@ function PoolList({ pools, loading, selectedPool, onSelect }: IPoolListProps) {
 
             <Box customClass="pool-list">
                 {loading ? (
-                    Array.from({ length: 4 }, (_, i) => (
-                        <Box key={i} customClass="pool-card pool-card--skeleton" />
+                    Array.from({ length: SKELETON_COUNT }, (_, i) => (
+                        <PoolCardSkeleton key={i} />
                     ))
-                ) : filtered.length === 0 ? (
+                ) : pools.length === 0 ? (
                     <Box customClass="pool-empty">
                         <Text font="mono" size={13} color="muted" customClass="pool-empty-text">
-                            {pools.length === 0
-                                ? "No stake pools available right now"
-                                : "No pools in this category"}
+                            {category === "all"
+                                ? matchmakingPoolListEmptyAll
+                                : matchmakingPoolListEmptyCategory}
                         </Text>
                     </Box>
                 ) : (
-                    filtered.map((p) => (
+                    pools.map((p) => (
                         <PoolCard
                             key={p.id}
                             pool={p}

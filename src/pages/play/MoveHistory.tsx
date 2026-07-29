@@ -3,7 +3,10 @@ import { ChevronLeft, ChevronRight, ChevronsRight } from 'lucide-react'
 import Box from '../../components/base/Box/Box'
 import Card from '../../components/base/Card/Card'
 import Text from '../../components/base/Text/Text'
+import Button from '../../components/base/Button/Button'
 import type { MoveRecord } from '../../types'
+import { playMoveHistoryReviewing, playMoveHistoryNoMovesYet } from '@/components/messages'
+
 
 interface IMoveHistoryProps {
   moves: MoveRecord[]
@@ -35,41 +38,43 @@ function MoveHistory({ moves, fenHistory, viewIndex, onGoBack, onGoForward, onJu
     <Card customClass="history-panel">
       {/* Nav bar */}
       <Box customClass="history-nav">
-        <button className="history-nav-btn" onClick={onGoBack} disabled={atStart}>
+        <Button variant="outline" customClass="history-nav-btn" onClick={onGoBack} disabled={atStart}>
           <ChevronLeft size={14} />
-        </button>
-        <button className="history-nav-btn" onClick={onGoForward} disabled={!isReviewing}>
+        </Button>
+        <Button variant="outline" customClass="history-nav-btn" onClick={onGoForward} disabled={!isReviewing}>
           <ChevronRight size={14} />
-        </button>
-        <button className="history-nav-btn history-nav-btn--live" onClick={() => onJumpTo(fenHistory.length)} disabled={!isReviewing}>
+        </Button>
+        <Button variant="outline" customClass="history-nav-btn history-nav-btn--live" onClick={() => onJumpTo(fenHistory.length)} disabled={!isReviewing}>
           <ChevronsRight size={14} />
-        </button>
+        </Button>
         {isReviewing && (
-          <Text as="span" customClass="history-reviewing-label">Reviewing</Text>
+          <Text as="span" customClass="history-reviewing-label">{playMoveHistoryReviewing}</Text>
         )}
       </Box>
 
       {/* Move list */}
       <Box customClass="history-list" ref={listRef}>
         {moves.length === 0 ? (
-          <Text font="mono" size={11} color="muted" customClass="history-empty">No moves yet</Text>
+          <Text font="mono" size={11} color="muted" customClass="history-empty">{playMoveHistoryNoMovesYet}</Text>
         ) : (
           moves.map(({ n, w, b }, i) => (
             <Box key={n} customClass="move-row">
               <Text font="mono" size={12} color="muted" customClass="move-num">{n}.</Text>
-              <button
-                className={`move-cell${isWhiteActive(i) ? ' move-cell--active' : ''}`}
+              <Button
+                variant="ghost"
+                customClass={`move-cell${isWhiteActive(i) ? ' move-cell--active' : ''}`}
                 onClick={() => onJumpTo(i * 2 + 1)}
               >
                 {w}
-              </button>
+              </Button>
               {b && (
-                <button
-                  className={`move-cell${isBlackActive(i) ? ' move-cell--active' : ''}`}
+                <Button
+                  variant="ghost"
+                  customClass={`move-cell${isBlackActive(i) ? ' move-cell--active' : ''}`}
                   onClick={() => onJumpTo(i * 2 + 2)}
                 >
                   {b}
-                </button>
+                </Button>
               )}
             </Box>
           ))

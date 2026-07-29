@@ -1,6 +1,8 @@
 @use '../../../styles/default.scss' as *;
 
-
+// Root class: .common-{componentName}
+// Sub-parts and variants (e.g. &.variant-name) nest inside it via SCSS &.
+// Anything rendered as a DOM sibling (not descendant) stays a flat top-level class.
 .input-field {
     width: 100%;
     background: $appSecondary;
@@ -47,6 +49,38 @@
         &:focus {
             border-color: rgba($gold, 0.4);
             background: $appSecondary;
+        }
+    }
+}
+
+// Deposit amount field — a huge borderless number, not a boxed field.
+// Targets the actual <input> (Input's Tailwind classes live there directly),
+// not .input-field, since Input.tsx doesn't apply that class.
+.deposit-amount-input {
+    input {
+        text-align: center;
+        font-family: var(--font-mono);
+        font-weight: 800;
+        font-size: 2.2rem;
+        height: auto;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0.5rem 0;
+        color: $white;
+
+        &::placeholder {
+            color: rgba($white, 0.15);
+        }
+    }
+
+    @media (min-width: $lg) {
+        input {
+            color: #141413;
+
+            &::placeholder {
+                color: #d8d4cb;
+            }
         }
     }
 }

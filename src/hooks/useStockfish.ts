@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 export function useStockfish(
     fen: string,
-    depth: number = 10,
+    depth: number = 2,
     enabled: boolean = true,
     elo?: number,
     skillLevel?: number,
@@ -31,21 +31,32 @@ export function useStockfish(
 
         // Skill Level (0–20): makes Stockfish blunder intentionally — most effective for easy mode
         if (skillLevel !== undefined) {
-            engineRef.current.postMessage(`setoption name Skill Level value ${skillLevel}`);
+            engineRef.current.postMessage(
+                `setoption name Skill Level value ${skillLevel}`,
+            );
         } else {
-            engineRef.current.postMessage("setoption name Skill Level value 20");
+            engineRef.current.postMessage(
+                "setoption name Skill Level value 20",
+            );
         }
 
         // ELO cap — secondary layer of weakness
         if (elo !== undefined) {
-            engineRef.current.postMessage("setoption name UCI_LimitStrength value true");
-            engineRef.current.postMessage(`setoption name UCI_Elo value ${elo}`);
+            engineRef.current.postMessage(
+                "setoption name UCI_LimitStrength value true",
+            );
+            engineRef.current.postMessage(
+                `setoption name UCI_Elo value ${elo}`,
+            );
         } else {
-            engineRef.current.postMessage("setoption name UCI_LimitStrength value false");
+            engineRef.current.postMessage(
+                "setoption name UCI_LimitStrength value false",
+            );
         }
 
         engineRef.current.postMessage(`position fen ${fen}`);
-        engineRef.current.postMessage(`go depth ${depth}`);
+        // movetime bounds worst-case search time — plain "go depth" is unbounded.
+        engineRef.current.postMessage(`go depth ${depth} movetime 3000`);
     }, [fen, depth, enabled, elo, skillLevel]);
 
     return { bestMove };

@@ -17,6 +17,7 @@ type TextSize =
     | 12
     | 13
     | 14
+    | 15
     | 16
     | 18
     | 20
@@ -42,7 +43,7 @@ interface ITextProps {
     truncate?: boolean;
 }
 
-function Text({
+export default function Text({
     children,
     font,
     size,
@@ -65,7 +66,7 @@ function Text({
     return (
         <Tag
             className={clsx(
-                "text",
+                "common-text",
                 font && `font-${font}`,
                 size && `size-${size}`,
                 weight && `w-${weight}`,
@@ -81,5 +82,3 @@ function Text({
         </Tag>
     );
 }
-
-export default Text;

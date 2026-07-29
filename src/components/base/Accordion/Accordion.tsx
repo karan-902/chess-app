@@ -1,66 +1,56 @@
-import clsx from 'clsx'
-import * as RadixAccordion from '@radix-ui/react-accordion'
-import './accordion.scss'
+import * as React from "react"
+import * as AccordionPrimitive from "@radix-ui/react-accordion"
+import { ChevronDown } from "lucide-react"
 
-interface IAccordionProps {
-  type?: 'single' | 'multiple'
-  defaultValue?: string
-  children: React.ReactNode
-  customClass?: string
-}
+import { cn } from "@/lib/utils"
 
-interface IAccordionItemProps {
-  value: string
-  children: React.ReactNode
-  customClass?: string
-}
+const Accordion = AccordionPrimitive.Root
 
-interface IAccordionTriggerProps {
-  children: React.ReactNode
-  customClass?: string
-}
+const AccordionItem = React.forwardRef<
+  React.ElementRef<typeof AccordionPrimitive.Item>,
+  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item>
+>(({ className, ...props }, ref) => (
+  <AccordionPrimitive.Item
+    ref={ref}
+    className={cn("border-b", className)}
+    {...props}
+  />
+))
+AccordionItem.displayName = "AccordionItem"
 
-interface IAccordionContentProps {
-  children: React.ReactNode
-  customClass?: string
-}
-
-export function Accordion({ type = 'single', defaultValue, children, customClass }: IAccordionProps) {
-  return (
-    <RadixAccordion.Root
-      type={type as 'single'}
-      defaultValue={defaultValue}
-      className={clsx('accordion-root', customClass)}
-      collapsible
+const AccordionTrigger = React.forwardRef<
+  React.ElementRef<typeof AccordionPrimitive.Trigger>,
+  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>
+>(({ className, children, ...props }, ref) => (
+  <AccordionPrimitive.Header className="flex">
+    <AccordionPrimitive.Trigger
+      ref={ref}
+      className={cn(
+        "flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline [&[data-state=open]>svg]:rotate-180",
+        className
+      )}
+      {...props}
     >
       {children}
-    </RadixAccordion.Root>
-  )
-}
+      <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />
+    </AccordionPrimitive.Trigger>
+  </AccordionPrimitive.Header>
+))
+AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName
 
-export function AccordionItem({ value, children, customClass }: IAccordionItemProps) {
-  return (
-    <RadixAccordion.Item value={value} className={clsx('accordion-item', customClass)}>
-      {children}
-    </RadixAccordion.Item>
-  )
-}
+const AccordionContent = React.forwardRef<
+  React.ElementRef<typeof AccordionPrimitive.Content>,
+  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Content>
+>(({ className, children, ...props }, ref) => (
+  <AccordionPrimitive.Content
+    ref={ref}
+    className="overflow-hidden text-sm transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
+    {...props}
+  >
+    <div className={cn("pb-4 pt-0", className)}>{children}</div>
+  </AccordionPrimitive.Content>
+))
 
-export function AccordionTrigger({ children, customClass }: IAccordionTriggerProps) {
-  return (
-    <RadixAccordion.Header className="accordion-header">
-      <RadixAccordion.Trigger className={clsx('accordion-trigger', customClass)}>
-        {children}
-        <span className="accordion-chevron">▾</span>
-      </RadixAccordion.Trigger>
-    </RadixAccordion.Header>
-  )
-}
+AccordionContent.displayName = AccordionPrimitive.Content.displayName
 
-export function AccordionContent({ children, customClass }: IAccordionContentProps) {
-  return (
-    <RadixAccordion.Content className={clsx('accordion-content', customClass)}>
-      <div className="accordion-content-inner">{children}</div>
-    </RadixAccordion.Content>
-  )
-}
+export { Accordion, AccordionItem, AccordionTrigger, AccordionContent }

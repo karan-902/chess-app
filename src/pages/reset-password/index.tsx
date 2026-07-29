@@ -4,11 +4,14 @@ import { Link, useNavigate, useSearchParams } from "react-router";
 import Box from "../../components/base/Box/Box";
 import Text from "../../components/base/Text/Text";
 import Button from "../../components/base/Button/Button";
-import Label from "../../components/base/Label/Label";
+import { Label } from "../../components/base/Label/label";
 import Input from "../../components/base/Input/Input";
+import KingStakeLogo from "@/components/constants";
 import { callAPIInterface } from "../../utils";
+import { authBackToSignIn, authConfirmPasswordLabel, authPasswordPlaceholder, authResetPasswordDescription, authResetPasswordInvalidLinkDescription, authResetPasswordInvalidLinkTitle, authResetPasswordLinkInvalidOrExpired, authResetPasswordNewPasswordLabel, authResetPasswordRequestNewLink, authResetPasswordResetButton, authResetPasswordTitle, authValidationConfirmPasswordRequired, authValidationPasswordMinLength, authValidationPasswordRequired, authValidationPasswordsMustMatch } from "@/components/messages";
 import type { IResetPasswordBody } from "../../types/index";
 import type { IMessageResponse } from "../../types/utils";
+
 
 export default function ResetPassword() {
     const [params] = useSearchParams();
@@ -19,11 +22,11 @@ export default function ResetPassword() {
         initialValues: { new_password: "", confirm: "" },
         validationSchema: object({
             new_password: string()
-                .required("Password is required")
-                .min(8, "Password must be at least 8 characters"),
+                .required(authValidationPasswordRequired)
+                .min(8, authValidationPasswordMinLength),
             confirm: string()
-                .required("Please confirm your password")
-                .oneOf([ref("new_password")], "Passwords do not match"),
+                .required(authValidationConfirmPasswordRequired)
+                .oneOf([ref("new_password")], authValidationPasswordsMustMatch),
         }),
         onSubmit: async ({ new_password }, { setSubmitting, setFieldError }) => {
             try {
@@ -34,7 +37,7 @@ export default function ResetPassword() {
                 );
                 navigate("/login", { replace: true });
             } catch {
-                setFieldError("new_password", "Reset link is invalid or has expired.");
+                setFieldError("new_password", authResetPasswordLinkInvalidOrExpired);
             } finally {
                 setSubmitting(false);
             }
@@ -46,14 +49,17 @@ export default function ResetPassword() {
             <Box customClass="auth-page auth-page--centered">
                 <Box customClass="auth-right">
                     <Box customClass="auth-card">
+                        <Box customClass="auth-brand-mini">
+                            <KingStakeLogo size={26} showText withCursor />
+                        </Box>
                         <Box customClass="auth-heading">
-                            <Text as="h1" customClass="auth-title">Invalid Link</Text>
+                            <Text as="h1" customClass="auth-title">{authResetPasswordInvalidLinkTitle}</Text>
                             <Text as="p" customClass="auth-subtitle">
-                                This reset link is missing or invalid.
+                                {authResetPasswordInvalidLinkDescription}
                             </Text>
                         </Box>
                         <Text as="p" customClass="auth-footer-text">
-                            <Link to="/forgot-password">Request a new link</Link>
+                            <Link to="/forgot-password">{authResetPasswordRequestNewLink}</Link>
                         </Text>
                     </Box>
                 </Box>
@@ -65,19 +71,34 @@ export default function ResetPassword() {
         <Box customClass="auth-page auth-page--centered">
             <Box customClass="auth-right">
                 <Box customClass="auth-card">
-                    <Box customClass="auth-heading">
-                        <Text as="h1" customClass="auth-title">Reset Password</Text>
-                        <Text as="p" customClass="auth-subtitle">Choose a new password for your account.</Text>
+                    <Box customClass="auth-brand-mini">
+                        <KingStakeLogo size={26} showText withCursor />
                     </Box>
 
-                    <form className="auth-form" onSubmit={formik.handleSubmit}>
+                    <Box customClass="auth-heading">
+                        <Text as="h1" customClass="auth-title">{authResetPasswordTitle}</Text>
+                        <Text as="p" customClass="auth-subtitle">{authResetPasswordDescription}</Text>
+                    </Box>
+
+                    <Box
+                        as="form"
+                        customClass="auth-form"
+                        onSubmit={
+                            formik.handleSubmit as React.FormEventHandler<HTMLElement>
+                        }
+                    >
                         <Box customClass="auth-field">
-                            <Label htmlFor="new_password">New Password</Label>
+                            <Label
+                                htmlFor="new_password"
+                                className="font-mono text-[11px] tracking-[0.08em] uppercase text-white/30"
+                            >
+                                {authResetPasswordNewPasswordLabel}
+                            </Label>
                             <Input
                                 name="new_password"
                                 id="new_password"
                                 type="password"
-                                placeholder="••••••••"
+                                placeholder={authPasswordPlaceholder}
                                 value={formik.values.new_password}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
@@ -88,12 +109,17 @@ export default function ResetPassword() {
                         </Box>
 
                         <Box customClass="auth-field">
-                            <Label htmlFor="confirm">Confirm Password</Label>
+                            <Label
+                                htmlFor="confirm"
+                                className="font-mono text-[11px] tracking-[0.08em] uppercase text-white/30"
+                            >
+                                {authConfirmPasswordLabel}
+                            </Label>
                             <Input
                                 name="confirm"
                                 id="confirm"
                                 type="password"
-                                placeholder="••••••••"
+                                placeholder={authPasswordPlaceholder}
                                 value={formik.values.confirm}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
@@ -105,15 +131,17 @@ export default function ResetPassword() {
 
                         <Button
                             type="submit"
+                            fullWidth
                             customClass="auth-submit-btn"
-                            disabled={!formik.isValid || !formik.dirty || formik.isSubmitting}
+                            isLoading={formik.isSubmitting}
+                            disabled={!formik.isValid || !formik.dirty}
                         >
-                            {formik.isSubmitting ? "Resetting…" : "Reset Password"}
+                            {authResetPasswordResetButton}
                         </Button>
-                    </form>
+                    </Box>
 
                     <Text as="p" customClass="auth-footer-text">
-                        <Link to="/login">← Back to Sign In</Link>
+                        <Link to="/login">{authBackToSignIn}</Link>
                     </Text>
                 </Box>
             </Box>

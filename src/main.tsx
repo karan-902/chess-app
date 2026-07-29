@@ -5,7 +5,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Toaster } from "sonner";
 import { store, persistor } from "./store";
 import { SocketProvider } from "./context/SocketContext";
-import { CurrencyProvider } from "./context/CurrencyContext";
+import { WalletActionModalProvider } from "./context/WalletActionModalContext";
 
 import "./styles/index.css";
 import "./styles/main.scss";
@@ -14,9 +14,9 @@ import App from "./App.tsx";
 createRoot(document.getElementById("root")!).render(
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
         <Provider store={store}>
-            <PersistGate loading={null} persistor={persistor}>
+            <PersistGate persistor={persistor}>
                 <SocketProvider>
-                    <CurrencyProvider>
+                    <WalletActionModalProvider>
                         <App />
                         <Toaster
                             position="top-right"
@@ -25,7 +25,7 @@ createRoot(document.getElementById("root")!).render(
                             closeButton
                             duration={5000}
                         />
-                    </CurrencyProvider>
+                    </WalletActionModalProvider>
                 </SocketProvider>
             </PersistGate>
         </Provider>

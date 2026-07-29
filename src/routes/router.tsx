@@ -4,8 +4,7 @@ import PrivateRoute from "@/container/PrivateRoute";
 import PublicRoute from "@/container/PublicRoute";
 import Leaderboard from "@/pages/leaderboard";
 import GameHistory from "@/pages/history";
-import ChatPage from "@/pages/chat";
-import Lobby from "@/pages/loby";
+import Lobby from "@/pages/lobby";
 import Login from "@/pages/login";
 import ForgotPassword from "@/pages/forgot-password";
 import ResetPassword from "@/pages/reset-password";
@@ -14,6 +13,7 @@ import Play from "@/pages/play";
 import Register from "@/pages/register";
 import Wallet from "@/pages/wallet";
 import ProfilePage from "@/pages/profile";
+import SkillLevelPage from "@/pages/skill-level";
 
 function IndexRedirect() {
     const [params] = useSearchParams();
@@ -46,14 +46,14 @@ export const router = createBrowserRouter([
             {
                 element: <PrivateRoute />,
                 children: [
-                    { path: "/lobby",        element: <Lobby />       },
-                    { path: "/matchmaking",  element: <Matchmaking /> },
-                    { path: "/chat",         element: <ChatPage />    },
-                    { path: "/history",      element: <GameHistory /> },
-                    { path: "/wallet",       element: <Wallet />      },
-                    { path: "/leaderboard",  element: <Leaderboard /> },
-                    { path: "/play",         element: <Play />        },
-                    { path: "/profile",      element: <ProfilePage /> },
+                    { path: "/skill-level", element: <SkillLevelPage /> },
+                    { path: "/lobby", element: <Lobby /> },
+                    { path: "/matchmaking", element: <Matchmaking /> },
+                    { path: "/history", element: <GameHistory /> },
+                    { path: "/wallet", element: <Wallet /> },
+                    { path: "/leaderboard", element: <Leaderboard /> },
+                    { path: "/play", element: <Play /> },
+                    { path: "/profile", element: <ProfilePage /> },
                 ],
             },
         ],

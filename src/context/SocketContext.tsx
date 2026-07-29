@@ -7,7 +7,7 @@ import {
     type ReactNode,
 } from "react";
 import { toast } from "sonner";
-import { Trophy, RefreshCw } from "lucide-react";
+import { Trophy, RefreshCw, Wallet } from "lucide-react";
 import type { Socket } from "socket.io-client";
 import { connectSocket, disconnectSocket } from "@/lib/socket";
 import { useReduxSelector } from "@/store/hooks";
@@ -17,12 +17,16 @@ import sessionService from "@/store/sessionService";
 import { router } from "@/routes/router";
 import { secondsToTimeControl } from "@/types/components";
 import Button from "@/components/base/Button/Button";
+import DeviceHandoffModal from "@/components/DeviceHandoffModal";
+import RejoinGameModal from "@/components/RejoinGameModal";
 
 import {
     sessionTerminatedTitle,
     sessionTerminatedDescription,
     activityFeedWin,
     deviceHandoffToastSuperseded,
+    walletDepositCompletedToast,
+    walletWithdrawCompletedToast,
 } from "@/components/messages";
 import type {
     IActivityFeedEvent,
@@ -30,6 +34,7 @@ import type {
     IRematchOfferedResponse,
     IRematchExpiredResponse,
     IRematchFoundResponse,
+    ITransactionCompletedEvent,
     Currency,
 } from "@/types/types";
 
@@ -336,6 +341,16 @@ export function SocketProvider({ children }: { children: ReactNode }) {
             );
         };
 
+        const onTransactionCompleted = (data: ITransactionCompletedEvent) => {
+            const amount = formateAmount(data.amount_usd, "USD");
+            toast.success(
+                data.type === "DEPOSIT"
+                    ? walletDepositCompletedToast(amount)
+                    : walletWithdrawCompletedToast(amount),
+                { icon: <Wallet size={14} />, duration: 4500 },
+            );
+        };
+
         const onActiveGameFound = (data: IActiveGameFoundResponse) => {
             if (router.state.location.pathname === "/play") return;
             // Don't surface rejoin modal while device handoff is pending —
@@ -383,6 +398,7 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         sock.on("connect", onConnect);
         sock.on("user_counts", onUserCounts);
         sock.on("activity_feed", onActivityFeed);
+        sock.on("transaction_completed", onTransactionCompleted);
         sock.on("active_game_found", onActiveGameFound);
         sock.on("rematch_offered", onRematchOffered);
         sock.on("rematch_expired", onRematchExpired);
@@ -418,6 +434,7 @@ export function SocketProvider({ children }: { children: ReactNode }) {
             sock.off("connect", onConnect);
             sock.off("user_counts", onUserCounts);
             sock.off("activity_feed", onActivityFeed);
+            sock.off("transaction_completed", onTransactionCompleted);
             sock.off("active_game_found", onActiveGameFound);
             sock.off("rematch_offered", onRematchOffered);
             sock.off("rematch_expired", onRematchExpired);

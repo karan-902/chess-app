@@ -5,11 +5,14 @@ import { object, string } from "yup";
 import Box from "../../components/base/Box/Box";
 import Text from "../../components/base/Text/Text";
 import Button from "../../components/base/Button/Button";
-import Label from "../../components/base/Label/Label";
+import { Label } from "../../components/base/Label/label";
 import Input from "../../components/base/Input/Input";
+import KingStakeLogo from "@/components/constants";
 import { callAPIInterface } from "../../utils";
+import { authBackToSignIn, authEmailLabel, authEmailPlaceholder, authForgotPasswordDescription, authForgotPasswordSendButton, authForgotPasswordSentDescription, authForgotPasswordTitle, authValidationEmailInvalid, authValidationEmailRequired } from "@/components/messages";
 import type { IForgotPasswordBody } from "../../types/index";
 import type { IMessageResponse } from "../../types/utils";
+
 
 export default function ForgotPassword() {
     const [sent, setSent] = useState(false);
@@ -17,7 +20,7 @@ export default function ForgotPassword() {
     const formik = useFormik({
         initialValues: { email: "" },
         validationSchema: object({
-            email: string().required("Email is required").email("Enter a valid email"),
+            email: string().required(authValidationEmailRequired).email(authValidationEmailInvalid),
         }),
         onSubmit: async ({ email }, { setSubmitting }) => {
             try {
@@ -39,24 +42,39 @@ export default function ForgotPassword() {
         <Box customClass="auth-page auth-page--centered">
             <Box customClass="auth-right">
                 <Box customClass="auth-card">
+                    <Box customClass="auth-brand-mini">
+                        <KingStakeLogo size={26} showText withCursor />
+                    </Box>
+
                     <Box customClass="auth-heading">
-                        <Text as="h1" customClass="auth-title">Forgot Password</Text>
+                        <Text as="h1" customClass="auth-title">{authForgotPasswordTitle}</Text>
                         <Text as="p" customClass="auth-subtitle">
                             {sent
-                                ? "Check your inbox for a reset link."
-                                : "Enter your email and we'll send you a reset link."}
+                                ? authForgotPasswordSentDescription
+                                : authForgotPasswordDescription}
                         </Text>
                     </Box>
 
                     {!sent && (
-                        <form className="auth-form" onSubmit={formik.handleSubmit}>
+                        <Box
+                            as="form"
+                            customClass="auth-form"
+                            onSubmit={
+                                formik.handleSubmit as React.FormEventHandler<HTMLElement>
+                            }
+                        >
                             <Box customClass="auth-field">
-                                <Label htmlFor="email">Email</Label>
+                                <Label
+                                    htmlFor="email"
+                                    className="font-mono text-[11px] tracking-[0.08em] uppercase text-white/30"
+                                >
+                                    {authEmailLabel}
+                                </Label>
                                 <Input
                                     name="email"
                                     id="email"
                                     type="email"
-                                    placeholder="you@example.com"
+                                    placeholder={authEmailPlaceholder}
                                     autoComplete="email"
                                     value={formik.values.email}
                                     onChange={formik.handleChange}
@@ -69,16 +87,18 @@ export default function ForgotPassword() {
 
                             <Button
                                 type="submit"
+                                fullWidth
                                 customClass="auth-submit-btn"
-                                disabled={!formik.isValid || !formik.dirty || formik.isSubmitting}
+                                isLoading={formik.isSubmitting}
+                                disabled={!formik.isValid || !formik.dirty}
                             >
-                                {formik.isSubmitting ? "Sending…" : "Send Reset Link"}
+                                {authForgotPasswordSendButton}
                             </Button>
-                        </form>
+                        </Box>
                     )}
 
                     <Text as="p" customClass="auth-footer-text">
-                        <Link to="/login">← Back to Sign In</Link>
+                        <Link to="/login">{authBackToSignIn}</Link>
                     </Text>
                 </Box>
             </Box>

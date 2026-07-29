@@ -3,9 +3,11 @@ import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import { getSocket } from "@/lib/socket";
 import { useSocket } from "@/context/SocketContext";
-import type { Pool, ImatchFoundResponse, IqueueJoinedResponse, IqueueLeftResponse, IqueueErrorResponse } from "@/types/types";
+import { matchmakingHookFailedTitle, matchmakingHookNoOpponentTitle, matchmakingHookNoOpponentFallbackDescription } from "@/components/messages";
+import type { Pool, ImatchFoundResponse, IqueueJoinedResponse, IqueueLeftResponse, IqueueErrorResponse, IQueueTimeoutResponse } from "@/types/types";
 
 export type MatchmakingStatus = "idle" | "queued" | "found";
+
 
 export function useMatchmaking() {
     const [status, setStatus] = useState<MatchmakingStatus>("idle");
@@ -20,14 +22,14 @@ export function useMatchmaking() {
         poolRef.current = pool;
         setQueuedPool(pool);
         setStatus("queued");
-        socket.emit("join_queue", { stake_amount: pool.stake, currency: pool.currency });
+        socket.emit("join_queue", { stake_amount: pool.stake, currency: pool.currency, pool_type: pool.category });
     };
 
     const leaveQueue = () => {
         const socket = getSocket();
         if (!socket || !poolRef.current) return;
         const pool = poolRef.current;
-        socket.emit("leave_queue", { stake_amount: pool.stake, currency: pool.currency });
+        socket.emit("leave_queue", { stake_amount: pool.stake, currency: pool.currency, pool_type: pool.category });
         // Clear immediately so the UI responds without waiting for queue_left
         setStatus("idle");
         setQueuedPool(null);
@@ -46,7 +48,7 @@ export function useMatchmaking() {
             setStatus("found");
             const pool = poolRef.current;
             navigate(
-                `/play?mode=pvp&time=${pool?.category ?? "rapid"}&game_id=${match.game_id}&color=${match.your_color}&opponent=${encodeURIComponent(match.opponent.username)}&opp_rating=${match.opponent.elo_rating}&opp_id=${match.opponent.id}&initial_timeout=${match.inactivity_timeout_seconds}`,
+                `/play?mode=pvp&time=${pool?.category ?? "rapid"}&game_id=${match.game_id}&color=${match.your_color}&opponent=${encodeURIComponent(match.opponent.username)}&opp_rating=${match.opponent.elo_rating}&opp_id=${match.opponent.id}&opp_avatar_seed=${encodeURIComponent(match.opponent.avatar_seed ?? "")}&initial_timeout=${match.inactivity_timeout_seconds}&stake_amount=${match.stake_amount}`,
                 { replace: true },
             );
         };
@@ -58,22 +60,37 @@ export function useMatchmaking() {
         };
 
         const onQueueError = ({ message }: IqueueErrorResponse) => {
-            toast.error("Matchmaking failed", { description: message, duration: 5000 });
+            toast.error(matchmakingHookFailedTitle, { description: message, duration: 5000 });
             setStatus("idle");
             setQueuedPool(null);
             poolRef.current = null;
         };
 
-        socket.on("queue_joined", onQueueJoined);
-        socket.on("match_found",  onMatchFound);
-        socket.on("queue_left",   onQueueLeft);
-        socket.on("queue_error",  onQueueError);
+        // Server-only decision — the frontend countdown in SearchingScreen is
+        // purely visual and never ends the search itself; this is the one
+        // event that actually stops it.
+        const onQueueTimeout = ({ message }: IQueueTimeoutResponse) => {
+            toast.info(matchmakingHookNoOpponentTitle, {
+                description: message || matchmakingHookNoOpponentFallbackDescription,
+                duration: 5000,
+            });
+            setStatus("idle");
+            setQueuedPool(null);
+            poolRef.current = null;
+        };
+
+        socket.on("queue_joined",  onQueueJoined);
+        socket.on("match_found",   onMatchFound);
+        socket.on("queue_left",    onQueueLeft);
+        socket.on("queue_error",   onQueueError);
+        socket.on("queue_timeout", onQueueTimeout);
 
         return () => {
-            socket.off("queue_joined", onQueueJoined);
-            socket.off("match_found",  onMatchFound);
-            socket.off("queue_left",   onQueueLeft);
-            socket.off("queue_error",  onQueueError);
+            socket.off("queue_joined",  onQueueJoined);
+            socket.off("match_found",   onMatchFound);
+            socket.off("queue_left",    onQueueLeft);
+            socket.off("queue_error",   onQueueError);
+            socket.off("queue_timeout", onQueueTimeout);
         };
     }, [navigate, ctxSocket]);
 

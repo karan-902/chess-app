@@ -1,22 +1,31 @@
 import { useState, useEffect, useCallback } from "react";
 import { callAPIInterface } from "@/utils";
 import { useSocket } from "@/context/SocketContext";
-import { useCurrency } from "@/context/CurrencyContext";
-import { POOLS_BY_CURRENCY } from "@/constants/currencies";
-import type { Pool, IPoolStats, IPoolsResponse, GameCategory } from "@/types/types";
+import { STAKE_CURRENCY, POOLS_FALLBACK } from "@/constants/config";
+import type {
+    Pool,
+    IPoolStats,
+    IPoolsResponse,
+    GameCategory,
+    PoolCategory,
+} from "@/types/types";
 
-const DEFAULT_STATS: IPoolStats = { liquidity: 0, games: 0, players: 0 };
+const DEFAULT_STATS: IPoolStats = { games: 0, players: 0 };
 
 function parseCategory(id: string): GameCategory {
     const prefix = id.split("-")[0];
-    if (prefix === "bullet" || prefix === "blitz" || prefix === "rapid" || prefix === "classical") {
+    if (
+        prefix === "bullet" ||
+        prefix === "blitz" ||
+        prefix === "rapid" ||
+        prefix === "classical"
+    ) {
         return prefix;
     }
     return "rapid";
 }
 
-export function usePools() {
-    const { currency } = useCurrency();
+export function usePools(poolType: PoolCategory = "all") {
     const { socket: ctxSocket } = useSocket();
     const [pools, setPools] = useState<Pool[]>([]);
     const [stats, setStats] = useState<IPoolStats>(DEFAULT_STATS);
@@ -24,7 +33,7 @@ export function usePools() {
     const [error, setError] = useState(false);
 
     const applyResponse = useCallback((data: IPoolsResponse) => {
-        const parsed: Pool[] = data.pools.map(p => ({
+        const parsed: Pool[] = data.pools.map((p) => ({
             ...p,
             currency: data.currency,
             category: parseCategory(p.id),
@@ -33,31 +42,36 @@ export function usePools() {
         setStats(data.stats);
     }, []);
 
-    // ── Initial REST fetch ────────────────────────────────────────────────────
+    // ── Initial REST fetch, re-run whenever the category tab changes ───────────
     useEffect(() => {
         setLoading(true);
         setError(false);
-        callAPIInterface<undefined, IPoolsResponse>("GET", `/matchmaking/pools?currency=${currency}`)
+        callAPIInterface<undefined, IPoolsResponse>(
+            "GET",
+            `/matchmaking/pools?currency=${STAKE_CURRENCY}&pool_type=${poolType}`,
+        )
             .then(applyResponse)
             .catch(() => {
                 setError(true);
-                setPools(POOLS_BY_CURRENCY[currency]);
+                setPools(POOLS_FALLBACK);
                 setStats(DEFAULT_STATS);
             })
             .finally(() => setLoading(false));
-    }, [currency, applyResponse]);
+    }, [applyResponse, poolType]);
 
     // ── Live updates via socket ───────────────────────────────────────────────
     useEffect(() => {
         if (!ctxSocket) return;
 
         const onPoolUpdated = (data: IPoolsResponse) => {
-            if (data.currency === currency) applyResponse(data);
+            if (data.currency === STAKE_CURRENCY) applyResponse(data);
         };
 
         ctxSocket.on("pool_updated", onPoolUpdated);
-        return () => { ctxSocket.off("pool_updated", onPoolUpdated); };
-    }, [currency, applyResponse, ctxSocket]);
+        return () => {
+            ctxSocket.off("pool_updated", onPoolUpdated);
+        };
+    }, [applyResponse, ctxSocket]);
 
     return { pools, stats, loading, error };
 }

@@ -1,66 +1,55 @@
-import clsx from 'clsx'
-import * as RadixTabs from '@radix-ui/react-tabs'
-import './tabs.scss'
+"use client"
 
-interface ITabsProps {
-  defaultValue?: string
-  value?: string
-  onValueChange?: (value: string) => void
-  children: React.ReactNode
-  customClass?: string
-}
+import * as React from "react"
+import * as TabsPrimitive from "@radix-ui/react-tabs"
 
-interface ITabsListProps {
-  children: React.ReactNode
-  customClass?: string
-}
+import { cn } from "@/lib/utils"
 
-interface ITabsTriggerProps {
-  value: string
-  children: React.ReactNode
-  customClass?: string
-  disabled?: boolean
-}
+const Tabs = TabsPrimitive.Root
 
-interface ITabsContentProps {
-  value: string
-  children: React.ReactNode
-  customClass?: string
-}
+const TabsList = React.forwardRef<
+  React.ElementRef<typeof TabsPrimitive.List>,
+  React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
+>(({ className, ...props }, ref) => (
+  <TabsPrimitive.List
+    ref={ref}
+    className={cn(
+      "inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground",
+      className
+    )}
+    {...props}
+  />
+))
+TabsList.displayName = TabsPrimitive.List.displayName
 
-export function Tabs({ defaultValue, value, onValueChange, children, customClass }: ITabsProps) {
-  return (
-    <RadixTabs.Root
-      defaultValue={defaultValue}
-      value={value}
-      onValueChange={onValueChange}
-      className={clsx('tabs-root', customClass)}
-    >
-      {children}
-    </RadixTabs.Root>
-  )
-}
+const TabsTrigger = React.forwardRef<
+  React.ElementRef<typeof TabsPrimitive.Trigger>,
+  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>
+>(({ className, ...props }, ref) => (
+  <TabsPrimitive.Trigger
+    ref={ref}
+    className={cn(
+      "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm",
+      className
+    )}
+    {...props}
+  />
+))
+TabsTrigger.displayName = TabsPrimitive.Trigger.displayName
 
-export function TabsList({ children, customClass }: ITabsListProps) {
-  return <RadixTabs.List className={clsx('tabs-list', customClass)}>{children}</RadixTabs.List>
-}
+const TabsContent = React.forwardRef<
+  React.ElementRef<typeof TabsPrimitive.Content>,
+  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content>
+>(({ className, ...props }, ref) => (
+  <TabsPrimitive.Content
+    ref={ref}
+    className={cn(
+      "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+      className
+    )}
+    {...props}
+  />
+))
+TabsContent.displayName = TabsPrimitive.Content.displayName
 
-export function TabsTrigger({ value, children, customClass, disabled }: ITabsTriggerProps) {
-  return (
-    <RadixTabs.Trigger
-      value={value}
-      className={clsx('tabs-trigger', customClass)}
-      disabled={disabled}
-    >
-      {children}
-    </RadixTabs.Trigger>
-  )
-}
-
-export function TabsContent({ value, children, customClass }: ITabsContentProps) {
-  return (
-    <RadixTabs.Content value={value} className={clsx('tabs-content', customClass)}>
-      {children}
-    </RadixTabs.Content>
-  )
-}
+export { Tabs, TabsList, TabsTrigger, TabsContent }

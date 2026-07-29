@@ -3,7 +3,9 @@ import axios, {
     type AxiosRequestConfig,
     type Method,
 } from "axios";
+import { toast } from "sonner";
 import sessionService from "@/store/sessionService";
+import { apiRateLimited } from "@/components/messages";
 import type { IGenerateTokenBody } from "@/types/index";
 import type { IGenerateTokenResponse } from "@/types/utils";
 
@@ -54,6 +56,7 @@ export async function getHeaders<TPayload = undefined>(
 ): Promise<AxiosRequestConfig> {
     const isOpen = OPEN_API_ENDPOINTS.includes(path);
     const headers = new AxiosHeaders();
+
     const session = await sessionService.loadSession();
 
     if (method !== "GET") headers.set("Content-Type", "application/json");
@@ -62,7 +65,9 @@ export async function getHeaders<TPayload = undefined>(
     }
 
     return {
-        baseURL: (import.meta.env.VITE_API_URL ?? "http://localhost:3000").trim(),
+        baseURL: (
+            import.meta.env.VITE_API_URL ?? "http://localhost:6060"
+        ).trim(),
         method,
         url: path,
         data,
@@ -82,6 +87,18 @@ export function getDisplayName(
     return (
         `${user?.first_name ?? ""} ${user?.last_name ?? ""}`.trim() || "Unknown"
     );
+}
+
+/** Compact relative time, e.g. "2m ago", "3h ago", "1d ago" */
+export function formatRelativeTime(ms: number): string {
+    const diffSeconds = Math.floor((Date.now() - ms) / 1000);
+    if (diffSeconds < 60) return "just now";
+    const minutes = Math.floor(diffSeconds / 60);
+    if (minutes < 60) return `${minutes}m ago`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours}h ago`;
+    const days = Math.floor(hours / 24);
+    return `${days}d ago`;
 }
 
 export const callAPIInterface = async <
@@ -128,6 +145,13 @@ export const callAPIInterface = async <
                 return;
             }
 
+            if (errorStatus === 429) {
+                // Same toast `id` across every call site so a burst of 429s
+                // (e.g. several requests firing at once) collapses into one
+                // visible message instead of stacking duplicates.
+                toast.error(apiRateLimited, { id: "rate-limited" });
+            }
+
             const isKnownError =
                 errorStatusCodes.includes(errorStatus) ||
                 serverErrorStatusCodes.includes(errorStatus);
@@ -136,6 +160,57 @@ export const callAPIInterface = async <
                 console.error(errorData?.message || err.message);
             }
 
+            reject(err);
+        }
+    });
+};
+
+export async function getSpeedHeaders<TPayload = undefined>(
+    method: Method,
+    path: string,
+    data?: TPayload,
+): Promise<AxiosRequestConfig> {
+    const headers = new AxiosHeaders();
+    headers.set(
+        "speed-version",
+        String(import.meta.env.VITE_SPEED_API_VERSION),
+    );
+    if (method !== "GET") headers.set("Content-Type", "application/json");
+    return {
+        baseURL: String(import.meta.env.VITE_SPEED_API_DEV_PAYMENT_BASE_URL),
+        method,
+        url: path,
+        data,
+        headers,
+        auth: {
+            username: String(
+                import.meta.env.VITE_KING_STAKE_ACCOUNT_SECRET_KEY,
+            ),
+            password: "",
+        },
+    };
+}
+
+export const callSpeedAPIInterface = async <
+    TResponse = unknown,
+    TPayload = undefined,
+>(
+    method: Method,
+    path: string,
+    data?: TPayload,
+): Promise<TResponse> => {
+    return new Promise(async (resolve, reject) => {
+        const config = await getSpeedHeaders(method, path, data);
+        if (!Object.keys(config).length) {
+            reject({});
+            return;
+        }
+        try {
+            const res = await axios(config);
+            resolve(res.data);
+        } catch (err: any) {
+            console.error(err);
+            console.error("Speed API Error:", err.response || err);
             reject(err);
         }
     });

@@ -1,30 +1,32 @@
-import clsx from 'clsx'
-import './stat-card.scss'
+import clsx from "clsx";
+import "./stat-card.scss";
 
 interface IStatCardProps {
-  label: string
-  value: string
-  icon?: React.ReactNode
-  valueColor?: 'default' | 'primary' | 'accent'
-  className?: string
-  customClass?: string
+    label: string;
+    value: string;
+    icon?: React.ReactNode;
+    valueColor?: "default" | "primary" | "accent" | "positive" | "negative";
+    className?: string;
+    customClass?: string;
 }
 
 function StatCard({
-  label,
-  value,
-  icon,
-  valueColor = 'default',
-  className,
-  customClass,
+    label,
+    value,
+    icon,
+    valueColor = "default",
+    className,
+    customClass,
 }: IStatCardProps) {
-  return (
-    <div className={clsx('stat-card', customClass, className)}>
-      {icon && <div className="stat-card-icon">{icon}</div>}
-      <div className={clsx('stat-card-value', `val-${valueColor}`)}>{value}</div>
-      <div className="stat-card-label">{label}</div>
-    </div>
-  )
+    return (
+        <div className={clsx("common-statcard", customClass, className)}>
+            {icon && <span className="statcard-icon">{icon}</span>}
+            <span className={clsx("statcard-value", `val-${valueColor}`)}>
+                {value}
+            </span>
+            <span className="statcard-label">{label}</span>
+        </div>
+    );
 }
 
-export default StatCard
+export default StatCard;
