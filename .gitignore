@@ -6,3 +6,4 @@ dist/
 .DS_Store
 *.log
 public/stockfish/
+.claude/settings.local.json
