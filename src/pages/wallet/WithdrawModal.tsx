@@ -53,13 +53,21 @@ function WithdrawModal({
     )!;
 
     const amountUsd = parseFloat(amount) || 0;
-    const exceedsBalance = amountUsd > withdrawableUsd;
+    const exceedsBalance =
+        Math.round(amountUsd * 100) > Math.round(withdrawableUsd * 100);
     const isZeroAmount = amount !== "" && amountUsd <= 0;
-    const amountError = exceedsBalance
-        ? walletWithdrawExceedsBalance
-        : isZeroAmount
-          ? walletWithdrawInvalidAmount
-          : undefined;
+    // Once submitting, the withdrawable balance can update in real time
+    // (the backend broadcasts the new balance as soon as its DB transaction
+    // commits, before this request's HTTP response even arrives) — don't
+    // re-validate the amount the user already committed to against that
+    // moving target.
+    const amountError = submitting
+        ? undefined
+        : exceedsBalance
+          ? walletWithdrawExceedsBalance
+          : isZeroAmount
+            ? walletWithdrawInvalidAmount
+            : undefined;
     const canSubmit =
         amount !== "" && !amountError && destination.trim() !== "";
 
@@ -163,6 +171,7 @@ function WithdrawModal({
                             fullWidth
                             value={amount}
                             onChange={handleAmountChange}
+                            disabled={submitting}
                             isError={!!amountError}
                             helperText={amountError}
                         />
