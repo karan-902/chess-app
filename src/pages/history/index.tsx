@@ -150,8 +150,9 @@ function matchRow(
     showSelf: boolean,
     currentUserId?: string,
 ) {
+    if (!item) return null;
     const selfName = showSelf
-        ? item.player?.id === currentUserId
+        ? item.player.id === currentUserId
             ? matchesYouLabel
             : item.player.username
         : undefined;
