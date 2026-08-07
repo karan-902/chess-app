@@ -1,27 +1,12 @@
-import clsx from 'clsx'
-import * as RadixSwitch from '@radix-ui/react-switch'
-import './switch.scss'
+import { Switch as MuiSwitch } from "@mui/material";
+import type { SwitchProps } from "@mui/material";
+import classNames from "classnames";
 
-interface ISwitchProps {
-  checked?: boolean
-  onCheckedChange?: (checked: boolean) => void
-  disabled?: boolean
-  customClass?: string
-  id?: string
+interface ISwitchProps extends SwitchProps {
+    customClass?: string;
 }
 
-function Switch({ checked, onCheckedChange, disabled, customClass, id }: ISwitchProps) {
-  return (
-    <RadixSwitch.Root
-      id={id}
-      checked={checked}
-      onCheckedChange={onCheckedChange}
-      disabled={disabled}
-      className={clsx('switch-root', customClass)}
-    >
-      <RadixSwitch.Thumb className="switch-thumb" />
-    </RadixSwitch.Root>
-  )
+export default function Switch({ customClass, ...props }: ISwitchProps) {
+    const classes = classNames("switch", customClass);
+    return <MuiSwitch {...props} className={classes} />;
 }
-
-export default Switch

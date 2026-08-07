@@ -1,5 +1,3 @@
-// ── Enums ────────────────────────────────────────────────────────────────────
-
 export enum SignupMethod {
     EMAIL = "email",
     GOOGLE = "google",
@@ -11,15 +9,14 @@ export enum SessionState {
     EXPIRED = "EXPIRED",
 }
 
-// ── API response types ────────────────────────────────────────────────────────
+export type SkillLevel = "beginner" | "intermediate" | "advanced" | "expert";
 
-// POST /verify-user
 export type IVerifyUserResponse = {
     email: string;
     signup_method: SignupMethod;
+    email_verified: boolean;
 };
 
-// POST /register
 export type IRegisterResponse = {
     id: string;
     first_name: string;
@@ -28,10 +25,13 @@ export type IRegisterResponse = {
     email: string;
     country: string;
     signup_method: SignupMethod;
+    elo_rating: number | null;
+    current_streak: number;
+    best_streak: number;
+    skill_level: SkillLevel | null;
     created: number;
 };
 
-// POST /sso-register, /login, /sso-login
 export type ILoginResponse = {
     id: string;
     first_name: string;
@@ -39,8 +39,13 @@ export type ILoginResponse = {
     username: string;
     email: string;
     country: string;
-    elo_rating: number;
+    elo_rating: number | null;
+    ratings: IRatingsBreakdown;
+    current_streak: number;
+    best_streak: number;
+    skill_level: SkillLevel | null;
     last_login: number | null;
+    avatar_seed: string | null;
     access_token: string;
     refresh_token: string;
     session_id: string;
@@ -48,59 +53,180 @@ export type ILoginResponse = {
     session_source: SignupMethod;
 };
 
-// GET /profile
-export type IProfileResponse = {
-    id:         string;
-    first_name: string;
-    last_name:  string;
-    username:   string;   // backend returns "username" (not "user_name")
-    email:      string;
-    country:    string;
-    elo_rating: number;
-    last_login: number | null;
+export type IRatingsBreakdown = {
+    BULLET: number | null;
+    BLITZ: number | null;
+    RAPID: number | null;
+    CLASSICAL: number | null;
 };
 
-// PUT /profile
+export type IProfileResponse = {
+    id: string;
+    first_name: string;
+    last_name: string;
+    username: string;
+    email: string;
+    country: string;
+
+    elo_rating: number | null;
+    ratings: IRatingsBreakdown;
+    skill_level: SkillLevel | null;
+    current_streak: number;
+    best_streak: number;
+    last_login: number | null;
+    avatar_seed: string | null;
+};
+
 export type IUpdateProfileBody = {
     first_name?: string;
-    last_name?:  string;
-    username?:   string;   // note: backend field is "username" not "user_name"
-    country?:    string;
-    // elo_rating is intentionally excluded — not updatable via this endpoint
+    last_name?: string;
+    username?: string;
+    country?: string;
+    avatar_seed?: string;
 };
 
 export type IUpdateProfileResponse = IProfileResponse;
 
-// GET /game/:game_id
+export type IWalletBalanceResponse = {
+    balance_usd: number;
+    deposit_usd: number;
+    win_usd: number;
+    withdrawable_usd: number;
+    pending_withdrawal_usd: number;
+};
+
+export type WithdrawMethod = "lightning" | "onchain";
+
+export type IWithdrawBody = {
+    amount_usd: number;
+    withdraw_method: WithdrawMethod;
+    destination: string;
+};
+
+export type IWithdrawResponse = IWalletBalanceResponse & {
+    status: string;
+};
+
+export type TransactionType =
+    | "DEPOSIT"
+    | "WITHDRAW"
+    | "WITHDRAW_REFUND"
+    | "STAKE"
+    | "SETTLEMENT"
+    | "DRAW_REFUND"
+    | "STAKE_REFUND";
+
+export type ITransactionsFilterBody = {
+    types?: TransactionType[];
+    from?: number;
+    to?: number;
+};
+
+export type ITransactionResponse = {
+    id: string;
+    type: TransactionType;
+    amount_usd: number;
+    game_id: string | null;
+    description: string;
+    created: number;
+    withdraw_status: string | null;
+};
+
+export type ITransactionsResponse = {
+    has_more: boolean;
+    object: "list";
+    data: ITransactionResponse[];
+    page_id: string | null;
+};
+
+export type IInitiateDepositBody = {
+    amount_usd: number;
+};
+
+export type IInitiateDepositResponse = {
+    payment_id: string;
+    bitcoin_address: string | null;
+    lightning_payment_request: string | null;
+    expires_at: number | null;
+    amount_usd: number;
+    status: "PENDING";
+};
+
+export type IAvatarOptionsResponse = {
+    style: string;
+    seeds: string[];
+};
+
 export type IGameRestoreResponse = {
-    game_id:      string;
-    status:       "ONGOING" | "COMPLETED" | "ABANDONED";
+    game_id: string;
+    status: "ONGOING" | "COMPLETED" | "ABANDONED";
     time_seconds: number;
-    current_fen:  string;
+    current_fen: string;
     turn_user_id: string;
-    white_player: { id: string; username: string; elo_rating: number };
-    black_player: { id: string; username: string; elo_rating: number };
+    white_player: {
+        id: string;
+        username: string;
+        elo_rating: number;
+        avatar_seed: string | null;
+    };
+    black_player: {
+        id: string;
+        username: string;
+        elo_rating: number;
+        avatar_seed: string | null;
+    };
     moves: Array<{
-        from:        string;
-        to:          string;
-        promotion:   string | null;
-        fen:         string;
-        player_id:   string;
+        from: string;
+        to: string;
+        promotion: string | null;
+        fen: string;
+        player_id: string;
         move_number: number;
     }>;
 };
 
-// POST /generate-token
 export type IGenerateTokenResponse = {
     access_token: string;
 };
 
-// POST /logout
 export type ILogoutResponse = {
     message: string;
 };
 
-// POST /forgot-password, /reset-password
 export type IMessageResponse = {
     message: string;
+};
+
+export type FriendStatus =
+    | "none"
+    | "pending_sent"
+    | "pending_received"
+    | "friends";
+
+export type IFriendListItem = {
+    id: string;
+    username: string;
+    avatar_seed: string | null;
+    is_online: boolean;
+};
+
+export type IFriendRequestResponse = {
+    id: string;
+    user: {
+        id: string;
+        username: string;
+        avatar_seed: string | null;
+    };
+    created: number;
+};
+
+export type ISearchResultItem = {
+    id: string;
+    username: string;
+    avatar_seed: string | null;
+    friend_status: FriendStatus;
+};
+
+export type ISendFriendRequestBody = {
+    addressee_id: string;
 };

@@ -1,17 +1,12 @@
-import clsx from 'clsx'
-import './label.scss'
+import { InputLabel } from "@mui/material";
+import type { InputLabelProps } from "@mui/material";
+import classNames from "classnames";
 
-interface ILabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
-  children: React.ReactNode
-  customClass?: string
+interface ILabelProps extends InputLabelProps {
+    customClass?: string;
 }
 
-function Label({ children, customClass, className, ...props }: ILabelProps) {
-  return (
-    <label className={clsx('label', customClass, className)} {...props}>
-      {children}
-    </label>
-  )
+export default function Label({ customClass, ...props }: ILabelProps) {
+    const classes = classNames("label", customClass);
+    return <InputLabel {...props} className={classes} />;
 }
-
-export default Label

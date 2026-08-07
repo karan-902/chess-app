@@ -1,0 +1,25 @@
+@use "../../../styles/default.scss" as *;
+
+.badge {
+    display: inline-flex;
+    vertical-align: middle;
+
+    .MuiBadge-badge {
+        position: static;
+        transform: none;
+        display: inline-block;
+        height: auto;
+        min-width: 0;
+        font-family: $fontOutfitExtraBold;
+        font-size: $font12;
+        letter-spacing: 0.04em;
+        color: $appTextMuted;
+        background: rgba($appText, 0.06);
+        border-radius: 0.25rem;
+        padding: 0.05rem 0.3rem;
+    }
+
+    &.match-row-vs {
+        margin: 0 0.4rem;
+    }
+}

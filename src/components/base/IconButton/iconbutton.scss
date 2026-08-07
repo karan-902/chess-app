@@ -1,0 +1,75 @@
+@use "../../../styles/default.scss" as *;
+
+.icon-button {
+    &.appbar-deposit-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.55rem;
+        height: 1.55rem;
+        min-width: unset;
+        padding: 0;
+        border: none;
+        border-radius: 50%;
+        background: transparent;
+        color: $appText;
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: background-color 0.15s ease;
+
+        &.active {
+            background: rgba($gold, 0.12);
+            color: $gold;
+        }
+    }
+    &.appbar-menu-trigger {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        padding: 0;
+        border-radius: 50%;
+        color: $appText;
+
+        &.active {
+            background: rgba($gold, 0.12);
+            color: $gold;
+        }
+    }
+
+    &.wallet-tx-filter-trigger {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.9rem;
+        height: 1.9rem;
+        padding: 0;
+        flex-shrink: 0;
+        border-radius: 50%;
+        border: 1px solid $appCardBorder;
+        background: transparent;
+        color: $appTextMuted;
+        transition:
+            border-color 0.15s ease,
+            color 0.15s ease;
+
+        &.active {
+            border-color: $gold;
+            color: $gold;
+
+            &::after {
+                content: "";
+                position: absolute;
+                top: 0.1rem;
+                right: 0.1rem;
+                width: 0.4rem;
+                height: 0.4rem;
+                border-radius: 50%;
+                background: $gold;
+                border: 1.5px solid $appBg;
+            }
+        }
+    }
+}

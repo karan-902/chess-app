@@ -1,11 +1,9 @@
 import { Navigate, Outlet } from "react-router";
-import { useReduxSelector } from "@/store/hooks";
+import { useReduxSelector } from "@/redux/hooks";
 
 function PublicRoute() {
     const isLoggedIn = useReduxSelector((state) => state.auth.isLoggedIn);
-
-    if (isLoggedIn) return <Navigate to="/lobby" replace />;
-
+    if (isLoggedIn) return <Navigate to="/play" replace />;
     return <Outlet />;
 }
 

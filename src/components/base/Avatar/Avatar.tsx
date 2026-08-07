@@ -1,25 +1,28 @@
-import clsx from 'clsx'
-import * as RadixAvatar from '@radix-ui/react-avatar'
-import './avatar.scss'
+import { Avatar as MuiAvatar } from "@mui/material";
+import type { AvatarProps } from "@mui/material";
+import classNames from "classnames";
+import "./avatar.scss";
 
-interface IAvatarProps {
-  letter: string
-  src?: string
-  variant?: 'primary' | 'danger' | 'neutral'
-  size?: 'sm' | 'md' | 'lg'
-  className?: string
-  customClass?: string
+interface IAvatarProps extends AvatarProps {
+    letter: string;
+    customClass?: string;
+    online?: boolean;
 }
 
-function Avatar({ letter, src, variant = 'primary', size = 'md', className, customClass }: IAvatarProps) {
-  return (
-    <RadixAvatar.Root className={clsx('avatar', variant, size, customClass, className)}>
-      {src && <RadixAvatar.Image src={src} alt={letter} className="avatar-image" />}
-      <RadixAvatar.Fallback className="avatar-fallback" delayMs={src ? 300 : 0}>
-        {letter}
-      </RadixAvatar.Fallback>
-    </RadixAvatar.Root>
-  )
+export default function Avatar({
+    letter,
+    src,
+    online,
+    customClass,
+    ...props
+}: IAvatarProps) {
+    const classes = classNames("avatar", customClass);
+    return (
+        <span className="avatar-wrap">
+            <MuiAvatar {...props} className={classes} src={src} alt={letter}>
+                {letter}
+            </MuiAvatar>
+            {online && <span className="avatar-status-dot" />}
+        </span>
+    );
 }
-
-export default Avatar

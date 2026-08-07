@@ -2,32 +2,38 @@ import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { ThemeProvider, CssBaseline } from "@mui/material";
 import { Toaster } from "sonner";
-import { store, persistor } from "./store";
+import { store, persistor } from "./redux/index.ts";
+import { hideLoader } from "./redux/loader.slice";
 import { SocketProvider } from "./context/SocketContext";
-import { CurrencyProvider } from "./context/CurrencyContext";
+import { WalletActionModalProvider } from "./context/WalletActionModalContext";
+import { theme } from "./theme";
+import BackdropLoader from "./components/base/BackdropLoader/BackdropLoader";
 
-import "./styles/index.css";
 import "./styles/main.scss";
 import App from "./App.tsx";
 
 createRoot(document.getElementById("root")!).render(
-    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-        <Provider store={store}>
-            <PersistGate loading={null} persistor={persistor}>
-                <SocketProvider>
-                    <CurrencyProvider>
-                        <App />
-                        <Toaster
-                            position="top-right"
-                            theme="dark"
-                            swipeDirections={["top", "right"]}
-                            closeButton
-                            duration={5000}
-                        />
-                    </CurrencyProvider>
-                </SocketProvider>
-            </PersistGate>
-        </Provider>
-    </GoogleOAuthProvider>,
+    <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+            <Provider store={store}>
+                <PersistGate persistor={persistor}>
+                    <SocketProvider>
+                        <WalletActionModalProvider>
+                            <App />
+                            <Toaster
+                                position="top-right"
+                                theme="dark"
+                                swipeDirections={["top", "right"]}
+                                closeButton
+                                duration={5000}
+                            />
+                        </WalletActionModalProvider>
+                    </SocketProvider>
+                </PersistGate>
+            </Provider>
+        </GoogleOAuthProvider>
+    </ThemeProvider>,
 );

@@ -13,14 +13,12 @@ export function useGameClock(timeControl: TimeControl, paused: boolean, turn: "w
 
     useEffect(() => { turnRef.current = turn; }, [turn]);
 
-    // Total elapsed game time
     useEffect(() => {
         if (paused) return;
         const id = setInterval(() => setElapsed(s => s + 1), 1000);
         return () => clearInterval(id);
     }, [paused]);
 
-    // Per-player countdown — self-terminates when a player times out
     useEffect(() => {
         if (paused) return;
         const id = setInterval(() => {
@@ -48,6 +46,13 @@ export function useGameClock(timeControl: TimeControl, paused: boolean, turn: "w
         timedOutRef.current = null;
     };
 
+    const syncClock = (whiteMs: number, blackMs: number) => {
+        setWhiteTime(Math.round(whiteMs / 1000));
+        setBlackTime(Math.round(blackMs / 1000));
+        setTimedOut(null);
+        timedOutRef.current = null;
+    };
+
     const fmt = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
     const fmtElapsed = (s: number) => {
         const m = Math.floor(s / 60);
@@ -60,5 +65,6 @@ export function useGameClock(timeControl: TimeControl, paused: boolean, turn: "w
         timedOut,
         elapsedFormatted: fmtElapsed(elapsed),
         reset,
+        syncClock,
     };
 }

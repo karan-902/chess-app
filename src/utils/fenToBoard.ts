@@ -1,11 +1,11 @@
-import type { Board } from "@/types/types";
+import type { TBoard } from "@/types/types";
 
 const FEN_TO_SYMBOL: Record<string, string> = {
     K: "♔", Q: "♕", R: "♖", B: "♗", N: "♘", P: "♙",
     k: "♚", q: "♛", r: "♜", b: "♝", n: "♞", p: "♟",
 };
 
-export function fenToBoard(fen: string): Board {
+export function fenToBoard(fen: string): TBoard {
     const position = fen.split(" ")[0];
     const rows = position.split("/");
 

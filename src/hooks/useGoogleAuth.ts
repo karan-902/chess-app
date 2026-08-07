@@ -1,30 +1,56 @@
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
 import { useNavigate } from "react-router";
 import { useGoogleLogin } from "@react-oauth/google";
-import { callAPIInterface } from "@/utils";
-import sessionService from "@/store/sessionService";
-import type { ISSOBody } from "@/types/index";
-import type { ILoginResponse } from "@/types/utils";
+import { toast } from "sonner";
+import { useReduxDispatch } from "@/redux/hooks";
+import { googleLogin as googleLoginThunk } from "@/redux/thunks";
+import { showLoader, hideLoader } from "@/redux/loader.slice";
+
+const CONFIRM_SWITCH_KEY = "ks_sso_confirm_device_switch";
 
 export function useGoogleAuth(
     endpoint: "/sso-login" | "/sso-register",
     state: "login" | "register",
+    hint?: string,
 ) {
     const navigate = useNavigate();
+    const dispatch = useReduxDispatch();
+    const [isProcessing, setIsProcessing] = useState(() =>
+        Boolean(new URLSearchParams(window.location.search).get("code")),
+    );
 
-    const processCode = useCallback(async (code: string) => {
-        try {
-            const res = await callAPIInterface<ISSOBody, ILoginResponse>("POST", endpoint, {
-                signup_method: "google",
-                google_token: code,
-                redirect_uri: window.location.origin,
-            });
-            await sessionService.saveSession(res);
-            navigate("/lobby");
-        } catch (err) {
-            console.error(err);
-        }
-    }, [endpoint, navigate]);
+    const processCode = useCallback(
+        async (code: string) => {
+            setIsProcessing(true);
+            dispatch(showLoader({ text: "Signing in..." }));
+
+            try {
+                const res = await dispatch(
+                    googleLoginThunk({
+                        endpoint,
+                        body: {
+                            signup_method: "google",
+                            google_token: code,
+                            redirect_uri: window.location.origin,
+                        },
+                    }),
+                ).unwrap();
+                navigate(res.skill_level === null ? "/skill-level" : "/play");
+            } catch (err: any) {
+                if (err?.type === "device_conflict") {
+                    sessionStorage.setItem(CONFIRM_SWITCH_KEY, "1");
+                    toast.error(
+                        `You're logged in on ${err.existing_device}. Sign in with Google again to switch to this device.`,
+                    );
+                }
+                console.error(err);
+            } finally {
+                setIsProcessing(false);
+                dispatch(hideLoader());
+            }
+        },
+        [endpoint, navigate, dispatch],
+    );
 
     useEffect(() => {
         const code = new URLSearchParams(window.location.search).get("code");
@@ -37,9 +63,10 @@ export function useGoogleAuth(
         flow: "auth-code",
         ux_mode: "redirect",
         redirect_uri: window.location.origin,
-        state,
+        state: hint ? `${state}:${hint}` : state,
+        hint: hint || undefined,
         onError: () => console.error(`Google ${state} failed`),
     });
 
-    return { googleLogin };
+    return { googleLogin, isProcessing };
 }

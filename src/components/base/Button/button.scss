@@ -1,22 +1,21 @@
 @use "../../../styles/default.scss" as *;
 
-// Root class: .common-{componentName}
-// Sub-parts and variants (e.g. &.variant-name) nest inside it via SCSS &.
-// Anything rendered as a DOM sibling (not descendant) stays a flat top-level class.
-.common-button {
+.button {
+    min-width: 0px !important;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
     border: none;
-    border-radius: $radiusMd;
-    font-family: var(--font-outfit);
+    border-radius: $appBtnRadius;
+    font-family: $fontOutfit;
     font-weight: 700;
     letter-spacing: 0.02em;
     cursor: pointer;
     transition:
         opacity 0.15s ease,
         border-color 0.15s ease,
+        color 0.15s ease,
         transform 0.1s ease;
 
     &:disabled {
@@ -26,449 +25,258 @@
 
     &.btn--loading {
         cursor: wait;
+        pointer-events: none;
     }
 
     &:not(:disabled):active {
         transform: scale(0.98);
     }
 
-    &.primary {
-        background: $gold;
-        color: #1a0f00;
-        box-shadow: 0 6px 20px rgba($gold, 0.35);
-
-        &:not(:disabled):hover {
-            background: $goldHover;
-        }
-    }
-
-    &.outline {
-        background: rgba($white, 0.04);
-        color: rgba($white, 0.7);
-        border: 1px solid rgba($white, 0.15);
-
-        &:not(:disabled):hover {
-            border-color: rgba($white, 0.3);
-            color: $white;
-        }
-    }
-
-    &.ghost {
+    &.auth-back-btn {
+        align-self: flex-start;
+        justify-content: flex-start;
+        width: fit-content;
+        height: auto;
+        padding: 0;
+        margin-bottom: 0.25rem;
         background: transparent;
-        color: rgba($white, 0.6);
+        color: rgba($appText, 0.4);
+        font-weight: 400;
+        font-size: $font14;
 
         &:not(:disabled):hover {
-            background: rgba($white, 0.05);
-            color: $white;
+            background: transparent;
+            color: rgba($appText, 0.7);
         }
     }
 
-    &.danger {
-        background: $paleRed;
-        color: $white;
-        box-shadow: 0 6px 20px rgba($paleRed, 0.3);
+    &.auth-submit-btn {
+        margin-top: 0.25rem;
+        height: 2.85rem;
+
+        &.btn--loading {
+            background-color: color-mix(in srgb, $gold 85%, white 15%);
+            color: $appText;
+        }
+    }
+
+    &.auth-google-btn {
+        background: transparent;
+        border: 1px solid rgba($appText, 0.22);
+        box-shadow: none;
+        color: rgba($appText, 0.65);
+        font-weight: 600;
+        height: 2.85rem;
+        border-color: $appCardBorder;
 
         &:not(:disabled):hover {
+            background: transparent;
+            border-color: rgba($appText, 0.4);
+            color: $appText;
+        }
+    }
+
+    &.play-cta,
+    &.stake-card-go {
+        background: $appBtnBg;
+        border: 1px solid $appBtnBorder;
+        box-shadow: none;
+        color: $appText;
+
+        &:not(:disabled):hover {
+            background: $appBtnBg;
+            border-color: rgba($appText, 0.4);
+        }
+    }
+
+    &.play-cta {
+        width: 50% !important;
+        height: 2.85rem;
+    }
+
+    &.stake-card-go {
+        height: 2.1rem;
+        font-size: $font12;
+        margin-top: 0.4rem;
+    }
+
+    &.searching-cancel-btn {
+        height: 2.1rem;
+        font-size: $font12;
+        border-color: rgba($paleRed, 0.35);
+        color: $paleRed;
+
+        &:not(:disabled):hover {
+            background: $appBtnBg;
+            border-color: $paleRed;
+        }
+
+        &:disabled {
+            opacity: 0.5;
+        }
+    }
+
+    &.wallet-deposit-btn,
+    &.wallet-withdraw-btn {
+        flex: 1;
+        height: 2.6rem;
+        font-size: $font14;
+    }
+
+    &.wallet-deposit-btn {
+        background: $gold;
+        border: none;
+        color: $appText;
+
+        &:not(:disabled):hover {
+            background: $gold;
             opacity: 0.9;
         }
     }
 
-    &.sm {
-        height: 2.25rem;
-        padding: 0 0.875rem;
-        font-size: $font13;
-    }
-    &.md {
-        height: 2.75rem;
-        padding: 0 1.125rem;
-        font-size: $font14;
-    }
-    &.lg {
-        height: 3.25rem;
-        padding: 0 1.375rem;
-        font-size: $font15;
-    }
-
-    &.full-width {
-        width: 100%;
-    }
-
-    // ── Lobby game setup modal close ─────────────────────────────────────────
-    &.gsm-close {
-        width: 1.9rem;
-        height: 1.9rem;
-        padding: 0;
-        border-radius: $radiusSm;
-    }
-
-    // ── Game over screen close ───────────────────────────────────────────────
-    &.gos-icon-btn {
-        width: 1.9rem;
-        height: 1.9rem;
-        padding: 0;
-        border-radius: 50%;
-        background: rgba($white, 0.06);
-        border: 1px solid rgba($white, 0.14);
-        color: rgba($white, 0.75);
+    &.wallet-withdraw-btn {
+        background: $appBtnBg;
+        border: 1px solid $appBtnBorder;
+        color: $appText;
 
         &:not(:disabled):hover {
-            background: rgba($white, 0.1);
-            border-color: rgba($white, 0.25);
-            color: $white;
+            background: $appBtnBg;
+            border-color: rgba($appText, 0.4);
         }
     }
 
-    // ── Matchmaking CTA close ────────────────────────────────────────────────
-    &.cta-close {
-        width: 1.7rem;
-        height: 1.7rem;
+    &.wallet-logout-btn {
+        display: block;
+        width: fit-content;
+        height: auto;
+        margin: 1.5rem auto 0;
         padding: 0;
-        border-radius: 50%;
-        flex-shrink: 0;
+        background: transparent;
+        color: rgba($appText, 0.4);
+        font-weight: 400;
+        font-size: $font14;
+
+        &:not(:disabled):hover {
+            background: transparent;
+            color: $paleRed;
+        }
     }
 
-    // ── Matchmaking category filter chip ─────────────────────────────────────
-    &.filter-chip-btn {
-        flex-shrink: 0;
-        height: auto;
-        padding: 0.4rem 0.75rem;
+    &.subtab-btn {
+        background: $appSurface;
+        border: 1px solid $appCardBorder;
         border-radius: 999px;
-        font-size: 0.74rem;
+        padding: 0.44rem 0.8rem;
+        font-size: $font14;
+        font-family: $fontOutfitExtraBold;
+        color: $appTextMuted;
+
+        &:not(:disabled):hover {
+            background: $appSurface;
+        }
+
+        &.active {
+            background: $gold !important;
+            color: $appText;
+        }
+    }
+
+    &.tx-filter-chip {
+        flex-shrink: 0;
+        background: transparent;
+        border: 1px solid $appCardBorder;
+        border-radius: 999px;
+        padding: 0.4rem 0.75rem;
+        font-size: $font12;
+        font-family: $fontOutfitExtraBold;
+        color: $appTextMuted;
         white-space: nowrap;
 
-        &.outline,
-        &.ghost {
-            background: $appCard;
-            border-color: $appBorder;
-            color: rgba($white, 0.55);
-        }
-    }
-
-    // ── Matchmaking searching cancel ─────────────────────────────────────────
-    &.searching-cancel-btn {
-        padding: 0.6rem 1rem;
-        margin-top: 10px;
-        background: rgba($white, 0.06);
-        border: 1px solid $appBorder;
-        color: rgba($white, 0.55);
-    }
-
-    // ── Game over rematch (secondary) ────────────────────────────────────────
-    &.gos-btn-secondary {
-        background: rgba($cyan, 0.12);
-        border-color: rgba($cyan, 0.35);
-        color: $cyan;
-
         &:not(:disabled):hover {
-            border-color: rgba($cyan, 0.5);
-            color: $cyan;
-        }
-    }
-
-    // ── Move history nav ─────────────────────────────────────────────────────
-    &.history-nav-btn {
-        width: 1.6rem;
-        height: 1.6rem;
-        padding: 0;
-        border-radius: $radiusSm;
-        background: $appSecondary;
-        border-color: $appBorder;
-        color: rgba($white, 0.55);
-
-        &.history-nav-btn--live {
-            margin-left: auto;
-        }
-    }
-
-    // ── Move history cell ────────────────────────────────────────────────────
-    &.move-cell {
-        height: auto;
-        padding: 0.12rem 0.35rem;
-        border-radius: 0.2rem;
-        background: transparent;
-        color: rgba($white, 0.55);
-        font-family: var(--font-mono);
-        font-size: 0.72rem;
-        font-weight: 400;
-
-        &:not(:disabled):hover {
-            background: rgba($white, 0.06);
-            color: $white;
-        }
-
-        &.move-cell--active {
-            background: rgba($gold, 0.18);
-            color: $gold;
-            font-weight: 700;
-        }
-    }
-
-    // ── Pawn promotion option ────────────────────────────────────────────────
-    &.promo-overlay__option {
-        height: auto;
-        flex-direction: column;
-        gap: 0.3rem;
-        padding: 0.625rem 0.25rem;
-        background: $appSecondary;
-        border: 1px solid rgba($white, 0.07);
-        border-radius: 0.75rem;
-
-        &:not(:disabled):hover {
-            background: rgba($gold, 0.1);
             border-color: rgba($gold, 0.35);
-            color: inherit;
-            transform: translateY(-2px);
-        }
-        &:not(:disabled):active {
-            transform: translateY(0);
-        }
-    }
-
-    // Pencil-edit trigger overlaid on the avatar's corner — hidden until the
-    // wrap is hovered (mouse), always shown on touch devices (no hover to reveal it).
-    &.profile-avatar-edit-btn {
-        position: absolute;
-        top: -0.15rem;
-        right: -0.15rem;
-        width: 1.2rem;
-        height: 1.2rem;
-        padding: 0;
-        border-radius: 50%;
-        background: $gold;
-        color: #1a0f00;
-        border: 2px solid $appCard;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.15s ease;
-
-        &:not(:disabled):hover {
-            background: $goldHover;
         }
 
-        @media (hover: hover) {
-            .profile-avatar-edit-wrap:hover & {
-                opacity: 1;
-                pointer-events: auto;
-            }
-        }
-
-        @media (hover: none) {
-            opacity: 1;
-            pointer-events: auto;
-        }
-    }
-
-    &.profile-avatar-picker-option {
-        width: 100%;
-        aspect-ratio: 1;
-        padding: 0;
-        border-radius: 50%;
-        overflow: hidden;
-        background: $appSecondary;
-        border: 2px solid transparent;
-
-        &:not(:disabled):hover {
-            transform: scale(1.05);
-        }
-
-        &.selected {
+        &.active {
             border-color: $gold;
-        }
-
-        img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: inherit;
+            color: $gold;
+            background: rgba($gold, 0.08);
         }
     }
 
-    &.deposit-howto-link {
-        align-self: flex-start;
-        height: auto;
-        display: none;
-        padding: 0;
-        margin-top: -0.6rem;
-        font-family: var(--font-mono);
-        font-size: 0.72rem;
-        font-weight: 400;
-        color: $cyan;
+    &.segment-btn {
+        position: relative;
+        z-index: 1;
+        flex: 1 1 0;
+        flex-direction: column;
+        gap: 0.1rem;
+        background: transparent;
+        border-radius: 999px;
+        padding: 0.4rem 0.3rem;
+        font-family: $fontOutfitExtraBold;
+        color: $appTextMuted;
+        transition: color 0.2s ease;
 
         &:not(:disabled):hover {
-            color: $cyan;
             background: transparent;
         }
     }
 
-    // Goes back to the brand view within the side panel — separate from the
-    // deposit modal's own close, so it never closes the whole modal.
-    &.deposit-steps-back-btn {
-        flex-shrink: 0;
-        width: 1.7rem;
-        height: 1.7rem;
-        padding: 0;
-        border-radius: 50%;
-        color: rgba($white, 0.55);
+    &.deposit-method-btn {
+        flex: 1;
+        background: $appSurface;
+        border: 1px solid $appCardBorder;
+        border-radius: 999px;
+        padding: 0.5rem 0.8rem;
+        font-size: $font14;
+        font-family: $fontOutfitExtraBold;
+        color: $appTextMuted;
 
         &:not(:disabled):hover {
-            background: rgba($white, 0.08);
-            color: $white;
+            background: $appSurface;
+        }
+
+        &.active {
+            background: $gold !important;
+            border-color: $gold;
+            color: $appBg;
+        }
+    }
+
+    &.deposit-generate-btn {
+        margin-top: 1rem;
+        height: 2.85rem;
+        background: $gold;
+        color: $appBg;
+
+        &:not(:disabled):hover {
+            background: color-mix(in srgb, $gold 85%, white 15%);
+        }
+    }
+
+    &.tx-filter-reset-btn {
+        height: 2.4rem;
+        background: transparent;
+        border: 1px solid $appCardBorder;
+        color: $appTextMuted;
+
+        &:not(:disabled):hover {
+            border-color: rgba($paleRed, 0.35);
+            color: $paleRed;
         }
     }
 
     &.deposit-copy-btn {
         flex-shrink: 0;
-        height: auto;
+        background: $appBtnBg;
+        border: 1px solid $appBtnBorder;
+        color: $appText;
+        font-size: $font12;
         padding: 0.35rem 0.6rem;
-        font-size: 0.68rem;
-
-        @media (min-width: $lg) {
-            background: $gold;
-            border-color: $gold;
-            color: #1a0f00;
-            font-weight: 700;
-
-            &:not(:disabled):hover {
-                background: $goldHover;
-                border-color: $goldHover;
-                color: #1a0f00;
-            }
-        }
-    }
-
-    &.deposit-amount-chip {
         height: auto;
-        padding: 0.4rem 0.75rem;
-        font-size: 0.76rem;
-        font-weight: 600;
-
-        &.active {
-            background: rgba($gold, 0.12);
-            border-color: $gold;
-            color: $gold;
-        }
-
-        @media (min-width: $lg) {
-            background: #fff;
-            border-color: #e3ded2;
-            color: #6b6660;
-
-            &:not(:disabled):hover {
-                border-color: #141413;
-                color: #141413;
-            }
-
-            &.active {
-                background: #141413;
-                border-color: #141413;
-                color: #fff;
-
-                &:not(:disabled):hover {
-                    border-color: #141413;
-                    color: #fff;
-                }
-            }
-        }
-    }
-
-    // ── Wallet transaction tools ──────────────────────────────────────────────
-    &.tx-tool-btn {
-        width: 1.9rem;
-        height: 1.9rem;
-        padding: 0;
-        border-radius: $radiusSm;
-        background: $appSecondary;
-        color: rgba($white, 0.55);
-
-        &.active-state {
-            border-color: $gold;
-            color: $gold;
-        }
-    }
-
-    &.tx-tool-menu-item {
-        width: 100%;
-        height: auto;
-        justify-content: flex-start;
-        padding: 0.4rem 0.6rem;
-        border-radius: 0.2rem;
-        font-family: var(--font-outfit);
-        font-size: 0.74rem;
-        font-weight: 400;
-        color: rgba($white, 0.55);
 
         &:not(:disabled):hover {
-            background: rgba($white, 0.06);
-            color: $white;
-        }
-
-        &.selected {
-            color: $gold;
-        }
-    }
-
-    &.tx-load-more {
-        margin-top: 0.25rem;
-    }
-
-    // ── History filter trigger ────────────────────────────────────────────────
-    &.history-filter-trigger {
-        flex-shrink: 0;
-        margin-top: 0.15rem;
-        height: auto;
-        padding: 0.4rem 0.65rem;
-        border-radius: $radiusSm;
-        background: $appSecondary;
-        color: rgba($white, 0.55);
-        font-size: 0.72rem;
-
-        &.has-filters {
-            border-color: rgba($gold, 0.5);
-            color: $gold;
-        }
-    }
-
-    // ── History filter option pill ───────────────────────────────────────────
-    // ── Skill Level continue ─────────────────────────────────────────────────
-    &.skill-level-continue-btn {
-        margin-top: 0.5rem;
-    }
-
-    // ── Auth (Login/Register/Forgot/Reset) ───────────────────────────────────
-    &.auth-submit-btn {
-        margin-top: 0.25rem;
-    }
-
-    &.auth-google-btn {
-        background: transparent;
-        border: 1px solid rgba($white, 0.22);
-        box-shadow: none;
-        color: rgba($white, 0.65);
-        font-weight: 600;
-
-        &:not(:disabled):hover {
-            background: transparent;
-            border-color: rgba($white, 0.4);
-            color: $white;
-        }
-    }
-
-    &.reg-back-link {
-        align-self: flex-start;
-        height: auto;
-        padding: 0;
-        margin-bottom: 0.25rem;
-        background: transparent;
-        color: rgba($white, 0.4);
-        font-weight: 400;
-        font-size: 0.78rem;
-
-        &:not(:disabled):hover {
-            background: transparent;
-            color: rgba($white, 0.7);
+            background: $appBtnBg;
+            border-color: rgba($appText, 0.4);
         }
     }
 
@@ -477,7 +285,7 @@
         height: 0.45rem;
         padding: 0;
         border-radius: 50%;
-        background: rgba($white, 0.15);
+        background: rgba($appText, 0.15);
 
         &.auth-left-dot--active {
             width: 1.1rem;
@@ -485,20 +293,58 @@
         }
     }
 
-    &.f-opt {
-        height: auto;
-        padding: 0.4rem 0.75rem;
-        border-radius: 999px;
-        background: $appSecondary;
-        color: rgba($white, 0.55);
-        font-size: 0.74rem;
-        font-weight: 400;
+    &.profile-edit-icon-btn {
+        position: absolute;
+        top: 0.9rem;
+        right: 0.9rem;
+        width: 1.9rem;
+        height: 1.9rem;
+        padding: 0;
+        border-radius: 50%;
+        background: $appBtnBg;
+        border: 1px solid $appBtnBorder;
+        color: $appText;
 
-        &.active {
-            background: $gold;
-            color: #1a0f00;
+        &:not(:disabled):hover {
             border-color: $gold;
-            font-weight: 700;
+            color: $gold;
+        }
+    }
+
+    &.profile-avatar-picker-option {
+        width: 3.25rem;
+        height: 3.25rem;
+        aspect-ratio: 1;
+        padding: 0;
+        border-radius: 50%;
+        background: $appSecondary;
+        border: 1.5px solid $appCardBorder;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        &.selected {
+            border-color: $gold;
+        }
+
+        &:not(:disabled):hover {
+            border-color: rgba($gold, 0.6);
+        }
+    }
+
+    &.profile-save-btn {
+        margin-top: 0.4rem;
+        height: 2.85rem;
+        background: $gold;
+        color: $appBg;
+
+        &:not(:disabled):hover {
+            background: color-mix(in srgb, $gold 85%, white 15%);
         }
     }
 }

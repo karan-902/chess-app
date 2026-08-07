@@ -3,7 +3,10 @@ import axios, {
     type AxiosRequestConfig,
     type Method,
 } from "axios";
-import sessionService from "@/store/sessionService";
+import dayjs from "dayjs";
+import { toast } from "sonner";
+import sessionService from "@/redux/sessionService";
+import { apiRateLimited } from "@/constants/messages";
 import type { IGenerateTokenBody } from "@/types/index";
 import type { IGenerateTokenResponse } from "@/types/utils";
 
@@ -54,6 +57,7 @@ export async function getHeaders<TPayload = undefined>(
 ): Promise<AxiosRequestConfig> {
     const isOpen = OPEN_API_ENDPOINTS.includes(path);
     const headers = new AxiosHeaders();
+
     const session = await sessionService.loadSession();
 
     if (method !== "GET") headers.set("Content-Type", "application/json");
@@ -62,7 +66,9 @@ export async function getHeaders<TPayload = undefined>(
     }
 
     return {
-        baseURL: (import.meta.env.VITE_API_URL ?? "http://localhost:3000").trim(),
+        baseURL: (
+            import.meta.env.VITE_API_URL ?? "http://localhost:6060"
+        ).trim(),
         method,
         url: path,
         data,
@@ -70,7 +76,6 @@ export async function getHeaders<TPayload = undefined>(
     };
 }
 
-/** Returns username if set, otherwise "First Last" */
 export function getDisplayName(
     user:
         | { username?: string; first_name?: string; last_name?: string }
@@ -82,6 +87,20 @@ export function getDisplayName(
     return (
         `${user?.first_name ?? ""} ${user?.last_name ?? ""}`.trim() || "Unknown"
     );
+}
+
+export function formatMatchDate(ms: number): string {
+    const now = dayjs();
+    const then = dayjs(ms);
+    if (!then.isSame(now, "day")) {
+        if (then.isSame(now.subtract(1, "day"), "day")) return "Yesterday";
+        return then.format("MMMM D, YYYY");
+    }
+    const diffSeconds = now.diff(then, "second");
+    if (diffSeconds < 60) return "just now";
+    const minutes = now.diff(then, "minute");
+    if (minutes < 60) return `${minutes}m ago`;
+    return `${now.diff(then, "hour")}h ago`;
 }
 
 export const callAPIInterface = async <
@@ -126,6 +145,10 @@ export const callAPIInterface = async <
                     reject(tokenErr);
                 }
                 return;
+            }
+
+            if (errorStatus === 429) {
+                toast.error(apiRateLimited, { id: "rate-limited" });
             }
 
             const isKnownError =

@@ -1,24 +1,25 @@
-import {
-    createContext,
-    useCallback,
-    useContext,
-    useEffect,
-    useState,
-} from "react";
-import { Outlet, useLocation, useNavigate } from "react-router";
-import { NAV_ITEMS, PATH_TITLE } from "@/constants/config";
-import Box from "@/components/base/Box/Box";
-import AppBar from "@/components/base/AppBar/AppBar";
-import BottomNav from "@/components/base/BottomNav/BottomNav";
-import SidebarNav from "@/components/base/SidebarNav/SidebarNav";
-import { setPageTitle } from "@/components/constants";
-
-export function usePageTitle(title: string) {
-    useEffect(() => {
-        setPageTitle(title);
-    }, [title, setPageTitle]);
-}
+import { Navigate, Outlet, useLocation, useSearchParams } from "react-router";
+import BackdropLoader from "@/components/base/BackdropLoader/BackdropLoader";
 
 export default function Layout() {
-    return <Outlet />;
+    const location = useLocation();
+    const [params] = useSearchParams();
+    const code = params.get("code");
+    const state = params.get("state");
+
+    const isRegister = state?.startsWith("register") ?? false;
+
+    if (code && isRegister && location.pathname !== "/register") {
+        return <Navigate to={`/register?code=${code}`} replace />;
+    }
+    if (code && !isRegister && location.pathname !== "/login") {
+        return <Navigate to={`/login?code=${code}`} replace />;
+    }
+
+    return (
+        <>
+            <Outlet />
+            <BackdropLoader />
+        </>
+    );
 }

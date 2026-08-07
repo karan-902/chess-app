@@ -1,77 +1,94 @@
-$whiteSmoke: #f5f5f5;
-$navText: #111827;
-$skeletonBg: #e8ecef;
-$vectorBlue: #9babfd;
-$greyText: #848b9e;
-$primaryBlue: #2a67ff;
-$primaryBlueHover: #2758d4;
-$lightCyanBlue: #e4e9ee;
-$topicalBlue: #cbdafa;
-$paleRed: #e74c3c;
+$paleRed: #ff5c5c;
 $brinkPink: #f3a69e;
-$lightRed: #ffe8e6;
-$paleGray: #f7fafc;
-$darkIndigo: #0a193e;
-$white: #fff;
-$lightGrey: #d8dce1;
-$sunFlowerYellow: #f9df00;
-$goldenRod: #f1c40f;
-$greenishTeal: #2ecc71;
+$greenishTeal: #39ff88;
 $black: #000000;
-$darkBlue: #041f61;
-$cardBorder: #f6f3f3;
-$outlineBlue: #bfd1ff;
-$cardDarkBg: #f0f5fa;
-$success: #e2f3e9;
-$error: #fd371e;
-$errorBg: #fff6f5;
-$errorBorder: #ffe4e1;
 
-$font8: 8px;
-$font9: 9px;
-$font10: 10px;
-$font11: 11px;
-$font12: 12px;
-$font13: 13px;
-$font14: 14px;
-$font15: 15px;
-$font16: 16px;
-$font18: 18px;
-$font20: 20px;
-$font22: 22px;
-$font24: 24px;
-$font28: 28px;
-$font30: 30px;
-$font32: 32px;
-$font34: 34px;
-$font36: 36px;
-$font44: 44px;
-$font45: 45px;
-$font56: 56px;
-$font58: 58px;
+$font12: 0.75rem;
+$font14: 0.875rem;
+$font15: 0.938rem;
+$font16: 1rem;
+$font18: 1.125rem;
+$font20: 1.25rem;
+$font24: 1.5rem;
+$font30: 1.9rem;
 
-// ── Breakpoints ───────────────────────────────────────────────────────────────
-$sm: 640px;
-$md: 768px;
-$lg: 1024px;
-$xl: 1280px;
-$xxl: 1536px;
+$fontOutfit: "Outfit-Regular";
+$fontOutfitThin: "Outfit-Thin";
+$fontOutfitExtraLight: "Outfit-ExtraLight";
+$fontOutfitLight: "Outfit-Light";
+$fontOutfitRegular: "Outfit-Regular";
+$fontOutfitMedium: "Outfit-Medium";
+$fontOutfitSemiBold: "Outfit-SemiBold";
+$fontOutfitBold: "Outfit-Bold";
+$fontOutfitExtraBold: "Outfit-ExtraBold";
+$fontOutfitBlack: "Outfit-Black";
 
-// ── KingStake: Slate Black palette ────────────────────────────────────────────
-$appBg:        #0a0a0c;   // near-black, barely slate
-$appCard:      #111318;   // dark slate surface
-$appSecondary: #1a1d24;   // mid slate surface
-$appMuted:     #07080a;   // deep black trough
-$appBorder:    rgba(255, 255, 255, 0.07);
+$fontMono: $fontOutfitRegular;
+$fontDisplay: $fontOutfitSemiBold;
 
-// ── KingStake Gold (Primary Accent) ───────────────────────────────────────────
-$gold:         #f0b90b;
-$goldHover:    #d4a009;
-$goldMuted:    rgba(240, 185, 11, 0.1);
-$goldGlow:     rgba(240, 185, 11, 0.18);
+$appBg: #100f0c;
+$appSecondary: #14171c;
+$appSurface: #17150f;
+$appCardBorder: #29261b;
+$appLine: #262319;
+$appText: #ece8de;
+$appTextMuted: #8b8779;
+$appBtnBg: #00000059;
+$appBtnBorder: #ece8de38;
 
-// ── Electric Cyan (Interactions / Active Turn) ─────────────────────────────────
-$cyan:         #00d4ff;
-$cyanHover:    #00b8e0;
-$cyanMuted:    rgba(0, 212, 255, 0.1);
-$cyanGlow:     rgba(0, 212, 255, 0.18);
+$gold: #f7931a;
+
+$cyan: #39ff88;
+
+$radiusSm: 0.2rem;
+$radiusMd: 0.3rem;
+$radiusLg: 0.4rem;
+
+$appCardRadius: 0.625rem;
+$appBtnRadius: 0.5rem;
+
+@font-face {
+    font-family: "Outfit-Thin";
+    src: url("/fonts/Outfit-Thin.ttf") format("truetype");
+    font-display: swap;
+}
+@font-face {
+    font-family: "Outfit-ExtraLight";
+    src: url("/fonts/Outfit-ExtraLight.ttf") format("truetype");
+    font-display: swap;
+}
+@font-face {
+    font-family: "Outfit-Light";
+    src: url("/fonts/Outfit-Light.ttf") format("truetype");
+    font-display: swap;
+}
+@font-face {
+    font-family: "Outfit-Regular";
+    src: url("/fonts/Outfit-Regular.ttf") format("truetype");
+    font-display: swap;
+}
+@font-face {
+    font-family: "Outfit-Medium";
+    src: url("/fonts/Outfit-Medium.ttf") format("truetype");
+    font-display: swap;
+}
+@font-face {
+    font-family: "Outfit-SemiBold";
+    src: url("/fonts/Outfit-SemiBold.ttf") format("truetype");
+    font-display: swap;
+}
+@font-face {
+    font-family: "Outfit-Bold";
+    src: url("/fonts/Outfit-Bold.ttf") format("truetype");
+    font-display: swap;
+}
+@font-face {
+    font-family: "Outfit-ExtraBold";
+    src: url("/fonts/Outfit-ExtraBold.ttf") format("truetype");
+    font-display: swap;
+}
+@font-face {
+    font-family: "Outfit-Black";
+    src: url("/fonts/Outfit-Black.ttf") format("truetype");
+    font-display: swap;
+}
