@@ -151,7 +151,7 @@ function matchRow(
     currentUserId?: string,
 ) {
     const selfName = showSelf
-        ? item.player.id === currentUserId
+        ? item.player?.id === currentUserId
             ? matchesYouLabel
             : item.player.username
         : undefined;
@@ -249,7 +249,13 @@ export default function MyMatches() {
                         </Text>
                     </Box>
                 ) : (
-                    matchList(items, false, currentUserId, loadingMore, loadMore)
+                    matchList(
+                        items,
+                        false,
+                        currentUserId,
+                        loadingMore,
+                        loadMore,
+                    )
                 ))}
 
             {subtab === "worldwide" &&
