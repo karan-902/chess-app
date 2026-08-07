@@ -8,6 +8,7 @@ import Button from "@/components/base/Button/Button";
 import Card from "@/components/base/Card/Card";
 import Skeleton from "@/components/base/Skeleton/Skeleton";
 import { useGameHistory } from "@/hooks/useGameHistory";
+import { useReduxSelector } from "@/redux/hooks";
 import { formatMatchDate } from "@/utils";
 import { formateText } from "@/utils/formate";
 import { CATEGORY_META } from "@/constants/config";
@@ -47,7 +48,7 @@ function MatchRow({
     endReason,
     amount,
     dateLabel,
-    showVs,
+    selfName,
 }: {
     outcome: "win" | "loss" | "draw";
     opponentName: string;
@@ -55,7 +56,7 @@ function MatchRow({
     endReason: string;
     amount: number;
     dateLabel: string;
-    showVs: boolean;
+    selfName?: string;
 }) {
     const CategoryIcon = CATEGORY_META[category].icon;
     return (
@@ -66,9 +67,9 @@ function MatchRow({
                 </Box>
                 <Box>
                     <Text customClass="match-row-headline">
-                        {showVs && (
+                        {selfName && (
                             <>
-                                {matchesYouLabel}
+                                {selfName}
                                 <Badge
                                     customClass="match-row-vs"
                                     badgeContent={matchesVsLabel}
@@ -144,7 +145,17 @@ function statsSkeletonRows() {
     ));
 }
 
-function matchRow(item: IGameHistoryItem, showVs: boolean) {
+function matchRow(
+    item: IGameHistoryItem,
+    showSelf: boolean,
+    currentUserId?: string,
+) {
+    if (!item) return null;
+    const selfName = showSelf
+        ? item.player.id === currentUserId
+            ? matchesYouLabel
+            : item.player.username
+        : undefined;
     return (
         <MatchRow
             outcome={item.result}
@@ -153,14 +164,15 @@ function matchRow(item: IGameHistoryItem, showVs: boolean) {
             endReason={item.end_reason}
             amount={Math.abs(item.settlement_usd)}
             dateLabel={formatMatchDate(item.played_at)}
-            showVs={showVs}
+            selfName={selfName}
         />
     );
 }
 
 function matchList(
     items: IGameHistoryItem[],
-    showVs: boolean,
+    showSelf: boolean,
+    currentUserId: string | undefined,
     loadingMore: boolean,
     loadMore: () => void,
 ) {
@@ -170,7 +182,9 @@ function matchList(
                 style={{ height: "100%" }}
                 data={items}
                 computeItemKey={(_, item) => item.game_id}
-                itemContent={(_, item) => matchRow(item, showVs)}
+                itemContent={(_, item) =>
+                    matchRow(item, showSelf, currentUserId)
+                }
                 endReached={loadMore}
                 components={{
                     Footer: () => (loadingMore ? <MatchRowSkeleton /> : null),
@@ -182,6 +196,7 @@ function matchList(
 
 export default function MyMatches() {
     const [subtab, setSubtab] = useState<Subtab>("results");
+    const currentUserId = useReduxSelector((state) => state.auth.session?.id);
     const { items, loading, loadingMore, loadMore, stats, statsLoading } =
         useGameHistory(
             subtab === "worldwide" ? "worldwide" : "own",
@@ -235,7 +250,13 @@ export default function MyMatches() {
                         </Text>
                     </Box>
                 ) : (
-                    matchList(items, false, loadingMore, loadMore)
+                    matchList(
+                        items,
+                        false,
+                        currentUserId,
+                        loadingMore,
+                        loadMore,
+                    )
                 ))}
 
             {subtab === "worldwide" &&
@@ -244,7 +265,7 @@ export default function MyMatches() {
                         {historySkeletonRows()}
                     </Card>
                 ) : (
-                    matchList(items, true, loadingMore, loadMore)
+                    matchList(items, true, currentUserId, loadingMore, loadMore)
                 ))}
 
             {subtab === "stats" && (

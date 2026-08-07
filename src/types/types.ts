@@ -273,6 +273,7 @@ export interface IGameHistoryOpponent {
 
 export interface IGameHistoryItem {
     game_id: string;
+    player: { id: string; username: string };
     opponent: IGameHistoryOpponent;
     result: "win" | "loss" | "draw";
     end_reason: string;
