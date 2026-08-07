@@ -81,7 +81,7 @@ export function ShatranjLogo({
                         textShadow: "0 0 18px rgba(247,147,26,0.45)",
                     }}
                 >
-                    Shatranj
+                    LOL
                     {withCursor && <span className="logo-cursor" />}
                 </span>
             )}
