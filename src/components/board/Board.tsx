@@ -2,6 +2,7 @@ import { useRef, useEffect, useState } from "react";
 import Box from "../base/Box/Box";
 import { TBoard } from "@/types/types";
 import PieceIcon from "./PieceIcon";
+import "./board.scss";
 
 interface IChessBoardProps {
     board: TBoard;
@@ -89,7 +90,6 @@ export default function Board({
         const from = squareToIndex(lastMove.from, flipped);
         const to = squareToIndex(lastMove.to, flipped);
 
-        // find what piece is now at the 'to' square on the board
         const piece = board[to.row]?.[to.col];
         if (!piece) return;
 
@@ -194,7 +194,7 @@ export default function Board({
                     }),
                 )}
 
-                {/* Sliding overlay piece */}
+                {}
                 {animPiece && (
                     <PieceIcon
                         code={animPiece.svgFile}

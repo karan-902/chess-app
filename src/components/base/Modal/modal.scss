@@ -1,9 +1,5 @@
 @use '../../../styles/default.scss' as *;
 
-// Root class: .common-{componentName}
-// Sub-parts and variants (e.g. &.variant-name) nest inside it via SCSS &.
-// Anything rendered as a DOM sibling (not descendant) stays a flat top-level class
-// — that's why .modal-overlay stays flat instead of nesting under .common-modal.
 .modal-overlay {
     position: fixed;
     inset: 0;
@@ -13,15 +9,16 @@
     animation: modal-overlay-in 0.15s ease;
 }
 
-.common-modal {
+.modal {
     position: fixed;
     top: 50%;
     left: 50%;
     z-index: 51;
+    margin: 0;
     transform: translate(-50%, -50%);
     width: min(92vw, 420px);
-    background: linear-gradient(180deg, rgba($white, 0.02) 0%, transparent 40%), $appCard;
-    border: 1px solid $appBorder;
+    background: linear-gradient(180deg, rgba($appText, 0.02) 0%, transparent 40%), $appSurface;
+    border: 1px solid $appCardBorder;
     border-radius: 1rem;
     padding: 1.5rem;
     box-shadow: 0 24px 64px rgba($black, 0.6);
@@ -32,17 +29,17 @@
     }
 
     .modal-title {
-        font-family: var(--font-outfit);
+        font-family: $fontOutfit;
         font-size: $font18;
         font-weight: 700;
-        color: $white;
+        color: $appText;
         margin-bottom: 0.4rem;
     }
 
     .modal-description {
-        font-family: var(--font-outfit);
-        font-size: $font13;
-        color: rgba($white, 0.5);
+        font-family: $fontOutfit;
+        font-size: $font14;
+        color: rgba($appText, 0.5);
         margin-bottom: 1.25rem;
         line-height: 1.5;
     }
@@ -59,13 +56,13 @@
         border-radius: 0.5rem;
         background: transparent;
         border: none;
-        color: rgba($white, 0.4);
+        color: rgba($appText, 0.4);
         cursor: pointer;
         transition: color 0.15s ease, background-color 0.15s ease;
 
         &:hover {
-            color: $white;
-            background: rgba($white, 0.06);
+            color: $appText;
+            background: rgba($appText, 0.06);
         }
     }
 

@@ -1,134 +1,288 @@
-import { useId } from "react";
-
 interface IPieceIconProps {
     code: string;
     className?: string;
     style?: React.CSSProperties;
 }
 
-function PieceShape({ type }: { type: string }) {
-    switch (type) {
-        case "p":
-            return (
-                <>
-                    <rect x={10} y={33} width={12} height={4} rx={1} />
-                    <polygon points="13,33 19,33 17,21 15,21" />
-                    <circle cx={16} cy={15} r={6} />
-                </>
-            );
-        case "r":
-            return (
-                <>
-                    <rect x={8} y={33} width={16} height={4} rx={1} />
-                    <rect x={10} y={16} width={12} height={17} />
-                    <rect x={9} y={9} width={4} height={7} />
-                    <rect x={14} y={9} width={4} height={7} />
-                    <rect x={19} y={9} width={4} height={7} />
-                </>
-            );
-        case "b":
-            return (
-                <>
-                    <rect x={9} y={33} width={14} height={4} rx={1} />
-                    <polygon points="16,10 22,29 10,29" />
-                    <circle cx={16} cy={9} r={3.4} />
-                    <circle cx={16} cy={4} r={1.6} />
-                </>
-            );
-        case "q":
-            return (
-                <>
-                    <rect x={8} y={33} width={16} height={4} rx={1} />
-                    <polygon points="11,33 21,33 19,14 13,14" />
-                    <rect x={10.3} y={11.3} width={11.4} height={2.7} />
-                    <polygon points="16,5 18.3,8.3 23,5 21.7,11 10.3,11 9,5 13.7,8.3" />
-                    <circle cx={16} cy={7.3} r={1.4} />
-                    <circle cx={10.3} cy={8.7} r={1} />
-                    <circle cx={21.7} cy={8.7} r={1} />
-                </>
-            );
-        case "k":
-            return (
-                <>
-                    <rect x={8} y={33} width={16} height={4} rx={1} />
-                    <polygon points="11,33 21,33 19,17 13,17" />
-                    <rect x={11} y={17} width={10} height={3} />
-                    <circle cx={16} cy={12} r={2.6} />
-                    <rect x={15} y={4} width={2} height={8} />
-                    <rect x={12} y={6.5} width={8} height={2} />
-                </>
-            );
-        default:
-            return null;
-    }
-}
-
-function KnightShape({ markColor }: { markColor: string }) {
-    return (
-        <>
-            <path d="M 22,10 C 32.5,11 38.5,18 38,39 L 15,39 C 15,30 25,32.5 23,18" />
-            <path d="M 24,18 C 24.38,20.91 18.45,25.37 16,27 C 13,29 13.18,31.34 11,31 C 9.958,30.06 12.41,27.96 11,28 C 10,28 11.19,29.23 10,30 C 9,30 5.997,31 6,26 C 6,24 12,14 12,14 C 12,14 13.89,12.1 14,10.5 C 13.27,9.506 13.5,8.5 13.5,7.5 C 14.5,6.5 16.5,10 16.5,10 L 18.5,10 C 18.5,10 19.28,8.008 21,7 C 22,7 22,10 22,10" />
+const PIECE_PATHS: Record<string, React.ReactNode> = {
+    wK: (
+        <g
+            fill="none"
+            fillRule="evenodd"
+            stroke="#000"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.5}
+        >
+            <path strokeLinejoin="miter" d="M22.5 11.63V6M20 8h5" />
             <path
-                d="M 9.5 25.5 A 0.5 0.5 0 1 1 8.5,25.5 A 0.5 0.5 0 1 1 9.5 25.5 z"
-                fill={markColor}
+                fill="#fff"
+                strokeLinecap="butt"
+                strokeLinejoin="miter"
+                d="M22.5 25s4.5-7.5 3-10.5c0 0-1-2.5-3-2.5s-3 2.5-3 2.5c-1.5 3 3 10.5 3 10.5"
             />
             <path
-                d="M 15 15.5 A 0.5 1.5 0 1 1 14,15.5 A 0.5 1.5 0 1 1 15 15.5 z"
-                transform="matrix(0.866,0.5,-0.5,0.866,9.693,-5.173)"
-                fill={markColor}
+                fill="#fff"
+                d="M11.5 37c5.5 3.5 15.5 3.5 21 0v-7s9-4.5 6-10.5c-4-6.5-13.5-3.5-16 4V27v-3.5c-3.5-7.5-13-10.5-16-4-3 6 5 10 5 10z"
             />
-        </>
-    );
-}
+            <path d="M11.5 30c5.5-3 15.5-3 21 0m-21 3.5c5.5-3 15.5-3 21 0m-21 3.5c5.5-3 15.5-3 21 0" />
+        </g>
+    ),
+    wQ: (
+        <g
+            fill="#fff"
+            fillRule="evenodd"
+            stroke="#000"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.5}
+        >
+            <path d="M8 12a2 2 0 1 1-4 0 2 2 0 1 1 4 0m16.5-4.5a2 2 0 1 1-4 0 2 2 0 1 1 4 0M41 12a2 2 0 1 1-4 0 2 2 0 1 1 4 0M16 8.5a2 2 0 1 1-4 0 2 2 0 1 1 4 0M33 9a2 2 0 1 1-4 0 2 2 0 1 1 4 0" />
+            <path
+                strokeLinecap="butt"
+                d="M9 26c8.5-1.5 21-1.5 27 0l2-12-7 11V11l-5.5 13.5-3-15-3 15-5.5-14V25L7 14z"
+            />
+            <path
+                strokeLinecap="butt"
+                d="M9 26c0 2 1.5 2 2.5 4 1 1.5 1 1 .5 3.5-1.5 1-1.5 2.5-1.5 2.5-1.5 1.5.5 2.5.5 2.5 6.5 1 16.5 1 23 0 0 0 1.5-1 0-2.5 0 0 .5-1.5-1-2.5-.5-2.5-.5-2 .5-3.5 1-2 2.5-2 2.5-4-8.5-1.5-18.5-1.5-27 0z"
+            />
+            <path
+                fill="none"
+                d="M11.5 30c3.5-1 18.5-1 22 0M12 33.5c6-1 15-1 21 0"
+            />
+        </g>
+    ),
+    wR: (
+        <g
+            fill="#fff"
+            fillRule="evenodd"
+            stroke="#000"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.5}
+        >
+            <path
+                strokeLinecap="butt"
+                d="M9 39h27v-3H9zm3-3v-4h21v4zm-1-22V9h4v2h5V9h5v2h5V9h4v5"
+            />
+            <path d="m34 14-3 3H14l-3-3" />
+            <path
+                strokeLinecap="butt"
+                strokeLinejoin="miter"
+                d="M31 17v12.5H14V17"
+            />
+            <path d="m31 29.5 1.5 2.5h-20l1.5-2.5" />
+            <path fill="none" strokeLinejoin="miter" d="M11 14h23" />
+        </g>
+    ),
+    wB: (
+        <g
+            fill="none"
+            fillRule="evenodd"
+            stroke="#000"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.5}
+        >
+            <g fill="#fff" strokeLinecap="butt">
+                <path d="M9 36c3.39-.97 10.11.43 13.5-2 3.39 2.43 10.11 1.03 13.5 2 0 0 1.65.54 3 2-.68.97-1.65.99-3 .5-3.39-.97-10.11.46-13.5-1-3.39 1.46-10.11.03-13.5 1-1.35.49-2.32.47-3-.5 1.35-1.94 3-2 3-2z" />
+                <path d="M15 32c2.5 2.5 12.5 2.5 15 0 .5-1.5 0-2 0-2 0-2.5-2.5-4-2.5-4 5.5-1.5 6-11.5-5-15.5-11 4-10.5 14-5 15.5 0 0-2.5 1.5-2.5 4 0 0-.5.5 0 2z" />
+                <path d="M25 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 1 1 5 0z" />
+            </g>
+            <path
+                strokeLinejoin="miter"
+                d="M17.5 26h10M15 30h15m-7.5-14.5v5M20 18h5"
+            />
+        </g>
+    ),
+    wN: (
+        <g
+            fill="none"
+            fillRule="evenodd"
+            stroke="#000"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.5}
+        >
+            <path
+                fill="#fff"
+                d="M22 10c10.5 1 16.5 8 16 29H15c0-9 10-6.5 8-21"
+            />
+            <path
+                fill="#fff"
+                d="M24 18c.38 2.91-5.55 7.37-8 9-3 2-2.82 4.34-5 4-1.042-.94 1.41-3.04 0-3-1 0 .19 1.23-1 2-1 0-4.003 1-4-4 0-2 6-12 6-12s1.89-1.9 2-3.5c-.73-.994-.5-2-.5-3 1-1 3 2.5 3 2.5h2s.78-1.992 2.5-3c1 0 1 3 1 3"
+            />
+            <path
+                fill="#000"
+                d="M9.5 25.5a.5.5 0 1 1-1 0 .5.5 0 1 1 1 0m5.433-9.75a.5 1.5 30 1 1-.866-.5.5 1.5 30 1 1 .866.5"
+            />
+        </g>
+    ),
+    wP: (
+        <path
+            fill="#fff"
+            stroke="#000"
+            strokeLinecap="round"
+            strokeWidth={1.5}
+            d="M22.5 9c-2.21 0-4 1.79-4 4 0 .89.29 1.71.78 2.38C17.33 16.5 16 18.59 16 21c0 2.03.94 3.84 2.41 5.03-3 1.06-7.41 5.55-7.41 13.47h23c0-7.92-4.41-12.41-7.41-13.47 1.47-1.19 2.41-3 2.41-5.03 0-2.41-1.33-4.5-3.28-5.62.49-.67.78-1.49.78-2.38 0-2.21-1.79-4-4-4z"
+        />
+    ),
+    bK: (
+        <g
+            fill="none"
+            fillRule="evenodd"
+            stroke="#000"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.5}
+        >
+            <path strokeLinejoin="miter" d="M22.5 11.6V6" />
+            <path
+                fill="#000"
+                strokeLinecap="butt"
+                strokeLinejoin="miter"
+                d="M22.5 25s4.5-7.5 3-10.5c0 0-1-2.5-3-2.5s-3 2.5-3 2.5c-1.5 3 3 10.5 3 10.5"
+            />
+            <path
+                fill="#000"
+                d="M11.5 37a22.3 22.3 0 0 0 21 0v-7s9-4.5 6-10.5c-4-6.5-13.5-3.5-16 4V27v-3.5c-3.5-7.5-13-10.5-16-4-3 6 5 10 5 10z"
+            />
+            <path strokeLinejoin="miter" d="M20 8h5" />
+            <path
+                stroke="#ececec"
+                d="M32 29.5s8.5-4 6-9.7C34.1 14 25 18 22.5 24.6v2.1-2.1C20 18 9.9 14 7 19.9c-2.5 5.6 4.8 9 4.8 9"
+            />
+            <path
+                stroke="#ececec"
+                d="M11.5 30c5.5-3 15.5-3 21 0m-21 3.5c5.5-3 15.5-3 21 0m-21 3.5c5.5-3 15.5-3 21 0"
+            />
+        </g>
+    ),
+    bQ: (
+        <g
+            fillRule="evenodd"
+            stroke="#000"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.5}
+        >
+            <g stroke="none">
+                <circle cx={6} cy={12} r={2.75} />
+                <circle cx={14} cy={9} r={2.75} />
+                <circle cx={22.5} cy={8} r={2.75} />
+                <circle cx={31} cy={9} r={2.75} />
+                <circle cx={39} cy={12} r={2.75} />
+            </g>
+            <path
+                strokeLinecap="butt"
+                d="M9 26c8.5-1.5 21-1.5 27 0l2.5-12.5L31 25l-.3-14.1-5.2 13.6-3-14.5-3 14.5-5.2-13.6L14 25 6.5 13.5z"
+            />
+            <path
+                strokeLinecap="butt"
+                d="M9 26c0 2 1.5 2 2.5 4 1 1.5 1 1 .5 3.5-1.5 1-1.5 2.5-1.5 2.5-1.5 1.5.5 2.5.5 2.5 6.5 1 16.5 1 23 0 0 0 1.5-1 0-2.5 0 0 .5-1.5-1-2.5-.5-2.5-.5-2 .5-3.5 1-2 2.5-2 2.5-4-8.5-1.5-18.5-1.5-27 0z"
+            />
+            <path fill="none" strokeLinecap="butt" d="M11 38.5a35 35 1 0 0 23 0" />
+            <path
+                fill="none"
+                stroke="#ececec"
+                d="M11 29a35 35 1 0 1 23 0m-21.5 2.5h20m-21 3a35 35 1 0 0 22 0m-23 3a35 35 1 0 0 24 0"
+            />
+        </g>
+    ),
+    bR: (
+        <g
+            fillRule="evenodd"
+            stroke="#000"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.5}
+        >
+            <path
+                strokeLinecap="butt"
+                d="M9 39h27v-3H9zm3.5-7 1.5-2.5h17l1.5 2.5zm-.5 4v-4h21v4z"
+            />
+            <path
+                strokeLinecap="butt"
+                strokeLinejoin="miter"
+                d="M14 29.5v-13h17v13z"
+            />
+            <path
+                strokeLinecap="butt"
+                d="M14 16.5 11 14h23l-3 2.5zM11 14V9h4v2h5V9h5v2h5V9h4v5z"
+            />
+            <path
+                fill="none"
+                stroke="#ececec"
+                strokeLinejoin="miter"
+                strokeWidth={1}
+                d="M12 35.5h21m-20-4h19m-18-2h17m-17-13h17M11 14h23"
+            />
+        </g>
+    ),
+    bB: (
+        <g
+            fill="none"
+            fillRule="evenodd"
+            stroke="#000"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.5}
+        >
+            <g fill="#000" strokeLinecap="butt">
+                <path d="M9 36c3.4-1 10.1.4 13.5-2 3.4 2.4 10.1 1 13.5 2 0 0 1.6.5 3 2-.7 1-1.6 1-3 .5-3.4-1-10.1.5-13.5-1-3.4 1.5-10.1 0-13.5 1-1.4.5-2.3.5-3-.5 1.4-2 3-2 3-2z" />
+                <path d="M15 32c2.5 2.5 12.5 2.5 15 0 .5-1.5 0-2 0-2 0-2.5-2.5-4-2.5-4 5.5-1.5 6-11.5-5-15.5-11 4-10.5 14-5 15.5 0 0-2.5 1.5-2.5 4 0 0-.5.5 0 2z" />
+                <path d="M25 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 1 1 5 0z" />
+            </g>
+            <path
+                stroke="#ececec"
+                strokeLinejoin="miter"
+                d="M17.5 26h10M15 30h15m-7.5-14.5v5M20 18h5"
+            />
+        </g>
+    ),
+    bN: (
+        <g
+            fill="none"
+            fillRule="evenodd"
+            stroke="#000"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.5}
+        >
+            <path
+                fill="#000"
+                d="M22 10c10.5 1 16.5 8 16 29H15c0-9 10-6.5 8-21"
+            />
+            <path
+                fill="#000"
+                d="M24 18c.38 2.91-5.55 7.37-8 9-3 2-2.82 4.34-5 4-1.04-.94 1.41-3.04 0-3-1 0 .19 1.23-1 2-1 0-4 1-4-4 0-2 6-12 6-12s1.89-1.9 2-3.5c-.73-1-.5-2-.5-3 1-1 3 2.5 3 2.5h2s.78-2 2.5-3c1 0 1 3 1 3"
+            />
+            <path
+                fill="#ececec"
+                stroke="#ececec"
+                d="M9.5 25.5a.5.5 0 1 1-1 0 .5.5 0 1 1 1 0m5.43-9.75a.5 1.5 30 1 1-.86-.5.5 1.5 30 1 1 .86.5"
+            />
+            <path
+                fill="#ececec"
+                stroke="none"
+                d="m24.55 10.4-.45 1.45.5.15c3.15 1 5.65 2.49 7.9 6.75S35.75 29.06 35.25 39l-.05.5h2.25l.05-.5c.5-10.06-.88-16.85-3.25-21.34s-5.79-6.64-9.19-7.16z"
+            />
+        </g>
+    ),
+    bP: (
+        <path
+            stroke="#000"
+            strokeLinecap="round"
+            strokeWidth={1.5}
+            d="M22.5 9a4 4 0 0 0-3.22 6.38 6.48 6.48 0 0 0-.87 10.65c-3 1.06-7.41 5.55-7.41 13.47h23c0-7.92-4.41-12.41-7.41-13.47a6.46 6.46 0 0 0-.87-10.65A4.01 4.01 0 0 0 22.5 9z"
+        />
+    ),
+};
 
 export default function PieceIcon({ code, className, style }: IPieceIconProps) {
-    const filterId = `piece-outline-${useId().replace(/:/g, "")}`;
-    const isWhite = code[0] === "w";
-    const type = code[1].toLowerCase();
-    const fill = isWhite ? "#fdfaf3" : "#000000";
-    const outline = isWhite ? "#1a140c" : "#fdfaf3";
-    const isKnight = type === "n";
-
     return (
-        <svg
-            className={className}
-            style={style}
-            viewBox={isKnight ? "0 0 45 45" : "0 0 32 40"}
-        >
-            <defs>
-                <filter
-                    id={filterId}
-                    x="-30%"
-                    y="-30%"
-                    width="160%"
-                    height="160%"
-                >
-                    <feMorphology
-                        in="SourceAlpha"
-                        operator="dilate"
-                        radius="0.8"
-                        result="dilated"
-                    />
-                    <feFlood floodColor={outline} result="outlineColor" />
-                    <feComposite
-                        in="outlineColor"
-                        in2="dilated"
-                        operator="in"
-                        result="outline"
-                    />
-                    <feMerge>
-                        <feMergeNode in="outline" />
-                        <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                </filter>
-            </defs>
-            <g fill={fill} filter={`url(#${filterId})`}>
-                {isKnight ? (
-                    <KnightShape markColor={outline} />
-                ) : (
-                    <PieceShape type={type} />
-                )}
-            </g>
+        <svg className={className} style={style} viewBox="0 0 45 45">
+            {PIECE_PATHS[code]}
         </svg>
     );
 }

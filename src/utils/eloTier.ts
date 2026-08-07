@@ -30,7 +30,7 @@ const ELO_TIERS: IEloTier[] = [
 
 export interface IEloTierResult extends IEloTier {
     next: IEloTier | null;
-    progress: number; // 0-100, % of the way to next tier; 100 if maxed out
+    progress: number;
 }
 
 export function getEloTier(elo: number): IEloTierResult {

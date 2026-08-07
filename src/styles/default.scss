@@ -1,90 +1,52 @@
-$whiteSmoke: #f5f5f5;
-$navText: #111827;
-$skeletonBg: #e8ecef;
-$vectorBlue: #9babfd;
-$greyText: #848b9e;
-$primaryBlue: #2a67ff;
-$primaryBlueHover: #2758d4;
-$lightCyanBlue: #e4e9ee;
-$topicalBlue: #cbdafa;
 $paleRed: #ff5c5c;
 $brinkPink: #f3a69e;
-$lightRed: #ffe8e6;
-$paleGray: #f7fafc;
-$darkIndigo: #0a193e;
-$white: #fff;
-$lightGrey: #d8dce1;
-$sunFlowerYellow: #f9df00;
-$goldenRod: #f1c40f;
 $greenishTeal: #39ff88;
 $black: #000000;
-$darkBlue: #041f61;
-$cardBorder: #f6f3f3;
-$outlineBlue: #bfd1ff;
-$cardDarkBg: #f0f5fa;
-$success: #e2f3e9;
-$error: #fd371e;
-$errorBg: #fff6f5;
-$errorBorder: #ffe4e1;
 
-$font8: 8px;
-$font9: 9px;
-$font10: 10px;
-$font11: 11px;
-$font12: 12px;
-$font13: 13px;
-$font14: 14px;
-$font15: 15px;
-$font16: 16px;
-$font18: 18px;
-$font20: 20px;
-$font22: 22px;
-$font24: 24px;
-$font28: 28px;
-$font30: 30px;
-$font32: 32px;
-$font34: 34px;
-$font36: 36px;
-$font44: 44px;
-$font45: 45px;
-$font56: 56px;
-$font58: 58px;
+$font12: 0.75rem;
+$font14: 0.875rem;
+$font15: 0.938rem;
+$font16: 1rem;
+$font18: 1.125rem;
+$font20: 1.25rem;
+$font24: 1.5rem;
+$font30: 1.9rem;
 
-// ── Breakpoints ───────────────────────────────────────────────────────────────
-$sm: 640px;
-$md: 768px;
-$lg: 1024px;
-$xl: 1280px;
-$xxl: 1536px;
+$fontOutfit: "Outfit-Regular";
+$fontOutfitThin: "Outfit-Thin";
+$fontOutfitExtraLight: "Outfit-ExtraLight";
+$fontOutfitLight: "Outfit-Light";
+$fontOutfitRegular: "Outfit-Regular";
+$fontOutfitMedium: "Outfit-Medium";
+$fontOutfitSemiBold: "Outfit-SemiBold";
+$fontOutfitBold: "Outfit-Bold";
+$fontOutfitExtraBold: "Outfit-ExtraBold";
+$fontOutfitBlack: "Outfit-Black";
 
-// ── KingStake: Obsidian Terminal palette ───────────────────────────────────────
-$appBg: #000000; // true black
-$appCard: #0c0e11; // dark surface
-$appSecondary: #14171c; // mid surface
-$appMuted: #050607; // deep black trough
-$appBorder: rgba(255, 255, 255, 0.09);
+$fontMono: $fontOutfitRegular;
+$fontDisplay: $fontOutfitSemiBold;
 
-// ── KingStake Accent — Bitcoin orange ──────────────────────────────────────────
+$appBg: #100f0c;
+$appSecondary: #14171c;
+$appSurface: #17150f;
+$appCardBorder: #29261b;
+$appLine: #262319;
+$appText: #ece8de;
+$appTextMuted: #8b8779;
+$appBtnBg: #00000059;
+$appBtnBorder: #ece8de38;
+
 $gold: #f7931a;
-$goldHover: #d97e0f;
-$goldMuted: rgba(247, 147, 26, 0.1);
-$goldGlow: rgba(247, 147, 26, 0.18);
 
-// ── KingStake Accent 2 — Acid green (live / active / positive) ─────────────────
 $cyan: #39ff88;
-$cyanHover: #2fe077;
-$cyanMuted: rgba(57, 255, 136, 0.1);
-$cyanGlow: rgba(57, 255, 136, 0.18);
 
-// ── KingStake radius scale — Obsidian Terminal (flat, HUD-terminal, not glass) ──
 $radiusSm: 0.2rem;
 $radiusMd: 0.3rem;
 $radiusLg: 0.4rem;
 
-// ── Outfit — self-hosted, same pattern as ecommerce-users-app: one distinct
-// family name per weight file (no font-weight descriptor on the @font-face
-// itself). Was previously referencing "Outfit" with no @font-face or Google
-// Fonts link anywhere, so it silently fell back to the system sans everywhere.
+$appCardRadius: 0.625rem;
+$appBtnRadius: 0.5rem;
+
 @font-face {
     font-family: "Outfit-Thin";
     src: url("/fonts/Outfit-Thin.ttf") format("truetype");
@@ -128,46 +90,5 @@ $radiusLg: 0.4rem;
 @font-face {
     font-family: "Outfit-Black";
     src: url("/fonts/Outfit-Black.ttf") format("truetype");
-    font-display: swap;
-}
-
-$fontOutfitThin: Outfit-Thin;
-$fontOutfitExtraLight: Outfit-ExtraLight;
-$fontOutfitLight: Outfit-Light;
-$fontOutfitRegular: Outfit-Regular;
-$fontOutfitMedium: Outfit-Medium;
-$fontOutfitSemiBold: Outfit-SemiBold;
-$fontOutfitBold: Outfit-Bold;
-$fontOutfitExtraBold: Outfit-ExtraBold;
-$fontOutfitBlack: Outfit-Black;
-
-@font-face {
-    font-family: "JetBrains Mono";
-    src: url("/fonts/JetBrainsMono-Regular.ttf") format("truetype");
-    font-weight: 400;
-    font-display: swap;
-}
-@font-face {
-    font-family: "JetBrains Mono";
-    src: url("/fonts/JetBrainsMono-Medium.ttf") format("truetype");
-    font-weight: 500;
-    font-display: swap;
-}
-@font-face {
-    font-family: "JetBrains Mono";
-    src: url("/fonts/JetBrainsMono-SemiBold.ttf") format("truetype");
-    font-weight: 600;
-    font-display: swap;
-}
-@font-face {
-    font-family: "JetBrains Mono";
-    src: url("/fonts/JetBrainsMono-Bold.ttf") format("truetype");
-    font-weight: 700;
-    font-display: swap;
-}
-@font-face {
-    font-family: "JetBrains Mono";
-    src: url("/fonts/JetBrainsMono-ExtraBold.ttf") format("truetype");
-    font-weight: 800;
     font-display: swap;
 }

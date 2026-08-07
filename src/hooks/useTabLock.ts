@@ -28,7 +28,6 @@ export function useTabLock(gameId: string | undefined, mode: string) {
             setStatus("primary");
         }
 
-        // ── BroadcastChannel ─────────────────────────────────────────────────
         let bc: BroadcastChannel | null = null;
         try {
             bc = new BroadcastChannel(channelName);
@@ -41,12 +40,9 @@ export function useTabLock(gameId: string | undefined, mode: string) {
                 }
             };
         } catch {
-            // BroadcastChannel unavailable — fall back to localStorage-only
+
         }
 
-        // ── Heartbeat — keeps our claim alive (primary) ──────────────────────
-        // Secondary tabs also run the interval but do a no-op since the entry
-        // won't start with their myId.
         const interval = setInterval(() => {
             const current = localStorage.getItem(storageKey);
             if (current?.startsWith(myId)) {
@@ -55,11 +51,10 @@ export function useTabLock(gameId: string | undefined, mode: string) {
         }, 2000);
         heartbeatRef.current = interval;
 
-        // ── Auto-promote when primary tab closes ─────────────────────────────
         const onStorage = (e: StorageEvent) => {
             if (e.key !== storageKey) return;
             if (e.newValue === null) {
-                // Primary tab removed the entry — try to claim.
+
                 localStorage.setItem(storageKey, `${myId}:${Date.now()}`);
                 setStatus("primary");
             }
@@ -71,7 +66,6 @@ export function useTabLock(gameId: string | undefined, mode: string) {
             heartbeatRef.current = null;
             window.removeEventListener("storage", onStorage);
 
-            // Release claim only if we still own it
             const current = localStorage.getItem(storageKey);
             if (current?.startsWith(myId)) {
                 localStorage.removeItem(storageKey);
@@ -82,9 +76,7 @@ export function useTabLock(gameId: string | undefined, mode: string) {
         };
     }, [gameId, mode, myId]);
 
-    /** Secondary tab clicks "Take Over" — claim primary on frontend side.
-     *  Caller must also emit `rejoin_game` to promote this socket on the backend. */
-    const takeOver = useCallback(() => {
+        const takeOver = useCallback(() => {
         if (!gameId) return;
         const storageKey = `kg_primary:${gameId}`;
         localStorage.setItem(storageKey, `${myId}:${Date.now()}`);
@@ -94,14 +86,12 @@ export function useTabLock(gameId: string | undefined, mode: string) {
             bc.postMessage({ type: "takeover", tabId: myId });
             bc.close();
         } catch {
-            /* ignore */
-        }
+                    }
 
         setStatus("primary");
     }, [gameId, myId]);
 
-    /** Called when the backend fires `tab_superseded` on this socket. */
-    const notifySuperseded = useCallback(() => setStatus("superseded"), []);
+        const notifySuperseded = useCallback(() => setStatus("superseded"), []);
 
     return { tabLockStatus: status, takeOver, notifySuperseded };
 }

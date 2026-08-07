@@ -1,0 +1,11 @@
+@use "../../../styles/default.scss" as *;
+
+.accordion {
+    background: $appSurface;
+    border: 1px solid $appCardBorder;
+    color: $appText;
+
+    &::before {
+        display: none;
+    }
+}

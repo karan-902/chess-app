@@ -2,8 +2,6 @@ import { useEffect, useRef, useState } from "react";
 
 const ANALYSIS_DEPTH = 10;
 
-// Converts a UCI "score mate N" into a large-magnitude centipawn number so it
-// sorts/subtracts correctly alongside real "score cp" values.
 function mateToCp(n: number): number {
     return n > 0 ? 100000 - n * 100 : -100000 - n * 100;
 }
@@ -16,7 +14,6 @@ function parseScore(line: string): number | null {
     return null;
 }
 
-// chess.com-style centipawn-loss -> accuracy curve, clamped to [0, 100].
 function cplToAccuracy(cpl: number): number {
     const raw = 103.1668 * Math.exp(-0.04354 * cpl) - 3.1669;
     return Math.max(0, Math.min(100, raw));
@@ -40,10 +37,6 @@ async function evaluatePosition(engine: Worker, fen: string): Promise<number> {
     });
 }
 
-// Post-game accuracy analysis: replays fenHistory through a dedicated
-// Stockfish worker (separate from the live opponent-move engine) to compute
-// the player's own centipawn loss per move, chess.com-style. Runs once,
-// triggered when `enabled` flips true (i.e. when the game ends).
 export function useGameAccuracy(
     fenHistory: string[],
     playerSide: "w" | "b",
@@ -95,7 +88,7 @@ export function useGameAccuracy(
             cancelled = true;
             engine.terminate();
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
     }, [enabled]);
 
     return { accuracy, analyzing };

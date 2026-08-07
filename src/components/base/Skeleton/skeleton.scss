@@ -4,9 +4,9 @@
     display: block;
     background: linear-gradient(
         90deg,
-        rgba($white, 0.05) 0%,
-        rgba($white, 0.1) 50%,
-        rgba($white, 0.05) 100%
+        rgba($appText, 0.05) 0%,
+        rgba($appText, 0.1) 50%,
+        rgba($appText, 0.05) 100%
     );
     background-size: 200% 100%;
     animation: skeleton-shimmer 1.4s ease-in-out infinite;
@@ -19,6 +19,11 @@
     }
     &.rounded {
         border-radius: $radiusMd;
+    }
+
+    &.wallet-btn-skeleton {
+        flex: 1;
+        border-radius: $appBtnRadius;
     }
 }
 

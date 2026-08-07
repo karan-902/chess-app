@@ -1,316 +1,301 @@
-import { useEffect } from "react";
-import { AnimatePresence } from "motion/react";
-import { useFormik } from "formik";
-import { object, string } from "yup";
-import { Link, useNavigate } from "react-router";
-import Box from "../../components/base/Box/Box";
-import Button from "../../components/base/Button/Button";
-import { Label } from "../../components/base/Label/label";
-import Input from "../../components/base/Input/Input";
-import Text from "../../components/base/Text/Text";
-import DeviceConflictModal from "@/components/DeviceConflictModal";
-
-import { callAPIInterface } from "../../utils";
-import { getDeviceFingerprint } from "@/utils/fingerprint";
-import sessionService from "../../store/sessionService";
-import { useGoogleAuth } from "../../hooks/useGoogleAuth";
-import { useReduxDispatch } from "../../store/hooks";
-import { showLoader, hideLoader } from "../../store/loader.slice";
-import EmailVerificationScreen from "../register/EmailVerificationScreen";
+import * as yup from "yup";
 import { useState } from "react";
+import { Link } from "react-router";
+import { ArrowLeft } from "lucide-react";
+import { useFormik, type FormikProps } from "formik";
+import Box from "@/components/base/Box/Box";
+import Text from "@/components/base/Text/Text";
+import Label from "@/components/base/Label/Label";
+import Input from "@/components/base/Input/Input";
+import Button from "@/components/base/Button/Button";
+import { useGoogleAuth } from "@/hooks/useGoogleAuth";
+import { callAPIInterface } from "@/utils";
+import { useReduxDispatch } from "@/redux/hooks";
+import { login } from "@/redux/thunks";
+import { showLoader, hideLoader } from "@/redux/loader.slice";
+import type { IVerifyUserBody } from "@/types/index";
+import type { IVerifyUserResponse } from "@/types/utils";
+import { SignupMethod } from "@/types/utils";
 import {
-    authBackLink,
-    authContinueWithGoogle,
     authEmailLabel,
     authEmailPlaceholder,
-    authOr,
     authPasswordLabel,
     authPasswordPlaceholder,
-    authLoginContinueButton,
-    authLoginForgotPassword,
-    authLoginIncorrectPassword,
-    authLoginNoAccountFound,
-    authLoginSignInButton,
-    authValidationEmailInvalid,
+    authOr,
+    authContinueWithGoogle,
     authValidationEmailRequired,
+    authValidationEmailInvalid,
     authValidationPasswordRequired,
-} from "@/components/messages";
-import type { ILoginBody, IVerifyUserBody } from "../../types/index";
-import type { ILoginResponse, IVerifyUserResponse } from "../../types/utils";
+    authLoginNoAccountFound,
+    authLoginBack,
+    authLoginForgotPassword,
+    authLoginContinueButton,
+    authLoginSignInButton,
+} from "@/constants/messages";
 import { GoogleIcon } from "@/components/constants";
 
-export default function LoginForm() {
-    const [step, setStep] = useState<"email" | "password" | "verify-otp">(
-        "email",
+const emailSchema = yup.object({
+    email: yup
+        .string()
+        .email(authValidationEmailInvalid)
+        .required(authValidationEmailRequired),
+});
+
+const passwordSchema = yup.object({
+    password: yup.string().required(authValidationPasswordRequired),
+});
+
+interface IEmailValues {
+    email: string;
+}
+
+interface IEmailScreenProps {
+    formik: FormikProps<IEmailValues>;
+    error: string | null;
+    isGoogleProcessing: boolean;
+    onGoogleLogin: () => void;
+}
+
+function EmailScreen({
+    formik,
+    error,
+    isGoogleProcessing,
+    onGoogleLogin,
+}: IEmailScreenProps) {
+    return (
+        <Box
+            customClass="auth-form"
+            component="form"
+            onSubmit={formik.handleSubmit as any}
+        >
+            <Box customClass="auth-field">
+                <Label htmlFor="email">{authEmailLabel}</Label>
+                <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder={authEmailPlaceholder}
+                    value={formik.values.email}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    isError={formik.touched.email && !!formik.errors.email}
+                    helperText={formik.errors.email}
+                    customClass="auth-input-underline"
+                    fullWidth
+                />
+            </Box>
+
+            {error && (
+                <Text customClass="auth-error">
+                    {error}
+                </Text>
+            )}
+
+            <Box customClass="auth-actions">
+                <Button
+                    type="submit"
+                    variant="contained"
+                    fullWidth
+                    customClass="auth-submit-btn"
+                    disabled={formik.isSubmitting}
+                    isLoading={formik.isSubmitting}
+                >
+                    {authLoginContinueButton}
+                </Button>
+
+                <Box customClass="auth-divider">
+                    <span>{authOr}</span>
+                </Box>
+
+                <Button
+                    type="button"
+                    startIcon={<GoogleIcon size={20} />}
+                    variant="outlined"
+                    fullWidth
+                    customClass="auth-google-btn"
+                    onClick={onGoogleLogin}
+                    disabled={isGoogleProcessing}
+                >
+                    {authContinueWithGoogle}
+                </Button>
+            </Box>
+        </Box>
     );
-    const [verifiedEmail, setVerifiedEmail] = useState("");
-    const [deviceConflict, setDeviceConflict] = useState<{
-        deviceName: string;
-        password: string;
-    } | null>(null);
-    const [confirmingSwitch, setConfirmingSwitch] = useState(false);
-    const navigate = useNavigate();
+}
+
+interface IPasswordValues {
+    password: string;
+}
+
+interface IPasswordScreenProps {
+    verifiedEmail: string;
+    formik: FormikProps<IPasswordValues>;
+    error: string | null;
+    onChangeEmail: () => void;
+}
+
+function PasswordScreen({
+    verifiedEmail,
+    formik,
+    error,
+    onChangeEmail,
+}: IPasswordScreenProps) {
+    return (
+        <Box
+            customClass="auth-form"
+            component="form"
+            onSubmit={formik.handleSubmit as any}
+        >
+            <Button
+                type="button"
+                startIcon={<ArrowLeft size={16} />}
+                customClass="auth-back-btn"
+                onClick={onChangeEmail}
+            >
+                {authLoginBack}
+            </Button>
+
+            <Box customClass="auth-field">
+                <Label htmlFor="verified-email">{authEmailLabel}</Label>
+                <Input
+                    id="verified-email"
+                    value={verifiedEmail}
+                    disabled
+                    readOnly
+                    customClass="auth-input-underline"
+                    fullWidth
+                />
+            </Box>
+
+            <Box customClass="auth-field">
+                <Label htmlFor="password">{authPasswordLabel}</Label>
+                <Input
+                    id="password"
+                    name="password"
+                    type="password"
+                    placeholder={authPasswordPlaceholder}
+                    value={formik.values.password}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    isError={
+                        formik.touched.password && !!formik.errors.password
+                    }
+                    helperText={formik.errors.password}
+                    customClass="auth-input-underline"
+                    fullWidth
+                />
+                <Link to="/forgot-password" className="auth-forgot-link">
+                    {authLoginForgotPassword}
+                </Link>
+            </Box>
+
+            {error && (
+                <Text customClass="auth-error">
+                    {error}
+                </Text>
+            )}
+
+            <Box customClass="auth-actions">
+                <Button
+                    type="submit"
+                    variant="contained"
+                    fullWidth
+                    customClass="auth-submit-btn"
+                    disabled={formik.isSubmitting}
+                    isLoading={formik.isSubmitting}
+                >
+                    {authLoginSignInButton}
+                </Button>
+            </Box>
+        </Box>
+    );
+}
+
+export default function LoginForm() {
     const dispatch = useReduxDispatch();
-    const { googleLogin, isProcessing } = useGoogleAuth("/sso-login", "login");
+    const [step, setStep] = useState<"email" | "password">("email");
+    const [verifiedEmail, setVerifiedEmail] = useState("");
+    const [error, setError] = useState<string | null>(null);
 
-    const attemptLogin = async (password: string, confirmSwitch: boolean) => {
-        const fingerprint = await getDeviceFingerprint();
-        console.log(fingerprint);
-        const res = await callAPIInterface<ILoginBody, ILoginResponse>(
-            "POST",
-            "/login",
-            {
-                email: verifiedEmail,
-                password,
-                fingerprint,
-                confirm_device_switch: confirmSwitch,
-            },
-        );
-        await sessionService.saveSession(res);
-        navigate(res.skill_level === null ? "/skill-level" : "/lobby");
-    };
-
-    useEffect(() => {
-        if (isProcessing)
-            dispatch(showLoader({ text: "Signing in with Google..." }));
-        else dispatch(hideLoader());
-        return () => {
-            dispatch(hideLoader());
-        };
-    }, [isProcessing]);
-
-    // ── Step 1: email ──
     const emailFormik = useFormik({
         initialValues: { email: "" },
-        validationSchema: object({
-            email: string()
-                .required(authValidationEmailRequired)
-                .email(authValidationEmailInvalid),
-        }),
-        onSubmit: async ({ email }, { setSubmitting, setFieldError }) => {
+        validationSchema: emailSchema,
+        onSubmit: async (values, { setSubmitting }) => {
+            setError(null);
             try {
                 const res = await callAPIInterface<
                     IVerifyUserBody,
                     IVerifyUserResponse
-                >("POST", "/verify-user", { email });
-                setVerifiedEmail(email);
-                if (res.signup_method === "google") {
+                >("POST", "/verify-user", { email: values.email });
+
+                if (res.signup_method === SignupMethod.GOOGLE) {
                     googleLogin();
-                } else if (!res.email_verified) {
-                    setStep("verify-otp");
-                } else {
-                    setStep("password");
+                    return;
                 }
-            } catch {
-                setFieldError("email", authLoginNoAccountFound);
+
+                setVerifiedEmail(values.email);
+                setStep("password");
+            } catch (err: any) {
+                setError(
+                    err?.response?.data?.message ?? authLoginNoAccountFound,
+                );
             } finally {
                 setSubmitting(false);
             }
         },
     });
 
-    // ── Step 2: password ──
-    const passwordFormik = useFormik({
+    const { googleLogin, isProcessing } = useGoogleAuth(
+        "/sso-login",
+        "login",
+        emailFormik.values.email,
+    );
+
+    const passwordFormik = useFormik<IPasswordValues>({
         initialValues: { password: "" },
-        validationSchema: object({
-            password: string().required(authValidationPasswordRequired),
-        }),
-        onSubmit: async ({ password }, { setSubmitting, setFieldError }) => {
+        validationSchema: passwordSchema,
+        onSubmit: async (values, { setSubmitting }) => {
+            setError(null);
             dispatch(showLoader({ text: "Signing in..." }));
             try {
-                await attemptLogin(password, false);
+                await dispatch(
+                    login({ email: verifiedEmail, password: values.password }),
+                ).unwrap();
             } catch (err: any) {
-                if (err?.response?.data?.type === "device_conflict") {
-                    setDeviceConflict({
-                        deviceName: err.response.data.existing_device,
-                        password,
-                    });
-                } else {
-                    setFieldError("password", authLoginIncorrectPassword);
-                }
+                setError(
+                    err?.message ??
+                        "Unable to sign in. Check your details and try again.",
+                );
             } finally {
-                dispatch(hideLoader());
                 setSubmitting(false);
+                dispatch(hideLoader());
             }
         },
     });
 
-    const handleConfirmDeviceSwitch = async () => {
-        if (!deviceConflict) return;
-        setConfirmingSwitch(true);
-        try {
-            await attemptLogin(deviceConflict.password, true);
-        } catch {
-            passwordFormik.setFieldError(
-                "password",
-                authLoginIncorrectPassword,
-            );
-        } finally {
-            setConfirmingSwitch(false);
-            setDeviceConflict(null);
-        }
+    const handleChangeEmail = () => {
+        setError(null);
+        passwordFormik.resetForm();
+        setStep("email");
     };
 
-    if (step === "verify-otp") {
+    if (step === "password") {
         return (
-            <EmailVerificationScreen
-                email={verifiedEmail}
-                onVerified={() => setStep("password")}
-                onBack={() => setStep("email")}
+            <PasswordScreen
+                verifiedEmail={verifiedEmail}
+                formik={passwordFormik}
+                error={error}
+                onChangeEmail={handleChangeEmail}
             />
         );
     }
 
-    if (step === "password") {
-        return (
-            <>
-                <Box
-                    as="form"
-                    customClass="auth-form"
-                    onSubmit={passwordFormik.handleSubmit}
-                >
-                    <Button
-                        type="button"
-                        variant="ghost"
-                        customClass="reg-back-link"
-                        onClick={() => setStep("email")}
-                    >
-                        {authBackLink}
-                    </Button>
-
-                    <Box customClass="auth-verified-email">
-                        <Text as="span" customClass="auth-verified-email-text">
-                            {verifiedEmail}
-                        </Text>
-                    </Box>
-
-                    <Box customClass="auth-field">
-                        <Label
-                            htmlFor="password"
-                            className="font-mono text-[11px] tracking-[0.08em] uppercase text-white/30"
-                        >
-                            {authPasswordLabel}
-                        </Label>
-                        <Input
-                            name="password"
-                            id="password"
-                            type="password"
-                            placeholder={authPasswordPlaceholder}
-                            autoComplete="current-password"
-                            value={passwordFormik.values.password}
-                            onChange={passwordFormik.handleChange}
-                            onBlur={passwordFormik.handleBlur}
-                            isError={
-                                passwordFormik.touched.password &&
-                                Boolean(passwordFormik.errors.password)
-                            }
-                            helperText={
-                                passwordFormik.touched.password
-                                    ? passwordFormik.errors.password
-                                    : undefined
-                            }
-                            fullWidth
-                        />
-                    </Box>
-
-                    <Box customClass="auth-forgot">
-                        <Link to="/forgot-password">
-                            {authLoginForgotPassword}
-                        </Link>
-                    </Box>
-
-                    <Button
-                        type="submit"
-                        fullWidth
-                        customClass="auth-submit-btn"
-                        isLoading={passwordFormik.isSubmitting}
-                        disabled={
-                            !passwordFormik.isValid || !passwordFormik.dirty
-                        }
-                    >
-                        {authLoginSignInButton}
-                    </Button>
-                </Box>
-
-                <AnimatePresence>
-                    {deviceConflict && (
-                        <DeviceConflictModal
-                            key="device-conflict-modal"
-                            deviceName={deviceConflict.deviceName}
-                            confirming={confirmingSwitch}
-                            onConfirm={handleConfirmDeviceSwitch}
-                            onCancel={() => setDeviceConflict(null)}
-                        />
-                    )}
-                </AnimatePresence>
-            </>
-        );
-    }
-
     return (
-        <Box customClass="login-form-wrap">
-            <Box
-                as="form"
-                customClass="auth-form"
-                onSubmit={emailFormik.handleSubmit}
-            >
-                <Box customClass="auth-field">
-                    <Label
-                        htmlFor="email"
-                        className="font-mono text-[11px] tracking-[0.08em] uppercase text-white/30"
-                    >
-                        {authEmailLabel}
-                    </Label>
-                    <Input
-                        name="email"
-                        id="email"
-                        type="email"
-                        placeholder={authEmailPlaceholder}
-                        autoComplete="email"
-                        value={emailFormik.values.email}
-                        onChange={emailFormik.handleChange}
-                        onBlur={emailFormik.handleBlur}
-                        isError={
-                            emailFormik.touched.email &&
-                            Boolean(emailFormik.errors.email)
-                        }
-                        helperText={
-                            emailFormik.touched.email
-                                ? emailFormik.errors.email
-                                : undefined
-                        }
-                        fullWidth
-                    />
-                </Box>
-
-                <Button
-                    type="submit"
-                    fullWidth
-                    customClass="auth-submit-btn"
-                    isLoading={emailFormik.isSubmitting}
-                    disabled={!emailFormik.isValid || !emailFormik.dirty}
-                >
-                    {authLoginContinueButton}
-                </Button>
-            </Box>
-
-            <Box customClass="auth-divider">
-                <Text as="span" customClass="auth-divider-text">
-                    {authOr}
-                </Text>
-            </Box>
-
-            <Button
-                type="button"
-                fullWidth
-                customClass="auth-google-btn"
-                onClick={() => googleLogin()}
-            >
-                <GoogleIcon size={18} />
-                <Text as="span" customClass="auth-google-btn-label">
-                    {authContinueWithGoogle}
-                </Text>
-            </Button>
-        </Box>
+        <EmailScreen
+            formik={emailFormik}
+            error={error}
+            isGoogleProcessing={isProcessing}
+            onGoogleLogin={() => googleLogin()}
+        />
     );
 }

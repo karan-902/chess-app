@@ -7,27 +7,31 @@ import {
     type ReactNode,
 } from "react";
 import { toast } from "sonner";
-import { Trophy, RefreshCw, Wallet } from "lucide-react";
+import { Trophy, RefreshCw, Wallet, Swords } from "lucide-react";
 import type { Socket } from "socket.io-client";
 import { connectSocket, disconnectSocket } from "@/lib/socket";
-import { useReduxSelector } from "@/store/hooks";
+import { useReduxSelector } from "@/redux/hooks";
 import { generateToken } from "@/utils";
 import { formateAmount } from "@/utils/formate";
-import sessionService from "@/store/sessionService";
+import sessionService from "@/redux/sessionService";
 import { router } from "@/routes/router";
 import { secondsToTimeControl } from "@/types/components";
 import Button from "@/components/base/Button/Button";
-import DeviceHandoffModal from "@/components/DeviceHandoffModal";
-import RejoinGameModal from "@/components/RejoinGameModal";
 
 import {
-    sessionTerminatedTitle,
-    sessionTerminatedDescription,
     activityFeedWin,
     deviceHandoffToastSuperseded,
     walletDepositCompletedToast,
     walletWithdrawCompletedToast,
-} from "@/components/messages";
+    friendsChallengeReceivedTitle,
+    friendsChallengeReceivedDesc,
+    friendsChallengeExpiredToast,
+    friendsChallengeDeclinedToast,
+    friendsChallengeCancelledToast,
+    friendsChallengeErrorFallback,
+    friendsRequestAccept,
+    friendsRequestDecline,
+} from "@/constants/messages";
 import type {
     IActivityFeedEvent,
     IActiveGameFoundResponse,
@@ -35,6 +39,12 @@ import type {
     IRematchExpiredResponse,
     IRematchFoundResponse,
     ITransactionCompletedEvent,
+    IChallengeReceivedResponse,
+    IChallengeDeclinedResponse,
+    IChallengeExpiredResponse,
+    IChallengeCancelledResponse,
+    IChallengeErrorResponse,
+    IChallengeMatchFoundResponse,
     Currency,
 } from "@/types/types";
 
@@ -44,12 +54,28 @@ interface IUserCounts {
     total: number;
 }
 
+export interface ISentChallenge {
+    friendId: string;
+    friendUsername: string;
+    stakeAmount: number;
+    currency: Currency;
+    secondsLeft: number;
+}
+
 interface ISocketContext {
     userCounts: IUserCounts;
     countsReady: boolean;
     myStatus: "active" | "inactive";
     socket: Socket | null;
     recentWins: IActivityFeedEvent[];
+    sentChallenge: ISentChallenge | null;
+    sendChallenge: (
+        friendId: string,
+        friendUsername: string,
+        stakeAmount: number,
+        currency: Currency,
+    ) => void;
+    cancelChallenge: () => void;
 }
 
 const RECENT_WINS_LIMIT = 12;
@@ -57,10 +83,7 @@ const RECENT_WINS_LIMIT = 12;
 const COUNTS_CACHE_KEY = "ks_user_counts";
 const REFRESH_FLAG_KEY = "ks_is_refreshing";
 const REFRESH_HOLD_MS = 4000;
-// Any other user's page reload looks like a departure-then-rejoin: the
-// server broadcasts the decremented count immediately on disconnect, then
-// the incremented one a moment later once they reconnect. Hold decreases
-// for this long so a same-user recovery within the window never renders.
+
 const DECREASE_GRACE_MS = 3000;
 
 function loadCachedCounts(): IUserCounts {
@@ -73,8 +96,6 @@ function loadCachedCounts(): IUserCounts {
 
 const DEFAULT_COUNTS: IUserCounts = { active: 0, inactive: 0, total: 0 };
 
-// Detect a browser refresh: beforeunload sets this flag, we consume it here
-// so it only affects the immediate next page load (not SPA navigations).
 const _isRefresh = (() => {
     try {
         const flag = sessionStorage.getItem(REFRESH_FLAG_KEY) === "1";
@@ -88,7 +109,6 @@ const _isRefresh = (() => {
 function RematchOfferModal({
     opponentName,
     stakeAmount,
-    currency,
     onAccept,
     onDismiss,
 }: {
@@ -102,21 +122,155 @@ function RematchOfferModal({
         <div className="gsm-backdrop" onClick={onDismiss}>
             <div className="gsm-panel" onClick={(e) => e.stopPropagation()}>
                 <div className="gsm-header">
-                    <RefreshCw size={16} style={{ color: "var(--gold, #f7931a)" }} />
+                    <RefreshCw
+                        size={16}
+                        style={{ color: "var(--gold, #f7931a)" }}
+                    />
                     <span className="gsm-modal-title">Rematch Offer</span>
                 </div>
                 <div className="gsm-body" style={{ textAlign: "center" }}>
                     <p className="device-conflict-desc">
-                        <strong>{opponentName}</strong> wants a rematch
-                        for <strong>{formateAmount(stakeAmount, currency)}</strong>
+                        <strong>{opponentName}</strong> wants a rematch for{" "}
+                        <strong>{formateAmount(stakeAmount)}</strong>
                     </p>
                 </div>
                 <div className="gsm-footer device-conflict-actions">
-                    <Button variant="outline" fullWidth onClick={onDismiss}>
+                    <Button variant="outlined" fullWidth onClick={onDismiss}>
                         Decline
                     </Button>
-                    <Button variant="primary" fullWidth onClick={onAccept}>
+                    <Button variant="contained" fullWidth onClick={onAccept}>
                         Accept
+                    </Button>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function ChallengeOfferModal({
+    challengerUsername,
+    stakeAmount,
+    onAccept,
+    onDecline,
+}: {
+    challengerUsername: string;
+    stakeAmount: number;
+    currency: Currency;
+    onAccept: () => void;
+    onDecline: () => void;
+}) {
+    return (
+        <div className="gsm-backdrop" onClick={onDecline}>
+            <div className="gsm-panel" onClick={(e) => e.stopPropagation()}>
+                <div className="gsm-header">
+                    <Swords
+                        size={16}
+                        style={{ color: "var(--gold, #f7931a)" }}
+                    />
+                    <span className="gsm-modal-title">
+                        {friendsChallengeReceivedTitle}
+                    </span>
+                </div>
+                <div className="gsm-body" style={{ textAlign: "center" }}>
+                    <p className="device-conflict-desc">
+                        {friendsChallengeReceivedDesc(
+                            challengerUsername,
+                            formateAmount(stakeAmount),
+                        )}
+                    </p>
+                </div>
+                <div className="gsm-footer device-conflict-actions">
+                    <Button variant="outlined" fullWidth onClick={onDecline}>
+                        {friendsRequestDecline}
+                    </Button>
+                    <Button variant="contained" fullWidth onClick={onAccept}>
+                        {friendsRequestAccept}
+                    </Button>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function DeviceHandoffModal({
+    deviceName,
+    onContinueHere,
+    onStayOnOther,
+}: {
+    deviceName: string | null;
+    onContinueHere: () => void;
+    onStayOnOther: () => void;
+}) {
+    return (
+        <div className="gsm-backdrop">
+            <div className="gsm-panel" onClick={(e) => e.stopPropagation()}>
+                <div className="gsm-header">
+                    <span className="gsm-modal-title">Signed in elsewhere</span>
+                </div>
+                <div className="gsm-body" style={{ textAlign: "center" }}>
+                    <p className="device-conflict-desc">
+                        {deviceName
+                            ? `${deviceName} is currently using your session.`
+                            : "Another device is currently using your session."}{" "}
+                        Continuing here will sign that device out.
+                    </p>
+                </div>
+                <div className="gsm-footer device-conflict-actions">
+                    <Button
+                        variant="outlined"
+                        fullWidth
+                        onClick={onStayOnOther}
+                    >
+                        Stay on other device
+                    </Button>
+                    <Button
+                        variant="contained"
+                        fullWidth
+                        onClick={onContinueHere}
+                    >
+                        Continue here
+                    </Button>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function RejoinGameModal({
+    opponentName,
+    opponentRating,
+    stakeAmount,
+    onRejoin,
+    onExit,
+}: {
+    opponentName: string;
+    opponentRating: number;
+    stakeAmount: number;
+    currency: Currency;
+    onRejoin: () => void;
+    onExit: () => void;
+}) {
+    return (
+        <div className="gsm-backdrop">
+            <div className="gsm-panel" onClick={(e) => e.stopPropagation()}>
+                <div className="gsm-header">
+                    <span className="gsm-modal-title">Game in progress</span>
+                </div>
+                <div className="gsm-body" style={{ textAlign: "center" }}>
+                    <p className="device-conflict-desc">
+                        You have an active game vs{" "}
+                        <strong>
+                            {opponentName} ({opponentRating})
+                        </strong>{" "}
+                        for <strong>{formateAmount(stakeAmount)}</strong>.
+                    </p>
+                </div>
+                <div className="gsm-footer device-conflict-actions">
+                    <Button variant="outlined" fullWidth onClick={onExit}>
+                        Exit
+                    </Button>
+                    <Button variant="contained" fullWidth onClick={onRejoin}>
+                        Rejoin
                     </Button>
                 </div>
             </div>
@@ -130,6 +284,9 @@ const SocketContext = createContext<ISocketContext>({
     myStatus: "inactive",
     socket: null,
     recentWins: [],
+    sentChallenge: null,
+    sendChallenge: () => {},
+    cancelChallenge: () => {},
 });
 
 export function SocketProvider({ children }: { children: ReactNode }) {
@@ -156,6 +313,37 @@ export function SocketProvider({ children }: { children: ReactNode }) {
     const setRematchOfferState = (offer: typeof rematchOffer) => {
         rematchOfferGameIdRef.current = offer?.gameId ?? null;
         setRematchOffer(offer);
+    };
+
+    const [incomingChallenge, setIncomingChallenge] = useState<{
+        challengerId: string;
+        challengerUsername: string;
+        stakeAmount: number;
+        currency: Currency;
+    } | null>(null);
+    const incomingChallengerIdRef = useRef<string | null>(null);
+    const setIncomingChallengeState = (offer: typeof incomingChallenge) => {
+        incomingChallengerIdRef.current = offer?.challengerId ?? null;
+        setIncomingChallenge(offer);
+    };
+
+    const [sentChallenge, setSentChallenge] = useState<ISentChallenge | null>(
+        null,
+    );
+    const sentChallengeRef = useRef<ISentChallenge | null>(null);
+    const challengeCountdownRef = useRef<ReturnType<typeof setInterval> | null>(
+        null,
+    );
+    const stopChallengeCountdown = () => {
+        if (challengeCountdownRef.current) {
+            clearInterval(challengeCountdownRef.current);
+            challengeCountdownRef.current = null;
+        }
+    };
+    const setSentChallengeState = (offer: ISentChallenge | null) => {
+        sentChallengeRef.current = offer;
+        setSentChallenge(offer);
+        if (!offer) stopChallengeCountdown();
     };
 
     const [deviceHandoff, setDeviceHandoff] = useState<string | null>(null);
@@ -208,10 +396,6 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         }
 
         const sock = connectSocket(session.access_token);
-        // Keep the singleton socket's auth in sync with the latest known-good
-        // token (this effect re-runs whenever a refresh — proactive or
-        // reactive — updates it), so a future auto-reconnect after a network
-        // drop never hands the server a token that was already stale.
         sock.auth = { token: session.access_token };
         setSocket(sock);
 
@@ -228,11 +412,7 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         };
 
         const onUserCounts = (counts: IUserCounts) => {
-            // Suppress stale decrements while a token-refresh reconnect is in flight.
             if (reconnectingRef.current) return;
-
-            // Post-refresh hold: ignore counts that are lower than the cached
-            // value so the brief disconnect dip never reaches the UI.
             if (Date.now() < holdUntilRef.current) {
                 if (counts.active >= displayedCountsRef.current.active) {
                     applyCounts(counts);
@@ -247,9 +427,6 @@ export function SocketProvider({ children }: { children: ReactNode }) {
             }
 
             if (counts.active < displayedCountsRef.current.active) {
-                // Someone else's reload looks identical to a departure at
-                // first — hold the drop briefly so their reconnect (which
-                // brings the count back up) can preempt it before it renders.
                 decreaseTimerRef.current = setTimeout(() => {
                     decreaseTimerRef.current = null;
                     applyCounts(counts);
@@ -261,8 +438,6 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         };
 
         const onConnect = () => {
-            // Reconnected after token refresh — lift suppression so the next
-            // user_counts broadcast (with this user included again) goes through.
             reconnectingRef.current = false;
         };
 
@@ -272,34 +447,22 @@ export function SocketProvider({ children }: { children: ReactNode }) {
             if (reconnectingRef.current) return;
             reconnectingRef.current = true;
 
-            // Halt socket.io's built-in auto-reconnect immediately.
-            // Without this, it retries with the still-expired token every
-            // reconnectionDelay ms, flooding the server with bad handshakes
-            // ("Error during WebSocket Handshake") and eventually triggering
-            // session_terminated which bounces the user to /login.
             sock.io.reconnection(false);
 
             try {
                 const newToken = await generateToken("socket_reconnect");
                 sock.auth = { token: newToken };
-                // Re-enable auto-reconnect BEFORE connecting so any subsequent
-                // network drops are handled normally.
+
                 sock.io.reconnection(true);
                 sock.connect();
             } catch {
-                // Token refresh failed (e.g. refresh token also expired).
                 reconnectingRef.current = false;
                 sock.io.reconnection(true);
                 console.warn("[Socket] token refresh failed — session expired");
             }
-            // reconnectingRef resets in onConnect after successful handshake
         };
 
         const onSessionTerminated = async () => {
-            toast.error(sessionTerminatedTitle, {
-                description: sessionTerminatedDescription,
-                duration: 5000,
-            });
             disconnectSocket();
             await sessionService.deleteSession();
             router.navigate("/login", { replace: true });
@@ -307,7 +470,7 @@ export function SocketProvider({ children }: { children: ReactNode }) {
 
         const onDeviceHandoffRequest = (data: { deviceName?: string }) => {
             deviceHandoffPendingRef.current = true;
-            // Suppress the rejoin modal while handoff is pending
+
             setActiveGame(null);
             setDeviceHandoff(data.deviceName ?? null);
         };
@@ -331,7 +494,7 @@ export function SocketProvider({ children }: { children: ReactNode }) {
             toast(
                 activityFeedWin(
                     data.winner_username,
-                    formateAmount(data.prize_usd, "USD"),
+                    formateAmount(data.prize_usd),
                     streakSuffix,
                 ),
                 {
@@ -342,7 +505,7 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         };
 
         const onTransactionCompleted = (data: ITransactionCompletedEvent) => {
-            const amount = formateAmount(data.amount_usd, "USD");
+            const amount = formateAmount(data.amount_usd);
             toast.success(
                 data.type === "DEPOSIT"
                     ? walletDepositCompletedToast(amount)
@@ -353,17 +516,11 @@ export function SocketProvider({ children }: { children: ReactNode }) {
 
         const onActiveGameFound = (data: IActiveGameFoundResponse) => {
             if (router.state.location.pathname === "/play") return;
-            // Don't surface rejoin modal while device handoff is pending —
-            // the handoff modal takes priority.
+
             if (deviceHandoffPendingRef.current) return;
             setActiveGame(data);
         };
 
-        // Global rematch-offer surface: if the recipient is still sitting on
-        // the finished game's own screen, useRematch's in-screen "opponent
-        // wants a rematch" UI handles it — this modal is only for everywhere
-        // else (lobby, a fresh matchmaking flow, etc.) where nothing else is
-        // listening for it.
         const onRematchOffered = (data: IRematchOfferedResponse) => {
             if (router.state.location.pathname === "/play") return;
             if (deviceHandoffPendingRef.current) return;
@@ -395,6 +552,63 @@ export function SocketProvider({ children }: { children: ReactNode }) {
             router.navigate(url, { replace: true });
         };
 
+        const onChallengeReceived = (data: IChallengeReceivedResponse) => {
+            setIncomingChallengeState({
+                challengerId: data.challenger_id,
+                challengerUsername: data.challenger_username,
+                stakeAmount: data.stake_amount,
+                currency: data.currency,
+            });
+        };
+
+        const onChallengeDeclined = (data: IChallengeDeclinedResponse) => {
+            if (sentChallengeRef.current?.friendId !== data.friend_id) return;
+            const username =
+                sentChallengeRef.current?.friendUsername ?? "Your friend";
+            setSentChallengeState(null);
+            toast.error(friendsChallengeDeclinedToast(username));
+        };
+
+        const onChallengeExpired = (data: IChallengeExpiredResponse) => {
+            if (
+                data.friend_id &&
+                sentChallengeRef.current?.friendId === data.friend_id
+            ) {
+                setSentChallengeState(null);
+                toast.error(friendsChallengeExpiredToast);
+            }
+            if (
+                data.challenger_id &&
+                incomingChallengerIdRef.current === data.challenger_id
+            ) {
+                setIncomingChallengeState(null);
+            }
+        };
+
+        const onChallengeCancelled = (data: IChallengeCancelledResponse) => {
+            if (incomingChallengerIdRef.current !== data.challenger_id) return;
+            setIncomingChallengeState(null);
+            toast.info(friendsChallengeCancelledToast);
+        };
+
+        const onChallengeError = (data: IChallengeErrorResponse) => {
+            toast.error(data.message || friendsChallengeErrorFallback);
+        };
+
+        const onChallengeMatchFound = (data: IChallengeMatchFoundResponse) => {
+            setSentChallengeState(null);
+            setIncomingChallengeState(null);
+            const url =
+                `/play?mode=pvp&time=${secondsToTimeControl(data.time_seconds)}` +
+                `&game_id=${data.game_id}&color=${data.your_color}` +
+                `&opponent=${encodeURIComponent(data.opponent.username)}` +
+                `&opp_rating=${data.opponent.elo_rating}&opp_id=${data.opponent.id}` +
+                `&opp_avatar_seed=${encodeURIComponent(data.opponent.avatar_seed ?? "")}` +
+                `&initial_timeout=${data.inactivity_timeout_seconds}` +
+                `&stake_amount=${data.stake_amount}`;
+            router.navigate(url, { replace: true });
+        };
+
         sock.on("connect", onConnect);
         sock.on("user_counts", onUserCounts);
         sock.on("activity_feed", onActivityFeed);
@@ -403,6 +617,12 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         sock.on("rematch_offered", onRematchOffered);
         sock.on("rematch_expired", onRematchExpired);
         sock.on("rematch_found", onGlobalRematchFound);
+        sock.on("challenge_received", onChallengeReceived);
+        sock.on("challenge_declined", onChallengeDeclined);
+        sock.on("challenge_expired", onChallengeExpired);
+        sock.on("challenge_cancelled", onChallengeCancelled);
+        sock.on("challenge_error", onChallengeError);
+        sock.on("challenge_match_found", onChallengeMatchFound);
         sock.on("connect_error", onConnectError);
         sock.on("session_terminated", onSessionTerminated);
         sock.on("device_handoff_request", onDeviceHandoffRequest);
@@ -420,9 +640,6 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         document.addEventListener("keypress", emitActivity);
         document.addEventListener("click", emitActivity);
 
-        // A backgrounded tab can sit on a stale count for a while even with
-        // the server's heartbeat broadcast — resync the instant it's looked
-        // at again instead of waiting out the rest of that interval.
         const onVisibilityChange = () => {
             if (document.visibilityState === "visible") {
                 sock.emit("request_user_counts");
@@ -439,6 +656,12 @@ export function SocketProvider({ children }: { children: ReactNode }) {
             sock.off("rematch_offered", onRematchOffered);
             sock.off("rematch_expired", onRematchExpired);
             sock.off("rematch_found", onGlobalRematchFound);
+            sock.off("challenge_received", onChallengeReceived);
+            sock.off("challenge_declined", onChallengeDeclined);
+            sock.off("challenge_expired", onChallengeExpired);
+            sock.off("challenge_cancelled", onChallengeCancelled);
+            sock.off("challenge_error", onChallengeError);
+            sock.off("challenge_match_found", onChallengeMatchFound);
             sock.off("connect_error", onConnectError);
             sock.off("session_terminated", onSessionTerminated);
             sock.off("device_handoff_request", onDeviceHandoffRequest);
@@ -478,15 +701,68 @@ export function SocketProvider({ children }: { children: ReactNode }) {
     const handleAcceptRematch = () => {
         if (!rematchOffer) return;
         socket?.emit("offer_rematch", { game_id: rematchOffer.gameId });
-        // Hide the modal, but deliberately keep rematchOfferGameIdRef pointed
-        // at this gameId — the rematch_found this triggers arrives moments
-        // later, and onGlobalRematchFound needs that ref intact to know it's
-        // ours to act on and navigate into the new game.
+
         setRematchOffer(null);
     };
 
     const handleDismissRematch = () => {
         setRematchOfferState(null);
+    };
+
+    const sendChallenge = (
+        friendId: string,
+        friendUsername: string,
+        stakeAmount: number,
+        currency: Currency,
+    ) => {
+        if (!socket) return;
+        socket.emit("challenge_friend", {
+            friend_id: friendId,
+            stake_amount: stakeAmount,
+            currency,
+        });
+        setSentChallengeState({
+            friendId,
+            friendUsername,
+            stakeAmount,
+            currency,
+            secondsLeft: 30,
+        });
+        stopChallengeCountdown();
+        challengeCountdownRef.current = setInterval(() => {
+            setSentChallenge((prev) =>
+                prev
+                    ? {
+                          ...prev,
+                          secondsLeft: Math.max(0, prev.secondsLeft - 1),
+                      }
+                    : prev,
+            );
+        }, 1000);
+    };
+
+    const cancelChallenge = () => {
+        if (!socket || !sentChallengeRef.current) return;
+        socket.emit("cancel_challenge", {
+            friend_id: sentChallengeRef.current.friendId,
+        });
+        setSentChallengeState(null);
+    };
+
+    const handleAcceptChallenge = () => {
+        if (!socket || !incomingChallenge) return;
+        socket.emit("accept_challenge", {
+            challenger_id: incomingChallenge.challengerId,
+        });
+        setIncomingChallengeState(null);
+    };
+
+    const handleDeclineChallenge = () => {
+        if (!socket || !incomingChallenge) return;
+        socket.emit("decline_challenge", {
+            challenger_id: incomingChallenge.challengerId,
+        });
+        setIncomingChallengeState(null);
     };
 
     const handleContinueHere = () => {
@@ -505,7 +781,16 @@ export function SocketProvider({ children }: { children: ReactNode }) {
 
     return (
         <SocketContext.Provider
-            value={{ userCounts, countsReady, myStatus, socket, recentWins }}
+            value={{
+                userCounts,
+                countsReady,
+                myStatus,
+                socket,
+                recentWins,
+                sentChallenge,
+                sendChallenge,
+                cancelChallenge,
+            }}
         >
             {children}
             {deviceHandoff !== null && (
@@ -534,6 +819,20 @@ export function SocketProvider({ children }: { children: ReactNode }) {
                     onDismiss={handleDismissRematch}
                 />
             )}
+            {incomingChallenge &&
+                deviceHandoff === null &&
+                !activeGame &&
+                !rematchOffer && (
+                    <ChallengeOfferModal
+                        challengerUsername={
+                            incomingChallenge.challengerUsername
+                        }
+                        stakeAmount={incomingChallenge.stakeAmount}
+                        currency={incomingChallenge.currency}
+                        onAccept={handleAcceptChallenge}
+                        onDecline={handleDeclineChallenge}
+                    />
+                )}
         </SocketContext.Provider>
     );
 }

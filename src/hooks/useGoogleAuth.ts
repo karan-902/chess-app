@@ -2,48 +2,55 @@ import { useEffect, useCallback, useState } from "react";
 import { useNavigate } from "react-router";
 import { useGoogleLogin } from "@react-oauth/google";
 import { toast } from "sonner";
-import { callAPIInterface } from "@/utils";
-import { getDeviceFingerprint } from "@/utils/fingerprint";
-import sessionService from "@/store/sessionService";
-import type { ISSOBody } from "@/types/index";
-import type { ILoginResponse } from "@/types/utils";
+import { useReduxDispatch } from "@/redux/hooks";
+import { googleLogin as googleLoginThunk } from "@/redux/thunks";
+import { showLoader, hideLoader } from "@/redux/loader.slice";
+
+const CONFIRM_SWITCH_KEY = "ks_sso_confirm_device_switch";
 
 export function useGoogleAuth(
     endpoint: "/sso-login" | "/sso-register",
     state: "login" | "register",
+    hint?: string,
 ) {
     const navigate = useNavigate();
-    const [isProcessing, setIsProcessing] = useState(
-        () => Boolean(new URLSearchParams(window.location.search).get("code")),
+    const dispatch = useReduxDispatch();
+    const [isProcessing, setIsProcessing] = useState(() =>
+        Boolean(new URLSearchParams(window.location.search).get("code")),
     );
 
-    const processCode = useCallback(async (code: string) => {
-        setIsProcessing(true);
-        try {
-            const fingerprint = await getDeviceFingerprint();
-            const res = await callAPIInterface<ISSOBody, ILoginResponse>("POST", endpoint, {
-                signup_method: "google",
-                google_token: code,
-                redirect_uri: window.location.origin,
-                fingerprint,
-            });
-            await sessionService.saveSession(res);
-            setIsProcessing(false);
-            navigate(res.skill_level === null ? "/skill-level" : "/lobby");
-        } catch (err: any) {
-            // Google auth codes are single-use, so a device conflict here
-            // can't be resolved by silently retrying the same code (unlike
-            // the email/password flow) — the user has to run Google sign-in
-            // again once they've decided to switch devices.
-            if (err?.response?.data?.type === "device_conflict") {
-                toast.error(
-                    `You're logged in on ${err.response.data.existing_device}. Sign in with Google again to switch to this device.`,
-                );
+    const processCode = useCallback(
+        async (code: string) => {
+            setIsProcessing(true);
+            dispatch(showLoader({ text: "Signing in..." }));
+
+            try {
+                const res = await dispatch(
+                    googleLoginThunk({
+                        endpoint,
+                        body: {
+                            signup_method: "google",
+                            google_token: code,
+                            redirect_uri: window.location.origin,
+                        },
+                    }),
+                ).unwrap();
+                navigate(res.skill_level === null ? "/skill-level" : "/play");
+            } catch (err: any) {
+                if (err?.type === "device_conflict") {
+                    sessionStorage.setItem(CONFIRM_SWITCH_KEY, "1");
+                    toast.error(
+                        `You're logged in on ${err.existing_device}. Sign in with Google again to switch to this device.`,
+                    );
+                }
+                console.error(err);
+            } finally {
+                setIsProcessing(false);
+                dispatch(hideLoader());
             }
-            console.error(err);
-            setIsProcessing(false);
-        }
-    }, [endpoint, navigate]);
+        },
+        [endpoint, navigate, dispatch],
+    );
 
     useEffect(() => {
         const code = new URLSearchParams(window.location.search).get("code");
@@ -56,7 +63,8 @@ export function useGoogleAuth(
         flow: "auth-code",
         ux_mode: "redirect",
         redirect_uri: window.location.origin,
-        state,
+        state: hint ? `${state}:${hint}` : state,
+        hint: hint || undefined,
         onError: () => console.error(`Google ${state} failed`),
     });
 

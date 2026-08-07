@@ -27,7 +27,7 @@ export function GoogleIcon({ size = 18 }: { size: number }) {
     );
 }
 
-export default function KingStakeLogo({
+export function ShatranjLogo({
     size = 40,
     showText = true,
     withCursor = false,
@@ -81,7 +81,7 @@ export default function KingStakeLogo({
                         textShadow: "0 0 18px rgba(247,147,26,0.45)",
                     }}
                 >
-                    KingStake
+                    Shatranj
                     {withCursor && <span className="logo-cursor" />}
                 </span>
             )}

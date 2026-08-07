@@ -13,16 +13,16 @@ import type {
 const DEFAULT_STATS: IPoolStats = { games: 0, players: 0 };
 
 function parseCategory(id: string): GameCategory {
-    const prefix = id.split("-")[0];
+    const prefix = id.split("-")[0]?.toUpperCase();
     if (
-        prefix === "bullet" ||
-        prefix === "blitz" ||
-        prefix === "rapid" ||
-        prefix === "classical"
+        prefix === "BULLET" ||
+        prefix === "BLITZ" ||
+        prefix === "RAPID" ||
+        prefix === "CLASSICAL"
     ) {
         return prefix;
     }
-    return "rapid";
+    return "RAPID";
 }
 
 export function usePools(poolType: PoolCategory = "all") {
@@ -37,18 +37,18 @@ export function usePools(poolType: PoolCategory = "all") {
             ...p,
             currency: data.currency,
             category: parseCategory(p.id),
+            timeSeconds: p.time_seconds,
         }));
         setPools(parsed);
         setStats(data.stats);
     }, []);
 
-    // ── Initial REST fetch, re-run whenever the category tab changes ───────────
     useEffect(() => {
         setLoading(true);
         setError(false);
         callAPIInterface<undefined, IPoolsResponse>(
             "GET",
-            `/matchmaking/pools?currency=${STAKE_CURRENCY}&pool_type=${poolType}`,
+            `/matchmaking/pools?pool_type=${poolType}`,
         )
             .then(applyResponse)
             .catch(() => {
@@ -59,7 +59,6 @@ export function usePools(poolType: PoolCategory = "all") {
             .finally(() => setLoading(false));
     }, [applyResponse, poolType]);
 
-    // ── Live updates via socket ───────────────────────────────────────────────
     useEffect(() => {
         if (!ctxSocket) return;
 

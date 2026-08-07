@@ -1,8 +1,5 @@
 @use "../../../styles/default.scss" as *;
 
-// Root class: .common-{componentName}
-// Sub-parts and variants (e.g. &.variant-name) nest inside it via SCSS &.
-// Anything rendered as a DOM sibling (not descendant) stays a flat top-level class.
 .common-select {
     position: relative;
     width: 100%;
@@ -15,12 +12,12 @@
         height: 2.75rem;
         padding: 0 1rem;
         background: $appSecondary;
-        border-color: $appBorder;
+        border-color: $appCardBorder;
         border-radius: $radiusMd;
         font-weight: 400;
 
         &:not(:disabled):hover {
-            border-color: rgba($white, 0.15);
+            border-color: rgba($appText, 0.15);
             color: inherit;
         }
 
@@ -40,17 +37,17 @@
     }
 
     .select-value {
-        font-family: var(--font-outfit);
+        font-family: $fontOutfit;
         font-size: $font14;
-        color: $white;
+        color: $appText;
 
         &.select-value--placeholder {
-            color: rgba($white, 0.28);
+            color: rgba($appText, 0.28);
         }
     }
 
     .select-chevron {
-        color: rgba($white, 0.4);
+        color: rgba($appText, 0.4);
         flex-shrink: 0;
         transition: transform 0.2s ease;
 
@@ -60,7 +57,7 @@
     }
 
     .select-search-icon {
-        color: rgba($white, 0.35);
+        color: rgba($appText, 0.35);
         flex-shrink: 0;
     }
 
@@ -69,12 +66,12 @@
         background: transparent;
         border: none;
         outline: none;
-        font-family: var(--font-outfit);
+        font-family: $fontOutfit;
         font-size: $font14;
-        color: $white;
+        color: $appText;
 
         &::placeholder {
-            color: rgba($white, 0.28);
+            color: rgba($appText, 0.28);
         }
     }
 
@@ -83,8 +80,8 @@
         top: calc(100% + 0.375rem);
         left: 0;
         right: 0;
-        background: $appCard;
-        border: 1px solid rgba($white, 0.1);
+        background: $appSurface;
+        border: 1px solid rgba($appText, 0.1);
         border-radius: $radiusLg;
         box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
         z-index: 50;
@@ -103,7 +100,7 @@
             background: transparent;
         }
         &::-webkit-scrollbar-thumb {
-            background: rgba($white, 0.12);
+            background: rgba($appText, 0.12);
             border-radius: 4px;
         }
     }
@@ -117,15 +114,15 @@
         padding: 0.375rem 0.75rem;
         border-radius: 0.5rem;
         background: transparent;
-        font-family: var(--font-outfit);
-        font-size: $font13;
+        font-family: $fontOutfit;
+        font-size: $font14;
         font-weight: 400;
-        color: rgba($white, 0.75);
+        color: rgba($appText, 0.75);
         text-align: left;
 
         &:not(:disabled):hover {
-            background: rgba($white, 0.06);
-            color: $white;
+            background: rgba($appText, 0.06);
+            color: $appText;
         }
 
         &.select-option--selected {
@@ -141,9 +138,9 @@
 
     .select-empty {
         padding: 1rem 0.75rem;
-        font-family: var(--font-outfit);
-        font-size: $font13;
-        color: rgba($white, 0.3);
+        font-family: $fontOutfit;
+        font-size: $font14;
+        color: rgba($appText, 0.3);
         text-align: center;
     }
 }

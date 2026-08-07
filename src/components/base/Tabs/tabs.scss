@@ -1,0 +1,19 @@
+@use "../../../styles/default.scss" as *;
+
+.tabs {
+    min-height: unset;
+
+    .MuiTabs-indicator {
+        background: $gold;
+    }
+}
+
+.tab {
+    text-transform: none;
+    color: rgba($appText, 0.55);
+    font-family: $fontOutfit;
+
+    &.Mui-selected {
+        color: $gold;
+    }
+}

@@ -1,5 +1,3 @@
-// ── Enums ────────────────────────────────────────────────────────────────────
-
 export enum SignupMethod {
     EMAIL = "email",
     GOOGLE = "google",
@@ -13,16 +11,12 @@ export enum SessionState {
 
 export type SkillLevel = "beginner" | "intermediate" | "advanced" | "expert";
 
-// ── API response types ────────────────────────────────────────────────────────
-
-// POST /verify-user
 export type IVerifyUserResponse = {
     email: string;
     signup_method: SignupMethod;
     email_verified: boolean;
 };
 
-// POST /register
 export type IRegisterResponse = {
     id: string;
     first_name: string;
@@ -31,14 +25,13 @@ export type IRegisterResponse = {
     email: string;
     country: string;
     signup_method: SignupMethod;
-    elo_rating: number | null; // null until skill level selected
+    elo_rating: number | null;
     current_streak: number;
     best_streak: number;
     skill_level: SkillLevel | null;
     created: number;
 };
 
-// POST /sso-register, /login, /sso-login
 export type ILoginResponse = {
     id: string;
     first_name: string;
@@ -46,7 +39,7 @@ export type ILoginResponse = {
     username: string;
     email: string;
     country: string;
-    elo_rating: number | null; // null until skill level selected
+    elo_rating: number | null;
     ratings: IRatingsBreakdown;
     current_streak: number;
     best_streak: number;
@@ -61,23 +54,20 @@ export type ILoginResponse = {
 };
 
 export type IRatingsBreakdown = {
-    bullet: number | null;
-    blitz: number | null;
-    rapid: number | null;
-    classical: number | null;
+    BULLET: number | null;
+    BLITZ: number | null;
+    RAPID: number | null;
+    CLASSICAL: number | null;
 };
 
-// GET /profile
 export type IProfileResponse = {
     id: string;
     first_name: string;
     last_name: string;
-    username: string; // backend returns "username" (not "user_name")
+    username: string;
     email: string;
     country: string;
-    // Rapid rating — kept for compact displays (AppBar badge, etc.); see
-    // `ratings` for the full per-category (bullet/blitz/rapid/classical)
-    // breakdown. Both null until skill level selected.
+
     elo_rating: number | null;
     ratings: IRatingsBreakdown;
     skill_level: SkillLevel | null;
@@ -87,22 +77,16 @@ export type IProfileResponse = {
     avatar_seed: string | null;
 };
 
-// PUT /profile
 export type IUpdateProfileBody = {
     first_name?: string;
     last_name?: string;
-    username?: string; // note: backend field is "username" not "user_name"
+    username?: string;
     country?: string;
     avatar_seed?: string;
-    // elo_rating is intentionally excluded — not updatable via this endpoint
 };
 
 export type IUpdateProfileResponse = IProfileResponse;
 
-// POST /deposit (Speed API)
-export type ICreatePaymentResponse = Record<string, unknown>;
-
-// GET /wallet
 export type IWalletBalanceResponse = {
     balance_usd: number;
     deposit_usd: number;
@@ -111,7 +95,6 @@ export type IWalletBalanceResponse = {
     pending_withdrawal_usd: number;
 };
 
-// POST /wallet/withdraw
 export type WithdrawMethod = "lightning" | "onchain";
 
 export type IWithdrawBody = {
@@ -128,12 +111,17 @@ export type TransactionType =
     | "DEPOSIT"
     | "WITHDRAW"
     | "WITHDRAW_REFUND"
-    | "STAKE_ESCROW"
-    | "PAYOUT"
+    | "STAKE"
+    | "SETTLEMENT"
     | "DRAW_REFUND"
-    | "ESCROW_REFUND";
+    | "STAKE_REFUND";
 
-// GET /wallet/transactions
+export type ITransactionsFilterBody = {
+    types?: TransactionType[];
+    from?: number;
+    to?: number;
+};
+
 export type ITransactionResponse = {
     id: string;
     type: TransactionType;
@@ -151,14 +139,6 @@ export type ITransactionsResponse = {
     page_id: string | null;
 };
 
-// GET /wallet/stats
-export type IWalletStatsResponse = {
-    deposited_usd: number;
-    withdrawn_usd: number;
-    net_payouts_usd: number;
-};
-
-// POST /deposit
 export type IInitiateDepositBody = {
     amount_usd: number;
 };
@@ -172,23 +152,11 @@ export type IInitiateDepositResponse = {
     status: "PENDING";
 };
 
-// GET /profile/avatar-options
 export type IAvatarOptionsResponse = {
     style: string;
     seeds: string[];
 };
 
-// POST /profile/skill-level
-export type ISetSkillLevelBody = {
-    skill_level: SkillLevel;
-};
-
-export type ISetSkillLevelResponse = {
-    skill_level: SkillLevel;
-    elo_rating: number;
-};
-
-// GET /game/:game_id
 export type IGameRestoreResponse = {
     game_id: string;
     status: "ONGOING" | "COMPLETED" | "ABANDONED";
@@ -217,17 +185,48 @@ export type IGameRestoreResponse = {
     }>;
 };
 
-// POST /generate-token
 export type IGenerateTokenResponse = {
     access_token: string;
 };
 
-// POST /logout
 export type ILogoutResponse = {
     message: string;
 };
 
-// POST /forgot-password, /reset-password
 export type IMessageResponse = {
     message: string;
+};
+
+export type FriendStatus =
+    | "none"
+    | "pending_sent"
+    | "pending_received"
+    | "friends";
+
+export type IFriendListItem = {
+    id: string;
+    username: string;
+    avatar_seed: string | null;
+    is_online: boolean;
+};
+
+export type IFriendRequestResponse = {
+    id: string;
+    user: {
+        id: string;
+        username: string;
+        avatar_seed: string | null;
+    };
+    created: number;
+};
+
+export type ISearchResultItem = {
+    id: string;
+    username: string;
+    avatar_seed: string | null;
+    friend_status: FriendStatus;
+};
+
+export type ISendFriendRequestBody = {
+    addressee_id: string;
 };

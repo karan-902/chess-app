@@ -1,23 +1,35 @@
-import clsx from "clsx";
+import { AppBar as MuiAppBar, Toolbar } from "@mui/material";
+import type { AppBarProps } from "@mui/material";
+import classNames from "classnames";
 import { Link } from "react-router";
-import Box from "@/components/base/Box/Box";
-import KingStakeLogo from "@/components/constants";
+import type { ReactNode } from "react";
+import { ShatranjLogo } from "@/components/constants";
 import "./appbar.scss";
 
-interface IAppBarProps {
-    children?: React.ReactNode;
+interface IAppBarProps extends AppBarProps {
     customClass?: string;
+    toolbarClass?: string;
+    bottomSlot?: ReactNode;
 }
 
-function AppBar({ children, customClass }: IAppBarProps) {
+export default function AppBar({
+    customClass,
+    toolbarClass,
+    children,
+    bottomSlot,
+    ...props
+}: IAppBarProps) {
+    const classes = classNames("appbar", customClass);
+    const toolbarClasses = classNames("toolbar", toolbarClass);
     return (
-        <Box as="header" customClass={clsx("common-appbar", customClass)}>
-            <Link to="/lobby" className="appbar-brand" title="Go to Lobby">
-                <KingStakeLogo size={26} showText={false} withCursor />
-            </Link>
-            {children}
-        </Box>
+        <MuiAppBar {...props} className={classes} position="static">
+            <Toolbar className={toolbarClasses}>
+                <Link to="/play" className="appbar-brand" title="Go to Play">
+                    <ShatranjLogo size={26} showText={false} withCursor />
+                </Link>
+                {children}
+            </Toolbar>
+            {bottomSlot}
+        </MuiAppBar>
     );
 }
-
-export default AppBar;

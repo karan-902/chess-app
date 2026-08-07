@@ -13,14 +13,12 @@ export function useGameClock(timeControl: TimeControl, paused: boolean, turn: "w
 
     useEffect(() => { turnRef.current = turn; }, [turn]);
 
-    // Total elapsed game time
     useEffect(() => {
         if (paused) return;
         const id = setInterval(() => setElapsed(s => s + 1), 1000);
         return () => clearInterval(id);
     }, [paused]);
 
-    // Per-player countdown — self-terminates when a player times out
     useEffect(() => {
         if (paused) return;
         const id = setInterval(() => {
@@ -48,11 +46,6 @@ export function useGameClock(timeControl: TimeControl, paused: boolean, turn: "w
         timedOutRef.current = null;
     };
 
-    // Re-syncs the visual clock to the server's authoritative values (pvp
-    // `clock_update`, sent on every move). The local per-second countdown
-    // above is just interpolation between syncs — this corrects any drift
-    // and, since a fresh sync only ever arrives while the game is still
-    // ongoing, also clears any locally-guessed timedOut state.
     const syncClock = (whiteMs: number, blackMs: number) => {
         setWhiteTime(Math.round(whiteMs / 1000));
         setBlackTime(Math.round(blackMs / 1000));

@@ -1,10 +1,20 @@
-import { Currency } from "@/types/types";
+import dayjs from "dayjs";
 
-export function formateAmount(amount: number, currency: Currency): string {
-    if (currency === "BTC") {
-        return `${parseFloat(amount.toFixed(8))} BTC`;
-    }
-    return `$${amount.toFixed(2)}`;
+const currencyFormatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+});
+
+export function formateAmount(amount: number): string {
+    return currencyFormatter.format(amount);
+}
+
+export function formateTime(date: number | Date): string {
+    return dayjs(date).format("h:mm A");
+}
+
+export function formateText(text: string): string {
+    return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
 }
 
 export function formateTimeControl(time: string): string {

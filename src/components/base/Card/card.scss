@@ -1,10 +1,10 @@
 @use "../../../styles/default.scss" as *;
 
-.common-card {
+.card {
     position: relative;
-    background: $appCard;
-    border: 1px solid $appBorder;
-    border-radius: $radiusMd;
+    background: $appSurface;
+    border: 1px solid $appCardBorder;
+    border-radius: $appCardRadius;
 
     &.clickable {
         cursor: pointer;
@@ -19,7 +19,6 @@
         }
     }
 
-    // ── Matchmaking pool card ─────────────────────────────────────────────────
     &.pool-card {
         padding: 0.8rem 0.9rem;
         border-radius: $radiusLg;
@@ -31,7 +30,6 @@
         }
     }
 
-    // ── Matchmaking sticky CTA ───────────────────────────────────────────────
     &.matchmaking-cta {
         border-radius: 0.7rem;
         background: $appSecondary;
@@ -100,11 +98,10 @@
                 rgba($gold, 0.1) 0%,
                 transparent 70%
             ),
-            $appCard;
+            $appSurface;
         border-color: rgba($gold, 0.22);
     }
 
-    // ── Wallet transaction item ───────────────────────────────────────────────
     &.tx-item {
         display: flex;
         align-items: center;
@@ -154,7 +151,6 @@
         }
     }
 
-    // ── Register method row ───────────────────────────────────────────────────
     &.reg-method-row {
         display: flex;
         align-items: center;
@@ -163,7 +159,6 @@
         border-radius: $radiusMd;
     }
 
-    // ── Skill Level rung (Vertical Ladder) ────────────────────────────────────
     &.skill-rung {
         display: flex;
         align-items: center;
@@ -174,6 +169,110 @@
 
         &.active {
             background: rgba($gold, 0.07);
+        }
+    }
+
+    &.friend-row {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        padding: 0.65rem 0.7rem;
+        margin-bottom: 0.4rem;
+        cursor: pointer;
+    }
+
+    &.friend-search-row {
+        margin-bottom: 0.4rem;
+        cursor: default;
+    }
+
+    &.friend-request-banner {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.7rem 0.8rem;
+        margin-bottom: 0.5rem;
+        border-color: rgba($gold, 0.3);
+    }
+
+    &.friend-challenge-waiting {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.6rem;
+        padding: 0.7rem 0.8rem;
+        margin-bottom: 0.9rem;
+        border-color: rgba($gold, 0.3);
+    }
+
+    &.stake-card {
+        padding: 1.1rem 0.9rem;
+        text-align: center;
+
+        &.practice.wide {
+            grid-column: 1 / -1;
+        }
+    }
+
+    .stake-card-live-corner {
+        position: absolute;
+        top: 0.7rem;
+        right: 0.7rem;
+    }
+
+    .stake-card-icon {
+        font-size: $font14;
+        line-height: 1;
+        color: $gold;
+    }
+
+    .stake-card-practice-title {
+        margin-bottom: 0.15rem;
+    }
+
+    &.matches-stat-list {
+        overflow: hidden;
+        flex: 1;
+        min-height: 0;
+    }
+
+    &.profile-id-card {
+        padding: 1.1rem 1rem;
+        margin-bottom: 1.1rem;
+    }
+
+    &.lb-row {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.7rem 0.85rem;
+        margin-bottom: 0.45rem;
+        font-size: $font14;
+        font-weight: 600;
+
+        &.me {
+            border-color: $gold;
+
+            .lb-earnings {
+                color: $gold;
+            }
+        }
+    }
+
+    &.backdrop-loader-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 200px;
+        height: 150px;
+        border-radius: 5px;
+        border-color: rgba($gold, 0.25);
+
+        .backdrop-loader-anim {
+            width: 84px;
+            height: 84px;
+            margin: 0 25px 10px;
         }
     }
 }

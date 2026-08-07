@@ -1,32 +1,26 @@
-// ── General app types ─────────────────────────────────────────────────────────
-
-export type Currency = "BTC" | "USD";
+export type Currency = "USD";
 export type View = "play" | "matchmaking" | "wallet" | "leaderboard";
 export type TBoard = (string | null)[][];
-export type PoolCategory = "all" | "bullet" | "blitz" | "rapid" | "classical";
+export type PoolCategory = "all" | "BULLET" | "BLITZ" | "RAPID" | "CLASSICAL";
 export type GameCategory = Exclude<PoolCategory, "all">;
 
-// ── Pool ──────────────────────────────────────────────────────────────────────
-
 export interface Pool {
-    id: string; // e.g. "bullet-1-BTC"
-    category: GameCategory; // derived on frontend from id prefix
-    currency: Currency; // added from response wrapper
-    stake: number; // e.g. 0.00001
-    prize: number; // e.g. 0.000018
-    time: string; // e.g. "3+2" (minutes+increment)
-    timeSeconds: number; // e.g. 180
+    id: string;
+    category: GameCategory;
+    currency: Currency;
+    stake: number;
+    prize: number;
+    time: string;
+    timeSeconds: number;
     players: number;
     active: number;
-    hot: boolean; // true if players >= 3 or active >= 2
+    hot: boolean;
 }
 
 export interface IPoolStats {
     games: number;
     players: number;
 }
-
-// ── REST ──────────────────────────────────────────────────────────────────────
 
 export interface IPoolsResponse {
     currency: Currency;
@@ -43,15 +37,11 @@ export interface IPoolsResponse {
     }[];
 }
 
-// ── Socket: Client → Server ───────────────────────────────────────────────────
-
 export interface IjoinQueueBody {
     stake_amount: number;
     currency: Currency;
     pool_type: PoolCategory;
 }
-
-// ── Socket: Server → Client ───────────────────────────────────────────────────
 
 export interface IqueueJoinedResponse {
     message: string;
@@ -75,8 +65,6 @@ export interface ImatchFoundResponse {
         avatar_seed: string | null;
     };
 }
-
-// ── Rematch ────────────────────────────────────────────────────────────────────
 
 export interface IRematchOfferedResponse {
     game_id: string;
@@ -107,8 +95,6 @@ export interface IRematchFoundResponse {
     inactivity_timeout_seconds: number;
 }
 
-// ── Reconnect to an ongoing game after a dropped/closed session ────────────────
-
 export interface IActiveGameFoundResponse {
     game_id: string;
     your_color: "white" | "black";
@@ -132,6 +118,47 @@ export interface IqueueErrorResponse {
 }
 export interface IQueueTimeoutResponse {
     message: string;
+}
+
+export interface IChallengeReceivedResponse {
+    challenger_id: string;
+    challenger_username: string;
+    stake_amount: number;
+    currency: Currency;
+}
+
+export interface IChallengeDeclinedResponse {
+    friend_id: string;
+    message?: string;
+}
+
+export interface IChallengeExpiredResponse {
+    friend_id?: string;
+    challenger_id?: string;
+}
+
+export interface IChallengeCancelledResponse {
+    challenger_id: string;
+}
+
+export interface IChallengeErrorResponse {
+    message: string;
+}
+
+export interface IChallengeMatchFoundResponse {
+    message: string;
+    game_id: string;
+    stake_amount: number;
+    currency: Currency;
+    time_seconds: number;
+    inactivity_timeout_seconds: number;
+    your_color: "white" | "black";
+    opponent: {
+        id: string;
+        username: string;
+        elo_rating: number;
+        avatar_seed: string | null;
+    };
 }
 
 export interface ISettlementSide {
@@ -183,17 +210,33 @@ export interface IdrawOfferedResponse {
     offered_by: string;
 }
 
+export interface IdrawRejectedResponse {
+    game_id: string;
+}
+
+export interface ISocketErrorResponse {
+    message: string;
+}
+
+export interface IopponentDisconnectedResponse {
+    game_id: string;
+    grace_period_seconds: number;
+}
+
+export interface IopponentReconnectedResponse {
+    game_id: string;
+}
+
 export interface IinactivityTimeoutResponse {
     game_id: string;
     loser_id: string;
     reason: "inactivity";
     settlement: IGameSettlement | null;
     your_elo_gain?: number;
+    your_streak?: number;
 }
 
 export interface IMatchFound extends ImatchFoundResponse {}
-
-// ── Leaderboard ───────────────────────────────────────────────────────────────
 
 export interface ILeaderboardPlayer {
     rank: number;
@@ -202,15 +245,13 @@ export interface ILeaderboardPlayer {
     country: string;
     elo_rating: number;
     avatar_seed: string | null;
-    earnings: number; // in the subscribed currency, 0 if none
+    earnings: number;
 }
 
 export interface ILeaderboardResponse {
     currency: Currency;
     players: ILeaderboardPlayer[];
 }
-
-// ── Activity Feed ──────────────────────────────────────────────────────────────
 
 export interface IActivityFeedEvent {
     winner_id: string;
@@ -219,20 +260,15 @@ export interface IActivityFeedEvent {
     winner_streak: number;
 }
 
-// ── Wallet ────────────────────────────────────────────────────────────────────
-
 export interface ITransactionCompletedEvent {
     type: "DEPOSIT" | "WITHDRAW";
     amount_usd: number;
 }
 
-// ── Game History ──────────────────────────────────────────────────────────────
-
 export interface IGameHistoryOpponent {
     id: string;
     username: string;
     elo_rating: number;
-    avatar_seed: string | null;
 }
 
 export interface IGameHistoryItem {
@@ -242,27 +278,24 @@ export interface IGameHistoryItem {
     end_reason: string;
     elo_change: number;
     stake_amount: number;
-    currency: Currency;
-    settlement_usd: number; // net (+profit/-stake) in USD at settlement time, 0 on draw
+    settlement_usd: number;
     time_seconds: number;
-    played_at: number; // Unix ms timestamp
+    played_at: number;
 }
 
 export interface IGameHistoryResponse {
     has_more: boolean;
     object: "list";
-    page_id: string | null; // opaque cursor, pass as ending_before to get next page
+    page_id: string | null;
     data: IGameHistoryItem[];
 }
 
-// GET /game/history/stats — all-time, not scoped to whatever page is loaded
 export interface IGameHistoryStatsResponse {
     win_rate: number;
     games: number;
-    net_pl_usd: number;
+    current_streak: number;
+    best_streak: number;
 }
-
-// ── Other ─────────────────────────────────────────────────────────────────────
 
 export interface Transaction {
     id: number;

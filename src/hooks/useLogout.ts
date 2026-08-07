@@ -1,15 +1,18 @@
 import { useNavigate } from "react-router";
 import { callAPIInterface } from "@/utils";
-import sessionService from "@/store/sessionService";
-import { useReduxSelector } from "@/store/hooks";
+import sessionService from "@/redux/sessionService";
+import { useReduxSelector, useReduxDispatch } from "@/redux/hooks";
+import { showLoader, hideLoader } from "@/redux/loader.slice";
 import type { ILogoutBody } from "@/types/index";
 import type { ILogoutResponse } from "@/types/utils";
 
 export function useLogout() {
     const navigate = useNavigate();
+    const dispatch = useReduxDispatch();
     const session = useReduxSelector((s) => s.auth.session);
 
     return async () => {
+        dispatch(showLoader({ text: "Logging out..." }));
         try {
             if (session?.session_id) {
                 await callAPIInterface<ILogoutBody, ILogoutResponse>(
@@ -18,11 +21,12 @@ export function useLogout() {
                     { session_id: session.session_id },
                 );
             }
-        } catch {
-            // proceed with client-side logout regardless
+        } catch (error) {
+            console.error(error);
         } finally {
             await sessionService.deleteSession();
             navigate("/login");
+            dispatch(hideLoader());
         }
     };
 }

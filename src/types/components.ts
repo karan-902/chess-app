@@ -1,13 +1,15 @@
+import { GameCategory } from "./types";
+
 export type GameMode = "pvp" | "pvc";
 export type Difficulty = "easy" | "medium" | "hard";
 export type TimeControl = "bullet" | "blitz" | "rapid" | "classical";
 export type GamePhase = "lobby" | "playing";
 
-export const TIME_SECONDS: Record<TimeControl, number> = {
-    bullet: 60,
-    blitz: 300,
-    rapid: 600,
-    classical: 1800,
+export const TIME_SECONDS: Record<GameCategory, number> = {
+    BULLET: 60,
+    BLITZ: 300,
+    RAPID: 600,
+    CLASSICAL: 1800,
 };
 
 export function secondsToTimeControl(seconds: number): TimeControl {
@@ -18,11 +20,18 @@ export function secondsToTimeControl(seconds: number): TimeControl {
 }
 
 export function getInactivitySeconds(timeSeconds: number): number {
-    if (timeSeconds <= 60) return 15; // bullet
-    if (timeSeconds <= 180) return 30; // blitz
-    if (timeSeconds <= 600) return 60; // rapid
+    if (timeSeconds <= 60) return 15;
+    if (timeSeconds <= 180) return 30;
+    if (timeSeconds <= 600) return 60;
     return 90;
 }
+
+export const CATEGORY_INACTIVITY_SECONDS: Record<TimeControl, number> = {
+    bullet: 15,
+    blitz: 30,
+    rapid: 60,
+    classical: 90,
+};
 
 export const DIFFICULTY_CONFIG: Record<
     Difficulty,

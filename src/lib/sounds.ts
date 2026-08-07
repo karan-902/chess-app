@@ -12,8 +12,6 @@ export type SoundName = keyof typeof SOUND_FILES;
 
 const audioCache = new Map<SoundName, HTMLAudioElement>();
 
-/** Plays a sound by name. Clones the cached element so overlapping rapid
- * plays (e.g. a move immediately followed by check) don't cut each other off. */
 export function playSound(name: SoundName, volume = 0.5): void {
     let base = audioCache.get(name);
     if (!base) {
@@ -22,7 +20,7 @@ export function playSound(name: SoundName, volume = 0.5): void {
     }
     const instance = base.cloneNode(true) as HTMLAudioElement;
     instance.volume = volume;
-    // Autoplay can reject before the first user gesture — ignore, not fatal.
+
     instance.play().catch(() => {});
 }
 
@@ -32,8 +30,6 @@ interface IMoveSoundInput {
     promotion?: string;
 }
 
-/** Picks the right sound for a chess.js move result, mirroring chess.com's
- * priority order: game-over > check > promotion > castle > capture > move. */
 export function getMoveSound(
     move: IMoveSoundInput,
     isCheck: boolean,

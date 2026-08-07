@@ -9,3 +9,4 @@ export const bitCoinSymbol =
     import.meta.env.VITE_APP_IMAGE_ICON_S3_URL + "/chrome-wallet/BitCoin.svg";
 export const usdtLightningIcon =
     import.meta.env.VITE_APP_IMAGE_ICON_S3_URL + "/chrome-wallet/USDT-L.png";
+export const checkmateLoader = "/images/checkmate-loader.gif";

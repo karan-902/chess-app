@@ -2,31 +2,45 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import { getSocket } from "@/lib/socket";
-import { inactivityTimeoutRemovedTitle, inactivityTimeoutTimedOutDescription, inactivityTimeoutDisconnectedDescription } from "@/components/messages";
+import {
+    inactivityTimeoutRemovedTitle,
+    inactivityTimeoutTimedOutDescription,
+    inactivityTimeoutDisconnectedDescription,
+} from "@/constants/messages";
 
+const DEFAULT_INACTIVITY_MS =
+    Number(import.meta.env.VITE_INACTIVITY_TIMEOUT_MS) || 180_000;
 
-const DEFAULT_INACTIVITY_MS = Number(import.meta.env.VITE_INACTIVITY_TIMEOUT_MS) || 180_000;
-
-export function useInactivityTimeout(paused: boolean, turn: "w" | "b", fenHistoryLength: number, playerSide: "w" | "b" = "w", inactivitySeconds?: number) {
-    const inactivityMs = inactivitySeconds ? inactivitySeconds * 1000 : DEFAULT_INACTIVITY_MS;
+export function useInactivityTimeout(
+    paused: boolean,
+    turn: "w" | "b",
+    fenHistoryLength: number,
+    playerSide: "w" | "b" = "w",
+    inactivitySeconds?: number,
+) {
+    const inactivityMs = inactivitySeconds
+        ? inactivitySeconds * 1000
+        : DEFAULT_INACTIVITY_MS;
     const [inactiveOut, setInactiveOut] = useState(false);
     const [secsLeft, setSecsLeft] = useState<number | null>(null);
     const lastMoveAtRef = useRef(Date.now());
     const navigate = useNavigate();
 
-    // Reset clock on every move (human or computer)
     useEffect(() => {
         lastMoveAtRef.current = Date.now();
         setSecsLeft(null);
     }, [fenHistoryLength]);
 
-    // Countdown — only ticks on the human player's turn
     useEffect(() => {
-        if (paused || turn !== playerSide) { setSecsLeft(null); return; }
+        if (paused || turn !== playerSide) {
+            setSecsLeft(null);
+            return;
+        }
         let active = true;
         const id = setInterval(() => {
             if (!active) return;
-            const remaining = inactivityMs - (Date.now() - lastMoveAtRef.current);
+            const remaining =
+                inactivityMs - (Date.now() - lastMoveAtRef.current);
             if (remaining <= 0) {
                 active = false;
                 clearInterval(id);
@@ -36,24 +50,29 @@ export function useInactivityTimeout(paused: boolean, turn: "w" | "b", fenHistor
             }
             setSecsLeft(Math.ceil(remaining / 1000));
         }, 1000);
-        return () => { active = false; clearInterval(id); };
+        return () => {
+            active = false;
+            clearInterval(id);
+        };
     }, [turn, paused, playerSide, inactivityMs]);
 
-    // Server-side notification when a player is removed for inactivity
     useEffect(() => {
         const socket = getSocket();
         if (!socket) return;
         const onPlayerOffline = ({ reason }: { reason: string }) => {
             toast.error(inactivityTimeoutRemovedTitle, {
-                description: reason === "inactivity_timeout"
-                    ? inactivityTimeoutTimedOutDescription
-                    : inactivityTimeoutDisconnectedDescription,
+                description:
+                    reason === "inactivity_timeout"
+                        ? inactivityTimeoutTimedOutDescription
+                        : inactivityTimeoutDisconnectedDescription,
                 duration: 5000,
             });
-            navigate("/lobby", { replace: true });
+            navigate("/play", { replace: true });
         };
         socket.on("player_offline", onPlayerOffline);
-        return () => { socket.off("player_offline", onPlayerOffline); };
+        return () => {
+            socket.off("player_offline", onPlayerOffline);
+        };
     }, [navigate]);
 
     const reset = () => {

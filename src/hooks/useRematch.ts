@@ -51,8 +51,7 @@ export function useRematch(gameId: string | undefined) {
 
         const onRematchOffered = (data: IRematchOfferedResponse) => {
             if (data.game_id !== gameId) return;
-            // If we already offered too, leave status as "offered" — rematch_found
-            // will arrive right after since both sides have now offered.
+
             setStatus((prev) => (prev === "offered" ? prev : "opponent-offered"));
         };
 
@@ -64,9 +63,7 @@ export function useRematch(gameId: string | undefined) {
         };
 
         const onRematchFound = (data: IRematchFoundResponse) => {
-            // Only act if this instance is still tracking the game the offer
-            // came from — otherwise a stale offer resolving later would
-            // hijack whatever game/screen the user has since moved on to.
+
             if (data.from_game_id !== gameId) return;
             stopCountdown();
             setStatus("found");
@@ -90,9 +87,7 @@ export function useRematch(gameId: string | undefined) {
             socket.off("rematch_offered", onRematchOffered);
             socket.off("rematch_expired", onRematchExpired);
             socket.off("rematch_found", onRematchFound);
-            // We're leaving with our own offer still pending (navigated away,
-            // or gameId changed) — tell the server so it can't still match +
-            // redirect us into a new staked game later, unprompted.
+
             if (statusRef.current === "offered" && gameId) {
                 socket.emit("cancel_rematch_offer", { game_id: gameId });
             }

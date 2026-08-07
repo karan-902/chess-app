@@ -13,7 +13,6 @@ export function useLeaderboard() {
         setPlayers(data.players);
     }, []);
 
-    // ── Initial REST fetch ────────────────────────────────────────────────────
     useEffect(() => {
         setLoading(true);
         setError(false);
@@ -23,7 +22,6 @@ export function useLeaderboard() {
             .finally(() => setLoading(false));
     }, [applyResponse]);
 
-    // ── Live updates via socket ───────────────────────────────────────────────
     useEffect(() => {
         if (!ctxSocket) return;
 

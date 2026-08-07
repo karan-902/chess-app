@@ -1,72 +1,57 @@
-import clsx from 'clsx'
-import * as RadixDialog from '@radix-ui/react-dialog'
-import { X } from 'lucide-react'
-import './modal.scss'
+import { Dialog as MuiDialog, DialogTitle, IconButton } from "@mui/material";
+import type { DialogProps } from "@mui/material";
+import classNames from "classnames";
+import { X } from "lucide-react";
+import "./modal.scss";
 
-interface IModalProps {
-  open: boolean
-  onOpenChange?: (open: boolean) => void
-  onClose?: () => void
-  title?: string
-  children: React.ReactNode
-  customClass?: string
-  preventOutsideClose?: boolean
-  variant?: 'default'
+interface IModalProps extends Omit<DialogProps, "title" | "onClose"> {
+    open: boolean;
+    onClose?: () => void;
+    title?: string;
+    customClass?: string;
+    preventOutsideClose?: boolean;
+    variant?: "default";
 }
 
-function renderModalBody(
-  variant: 'default',
-  title: string | undefined,
-  onClose: (() => void) | undefined,
-  preventOutsideClose: boolean | undefined,
-  children: React.ReactNode,
-) {
-  switch (variant) {
-    default:
-      return (
-        <>
-          {title && <RadixDialog.Title className="modal-title">{title}</RadixDialog.Title>}
-          {onClose && !preventOutsideClose && (
-            <RadixDialog.Close asChild>
-              <button type="button" className="modal-close-icon" aria-label="Close">
-                <X size={18} strokeWidth={2} />
-              </button>
-            </RadixDialog.Close>
-          )}
-          {children}
-        </>
-      )
-  }
-}
-
-export function Modal({
-  open,
-  onOpenChange,
-  onClose,
-  title,
-  children,
-  customClass,
-  preventOutsideClose,
-  variant = 'default',
+export default function Modal({
+    open,
+    onClose,
+    title,
+    children,
+    customClass,
+    preventOutsideClose,
+    variant = "default",
+    ...props
 }: IModalProps) {
-  const handleOpenChange = (next: boolean) => {
-    if (!next) onClose?.()
-    onOpenChange?.(next)
-  }
+    const paperClasses = classNames("modal", `modal-${variant}`, customClass);
 
-  return (
-    <RadixDialog.Root open={open} onOpenChange={handleOpenChange}>
-      <RadixDialog.Portal>
-        <RadixDialog.Overlay className="modal-overlay" />
-        <RadixDialog.Content
-          className={clsx('common-modal', `modal--${variant}`, customClass)}
-          onEscapeKeyDown={preventOutsideClose ? (e) => e.preventDefault() : undefined}
-          onPointerDownOutside={preventOutsideClose ? (e) => e.preventDefault() : undefined}
-          onInteractOutside={preventOutsideClose ? (e) => e.preventDefault() : undefined}
+    return (
+        <MuiDialog
+            open={open}
+            onClose={preventOutsideClose ? undefined : onClose}
+            slotProps={{
+                paper: { className: paperClasses },
+                backdrop: { className: "modal-overlay" },
+            }}
+            disableScrollLock
+            container={() =>
+                document.querySelector(".app-shell") as HTMLElement
+            }
+            {...props}
         >
-          {renderModalBody(variant, title, onClose, preventOutsideClose, children)}
-        </RadixDialog.Content>
-      </RadixDialog.Portal>
-    </RadixDialog.Root>
-  )
+            {title && (
+                <DialogTitle className="modal-title">{title}</DialogTitle>
+            )}
+            {onClose && !preventOutsideClose && (
+                <IconButton
+                    className="modal-close-icon"
+                    onClick={onClose}
+                    aria-label="Close"
+                >
+                    <X size={18} strokeWidth={2} />
+                </IconButton>
+            )}
+            {children}
+        </MuiDialog>
+    );
 }

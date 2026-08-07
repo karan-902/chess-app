@@ -21,6 +21,7 @@ export function useStockfish(
                 const move = message.split(" ")[1];
                 setBestMove(move);
             }
+            // console.log(message);
         };
         return () => engine.terminate();
     }, []);
@@ -29,7 +30,6 @@ export function useStockfish(
         if (!engineRef.current || !fen || !enabled) return;
         setBestMove(null);
 
-        // Skill Level (0–20): makes Stockfish blunder intentionally — most effective for easy mode
         if (skillLevel !== undefined) {
             engineRef.current.postMessage(
                 `setoption name Skill Level value ${skillLevel}`,
@@ -40,7 +40,6 @@ export function useStockfish(
             );
         }
 
-        // ELO cap — secondary layer of weakness
         if (elo !== undefined) {
             engineRef.current.postMessage(
                 "setoption name UCI_LimitStrength value true",
@@ -55,7 +54,7 @@ export function useStockfish(
         }
 
         engineRef.current.postMessage(`position fen ${fen}`);
-        // movetime bounds worst-case search time — plain "go depth" is unbounded.
+
         engineRef.current.postMessage(`go depth ${depth} movetime 3000`);
     }, [fen, depth, enabled, elo, skillLevel]);
 

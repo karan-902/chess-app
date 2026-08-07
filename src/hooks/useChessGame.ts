@@ -16,8 +16,8 @@ const PIECE_VALUES: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9 };
 
 export interface ICapturedPieces {
     byWhite: string[];
-    byBlack: string[]; // white piece types black has captured
-    whiteAdvantage: number; // positive = white ahead on material
+    byBlack: string[];
+    whiteAdvantage: number;
 }
 
 export function useChessGame() {
@@ -30,7 +30,6 @@ export function useChessGame() {
         to: string;
     } | null>(null);
 
-    // Returns { fen, promotion? } on success, null on invalid move
     const makeMove = (
         from: string,
         to: string,
@@ -170,8 +169,6 @@ export function useChessGame() {
         return { from: m.from, to: m.to };
     };
 
-    // Apply opponent's move using local chess.js (for history), then override the
-    // displayed FEN with the server-authoritative value in case they ever diverge.
     const applyOpponentMove = (
         from: string,
         to: string,
@@ -185,7 +182,7 @@ export function useChessGame() {
                     getMoveSound(move, chess.isCheck(), chess.isGameOver()),
                 );
                 setLastMove({ from, to });
-                // Capture history before chess.load() wipes it
+
                 const history = chess.history();
                 const records: MoveRecord[] = [];
                 for (let i = 0; i < history.length; i += 2) {
@@ -195,14 +192,12 @@ export function useChessGame() {
                         b: history[i + 1] ?? "",
                     });
                 }
-                // Sync to server FEN only if there's a discrepancy
                 if (chess.fen() !== serverFen) chess.load(serverFen);
                 setFen(serverFen);
                 setFenHistory((prev) => [...prev, serverFen]);
                 setMoveHistory(records);
             }
         } catch {
-            // Fallback: just load the server FEN if local move fails entirely
             chess.load(serverFen);
             setFen(serverFen);
             setFenHistory((prev) => [...prev, serverFen]);
@@ -210,10 +205,6 @@ export function useChessGame() {
         }
     };
 
-    // Reconciles the mover's own optimistic move against the server's
-    // authoritative response (move_confirmed). The move was already applied
-    // (and its sound already played) by makeMove — this only corrects state
-    // if the server's FEN ever disagrees, it never re-applies the move.
     const confirmMove = (serverFen: string) => {
         if (chess.fen() === serverFen) return;
         chess.load(serverFen);

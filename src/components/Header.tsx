@@ -1,140 +1,153 @@
-import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router";
-import { DollarSign, Plus, User, Wallet, LogOut } from "lucide-react";
+import { useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router";
+import classNames from "classnames";
+import { Wallet as WalletIcon, User as UserIcon } from "lucide-react";
+import AppBar from "./base/AppBar/AppBar";
 import Box from "@/components/base/Box/Box";
-import Button from "@/components/base/Button/Button";
+import Text from "@/components/base/Text/Text";
 import Avatar from "@/components/base/Avatar/Avatar";
-import { useReduxSelector } from "@/store/hooks";
-import { useSocket } from "@/context/SocketContext";
+import Popover from "@/components/base/Popover/Popover";
+import Tooltip from "@/components/base/Tooltip/Tooltip";
+import Skeleton from "@/components/base/Skeleton/Skeleton";
+import Button from "@/components/base/Button/Button";
+// import { useSocket } from "@/context/SocketContext";
 import { useWalletBalance } from "@/hooks/useWallet";
 import { useLogout } from "@/hooks/useLogout";
-import { useWalletActionModal } from "@/context/WalletActionModalContext";
+import { useReduxSelector } from "@/redux/hooks";
 import { formateAmount } from "@/utils/formate";
-import { getAvatarUrl } from "@/utils/avatar";
+import { NAV_ITEMS } from "@/constants/config";
+// import { appbarOnlineSuffix } from "@/constants/messages";
 import {
-    appbarOnlineSuffix,
-    appbarDepositButton,
-    appBarViewProfile,
-    appBarWalletHistory,
+    appbarWalletTooltip,
+    profileTitle,
     appBarLogout,
-} from "@/components/messages";
-import AppBar from "./base/AppBar/AppBar";
+    leaderboardRankFallback,
+} from "@/constants/messages";
+import IconButton from "./base/IconButton/IconButton";
 
 export default function Header() {
+    // const { userCounts } = useSocket();
+    const { pathname } = useLocation();
+    const navigate = useNavigate();
+    const { usdValue, loading } = useWalletBalance();
     const session = useReduxSelector((state) => state.auth.session);
-    const { userCounts } = useSocket();
-    const { usdValue } = useWalletBalance();
     const logout = useLogout();
-    const walletActionModal = useWalletActionModal();
-    const [menuOpen, setMenuOpen] = useState(false);
-    const menuRef = useRef<HTMLDivElement>(null);
+    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
-    useEffect(() => {
-        const handler = (e: MouseEvent) => {
-            if (menuRef.current && !menuRef.current.contains(e.target as Node))
-                setMenuOpen(false);
-        };
-        if (menuOpen) document.addEventListener("mousedown", handler);
-        return () => document.removeEventListener("mousedown", handler);
-    }, [menuOpen]);
+    const initial = session?.username?.charAt(0).toUpperCase() ?? "?";
 
-    const avatarLetter = session?.username?.[0]?.toUpperCase() ?? "?";
+    const closeMenu = () => setAnchorEl(null);
 
     return (
-        <AppBar customClass="appbar">
+        <AppBar
+            bottomSlot={
+                <Box customClass="appbar-nav-tabs">
+                    {NAV_ITEMS.map((item) => (
+                        <Link
+                            key={item.id}
+                            to={item.path}
+                            className={classNames(
+                                "appbar-nav-tab",
+                                pathname === item.path && "active",
+                            )}
+                        >
+                            {item.label}
+                        </Link>
+                    ))}
+                </Box>
+            }
+        >
             <Box customClass="appbar-right">
+                {/*
+                 Online Pill
                 <Box customClass="appbar-online">
-                    <span className="live-dot" />
-                    {userCounts.active.toLocaleString()} {appbarOnlineSuffix}
-                </Box>
-                <Box customClass="appbar-balance-group">
-                    <Box customClass="appbar-balance">
-                        <DollarSign size={14} className="appbar-balance-icon" />
-                        {formateAmount(usdValue, "USD")}
+                    <Box customClass="live-ring-wrap">
+                        <Text component="span" customClass="live-dot" />
+                        <Text component="span" customClass="live-ring" />
                     </Box>
-                    <Button
-                        variant="primary"
-                        size="sm"
-                        customClass="appbar-deposit-btn-mobile"
-                        aria-label={appbarDepositButton}
-                        onClick={walletActionModal.openDeposit}
-                    >
-                        <Plus size={14} strokeWidth={2.5} />
-                    </Button>
-                    <Button
-                        variant="primary"
-                        size="sm"
-                        customClass="appbar-deposit-btn-desktop"
-                        onClick={walletActionModal.openDeposit}
-                    >
-                        {appbarDepositButton}
-                        <Plus size={14} strokeWidth={2.5} />
-                    </Button>
+                    <Text customClass="appbar-online-label">
+                        {userCounts.active.toLocaleString()}{" "}
+                        {appbarOnlineSuffix}
+                    </Text>
                 </Box>
-                <Box customClass="appbar-avatar-menu" ref={menuRef}>
+                */}
+                <Box customClass="appbar-balance">
+                    {loading ? (
+                        <Skeleton customClass="text" width={44} height={13} />
+                    ) : (
+                        <Text customClass="appbar-balance-label">
+                            {formateAmount(usdValue)}
+                        </Text>
+                    )}
+                    <Tooltip
+                        customClass="wallet-tooltip"
+                        title={appbarWalletTooltip}
+                    >
+                        <IconButton
+                            customClass={classNames(
+                                "appbar-deposit-btn",
+                                pathname === "/wallet" && "active",
+                            )}
+                            onClick={() => navigate("/wallet")}
+                        >
+                            <WalletIcon size={18} strokeWidth={2.5} />
+                        </IconButton>
+                    </Tooltip>
+                </Box>
+
+                {session ? (
+                    <IconButton
+                        customClass={classNames(
+                            "appbar-menu-trigger",
+                            pathname === "/profile" && "active",
+                        )}
+                        onClick={(e) => setAnchorEl(e.currentTarget)}
+                    >
+                        <UserIcon size={18} strokeWidth={2.5} />
+                    </IconButton>
+                ) : (
+                    <Skeleton customClass="circle" width={28} height={28} />
+                )}
+
+                <Popover
+                    open={!!anchorEl}
+                    anchorEl={anchorEl}
+                    onClose={closeMenu}
+                    anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                    transformOrigin={{ vertical: "top", horizontal: "right" }}
+                    customClass="appbar-account-popover"
+                >
+                    <Box customClass="appbar-dropdown-head">
+                        <Avatar letter={initial} customClass="sm primary" />
+                        <Box customClass="appbar-dropdown-id">
+                            <Text customClass="appbar-dropdown-name">
+                                {session?.username}
+                            </Text>
+                            <Text customClass="appbar-dropdown-elo">
+                                {session?.elo_rating ?? leaderboardRankFallback}{" "}
+                                ELO
+                            </Text>
+                        </Box>
+                    </Box>
+                    <Link
+                        to="/profile"
+                        className="appbar-dropdown-item"
+                        onClick={closeMenu}
+                    >
+                        {profileTitle}
+                    </Link>
                     <Button
                         type="button"
-                        variant="ghost"
-                        customClass="appbar-avatar-trigger"
-                        onClick={() => setMenuOpen((v) => !v)}
+                        sx={{ justifyContent: "flex-start" }}
+                        customClass="appbar-dropdown-item  danger"
+                        onClick={() => {
+                            closeMenu();
+                            logout();
+                        }}
                     >
-                        <Avatar
-                            letter={avatarLetter}
-                            src={getAvatarUrl(session?.avatar_seed)}
-                            size="sm"
-                            variant="neutral"
-                        />
+                        {appBarLogout}
                     </Button>
-                    {menuOpen && (
-                        <Box customClass="appbar-dropdown">
-                            <Box customClass="appbar-dropdown-head">
-                                <Avatar
-                                    letter={avatarLetter}
-                                    src={getAvatarUrl(session?.avatar_seed)}
-                                    size="sm"
-                                    variant="neutral"
-                                />
-                                <Box customClass="appbar-dropdown-id">
-                                    <span className="appbar-dropdown-name">
-                                        {session?.username}
-                                    </span>
-                                    {session?.elo_rating != null && (
-                                        <span className="appbar-dropdown-elo">
-                                            {session.elo_rating} ELO
-                                        </span>
-                                    )}
-                                </Box>
-                            </Box>
-                            <Link
-                                to="/profile"
-                                className="appbar-dropdown-item"
-                                onClick={() => setMenuOpen(false)}
-                            >
-                                <User size={15} strokeWidth={2} />
-                                {appBarViewProfile}
-                            </Link>
-                            <Link
-                                to="/wallet"
-                                className="appbar-dropdown-item"
-                                onClick={() => setMenuOpen(false)}
-                            >
-                                <Wallet size={15} strokeWidth={2} />
-                                {appBarWalletHistory}
-                            </Link>
-                            <button
-                                type="button"
-                                className="appbar-dropdown-item danger"
-                                onClick={() => {
-                                    setMenuOpen(false);
-                                    logout();
-                                }}
-                            >
-                                <LogOut size={15} strokeWidth={2} />
-                                {appBarLogout}
-                            </button>
-                        </Box>
-                    )}
-                </Box>
+                </Popover>
             </Box>
         </AppBar>
     );

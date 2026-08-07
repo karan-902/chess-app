@@ -3,14 +3,15 @@ import { callAPIInterface } from "@/utils";
 import { useSocket } from "@/context/SocketContext";
 import type {
     IWalletBalanceResponse,
-    IWalletStatsResponse,
     ITransactionResponse,
     ITransactionsResponse,
+    ITransactionsFilterBody,
     IWithdrawBody,
     IWithdrawResponse,
     IInitiateDepositBody,
     IInitiateDepositResponse,
     WithdrawMethod,
+    TransactionType,
 } from "@/types/utils";
 
 const PAGE_SIZE = 20;
@@ -79,85 +80,72 @@ export function useWallet() {
         refetch: loadBalance,
     } = useWalletBalance();
 
-    const [stats, setStats] = useState({
-        deposited: 0,
-        withdrawn: 0,
-        netPayouts: 0,
-    });
-    const [statsLoading, setStatsLoading] = useState(true);
-
-    const loadStats = useCallback(async () => {
-        try {
-            const res = await callAPIInterface<undefined, IWalletStatsResponse>(
-                "GET",
-                "/wallet/stats",
-            );
-            setStats({
-                deposited: res.deposited_usd,
-                withdrawn: res.withdrawn_usd,
-                netPayouts: res.net_payouts_usd,
-            });
-        } catch {
-        } finally {
-            setStatsLoading(false);
-        }
-    }, []);
-
-    useEffect(() => {
-        loadStats();
-    }, [loadStats]);
-
-    useEffect(() => {
-        if (!socket) return;
-        socket.on("wallet_updated", loadStats);
-        return () => {
-            socket.off("wallet_updated", loadStats);
-        };
-    }, [socket, loadStats]);
-
     const [transactions, setTransactions] = useState<ITransactionResponse[]>(
         [],
     );
     const [transactionsLoading, setTransactionsLoading] = useState(true);
     const [loadingMore, setLoadingMore] = useState(false);
+    const [typeFilter, setTypeFilter] = useState<TransactionType[]>([]);
+    const [dateFilter, setDateFilter] = useState<{
+        from?: number;
+        to?: number;
+    }>({});
 
     const hasMoreRef = useRef(true);
     const pageIdRef = useRef<string | null>(null);
     const isFetchingRef = useRef(false);
+    const activeFilterRef = useRef<ITransactionsFilterBody | null>(null);
 
-    const loadTransactions = useCallback(async (isFirstLoad: boolean) => {
-        if (isFetchingRef.current) return;
-        if (!isFirstLoad && !hasMoreRef.current) return;
+    const loadTransactions = useCallback(
+        async (isFirstLoad: boolean) => {
+            if (!isFirstLoad && (isFetchingRef.current || !hasMoreRef.current))
+                return;
 
-        isFetchingRef.current = true;
-        isFirstLoad ? setTransactionsLoading(true) : setLoadingMore(true);
+            const requestFilter: ITransactionsFilterBody = {
+                types: typeFilter,
+                from: dateFilter.from,
+                to: dateFilter.to,
+            };
+            activeFilterRef.current = requestFilter;
+            isFetchingRef.current = true;
+            isFirstLoad ? setTransactionsLoading(true) : setLoadingMore(true);
 
-        const cursor =
-            !isFirstLoad && pageIdRef.current
-                ? `&ending_before=${encodeURIComponent(pageIdRef.current)}`
-                : "";
+            const cursor =
+                !isFirstLoad && pageIdRef.current
+                    ? `&ending_before=${encodeURIComponent(pageIdRef.current)}`
+                    : "";
 
-        try {
-            const res = await callAPIInterface<
-                undefined,
-                ITransactionsResponse
-            >("GET", `/wallet/transactions?limit=${PAGE_SIZE}${cursor}`);
-            setTransactions((prev) =>
-                isFirstLoad ? res.data : [...prev, ...res.data],
-            );
-            hasMoreRef.current = res.has_more;
-            pageIdRef.current = res.page_id;
-        } catch {
-            // leave existing list as-is on failure
-        } finally {
-            isFetchingRef.current = false;
-            isFirstLoad ? setTransactionsLoading(false) : setLoadingMore(false);
-        }
-    }, []);
+            try {
+                const res = await callAPIInterface<
+                    ITransactionsFilterBody,
+                    ITransactionsResponse
+                >(
+                    "POST",
+                    `/wallet/transactions/filter?limit=${PAGE_SIZE}${cursor}`,
+                    requestFilter,
+                );
+                if (activeFilterRef.current !== requestFilter) return;
+                setTransactions((prev) =>
+                    isFirstLoad ? res.data : [...prev, ...res.data],
+                );
+                hasMoreRef.current = res.has_more;
+                pageIdRef.current = res.page_id;
+            } catch {
+            } finally {
+                isFetchingRef.current = false;
+                if (activeFilterRef.current === requestFilter) {
+                    isFirstLoad
+                        ? setTransactionsLoading(false)
+                        : setLoadingMore(false);
+                }
+            }
+        },
+        [typeFilter, dateFilter],
+    );
 
     useEffect(() => {
         loadTransactions(true);
-    }, []);
+    }, [loadTransactions]);
 
     useEffect(() => {
         if (!socket) return;
@@ -177,13 +165,15 @@ export function useWallet() {
         usdValue,
         withdrawableUsd,
         balanceLoading,
-        stats,
-        statsLoading,
         transactions,
         transactionsLoading,
         loadingMore,
         hasMore: hasMoreRef.current,
         loadMoreTransactions,
+        typeFilter,
+        setTypeFilter,
+        dateFilter,
+        setDateFilter,
         refetchBalance: loadBalance,
     };
 }

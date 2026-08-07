@@ -15,7 +15,7 @@ import {
     authLeftRegisterDesc,
     authLeftRegisterFeatures,
     authLeftRegisterQuotes,
-} from "@/components/messages";
+} from "@/constants/messages";
 
 interface IAuthLeftProps {
     variant: "login" | "register";
@@ -72,16 +72,16 @@ export default function AuthLeft({ variant }: IAuthLeftProps) {
             <Box customClass="auth-left-content">
                 <Box customClass="auth-left-brand">
                     <KingStakeLogo size={26} showText={false} />
-                    <Text as="span" customClass="auth-left-name">
+                    <Text component="span" customClass="auth-left-name">
                         {authLeftBrandName}
                     </Text>
-                    <Text as="p" customClass="auth-left-tagline">
+                    <Text component="p" customClass="auth-left-tagline">
                         {authLeftTagline}
                     </Text>
                 </Box>
 
                 <Box customClass="auth-left-headline">
-                    <Text as="h2" customClass="auth-left-h2">
+                    <Text component="h2" customClass="auth-left-h2">
                         {c.headlineLines.map((line, i) => (
                             <Fragment key={line}>
                                 {i > 0 && <br />}
@@ -89,7 +89,7 @@ export default function AuthLeft({ variant }: IAuthLeftProps) {
                             </Fragment>
                         ))}
                     </Text>
-                    <Text as="p" customClass="auth-left-desc">
+                    <Text component="p" customClass="auth-left-desc">
                         {c.desc}
                     </Text>
                 </Box>
@@ -98,17 +98,17 @@ export default function AuthLeft({ variant }: IAuthLeftProps) {
                     {c.features.map((f) => (
                         <Box key={f.title} customClass="auth-left-feature">
                             <Box customClass="auth-left-feature-icon">
-                                <Text as="span">{f.icon}</Text>
+                                <Text component="span">{f.icon}</Text>
                             </Box>
                             <Box customClass="auth-left-feature-text">
                                 <Text
-                                    as="span"
+                                    component="span"
                                     customClass="auth-left-feature-title"
                                 >
                                     {f.title}
                                 </Text>
                                 <Text
-                                    as="span"
+                                    component="span"
                                     customClass="auth-left-feature-sub"
                                 >
                                     {f.sub}
@@ -122,17 +122,17 @@ export default function AuthLeft({ variant }: IAuthLeftProps) {
                     <Box
                         customClass={`auth-left-quote-body${fading ? " auth-left-quote-body--fade" : ""}`}
                     >
-                        <Text as="p" customClass="auth-left-quote-text">
+                        <Text component="p" customClass="auth-left-quote-text">
                             "{q.text}"
                         </Text>
                         <Box customClass="auth-left-quote-meta">
                             <Text
-                                as="span"
+                                component="span"
                                 customClass="auth-left-quote-author"
                             >
                                 {q.author}
                             </Text>
-                            <Text as="span" customClass="auth-left-quote-title">
+                            <Text component="span" customClass="auth-left-quote-title">
                                 {q.title}
                             </Text>
                         </Box>
@@ -141,7 +141,7 @@ export default function AuthLeft({ variant }: IAuthLeftProps) {
                         {c.quotes.map((_, i) => (
                             <Button
                                 key={i}
-                                variant="ghost"
+                                variant="text"
                                 customClass={`auth-left-dot${i === active ? " auth-left-dot--active" : ""}`}
                                 onClick={() => goTo(i)}
                                 aria-label={authLeftQuoteAriaLabel(i + 1)}

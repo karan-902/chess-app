@@ -25,7 +25,7 @@ export function useComputerOpponent({
     makeMove,
     getRandomMove,
 }: IProps) {
-    // Easy: random move after a short delay
+
     useEffect(() => {
         if (
             mode !== "pvc" ||
@@ -56,6 +56,6 @@ export function useComputerOpponent({
             500,
         );
         return () => clearTimeout(t);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
     }, [bestMove, turn, mode, difficulty, gameEnded]);
 }
