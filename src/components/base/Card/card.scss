@@ -212,6 +212,10 @@
         &.practice.wide {
             grid-column: 1 / -1;
         }
+
+        &.insufficient {
+            opacity: 0.5;
+        }
     }
 
     .stake-card-live-corner {

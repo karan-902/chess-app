@@ -1,7 +1,8 @@
 import * as yup from "yup";
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate, useSearchParams } from "react-router";
 import { ArrowLeft } from "lucide-react";
+import { toast } from "sonner";
 import { useFormik, type FormikProps } from "formik";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
@@ -9,6 +10,7 @@ import Label from "@/components/base/Label/Label";
 import Input from "@/components/base/Input/Input";
 import Button from "@/components/base/Button/Button";
 import { useGoogleAuth } from "@/hooks/useGoogleAuth";
+import SelectCountryScreen from "@/pages/select-country/SelectCountryScreen";
 import { callAPIInterface } from "@/utils";
 import { useReduxDispatch } from "@/redux/hooks";
 import { login } from "@/redux/thunks";
@@ -31,6 +33,7 @@ import {
     authLoginForgotPassword,
     authLoginContinueButton,
     authLoginSignInButton,
+    authLoginEmailNotVerified,
 } from "@/constants/messages";
 import { GoogleIcon } from "@/components/constants";
 
@@ -213,7 +216,11 @@ function PasswordScreen({
 
 export default function LoginForm() {
     const dispatch = useReduxDispatch();
-    const [step, setStep] = useState<"email" | "password">("email");
+    const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const [step, setStep] = useState<"email" | "password" | "country">(
+        searchParams.get("step") === "country" ? "country" : "email",
+    );
     const [verifiedEmail, setVerifiedEmail] = useState("");
     const [error, setError] = useState<string | null>(null);
 
@@ -230,6 +237,14 @@ export default function LoginForm() {
 
                 if (res.signup_method === SignupMethod.GOOGLE) {
                     googleLogin();
+                    return;
+                }
+
+                if (!res.email_verified) {
+                    toast.error(authLoginEmailNotVerified);
+                    navigate(
+                        `/verify-email?email=${encodeURIComponent(values.email)}`,
+                    );
                     return;
                 }
 
@@ -258,10 +273,18 @@ export default function LoginForm() {
             setError(null);
             dispatch(showLoader({ text: "Signing in..." }));
             try {
-                await dispatch(
+                const res = await dispatch(
                     login({ email: verifiedEmail, password: values.password }),
                 ).unwrap();
+                if (!res.country) setStep("country");
             } catch (err: any) {
+                if (err?.type === "email_not_verified") {
+                    toast.error(authLoginEmailNotVerified);
+                    navigate(
+                        `/verify-email?email=${encodeURIComponent(verifiedEmail)}`,
+                    );
+                    return;
+                }
                 setError(
                     err?.message ??
                         "Unable to sign in. Check your details and try again.",
@@ -278,6 +301,10 @@ export default function LoginForm() {
         passwordFormik.resetForm();
         setStep("email");
     };
+
+    if (step === "country") {
+        return <SelectCountryScreen />;
+    }
 
     if (step === "password") {
         return (

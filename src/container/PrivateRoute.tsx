@@ -7,8 +7,10 @@ import { useReduxSelector } from "@/redux/hooks";
 
 function PrivateRoute() {
     const isLoggedIn = useReduxSelector((state) => state.auth.isLoggedIn);
+    const country = useReduxSelector((state) => state.auth.session?.country);
 
     if (!isLoggedIn) return <Navigate to="/login" replace />;
+    if (!country) return <Navigate to="/login?step=country" replace />;
 
     const renderLayout = () => {
         return (

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import classNames from "classnames";
-import { Copy, Check, ArrowLeft, X as XIcon } from "lucide-react";
+import { Copy, Check, CheckCircle2, ArrowLeft, X as XIcon } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
@@ -382,6 +382,9 @@ export default function DepositModal() {
 
             {stage === "success" && (
                 <Box customClass="deposit-success-stage">
+                    <Box customClass="deposit-success-icon">
+                        <CheckCircle2 size={32} strokeWidth={2} />
+                    </Box>
                     <Text customClass="deposit-heading">
                         {depositModalPaymentReceived}
                     </Text>

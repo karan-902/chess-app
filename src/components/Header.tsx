@@ -22,6 +22,7 @@ import {
     profileTitle,
     appBarLogout,
     leaderboardRankFallback,
+    appBarWalletHistory,
 } from "@/constants/messages";
 import IconButton from "./base/IconButton/IconButton";
 
@@ -79,20 +80,6 @@ export default function Header() {
                             {formateAmount(usdValue)}
                         </Text>
                     )}
-                    <Tooltip
-                        customClass="wallet-tooltip"
-                        title={appbarWalletTooltip}
-                    >
-                        <IconButton
-                            customClass={classNames(
-                                "appbar-deposit-btn",
-                                pathname === "/wallet" && "active",
-                            )}
-                            onClick={() => navigate("/wallet")}
-                        >
-                            <WalletIcon size={18} strokeWidth={2.5} />
-                        </IconButton>
-                    </Tooltip>
                 </Box>
 
                 {session ? (
@@ -135,6 +122,13 @@ export default function Header() {
                         onClick={closeMenu}
                     >
                         {profileTitle}
+                    </Link>
+                    <Link
+                        to="/wallet"
+                        className="appbar-dropdown-item"
+                        onClick={closeMenu}
+                    >
+                        {appBarWalletHistory}
                     </Link>
                     <Button
                         type="button"

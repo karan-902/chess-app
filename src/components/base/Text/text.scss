@@ -166,11 +166,6 @@
     &.pool-meta-time {
         font-weight: 400;
         text-transform: none;
-
-        &::before {
-            content: "·";
-            margin-right: 0.3rem;
-        }
     }
 
     &.pool-win-label {
@@ -195,7 +190,8 @@
         margin-bottom: 0.9rem;
     }
 
-    &.pool-opponent-ready {
+    &.pool-opponent-ready,
+    &.pool-insufficient-label {
         display: block;
         font-size: $font12;
         font-family: $fontOutfitExtraBold;

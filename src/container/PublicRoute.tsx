@@ -3,7 +3,8 @@ import { useReduxSelector } from "@/redux/hooks";
 
 function PublicRoute() {
     const isLoggedIn = useReduxSelector((state) => state.auth.isLoggedIn);
-    if (isLoggedIn) return <Navigate to="/play" replace />;
+    const country = useReduxSelector((state) => state.auth.session?.country);
+    if (isLoggedIn && country) return <Navigate to="/play" replace />;
     return <Outlet />;
 }
 

@@ -12,6 +12,20 @@ export const TIME_SECONDS: Record<GameCategory, number> = {
     CLASSICAL: 1800,
 };
 
+export interface IEmailFormValues {
+    first_name: string;
+    last_name: string;
+    email: string;
+    password: string;
+    confirm: string;
+    country: string;
+}
+
+export interface IEmailFormScreenProps {
+    onBack: () => void;
+    onRegistered: (email: string, password: string) => void;
+}
+
 export function secondsToTimeControl(seconds: number): TimeControl {
     const match = (
         Object.entries(TIME_SECONDS) as [TimeControl, number][]

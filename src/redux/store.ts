@@ -15,7 +15,7 @@ import {
 import { buildPersistConfig } from "./hooks";
 
 const lf = localforage.createInstance({
-    name: "KingStake",
+    name: "Shatranj",
     storeName: "key-value-pairs",
 });
 

@@ -151,9 +151,10 @@
 
     &.pool-meta {
         display: flex;
+        flex-wrap: wrap;
         align-items: center;
         justify-content: center;
-        gap: 0.3rem;
+        gap: 0.2rem 0.3rem;
         font-size: $font12;
         font-weight: 700;
         letter-spacing: 0.04em;
@@ -474,6 +475,18 @@
     &.deposit-success-stage {
         text-align: center;
         padding: 1rem 0;
+    }
+
+    &.deposit-success-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 3.5rem;
+        height: 3.5rem;
+        margin: 0 auto 1rem;
+        border-radius: 50%;
+        background: rgba($greenishTeal, 0.1);
+        color: $greenishTeal;
     }
 
     &.deposit-method-tabs {

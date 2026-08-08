@@ -1,4 +1,4 @@
-# KingStake — Full QA Test Plan
+# Shatranj — Full QA Test Plan
 
 Real money moves through this app (BTC deposits/withdrawals, USD stakes), so
 "looks right" isn't good enough for the wallet/game-settlement paths —
@@ -46,7 +46,7 @@ is pulled directly from the current code, not guessed.
 - [ ] Simulate/force the same webhook event twice (Speed retry behavior) → balance must not double-credit, and the toast must not fire twice
 - [ ] Cancel/close the modal mid-QR-screen, then let the payment actually complete anyway → toast + balance update should still land (global listener, not modal-scoped)
 - [ ] Desktop modal: resize browser to exactly 768–905px wide → board/panel layout must not overflow; verify on both the amount-entry screen (should be vertically centered, not top-stuck) and the QR screen (should scroll internally if content overflows the fixed panel height, header/footer stay pinned)
-- [ ] KingStake logo renders correctly in the side panel (not the old broken/wrong `tryspeed.com` image)
+- [ ] Shatranj logo renders correctly in the side panel (not the old broken/wrong `tryspeed.com` image)
 
 ## 4. Wallet — Withdraw
 

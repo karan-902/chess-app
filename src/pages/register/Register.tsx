@@ -1,6 +1,4 @@
-import Box from "@/components/base/Box/Box";
-import Text from "@/components/base/Text/Text";
-import { ShatranjLogo } from "@/components/constants";
+import AuthLayout from "@/container/AuthLayout";
 import RegisterForm from "./RegisterForm";
 import {
     authRegisterTitle,
@@ -12,23 +10,17 @@ import { Link } from "react-router";
 
 export default function RegisterPage() {
     return (
-        <Box customClass="auth-page">
-            <Box customClass="auth-brand">
-                <ShatranjLogo size={22} showText={true} />
-            </Box>
-            <Box customClass="auth-heading">
-                <Text component="h1" customClass="auth-title">
-                    {authRegisterTitle}
-                </Text>
-                <Text component="p" customClass="auth-subtitle">
-                    {authRegisterSubtitle}
-                </Text>
-            </Box>
+        <AuthLayout
+            title={authRegisterTitle}
+            subtitle={authRegisterSubtitle}
+            footer={
+                <>
+                    {authRegisterHaveAccountPrompt}{" "}
+                    <Link to="/login">{authRegisterSignInLink}</Link>
+                </>
+            }
+        >
             <RegisterForm />
-            <Text customClass="auth-footer">
-                {authRegisterHaveAccountPrompt}{" "}
-                <Link to="/login">{authRegisterSignInLink}</Link>
-            </Text>
-        </Box>
+        </AuthLayout>
     );
 }

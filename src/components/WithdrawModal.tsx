@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { CheckCircle2 } from "lucide-react";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import Button from "@/components/base/Button/Button";
@@ -186,6 +187,9 @@ export default function WithdrawModal() {
 
             {stage === "success" && (
                 <Box customClass="deposit-success-stage">
+                    <Box customClass="deposit-success-icon">
+                        <CheckCircle2 size={32} strokeWidth={2} />
+                    </Box>
                     <Text customClass="deposit-heading">
                         {withdrawModalSuccessTitle}
                     </Text>

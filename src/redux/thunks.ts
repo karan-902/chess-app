@@ -16,8 +16,11 @@ export const login = createAsyncThunk(
             );
             await sessionService.saveSession(res);
             return res;
-        } catch (err) {
-            return rejectWithValue(throwThunkError(err));
+        } catch (err: any) {
+            return rejectWithValue({
+                ...err?.response?.data,
+                ...throwThunkError(err),
+            });
         }
     },
 );

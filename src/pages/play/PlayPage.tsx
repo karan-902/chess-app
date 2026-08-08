@@ -11,6 +11,7 @@ import { ShatranjLogo } from "@/components/constants";
 import GameRoom from "./GameRoom";
 import { usePools } from "@/hooks/usePools";
 import { useMatchmaking } from "@/hooks/useMatchmaking";
+import { useWalletBalance } from "@/hooks/useWallet";
 import { CATEGORY_META, QUEUE_TIMEOUT_SECONDS } from "@/constants/config";
 import type { GameCategory } from "@/types/types";
 import { TIME_SECONDS } from "@/types/components";
@@ -26,6 +27,7 @@ import {
     matchmakingPoolCardWinLabel,
     matchmakingPoolCardEntryFee,
     matchmakingPoolCardOpponentReady,
+    matchmakingPoolCardInsufficientBalance,
     matchmakingSearchingSecondsLeft,
     matchmakingSearchingCancelButton,
     matchmakingSearchingFindingOpponent,
@@ -119,6 +121,7 @@ export default function PlayPage() {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const { pools } = usePools();
+    const { usdValue } = useWalletBalance();
     const { status, queuedPool, joinQueue, leaveQueue, resetStatus } =
         useMatchmaking();
     const [secondsLeft, setSecondsLeft] = useState(0);
@@ -236,14 +239,17 @@ export default function PlayPage() {
                             {pools.map((pool) => {
                                 const CategoryIcon =
                                     CATEGORY_META[pool.category]?.icon;
-                                console.log(CategoryIcon, "CATEGORY_ICON");
                                 const timeLabel = historyTimeControlLabel(
                                     pool.timeSeconds / 60,
                                 );
+                                const canAfford = usdValue >= pool.stake;
                                 return (
                                     <Card
                                         key={pool.id}
-                                        customClass="stake-card"
+                                        customClass={classNames(
+                                            "stake-card",
+                                            !canAfford && "insufficient",
+                                        )}
                                     >
                                         {pool.players > 0 && (
                                             <Box customClass="stake-card-live-corner">
@@ -281,18 +287,27 @@ export default function PlayPage() {
                                                 `$${pool.stake}`,
                                             )}
                                         </Text>
-                                        {pool.players > 0 && (
-                                            <Text customClass="pool-opponent-ready">
+                                        {!canAfford ? (
+                                            <Text customClass="pool-insufficient-label">
                                                 {
-                                                    matchmakingPoolCardOpponentReady
+                                                    matchmakingPoolCardInsufficientBalance
                                                 }
                                             </Text>
+                                        ) : (
+                                            pool.players > 0 && (
+                                                <Text customClass="pool-opponent-ready">
+                                                    {
+                                                        matchmakingPoolCardOpponentReady
+                                                    }
+                                                </Text>
+                                            )
                                         )}
                                         <Button
                                             type="button"
                                             variant="outlined"
                                             fullWidth
                                             customClass="stake-card-go"
+                                            disabled={!canAfford}
                                             onClick={() => joinQueue(pool)}
                                         >
                                             {playSheetCardPlayButton}

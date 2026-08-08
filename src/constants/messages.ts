@@ -55,6 +55,8 @@ export const authLoginForgotPassword = "Forgot password?";
 export const authLoginContinueButton = "Continue";
 export const authLoginSignInButton = "Sign In";
 export const authLoginIncorrectPassword = "Incorrect password";
+export const authLoginEmailNotVerified =
+    "Please verify your email to continue.";
 export const authLoginNoAccountPrompt = "Don't have an account?";
 export const authLoginCreateOneLink = "Create one";
 export const authRegisterTitle = "Create Account";
@@ -97,6 +99,8 @@ export const authForgotPasswordSentDescription =
 export const authForgotPasswordDescription =
     "Enter your email and we'll send you a reset link.";
 export const authForgotPasswordSendButton = "Send Reset Link";
+export const authForgotPasswordFailed =
+    "Something went wrong. Please try again.";
 export const authDeviceConflictTitle = "Already logged in elsewhere";
 export const authDeviceConflictDescription = (deviceName: string) =>
     `You're currently logged in on ${deviceName}. Continuing here will log that device out.`;
@@ -150,8 +154,9 @@ export const matchmakingPoolListEmptyAll = "No stake pools available right now";
 export const matchmakingPoolListEmptyCategory = "No pools in this category";
 export const matchmakingPoolCardHot = "HOT";
 export const matchmakingPoolCardWinLabel = "Win";
-export const matchmakingPoolCardEntryFee = (fee: string) => `Entry fee ${fee}`;
+export const matchmakingPoolCardEntryFee = (fee: string) => `Stake ${fee}`;
 export const matchmakingPoolCardOpponentReady = "Opponent ready · Claim match";
+export const matchmakingPoolCardInsufficientBalance = "Add funds to play";
 export const matchmakingCtaWager = (stake: string) => `Wager ${stake}`;
 export const matchmakingCtaWinFee = (prize: string) =>
     `Win ${prize} · 12% platform fee`;
@@ -455,7 +460,7 @@ export const rulesPayoutsList = [
 export const rulesMatchingTitle = "Fair matching";
 export const rulesMatchingDesc =
     "You're matched by rating and stake size, not queue order — so the board you get is close to even before the first move.";
-export const rulesAboutVersion = "Chess · v1.0.0";
+export const rulesAboutVersion = "Shatranj · v1.0.0";
 export const rulesAboutCredit =
     'Piece set "cburnett" by Colin M.L. Burnett, CC BY-SA 3.0';
 
@@ -498,6 +503,13 @@ export const skillLevelAlreadyPlayedError =
     "Skill level can't be set after you've played a game";
 export const skillLevelSetFailedTitle = "Failed to set skill level";
 export const skillLevelSetFailedDescription = "Please try again.";
+
+export const selectCountryTitle = "Select Your Country";
+export const selectCountrySubtitle =
+    "We need your country to enable deposits, withdrawals, and matchmaking.";
+export const selectCountryContinueButton = "Continue";
+export const selectCountrySetFailed =
+    "Couldn't save your country. Please try again.";
 export const inactivityTimeoutRemovedTitle = "You were removed";
 export const inactivityTimeoutTimedOutDescription =
     "You didn't move in time. The game has ended.";
@@ -541,7 +553,7 @@ export const appBarWalletBalanceAriaLabel = "View wallet";
 export const apiRateLimited = "Too many attempts, please wait.";
 
 export const authLeftQuoteAriaLabel = (n: number) => `Quote ${n}`;
-export const authLeftBrandName = "KINGSTAKE";
+export const authLeftBrandName = "SHATRANJ";
 export const authLeftTagline = "Chess · Crypto · Competition";
 
 export const authLeftLoginHeadlineLines = [
