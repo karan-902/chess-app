@@ -81,6 +81,7 @@
         background: $appBtnBg;
         border: 1px solid $appBtnBorder;
         box-shadow: none;
+        border-radius: 0.6rem;
         color: $appText;
 
         &:not(:disabled):hover {
@@ -118,24 +119,18 @@
 
     &.wallet-deposit-btn,
     &.wallet-withdraw-btn {
+        border: 1px solid $appCardBorder;
+        border-radius: 0.6rem;
         flex: 1;
         height: 2.6rem;
         font-size: $font14;
     }
 
     &.wallet-deposit-btn {
-        background: $gold;
-        border: none;
         color: $appText;
-
-        &:not(:disabled):hover {
-            background: $gold;
-            opacity: 0.9;
-        }
     }
 
     &.wallet-withdraw-btn {
-        background: $appBtnBg;
         border: 1px solid $appBtnBorder;
         color: $appText;
 
@@ -161,7 +156,20 @@
             color: $paleRed;
         }
     }
-
+    &.my-matches-segment-btn {
+        flex: 1;
+        text-align: center;
+        padding: 0.5rem 0.4rem;
+        border-radius: 0.5rem;
+        font-size: $font14;
+        font-family: $fontOutfitExtraBold;
+        color: $appTextMuted;
+        cursor: default;
+        &.active {
+            background: $gold !important;
+            color: $appSurface;
+        }
+    }
     &.subtab-btn {
         background: $appSurface;
         border: 1px solid $appCardBorder;

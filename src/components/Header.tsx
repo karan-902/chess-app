@@ -29,7 +29,6 @@ import IconButton from "./base/IconButton/IconButton";
 export default function Header() {
     // const { userCounts } = useSocket();
     const { pathname } = useLocation();
-    const navigate = useNavigate();
     const { usdValue, loading } = useWalletBalance();
     const session = useReduxSelector((state) => state.auth.session);
     const logout = useLogout();
@@ -41,6 +40,7 @@ export default function Header() {
 
     return (
         <AppBar
+            toolbarClass="app-toolbar"
             bottomSlot={
                 <Box customClass="appbar-nav-tabs">
                     {NAV_ITEMS.map((item) => (

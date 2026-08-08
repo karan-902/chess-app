@@ -268,7 +268,7 @@ export default function Wallet() {
     return (
         <Box customClass="wallet-page">
             <Box customClass="wallet-split">
-                <Box customClass={classNames("wallet-split-block", "accent")}>
+                <Box customClass="wallet-split-block accent">
                     <Text customClass="wallet-split-lbl">
                         {walletPageBalanceLabel}
                     </Text>

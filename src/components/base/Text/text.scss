@@ -40,7 +40,7 @@
     }
 
     &.auth-title {
-        font-family: $fontDisplay;
+        font-family: $fontOutfitExtraBold;
         font-size: $font24;
         font-weight: 700;
         color: $appText;
@@ -226,11 +226,11 @@
     &.segment-btn-label {
         display: block;
         font-size: $font14;
-        font-weight: 600;
+        font-family: $fontOutfitExtraBold;
         transition: color 0.2s ease;
 
         .segment-btn.active & {
-            color: $appText;
+            color: $appSurface;
         }
     }
 
@@ -242,14 +242,21 @@
         transition: color 0.2s ease;
 
         .segment-btn.active & {
-            color: $appText;
+            color: $appSurface;
         }
     }
 
+    &.shatranj-logo {
+        font-family: $fontOutfitExtraBold;
+        text-transform: uppercase;
+        color: $appText;
+    }
     &.auth-footer {
         font-size: $font12;
-        color: alpha($appText, 0.5);
+        font-family: $fontOutfitExtraBold;
+        color: $appTextMuted;
         text-align: center;
+        margin-top: auto;
 
         a {
             color: $gold;
@@ -311,7 +318,7 @@
     &.matches-stat-title {
         font-family: $fontOutfitMedium;
         font-size: $font15;
-        color: $appText;
+        color: $appTextMuted;
     }
 
     &.lb-rank {
@@ -350,9 +357,9 @@
     &.wallet-split-lbl {
         display: block;
         font-size: $font12;
-        text-transform: uppercase;
+        text-transform: capitalize;
         letter-spacing: 0.05em;
-        font-family: $fontOutfitExtraBold;
+        font-family: $fontOutfitLight;
         color: $appTextMuted;
         margin-bottom: 0.35rem;
     }
@@ -364,13 +371,13 @@
         color: $greenishTeal;
 
         .wallet-split-block.accent & {
-            color: $gold;
+            color: $appText;
         }
     }
 
     &.wallet-tx-title {
-        font-family: $fontDisplay;
-        font-size: $font18;
+        font-family: $fontOutfitExtraBold;
+        font-size: $font15;
         color: $appText;
     }
 
@@ -415,7 +422,7 @@
 
     &.wallet-tx-time {
         font-size: $font12;
-        font-family: $fontOutfitExtraBold;
+        font-family: $fontOutfitMedium;
         color: $appTextMuted;
     }
 

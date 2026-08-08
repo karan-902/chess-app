@@ -1,18 +1,20 @@
 :root {
-    --app-bg: #f6f3ea;
-    --app-secondary: #efe9d8;
+    --app-bg: #f7f4ec;
+    --app-secondary: #fbf9f2;
     --app-surface: #ffffff;
-    --app-card-border: #e7e1ce;
+    --app-card-border: #e8e1cc;
     --app-line: #ece6d4;
     --app-text: #1c1810;
-    --app-text-muted: #867f6b;
+    --app-text-muted: #85806d;
     --app-btn-bg: #ffffff8a;
     --app-btn-border: #1c18101f;
-    --gold: #e1890f;
+    --gold: #c97d0e;
     --cyan: #2e9e6e;
-    --pale-red: #c84a3e;
+    --pale-red: #c6433d;
     --brink-pink: #c96a5a;
-    --greenish-teal: #2e9e6e;
+    --greenish-teal: #1f8a5f;
+    --backdrop-center: #1a1d22;
+    --backdrop-edge: #000000;
 }
 
 :root[data-theme="dark"] {
@@ -73,6 +75,8 @@ $appText: var(--app-text);
 $appTextMuted: var(--app-text-muted);
 $appBtnBg: var(--app-btn-bg);
 $appBtnBorder: var(--app-btn-border);
+$backdropCenter: var(--backdrop-center);
+$backdropEdge: var(--backdrop-edge);
 
 $gold: var(--gold);
 

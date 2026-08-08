@@ -194,7 +194,7 @@
         padding: 1.1rem;
     }
 
-    &.subtabs {
+    &.my-matches-segment {
         display: flex;
         gap: 0.5rem;
         margin-bottom: 1rem;
@@ -207,11 +207,11 @@
     &.segment {
         position: relative;
         display: flex;
-        background: $appBg;
+        gap: 0.35rem;
+        background: $appSurface;
         border: 1px solid $appCardBorder;
-        border-radius: 999px;
-        padding: 0.2rem;
-        margin-bottom: 1rem;
+        border-radius: 0.7rem;
+        padding: 0.3rem;
 
         &.compact {
             margin-bottom: 0.5rem;
@@ -223,7 +223,7 @@
         top: 0.2rem;
         bottom: 0.2rem;
         left: 0;
-        border-radius: 999px;
+        border-radius: 0.5rem;
         background: $gold;
         transition:
             transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
@@ -234,7 +234,6 @@
     &.matches-empty {
         padding: 0.5rem 0.15rem;
     }
-
 
     &.matches-stats-head {
         text-align: center;
@@ -306,10 +305,13 @@
     }
 
     &.wallet-split-block {
-        background: $appSurface;
         border: 1px solid $appCardBorder;
         border-radius: $appCardRadius;
         padding: 0.9rem 0.85rem;
+    }
+    &.accent {
+        background: #c97d0e1f;
+        border: 1px solid $gold;
     }
 
     &.wallet-btn-row {

@@ -238,11 +238,13 @@
         overflow: hidden;
         flex: 1;
         min-height: 0;
+        border-radius: 0.85rem;
     }
 
     &.profile-id-card {
         padding: 1.1rem 1rem;
         margin-bottom: 1.1rem;
+        border-radius: 0.85rem;
     }
 
     &.lb-row {

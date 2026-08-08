@@ -1,3 +1,5 @@
+import Text from "./base/Text/Text";
+
 export function GoogleIcon({ size = 18 }: { size: number }) {
     return (
         <svg
@@ -70,20 +72,10 @@ export function ShatranjLogo({
             </svg>
 
             {showText && (
-                <span
-                    style={{
-                        fontFamily: "var(--font-outfit)",
-                        fontSize,
-                        fontWeight: 700,
-                        letterSpacing: "-0.01em",
-                        lineHeight: 1,
-                        color: "#f7931a",
-                        textShadow: "0 0 18px rgba(247,147,26,0.45)",
-                    }}
-                >
+                <Text customClass="shatranj-logo">
                     Shatranj
                     {withCursor && <span className="logo-cursor" />}
-                </span>
+                </Text>
             )}
         </span>
     );

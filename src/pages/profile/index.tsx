@@ -334,11 +334,6 @@ export default function Profile() {
             </Card>
 
             <Text component="h3" customClass="rules-heading">
-                {profileTitle}
-            </Text>
-            <Text customClass="rules-text">{profileSubtitle}</Text>
-
-            <Text component="h3" customClass="rules-heading">
                 {profilePersonalInfoLabel}
             </Text>
             <Card customClass="matches-stat-list">

@@ -3,10 +3,11 @@
 .appbar {
     display: flex;
     flex-direction: column;
-    background: $appSurface;
+    background: $appSurface !important;
     flex-shrink: 0;
     box-shadow: none;
     position: static;
+    box-shadow: none !important;
 
     .MuiToolbar-root {
         width: 100%;
@@ -16,6 +17,10 @@
         align-items: center;
         justify-content: space-between;
         gap: 1rem;
+        &.app-toolbar {
+            background-color: $appSurface;
+            border-bottom: 1px solid $appCardBorder;
+        }
     }
 
     .appbar-brand {
@@ -39,18 +44,17 @@
     .appbar-balance {
         display: flex;
         align-items: center;
-        gap: 0.4rem;
-        background: $appSurface;
-        border: 1px solid $appCardBorder;
+        gap: 0.3rem;
+        font-size: 0.78rem;
+        background: #1f8a5f1a;
+        border: 1px solid #1f8a5f4d;
+        padding: 0.3rem 0.65rem;
         border-radius: 999px;
-        padding: 0.3rem 0.3rem 0.3rem 0.7rem;
     }
 
     .appbar-balance-label {
-        font-family: $fontMono;
-        font-variant-numeric: tabular-nums;
+        font-family: $fontOutfitExtraBold;
         font-size: $font14;
-        font-weight: 600;
         color: $greenishTeal;
     }
 }
@@ -100,7 +104,7 @@
 .appbar-nav-tab {
     position: relative;
     padding: 0.625rem 0.625rem 0.75rem;
-    font-family: $fontOutfitExtraBold;
+    font-family: $fontOutfitSemiBold;
     font-size: $font14;
     font-weight: 600;
     color: $appTextMuted;

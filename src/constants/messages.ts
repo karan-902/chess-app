@@ -48,7 +48,7 @@ export const authValidationFirstNameRequired = "First name is required";
 export const authValidationLastNameRequired = "Last name is required";
 export const authValidationCountryRequired = "Country is required";
 export const authLoginTitle = "Welcome Back";
-export const authLoginSubtitle = "Sign in to your CheckMate account";
+export const authLoginSubtitle = "Sign in to your Shatranj account";
 export const authLoginNoAccountFound = "No account found with this email";
 export const authLoginBack = "Back";
 export const authLoginForgotPassword = "Forgot password?";
@@ -433,9 +433,9 @@ export const matchesStatsBestStreakLabel = "Best streak";
 export const matchesStatsCurrentStreakLabel = "Current streak";
 export const matchesStatsFallback = 0;
 
-export const walletPageBalanceLabel = "Balance";
+export const walletPageBalanceLabel = "Total Balance";
 export const walletPageWithdrawableLabel = "Withdrawable";
-export const walletPageTransactionsTitle = "Transactions";
+export const walletPageTransactionsTitle = "Recent Transactions";
 export const walletPageEmptyTitle = "No transactions yet";
 export const walletPageEmptyDesc =
     "Your deposits, withdrawals, and match payouts will show up here.";

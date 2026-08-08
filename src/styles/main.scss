@@ -25,7 +25,11 @@ body {
         display: flex;
         justify-content: center;
         height: 100vh;
-        background: radial-gradient(circle at 50% 0%, #1a1d22 0%, #000 65%);
+        background: radial-gradient(
+            circle at 50% 0%,
+            $backdropCenter 0%,
+            $backdropEdge 65%
+        );
     }
 }
 
@@ -35,6 +39,7 @@ body {
     width: 100%;
     max-width: 480px;
     height: 100%;
+    background: $appBg;
 
     @media (min-width: 768px) {
         max-width: 768px;
