@@ -67,6 +67,37 @@
         justify-content: center;
     }
 
+    &.reg-method-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    &.reg-method-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 50%;
+        background: rgba($gold, 0.08);
+        color: $gold;
+        flex-shrink: 0;
+    }
+
+    &.reg-method-text {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+        flex: 1;
+    }
+
+    &.otp-heading {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+    }
+
     &.auth-divider {
         display: flex;
         align-items: center;

@@ -56,6 +56,39 @@
         color: $paleRed;
     }
 
+    &.reg-method-title {
+        font-size: $font15;
+        font-weight: 600;
+        color: $appText;
+    }
+
+    &.reg-method-sub {
+        font-size: $font12;
+        color: rgba($appText, 0.5);
+    }
+
+    &.otp-title {
+        font-family: $fontDisplay;
+        font-size: $font20;
+        font-weight: 700;
+        color: $appText;
+    }
+
+    &.otp-subtitle {
+        font-size: $font14;
+        color: rgba($appText, 0.5);
+
+        strong {
+            color: $appText;
+        }
+    }
+
+    &.otp-expiry {
+        font-size: $font12;
+        color: rgba($appText, 0.45);
+        text-align: center;
+    }
+
     &.appbar-online-label {
         font-family: $fontMono;
         font-size: $font12;

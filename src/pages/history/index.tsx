@@ -152,14 +152,14 @@ function matchRow(
 ) {
     if (!item) return null;
     const selfName = showSelf
-        ? item.player.id === currentUserId
+        ? item.player?.id === currentUserId
             ? matchesYouLabel
-            : item.player.username
+            : item.player?.username
         : undefined;
     return (
         <MatchRow
             outcome={item.result}
-            opponentName={item.opponent.username}
+            opponentName={item.opponent?.username}
             category={deriveCategory(item.time_seconds)}
             endReason={item.end_reason}
             amount={Math.abs(item.settlement_usd)}

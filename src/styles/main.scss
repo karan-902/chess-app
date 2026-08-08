@@ -95,6 +95,51 @@ body {
     cursor: pointer;
 }
 
+.reg-method-arrow {
+    margin-left: auto;
+    color: rgba($appText, 0.3);
+}
+
+.otp-input-row {
+    display: flex;
+    gap: 0.6rem;
+    justify-content: center;
+}
+
+.otp-slot {
+    position: relative;
+    width: 2.75rem;
+    height: 3.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: $appSecondary;
+    border: 1px solid $appCardBorder;
+    border-radius: $radiusMd;
+    font-family: $fontDisplay;
+    font-size: $font20;
+    color: $appText;
+
+    &--active {
+        border-color: rgba($gold, 0.5);
+        box-shadow: 0 0 0 3px rgba($gold, 0.09);
+    }
+}
+
+.otp-slot-caret {
+    position: absolute;
+    width: 1px;
+    height: 1.4rem;
+    background: $gold;
+    animation: otp-caret-blink 1s step-end infinite;
+}
+
+@keyframes otp-caret-blink {
+    50% {
+        opacity: 0;
+    }
+}
+
 .deposit-speed-logo {
     height: 0.85rem;
     width: auto;
