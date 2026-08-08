@@ -48,7 +48,7 @@
 
     &.auth-subtitle {
         font-size: $font14;
-        color: rgba($appText, 0.5);
+        color: alpha($appText, 0.5);
     }
 
     &.auth-error {
@@ -64,7 +64,7 @@
 
     &.reg-method-sub {
         font-size: $font12;
-        color: rgba($appText, 0.5);
+        color: alpha($appText, 0.5);
     }
 
     &.otp-title {
@@ -76,7 +76,7 @@
 
     &.otp-subtitle {
         font-size: $font14;
-        color: rgba($appText, 0.5);
+        color: alpha($appText, 0.5);
 
         strong {
             color: $appText;
@@ -85,7 +85,7 @@
 
     &.otp-expiry {
         font-size: $font12;
-        color: rgba($appText, 0.45);
+        color: alpha($appText, 0.45);
         text-align: center;
     }
 
@@ -248,7 +248,7 @@
 
     &.auth-footer {
         font-size: $font12;
-        color: rgba($appText, 0.5);
+        color: alpha($appText, 0.5);
         text-align: center;
 
         a {
@@ -641,7 +641,7 @@
         font-family: $fontMono;
         font-size: $font14;
         line-height: 2.1;
-        color: rgba($appText, 0.78);
+        color: alpha($appText, 0.78);
         margin-right: 0.9rem;
         white-space: nowrap;
     }

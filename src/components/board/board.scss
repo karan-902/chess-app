@@ -23,7 +23,7 @@
     justify-content: center;
 
     &.square-selected {
-        box-shadow: inset 0 0 0 3px rgba($gold, 0.65);
+        box-shadow: inset 0 0 0 3px alpha($gold, 0.65);
     }
 }
 
@@ -47,10 +47,10 @@
 }
 
 .label-on-light {
-    color: rgba($gold, 0.35);
+    color: alpha($gold, 0.35);
 }
 .label-on-dark {
-    color: rgba($gold, 0.22);
+    color: alpha($gold, 0.22);
 }
 
 .chess-piece-svg {
@@ -66,7 +66,7 @@
     width: 1.35rem;
     height: 1.35rem;
     flex-shrink: 0;
-    filter: drop-shadow(0 0 1.5px rgba($gold, 0.4));
+    filter: drop-shadow(0 0 1.5px alpha($gold, 0.4));
 
     &.stacked {
         margin-left: -1.25rem;
@@ -88,7 +88,7 @@
     width: 22%;
     height: 22%;
     border-radius: 50%;
-    background: rgba($gold, 0.65);
+    background: alpha($gold, 0.65);
     pointer-events: none;
     z-index: 3;
 }
@@ -96,7 +96,7 @@
 .legal-capture-ring {
     position: absolute;
     inset: 0;
-    border: 4px solid rgba($gold, 0.3);
+    border: 4px solid alpha($gold, 0.3);
     border-radius: 50%;
     pointer-events: none;
     z-index: 3;
@@ -183,11 +183,11 @@
 
 @keyframes chess-king-stalemate-pulse {
     from {
-        filter: drop-shadow(0 0 4px rgba($gold, 0.6));
+        filter: drop-shadow(0 0 4px alpha($gold, 0.6));
     }
     to {
-        filter: drop-shadow(0 0 14px rgba($gold, 1))
-            drop-shadow(0 0 6px rgba($gold, 0.8));
+        filter: drop-shadow(0 0 14px alpha($gold, 1))
+            drop-shadow(0 0 6px alpha($gold, 0.8));
     }
 }
 
@@ -229,7 +229,7 @@
 
     &.in-check {
         animation: board-preview-king-shake 0.45s ease-in-out 3;
-        filter: drop-shadow(0 0 6px rgba($paleRed, 0.9));
+        filter: drop-shadow(0 0 6px alpha($paleRed, 0.9));
     }
 }
 
@@ -276,7 +276,7 @@
     left: 0;
     width: 12.5%;
     height: 12.5%;
-    background: rgba($paleRed, 0.55);
+    background: alpha($paleRed, 0.55);
     transition: opacity 0.4s ease;
     pointer-events: none;
 }
@@ -301,9 +301,9 @@
     background: linear-gradient(
         100deg,
         transparent 0%,
-        rgba($gold, 0.22) 45%,
-        rgba($gold, 0.4) 50%,
-        rgba($gold, 0.22) 55%,
+        alpha($gold, 0.22) 45%,
+        alpha($gold, 0.4) 50%,
+        alpha($gold, 0.22) 55%,
         transparent 100%
     );
     transform: skewX(-18deg) translateX(0%);
@@ -340,10 +340,10 @@
 
 @keyframes board-preview-check-pulse {
     0% {
-        box-shadow: 0 0 0 0 rgba($paleRed, 0.65);
+        box-shadow: 0 0 0 0 alpha($paleRed, 0.65);
     }
     100% {
-        box-shadow: 0 0 0 22px rgba($paleRed, 0);
+        box-shadow: 0 0 0 22px alpha($paleRed, 0);
     }
 }
 

@@ -10,7 +10,7 @@
 
 .tab {
     text-transform: none;
-    color: rgba($appText, 0.55);
+    color: alpha($appText, 0.55);
     font-family: $fontOutfit;
 
     &.Mui-selected {

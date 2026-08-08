@@ -4,7 +4,7 @@
     position: fixed;
     inset: 0;
     z-index: 50;
-    background: rgba($black, 0.72);
+    background: alpha($black, 0.72);
     backdrop-filter: blur(4px);
     animation: modal-overlay-in 0.15s ease;
 }
@@ -17,11 +17,11 @@
     margin: 0;
     transform: translate(-50%, -50%);
     width: min(92vw, 420px);
-    background: linear-gradient(180deg, rgba($appText, 0.02) 0%, transparent 40%), $appSurface;
+    background: linear-gradient(180deg, alpha($appText, 0.02) 0%, transparent 40%), $appSurface;
     border: 1px solid $appCardBorder;
     border-radius: 1rem;
     padding: 1.5rem;
-    box-shadow: 0 24px 64px rgba($black, 0.6);
+    box-shadow: 0 24px 64px alpha($black, 0.6);
     animation: modal-content-in 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 
     &:focus {
@@ -39,7 +39,7 @@
     .modal-description {
         font-family: $fontOutfit;
         font-size: $font14;
-        color: rgba($appText, 0.5);
+        color: alpha($appText, 0.5);
         margin-bottom: 1.25rem;
         line-height: 1.5;
     }
@@ -56,19 +56,19 @@
         border-radius: 0.5rem;
         background: transparent;
         border: none;
-        color: rgba($appText, 0.4);
+        color: alpha($appText, 0.4);
         cursor: pointer;
         transition: color 0.15s ease, background-color 0.15s ease;
 
         &:hover {
             color: $appText;
-            background: rgba($appText, 0.06);
+            background: alpha($appText, 0.06);
         }
     }
 
     &.modal--danger {
-        border-color: rgba($paleRed, 0.2);
-        box-shadow: 0 0 0 1px rgba($paleRed, 0.08), 0 24px 64px rgba($black, 0.6);
+        border-color: alpha($paleRed, 0.2);
+        box-shadow: 0 0 0 1px alpha($paleRed, 0.08), 0 24px 64px alpha($black, 0.6);
     }
 }
 

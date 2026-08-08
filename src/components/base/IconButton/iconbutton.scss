@@ -18,7 +18,7 @@
         transition: background-color 0.15s ease;
 
         &.active {
-            background: rgba($gold, 0.12);
+            background: alpha($gold, 0.12);
             color: $gold;
         }
     }
@@ -33,7 +33,7 @@
         color: $appText;
 
         &.active {
-            background: rgba($gold, 0.12);
+            background: alpha($gold, 0.12);
             color: $gold;
         }
     }

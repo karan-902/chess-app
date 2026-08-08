@@ -11,7 +11,7 @@
         transition: border-color 0.15s ease;
 
         &:hover {
-            border-color: rgba($gold, 0.35);
+            border-color: alpha($gold, 0.35);
         }
 
         &:active {
@@ -25,18 +25,18 @@
 
         &.selected {
             border-color: $gold;
-            background: rgba($gold, 0.08);
-            box-shadow: 0 0 0 1px rgba($gold, 0.25);
+            background: alpha($gold, 0.08);
+            box-shadow: 0 0 0 1px alpha($gold, 0.25);
         }
     }
 
     &.matchmaking-cta {
         border-radius: 0.7rem;
         background: $appSecondary;
-        border: 1px solid rgba($gold, 0.3);
+        border: 1px solid alpha($gold, 0.3);
         box-shadow:
             0 -12px 40px rgba(0, 0, 0, 0.5),
-            0 0 24px rgba($gold, 0.08);
+            0 0 24px alpha($gold, 0.08);
         padding: 0.9rem 1rem;
     }
 
@@ -45,8 +45,8 @@
         align-items: center;
         gap: 0.55rem;
         padding: 0.55rem 0.85rem;
-        background: rgba($gold, 0.08);
-        border-color: rgba($gold, 0.3);
+        background: alpha($gold, 0.08);
+        border-color: alpha($gold, 0.3);
 
         &.wager-badge--pvp {
             .live-dot {
@@ -66,12 +66,12 @@
             background 0.2s ease;
 
         &.turn-active.opp {
-            border-color: rgba($paleRed, 0.45);
-            background: rgba($paleRed, 0.06);
+            border-color: alpha($paleRed, 0.45);
+            background: alpha($paleRed, 0.06);
         }
         &.turn-active.self {
-            border-color: rgba($cyan, 0.45);
-            background: rgba($cyan, 0.06);
+            border-color: alpha($cyan, 0.45);
+            background: alpha($cyan, 0.06);
         }
     }
 
@@ -95,11 +95,11 @@
         background:
             radial-gradient(
                 ellipse 120% 60% at 50% 0%,
-                rgba($gold, 0.1) 0%,
+                alpha($gold, 0.1) 0%,
                 transparent 70%
             ),
             $appSurface;
-        border-color: rgba($gold, 0.22);
+        border-color: alpha($gold, 0.22);
     }
 
     &.tx-item {
@@ -137,9 +137,9 @@
         &.podium-step--1 {
             height: 8.5rem;
             order: 2;
-            border-color: rgba($gold, 0.45);
-            background: rgba($gold, 0.08);
-            box-shadow: 0 0 28px rgba($gold, 0.12);
+            border-color: alpha($gold, 0.45);
+            background: alpha($gold, 0.08);
+            box-shadow: 0 0 28px alpha($gold, 0.12);
         }
         &.podium-step--2 {
             height: 6.5rem;
@@ -168,7 +168,7 @@
         background: transparent;
 
         &.active {
-            background: rgba($gold, 0.07);
+            background: alpha($gold, 0.07);
         }
     }
 
@@ -192,7 +192,7 @@
         gap: 0.6rem;
         padding: 0.7rem 0.8rem;
         margin-bottom: 0.5rem;
-        border-color: rgba($gold, 0.3);
+        border-color: alpha($gold, 0.3);
     }
 
     &.friend-challenge-waiting {
@@ -202,7 +202,7 @@
         gap: 0.6rem;
         padding: 0.7rem 0.8rem;
         margin-bottom: 0.9rem;
-        border-color: rgba($gold, 0.3);
+        border-color: alpha($gold, 0.3);
     }
 
     &.stake-card {
@@ -271,7 +271,7 @@
         width: 200px;
         height: 150px;
         border-radius: 5px;
-        border-color: rgba($gold, 0.25);
+        border-color: alpha($gold, 0.25);
 
         .backdrop-loader-anim {
             width: 84px;

@@ -40,13 +40,13 @@
         padding: 0;
         margin-bottom: 0.25rem;
         background: transparent;
-        color: rgba($appText, 0.4);
+        color: alpha($appText, 0.4);
         font-weight: 400;
         font-size: $font14;
 
         &:not(:disabled):hover {
             background: transparent;
-            color: rgba($appText, 0.7);
+            color: alpha($appText, 0.7);
         }
     }
 
@@ -62,16 +62,16 @@
 
     &.auth-google-btn {
         background: transparent;
-        border: 1px solid rgba($appText, 0.22);
+        border: 1px solid alpha($appText, 0.22);
         box-shadow: none;
-        color: rgba($appText, 0.65);
+        color: alpha($appText, 0.65);
         font-weight: 600;
         height: 2.85rem;
         border-color: $appCardBorder;
 
         &:not(:disabled):hover {
             background: transparent;
-            border-color: rgba($appText, 0.4);
+            border-color: alpha($appText, 0.4);
             color: $appText;
         }
     }
@@ -85,7 +85,7 @@
 
         &:not(:disabled):hover {
             background: $appBtnBg;
-            border-color: rgba($appText, 0.4);
+            border-color: alpha($appText, 0.4);
         }
     }
 
@@ -103,7 +103,7 @@
     &.searching-cancel-btn {
         height: 2.1rem;
         font-size: $font12;
-        border-color: rgba($paleRed, 0.35);
+        border-color: alpha($paleRed, 0.35);
         color: $paleRed;
 
         &:not(:disabled):hover {
@@ -141,7 +141,7 @@
 
         &:not(:disabled):hover {
             background: $appBtnBg;
-            border-color: rgba($appText, 0.4);
+            border-color: alpha($appText, 0.4);
         }
     }
 
@@ -152,7 +152,7 @@
         margin: 1.5rem auto 0;
         padding: 0;
         background: transparent;
-        color: rgba($appText, 0.4);
+        color: alpha($appText, 0.4);
         font-weight: 400;
         font-size: $font14;
 
@@ -193,13 +193,13 @@
         white-space: nowrap;
 
         &:not(:disabled):hover {
-            border-color: rgba($gold, 0.35);
+            border-color: alpha($gold, 0.35);
         }
 
         &.active {
             border-color: $gold;
             color: $gold;
-            background: rgba($gold, 0.08);
+            background: alpha($gold, 0.08);
         }
     }
 
@@ -260,7 +260,7 @@
         color: $appTextMuted;
 
         &:not(:disabled):hover {
-            border-color: rgba($paleRed, 0.35);
+            border-color: alpha($paleRed, 0.35);
             color: $paleRed;
         }
     }
@@ -276,7 +276,7 @@
 
         &:not(:disabled):hover {
             background: $appBtnBg;
-            border-color: rgba($appText, 0.4);
+            border-color: alpha($appText, 0.4);
         }
     }
 
@@ -285,7 +285,7 @@
         height: 0.45rem;
         padding: 0;
         border-radius: 50%;
-        background: rgba($appText, 0.15);
+        background: alpha($appText, 0.15);
 
         &.auth-left-dot--active {
             width: 1.1rem;
@@ -333,7 +333,7 @@
         }
 
         &:not(:disabled):hover {
-            border-color: rgba($gold, 0.6);
+            border-color: alpha($gold, 0.6);
         }
     }
 

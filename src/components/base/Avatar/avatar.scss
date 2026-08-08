@@ -14,7 +14,7 @@
         border-radius: 50%;
         background: $greenishTeal;
         border: 2px solid $appBg;
-        box-shadow: 0 0 6px rgba($greenishTeal, 0.7);
+        box-shadow: 0 0 6px alpha($greenishTeal, 0.7);
     }
 }
 
@@ -26,21 +26,21 @@
     transition: box-shadow 0.15s ease;
 
     &.primary {
-        background: rgba($cyan, 0.1);
-        border: 1px solid rgba($cyan, 0.3);
+        background: alpha($cyan, 0.1);
+        border: 1px solid alpha($cyan, 0.3);
         color: $cyan;
     }
 
     &.danger {
-        background: rgba($paleRed, 0.1);
-        border: 1px solid rgba($paleRed, 0.25);
+        background: alpha($paleRed, 0.1);
+        border: 1px solid alpha($paleRed, 0.25);
         color: $brinkPink;
     }
 
     &.neutral {
-        background: rgba($appText, 0.05);
-        border: 1px solid rgba($appText, 0.1);
-        color: rgba($appText, 0.5);
+        background: alpha($appText, 0.05);
+        border: 1px solid alpha($appText, 0.1);
+        color: alpha($appText, 0.5);
     }
 
     &.sm {
@@ -67,7 +67,7 @@
 
     &.profile-avatar-ring {
         background: $appSecondary;
-        border: 1px solid rgba($gold, 0.35);
+        border: 1px solid alpha($gold, 0.35);
         color: $gold;
     }
 }

@@ -15,7 +15,7 @@
         box-shadow 0.15s ease;
 
     input::placeholder {
-        color: rgba($appText, 0.18);
+        color: alpha($appText, 0.18);
         opacity: 1;
     }
 
@@ -29,16 +29,16 @@
     }
 
     &.Mui-focused {
-        border-color: rgba($gold, 0.5);
-        box-shadow: 0 0 0 3px rgba($gold, 0.09);
+        border-color: alpha($gold, 0.5);
+        box-shadow: 0 0 0 3px alpha($gold, 0.09);
     }
 
     &.Mui-error {
-        border-color: rgba($paleRed, 0.6);
+        border-color: alpha($paleRed, 0.6);
 
         &.Mui-focused {
-            border-color: rgba($paleRed, 0.8);
-            box-shadow: 0 0 0 3px rgba($paleRed, 0.1);
+            border-color: alpha($paleRed, 0.8);
+            box-shadow: 0 0 0 3px alpha($paleRed, 0.1);
         }
     }
 
@@ -61,7 +61,7 @@
         }
 
         &.Mui-error {
-            border-bottom-color: rgba($paleRed, 0.7);
+            border-bottom-color: alpha($paleRed, 0.7);
         }
 
         input:-webkit-autofill,
@@ -87,11 +87,11 @@
     border: none;
     cursor: pointer;
     padding: 0;
-    color: rgba($appText, 0.4);
+    color: alpha($appText, 0.4);
     transition: color 0.15s ease;
 
     &:hover {
-        color: rgba($appText, 0.85);
+        color: alpha($appText, 0.85);
     }
 }
 

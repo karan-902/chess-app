@@ -6,6 +6,6 @@
     flex-direction: column;
     align-items: center;
     gap: 0.9rem;
-    background: rgba($black, 0.72);
+    background: alpha($black, 0.72);
     backdrop-filter: blur(4px);
 }

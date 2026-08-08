@@ -30,7 +30,7 @@ export const activityFeedWin = (
 export const authBackLink = "← Back";
 export const authBackToSignIn = "← Back to Sign In";
 export const authEmailLabel = "Email";
-export const authEmailPlaceholder = "you@example.com";
+export const authEmailPlaceholder = "johndoe@example.com";
 export const authPasswordLabel = "Password";
 export const authPasswordPlaceholder = "••••••••";
 export const authConfirmPasswordLabel = "Confirm Password";
@@ -445,9 +445,9 @@ export const walletFilterFromLabel = "From";
 export const walletFilterToLabel = "To";
 export const walletFilterApplyButton = "Apply Filters";
 export const walletFilterResetButton = "Reset";
+
 export const appbarWalletTooltip = "View wallet";
 export const appbarViewProfile = "View Profile";
-
 export const rulesStakingTitle = "How staking works";
 export const rulesStakingDesc =
     "Every match is winner-take-most. Both players stake the same amount when the game starts; the winner takes the pot minus a 12% platform fee.";
@@ -483,6 +483,8 @@ export const profileUsernameLabel = "Username";
 export const profileEmailLabel = "Email";
 export const profileEmailHint = "Email cannot be changed";
 export const profileCountryLabel = "Country";
+export const profileAppearanceLabel = "Appearance";
+export const profileDarkModeLabel = "Dark Mode";
 export const profileEloRatingLabel = "ELO Rating";
 export const profileEloRatingHint =
     "Rating updates automatically after each game";

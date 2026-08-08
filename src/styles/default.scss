@@ -1,6 +1,44 @@
-$paleRed: #ff5c5c;
-$brinkPink: #f3a69e;
-$greenishTeal: #39ff88;
+:root {
+    --app-bg: #f6f3ea;
+    --app-secondary: #efe9d8;
+    --app-surface: #ffffff;
+    --app-card-border: #e7e1ce;
+    --app-line: #ece6d4;
+    --app-text: #1c1810;
+    --app-text-muted: #867f6b;
+    --app-btn-bg: #ffffff8a;
+    --app-btn-border: #1c18101f;
+    --gold: #e1890f;
+    --cyan: #2e9e6e;
+    --pale-red: #c84a3e;
+    --brink-pink: #c96a5a;
+    --greenish-teal: #2e9e6e;
+}
+
+:root[data-theme="dark"] {
+    --app-bg: #100f0c;
+    --app-secondary: #14171c;
+    --app-surface: #17150f;
+    --app-card-border: #29261b;
+    --app-line: #262319;
+    --app-text: #ece8de;
+    --app-text-muted: #8b8779;
+    --app-btn-bg: #00000059;
+    --app-btn-border: #ece8de38;
+    --gold: #f7931a;
+    --cyan: #39ff88;
+    --pale-red: #ff5c5c;
+    --brink-pink: #f3a69e;
+    --greenish-teal: #39ff88;
+}
+
+@function alpha($color, $opacity) {
+    @return color-mix(in srgb, #{$color} #{$opacity * 100%}, transparent);
+}
+
+$paleRed: var(--pale-red);
+$brinkPink: var(--brink-pink);
+$greenishTeal: var(--greenish-teal);
 $black: #000000;
 
 $font12: 0.75rem;
@@ -26,19 +64,19 @@ $fontOutfitBlack: "Outfit-Black";
 $fontMono: $fontOutfitRegular;
 $fontDisplay: $fontOutfitSemiBold;
 
-$appBg: #100f0c;
-$appSecondary: #14171c;
-$appSurface: #17150f;
-$appCardBorder: #29261b;
-$appLine: #262319;
-$appText: #ece8de;
-$appTextMuted: #8b8779;
-$appBtnBg: #00000059;
-$appBtnBorder: #ece8de38;
+$appBg: var(--app-bg);
+$appSecondary: var(--app-secondary);
+$appSurface: var(--app-surface);
+$appCardBorder: var(--app-card-border);
+$appLine: var(--app-line);
+$appText: var(--app-text);
+$appTextMuted: var(--app-text-muted);
+$appBtnBg: var(--app-btn-bg);
+$appBtnBorder: var(--app-btn-border);
 
-$gold: #f7931a;
+$gold: var(--gold);
 
-$cyan: #39ff88;
+$cyan: var(--cyan);
 
 $radiusSm: 0.2rem;
 $radiusMd: 0.3rem;

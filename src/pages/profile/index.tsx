@@ -13,8 +13,10 @@ import Button from "@/components/base/Button/Button";
 import Input from "@/components/base/Input/Input";
 import Label from "@/components/base/Label/Label";
 import Drawer from "@/components/base/Drawer/Drawer";
+import Switch from "@/components/base/Switch/Switch";
 import { useReduxSelector, useReduxDispatch } from "@/redux/hooks";
 import { updateSession } from "@/redux/persisted/auth.slice";
+import { useAppTheme } from "@/context/ThemeContext";
 import { callAPIInterface } from "@/utils";
 import { getAvatarUrl } from "@/utils/avatar";
 import { formateText } from "@/utils/formate";
@@ -51,6 +53,8 @@ import {
     profileAvatarPickerTitle,
     profileAvatarUpdateSuccess,
     profileAvatarUpdateFailed,
+    profileAppearanceLabel,
+    profileDarkModeLabel,
 } from "@/constants/messages";
 
 const CATEGORY_ORDER: GameCategory[] = [
@@ -285,6 +289,7 @@ function EditProfileDrawer({
 export default function Profile() {
     const session = useReduxSelector((state) => state.auth.session);
     const dispatch = useReduxDispatch();
+    const { mode, toggleTheme } = useAppTheme();
     const [editOpen, setEditOpen] = useState(false);
     const [loading, setLoading] = useState(true);
 
@@ -384,6 +389,18 @@ export default function Profile() {
                     <Text component="span" customClass="matches-stat-val">
                         {session.elo_rating ?? leaderboardRankFallback}
                     </Text>
+                </Box>
+            </Card>
+
+            <Text component="h3" customClass="rules-heading">
+                {profileAppearanceLabel}
+            </Text>
+            <Card customClass="matches-stat-list">
+                <Box customClass="matches-stat-row">
+                    <Text customClass="matches-stat-title" component="span">
+                        {profileDarkModeLabel}
+                    </Text>
+                    <Switch checked={mode === "dark"} onChange={toggleTheme} />
                 </Box>
             </Card>
 
