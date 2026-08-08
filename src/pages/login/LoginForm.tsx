@@ -100,7 +100,7 @@ function EmailScreen({
                     variant="contained"
                     fullWidth
                     customClass="auth-submit-btn"
-                    disabled={formik.isSubmitting}
+                    disabled={!formik.dirty || formik.isSubmitting}
                     isLoading={formik.isSubmitting}
                 >
                     {authLoginContinueButton}
@@ -204,7 +204,7 @@ function PasswordScreen({
                     variant="contained"
                     fullWidth
                     customClass="auth-submit-btn"
-                    disabled={formik.isSubmitting}
+                    disabled={!formik.dirty || formik.isSubmitting}
                     isLoading={formik.isSubmitting}
                 >
                     {authLoginSignInButton}

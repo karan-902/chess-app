@@ -95,7 +95,7 @@ export default function ForgotPasswordPage() {
                         variant="contained"
                         fullWidth
                         customClass="auth-submit-btn"
-                        disabled={formik.isSubmitting}
+                        disabled={!formik.dirty || formik.isSubmitting}
                         isLoading={formik.isSubmitting}
                     >
                         {authForgotPasswordSendButton}
