@@ -80,7 +80,6 @@ function EmailScreen({
                     placeholder={authEmailPlaceholder}
                     value={formik.values.email}
                     onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
                     isError={formik.touched.email && !!formik.errors.email}
                     helperText={formik.errors.email}
                     customClass="auth-input-underline"
