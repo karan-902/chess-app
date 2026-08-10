@@ -337,14 +337,14 @@ export default function DepositModal() {
                     <Box customClass="deposit-qr-wrap">
                         <QRCodeSVG
                             value={address ?? ""}
-                            size={176}
+                            size={220}
                             bgColor="#ece8de"
                             fgColor="#100f0c"
                             marginSize={2}
                             imageSettings={{
                                 src: qrLogo,
-                                height: 32,
-                                width: 32,
+                                height: 40,
+                                width: 40,
                                 excavate: true,
                             }}
                         />

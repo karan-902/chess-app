@@ -22,6 +22,7 @@ import { useRematch } from "@/hooks/useRematch";
 import { useStockfish } from "@/hooks/useStockfish";
 import { useComputerOpponent } from "@/hooks/useComputerOpponent";
 import { useSocket } from "@/context/SocketContext";
+import { useWalletBalance } from "@/hooks/useWallet";
 import { useReduxSelector } from "@/redux/hooks";
 import { fenToBoard } from "@/utils/fenToBoard";
 import { formateAmount } from "@/utils/formate";
@@ -83,6 +84,7 @@ import {
     playPromotionRook,
     playPromotionBishop,
     playPromotionKnight,
+    matchmakingPoolCardInsufficientBalance,
 } from "@/constants/messages";
 import Button from "@/components/base/Button/Button";
 
@@ -135,6 +137,7 @@ export default function GameRoom() {
     const session = useReduxSelector((state) => state.auth.session);
     const navigate = useNavigate();
     const { socket } = useSocket();
+    const { usdValue } = useWalletBalance();
     const myUserId = useReduxSelector((state) => state.auth.session?.id);
 
     const mode: GameMode = params.get("mode") === "pvc" ? "pvc" : "pvp";
@@ -157,6 +160,7 @@ export default function GameRoom() {
           ? CATEGORY_INACTIVITY_SECONDS[timeControl]
           : undefined;
     const stakeAmount = Number(params.get("stake_amount") ?? 0);
+    const canAffordRematch = usdValue >= stakeAmount;
 
     const [wasAlreadyFinished] = useState(
         () => !!gameId && isGameFinished(gameId),
@@ -839,7 +843,12 @@ export default function GameRoom() {
                         >
                             {playGameOverNewGameButton}
                         </Button>
-                        {!isPvc && (
+                        {!isPvc && !canAffordRematch && (
+                            <Text customClass="pool-insufficient-label">
+                                {matchmakingPoolCardInsufficientBalance}
+                            </Text>
+                        )}
+                        {!isPvc && canAffordRematch && (
                             <Button
                                 customClass="gr-overlay-btn primary"
                                 onClick={offerRematch}

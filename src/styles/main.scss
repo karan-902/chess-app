@@ -146,11 +146,12 @@ body {
 }
 
 .deposit-speed-logo {
-    height: 0.85rem;
+    height: 1.1rem;
     width: auto;
 }
 
 .deposit-howto-link {
+    display: none;
     align-self: center;
     margin-top: 0.9rem;
     font-size: $font12;
