@@ -58,4 +58,14 @@ export function useComputerOpponent({
         return () => clearTimeout(t);
 
     }, [bestMove, turn, mode, difficulty, gameEnded]);
+
+    useEffect(() => {
+        if (mode !== "pvc" || difficulty === "easy" || turn !== "b" || gameEnded)
+            return;
+        const fallback = setTimeout(() => {
+            const move = getRandomMove();
+            if (move) makeMove(move.from, move.to);
+        }, 6000);
+        return () => clearTimeout(fallback);
+    }, [turn, mode, difficulty, gameEnded]);
 }

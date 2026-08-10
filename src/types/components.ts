@@ -52,6 +52,6 @@ export const DIFFICULTY_CONFIG: Record<
     { rating: number; depth: number; elo: number }
 > = {
     easy: { rating: 100, depth: 2, elo: 100 },
-    medium: { rating: 1600, depth: 8, elo: 1600 },
-    hard: { rating: 3000, depth: 18, elo: 3000 },
+    medium: { rating: 1600, depth: 4, elo: 1600 },
+    hard: { rating: 3000, depth: 8, elo: 3000 },
 };

@@ -23,6 +23,7 @@ export function useStockfish(
             }
             // console.log(message);
         };
+        engine.onerror = (e) => console.error("[stockfish] worker error", e);
         return () => engine.terminate();
     }, []);
 
