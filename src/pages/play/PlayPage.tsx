@@ -302,16 +302,17 @@ export default function PlayPage() {
                                                 </Text>
                                             )
                                         )}
-                                        <Button
-                                            type="button"
-                                            variant="outlined"
-                                            fullWidth
-                                            customClass="stake-card-go"
-                                            disabled={!canAfford}
-                                            onClick={() => joinQueue(pool)}
-                                        >
-                                            {playSheetCardPlayButton}
-                                        </Button>
+                                        {canAfford && (
+                                            <Button
+                                                type="button"
+                                                variant="outlined"
+                                                fullWidth
+                                                customClass="stake-card-go"
+                                                onClick={() => joinQueue(pool)}
+                                            >
+                                                {playSheetCardPlayButton}
+                                            </Button>
+                                        )}
                                     </Card>
                                 );
                             })}
