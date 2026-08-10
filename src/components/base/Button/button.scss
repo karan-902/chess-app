@@ -87,7 +87,7 @@
         &:not(:disabled):hover {
             background: $appBtnBg;
             border-color: alpha($appText, 0.4);
-            color: $appSurface;
+            color: $appTextMuted;
         }
     }
 
