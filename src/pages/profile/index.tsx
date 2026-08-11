@@ -29,8 +29,6 @@ import type {
     IAvatarOptionsResponse,
 } from "@/types/utils";
 import {
-    profileTitle,
-    profileSubtitle,
     profileEditButton,
     profileRatingsByCategoryLabel,
     profileStreakWidgetTitle,
