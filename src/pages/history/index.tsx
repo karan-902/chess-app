@@ -15,8 +15,8 @@ import { CATEGORY_META } from "@/constants/config";
 import type { GameCategory } from "@/types/types";
 import type { IGameHistoryItem } from "@/types/types";
 import {
-    matchesSubtabResults,
-    matchesSubtabWorldwide,
+    matchesSubtabHistory,
+    matchesSubtabGlobal,
     matchesSubtabStats,
     matchesEmptyTitle,
     matchesEmptyDesc,
@@ -213,7 +213,7 @@ export default function MyMatches() {
                     )}
                     onClick={() => setSubtab("results")}
                 >
-                    {matchesSubtabResults}
+                    {matchesSubtabHistory}
                 </Button>
                 <Button
                     customClass={classNames(
@@ -231,7 +231,7 @@ export default function MyMatches() {
                     )}
                     onClick={() => setSubtab("worldwide")}
                 >
-                    {matchesSubtabWorldwide}
+                    {matchesSubtabGlobal}
                 </Button>
             </Box>
 

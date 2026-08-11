@@ -143,7 +143,7 @@ export const POOLS_FALLBACK: Pool[] = [
 export const PATH_TITLE: Record<string, string> = {
     "/play": "Play",
     "/matchmaking": "Find Match",
-    "/history": "Game History",
+    "/history": "Matches",
     "/wallet": "Wallet",
     "/leaderboard": "Leaderboard",
     "/friends": "Friends",
@@ -151,7 +151,7 @@ export const PATH_TITLE: Record<string, string> = {
 
 export const NAV_ITEMS = [
     { id: "play", path: "/play", label: "Play" },
-    { id: "my-matches", path: "/history", label: "Game History" },
+    { id: "my-matches", path: "/history", label: "Matches" },
     { id: "leaderboards", path: "/leaderboard", label: "Leaderboards" },
     { id: "rules", path: "/rules", label: "Rules" },
 ];

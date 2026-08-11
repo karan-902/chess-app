@@ -413,9 +413,9 @@ export const leaderboardRankFallback = "–";
 
 export const historyTimeControlLabel = (minutes: number) => `${minutes} min`;
 
-export const matchesSubtabResults = "My Matches";
-export const matchesSubtabWorldwide = "Worldwide";
-export const matchesSubtabStats = "My stats";
+export const matchesSubtabHistory = "History";
+export const matchesSubtabGlobal = "Global";
+export const matchesSubtabStats = "Stats";
 
 export const matchesEmptyTitle = "Welcome!";
 export const matchesEmptyDesc =
