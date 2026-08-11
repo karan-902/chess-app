@@ -351,7 +351,9 @@ export default function DepositModal() {
                     </Box>
 
                     <Box customClass="deposit-address-row">
-                        <Text customClass="deposit-address">{address}</Text>
+                        <Text customClass="deposit-address" truncate>
+                            {address}
+                        </Text>
                         <Button
                             customClass="deposit-copy-btn"
                             onClick={handleCopy}
