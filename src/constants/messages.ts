@@ -413,7 +413,7 @@ export const leaderboardRankFallback = "–";
 
 export const historyTimeControlLabel = (minutes: number) => `${minutes} min`;
 
-export const matchesSubtabResults = "My results";
+export const matchesSubtabResults = "My Matches";
 export const matchesSubtabWorldwide = "Worldwide";
 export const matchesSubtabStats = "My stats";
 

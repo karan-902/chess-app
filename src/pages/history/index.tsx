@@ -218,20 +218,20 @@ export default function MyMatches() {
                 <Button
                     customClass={classNames(
                         "my-matches-segment-btn",
-                        subtab === "worldwide" && "active",
-                    )}
-                    onClick={() => setSubtab("worldwide")}
-                >
-                    {matchesSubtabWorldwide}
-                </Button>
-                <Button
-                    customClass={classNames(
-                        "my-matches-segment-btn",
                         subtab === "stats" && "active",
                     )}
                     onClick={() => setSubtab("stats")}
                 >
                     {matchesSubtabStats}
+                </Button>
+                <Button
+                    customClass={classNames(
+                        "my-matches-segment-btn",
+                        subtab === "worldwide" && "active",
+                    )}
+                    onClick={() => setSubtab("worldwide")}
+                >
+                    {matchesSubtabWorldwide}
                 </Button>
             </Box>
 
