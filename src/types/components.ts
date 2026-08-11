@@ -7,7 +7,7 @@ export type GamePhase = "lobby" | "playing";
 
 export const TIME_SECONDS: Record<GameCategory, number> = {
     BULLET: 60,
-    BLITZ: 300,
+    BLITZ: 180,
     RAPID: 600,
     CLASSICAL: 1800,
 };

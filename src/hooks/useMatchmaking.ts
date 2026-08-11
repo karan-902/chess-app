@@ -17,7 +17,7 @@ import type {
     IQueueTimeoutResponse,
 } from "@/types/types";
 
-export type MatchmakingStatus = "idle" | "queued" | "found";
+export type MatchmakingStatus = "idle" | "joining" | "queued" | "found";
 
 export function useMatchmaking() {
     const [status, setStatus] = useState<MatchmakingStatus>("idle");
@@ -31,7 +31,7 @@ export function useMatchmaking() {
         if (!socket) return;
         poolRef.current = pool;
         setQueuedPool(pool);
-        setStatus("queued");
+        setStatus("joining");
         socket.emit("join_queue", {
             stake_amount: pool.stake,
             currency: pool.currency,

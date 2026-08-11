@@ -99,6 +99,7 @@
     &.stake-card-go {
         height: 2.1rem;
         font-size: $font12;
+        color: $appSurface !important;
         margin-top: 0.4rem;
     }
 
@@ -115,6 +116,19 @@
 
         &:disabled {
             opacity: 0.5;
+        }
+    }
+
+    &.pool-confirm-cancel-btn {
+        height: 2.1rem;
+        background: transparent;
+        border: none;
+        font-size: $font12;
+        color: $appTextMuted;
+
+        &:not(:disabled):hover {
+            background: transparent;
+            color: $appText;
         }
     }
 
@@ -330,6 +344,7 @@
     }
 
     &.profile-avatar-picker-option {
+        position: relative;
         width: 3.25rem;
         height: 3.25rem;
         aspect-ratio: 1;
@@ -337,7 +352,6 @@
         border-radius: 50%;
         background: $appSecondary;
         border: 1.5px solid $appCardBorder;
-        overflow: hidden;
 
         img {
             width: 100%;

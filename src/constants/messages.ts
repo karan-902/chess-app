@@ -174,6 +174,10 @@ export const matchmakingSearchingSecondsLeft = (seconds: number) =>
 export const matchmakingSearchingStakeLabel = "Stake";
 export const matchmakingSearchingPrizeLabel = "Prize";
 export const matchmakingSearchingCancelButton = "Cancel search";
+export const matchmakingConfirmTitle = "Confirm your match";
+export const matchmakingConfirmDescription =
+    "You'll be matched with an opponent as soon as you confirm.";
+export const matchmakingConfirmCancelButton = "Cancel";
 export const lobbyPlayNowButton = "Play now";
 export const playPageHint = "Tap Play now to choose a stake pool.";
 export const playSheetTitle = "Choose a stake pool";
@@ -468,8 +472,9 @@ export const profileEyebrow = "whoami --edit";
 export const profileTitle = "Profile";
 export const profileSubtitle = "Manage your account details";
 export const profileEditButton = "Edit Profile";
-export const profileValidationRequired = "Required";
-export const profileValidationUsernameMinLength = "Min 3 characters";
+export const profileValidationUsernameRequired = "Username is required";
+export const profileValidationUsernameMinLength =
+    "Username must be at least 3 characters";
 export const profileUpdateSuccess = "Profile updated";
 export const profileUpdateFailed = "Failed to update profile";
 export const profileEloLabel = "ELO";

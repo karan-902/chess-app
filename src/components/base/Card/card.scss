@@ -216,6 +216,12 @@
         &.insufficient {
             opacity: 0.5;
         }
+
+        &.selected {
+            border-color: $gold;
+            background: alpha($gold, 0.08);
+            box-shadow: 0 0 0 1px alpha($gold, 0.25);
+        }
     }
 
     .stake-card-live-corner {

@@ -21,7 +21,6 @@ import {
     appbarWalletTooltip,
     profileTitle,
     appBarLogout,
-    leaderboardRankFallback,
     appBarWallet,
 } from "@/constants/messages";
 import IconButton from "./base/IconButton/IconButton";
@@ -109,10 +108,6 @@ export default function Header() {
                         <Box customClass="appbar-dropdown-id">
                             <Text customClass="appbar-dropdown-name">
                                 {session?.username}
-                            </Text>
-                            <Text customClass="appbar-dropdown-elo">
-                                {session?.elo_rating ?? leaderboardRankFallback}{" "}
-                                ELO
                             </Text>
                         </Box>
                     </Box>

@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { toast } from "sonner";
 import classNames from "classnames";
-import { Pencil } from "lucide-react";
+import { Pencil, Check } from "lucide-react";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import Card from "@/components/base/Card/Card";
@@ -32,14 +32,13 @@ import {
     profileTitle,
     profileSubtitle,
     profileEditButton,
-    profileEloLabel,
     profileRatingsByCategoryLabel,
     profileStreakWidgetTitle,
     profileStreakWinsSuffix,
     leaderboardRankFallback,
     matchesStatsCurrentStreakLabel,
     matchesStatsBestStreakLabel,
-    profileValidationRequired,
+    profileValidationUsernameRequired,
     profileValidationUsernameMinLength,
     profileUpdateSuccess,
     profileUpdateFailed,
@@ -68,7 +67,7 @@ const profileEditSchema = Yup.object({
     username: Yup.string()
         .trim()
         .min(3, profileValidationUsernameMinLength)
-        .required(profileValidationRequired),
+        .required(profileValidationUsernameRequired),
 });
 
 function StatRowSkeleton() {
@@ -103,25 +102,6 @@ function ProfileSkeleton() {
                 </Box>
             </Card>
 
-            <Skeleton
-                customClass="text"
-                width={70}
-                height={17}
-                style={{ margin: "0.9rem 0 0.3rem" }}
-            />
-            <Skeleton
-                customClass="text"
-                width={180}
-                height={13}
-                style={{ marginBottom: "0.9rem" }}
-            />
-
-            <Skeleton
-                customClass="text"
-                width={110}
-                height={17}
-                style={{ marginBottom: "0.6rem" }}
-            />
             <Card customClass="matches-stat-list">
                 {Array.from({ length: 6 }, (_, i) => (
                     <StatRowSkeleton key={i} />
@@ -169,6 +149,7 @@ function EditProfileDrawer({
     const [avatarOptions, setAvatarOptions] =
         useState<IAvatarOptionsResponse | null>(null);
     const [savingAvatar, setSavingAvatar] = useState(false);
+    const usernameInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         if (!open || avatarOptions) return;
@@ -179,6 +160,11 @@ function EditProfileDrawer({
             .then(setAvatarOptions)
             .catch(() => {});
     }, [open, avatarOptions]);
+
+    useEffect(() => {
+        if (!open) return;
+        usernameInputRef.current?.focus();
+    }, [open]);
 
     const formik = useFormik({
         initialValues: {
@@ -203,6 +189,11 @@ function EditProfileDrawer({
         },
     });
 
+    const handleClose = () => {
+        formik.resetForm();
+        onClose();
+    };
+
     const updateAvatar = async (seed: string) => {
         if (seed === session.avatar_seed || savingAvatar) return;
         setSavingAvatar(true);
@@ -221,7 +212,7 @@ function EditProfileDrawer({
     };
 
     return (
-        <Drawer anchor="bottom" open={open} onClose={onClose}>
+        <Drawer anchor="bottom" open={open} onClose={handleClose}>
             <Text customClass="edit-profile-title">{profileEditButton}</Text>
 
             <Text customClass="edit-profile-section-label">
@@ -246,6 +237,11 @@ function EditProfileDrawer({
                             width="100%"
                             height="100%"
                         />
+                        {seed === session.avatar_seed && (
+                            <Box customClass="profile-avatar-selected-tick">
+                                <Check size={10} strokeWidth={3} />
+                            </Box>
+                        )}
                     </Button>
                 ))}
             </Box>
@@ -259,6 +255,7 @@ function EditProfileDrawer({
                     <Label htmlFor="username">{profileUsernameLabel}</Label>
                     <Input
                         id="username"
+                        ref={usernameInputRef}
                         fullWidth
                         isError={
                             !!(
@@ -375,14 +372,6 @@ export default function Profile() {
                     </Text>
                     <Text component="span" customClass="matches-stat-val">
                         {session.country}
-                    </Text>
-                </Box>
-                <Box customClass="matches-stat-row">
-                    <Text customClass="matches-stat-title" component="span">
-                        {profileEloLabel}
-                    </Text>
-                    <Text component="span" customClass="matches-stat-val">
-                        {session.elo_rating ?? leaderboardRankFallback}
                     </Text>
                 </Box>
             </Card>

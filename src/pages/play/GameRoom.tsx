@@ -42,6 +42,7 @@ import type {
     ISocketErrorResponse,
     IopponentDisconnectedResponse,
     IopponentReconnectedResponse,
+    GameCategory,
 } from "@/types/types";
 import {
     playOpponentFallbackOpponent,
@@ -85,6 +86,7 @@ import {
     playPromotionBishop,
     playPromotionKnight,
     matchmakingPoolCardInsufficientBalance,
+    leaderboardRankFallback,
 } from "@/constants/messages";
 import Button from "@/components/base/Button/Button";
 
@@ -146,6 +148,7 @@ export default function GameRoom() {
         (params.get("difficulty") as Difficulty) || "medium";
     const gameId = params.get("game_id") ?? undefined;
     const timeControl = (params.get("time") as TimeControl) || "rapid";
+    const myCategory = timeControl.toUpperCase() as GameCategory;
     const playerSide: "w" | "b" = params.get("color") === "black" ? "b" : "w";
     const opponentName = isPvc
         ? playOpponentFallbackComputer
@@ -649,7 +652,9 @@ export default function GameRoom() {
                         {session?.username}(You)
                     </Text>
                     <Text customClass="gr-elo">
-                        {isPvc ? "" : `${formateAmount(stakeAmount)} staked`}
+                        {isPvc
+                            ? ""
+                            : `${session?.ratings[myCategory] ?? leaderboardRankFallback} elo`}
                     </Text>
                     <Box customClass="gr-captured">
                         {pairCapturedPieces(myCaptured).map(
