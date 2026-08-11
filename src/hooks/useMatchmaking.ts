@@ -94,9 +94,9 @@ export function useMatchmaking() {
         const onQueueTimeout = ({ message }: IQueueTimeoutResponse) => {
             dispatch(
                 showToast({
-                    message: `${matchmakingHookNoOpponentTitle} — ${
-                        message || matchmakingHookNoOpponentFallbackDescription
-                    }`,
+                    message:
+                        message ||
+                        `${matchmakingHookNoOpponentTitle} — ${matchmakingHookNoOpponentFallbackDescription}`,
                     severity: "info",
                 }),
             );
