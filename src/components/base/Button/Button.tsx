@@ -7,13 +7,18 @@ import "./button.scss";
 interface IButtonProps extends ButtonProps {
     customClass?: string;
     isLoading?: boolean;
+    loaderOnDark?: boolean;
 }
 
 const Button = forwardRef<HTMLButtonElement, IButtonProps>(function Button(
-    { customClass, children, isLoading, disabled, ...props },
+    { customClass, children, isLoading, disabled, loaderOnDark, ...props },
     ref,
 ) {
-    const classes = classNames("button", customClass, isLoading && "btn--loading");
+    const classes = classNames(
+        "button",
+        customClass,
+        isLoading && "btn--loading",
+    );
 
     return (
         <MuiButton
@@ -24,7 +29,11 @@ const Button = forwardRef<HTMLButtonElement, IButtonProps>(function Button(
             aria-busy={isLoading || undefined}
         >
             {isLoading ? (
-                <CircularProgress size={15} color="inherit" />
+                loaderOnDark ? (
+                    <CircularProgress size={15} sx={{ color: "#ffffff" }} />
+                ) : (
+                    <CircularProgress size={15} color="inherit" />
+                )
             ) : (
                 children
             )}

@@ -293,6 +293,7 @@ export default function PlayPage() {
                                 fullWidth
                                 customClass="stake-card-go"
                                 isLoading={status === "joining"}
+                                loaderOnDark
                                 onClick={handleConfirmJoin}
                             >
                                 {matchmakingCtaFindOpponentButton}
