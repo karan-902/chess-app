@@ -151,7 +151,7 @@ export const PATH_TITLE: Record<string, string> = {
 
 export const NAV_ITEMS = [
     { id: "play", path: "/play", label: "Play" },
-    { id: "my-matches", path: "/history", label: "Matches" },
+    { id: "my-matches", path: "/history", label: "Game History" },
     { id: "leaderboards", path: "/leaderboard", label: "Leaderboards" },
     { id: "rules", path: "/rules", label: "Rules" },
 ];
