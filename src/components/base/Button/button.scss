@@ -78,14 +78,14 @@
 
     &.play-cta,
     &.stake-card-go {
-        background: $gold;
+        background: $gold !important;
         border: 1px solid $appBtnBorder;
         box-shadow: none;
         border-radius: 0.6rem;
         color: $appSurface;
 
         &:not(:disabled):hover {
-            background: $appBtnBg;
+            background: $appBtnBg !important;
             border-color: alpha($appText, 0.4);
             color: $appText;
         }
