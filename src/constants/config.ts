@@ -13,7 +13,7 @@ import {
     Handshake,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import type { Currency, GameCategory, Pool, EngineLine } from "@/types/types";
+import type { Currency, GameCategory } from "@/types/types";
 import type { TransactionType } from "@/types/utils";
 
 export const CATEGORY_META: Record<
@@ -58,87 +58,6 @@ export const QUEUE_TIMEOUT_SECONDS: Record<GameCategory, number> = {
 };
 
 export const STAKE_CURRENCY: Currency = "USD";
-
-export const ENGINE_LINES: EngineLine[] = [
-    { move: "Nc4", score: "+0.4", continuation: "Nc4 Qd7 f4 f6 Nf3" },
-    { move: "Qd2", score: "+0.1", continuation: "Qd2 Nf6 Nc3 d5 e5" },
-    { move: "f4", score: "-0.2", continuation: "f4 f6 Nf3 Ne7 d5" },
-];
-
-export const POOLS_FALLBACK: Pool[] = [
-    {
-        id: "bullet-1-USD",
-        category: "BULLET",
-        currency: "USD",
-        stake: 5,
-        prize: 9,
-        time: "1+0",
-        timeSeconds: 60,
-        players: 634,
-        active: 201,
-        hot: true,
-    },
-    {
-        id: "blitz-5-USD",
-        category: "BLITZ",
-        currency: "USD",
-        stake: 10,
-        prize: 18,
-        time: "3+2",
-        timeSeconds: 180,
-        players: 418,
-        active: 134,
-        hot: true,
-    },
-    {
-        id: "blitz-25-USD",
-        category: "RAPID",
-        currency: "USD",
-        stake: 25,
-        prize: 45,
-        time: "5+0",
-        timeSeconds: 300,
-        players: 256,
-        active: 78,
-        hot: false,
-    },
-    {
-        id: "rapid-100-USD",
-        category: "CLASSICAL",
-        currency: "USD",
-        stake: 50,
-        prize: 90,
-        time: "10+0",
-        timeSeconds: 600,
-        players: 112,
-        active: 33,
-        hot: false,
-    },
-    {
-        id: "rapid-250-USD",
-        category: "RAPID",
-        currency: "USD",
-        stake: 100,
-        prize: 180,
-        time: "15+10",
-        timeSeconds: 900,
-        players: 55,
-        active: 15,
-        hot: false,
-    },
-    {
-        id: "classical-1000-USD",
-        category: "CLASSICAL",
-        currency: "USD",
-        stake: 500,
-        prize: 900,
-        time: "30+0",
-        timeSeconds: 1800,
-        players: 14,
-        active: 4,
-        hot: false,
-    },
-];
 
 export const PATH_TITLE: Record<string, string> = {
     "/play": "Play",

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { callAPIInterface } from "@/utils";
 import { useSocket } from "@/context/SocketContext";
-import { STAKE_CURRENCY, POOLS_FALLBACK } from "@/constants/config";
+import { STAKE_CURRENCY } from "@/constants/config";
 import type {
     Pool,
     IPoolStats,
@@ -53,7 +53,7 @@ export function usePools(poolType: PoolCategory = "all") {
             .then(applyResponse)
             .catch(() => {
                 setError(true);
-                setPools(POOLS_FALLBACK);
+                setPools([]);
                 setStats(DEFAULT_STATS);
             })
             .finally(() => setLoading(false));
