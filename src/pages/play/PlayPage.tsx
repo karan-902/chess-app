@@ -194,7 +194,7 @@ export default function PlayPage() {
             <Box customClass="cta-bottom">
                 <Button
                     type="button"
-                    variant="outlined"
+                    variant="contained"
                     fullWidth
                     customClass="play-cta"
                     onClick={() => setSheetOpen(true)}
@@ -289,7 +289,7 @@ export default function PlayPage() {
                         <Box customClass="pool-confirm-actions">
                             <Button
                                 type="button"
-                                variant="outlined"
+                                variant="contained"
                                 fullWidth
                                 customClass="stake-card-go"
                                 isLoading={status === "joining"}
@@ -433,7 +433,7 @@ export default function PlayPage() {
                         </Box>
                         <Button
                             type="button"
-                            variant="outlined"
+                            variant="contained"
                             fullWidth
                             customClass="stake-card-go"
                             disabled={!selection}
