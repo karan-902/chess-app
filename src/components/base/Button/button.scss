@@ -90,10 +90,7 @@
         color: $appSurface !important;
 
         &:not(.Mui-disabled):hover {
-            background: $appBtnBg !important;
-            background-color: $appBtnBg !important;
-            border-color: alpha($appText, 0.4);
-            color: $appText !important;
+            opacity: 0.4;
         }
     }
 
