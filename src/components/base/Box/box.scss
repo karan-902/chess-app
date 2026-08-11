@@ -216,6 +216,16 @@
         &.compact {
             margin-bottom: 0.5rem;
         }
+
+        &.category-select {
+            gap: 0.25rem;
+            padding: 0.25rem;
+
+            @media (min-width: 768px) {
+                gap: 0.35rem;
+                padding: 0.3rem;
+            }
+        }
     }
 
     &.segment-thumb {
@@ -244,6 +254,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        gap: 0.5rem;
         padding: 0.75rem 0.85rem;
         border-bottom: 1px solid $appLine;
 
@@ -391,6 +402,10 @@
         }
     }
 
+    &.wallet-tx-text {
+        min-width: 0;
+    }
+
     &.match-row {
         display: flex;
         align-items: center;
@@ -421,6 +436,10 @@
         display: flex;
         align-items: center;
         gap: 0.6rem;
+        min-width: 0;
+    }
+
+    &.match-row-text {
         min-width: 0;
     }
 

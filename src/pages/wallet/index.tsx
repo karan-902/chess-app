@@ -195,7 +195,7 @@ function TxItemSkeleton() {
             <Box customClass="wallet-tx-row">
                 <Box customClass="wallet-tx-info">
                     <Skeleton customClass="circle" width={32} height={32} />
-                    <Box>
+                    <Box customClass="wallet-tx-text">
                         <Skeleton customClass="text" width={110} height={14} />
                         <Skeleton customClass="text" width={60} height={11} />
                     </Box>
@@ -220,7 +220,7 @@ function txRow(tx: ITransactionResponse) {
                     <Box customClass="wallet-tx-icon">
                         <TxIcon size={16} strokeWidth={2} />
                     </Box>
-                    <Box>
+                    <Box customClass="wallet-tx-text">
                         <Text customClass="wallet-tx-desc">
                             {tx.description}
                         </Text>

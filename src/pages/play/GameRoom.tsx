@@ -558,7 +558,9 @@ export default function GameRoom() {
                 )}
             >
                 <Box customClass="gr-meta">
-                    <Text customClass="gr-name">{opponentName}</Text>
+                    <Text customClass="gr-name" truncate>
+                        {opponentName}
+                    </Text>
                     <Text customClass="gr-elo">
                         {isPvc
                             ? playWagerBadgeDifficultyLabels[difficulty]
@@ -643,7 +645,9 @@ export default function GameRoom() {
                 )}
             >
                 <Box customClass="gr-meta">
-                    <Text customClass="gr-name">{session?.username}(You)</Text>
+                    <Text customClass="gr-name" truncate>
+                        {session?.username}(You)
+                    </Text>
                     <Text customClass="gr-elo">
                         {isPvc ? "" : `${formateAmount(stakeAmount)} staked`}
                     </Text>

@@ -65,8 +65,8 @@ function MatchRow({
                 <Box customClass="match-row-icon">
                     <CategoryIcon size={15} strokeWidth={2} />
                 </Box>
-                <Box>
-                    <Text customClass="match-row-headline">
+                <Box customClass="match-row-text">
+                    <Text customClass="match-row-headline" truncate>
                         {selfName && (
                             <>
                                 {selfName}

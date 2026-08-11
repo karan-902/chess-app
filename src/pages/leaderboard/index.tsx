@@ -69,7 +69,7 @@ export default function Leaderboard() {
                             <Text customClass="lb-rank">
                                 {leaderboardRankFallback}
                             </Text>
-                            <Text customClass="lb-name">
+                            <Text customClass="lb-name" truncate>
                                 {currentUsername
                                     ? youLabel(currentUsername)
                                     : matchesYouLabel}
@@ -96,7 +96,7 @@ export default function Leaderboard() {
                             >
                                 {player.rank}
                             </Text>
-                            <Text customClass="lb-name">
+                            <Text customClass="lb-name" truncate>
                                 {isMe(player.id)
                                     ? youLabel(player.username)
                                     : player.username}

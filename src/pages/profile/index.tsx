@@ -323,10 +323,10 @@ export default function Profile() {
                         customClass="lg profile-avatar-ring"
                     />
                     <Box customClass="profile-id-text">
-                        <Text customClass="profile-id-name">
+                        <Text customClass="profile-id-name" truncate>
                             {session.username}
                         </Text>
-                        <Text customClass="profile-id-handle">
+                        <Text customClass="profile-id-handle" truncate>
                             {`${session.first_name} ${session.last_name}`.trim()}
                         </Text>
                     </Box>

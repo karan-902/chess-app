@@ -345,6 +345,7 @@ export default function PlayPage() {
                                             TIME_SECONDS[c] / 60,
                                         )
                                     }
+                                    customClass="segment category-select"
                                 />
                                 <Button
                                     type="button"

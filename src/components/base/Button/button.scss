@@ -228,6 +228,15 @@
         &:not(:disabled):hover {
             background: transparent;
         }
+
+        .segment.category-select & {
+            padding: 0.4rem 0.1rem;
+            letter-spacing: normal;
+
+            @media (min-width: 768px) {
+                padding: 0.4rem 0.3rem;
+            }
+        }
     }
 
     &.deposit-method-btn {

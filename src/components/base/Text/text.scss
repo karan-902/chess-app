@@ -233,6 +233,15 @@
         .segment-btn.active & {
             color: $appSurface;
         }
+
+        .segment.category-select & {
+            font-size: $font12;
+            overflow-wrap: anywhere;
+
+            @media (min-width: 768px) {
+                font-size: $font14;
+            }
+        }
     }
 
     &.segment-btn-sub {
@@ -315,11 +324,16 @@
         font-family: $fontOutfitExtraBold;
         font-size: $font14;
         color: $appText;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
     &.matches-stat-title {
         font-family: $fontOutfitMedium;
         font-size: $font15;
         color: $appTextMuted;
+        flex-shrink: 0;
     }
 
     &.lb-rank {
