@@ -79,13 +79,23 @@
     &.play-cta,
     &.stake-card-go {
         background: $gold !important;
+        background-color: $gold !important;
         border: 1px solid $appBtnBorder;
         box-shadow: none;
         border-radius: 0.6rem;
-        color: $appSurface;
+        color: $appSurface !important;
+        opacity: 1 !important;
+
+        &.Mui-disabled {
+            background: $gold !important;
+            background-color: $gold !important;
+            color: $appSurface !important;
+            opacity: 1 !important;
+        }
 
         &:not(:disabled):hover {
             background: $appBtnBg !important;
+            background-color: $appBtnBg !important;
             border-color: alpha($appText, 0.4);
             color: $appText;
         }
