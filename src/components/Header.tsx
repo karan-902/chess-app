@@ -22,7 +22,7 @@ import {
     profileTitle,
     appBarLogout,
     leaderboardRankFallback,
-    appBarWalletHistory,
+    appBarWallet,
 } from "@/constants/messages";
 import IconButton from "./base/IconButton/IconButton";
 
@@ -128,7 +128,7 @@ export default function Header() {
                         className="appbar-dropdown-item"
                         onClick={closeMenu}
                     >
-                        {appBarWalletHistory}
+                        {appBarWallet}
                     </Link>
                     <Button
                         type="button"

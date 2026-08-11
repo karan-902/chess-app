@@ -542,7 +542,7 @@ export const appBarOnlineLabel = "online";
 export const appBarMessagesAriaLabel = "Messages";
 export const appBarAccountSettingsAriaLabel = "Account settings";
 export const appBarViewProfile = "View Profile";
-export const appBarWalletHistory = "Wallet & History";
+export const appBarWallet = "Wallet";
 export const appBarLogout = "Log Out";
 export const appBarEloAriaLabel = (tier: string, elo: number) =>
     `${tier} tier, ${elo} rating`;
