@@ -217,6 +217,16 @@ function EditProfileDrawer({
                 {profileAvatarPickerTitle}
             </Text>
             <Box customClass="profile-avatar-picker-grid">
+                {!avatarOptions &&
+                    Array.from({ length: 12 }, (_, i) => (
+                        <Skeleton
+                            key={i}
+                            variant="circular"
+                            customClass="circle"
+                            width={52}
+                            height={52}
+                        />
+                    ))}
                 {avatarOptions?.seeds.map((seed) => (
                     <Button
                         key={seed}
@@ -268,7 +278,7 @@ function EditProfileDrawer({
 
                 <Button
                     type="submit"
-                    variant="outlined"
+                    variant="contained"
                     fullWidth
                     isLoading={formik.isSubmitting}
                     disabled={!formik.dirty || formik.isSubmitting}

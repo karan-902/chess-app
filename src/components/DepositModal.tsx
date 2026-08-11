@@ -272,6 +272,7 @@ export default function DepositModal() {
 
                     <Button
                         fullWidth
+                        variant="contained"
                         customClass="deposit-generate-btn"
                         onClick={handleGenerate}
                         isLoading={submitting}
@@ -393,7 +394,12 @@ export default function DepositModal() {
                     <Text customClass="deposit-tagline">
                         {depositModalPaymentReceivedDesc}
                     </Text>
-                    <Button fullWidth customClass="deposit-generate-btn" onClick={close}>
+                    <Button
+                        fullWidth
+                        variant="contained"
+                        customClass="deposit-generate-btn"
+                        onClick={close}
+                    >
                         {depositModalCloseLink}
                     </Button>
                 </Box>

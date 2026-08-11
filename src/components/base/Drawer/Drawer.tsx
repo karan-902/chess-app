@@ -33,7 +33,6 @@ export default function Drawer({
                         `drawer-panel--${anchor}`,
                     ),
                 },
-                backdrop: { className: "drawer-backdrop" },
             }}
         >
             <Button

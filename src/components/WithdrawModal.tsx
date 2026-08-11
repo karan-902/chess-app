@@ -175,6 +175,7 @@ export default function WithdrawModal() {
 
                     <Button
                         fullWidth
+                        variant="contained"
                         customClass="deposit-generate-btn"
                         onClick={handleSubmit}
                         isLoading={submitting}
@@ -198,6 +199,7 @@ export default function WithdrawModal() {
                     </Text>
                     <Button
                         fullWidth
+                        variant="contained"
                         customClass="deposit-generate-btn"
                         onClick={close}
                     >

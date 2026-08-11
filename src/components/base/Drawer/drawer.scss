@@ -1,9 +1,5 @@
 @use "../../../styles/default.scss" as *;
 
-.drawer-backdrop {
-    background: rgba(0, 0, 0, 0.6) !important;
-}
-
 .drawer-panel {
     position: relative;
     background: $appBg;
