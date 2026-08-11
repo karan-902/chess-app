@@ -4,11 +4,6 @@ import { getSocket } from "@/lib/socket";
 import { useSocket } from "@/context/SocketContext";
 import { useReduxDispatch } from "@/redux/hooks";
 import { showToast } from "@/redux/toast.slice";
-import {
-    matchmakingHookFailedTitle,
-    matchmakingHookNoOpponentTitle,
-    matchmakingHookNoOpponentFallbackDescription,
-} from "@/constants/messages";
 import type {
     Pool,
     ImatchFoundResponse,
@@ -82,24 +77,12 @@ export function useMatchmaking() {
         };
 
         const onQueueError = ({ message }: IqueueErrorResponse) => {
-            dispatch(
-                showToast({
-                    message: `${matchmakingHookFailedTitle} — ${message}`,
-                    severity: "error",
-                }),
-            );
+            dispatch(showToast({ message, severity: "error" }));
             resetStatus();
         };
 
         const onQueueTimeout = ({ message }: IQueueTimeoutResponse) => {
-            dispatch(
-                showToast({
-                    message:
-                        message ||
-                        `${matchmakingHookNoOpponentTitle} — ${matchmakingHookNoOpponentFallbackDescription}`,
-                    severity: "info",
-                }),
-            );
+            dispatch(showToast({ message, severity: "info" }));
             resetStatus();
         };
 

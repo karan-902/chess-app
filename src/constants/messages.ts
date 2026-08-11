@@ -522,10 +522,6 @@ export const inactivityTimeoutTimedOutDescription =
     "You didn't move in time. The game has ended.";
 export const inactivityTimeoutDisconnectedDescription =
     "You were disconnected from the game.";
-export const matchmakingHookFailedTitle = "Matchmaking failed";
-export const matchmakingHookNoOpponentTitle = "No opponent found";
-export const matchmakingHookNoOpponentFallbackDescription =
-    "Try again or pick a different pool.";
 export const sidebarNavLogoTitle = "Go to Lobby";
 export const sidebarNavStreakSuffix = "W streak";
 export const sidebarNavRatingHint = (elo: number) =>
