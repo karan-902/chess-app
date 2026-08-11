@@ -2,7 +2,6 @@ import * as yup from "yup";
 import { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router";
 import { ArrowLeft } from "lucide-react";
-import { toast } from "sonner";
 import { useFormik, type FormikProps } from "formik";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
@@ -15,6 +14,7 @@ import { callAPIInterface } from "@/utils";
 import { useReduxDispatch } from "@/redux/hooks";
 import { login } from "@/redux/thunks";
 import { showLoader, hideLoader } from "@/redux/loader.slice";
+import { showToast } from "@/redux/toast.slice";
 import type { IVerifyUserBody } from "@/types/index";
 import type { IVerifyUserResponse } from "@/types/utils";
 import { SignupMethod } from "@/types/utils";
@@ -240,7 +240,12 @@ export default function LoginForm() {
                 }
 
                 if (!res.email_verified) {
-                    toast.error(authLoginEmailNotVerified);
+                    dispatch(
+                        showToast({
+                            message: authLoginEmailNotVerified,
+                            severity: "error",
+                        }),
+                    );
                     navigate(
                         `/verify-email?email=${encodeURIComponent(values.email)}`,
                     );
@@ -278,7 +283,12 @@ export default function LoginForm() {
                 if (!res.country) setStep("country");
             } catch (err: any) {
                 if (err?.type === "email_not_verified") {
-                    toast.error(authLoginEmailNotVerified);
+                    dispatch(
+                        showToast({
+                            message: authLoginEmailNotVerified,
+                            severity: "error",
+                        }),
+                    );
                     navigate(
                         `/verify-email?email=${encodeURIComponent(verifiedEmail)}`,
                     );

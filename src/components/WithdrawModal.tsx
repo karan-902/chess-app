@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
 import { CheckCircle2 } from "lucide-react";
+import { useReduxDispatch } from "@/redux/hooks";
+import { showToast } from "@/redux/toast.slice";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import Button from "@/components/base/Button/Button";
@@ -34,6 +35,7 @@ import {
 type Stage = "amount" | "success";
 
 export default function WithdrawModal() {
+    const dispatch = useReduxDispatch();
     const { openModal, close } = useWalletActionModal();
     const { withdrawableUsd, refetch } = useWalletBalance();
     const open = openModal === "withdraw";
@@ -87,7 +89,12 @@ export default function WithdrawModal() {
 
     const handleSubmit = async () => {
         if (!destination.trim()) {
-            toast.error(withdrawModalInvalidDestination);
+            dispatch(
+                showToast({
+                    message: withdrawModalInvalidDestination,
+                    severity: "error",
+                }),
+            );
             return;
         }
         setSubmitting(true);
@@ -96,7 +103,9 @@ export default function WithdrawModal() {
             refetch();
             setStage("success");
         } catch {
-            toast.error(withdrawModalFailed);
+            dispatch(
+                showToast({ message: withdrawModalFailed, severity: "error" }),
+            );
         } finally {
             setSubmitting(false);
         }

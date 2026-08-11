@@ -1,6 +1,5 @@
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { toast } from "sonner";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import Label from "@/components/base/Label/Label";
@@ -9,6 +8,7 @@ import Button from "@/components/base/Button/Button";
 import { callAPIInterface } from "@/utils";
 import { useReduxDispatch } from "@/redux/hooks";
 import { updateSession } from "@/redux/persisted/auth.slice";
+import { showToast } from "@/redux/toast.slice";
 import { COUNTRY_OPTIONS } from "@/constants/config";
 import type { IUpdateProfileBody, IUpdateProfileResponse } from "@/types/utils";
 import {
@@ -49,7 +49,12 @@ export default function SelectCountryScreen({
                 dispatch(updateSession(updated));
                 onSelected?.();
             } catch {
-                toast.error(selectCountrySetFailed);
+                dispatch(
+                    showToast({
+                        message: selectCountrySetFailed,
+                        severity: "error",
+                    }),
+                );
             } finally {
                 setSubmitting(false);
             }

@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router";
-import { toast } from "sonner";
 import { getSocket } from "@/lib/socket";
 import { useSocket } from "@/context/SocketContext";
+import { useReduxDispatch } from "@/redux/hooks";
+import { showToast } from "@/redux/toast.slice";
 import {
     matchmakingHookFailedTitle,
     matchmakingHookNoOpponentTitle,
@@ -25,6 +26,7 @@ export function useMatchmaking() {
     const poolRef = useRef<Pool | null>(null);
     const navigate = useNavigate();
     const { socket: ctxSocket } = useSocket();
+    const dispatch = useReduxDispatch();
 
     const joinQueue = (pool: Pool) => {
         const socket = getSocket();
@@ -80,19 +82,24 @@ export function useMatchmaking() {
         };
 
         const onQueueError = ({ message }: IqueueErrorResponse) => {
-            toast.error(matchmakingHookFailedTitle, {
-                description: message,
-                duration: 5000,
-            });
+            dispatch(
+                showToast({
+                    message: `${matchmakingHookFailedTitle} — ${message}`,
+                    severity: "error",
+                }),
+            );
             resetStatus();
         };
 
         const onQueueTimeout = ({ message }: IQueueTimeoutResponse) => {
-            toast.info(matchmakingHookNoOpponentTitle, {
-                description:
-                    message || matchmakingHookNoOpponentFallbackDescription,
-                duration: 5000,
-            });
+            dispatch(
+                showToast({
+                    message: `${matchmakingHookNoOpponentTitle} — ${
+                        message || matchmakingHookNoOpponentFallbackDescription
+                    }`,
+                    severity: "info",
+                }),
+            );
             resetStatus();
         };
 

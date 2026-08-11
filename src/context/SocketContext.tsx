@@ -6,11 +6,11 @@ import {
     useRef,
     type ReactNode,
 } from "react";
-import { toast } from "sonner";
-import { Trophy, RefreshCw, Wallet, Swords } from "lucide-react";
+import { RefreshCw, Swords } from "lucide-react";
 import type { Socket } from "socket.io-client";
 import { connectSocket, disconnectSocket } from "@/lib/socket";
-import { useReduxSelector } from "@/redux/hooks";
+import { useReduxSelector, useReduxDispatch } from "@/redux/hooks";
+import { showToast } from "@/redux/toast.slice";
 import { generateToken } from "@/utils";
 import { formateAmount } from "@/utils/formate";
 import sessionService from "@/redux/sessionService";
@@ -292,6 +292,7 @@ const SocketContext = createContext<ISocketContext>({
 export function SocketProvider({ children }: { children: ReactNode }) {
     const session = useReduxSelector((state) => state.auth.session);
     const isLoggedIn = useReduxSelector((state) => state.auth.isLoggedIn);
+    const dispatch = useReduxDispatch();
     const [userCounts, setUserCounts] = useState<IUserCounts>(
         _isRefresh ? loadCachedCounts : () => DEFAULT_COUNTS,
     );
@@ -478,7 +479,12 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         const onDeviceSuperseded = () => {
             setDeviceHandoff(null);
             deviceHandoffPendingRef.current = false;
-            toast.info(deviceHandoffToastSuperseded, { duration: 4000 });
+            dispatch(
+                showToast({
+                    message: deviceHandoffToastSuperseded,
+                    severity: "info",
+                }),
+            );
             router.navigate("/", { replace: true });
         };
 
@@ -491,26 +497,28 @@ export function SocketProvider({ children }: { children: ReactNode }) {
                 data.winner_streak > 1
                     ? ` · 🔥${data.winner_streak}W streak`
                     : "";
-            toast(
-                activityFeedWin(
-                    data.winner_username,
-                    formateAmount(data.prize_usd),
-                    streakSuffix,
-                ),
-                {
-                    icon: <Trophy size={14} />,
-                    duration: 4000,
-                },
+            dispatch(
+                showToast({
+                    message: activityFeedWin(
+                        data.winner_username,
+                        formateAmount(data.prize_usd),
+                        streakSuffix,
+                    ),
+                    severity: "success",
+                }),
             );
         };
 
         const onTransactionCompleted = (data: ITransactionCompletedEvent) => {
             const amount = formateAmount(data.amount_usd);
-            toast.success(
-                data.type === "DEPOSIT"
-                    ? walletDepositCompletedToast(amount)
-                    : walletWithdrawCompletedToast(amount),
-                { icon: <Wallet size={14} />, duration: 4500 },
+            dispatch(
+                showToast({
+                    message:
+                        data.type === "DEPOSIT"
+                            ? walletDepositCompletedToast(amount)
+                            : walletWithdrawCompletedToast(amount),
+                    severity: "success",
+                }),
             );
         };
 
@@ -566,7 +574,12 @@ export function SocketProvider({ children }: { children: ReactNode }) {
             const username =
                 sentChallengeRef.current?.friendUsername ?? "Your friend";
             setSentChallengeState(null);
-            toast.error(friendsChallengeDeclinedToast(username));
+            dispatch(
+                showToast({
+                    message: friendsChallengeDeclinedToast(username),
+                    severity: "error",
+                }),
+            );
         };
 
         const onChallengeExpired = (data: IChallengeExpiredResponse) => {
@@ -575,7 +588,12 @@ export function SocketProvider({ children }: { children: ReactNode }) {
                 sentChallengeRef.current?.friendId === data.friend_id
             ) {
                 setSentChallengeState(null);
-                toast.error(friendsChallengeExpiredToast);
+                dispatch(
+                    showToast({
+                        message: friendsChallengeExpiredToast,
+                        severity: "error",
+                    }),
+                );
             }
             if (
                 data.challenger_id &&
@@ -588,11 +606,21 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         const onChallengeCancelled = (data: IChallengeCancelledResponse) => {
             if (incomingChallengerIdRef.current !== data.challenger_id) return;
             setIncomingChallengeState(null);
-            toast.info(friendsChallengeCancelledToast);
+            dispatch(
+                showToast({
+                    message: friendsChallengeCancelledToast,
+                    severity: "info",
+                }),
+            );
         };
 
         const onChallengeError = (data: IChallengeErrorResponse) => {
-            toast.error(data.message || friendsChallengeErrorFallback);
+            dispatch(
+                showToast({
+                    message: data.message || friendsChallengeErrorFallback,
+                    severity: "error",
+                }),
+            );
         };
 
         const onChallengeMatchFound = (data: IChallengeMatchFoundResponse) => {

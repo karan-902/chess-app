@@ -1,5 +1,6 @@
 import { Navigate, Outlet, useLocation, useSearchParams } from "react-router";
 import BackdropLoader from "@/components/base/BackdropLoader/BackdropLoader";
+import Notification from "@/components/base/Notification/Notification";
 
 export default function Layout() {
     const location = useLocation();
@@ -20,6 +21,7 @@ export default function Layout() {
         <>
             <Outlet />
             <BackdropLoader />
+            <Notification />
         </>
     );
 }

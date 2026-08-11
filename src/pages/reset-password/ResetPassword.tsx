@@ -2,13 +2,14 @@ import * as yup from "yup";
 import { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router";
 import { useFormik } from "formik";
-import { toast } from "sonner";
 import Box from "@/components/base/Box/Box";
 import Label from "@/components/base/Label/Label";
 import Input from "@/components/base/Input/Input";
 import Button from "@/components/base/Button/Button";
 import AuthLayout from "@/container/AuthLayout";
 import { callAPIInterface } from "@/utils";
+import { useReduxDispatch } from "@/redux/hooks";
+import { showToast } from "@/redux/toast.slice";
 import type { IResetPasswordBody } from "@/types/index";
 import type { IMessageResponse } from "@/types/utils";
 import {
@@ -41,6 +42,7 @@ const resetSchema = yup.object({
 });
 
 export default function ResetPasswordPage() {
+    const dispatch = useReduxDispatch();
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const token = searchParams.get("token");
@@ -58,10 +60,17 @@ export default function ResetPasswordPage() {
                     reset_token: token!,
                     new_password: values.password,
                 });
-                toast.success(res.message);
+                dispatch(
+                    showToast({ message: res.message, severity: "success" }),
+                );
                 navigate("/login", { replace: true });
             } catch {
-                toast.error(authResetPasswordLinkInvalidOrExpired);
+                dispatch(
+                    showToast({
+                        message: authResetPasswordLinkInvalidOrExpired,
+                        severity: "error",
+                    }),
+                );
                 setInvalid(true);
             } finally {
                 setSubmitting(false);

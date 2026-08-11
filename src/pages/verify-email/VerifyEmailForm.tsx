@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { ArrowLeft } from "lucide-react";
 import { OTPInput, type SlotProps } from "input-otp";
-import { toast } from "sonner";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import Button from "@/components/base/Button/Button";
 import { callAPIInterface } from "@/utils";
+import { useReduxDispatch } from "@/redux/hooks";
+import { showToast } from "@/redux/toast.slice";
 import type { IVerifyEmailBody, IResendOtpBody } from "@/types/index";
 import type { IMessageResponse } from "@/types/utils";
 import {
@@ -57,6 +58,7 @@ export default function VerifyEmailForm({
     onVerified,
     onBack,
 }: IVerifyEmailFormProps) {
+    const dispatch = useReduxDispatch();
     const [otp, setOtp] = useState("");
     const [verifying, setVerifying] = useState(false);
     const [resending, setResending] = useState(false);
@@ -82,13 +84,22 @@ export default function VerifyEmailForm({
                 "/verify-email",
                 { email, otp },
             );
-            toast.success(authEmailVerificationVerifiedSuccess);
+            dispatch(
+                showToast({
+                    message: authEmailVerificationVerifiedSuccess,
+                    severity: "success",
+                }),
+            );
             onVerified();
         } catch (err: any) {
             if (err?.response?.status !== 429) {
-                toast.error(
-                    err?.response?.data?.message ??
-                        authEmailVerificationInvalidCode,
+                dispatch(
+                    showToast({
+                        message:
+                            err?.response?.data?.message ??
+                            authEmailVerificationInvalidCode,
+                        severity: "error",
+                    }),
                 );
             }
             setOtp("");
@@ -106,13 +117,23 @@ export default function VerifyEmailForm({
                 "/resend-otp",
                 { email },
             );
-            toast.success(authEmailVerificationResentSuccess);
+            dispatch(
+                showToast({
+                    message: authEmailVerificationResentSuccess,
+                    severity: "success",
+                }),
+            );
             setOtp("");
             setExpirySeconds(OTP_EXPIRY_SECONDS);
             setCooldown(RESEND_COOLDOWN_SECONDS);
         } catch (err: any) {
             if (err?.response?.status !== 429) {
-                toast.error(authEmailVerificationResendFailed);
+                dispatch(
+                    showToast({
+                        message: authEmailVerificationResendFailed,
+                        severity: "error",
+                    }),
+                );
             }
         } finally {
             setResending(false);

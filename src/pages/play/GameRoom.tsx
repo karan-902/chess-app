@@ -6,7 +6,7 @@ import {
     Navigate,
 } from "react-router";
 import classNames from "classnames";
-import { toast } from "sonner";
+import { showToast } from "@/redux/toast.slice";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
@@ -23,7 +23,7 @@ import { useStockfish } from "@/hooks/useStockfish";
 import { useComputerOpponent } from "@/hooks/useComputerOpponent";
 import { useSocket } from "@/context/SocketContext";
 import { useWalletBalance } from "@/hooks/useWallet";
-import { useReduxSelector } from "@/redux/hooks";
+import { useReduxSelector, useReduxDispatch } from "@/redux/hooks";
 import { fenToBoard } from "@/utils/fenToBoard";
 import { formateAmount } from "@/utils/formate";
 import {
@@ -136,6 +136,7 @@ function pairCapturedPieces(types: string[]) {
 
 export default function GameRoom() {
     const [params] = useSearchParams();
+    const dispatch = useReduxDispatch();
     const session = useReduxSelector((state) => state.auth.session);
     const navigate = useNavigate();
     const { socket } = useSocket();
@@ -341,7 +342,13 @@ export default function GameRoom() {
             if (data.game_id === gameId) setDrawOffer(data);
         };
         const onDrawRejected = (data: IdrawRejectedResponse) => {
-            if (data.game_id === gameId) toast(playToastDrawDeclined);
+            if (data.game_id === gameId)
+                dispatch(
+                    showToast({
+                        message: playToastDrawDeclined,
+                        severity: "info",
+                    }),
+                );
         };
         const onGameEnded = (data: IgameEndedResponse) => {
             if (data.game_id === gameId) setGameEnded(data);
@@ -361,21 +368,31 @@ export default function GameRoom() {
             });
         };
         const onSocketError = (data: ISocketErrorResponse) => {
-            toast.error(data.message);
+            dispatch(
+                showToast({ message: data.message, severity: "error" }),
+            );
         };
         const onOpponentDisconnected = (
             data: IopponentDisconnectedResponse,
         ) => {
             if (data.game_id !== gameId) return;
-            toast.info(playToastOpponentDisconnectedTitle, {
-                description: playToastOpponentDisconnectedDesc(
-                    data.grace_period_seconds,
-                ),
-            });
+            dispatch(
+                showToast({
+                    message: `${playToastOpponentDisconnectedTitle} — ${playToastOpponentDisconnectedDesc(
+                        data.grace_period_seconds,
+                    )}`,
+                    severity: "info",
+                }),
+            );
         };
         const onOpponentReconnected = (data: IopponentReconnectedResponse) => {
             if (data.game_id !== gameId) return;
-            toast.success(playToastOpponentReconnected);
+            dispatch(
+                showToast({
+                    message: playToastOpponentReconnected,
+                    severity: "success",
+                }),
+            );
         };
 
         socket.on("opponent_move", onOpponentMove);
@@ -499,7 +516,9 @@ export default function GameRoom() {
     const handleDrawDecline = () => {
         socket?.emit("reject_draw", { game_id: gameId });
         setDrawOffer(null);
-        toast(playToastDrawDeclined);
+        dispatch(
+            showToast({ message: playToastDrawDeclined, severity: "info" }),
+        );
     };
 
     if (tabLockStatus === "secondary") {

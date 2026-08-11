@@ -4,7 +4,8 @@ import axios, {
     type Method,
 } from "axios";
 import dayjs from "dayjs";
-import { toast } from "sonner";
+import { store } from "@/redux/index";
+import { showToast } from "@/redux/toast.slice";
 import sessionService from "@/redux/sessionService";
 import { apiRateLimited } from "@/constants/messages";
 import type { IGenerateTokenBody } from "@/types/index";
@@ -148,7 +149,9 @@ export const callAPIInterface = async <
             }
 
             if (errorStatus === 429) {
-                toast.error(apiRateLimited, { id: "rate-limited" });
+                store.dispatch(
+                    showToast({ message: apiRateLimited, severity: "error" }),
+                );
             }
 
             const isKnownError =

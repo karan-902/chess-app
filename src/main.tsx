@@ -4,7 +4,6 @@ import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ThemeProvider as MuiThemeProvider, CssBaseline } from "@mui/material";
-import { Toaster } from "sonner";
 import { store, persistor } from "./redux/index.ts";
 import { SocketProvider } from "./context/SocketContext";
 import { WalletActionModalProvider } from "./context/WalletActionModalContext";
@@ -27,13 +26,6 @@ function Root() {
                         <SocketProvider>
                             <WalletActionModalProvider>
                                 <App />
-                                <Toaster
-                                    position="top-right"
-                                    theme="dark"
-                                    swipeDirections={["top", "right"]}
-                                    closeButton
-                                    duration={5000}
-                                />
                             </WalletActionModalProvider>
                         </SocketProvider>
                     </PersistGate>

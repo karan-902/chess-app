@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router";
-import { toast } from "sonner";
 import { getSocket } from "@/lib/socket";
+import { useReduxDispatch } from "@/redux/hooks";
+import { showToast } from "@/redux/toast.slice";
 import {
     inactivityTimeoutRemovedTitle,
     inactivityTimeoutTimedOutDescription,
@@ -25,6 +26,7 @@ export function useInactivityTimeout(
     const [secsLeft, setSecsLeft] = useState<number | null>(null);
     const lastMoveAtRef = useRef(Date.now());
     const navigate = useNavigate();
+    const dispatch = useReduxDispatch();
 
     useEffect(() => {
         lastMoveAtRef.current = Date.now();
@@ -60,13 +62,16 @@ export function useInactivityTimeout(
         const socket = getSocket();
         if (!socket) return;
         const onPlayerOffline = ({ reason }: { reason: string }) => {
-            toast.error(inactivityTimeoutRemovedTitle, {
-                description:
-                    reason === "inactivity_timeout"
-                        ? inactivityTimeoutTimedOutDescription
-                        : inactivityTimeoutDisconnectedDescription,
-                duration: 5000,
-            });
+            dispatch(
+                showToast({
+                    message: `${inactivityTimeoutRemovedTitle} — ${
+                        reason === "inactivity_timeout"
+                            ? inactivityTimeoutTimedOutDescription
+                            : inactivityTimeoutDisconnectedDescription
+                    }`,
+                    severity: "error",
+                }),
+            );
             navigate("/play", { replace: true });
         };
         socket.on("player_offline", onPlayerOffline);

@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { toast } from "sonner";
 import classNames from "classnames";
 import { Pencil, Check } from "lucide-react";
 import Box from "@/components/base/Box/Box";
@@ -16,6 +15,7 @@ import Drawer from "@/components/base/Drawer/Drawer";
 import Switch from "@/components/base/Switch/Switch";
 import { useReduxSelector, useReduxDispatch } from "@/redux/hooks";
 import { updateSession } from "@/redux/persisted/auth.slice";
+import { showToast } from "@/redux/toast.slice";
 import { useAppTheme } from "@/context/ThemeContext";
 import { callAPIInterface } from "@/utils";
 import { getAvatarUrl } from "@/utils/avatar";
@@ -177,10 +177,20 @@ function EditProfileDrawer({
                     IUpdateProfileResponse
                 >("PUT", "/profile", values);
                 dispatch(updateSession(updated));
-                toast.success(profileUpdateSuccess);
+                dispatch(
+                    showToast({
+                        message: profileUpdateSuccess,
+                        severity: "success",
+                    }),
+                );
                 onClose();
             } catch {
-                toast.error(profileUpdateFailed);
+                dispatch(
+                    showToast({
+                        message: profileUpdateFailed,
+                        severity: "error",
+                    }),
+                );
             } finally {
                 setSubmitting(false);
             }
@@ -201,9 +211,19 @@ function EditProfileDrawer({
                 IUpdateProfileResponse
             >("PUT", "/profile", { avatar_seed: seed });
             dispatch(updateSession(updated));
-            toast.success(profileAvatarUpdateSuccess);
+            dispatch(
+                showToast({
+                    message: profileAvatarUpdateSuccess,
+                    severity: "success",
+                }),
+            );
         } catch {
-            toast.error(profileAvatarUpdateFailed);
+            dispatch(
+                showToast({
+                    message: profileAvatarUpdateFailed,
+                    severity: "error",
+                }),
+            );
         } finally {
             setSavingAvatar(false);
         }

@@ -2,7 +2,7 @@ import * as yup from "yup";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { ArrowLeft, Mail, ChevronRight } from "lucide-react";
-import { toast } from "sonner";
+import { showToast } from "@/redux/toast.slice";
 import { useFormik } from "formik";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
@@ -121,6 +121,7 @@ function MethodScreen({
 }
 
 function EmailFormScreen({ onBack, onRegistered }: IEmailFormScreenProps) {
+    const dispatch = useReduxDispatch();
     const formik = useFormik<IEmailFormValues>({
         initialValues: {
             first_name: "",
@@ -146,9 +147,13 @@ function EmailFormScreen({ onBack, onRegistered }: IEmailFormScreenProps) {
                 );
                 onRegistered(values.email, values.password);
             } catch (err: any) {
-                toast.error(
-                    err?.response?.data?.message ??
-                        authRegisterRegistrationFailed,
+                dispatch(
+                    showToast({
+                        message:
+                            err?.response?.data?.message ??
+                            authRegisterRegistrationFailed,
+                        severity: "error",
+                    }),
                 );
             } finally {
                 setSubmitting(false);

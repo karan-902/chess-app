@@ -2,13 +2,14 @@ import * as yup from "yup";
 import { useState } from "react";
 import { Link } from "react-router";
 import { useFormik } from "formik";
-import { toast } from "sonner";
 import Box from "@/components/base/Box/Box";
 import Label from "@/components/base/Label/Label";
 import Input from "@/components/base/Input/Input";
 import Button from "@/components/base/Button/Button";
 import AuthLayout from "@/container/AuthLayout";
 import { callAPIInterface } from "@/utils";
+import { useReduxDispatch } from "@/redux/hooks";
+import { showToast } from "@/redux/toast.slice";
 import type { IForgotPasswordBody } from "@/types/index";
 import type { IMessageResponse } from "@/types/utils";
 import {
@@ -32,6 +33,7 @@ const emailSchema = yup.object({
 });
 
 export default function ForgotPasswordPage() {
+    const dispatch = useReduxDispatch();
     const [sent, setSent] = useState(false);
 
     const formik = useFormik({
@@ -46,8 +48,13 @@ export default function ForgotPasswordPage() {
                 );
                 setSent(true);
             } catch (err: any) {
-                toast.error(
-                    err?.response?.data?.message ?? authForgotPasswordFailed,
+                dispatch(
+                    showToast({
+                        message:
+                            err?.response?.data?.message ??
+                            authForgotPasswordFailed,
+                        severity: "error",
+                    }),
                 );
             } finally {
                 setSubmitting(false);

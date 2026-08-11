@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router";
-import { toast } from "sonner";
 import { getSocket } from "@/lib/socket";
 import { useSocket } from "@/context/SocketContext";
+import { useReduxDispatch } from "@/redux/hooks";
+import { showToast } from "@/redux/toast.slice";
 import { secondsToTimeControl } from "@/types/components";
 import type {
     IRematchOfferedResponse,
@@ -21,6 +22,7 @@ export function useRematch(gameId: string | undefined) {
     const statusRef = useRef<RematchStatus>("idle");
     const navigate = useNavigate();
     const { socket: ctxSocket } = useSocket();
+    const dispatch = useReduxDispatch();
 
     useEffect(() => {
         statusRef.current = status;
@@ -59,7 +61,10 @@ export function useRematch(gameId: string | undefined) {
             if (data.game_id !== gameId) return;
             stopCountdown();
             setStatus("idle");
-            if (data.message) toast.error(data.message);
+            if (data.message)
+                dispatch(
+                    showToast({ message: data.message, severity: "error" }),
+                );
         };
 
         const onRematchFound = (data: IRematchFoundResponse) => {
