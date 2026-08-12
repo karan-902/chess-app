@@ -244,7 +244,7 @@ export default function PlayPage() {
                                 <Text customClass="searching-detail-label">
                                     {matchmakingSearchingPrizeLabel}
                                 </Text>
-                                <Text customClass="searching-detail-value">
+                                <Text customClass="searching-detail-value win-prize">
                                     ${queuedPool?.prize}
                                 </Text>
                             </Box>
@@ -281,7 +281,7 @@ export default function PlayPage() {
                                 <Text customClass="searching-detail-label">
                                     {matchmakingSearchingPrizeLabel}
                                 </Text>
-                                <Text customClass="searching-detail-value">
+                                <Text customClass="searching-detail-value win-prize">
                                     ${confirmPool.prize}
                                 </Text>
                             </Box>
@@ -326,8 +326,7 @@ export default function PlayPage() {
                                         customClass={classNames(
                                             "stake-card",
                                             !canAfford && "insufficient",
-                                            pool.id === selection &&
-                                                "selected",
+                                            pool.id === selection && "selected",
                                         )}
                                         onClick={
                                             canAfford

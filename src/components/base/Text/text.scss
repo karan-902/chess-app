@@ -144,10 +144,12 @@
 
     &.searching-detail-value {
         display: block;
-        font-family: $fontMono;
         font-size: $font16;
-        font-weight: 700;
+        font-family: $fontOutfitExtraBold;
         color: $appText;
+    }
+    &.win-prize {
+        color: $greenishTeal !important;
     }
 
     &.sheet-tip {

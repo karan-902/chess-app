@@ -62,6 +62,14 @@ export function useGoogleAuth(
         processCode(code);
     }, [processCode]);
 
+    useEffect(() => {
+        const handlePageShow = (e: PageTransitionEvent) => {
+            if (e.persisted) dispatch(hideLoader());
+        };
+        window.addEventListener("pageshow", handlePageShow);
+        return () => window.removeEventListener("pageshow", handlePageShow);
+    }, [dispatch]);
+
     const triggerGoogleLogin = useGoogleLogin({
         flow: "auth-code",
         ux_mode: "redirect",
