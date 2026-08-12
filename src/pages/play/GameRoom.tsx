@@ -10,7 +10,6 @@ import { showToast } from "@/redux/toast.slice";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
-import Drawer from "@/components/base/Drawer/Drawer";
 import ChessBoard from "@/components/board/Board";
 import PieceIcon from "@/components/board/PieceIcon";
 import { useChessGame } from "@/hooks/useChessGame";
@@ -89,6 +88,7 @@ import {
     leaderboardRankFallback,
 } from "@/constants/messages";
 import Button from "@/components/base/Button/Button";
+import Modal from "@/components/base/Modal/Modal";
 
 const REASON_LABEL: Record<string, string> = {
     checkmate: playReasonCheckmate,
@@ -192,12 +192,20 @@ export default function GameRoom() {
         isPromotionMove,
         getRandomMove,
         getCapturedPieces,
+        getPieceColor,
+        getPremoveMoves,
     } = useChessGame();
 
     const { viewIndex, isReviewing, displayFen, goBack, goForward } =
         useBoardReview(fenHistory);
 
     const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
+    const [premoveFrom, setPremoveFrom] = useState<string | null>(null);
+    const [premove, setPremove] = useState<{
+        from: string;
+        to: string;
+    } | null>(null);
+    const [flashSquare, setFlashSquare] = useState<string | null>(null);
     const [pendingPromotion, setPendingPromotion] = useState<{
         from: string;
         to: string;
@@ -231,6 +239,11 @@ export default function GameRoom() {
     useEffect(() => {
         if (gameEnded && gameId) markGameFinished(gameId);
     }, [gameEnded, gameId]);
+
+    useEffect(() => {
+        setPremove(null);
+        setPremoveFrom(null);
+    }, [gameId]);
 
     const paused = !!gameEnded;
     const { whiteTimer, blackTimer, timedOut, syncClock } = useGameClock(
@@ -368,9 +381,7 @@ export default function GameRoom() {
             });
         };
         const onSocketError = (data: ISocketErrorResponse) => {
-            dispatch(
-                showToast({ message: data.message, severity: "error" }),
-            );
+            dispatch(showToast({ message: data.message, severity: "error" }));
         };
         const onOpponentDisconnected = (
             data: IopponentDisconnectedResponse,
@@ -434,6 +445,9 @@ export default function GameRoom() {
     ]);
 
     const legalMoves = selectedSquare ? getLegalMoves(selectedSquare) : [];
+    const premoveTargets = premoveFrom
+        ? getPremoveMoves(premoveFrom, playerSide)
+        : [];
 
     const commitMove = (from: string, to: string, promotion?: string) => {
         const result = makeMove(from, to, promotion);
@@ -457,15 +471,51 @@ export default function GameRoom() {
                 isPvc,
             });
         }
+        return result;
     };
 
+    useEffect(() => {
+        if (turn !== playerSide || gameEnded || !premove) return;
+        setPremove(null);
+        const result = commitMove(premove.from, premove.to);
+        if (!result) {
+            setFlashSquare(premove.from);
+            setTimeout(() => setFlashSquare(null), 500);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [turn, gameEnded, playerSide, premove]);
+
     const handleSquareClick = (square: string) => {
-        if (gameEnded || isReviewing || turn !== playerSide || pendingPromotion)
+        if (gameEnded || isReviewing || pendingPromotion) return;
+
+        if (turn !== playerSide) {
+            if (premove) {
+                if (getPieceColor(square) === playerSide) {
+                    setPremove(null);
+                    setPremoveFrom(square);
+                }
+                return;
+            }
+            if (premoveFrom) {
+                if (premoveTargets.includes(square)) {
+                    setPremove({ from: premoveFrom, to: square });
+                    setPremoveFrom(null);
+                } else {
+                    setPremoveFrom(
+                        getPieceColor(square) === playerSide ? square : null,
+                    );
+                }
+                return;
+            }
+            if (getPieceColor(square) === playerSide) setPremoveFrom(square);
             return;
+        }
 
         if (selectedSquare && legalMoves.includes(square)) {
             if (isPromotionMove(selectedSquare, square)) {
-                setPendingPromotion({ from: selectedSquare, to: square });
+                setTimeout(() =>
+                    setPendingPromotion({ from: selectedSquare, to: square }),
+                );
             } else {
                 commitMove(selectedSquare, square);
             }
@@ -474,6 +524,11 @@ export default function GameRoom() {
         }
 
         setSelectedSquare(getLegalMoves(square).length > 0 ? square : null);
+    };
+
+    const handleSquareRightClick = () => {
+        setPremove(null);
+        setPremoveFrom(null);
     };
 
     const handlePromotionSelect = (piece: string) => {
@@ -616,11 +671,24 @@ export default function GameRoom() {
             <Box customClass="gr-board-wrap">
                 <ChessBoard
                     board={board}
-                    selectedSquare={selectedSquare}
-                    legalMoves={legalMoves}
+                    selectedSquare={
+                        myTurnActive
+                            ? selectedSquare
+                            : (premove?.from ?? premoveFrom)
+                    }
+                    legalMoves={
+                        myTurnActive
+                            ? legalMoves
+                            : premove
+                              ? [premove.to]
+                              : premoveTargets
+                    }
+                    premoveMode={!myTurnActive}
                     checkSquare={checkSquare}
                     stalemateSquare={stalemateSquare}
+                    flashSquare={flashSquare}
                     onSquareClick={handleSquareClick}
+                    onSquareRightClick={handleSquareRightClick}
                     lastMove={isReviewing ? null : lastMove}
                     flipped={playerSide === "b"}
                 />
@@ -805,11 +873,9 @@ export default function GameRoom() {
                 )}
             </Box>
 
-            <Drawer
-                anchor="bottom"
+            <Modal
                 open={resignOpen || (blocker.state === "blocked" && !gameEnded)}
                 onClose={handleKeepPlaying}
-                customClass="resign-sheet"
             >
                 <Text customClass="gr-heading">{playResignDialogTitle}</Text>
                 <Text customClass="gr-elo">
@@ -828,7 +894,7 @@ export default function GameRoom() {
                         {playResignDialogResignButton}
                     </Button>
                 </Box>
-            </Drawer>
+            </Modal>
 
             {gameEnded && (
                 <Box customClass="gr-overlay">

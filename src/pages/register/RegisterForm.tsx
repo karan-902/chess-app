@@ -1,7 +1,7 @@
 import * as yup from "yup";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router";
-import { ArrowLeft, Mail, ChevronRight } from "lucide-react";
+import { ArrowLeft, Mail, ChevronRight, Check } from "lucide-react";
 import { showToast } from "@/redux/toast.slice";
 import { useFormik } from "formik";
 import Box from "@/components/base/Box/Box";
@@ -20,7 +20,10 @@ import { showLoader, hideLoader } from "@/redux/loader.slice";
 import { GoogleIcon } from "@/components/constants";
 import { COUNTRY_OPTIONS } from "@/constants/config";
 import type { IRegisterEmailBody } from "@/types/index";
-import type { IRegisterResponse } from "@/types/utils";
+import type {
+    IRegisterResponse,
+    IUsernameAvailableResponse,
+} from "@/types/utils";
 import {
     authLoginBack,
     authEmailLabel,
@@ -34,17 +37,16 @@ import {
     authValidationPasswordMinLength,
     authValidationConfirmPasswordRequired,
     authValidationPasswordsMustMatch,
-    authValidationFirstNameRequired,
-    authValidationLastNameRequired,
+    authValidationUsernameRequired,
+    authValidationUsernameMinLength,
+    authValidationUsernameTaken,
     authValidationCountryRequired,
     authRegisterEmailMethodTitle,
     authRegisterEmailMethodSub,
     authRegisterGoogleMethodTitle,
     authRegisterGoogleMethodSub,
-    authRegisterFirstNameLabel,
-    authRegisterFirstNamePlaceholder,
-    authRegisterLastNameLabel,
-    authRegisterLastNamePlaceholder,
+    authRegisterUsernameLabel,
+    authRegisterUsernamePlaceholder,
     authRegisterCountryLabel,
     authRegisterCreateAccountButton,
     authRegisterRegistrationFailed,
@@ -53,9 +55,14 @@ import {
 } from "@/constants/messages";
 import { IEmailFormScreenProps, IEmailFormValues } from "@/types/components";
 
+const USERNAME_CHECK_DEBOUNCE_MS = 500;
+
 const registerSchema = yup.object({
-    first_name: yup.string().required(authValidationFirstNameRequired),
-    last_name: yup.string().required(authValidationLastNameRequired),
+    username: yup
+        .string()
+        .trim()
+        .min(3, authValidationUsernameMinLength)
+        .required(authValidationUsernameRequired),
     email: yup
         .string()
         .email(authValidationEmailInvalid)
@@ -124,8 +131,7 @@ function EmailFormScreen({ onBack, onRegistered }: IEmailFormScreenProps) {
     const dispatch = useReduxDispatch();
     const formik = useFormik<IEmailFormValues>({
         initialValues: {
-            first_name: "",
-            last_name: "",
+            username: "",
             email: "",
             password: "",
             confirm: "",
@@ -138,8 +144,7 @@ function EmailFormScreen({ onBack, onRegistered }: IEmailFormScreenProps) {
                     "POST",
                     "/register",
                     {
-                        first_name: values.first_name,
-                        last_name: values.last_name,
+                        username: values.username,
                         email: values.email,
                         password: values.password,
                         country: values.country,
@@ -161,6 +166,45 @@ function EmailFormScreen({ onBack, onRegistered }: IEmailFormScreenProps) {
         },
     });
 
+    const [usernameStatus, setUsernameStatus] = useState<
+        "idle" | "checking" | "available" | "taken"
+    >("idle");
+    const usernameDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(
+        null,
+    );
+
+    useEffect(() => {
+        if (usernameDebounceRef.current)
+            clearTimeout(usernameDebounceRef.current);
+
+        const trimmed = formik.values.username.trim();
+        if (trimmed.length < 3) {
+            setUsernameStatus("idle");
+            return;
+        }
+
+        setUsernameStatus("checking");
+        usernameDebounceRef.current = setTimeout(async () => {
+            try {
+                const res = await callAPIInterface<
+                    undefined,
+                    IUsernameAvailableResponse
+                >(
+                    "GET",
+                    `/username-available?username=${encodeURIComponent(trimmed)}`,
+                );
+                setUsernameStatus(res.available ? "available" : "taken");
+            } catch {
+                setUsernameStatus("idle");
+            }
+        }, USERNAME_CHECK_DEBOUNCE_MS);
+
+        return () => {
+            if (usernameDebounceRef.current)
+                clearTimeout(usernameDebounceRef.current);
+        };
+    }, [formik.values.username]);
+
     return (
         <Box
             customClass="auth-form"
@@ -177,36 +221,35 @@ function EmailFormScreen({ onBack, onRegistered }: IEmailFormScreenProps) {
             </Button>
 
             <Box customClass="auth-field">
-                <Label htmlFor="first_name">{authRegisterFirstNameLabel}</Label>
+                <Label htmlFor="username">{authRegisterUsernameLabel}</Label>
                 <Input
-                    id="first_name"
-                    name="first_name"
-                    placeholder={authRegisterFirstNamePlaceholder}
-                    value={formik.values.first_name}
+                    id="username"
+                    name="username"
+                    placeholder={authRegisterUsernamePlaceholder}
+                    value={formik.values.username}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     isError={
-                        formik.touched.first_name && !!formik.errors.first_name
+                        (formik.touched.username &&
+                            !!formik.errors.username) ||
+                        usernameStatus === "taken"
                     }
-                    helperText={formik.errors.first_name}
-                    customClass="auth-input-underline"
-                    fullWidth
-                />
-            </Box>
-
-            <Box customClass="auth-field">
-                <Label htmlFor="last_name">{authRegisterLastNameLabel}</Label>
-                <Input
-                    id="last_name"
-                    name="last_name"
-                    placeholder={authRegisterLastNamePlaceholder}
-                    value={formik.values.last_name}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    isError={
-                        formik.touched.last_name && !!formik.errors.last_name
+                    helperText={
+                        formik.touched.username && formik.errors.username
+                            ? formik.errors.username
+                            : usernameStatus === "taken"
+                              ? authValidationUsernameTaken
+                              : undefined
                     }
-                    helperText={formik.errors.last_name}
+                    endIcon={
+                        usernameStatus === "available" ? (
+                            <Check
+                                size={16}
+                                strokeWidth={2.5}
+                                className="input-check-icon"
+                            />
+                        ) : undefined
+                    }
                     customClass="auth-input-underline"
                     fullWidth
                 />
@@ -291,7 +334,12 @@ function EmailFormScreen({ onBack, onRegistered }: IEmailFormScreenProps) {
                 variant="contained"
                 fullWidth
                 customClass="auth-submit-btn"
-                disabled={!formik.dirty || formik.isSubmitting}
+                disabled={
+                    !formik.dirty ||
+                    formik.isSubmitting ||
+                    usernameStatus === "taken" ||
+                    usernameStatus === "checking"
+                }
                 isLoading={formik.isSubmitting}
             >
                 {authRegisterCreateAccountButton}

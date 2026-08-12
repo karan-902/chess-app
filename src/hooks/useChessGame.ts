@@ -162,6 +162,23 @@ export function useChessGame() {
         };
     };
 
+    const getPieceColor = (square: string): "w" | "b" | null => {
+        return chess.get(square as Square)?.color ?? null;
+    };
+
+    const getPremoveMoves = (square: string, asColor: "w" | "b"): string[] => {
+        const parts = chess.fen().split(" ");
+        parts[1] = asColor;
+        try {
+            const clone = new Chess(parts.join(" "));
+            return clone
+                .moves({ square: square as Square, verbose: true })
+                .map((m) => m.to);
+        } catch {
+            return [];
+        }
+    };
+
     const getRandomMove = (): { from: string; to: string } | null => {
         const moves = chess.moves({ verbose: true });
         if (moves.length === 0) return null;
@@ -251,6 +268,8 @@ export function useChessGame() {
         getLegalMoves,
         isPromotionMove,
         getRandomMove,
+        getPieceColor,
+        getPremoveMoves,
         getAttackedSquares,
         getCapturedPieces,
         moveHistory,

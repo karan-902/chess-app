@@ -7,7 +7,6 @@ import Text from "@/components/base/Text/Text";
 import Button from "@/components/base/Button/Button";
 import Label from "@/components/base/Label/Label";
 import Input from "@/components/base/Input/Input";
-import Drawer from "@/components/base/Drawer/Drawer";
 import { speedLogo, qrLogo } from "@/components/images";
 import { useWalletActionModal } from "@/context/WalletActionModalContext";
 import { useSocket } from "@/context/SocketContext";
@@ -52,6 +51,7 @@ import {
     depositModalPaymentReceivedDesc,
     depositModalCloseLink,
 } from "@/constants/messages";
+import Modal from "./base/Modal/Modal";
 
 type Method = "bitcoin" | "lightning";
 type Stage = "amount" | "qr" | "success";
@@ -189,12 +189,7 @@ export default function DepositModal() {
     };
 
     return (
-        <Drawer
-            anchor="bottom"
-            open={open}
-            onClose={close}
-            customClass="deposit-sheet"
-        >
+        <Modal open={open} onClose={close}>
             {stage === "amount" && showSteps && (
                 <Box customClass="deposit-steps">
                     <Box customClass="deposit-steps-head">
@@ -364,7 +359,9 @@ export default function DepositModal() {
                             ) : (
                                 <Copy size={14} strokeWidth={2} />
                             )}
-                            {copied ? depositModalCopied : depositModalCopyButton}
+                            {copied
+                                ? depositModalCopied
+                                : depositModalCopyButton}
                         </Button>
                     </Box>
 
@@ -404,6 +401,6 @@ export default function DepositModal() {
                     </Button>
                 </Box>
             )}
-        </Drawer>
+        </Modal>
     );
 }

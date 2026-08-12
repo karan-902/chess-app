@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import type { Difficulty, GameMode } from "@/types/components";
 
+const COMPUTER_MOVE_DELAY_MS = 1500;
+
 interface IProps {
     mode: GameMode;
     difficulty: Difficulty;
@@ -37,7 +39,7 @@ export function useComputerOpponent({
         const t = setTimeout(() => {
             const move = getRandomMove();
             if (move) makeMove(move.from, move.to);
-        }, 500);
+        }, COMPUTER_MOVE_DELAY_MS);
         return () => clearTimeout(t);
     }, [fen, turn, mode, difficulty, gameEnded]);
 
@@ -53,7 +55,7 @@ export function useComputerOpponent({
         }
         const t = setTimeout(
             () => makeMove(bestMove.slice(0, 2), bestMove.slice(2, 4)),
-            500,
+            COMPUTER_MOVE_DELAY_MS,
         );
         return () => clearTimeout(t);
 

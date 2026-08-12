@@ -9,7 +9,6 @@ import Button from "@/components/base/Button/Button";
 import IconButton from "@/components/base/IconButton/IconButton";
 import Label from "@/components/base/Label/Label";
 import Input from "@/components/base/Input/Input";
-import Drawer from "@/components/base/Drawer/Drawer";
 import Skeleton from "@/components/base/Skeleton/Skeleton";
 import { useWallet } from "@/hooks/useWallet";
 import { useWalletActionModal } from "@/context/WalletActionModalContext";
@@ -34,6 +33,7 @@ import {
     appbarDepositButton,
     withdrawModalTitle,
 } from "@/constants/messages";
+import Modal from "@/components/base/Modal/Modal";
 
 const TX_FILTER_TYPES = Object.keys(
     TRANSACTION_TYPE_LABELS,
@@ -109,12 +109,7 @@ function TransactionFilterDrawer({
     };
 
     return (
-        <Drawer
-            anchor="bottom"
-            open={open}
-            onClose={onClose}
-            customClass="tx-filter-sheet"
-        >
+        <Modal open={open} onClose={onClose} customClass="tx-filter-sheet">
             <Box customClass="tx-filter-sheet-content">
                 <Text customClass="deposit-heading">{walletFilterTitle}</Text>
 
@@ -183,7 +178,7 @@ function TransactionFilterDrawer({
                     {walletFilterResetButton}
                 </Button>
             </Box>
-        </Drawer>
+        </Modal>
     );
 }
 

@@ -1,28 +1,14 @@
-@use '../../../styles/default.scss' as *;
-
-.modal-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 50;
-    background: alpha($black, 0.72);
-    backdrop-filter: blur(4px);
-    animation: modal-overlay-in 0.15s ease;
-}
+@use "../../../styles/default.scss" as *;
 
 .modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    z-index: 51;
-    margin: 0;
-    transform: translate(-50%, -50%);
-    width: min(92vw, 420px);
-    background: linear-gradient(180deg, alpha($appText, 0.02) 0%, transparent 40%), $appSurface;
+    width: min(calc(100% - 4rem), 420px);
+    background:
+        linear-gradient(180deg, alpha($appText, 0.02) 0%, transparent 40%),
+        $appSurface;
     border: 1px solid $appCardBorder;
     border-radius: 1rem;
     padding: 1.5rem;
     box-shadow: 0 24px 64px alpha($black, 0.6);
-    animation: modal-content-in 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 
     &:focus {
         outline: none;
@@ -46,48 +32,33 @@
 
     .modal-close-icon {
         position: absolute;
-        top: 1rem;
-        right: 1rem;
+        top: 0.75rem;
+        right: 0.75rem;
+        z-index: 1;
         display: flex;
         align-items: center;
         justify-content: center;
         width: 1.75rem;
         height: 1.75rem;
-        border-radius: 0.5rem;
-        background: transparent;
+        min-width: 0;
+        padding: 0;
+        border-radius: 50%;
         border: none;
-        color: alpha($appText, 0.4);
+        color: alpha($appText, 0.55);
         cursor: pointer;
-        transition: color 0.15s ease, background-color 0.15s ease;
+        transition:
+            color 0.15s ease,
+            background-color 0.15s ease;
 
         &:hover {
-            color: $appText;
-            background: alpha($appText, 0.06);
+            background: alpha($appText, 0.12);
         }
     }
 
     &.modal--danger {
         border-color: alpha($paleRed, 0.2);
-        box-shadow: 0 0 0 1px alpha($paleRed, 0.08), 0 24px 64px alpha($black, 0.6);
-    }
-}
-
-@keyframes modal-overlay-in {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-@keyframes modal-content-in {
-    from {
-        opacity: 0;
-        transform: translate(-50%, -48%) scale(0.97);
-    }
-    to {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
+        box-shadow:
+            0 0 0 1px alpha($paleRed, 0.08),
+            0 24px 64px alpha($black, 0.6);
     }
 }

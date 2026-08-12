@@ -11,7 +11,6 @@ import Skeleton from "@/components/base/Skeleton/Skeleton";
 import Button from "@/components/base/Button/Button";
 import Input from "@/components/base/Input/Input";
 import Label from "@/components/base/Label/Label";
-import Drawer from "@/components/base/Drawer/Drawer";
 import Switch from "@/components/base/Switch/Switch";
 import { useReduxSelector, useReduxDispatch } from "@/redux/hooks";
 import { updateSession } from "@/redux/persisted/auth.slice";
@@ -41,8 +40,6 @@ import {
     profileUpdateSuccess,
     profileUpdateFailed,
     profilePersonalInfoLabel,
-    profileFirstNameLabel,
-    profileLastNameLabel,
     profileUsernameLabel,
     profileEmailLabel,
     profileCountryLabel,
@@ -53,6 +50,7 @@ import {
     profileAppearanceLabel,
     profileDarkModeLabel,
 } from "@/constants/messages";
+import Modal from "@/components/base/Modal/Modal";
 
 const CATEGORY_ORDER: GameCategory[] = [
     "BULLET",
@@ -230,7 +228,7 @@ function EditProfileDrawer({
     };
 
     return (
-        <Drawer anchor="bottom" open={open} onClose={handleClose}>
+        <Modal open={open} onClose={handleClose}>
             <Text customClass="edit-profile-title">{profileEditButton}</Text>
 
             <Text customClass="edit-profile-section-label">
@@ -307,7 +305,7 @@ function EditProfileDrawer({
                     {profileSaveChangesButton}
                 </Button>
             </Box>
-        </Drawer>
+        </Modal>
     );
 }
 
@@ -351,9 +349,6 @@ export default function Profile() {
                         <Text customClass="profile-id-name" truncate>
                             {session.username}
                         </Text>
-                        <Text customClass="profile-id-handle" truncate>
-                            {`${session.first_name} ${session.last_name}`.trim()}
-                        </Text>
                     </Box>
                 </Box>
             </Card>
@@ -362,22 +357,6 @@ export default function Profile() {
                 {profilePersonalInfoLabel}
             </Text>
             <Card customClass="matches-stat-list">
-                <Box customClass="matches-stat-row">
-                    <Text customClass="matches-stat-title" component="span">
-                        {profileFirstNameLabel}
-                    </Text>
-                    <Text component="span" customClass="matches-stat-val">
-                        {session.first_name}
-                    </Text>
-                </Box>
-                <Box customClass="matches-stat-row">
-                    <Text customClass="matches-stat-title" component="span">
-                        {profileLastNameLabel}
-                    </Text>
-                    <Text component="span" customClass="matches-stat-val">
-                        {session.last_name}
-                    </Text>
-                </Box>
                 <Box customClass="matches-stat-row">
                     <Text customClass="matches-stat-title" component="span">
                         {profileUsernameLabel}

@@ -1,7 +1,6 @@
 @use "../../../styles/default.scss" as *;
 
 .drawer-panel {
-    position: relative;
     background: $appBg;
     padding: 0.6rem;
     display: flex;
@@ -23,7 +22,7 @@
         width: 100%;
         max-height: 85%;
         border-top: 1px solid $appLine;
-        border-radius: 1.25rem 1.25rem 0 0;
+        border-radius: 0.875rem 0.875rem 0 0;
         padding: 3.25rem 1rem 1.25rem;
     }
 }

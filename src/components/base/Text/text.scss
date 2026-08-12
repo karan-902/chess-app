@@ -165,32 +165,34 @@
         }
     }
 
+    &.pool-meta-label,
     &.pool-meta-time {
-        flex-basis: 100%;
+        font-size: 0.75rem;
+    }
+
+    &.pool-meta-time {
         font-weight: 400;
         text-transform: none;
     }
 
     &.pool-win-label {
         display: block;
-        font-size: $font14;
+        font-size: $font12;
         color: $appText;
     }
 
     &.pool-win-amt {
         display: block;
         font-family: $fontMono;
-        font-size: $font30;
+        font-size: $font24;
         font-weight: 700;
         color: $gold;
-        margin: 0.1rem 0;
     }
 
     &.pool-entry-fee {
         display: block;
-        font-size: $font14;
+        font-size: $font12;
         color: $appText;
-        margin-bottom: 0.9rem;
     }
 
     &.pool-opponent-ready,

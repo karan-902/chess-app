@@ -34,6 +34,11 @@ export default function Drawer({
                     ),
                 },
             }}
+            disableScrollLock
+            disableAutoFocus
+            container={() =>
+                document.querySelector(".app-shell") as HTMLElement
+            }
         >
             <Button
                 type="button"

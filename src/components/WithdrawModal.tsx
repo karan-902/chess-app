@@ -8,7 +8,6 @@ import Button from "@/components/base/Button/Button";
 import Label from "@/components/base/Label/Label";
 import Input from "@/components/base/Input/Input";
 import Select from "@/components/base/Select/Select";
-import Drawer from "@/components/base/Drawer/Drawer";
 import { useWalletActionModal } from "@/context/WalletActionModalContext";
 import { useWalletBalance } from "@/hooks/useWallet";
 import { requestWithdraw } from "@/hooks/useWallet";
@@ -31,6 +30,7 @@ import {
     walletPageWithdrawableLabel,
     depositModalCloseLink,
 } from "@/constants/messages";
+import Modal from "./base/Modal/Modal";
 
 type Stage = "amount" | "success";
 
@@ -112,12 +112,7 @@ export default function WithdrawModal() {
     };
 
     return (
-        <Drawer
-            anchor="bottom"
-            open={open}
-            onClose={close}
-            customClass="withdraw-sheet"
-        >
+        <Modal open={open} onClose={close}>
             {stage === "amount" && (
                 <Box customClass="deposit-amount-stage">
                     <Text customClass="deposit-heading">
@@ -216,6 +211,6 @@ export default function WithdrawModal() {
                     </Button>
                 </Box>
             )}
-        </Drawer>
+        </Modal>
     );
 }

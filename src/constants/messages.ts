@@ -44,8 +44,10 @@ export const authValidationPasswordMinLength =
 export const authValidationConfirmPasswordRequired =
     "Please confirm your password";
 export const authValidationPasswordsMustMatch = "Passwords do not match";
-export const authValidationFirstNameRequired = "First name is required";
-export const authValidationLastNameRequired = "Last name is required";
+export const authValidationUsernameRequired = "Username is required";
+export const authValidationUsernameMinLength =
+    "Username must be at least 3 characters";
+export const authValidationUsernameTaken = "Username not available";
 export const authValidationCountryRequired = "Country is required";
 export const authLoginTitle = "Welcome Back";
 export const authLoginSubtitle = "Sign in to your Shatranj account";
@@ -67,10 +69,8 @@ export const authRegisterEmailMethodTitle = "Email";
 export const authRegisterEmailMethodSub = "Username · password";
 export const authRegisterGoogleMethodTitle = "Google";
 export const authRegisterGoogleMethodSub = "One-tap sign up";
-export const authRegisterFirstNameLabel = "First Name";
-export const authRegisterFirstNamePlaceholder = "Karan";
-export const authRegisterLastNameLabel = "Last Name";
-export const authRegisterLastNamePlaceholder = "Dhakad";
+export const authRegisterUsernameLabel = "Username";
+export const authRegisterUsernamePlaceholder = "john_doe";
 export const authRegisterCountryLabel = "Country";
 export const authRegisterCreateAccountButton = "Create Account";
 export const authRegisterRegistrationFailed =
@@ -156,7 +156,7 @@ export const matchmakingPoolCardHot = "HOT";
 export const matchmakingPoolCardWinLabel = "Win";
 export const matchmakingPoolCardEntryFee = (fee: string) => `Stake ${fee}`;
 export const matchmakingPoolCardOpponentReady = "Opponent ready · Claim match";
-export const matchmakingPoolCardInsufficientBalance = "Add funds to play";
+export const matchmakingPoolCardInsufficientBalance = "Add funds";
 export const matchmakingCtaWager = (stake: string) => `Wager ${stake}`;
 export const matchmakingCtaWinFee = (prize: string) =>
     `Win ${prize} · 12% platform fee`;
@@ -482,8 +482,6 @@ export const profileStreakWidgetTitle = "Streak";
 export const profileStreakWinsSuffix = "wins";
 export const profileBestStreakRow = (n: number) => `best ${n}W`;
 export const profilePersonalInfoLabel = "Personal Info";
-export const profileFirstNameLabel = "First name";
-export const profileLastNameLabel = "Last name";
 export const profileUsernameLabel = "Username";
 export const profileEmailLabel = "Email";
 export const profileEmailHint = "Email cannot be changed";

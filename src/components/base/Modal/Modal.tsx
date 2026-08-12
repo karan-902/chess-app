@@ -10,7 +10,6 @@ interface IModalProps extends Omit<DialogProps, "title" | "onClose"> {
     title?: string;
     customClass?: string;
     preventOutsideClose?: boolean;
-    variant?: "default";
 }
 
 export default function Modal({
@@ -20,10 +19,9 @@ export default function Modal({
     children,
     customClass,
     preventOutsideClose,
-    variant = "default",
     ...props
 }: IModalProps) {
-    const paperClasses = classNames("modal", `modal-${variant}`, customClass);
+    const paperClasses = classNames("modal", customClass);
 
     return (
         <MuiDialog
@@ -31,7 +29,6 @@ export default function Modal({
             onClose={preventOutsideClose ? undefined : onClose}
             slotProps={{
                 paper: { className: paperClasses },
-                backdrop: { className: "modal-overlay" },
             }}
             disableScrollLock
             container={() =>
@@ -48,7 +45,7 @@ export default function Modal({
                     onClick={onClose}
                     aria-label="Close"
                 >
-                    <X size={18} strokeWidth={2} />
+                    <X size={22} strokeWidth={2} />
                 </IconButton>
             )}
             {children}

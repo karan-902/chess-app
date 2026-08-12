@@ -134,14 +134,9 @@ export default function PlayPage() {
         useState<Difficulty>("easy");
     const [practiceTimeControl, setPracticeTimeControl] =
         useState<GameCategory>("RAPID");
+    const [confirmOpen, setConfirmOpen] = useState(false);
     const [confirmPool, setConfirmPool] = useState<Pool | null>(null);
-    const [selection, setSelection] = useState<string | "practice" | null>(
-        null,
-    );
-    const selectedPool =
-        selection && selection !== "practice"
-            ? (pools.find((p) => p.id === selection) ?? null)
-            : null;
+    const [practiceOpen, setPracticeOpen] = useState(false);
 
     useEffect(() => {
         if (status !== "queued" || !queuedPool) return;
@@ -155,13 +150,14 @@ export default function PlayPage() {
     useEffect(() => {
         if (status !== "found") return;
         setSheetOpen(false);
+        setConfirmOpen(false);
         if (!gameId) resetStatus();
     }, [status, gameId, resetStatus]);
 
     useEffect(() => {
         if (status === "idle") {
+            setConfirmOpen(false);
             setConfirmPool(null);
-            setSelection(null);
         }
     }, [status]);
 
@@ -170,16 +166,44 @@ export default function PlayPage() {
     }
 
     const handlePractice = () => {
-        setSheetOpen(false);
+        setPracticeOpen(false);
         navigate(
             `/play?mode=pvc&time=${practiceTimeControl}&difficulty=${practiceDifficulty}&game_id=pvc-${Date.now()}&color=white`,
             { replace: true },
         );
     };
 
+    const handlePracticeOpen = () => {
+        setSheetOpen(false);
+        setPracticeOpen(true);
+    };
+
+    const handlePracticeCancel = () => {
+        setPracticeOpen(false);
+        setSheetOpen(true);
+    };
+
+    const handlePoolPlay = (pool: Pool) => {
+        setSheetOpen(false);
+        setConfirmPool(pool);
+        setConfirmOpen(true);
+    };
+
     const handleConfirmJoin = () => {
         if (!confirmPool) return;
         joinQueue(confirmPool);
+    };
+
+    const handleConfirmCancel = () => {
+        setConfirmOpen(false);
+        setConfirmPool(null);
+        setSheetOpen(true);
+    };
+
+    const handleConfirmDrawerClose = () => {
+        if (status === "joining" || status === "queued") leaveQueue();
+        setConfirmOpen(false);
+        setConfirmPool(null);
     };
 
     return (
@@ -206,14 +230,176 @@ export default function PlayPage() {
             <Drawer
                 anchor="bottom"
                 open={sheetOpen}
-                onClose={() => {
-                    if (status === "joining" || status === "queued")
-                        leaveQueue();
-                    setConfirmPool(null);
-                    setSelection(null);
-                    setSheetOpen(false);
-                }}
+                onClose={() => setSheetOpen(false)}
                 customClass="stake-sheet"
+            >
+                <Box customClass="stake-grid">
+                    {pools.map((pool) => {
+                        const CategoryIcon = CATEGORY_META[pool.category]?.icon;
+                        const timeLabel = historyTimeControlLabel(
+                            pool.timeSeconds / 60,
+                        );
+                        const canAfford = usdValue >= pool.stake;
+                        return (
+                            <Card
+                                key={pool.id}
+                                customClass={classNames(
+                                    "stake-card",
+                                    !canAfford && "insufficient",
+                                )}
+                            >
+                                {pool.players > 0 && (
+                                    <Box customClass="stake-card-live-corner">
+                                        <LivePulse />
+                                    </Box>
+                                )}
+                                <Box customClass="pool-meta">
+                                    <CategoryIcon
+                                        className="stake-card-icon"
+                                        size="1em"
+                                        strokeWidth={2}
+                                    />
+                                    <Text
+                                        customClass="pool-meta-label"
+                                        component="span"
+                                    >
+                                        {CATEGORY_META[pool.category]?.label}
+                                    </Text>
+                                    <Text
+                                        component="span"
+                                        customClass="pool-meta-time"
+                                    >
+                                        {timeLabel}
+                                    </Text>
+                                    {pool.active > 0 && <LivePulse />}
+                                </Box>
+                                <Text customClass="pool-win-label">
+                                    {matchmakingPoolCardWinLabel}
+                                </Text>
+                                <Text customClass="pool-win-amt">
+                                    ${pool.prize}
+                                </Text>
+                                <Text customClass="pool-entry-fee">
+                                    {matchmakingPoolCardEntryFee(
+                                        `$${pool.stake}`,
+                                    )}
+                                </Text>
+
+                                {pool.players > 0 && (
+                                    <Text customClass="pool-opponent-ready">
+                                        {matchmakingPoolCardOpponentReady}
+                                    </Text>
+                                )}
+
+                                <Button
+                                    type="button"
+                                    variant="contained"
+                                    fullWidth
+                                    customClass="stake-card-go"
+                                    disabled={!canAfford}
+                                    onClick={
+                                        canAfford
+                                            ? () => handlePoolPlay(pool)
+                                            : undefined
+                                    }
+                                >
+                                    {canAfford
+                                        ? playSheetCardPlayButton
+                                        : matchmakingPoolCardInsufficientBalance}
+                                </Button>
+                            </Card>
+                        );
+                    })}
+                    <Card
+                        customClass={classNames(
+                            "stake-card",
+                            "practice",
+                            "wide",
+                        )}
+                    >
+                        <Text customClass="stake-card-tc">
+                            {playSheetPracticeLabel}
+                        </Text>
+                        <Text customClass="stake-card-practice-title">
+                            {playSheetPracticeTitle}
+                        </Text>
+                        <Text customClass="stake-card-fee">
+                            {playSheetPracticeDesc}
+                        </Text>
+                        <Button
+                            type="button"
+                            variant="contained"
+                            fullWidth
+                            customClass="stake-card-go"
+                            onClick={handlePracticeOpen}
+                        >
+                            {playSheetCardPlayButton}
+                        </Button>
+                    </Card>
+                </Box>
+                <Text customClass="sheet-tip">
+                    <b>Tip:</b> {playSheetTip}
+                </Text>
+            </Drawer>
+
+            <Drawer
+                anchor="bottom"
+                open={practiceOpen}
+                onClose={() => setPracticeOpen(false)}
+                customClass="practice-sheet"
+            >
+                <Box customClass="matchmaking-searching practice-options">
+                    <Text customClass="searching-title">
+                        {playSheetPracticeTitle}
+                    </Text>
+                    <Text customClass="matches-empty-desc">
+                        {playSheetPracticeDesc}
+                    </Text>
+                    <ChipSelect
+                        options={PRACTICE_DIFFICULTIES}
+                        value={practiceDifficulty}
+                        onChange={setPracticeDifficulty}
+                        label={(d) => playWagerBadgeDifficultyLabels[d]}
+                        customClass="segment compact"
+                    />
+                    <ChipSelect
+                        options={CATEGORY_ORDER}
+                        value={practiceTimeControl}
+                        onChange={setPracticeTimeControl}
+                        label={(c) => CATEGORY_META[c]?.label}
+                        subLabel={(c) =>
+                            historyTimeControlLabel(TIME_SECONDS[c] / 60)
+                        }
+                        customClass="segment category-select"
+                    />
+                    <Box customClass="pool-confirm-actions">
+                        <Button
+                            type="button"
+                            variant="contained"
+                            fullWidth
+                            customClass="stake-card-go"
+                            onClick={handlePractice}
+                        >
+                            {playSheetCardPlayButton}
+                        </Button>
+                        <Button
+                            type="button"
+                            variant="outlined"
+                            fullWidth
+                            customClass="pool-confirm-cancel-btn"
+                            onClick={handlePracticeCancel}
+                        >
+                            {matchmakingConfirmCancelButton}
+                        </Button>
+                    </Box>
+                </Box>
+            </Drawer>
+
+            <Drawer
+                anchor="bottom"
+                open={confirmOpen}
+                onClose={handleConfirmDrawerClose}
+                customClass="pool-confirm-sheet"
             >
                 {status === "queued" || status === "found" ? (
                     <Box customClass="matchmaking-searching">
@@ -260,194 +446,58 @@ export default function PlayPage() {
                             {matchmakingSearchingCancelButton}
                         </Button>
                     </Box>
-                ) : confirmPool ? (
-                    <Box customClass="matchmaking-searching">
-                        <Text customClass="searching-title">
-                            {matchmakingConfirmTitle}
-                        </Text>
-                        <Text customClass="matches-empty-desc">
-                            {matchmakingConfirmDescription}
-                        </Text>
-                        <Box customClass="searching-details">
-                            <Box customClass="searching-detail-item">
-                                <Text customClass="searching-detail-label">
-                                    {matchmakingSearchingStakeLabel}
-                                </Text>
-                                <Text customClass="searching-detail-value">
-                                    ${confirmPool.stake}
-                                </Text>
-                            </Box>
-                            <Box customClass="searching-detail-item">
-                                <Text customClass="searching-detail-label">
-                                    {matchmakingSearchingPrizeLabel}
-                                </Text>
-                                <Text customClass="searching-detail-value win-prize">
-                                    ${confirmPool.prize}
-                                </Text>
-                            </Box>
-                        </Box>
-                        <Box customClass="pool-confirm-actions">
-                            <Button
-                                type="button"
-                                variant="contained"
-                                fullWidth
-                                customClass="stake-card-go"
-                                isLoading={status === "joining"}
-                                loaderOnDark
-                                onClick={handleConfirmJoin}
-                            >
-                                {matchmakingCtaFindOpponentButton}
-                            </Button>
-                            <Button
-                                type="button"
-                                variant="outlined"
-                                fullWidth
-                                customClass="pool-confirm-cancel-btn"
-                                disabled={status === "joining"}
-                                onClick={() => setConfirmPool(null)}
-                            >
-                                {matchmakingConfirmCancelButton}
-                            </Button>
-                        </Box>
-                    </Box>
                 ) : (
-                    <>
-                        <Box customClass="stake-grid">
-                            {pools.map((pool) => {
-                                const CategoryIcon =
-                                    CATEGORY_META[pool.category]?.icon;
-                                const timeLabel = historyTimeControlLabel(
-                                    pool.timeSeconds / 60,
-                                );
-                                const canAfford = usdValue >= pool.stake;
-                                return (
-                                    <Card
-                                        key={pool.id}
-                                        customClass={classNames(
-                                            "stake-card",
-                                            !canAfford && "insufficient",
-                                            pool.id === selection && "selected",
-                                        )}
-                                        onClick={
-                                            canAfford
-                                                ? () => setSelection(pool.id)
-                                                : undefined
-                                        }
-                                    >
-                                        {pool.players > 0 && (
-                                            <Box customClass="stake-card-live-corner">
-                                                <LivePulse />
-                                            </Box>
-                                        )}
-                                        <Box customClass="pool-meta">
-                                            <CategoryIcon
-                                                className="stake-card-icon"
-                                                size={12}
-                                                strokeWidth={2}
-                                            />
-                                            <Text component="span">
-                                                {
-                                                    CATEGORY_META[pool.category]
-                                                        ?.label
-                                                }
-                                            </Text>
-                                            <Text
-                                                component="span"
-                                                customClass="pool-meta-time"
-                                            >
-                                                {timeLabel}
-                                            </Text>
-                                            {pool.active > 0 && <LivePulse />}
-                                        </Box>
-                                        <Text customClass="pool-win-label">
-                                            {matchmakingPoolCardWinLabel}
-                                        </Text>
-                                        <Text customClass="pool-win-amt">
-                                            ${pool.prize}
-                                        </Text>
-                                        <Text customClass="pool-entry-fee">
-                                            {matchmakingPoolCardEntryFee(
-                                                `$${pool.stake}`,
-                                            )}
-                                        </Text>
-
-                                        {pool.players > 0 && (
-                                            <Text customClass="pool-opponent-ready">
-                                                {
-                                                    matchmakingPoolCardOpponentReady
-                                                }
-                                            </Text>
-                                        )}
-
-                                        {!canAfford && (
-                                            <Text customClass="pool-insufficient-label">
-                                                {
-                                                    matchmakingPoolCardInsufficientBalance
-                                                }
-                                            </Text>
-                                        )}
-                                    </Card>
-                                );
-                            })}
-                            <Card
-                                customClass={classNames(
-                                    "stake-card",
-                                    "practice",
-                                    "wide",
-                                    selection === "practice" && "selected",
-                                )}
-                                onClick={() => setSelection("practice")}
-                            >
-                                <Text customClass="stake-card-tc">
-                                    {playSheetPracticeLabel}
-                                </Text>
-                                <Text customClass="stake-card-practice-title">
-                                    {playSheetPracticeTitle}
-                                </Text>
-                                <Text customClass="stake-card-fee">
-                                    {playSheetPracticeDesc}
-                                </Text>
-                                <ChipSelect
-                                    options={PRACTICE_DIFFICULTIES}
-                                    value={practiceDifficulty}
-                                    onChange={setPracticeDifficulty}
-                                    label={(d) =>
-                                        playWagerBadgeDifficultyLabels[d]
-                                    }
-                                    customClass="segment compact"
-                                />
-                                <ChipSelect
-                                    options={CATEGORY_ORDER}
-                                    value={practiceTimeControl}
-                                    onChange={setPracticeTimeControl}
-                                    label={(c) => CATEGORY_META[c]?.label}
-                                    subLabel={(c) =>
-                                        historyTimeControlLabel(
-                                            TIME_SECONDS[c] / 60,
-                                        )
-                                    }
-                                    customClass="segment category-select"
-                                />
-                            </Card>
+                    confirmPool && (
+                        <Box customClass="matchmaking-searching">
+                            <Text customClass="searching-title">
+                                {matchmakingConfirmTitle}
+                            </Text>
+                            <Text customClass="matches-empty-desc">
+                                {matchmakingConfirmDescription}
+                            </Text>
+                            <Box customClass="searching-details">
+                                <Box customClass="searching-detail-item">
+                                    <Text customClass="searching-detail-label">
+                                        {matchmakingSearchingStakeLabel}
+                                    </Text>
+                                    <Text customClass="searching-detail-value">
+                                        ${confirmPool.stake}
+                                    </Text>
+                                </Box>
+                                <Box customClass="searching-detail-item">
+                                    <Text customClass="searching-detail-label">
+                                        {matchmakingSearchingPrizeLabel}
+                                    </Text>
+                                    <Text customClass="searching-detail-value win-prize">
+                                        ${confirmPool.prize}
+                                    </Text>
+                                </Box>
+                            </Box>
+                            <Box customClass="pool-confirm-actions">
+                                <Button
+                                    type="button"
+                                    variant="contained"
+                                    fullWidth
+                                    customClass="stake-card-go"
+                                    isLoading={status === "joining"}
+                                    loaderOnDark
+                                    onClick={handleConfirmJoin}
+                                >
+                                    {matchmakingCtaFindOpponentButton}
+                                </Button>
+                                <Button
+                                    type="button"
+                                    variant="outlined"
+                                    fullWidth
+                                    customClass="pool-confirm-cancel-btn"
+                                    disabled={status === "joining"}
+                                    onClick={handleConfirmCancel}
+                                >
+                                    {matchmakingConfirmCancelButton}
+                                </Button>
+                            </Box>
                         </Box>
-                        <Button
-                            type="button"
-                            variant="contained"
-                            fullWidth
-                            customClass="stake-card-go"
-                            disabled={!selection}
-                            onClick={() => {
-                                if (selection === "practice") handlePractice();
-                                else if (selectedPool)
-                                    setConfirmPool(selectedPool);
-                            }}
-                        >
-                            {playSheetCardPlayButton}
-                        </Button>
-                        <Text customClass="sheet-tip">
-                            <b>Tip:</b> {playSheetTip}
-                        </Text>
-                    </>
+                    )
                 )}
             </Drawer>
         </Box>

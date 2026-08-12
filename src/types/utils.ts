@@ -17,6 +17,10 @@ export type IVerifyUserResponse = {
     email_verified: boolean;
 };
 
+export type IUsernameAvailableResponse = {
+    available: boolean;
+};
+
 export type IRegisterResponse = {
     id: string;
     first_name: string;
@@ -34,12 +38,9 @@ export type IRegisterResponse = {
 
 export type ILoginResponse = {
     id: string;
-    first_name: string;
-    last_name: string;
     username: string;
     email: string;
     country: string;
-    elo_rating: number | null;
     ratings: IRatingsBreakdown;
     current_streak: number;
     best_streak: number;
