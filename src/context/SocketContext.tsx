@@ -615,9 +615,10 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         };
 
         const onChallengeError = (data: IChallengeErrorResponse) => {
+            console.log(data);
             dispatch(
                 showToast({
-                    message: data.message || friendsChallengeErrorFallback,
+                    message: data.message,
                     severity: "error",
                 }),
             );
