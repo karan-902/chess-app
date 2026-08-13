@@ -3,11 +3,6 @@ import { useNavigate } from "react-router";
 import { getSocket } from "@/lib/socket";
 import { useReduxDispatch } from "@/redux/hooks";
 import { showToast } from "@/redux/toast.slice";
-import {
-    inactivityTimeoutRemovedTitle,
-    inactivityTimeoutTimedOutDescription,
-    inactivityTimeoutDisconnectedDescription,
-} from "@/constants/messages";
 
 const DEFAULT_INACTIVITY_MS =
     Number(import.meta.env.VITE_INACTIVITY_TIMEOUT_MS) || 180_000;
@@ -61,17 +56,8 @@ export function useInactivityTimeout(
     useEffect(() => {
         const socket = getSocket();
         if (!socket) return;
-        const onPlayerOffline = ({ reason }: { reason: string }) => {
-            dispatch(
-                showToast({
-                    message: `${inactivityTimeoutRemovedTitle} — ${
-                        reason === "inactivity_timeout"
-                            ? inactivityTimeoutTimedOutDescription
-                            : inactivityTimeoutDisconnectedDescription
-                    }`,
-                    severity: "error",
-                }),
-            );
+        const onPlayerOffline = ({ message }: { message: string }) => {
+            dispatch(showToast({ message, severity: "error" }));
             navigate("/play", { replace: true });
         };
         socket.on("player_offline", onPlayerOffline);

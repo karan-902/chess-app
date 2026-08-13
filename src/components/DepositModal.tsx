@@ -228,17 +228,6 @@ export default function DepositModal() {
                     <Text customClass="deposit-heading">
                         {depositModalTitle}
                     </Text>
-                    <Text customClass="deposit-tagline">
-                        {depositModalTagline}
-                    </Text>
-                    <Box customClass="deposit-speed-badge">
-                        <Text component="span">{depositModalSpeedBadge}</Text>
-                        <img
-                            src={speedLogo}
-                            alt="Speed"
-                            className="deposit-speed-logo"
-                        />
-                    </Box>
 
                     <Box customClass="auth-field">
                         <Label htmlFor="deposit-amount">
@@ -262,6 +251,17 @@ export default function DepositModal() {
                             }
                             isError={!!amountError}
                             helperText={amountError}
+                        />
+                    </Box>
+                    <Text customClass="deposit-tagline">
+                        {depositModalTagline}
+                    </Text>
+                    <Box customClass="deposit-speed-badge">
+                        <Text component="span">{depositModalSpeedBadge}</Text>
+                        <img
+                            src={speedLogo}
+                            alt="Speed"
+                            className="deposit-speed-logo"
                         />
                     </Box>
 

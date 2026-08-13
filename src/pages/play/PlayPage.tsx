@@ -6,6 +6,7 @@ import Text from "@/components/base/Text/Text";
 import Button from "@/components/base/Button/Button";
 import Card from "@/components/base/Card/Card";
 import Drawer from "@/components/base/Drawer/Drawer";
+import Skeleton from "@/components/base/Skeleton/Skeleton";
 import BoardPreview from "@/components/board/BoardPreview";
 import { ShatranjLogo } from "@/components/constants";
 import GameRoom from "./GameRoom";
@@ -57,6 +58,14 @@ function LivePulse() {
             <Text component="span" customClass="live-dot" />
             <Text component="span" customClass="live-ring" />
         </Box>
+    );
+}
+
+function PoolCardSkeleton() {
+    return (
+        <Card customClass="stake-card">
+            <Skeleton variant="rounded" width="100%" height="100%" />
+        </Card>
     );
 }
 
@@ -124,7 +133,7 @@ export default function PlayPage() {
     const [sheetOpen, setSheetOpen] = useState(false);
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
-    const { pools } = usePools();
+    const { pools, loading: poolsLoading } = usePools();
     const { usdValue } = useWalletBalance();
     const { status, queuedPool, joinQueue, leaveQueue, resetStatus } =
         useMatchmaking();
@@ -234,82 +243,96 @@ export default function PlayPage() {
                 customClass="stake-sheet"
             >
                 <Box customClass="stake-grid">
-                    {pools.map((pool) => {
-                        const CategoryIcon = CATEGORY_META[pool.category]?.icon;
-                        const timeLabel = historyTimeControlLabel(
-                            pool.timeSeconds / 60,
-                        );
-                        const canAfford = usdValue >= pool.stake;
-                        return (
-                            <Card
-                                key={pool.id}
-                                customClass={classNames(
-                                    "stake-card",
-                                    !canAfford && "insufficient",
-                                )}
-                            >
-                                {pool.players > 0 && (
-                                    <Box customClass="stake-card-live-corner">
-                                        <LivePulse />
-                                    </Box>
-                                )}
-                                <Box customClass="pool-meta">
-                                    <CategoryIcon
-                                        className="stake-card-icon"
-                                        size="1em"
-                                        strokeWidth={2}
-                                    />
-                                    <Text
-                                        customClass="pool-meta-label"
-                                        component="span"
+                    {poolsLoading ? (
+                        Array.from({ length: 4 }, (_, i) => (
+                            <PoolCardSkeleton key={i} />
+                        ))
+                    ) : (
+                        <>
+                            {pools.map((pool) => {
+                                const CategoryIcon =
+                                    CATEGORY_META[pool.category]?.icon;
+                                const timeLabel = historyTimeControlLabel(
+                                    pool.timeSeconds / 60,
+                                );
+                                const canAfford = usdValue >= pool.stake;
+                                return (
+                                    <Card
+                                        key={pool.id}
+                                        customClass={classNames(
+                                            "stake-card",
+                                            !canAfford && "insufficient",
+                                        )}
                                     >
-                                        {CATEGORY_META[pool.category]?.label}
-                                    </Text>
-                                    <Text
-                                        component="span"
-                                        customClass="pool-meta-time"
-                                    >
-                                        {timeLabel}
-                                    </Text>
-                                    {pool.active > 0 && <LivePulse />}
-                                </Box>
-                                <Text customClass="pool-win-label">
-                                    {matchmakingPoolCardWinLabel}
-                                </Text>
-                                <Text customClass="pool-win-amt">
-                                    ${pool.prize}
-                                </Text>
-                                <Text customClass="pool-entry-fee">
-                                    {matchmakingPoolCardEntryFee(
-                                        `$${pool.stake}`,
-                                    )}
-                                </Text>
+                                        {pool.players > 0 && (
+                                            <Box customClass="stake-card-live-corner">
+                                                <LivePulse />
+                                            </Box>
+                                        )}
+                                        <Box customClass="pool-meta">
+                                            <CategoryIcon
+                                                className="stake-card-icon"
+                                                size="1em"
+                                                strokeWidth={2}
+                                            />
+                                            <Text
+                                                customClass="pool-meta-label"
+                                                component="span"
+                                            >
+                                                {
+                                                    CATEGORY_META[pool.category]
+                                                        ?.label
+                                                }
+                                            </Text>
+                                            <Text
+                                                component="span"
+                                                customClass="pool-meta-time"
+                                            >
+                                                {timeLabel}
+                                            </Text>
+                                            {pool.active > 0 && <LivePulse />}
+                                        </Box>
+                                        <Text customClass="pool-win-label">
+                                            {matchmakingPoolCardWinLabel}
+                                        </Text>
+                                        <Text customClass="pool-win-amt">
+                                            ${pool.prize}
+                                        </Text>
+                                        <Text customClass="pool-entry-fee">
+                                            {matchmakingPoolCardEntryFee(
+                                                `$${pool.stake}`,
+                                            )}
+                                        </Text>
 
-                                {pool.players > 0 && (
-                                    <Text customClass="pool-opponent-ready">
-                                        {matchmakingPoolCardOpponentReady}
-                                    </Text>
-                                )}
+                                        {pool.players > 0 && (
+                                            <Text customClass="pool-opponent-ready">
+                                                {
+                                                    matchmakingPoolCardOpponentReady
+                                                }
+                                            </Text>
+                                        )}
 
-                                <Button
-                                    type="button"
-                                    variant="contained"
-                                    fullWidth
-                                    customClass="stake-card-go"
-                                    disabled={!canAfford}
-                                    onClick={
-                                        canAfford
-                                            ? () => handlePoolPlay(pool)
-                                            : undefined
-                                    }
-                                >
-                                    {canAfford
-                                        ? playSheetCardPlayButton
-                                        : matchmakingPoolCardInsufficientBalance}
-                                </Button>
-                            </Card>
-                        );
-                    })}
+                                        <Button
+                                            type="button"
+                                            variant="contained"
+                                            fullWidth
+                                            customClass="stake-card-go"
+                                            disabled={!canAfford}
+                                            onClick={
+                                                canAfford
+                                                    ? () => handlePoolPlay(pool)
+                                                    : undefined
+                                            }
+                                        >
+                                            {canAfford
+                                                ? playSheetCardPlayButton
+                                                : matchmakingPoolCardInsufficientBalance}
+                                        </Button>
+                                    </Card>
+                                );
+                            })}
+                        </>
+                    )}
                     <Card
                         customClass={classNames(
                             "stake-card",
@@ -349,12 +372,6 @@ export default function PlayPage() {
                 customClass="practice-sheet"
             >
                 <Box customClass="matchmaking-searching practice-options">
-                    <Text customClass="searching-title">
-                        {playSheetPracticeTitle}
-                    </Text>
-                    <Text customClass="matches-empty-desc">
-                        {playSheetPracticeDesc}
-                    </Text>
                     <ChipSelect
                         options={PRACTICE_DIFFICULTIES}
                         value={practiceDifficulty}

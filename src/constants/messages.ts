@@ -186,7 +186,7 @@ export const playSheetTip =
     "Rapid and Classical pools pay out the largest prizes.";
 export const playSheetPracticeLabel = "For fun";
 export const playSheetPracticeTitle = "Practice";
-export const playSheetPracticeDesc = "Free to play, vs computer";
+export const playSheetPracticeDesc = "Free to play";
 export const playReasonInactivity = "Inactivity";
 export const playReasonResignation = "Resignation";
 export const playReasonAgreement = "Agreement";
@@ -515,11 +515,6 @@ export const selectCountrySubtitle =
 export const selectCountryContinueButton = "Continue";
 export const selectCountrySetFailed =
     "Couldn't save your country. Please try again.";
-export const inactivityTimeoutRemovedTitle = "You were removed";
-export const inactivityTimeoutTimedOutDescription =
-    "You didn't move in time. The game has ended.";
-export const inactivityTimeoutDisconnectedDescription =
-    "You were disconnected from the game.";
 export const sidebarNavLogoTitle = "Go to Lobby";
 export const sidebarNavStreakSuffix = "W streak";
 export const sidebarNavRatingHint = (elo: number) =>

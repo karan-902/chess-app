@@ -945,6 +945,7 @@ export default function GameRoom() {
                         {!isPvc && canAffordRematch && (
                             <Button
                                 customClass="gr-overlay-btn primary"
+                                sx={{ display: "none" }}
                                 onClick={offerRematch}
                                 disabled={rematchStatus === "offered"}
                             >
