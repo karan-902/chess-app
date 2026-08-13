@@ -1,6 +1,5 @@
 import { Difficulty } from "@/types/components";
 import {
-    DollarSign,
     Rocket,
     Zap,
     Timer,
@@ -13,7 +12,7 @@ import {
     Handshake,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import type { Currency, GameCategory } from "@/types/types";
+import type { GameCategory } from "@/types/types";
 import type { TransactionType } from "@/types/utils";
 
 export const CATEGORY_META: Record<
@@ -46,18 +45,12 @@ export const TRANSACTION_TYPE_LABELS: Record<TransactionType, string> = {
     STAKE_REFUND: "Stake Refunds",
 };
 
-export const CURRENCY_META = {
-    USD: { icon: DollarSign, color: "#f7931a" },
-} as const;
-
 export const QUEUE_TIMEOUT_SECONDS: Record<GameCategory, number> = {
     BULLET: 30,
     BLITZ: 45,
     RAPID: 60,
     CLASSICAL: 90,
 };
-
-export const STAKE_CURRENCY: Currency = "USD";
 
 export const PATH_TITLE: Record<string, string> = {
     "/play": "Play",
@@ -71,7 +64,7 @@ export const PATH_TITLE: Record<string, string> = {
 export const NAV_ITEMS = [
     { id: "play", path: "/play", label: "Play" },
     { id: "my-matches", path: "/history", label: "Matches" },
-    { id: "leaderboards", path: "/leaderboard", label: "Leaderboards" },
+    { id: "leaderboard", path: "/leaderboard", label: "Leaderboard" },
     { id: "rules", path: "/rules", label: "Rules" },
 ];
 

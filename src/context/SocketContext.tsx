@@ -45,7 +45,6 @@ import type {
     IChallengeCancelledResponse,
     IChallengeErrorResponse,
     IChallengeMatchFoundResponse,
-    Currency,
 } from "@/types/types";
 
 interface IUserCounts {
@@ -58,7 +57,6 @@ export interface ISentChallenge {
     friendId: string;
     friendUsername: string;
     stakeAmount: number;
-    currency: Currency;
     secondsLeft: number;
 }
 
@@ -73,7 +71,6 @@ interface ISocketContext {
         friendId: string,
         friendUsername: string,
         stakeAmount: number,
-        currency: Currency,
     ) => void;
     cancelChallenge: () => void;
 }
@@ -114,7 +111,6 @@ function RematchOfferModal({
 }: {
     opponentName: string;
     stakeAmount: number;
-    currency: Currency;
     onAccept: () => void;
     onDismiss: () => void;
 }) {
@@ -155,7 +151,6 @@ function ChallengeOfferModal({
 }: {
     challengerUsername: string;
     stakeAmount: number;
-    currency: Currency;
     onAccept: () => void;
     onDecline: () => void;
 }) {
@@ -246,7 +241,6 @@ function RejoinGameModal({
     opponentName: string;
     opponentRating: number;
     stakeAmount: number;
-    currency: Currency;
     onRejoin: () => void;
     onExit: () => void;
 }) {
@@ -307,7 +301,6 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         gameId: string;
         opponentUsername: string;
         stakeAmount: number;
-        currency: Currency;
     } | null>(null);
 
     const rematchOfferGameIdRef = useRef<string | null>(null);
@@ -320,7 +313,6 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         challengerId: string;
         challengerUsername: string;
         stakeAmount: number;
-        currency: Currency;
     } | null>(null);
     const incomingChallengerIdRef = useRef<string | null>(null);
     const setIncomingChallengeState = (offer: typeof incomingChallenge) => {
@@ -536,7 +528,6 @@ export function SocketProvider({ children }: { children: ReactNode }) {
                 gameId: data.game_id,
                 opponentUsername: data.offered_by_username,
                 stakeAmount: data.stake_amount,
-                currency: data.currency,
             });
         };
 
@@ -555,7 +546,6 @@ export function SocketProvider({ children }: { children: ReactNode }) {
                 `&opponent=${encodeURIComponent(data.opponent.username)}` +
                 `&opp_rating=${data.opponent.elo_rating}&opp_id=${data.opponent.id}` +
                 `&opp_avatar_seed=${encodeURIComponent(data.opponent.avatar_seed ?? "")}` +
-                `&initial_timeout=${data.inactivity_timeout_seconds}` +
                 `&stake_amount=${data.stake_amount}`;
             router.navigate(url, { replace: true });
         };
@@ -565,7 +555,6 @@ export function SocketProvider({ children }: { children: ReactNode }) {
                 challengerId: data.challenger_id,
                 challengerUsername: data.challenger_username,
                 stakeAmount: data.stake_amount,
-                currency: data.currency,
             });
         };
 
@@ -633,7 +622,6 @@ export function SocketProvider({ children }: { children: ReactNode }) {
                 `&opponent=${encodeURIComponent(data.opponent.username)}` +
                 `&opp_rating=${data.opponent.elo_rating}&opp_id=${data.opponent.id}` +
                 `&opp_avatar_seed=${encodeURIComponent(data.opponent.avatar_seed ?? "")}` +
-                `&initial_timeout=${data.inactivity_timeout_seconds}` +
                 `&stake_amount=${data.stake_amount}`;
             router.navigate(url, { replace: true });
         };
@@ -721,7 +709,6 @@ export function SocketProvider({ children }: { children: ReactNode }) {
             `&opponent=${encodeURIComponent(activeGame.opponent.username)}` +
             `&opp_rating=${activeGame.opponent.elo_rating}&opp_id=${activeGame.opponent.id}` +
             `&opp_avatar_seed=${encodeURIComponent(activeGame.opponent.avatar_seed ?? "")}` +
-            `&initial_timeout=${activeGame.inactivity_timeout_seconds}` +
             `&stake_amount=${activeGame.stake_amount}`;
         setActiveGame(null);
         router.navigate(url, { replace: true });
@@ -742,19 +729,16 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         friendId: string,
         friendUsername: string,
         stakeAmount: number,
-        currency: Currency,
     ) => {
         if (!socket) return;
         socket.emit("challenge_friend", {
             friend_id: friendId,
             stake_amount: stakeAmount,
-            currency,
         });
         setSentChallengeState({
             friendId,
             friendUsername,
             stakeAmount,
-            currency,
             secondsLeft: 30,
         });
         stopChallengeCountdown();
@@ -834,7 +818,6 @@ export function SocketProvider({ children }: { children: ReactNode }) {
                     opponentName={activeGame.opponent.username}
                     opponentRating={activeGame.opponent.elo_rating}
                     stakeAmount={activeGame.stake_amount}
-                    currency={activeGame.currency}
                     onRejoin={handleRejoin}
                     onExit={() => setActiveGame(null)}
                 />
@@ -843,7 +826,6 @@ export function SocketProvider({ children }: { children: ReactNode }) {
                 <RematchOfferModal
                     opponentName={rematchOffer.opponentUsername}
                     stakeAmount={rematchOffer.stakeAmount}
-                    currency={rematchOffer.currency}
                     onAccept={handleAcceptRematch}
                     onDismiss={handleDismissRematch}
                 />
@@ -857,7 +839,6 @@ export function SocketProvider({ children }: { children: ReactNode }) {
                             incomingChallenge.challengerUsername
                         }
                         stakeAmount={incomingChallenge.stakeAmount}
-                        currency={incomingChallenge.currency}
                         onAccept={handleAcceptChallenge}
                         onDecline={handleDeclineChallenge}
                     />

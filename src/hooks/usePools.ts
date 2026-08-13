@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { callAPIInterface } from "@/utils";
 import { useSocket } from "@/context/SocketContext";
-import { STAKE_CURRENCY } from "@/constants/config";
 import type {
     Pool,
     IPoolStats,
@@ -35,7 +34,6 @@ export function usePools(poolType: PoolCategory = "all") {
     const applyResponse = useCallback((data: IPoolsResponse) => {
         const parsed: Pool[] = data.pools.map((p) => ({
             ...p,
-            currency: data.currency,
             category: parseCategory(p.id),
             timeSeconds: p.time_seconds,
         }));
@@ -63,7 +61,7 @@ export function usePools(poolType: PoolCategory = "all") {
         if (!ctxSocket) return;
 
         const onPoolUpdated = (data: IPoolsResponse) => {
-            if (data.currency === STAKE_CURRENCY) applyResponse(data);
+            applyResponse(data);
         };
 
         ctxSocket.on("pool_updated", onPoolUpdated);

@@ -78,7 +78,6 @@ export function useRematch(gameId: string | undefined) {
                     `&opponent=${encodeURIComponent(data.opponent.username)}` +
                     `&opp_rating=${data.opponent.elo_rating}&opp_id=${data.opponent.id}` +
                     `&opp_avatar_seed=${encodeURIComponent(data.opponent.avatar_seed ?? "")}` +
-                    `&initial_timeout=${data.inactivity_timeout_seconds}` +
                     `&stake_amount=${data.stake_amount}`,
                 { replace: true },
             );

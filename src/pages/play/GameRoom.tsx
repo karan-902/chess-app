@@ -15,7 +15,6 @@ import PieceIcon from "@/components/board/PieceIcon";
 import { useChessGame } from "@/hooks/useChessGame";
 import { useBoardReview } from "@/hooks/useBoardReview";
 import { useGameClock } from "@/hooks/useGameClock";
-import { useInactivityTimeout } from "@/hooks/useInactivityTimeout";
 import { useTabLock } from "@/hooks/useTabLock";
 import { useRematch } from "@/hooks/useRematch";
 import { useStockfish } from "@/hooks/useStockfish";
@@ -23,12 +22,8 @@ import { useComputerOpponent } from "@/hooks/useComputerOpponent";
 import { useSocket } from "@/context/SocketContext";
 import { useWalletBalance } from "@/hooks/useWallet";
 import { useReduxSelector, useReduxDispatch } from "@/redux/hooks";
-import { fenToBoard } from "@/utils/fenToBoard";
 import { formateAmount } from "@/utils/formate";
-import {
-    DIFFICULTY_CONFIG,
-    CATEGORY_INACTIVITY_SECONDS,
-} from "@/types/components";
+import { DIFFICULTY_CONFIG } from "@/types/components";
 import type { TimeControl, GameMode, Difficulty } from "@/types/components";
 import type {
     IopponentMoveResponse,
@@ -37,7 +32,6 @@ import type {
     IdrawOfferedResponse,
     IdrawRejectedResponse,
     IgameEndedResponse,
-    IinactivityTimeoutResponse,
     ISocketErrorResponse,
     IopponentDisconnectedResponse,
     IopponentReconnectedResponse,
@@ -76,8 +70,6 @@ import {
     playReasonTimeout,
     playReasonInactivity,
     playReasonGameOver,
-    playPlayerRowMakeMovePrefix,
-    playPlayerRowMakeMoveSuffix,
     playMoveHistoryReviewing,
     playPromotionTitle,
     playPromotionQueen,
@@ -96,7 +88,6 @@ const REASON_LABEL: Record<string, string> = {
     draw: playReasonDraw,
     stalemate: playReasonStalemate,
     timeout: playReasonTimeout,
-    inactivity: playReasonInactivity,
     opponent_disconnected: playReasonInactivity,
 };
 
@@ -120,6 +111,20 @@ function isGameFinished(id: string) {
     } catch {
         return false;
     }
+}
+
+function getPvcColor(id: string): string | null {
+    try {
+        return sessionStorage.getItem(`pvc_color:${id}`);
+    } catch {
+        return null;
+    }
+}
+
+function setPvcColor(id: string, color: string) {
+    try {
+        sessionStorage.setItem(`pvc_color:${id}`, color);
+    } catch {}
 }
 
 function capturedCode(type: string, color: "w" | "b") {
@@ -151,6 +156,7 @@ export default function GameRoom() {
     const timeControl = (params.get("time") as TimeControl) || "rapid";
     const myCategory = timeControl.toUpperCase() as GameCategory;
     const playerSide: "w" | "b" = params.get("color") === "black" ? "b" : "w";
+    const computerSide: "w" | "b" = playerSide === "w" ? "b" : "w";
     const opponentName = isPvc
         ? playOpponentFallbackComputer
         : params.get("opponent")
@@ -158,11 +164,6 @@ export default function GameRoom() {
           : playOpponentFallbackOpponent;
     const opponentRating = Number(params.get("opp_rating") ?? 0);
     const opponentId = params.get("opp_id") ?? undefined;
-    const initialTimeout = params.get("initial_timeout")
-        ? Number(params.get("initial_timeout"))
-        : isPvc
-          ? CATEGORY_INACTIVITY_SECONDS[timeControl]
-          : undefined;
     const stakeAmount = Number(params.get("stake_amount") ?? 0);
     const canAffordRematch = usdValue >= stakeAmount;
 
@@ -170,8 +171,26 @@ export default function GameRoom() {
         () => !!gameId && isGameFinished(gameId),
     );
 
+    const [pvcColorRedirect] = useState<string | null>(() => {
+        if (!isPvc || !gameId) return null;
+        const urlColor = params.get("color") ?? "white";
+        const storedColor = getPvcColor(gameId);
+        if (!storedColor) {
+            setPvcColor(gameId, urlColor);
+            return null;
+        }
+        if (storedColor === urlColor) return null;
+        const corrected = new URLSearchParams(params);
+        corrected.set("color", storedColor);
+        return `/play?${corrected.toString()}`;
+    });
+
     if (wasAlreadyFinished) {
         return <Navigate to="/play" replace />;
+    }
+
+    if (pvcColorRedirect) {
+        return <Navigate to={pvcColorRedirect} replace />;
     }
 
     const {
@@ -192,8 +211,8 @@ export default function GameRoom() {
         isPromotionMove,
         getRandomMove,
         getCapturedPieces,
-        getPieceColor,
         getPremoveMoves,
+        getPremovePieceColor,
     } = useChessGame();
 
     const { viewIndex, isReviewing, displayFen, goBack, goForward } =
@@ -201,10 +220,9 @@ export default function GameRoom() {
 
     const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
     const [premoveFrom, setPremoveFrom] = useState<string | null>(null);
-    const [premove, setPremove] = useState<{
-        from: string;
-        to: string;
-    } | null>(null);
+    const [premoveQueue, setPremoveQueue] = useState<
+        { from: string; to: string }[]
+    >([]);
     const [flashSquare, setFlashSquare] = useState<string | null>(null);
     const [pendingPromotion, setPendingPromotion] = useState<{
         from: string;
@@ -241,7 +259,7 @@ export default function GameRoom() {
     }, [gameEnded, gameId]);
 
     useEffect(() => {
-        setPremove(null);
+        setPremoveQueue([]);
         setPremoveFrom(null);
     }, [gameId]);
 
@@ -250,13 +268,6 @@ export default function GameRoom() {
         timeControl,
         paused,
         turn,
-    );
-    const { secsLeft, inactiveOut } = useInactivityTimeout(
-        paused,
-        turn,
-        fenHistory.length,
-        playerSide,
-        initialTimeout,
     );
     const { tabLockStatus, takeOver, notifySuperseded } = useTabLock(
         gameId,
@@ -271,7 +282,7 @@ export default function GameRoom() {
     const { bestMove } = useStockfish(
         fen,
         DIFFICULTY_CONFIG[difficulty].depth,
-        isPvc && difficulty !== "easy" && turn === "b" && !isGameOver,
+        isPvc && difficulty !== "easy" && turn === computerSide && !isGameOver,
         DIFFICULTY_CONFIG[difficulty].elo,
     );
     useComputerOpponent({
@@ -279,6 +290,7 @@ export default function GameRoom() {
         difficulty,
         fen,
         turn,
+        computerSide,
         gameEnded: isGameOver,
         bestMove,
         makeMove,
@@ -312,16 +324,6 @@ export default function GameRoom() {
         gameId,
         myUserId,
     ]);
-
-    useEffect(() => {
-        if (!isPvc || !inactiveOut || gameEnded) return;
-        setGameEnded({
-            game_id: gameId ?? "pvc",
-            winner_id: "computer",
-            reason: "inactivity",
-            settlement: null,
-        });
-    }, [isPvc, inactiveOut, gameEnded, gameId]);
 
     useEffect(() => {
         if (!isPvc || !timedOut || gameEnded) return;
@@ -366,20 +368,6 @@ export default function GameRoom() {
         const onGameEnded = (data: IgameEndedResponse) => {
             if (data.game_id === gameId) setGameEnded(data);
         };
-        const onInactivityTimeout = (data: IinactivityTimeoutResponse) => {
-            if (data.game_id !== gameId) return;
-            setGameEnded({
-                game_id: data.game_id,
-                winner_id:
-                    data.loser_id === myUserId
-                        ? (opponentId ?? null)
-                        : (myUserId ?? null),
-                reason: data.reason,
-                settlement: data.settlement,
-                your_elo_gain: data.your_elo_gain,
-                your_streak: data.your_streak,
-            });
-        };
         const onSocketError = (data: ISocketErrorResponse) => {
             dispatch(showToast({ message: data.message, severity: "error" }));
         };
@@ -412,7 +400,6 @@ export default function GameRoom() {
         socket.on("draw_offered", onDrawOffered);
         socket.on("draw_rejected", onDrawRejected);
         socket.on("game_ended", onGameEnded);
-        socket.on("inactivity_timeout", onInactivityTimeout);
         socket.on("tab_superseded", notifySuperseded);
         socket.on("socket_error", onSocketError);
         socket.on("opponent_disconnected", onOpponentDisconnected);
@@ -426,7 +413,6 @@ export default function GameRoom() {
             socket.off("draw_offered", onDrawOffered);
             socket.off("draw_rejected", onDrawRejected);
             socket.off("game_ended", onGameEnded);
-            socket.off("inactivity_timeout", onInactivityTimeout);
             socket.off("tab_superseded", notifySuperseded);
             socket.off("socket_error", onSocketError);
             socket.off("opponent_disconnected", onOpponentDisconnected);
@@ -446,7 +432,7 @@ export default function GameRoom() {
 
     const legalMoves = selectedSquare ? getLegalMoves(selectedSquare) : [];
     const premoveTargets = premoveFrom
-        ? getPremoveMoves(premoveFrom, playerSide)
+        ? getPremoveMoves(premoveFrom, playerSide, premoveQueue)
         : [];
 
     const commitMove = (from: string, to: string, promotion?: string) => {
@@ -475,39 +461,48 @@ export default function GameRoom() {
     };
 
     useEffect(() => {
-        if (turn !== playerSide || gameEnded || !premove) return;
-        setPremove(null);
-        const result = commitMove(premove.from, premove.to);
+        if (turn !== playerSide || gameEnded || premoveQueue.length === 0)
+            return;
+        const [next, ...rest] = premoveQueue;
+        setPremoveQueue(rest);
+        const result = commitMove(next.from, next.to);
         if (!result) {
-            setFlashSquare(premove.from);
+            setPremoveQueue([]);
+            setFlashSquare(next.from);
             setTimeout(() => setFlashSquare(null), 500);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [turn, gameEnded, playerSide, premove]);
+    }, [turn, gameEnded, playerSide, premoveQueue]);
 
     const handleSquareClick = (square: string) => {
         if (gameEnded || isReviewing || pendingPromotion) return;
 
         if (turn !== playerSide) {
-            if (premove) {
-                if (getPieceColor(square) === playerSide) {
-                    setPremove(null);
-                    setPremoveFrom(square);
-                }
-                return;
-            }
             if (premoveFrom) {
                 if (premoveTargets.includes(square)) {
-                    setPremove({ from: premoveFrom, to: square });
+                    setPremoveQueue((q) => [
+                        ...q,
+                        { from: premoveFrom, to: square },
+                    ]);
                     setPremoveFrom(null);
                 } else {
                     setPremoveFrom(
-                        getPieceColor(square) === playerSide ? square : null,
+                        getPremovePieceColor(
+                            square,
+                            playerSide,
+                            premoveQueue,
+                        ) === playerSide
+                            ? square
+                            : null,
                     );
                 }
                 return;
             }
-            if (getPieceColor(square) === playerSide) setPremoveFrom(square);
+            if (
+                getPremovePieceColor(square, playerSide, premoveQueue) ===
+                playerSide
+            )
+                setPremoveFrom(square);
             return;
         }
 
@@ -523,11 +518,16 @@ export default function GameRoom() {
             return;
         }
 
-        setSelectedSquare(getLegalMoves(square).length > 0 ? square : null);
+        const hasOwnPiece = getLegalMoves(square).length > 0;
+        if (selectedSquare && !hasOwnPiece) {
+            setFlashSquare(selectedSquare);
+            setTimeout(() => setFlashSquare(null), 400);
+        }
+        setSelectedSquare(hasOwnPiece ? square : null);
     };
 
     const handleSquareRightClick = () => {
-        setPremove(null);
+        setPremoveQueue([]);
         setPremoveFrom(null);
     };
 
@@ -590,7 +590,7 @@ export default function GameRoom() {
         );
     }
 
-    const board = fenToBoard(isReviewing ? displayFen : fen);
+    const boardFen = isReviewing ? displayFen : fen;
     const checkSquare = !isReviewing && inCheck ? kingSquare() : null;
     const stalemateSquare = !isReviewing && isStalemate ? kingSquare() : null;
 
@@ -670,20 +670,17 @@ export default function GameRoom() {
 
             <Box customClass="gr-board-wrap">
                 <ChessBoard
-                    board={board}
+                    fen={boardFen}
                     selectedSquare={
-                        myTurnActive
-                            ? selectedSquare
-                            : (premove?.from ?? premoveFrom)
+                        myTurnActive ? selectedSquare : premoveFrom
                     }
-                    legalMoves={
-                        myTurnActive
-                            ? legalMoves
-                            : premove
-                              ? [premove.to]
-                              : premoveTargets
-                    }
+                    legalMoves={myTurnActive ? legalMoves : premoveTargets}
+                    premoveSquares={premoveQueue.flatMap((m) => [
+                        m.from,
+                        m.to,
+                    ])}
                     premoveMode={!myTurnActive}
+                    draggableColor={playerSide}
                     checkSquare={checkSquare}
                     stalemateSquare={stalemateSquare}
                     flashSquare={flashSquare}
@@ -767,13 +764,6 @@ export default function GameRoom() {
                 </Box>
                 <Text customClass="gr-clock">{myClock}</Text>
             </Box>
-
-            {secsLeft !== null && (
-                <Text customClass="gr-inactivity-warning">
-                    {playPlayerRowMakeMovePrefix} {secsLeft}s{" "}
-                    {playPlayerRowMakeMoveSuffix}
-                </Text>
-            )}
 
             {drawOffer && (
                 <Box customClass="gr-draw-banner">

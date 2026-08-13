@@ -32,20 +32,6 @@ export function secondsToTimeControl(seconds: number): TimeControl {
     return match?.[0] ?? "rapid";
 }
 
-export function getInactivitySeconds(timeSeconds: number): number {
-    if (timeSeconds <= 60) return 15;
-    if (timeSeconds <= 180) return 30;
-    if (timeSeconds <= 600) return 60;
-    return 90;
-}
-
-export const CATEGORY_INACTIVITY_SECONDS: Record<TimeControl, number> = {
-    bullet: 15,
-    blitz: 30,
-    rapid: 60,
-    classical: 90,
-};
-
 export const DIFFICULTY_CONFIG: Record<
     Difficulty,
     { rating: number; depth: number; elo: number }

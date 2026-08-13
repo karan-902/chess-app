@@ -74,6 +74,11 @@
         color: $appText;
     }
 
+    &.shatranj-logo {
+        display: inline-flex;
+        align-items: center;
+        color: $gold !important;
+    }
     &.otp-subtitle {
         font-size: $font14;
         color: alpha($appText, 0.5);
@@ -114,7 +119,7 @@
 
     &.play-hint {
         font-size: $font14;
-        font-family: $fontOutfitExtraBold;
+        font-family: $fontOutfitMedium;
         color: $appTextMuted;
         text-align: center;
         margin-top: 0.25rem;
@@ -148,13 +153,10 @@
         font-family: $fontOutfitExtraBold;
         color: $appText;
     }
-    &.win-prize {
-        color: $greenishTeal !important;
-    }
 
     &.sheet-tip {
         font-size: $font12;
-        font-family: $fontOutfitExtraBold;
+        font-family: $fontOutfitMedium;
         color: $appTextMuted;
         text-align: center;
         line-height: 1.5;
@@ -168,10 +170,10 @@
     &.pool-meta-label,
     &.pool-meta-time {
         font-size: 0.75rem;
+        font-family: $fontOutfitMedium;
     }
 
     &.pool-meta-time {
-        font-weight: 400;
         text-transform: none;
     }
 
@@ -187,12 +189,20 @@
         font-size: $font24;
         font-weight: 700;
         color: $gold;
+        @media screen and (max-width: 768px) {
+            font-size: $font16;
+        }
     }
 
     &.pool-entry-fee {
         display: block;
         font-size: $font12;
         color: $appText;
+    }
+
+    &.room-balance {
+        font-size: $font12;
+        color: alpha($appText, 0.6);
     }
 
     &.pool-opponent-ready,
@@ -209,7 +219,7 @@
         font-weight: 700;
         letter-spacing: 0.06em;
         text-transform: uppercase;
-        font-family: $fontOutfitExtraBold;
+        font-family: $fontOutfitMedium;
         color: $appTextMuted;
         margin-bottom: 0.35rem;
     }
@@ -218,7 +228,6 @@
         font-size: $font12;
         font-family: $fontOutfitExtraBold;
         color: $appTextMuted;
-        margin-bottom: 0.75rem;
     }
 
     &.stake-card-practice-title {
@@ -307,7 +316,7 @@
 
     &.matches-empty-desc {
         font-size: $font14;
-        font-family: $fontOutfitExtraBold;
+        font-family: $fontOutfitMedium;
         color: $appTextMuted;
         line-height: 1.55;
     }
@@ -387,7 +396,7 @@
         display: block;
         font-family: $fontOutfitExtraBold;
         font-size: $font24;
-        color: $greenishTeal;
+        color: $appText;
 
         .wallet-split-block.accent & {
             color: $appText;
@@ -519,13 +528,13 @@
         font-size: $font12;
         text-transform: uppercase;
         letter-spacing: 0.05em;
-        font-family: $fontOutfitExtraBold;
+        font-family: $fontOutfitMedium;
         color: $appTextMuted;
     }
 
     &.withdraw-available-amt {
         display: block;
-        font-family: $fontMono;
+        font-family: $fontOutfitExtraBold;
         font-size: $font20;
         font-weight: 700;
         color: $appText;
@@ -535,7 +544,7 @@
     &.withdraw-available-caveat {
         display: block;
         font-size: $font12;
-        font-family: $fontOutfitExtraBold;
+        font-family: $fontOutfitMedium;
         color: $appTextMuted;
         line-height: 1.4;
     }
@@ -652,27 +661,18 @@
         }
     }
 
-    &.gr-inactivity-warning {
-        display: block;
-        text-align: center;
-        margin-top: 0.7rem;
-        font-size: $font12;
-        font-weight: 600;
-        color: $paleRed;
-    }
-
     &.gr-move-pair {
         display: inline-block;
         font-family: $fontMono;
         font-size: $font14;
         line-height: 2.1;
-        color: alpha($appText, 0.78);
+        color: $appText;
         margin-right: 0.9rem;
         white-space: nowrap;
     }
 
     &.gr-move-n {
-        opacity: 0.65;
+        opacity: 0.85;
         margin-right: 0.2rem;
     }
 

@@ -106,6 +106,20 @@ export const authDeviceConflictDescription = (deviceName: string) =>
     `You're currently logged in on ${deviceName}. Continuing here will log that device out.`;
 export const authDeviceConflictContinueButton = "Continue Here";
 export const authDeviceConflictCancelButton = "Cancel";
+export const authDeviceApprovalTitle = "New device detected";
+export const authDeviceApprovalDescription =
+    "We've emailed you to approve this sign-in. This screen will continue automatically once you approve it.";
+export const authDeviceApprovalBack = "Back to login";
+export const deviceApprovePageTitle = "Approve this sign-in?";
+export const deviceApprovePageDescription =
+    "Someone is trying to sign in to your Shatranj account from a new device. If this was you, approve it below.";
+export const deviceApproveButton = "Yes, this was me";
+export const deviceApprovedTitle = "Device approved";
+export const deviceApprovedDescription =
+    "You can return to your other device now — it will sign in automatically.";
+export const deviceApproveInvalidTitle = "Link expired";
+export const deviceApproveInvalidDescription =
+    "This approval link is no longer valid. Please try logging in again.";
 export const authResetPasswordInvalidLinkTitle = "Invalid Link";
 export const authResetPasswordInvalidLinkDescription =
     "This reset link is missing or invalid.";
@@ -187,6 +201,30 @@ export const playSheetTip =
 export const playSheetPracticeLabel = "For fun";
 export const playSheetPracticeTitle = "Practice";
 export const playSheetPracticeDesc = "Free to play";
+export const playSheetFriendLabel = "Play a friend";
+export const playSheetFriendTitle = "Room match";
+export const playSheetFriendDesc = "Create or join";
+export const roomCreateTabLabel = "Create";
+export const roomJoinTabLabel = "Join";
+export const roomStakeLabel = "Stake amount";
+export const roomStakeAmountPlaceholder = "Enter amount";
+export const roomBalanceLabel = (balance: string) => `Balance ${balance}`;
+export const roomStakeRequired = "Stake amount is required";
+export const roomStakeInsufficientBalance = "Amount exceeds your balance";
+export const roomTimeLabel = "Duration";
+export const roomMinutesPlaceholder = "Enter minutes";
+export const roomMinutesSuffix = "min";
+export const roomRatedLabel = "Rated";
+export const roomCreateButton = "Create room";
+export const roomJoinCodeLabel = "Room code";
+export const roomJoinCodePlaceholder = "9RLGSQ";
+export const roomPasteLabel = "Paste";
+export const roomJoinButton = "Join room";
+export const roomWaitingTitle = "Waiting for opponent";
+export const roomWaitingDesc = "Share this code with your friend";
+export const roomCopyButton = "Copy code";
+export const roomCopiedButton = "Copied!";
+export const roomCancelButton = "Cancel";
 export const playReasonInactivity = "Inactivity";
 export const playReasonResignation = "Resignation";
 export const playReasonAgreement = "Agreement";
@@ -229,8 +267,6 @@ export const playMoveHistoryNoMovesYet = "No moves yet";
 export const playPlayerRowThinking = "Thinking";
 export const playPlayerRowYourTurn = "Your Turn";
 export const playPlayerRowPlaying = "Playing";
-export const playPlayerRowMakeMovePrefix = "Make a move in";
-export const playPlayerRowMakeMoveSuffix = "or lose";
 export const playWagerBadgePractice = "Practice";
 export const playWagerBadgeWageredEachSide = "wagered each side";
 export const playWagerBadgeLive = "LIVE";
@@ -276,8 +312,6 @@ export const walletStatsWithdrawn = "Withdrawn";
 export const walletStatsNetPayouts = "Net Payouts";
 export const walletActionCardDepositTab = "↓ Deposit";
 export const walletActionCardWithdrawTab = "↑ Withdraw";
-export const walletActionCardAmountLabel = (currency: string) =>
-    `Amount (${currency})`;
 export const walletActionCardGenerateAddressButton = "DEPOSIT";
 export const walletActionCardRequestWithdrawalButton = "REQUEST WITHDRAWAL";
 export const walletTransactionsSectionTitle = "Recent Transactions";
@@ -429,7 +463,8 @@ export const matchesYouLabel = "You";
 export const matchesVsLabel = "VS";
 
 export const matchesStatsTitle = "Chess";
-export const matchesStatsSubtitle = "Play 5 matches to get a global rank";
+export const matchesStatsSubtitle =
+    "Play 5 matches to get a rank in Leaderboard ";
 export const matchesStatsDaysLabel = (n: number) => `Days ${n}`;
 export const matchesStatsWinRateLabel = "Win rate";
 export const matchesStatsGamesPlayedLabel = "Games played";
@@ -686,3 +721,5 @@ export const friendsChallengeDeclinedToast = (username: string) =>
 export const friendsChallengeCancelledToast = "The challenge was cancelled.";
 export const friendsChallengeErrorFallback =
     "Something went wrong with that challenge.";
+export const MIN_DEPOSIT_USD = 1;
+export const MAX_AMOUNT_DIGITS = 4;

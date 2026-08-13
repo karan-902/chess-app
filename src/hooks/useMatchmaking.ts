@@ -31,7 +31,6 @@ export function useMatchmaking() {
         setStatus("joining");
         socket.emit("join_queue", {
             stake_amount: pool.stake,
-            currency: pool.currency,
             pool_type: pool.category,
         });
     };
@@ -48,7 +47,6 @@ export function useMatchmaking() {
         const pool = poolRef.current;
         socket.emit("leave_queue", {
             stake_amount: pool.stake,
-            currency: pool.currency,
             pool_type: pool.category,
         });
 
@@ -67,7 +65,7 @@ export function useMatchmaking() {
             setStatus("found");
             const pool = poolRef.current;
             navigate(
-                `/play?mode=pvp&time=${pool?.category ?? "rapid"}&game_id=${match.game_id}&color=${match.your_color}&opponent=${encodeURIComponent(match.opponent.username)}&opp_rating=${match.opponent.elo_rating}&opp_id=${match.opponent.id}&opp_avatar_seed=${encodeURIComponent(match.opponent.avatar_seed ?? "")}&initial_timeout=${match.inactivity_timeout_seconds}&stake_amount=${match.stake_amount}`,
+                `/play?mode=pvp&time=${pool?.category ?? "rapid"}&game_id=${match.game_id}&color=${match.your_color}&opponent=${encodeURIComponent(match.opponent.username)}&opp_rating=${match.opponent.elo_rating}&opp_id=${match.opponent.id}&opp_avatar_seed=${encodeURIComponent(match.opponent.avatar_seed ?? "")}&stake_amount=${match.stake_amount}`,
                 { replace: true },
             );
         };

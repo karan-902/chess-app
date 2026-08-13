@@ -1,4 +1,3 @@
-export type Currency = "USD";
 export type View = "play" | "matchmaking" | "wallet" | "leaderboard";
 export type TBoard = (string | null)[][];
 export type PoolCategory = "all" | "BULLET" | "BLITZ" | "RAPID" | "CLASSICAL";
@@ -7,7 +6,6 @@ export type GameCategory = Exclude<PoolCategory, "all">;
 export interface Pool {
     id: string;
     category: GameCategory;
-    currency: Currency;
     stake: number;
     prize: number;
     time: string;
@@ -23,7 +21,6 @@ export interface IPoolStats {
 }
 
 export interface IPoolsResponse {
-    currency: Currency;
     stats: IPoolStats;
     pools: {
         id: string;
@@ -39,14 +36,12 @@ export interface IPoolsResponse {
 
 export interface IjoinQueueBody {
     stake_amount: number;
-    currency: Currency;
     pool_type: PoolCategory;
 }
 
 export interface IqueueJoinedResponse {
     message: string;
     stake_amount: number;
-    currency: Currency;
     your_elo: number;
 }
 
@@ -54,9 +49,7 @@ export interface ImatchFoundResponse {
     message: string;
     game_id: string;
     stake_amount: number;
-    currency: Currency;
     time_seconds: number;
-    inactivity_timeout_seconds: number;
     your_color: "white" | "black";
     opponent: {
         id: string;
@@ -71,7 +64,6 @@ export interface IRematchOfferedResponse {
     offered_by: string;
     offered_by_username: string;
     stake_amount: number;
-    currency: Currency;
 }
 
 export interface IRematchExpiredResponse {
@@ -90,9 +82,39 @@ export interface IRematchFoundResponse {
         avatar_seed: string | null;
     };
     stake_amount: number;
-    currency: Currency;
     time_seconds: number;
-    inactivity_timeout_seconds: number;
+}
+
+export interface IRoomCreatedResponse {
+    code: string;
+    stake_amount: number;
+    time_seconds: number;
+    is_rated: boolean;
+    expires_in_seconds: number;
+}
+
+export interface IRoomMatchedResponse {
+    game_id: string;
+    room_code: string;
+    your_color: "white" | "black";
+    opponent: {
+        id: string;
+        username: string;
+        elo_rating: number;
+        avatar_seed: string | null;
+    };
+    stake_amount: number;
+    is_rated: boolean;
+    time_seconds: number;
+}
+
+export interface IRoomErrorResponse {
+    message: string;
+}
+
+export interface IRoomExpiredResponse {
+    code: string;
+    message?: string;
 }
 
 export interface IActiveGameFoundResponse {
@@ -105,9 +127,7 @@ export interface IActiveGameFoundResponse {
         avatar_seed: string | null;
     };
     stake_amount: number;
-    currency: Currency;
     time_seconds: number;
-    inactivity_timeout_seconds: number;
 }
 
 export interface IqueueLeftResponse {
@@ -124,7 +144,6 @@ export interface IChallengeReceivedResponse {
     challenger_id: string;
     challenger_username: string;
     stake_amount: number;
-    currency: Currency;
 }
 
 export interface IChallengeDeclinedResponse {
@@ -149,9 +168,7 @@ export interface IChallengeMatchFoundResponse {
     message: string;
     game_id: string;
     stake_amount: number;
-    currency: Currency;
     time_seconds: number;
-    inactivity_timeout_seconds: number;
     your_color: "white" | "black";
     opponent: {
         id: string;
@@ -178,7 +195,6 @@ export interface IgameEndedResponse {
         | "resign"
         | "draw"
         | "opponent_disconnected"
-        | "inactivity"
         | string;
     settlement: IGameSettlement | null;
     your_elo_gain?: number;
@@ -190,7 +206,6 @@ export interface IopponentMoveResponse {
     to: string;
     promotion: string | null;
     fen: string;
-    inactivity_timeout_seconds?: number;
 }
 
 export interface IMoveConfirmedResponse {
@@ -227,15 +242,6 @@ export interface IopponentReconnectedResponse {
     game_id: string;
 }
 
-export interface IinactivityTimeoutResponse {
-    game_id: string;
-    loser_id: string;
-    reason: "inactivity";
-    settlement: IGameSettlement | null;
-    your_elo_gain?: number;
-    your_streak?: number;
-}
-
 export interface IMatchFound extends ImatchFoundResponse {}
 
 export interface ILeaderboardPlayer {
@@ -249,7 +255,6 @@ export interface ILeaderboardPlayer {
 }
 
 export interface ILeaderboardResponse {
-    currency: Currency;
     players: ILeaderboardPlayer[];
 }
 
