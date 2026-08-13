@@ -1,0 +1,7 @@
+@use "../../../styles/default.scss" as *;
+
+.label {
+    &.room-field-label {
+        text-align: left !important;
+    }
+}

@@ -50,14 +50,13 @@ import {
     depositModalPaymentReceived,
     depositModalPaymentReceivedDesc,
     depositModalCloseLink,
+    MAX_AMOUNT_DIGITS,
+    MIN_DEPOSIT_USD,
 } from "@/constants/messages";
 import Modal from "./base/Modal/Modal";
 
 type Method = "bitcoin" | "lightning";
 type Stage = "amount" | "qr" | "success";
-
-const MIN_DEPOSIT_USD = 1;
-const MAX_AMOUNT_DIGITS = 4;
 
 const STEPS = [
     {
@@ -196,14 +195,13 @@ export default function DepositModal() {
                         <Text customClass="deposit-heading">
                             {depositModalStepsTitle}
                         </Text>
-                        <button
-                            type="button"
-                            className="deposit-steps-close"
+                        <Button
+                            customClass="deposit-steps-close"
                             onClick={() => setShowSteps(false)}
                             aria-label={depositModalStepsCloseAriaLabel}
                         >
                             <XIcon size={16} strokeWidth={2} />
-                        </button>
+                        </Button>
                     </Box>
                     {STEPS.map((step) => (
                         <Box key={step.title} customClass="deposit-step">
@@ -246,6 +244,7 @@ export default function DepositModal() {
                                 setAmount(
                                     e.target.value
                                         .replace(/\D/g, "")
+                                        .replace(/^0+/, "")
                                         .slice(0, MAX_AMOUNT_DIGITS),
                                 )
                             }
@@ -253,9 +252,6 @@ export default function DepositModal() {
                             helperText={amountError}
                         />
                     </Box>
-                    <Text customClass="deposit-tagline">
-                        {depositModalTagline}
-                    </Text>
                     <Box customClass="deposit-speed-badge">
                         <Text component="span">{depositModalSpeedBadge}</Text>
                         <img
@@ -264,6 +260,9 @@ export default function DepositModal() {
                             className="deposit-speed-logo"
                         />
                     </Box>
+                    <Text customClass="deposit-tagline">
+                        {depositModalTagline}
+                    </Text>
 
                     <Button
                         fullWidth

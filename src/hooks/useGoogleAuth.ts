@@ -18,6 +18,9 @@ export function useGoogleAuth(
     const [isProcessing, setIsProcessing] = useState(() =>
         Boolean(new URLSearchParams(window.location.search).get("code")),
     );
+    const [pendingApprovalToken, setPendingApprovalToken] = useState<
+        string | null
+    >(null);
 
     const processCode = useCallback(
         async (code: string) => {
@@ -35,6 +38,10 @@ export function useGoogleAuth(
                         },
                     }),
                 ).unwrap();
+                if ("status" in res) {
+                    setPendingApprovalToken(res.approval_token);
+                    return;
+                }
                 navigate(res.skill_level === null ? "/skill-level" : "/play");
             } catch (err: any) {
                 if (err?.type === "device_conflict") {
@@ -87,5 +94,5 @@ export function useGoogleAuth(
         triggerGoogleLogin();
     };
 
-    return { googleLogin, isProcessing };
+    return { googleLogin, isProcessing, pendingApprovalToken };
 }

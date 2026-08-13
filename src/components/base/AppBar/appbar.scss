@@ -26,6 +26,7 @@
     .appbar-brand {
         display: flex;
         align-items: center;
+        color: $gold;
         text-decoration: none;
     }
 
@@ -55,7 +56,7 @@
     .appbar-balance-label {
         font-family: $fontOutfitExtraBold;
         font-size: $font14;
-        color: $greenishTeal;
+        color: $appText;
     }
 }
 

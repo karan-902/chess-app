@@ -18,22 +18,21 @@
 }
 
 :root[data-theme="dark"] {
-    --app-bg: #100f0c;
-    --app-secondary: #14171c;
-    --app-surface: #17150f;
+    --app-bg: #121212;
+    --app-secondary: #17140f;
+    --app-surface: #1c1a17;
     --app-card-border: #29261b;
     --app-line: #262319;
-    --app-text: #ece8de;
-    --app-text-muted: #8b8779;
+    --app-text: #f5f2ec;
+    --app-text-muted: #a8a296;
     --app-btn-bg: #00000059;
     --app-btn-border: #ece8de38;
-    --gold: #f7931a;
-    --cyan: #39ff88;
+    --gold: #e8863a;
+    --cyan: #39d0ff;
     --pale-red: #ff5c5c;
     --brink-pink: #f3a69e;
     --greenish-teal: #39ff88;
 }
-
 @function alpha($color, $opacity) {
     @return color-mix(in srgb, #{$color} #{$opacity * 100%}, transparent);
 }
@@ -48,6 +47,7 @@ $font14: 0.875rem;
 $font15: 0.938rem;
 $font16: 1rem;
 $font18: 1.125rem;
+$font22: 1.375rem;
 $font20: 1.25rem;
 $font24: 1.5rem;
 $font30: 1.9rem;

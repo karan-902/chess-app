@@ -1,11 +1,27 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useState, useEffect, useMemo } from "react";
+import {
+    DndContext,
+    DragOverlay,
+    PointerSensor,
+    TouchSensor,
+    useDraggable,
+    useDroppable,
+    useSensor,
+    useSensors,
+    type DragStartEvent,
+    type DragEndEvent,
+} from "@dnd-kit/core";
+import {
+    restrictToParentElement,
+    snapCenterToCursor,
+} from "@dnd-kit/modifiers";
+import classNames from "classnames";
 import Box from "../base/Box/Box";
-import { TBoard } from "@/types/types";
 import PieceIcon from "./PieceIcon";
 import "./board.scss";
 
 interface IChessBoardProps {
-    board: TBoard;
+    fen: string;
     selectedSquare?: string | null;
     legalMoves?: string[];
     attackedSquares?: string[];
@@ -17,22 +33,9 @@ interface IChessBoardProps {
     lastMove?: { from: string; to: string } | null;
     flipped?: boolean;
     premoveMode?: boolean;
+    premoveSquares?: string[];
+    draggableColor?: "w" | "b";
 }
-
-const PIECE_SVG: Record<string, string> = {
-    "♔": "wK",
-    "♕": "wQ",
-    "♖": "wR",
-    "♗": "wB",
-    "♘": "wN",
-    "♙": "wP",
-    "♚": "bK",
-    "♛": "bQ",
-    "♜": "bR",
-    "♝": "bB",
-    "♞": "bN",
-    "♟": "bP",
-};
 
 const LIGHT_SQ = "#c9b48a";
 const DARK_SQ = "#7a6440";
@@ -42,53 +45,130 @@ const FILES = ["a", "b", "c", "d", "e", "f", "g", "h"];
 const RANKS_FLIP = ["1", "2", "3", "4", "5", "6", "7", "8"];
 const FILES_FLIP = ["h", "g", "f", "e", "d", "c", "b", "a"];
 
-interface AnimPiece {
-    svgFile: string;
-    fromX: number;
-    fromY: number;
-    toX: number;
-    toY: number;
-    pieceW: number;
-    pieceH: number;
+const PIECE_LETTER: Record<string, string> = {
+    p: "P",
+    n: "N",
+    b: "B",
+    r: "R",
+    q: "Q",
+    k: "K",
+};
+
+function boardFromFen(fen: string): Record<string, string> {
+    const placement = fen.split(" ")[0] ?? "";
+    const board: Record<string, string> = {};
+    placement.split("/").forEach((rankStr, i) => {
+        const rank = 8 - i;
+        let file = 0;
+        for (const ch of rankStr) {
+            if (/\d/.test(ch)) {
+                file += Number(ch);
+            } else {
+                const color = ch === ch.toUpperCase() ? "w" : "b";
+                board[`${"abcdefgh"[file]}${rank}`] =
+                    `${color}${PIECE_LETTER[ch.toLowerCase()]}`;
+                file += 1;
+            }
+        }
+    });
+    return board;
 }
 
-interface DragState {
+function DroppableSquare({
+    square,
+    className,
+    style,
+    onClick,
+    onContextMenu,
+    premoveMode,
+    children,
+}: {
     square: string;
-    pointerId: number;
-    svgFile: string;
-    startX: number;
-    startY: number;
-    x: number;
-    y: number;
-    liftY: number;
-    dragging: boolean;
-    hoverSquare: string | null;
+    className: string;
+    style: React.CSSProperties;
+    onClick: () => void;
+    onContextMenu: (e: React.MouseEvent) => void;
+    premoveMode?: boolean;
+    children: React.ReactNode;
+}) {
+    const { setNodeRef, isOver } = useDroppable({ id: square });
+    return (
+        <Box
+            ref={setNodeRef}
+            customClass={classNames(
+                className,
+                isOver &&
+                    (premoveMode
+                        ? "square-drag-hover-premove"
+                        : "square-drag-hover"),
+            )}
+            style={style}
+            onClick={onClick}
+            onContextMenu={onContextMenu}
+        >
+            {children}
+        </Box>
+    );
 }
 
-const DRAG_THRESHOLD = 6;
+function DraggablePiece({
+    square,
+    code,
+    col,
+    row,
+    className,
+    onClick,
+    draggable,
+}: {
+    square: string;
+    code: string;
+    col: number;
+    row: number;
+    className: string;
+    onClick: () => void;
+    draggable: boolean;
+}) {
+    const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+        id: square,
+        data: { code },
+        disabled: !draggable,
+    });
 
-function squareToIndex(square: string, flipped?: boolean) {
-    const col = FILES.indexOf(square[0]);
-    const row = RANKS.indexOf(square[1]);
-    return flipped ? { col: 7 - col, row: 7 - row } : { col, row };
-}
-
-function squareAtPoint(
-    rect: DOMRect,
-    clientX: number,
-    clientY: number,
-    files: string[],
-    ranks: string[],
-): string {
-    const x = clientX - rect.left;
-    const y = clientY - rect.top;
-    const col = Math.min(7, Math.max(0, Math.floor((x / rect.width) * 8)));
-    const row = Math.min(7, Math.max(0, Math.floor((y / rect.height) * 8)));
-    return `${files[col]}${ranks[row]}`;
+    return (
+        <div
+            ref={setNodeRef}
+            {...listeners}
+            {...attributes}
+            onClick={onClick}
+            style={{
+                position: "absolute",
+                left: `${col * 12.5}%`,
+                top: `${row * 12.5}%`,
+                width: "12.5%",
+                height: "12.5%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                touchAction: "none",
+                cursor: draggable ? "grab" : "pointer",
+                opacity: isDragging ? 0 : 1,
+                zIndex: 2,
+                transition: isDragging
+                    ? "none"
+                    : "left 0.2s ease, top 0.2s ease",
+            }}
+        >
+            <PieceIcon
+                code={code}
+                className={className}
+                style={{ width: "96%", height: "96%" }}
+            />
+        </div>
+    );
 }
 
 export default function Board({
-    board,
+    fen,
     selectedSquare,
     legalMoves = [],
     attackedSquares = [],
@@ -100,290 +180,185 @@ export default function Board({
     lastMove,
     flipped,
     premoveMode,
+    premoveSquares = [],
+    draggableColor,
 }: IChessBoardProps) {
     const gridRef = useRef<HTMLDivElement>(null);
-    const [animPiece, setAnimPiece] = useState<AnimPiece | null>(null);
-    const [animating, setAnimating] = useState(false);
-    const prevLastMove = useRef<typeof lastMove>(null);
-    const [dragState, setDragState] = useState<DragState | null>(null);
-    const dragRectRef = useRef<DOMRect | null>(null);
+    const [boardWidth, setBoardWidth] = useState(400);
+    const [activeDrag, setActiveDrag] = useState<{
+        square: string;
+        code: string;
+    } | null>(null);
+
+    useEffect(() => {
+        const el = gridRef.current;
+        if (!el) return;
+        const observer = new ResizeObserver((entries) => {
+            const width = entries[0]?.contentRect.width;
+            if (width) setBoardWidth(width);
+        });
+        observer.observe(el);
+        return () => observer.disconnect();
+    }, []);
 
     const ranks = flipped ? RANKS_FLIP : RANKS;
     const files = flipped ? FILES_FLIP : FILES;
+    const board = useMemo(() => boardFromFen(fen), [fen]);
+    const cellSize = boardWidth / 8;
+    const pieceSize = cellSize * 0.96;
 
+    const prevKeyMapRef = useRef<Record<string, string>>({});
+    const pieceKeys: Record<string, string> = {};
+    for (const square of Object.keys(board)) {
+        pieceKeys[square] = square;
+    }
+    if (lastMove && board[lastMove.to] && !board[lastMove.from]) {
+        pieceKeys[lastMove.to] =
+            prevKeyMapRef.current[lastMove.from] ?? lastMove.from;
+    }
     useEffect(() => {
-        if (
-            !lastMove ||
-            (prevLastMove.current &&
-                prevLastMove.current.from === lastMove.from &&
-                prevLastMove.current.to === lastMove.to)
-        )
-            return;
-        if (!gridRef.current) return;
+        prevKeyMapRef.current = pieceKeys;
+    });
 
-        prevLastMove.current = lastMove;
+    const sensors = useSensors(
+        useSensor(PointerSensor, {
+            activationConstraint: { distance: 6 },
+        }),
+        useSensor(TouchSensor, {
+            activationConstraint: { delay: 120, tolerance: 8 },
+        }),
+    );
 
-        const grid = gridRef.current;
-        const rect = grid.getBoundingClientRect();
-        const sqW = rect.width / 8;
-        const sqH = rect.height / 8;
-
-        const from = squareToIndex(lastMove.from, flipped);
-        const to = squareToIndex(lastMove.to, flipped);
-
-        const piece = board[to.row]?.[to.col];
-        if (!piece) return;
-
-        const svgFile = PIECE_SVG[piece];
-        if (!svgFile) return;
-
-        const pieceW = sqW * 0.9;
-        const pieceH = sqH * 0.9;
-        const offset = { x: sqW * 0.05, y: sqH * 0.05 };
-
-        setAnimPiece({
-            svgFile,
-            fromX: from.col * sqW + offset.x,
-            fromY: from.row * sqH + offset.y,
-            toX: to.col * sqW + offset.x,
-            toY: to.row * sqH + offset.y,
-            pieceW,
-            pieceH,
-        });
-        setAnimating(false);
-
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => setAnimating(true));
-        });
-
-        const timer = setTimeout(() => setAnimPiece(null), 320);
-        return () => clearTimeout(timer);
-    }, [lastMove]);
-
-    useEffect(() => {
-        if (!dragState) return;
-        const { pointerId, startX, startY, square } = dragState;
-
-        const handleMove = (e: PointerEvent) => {
-            if (e.pointerId !== pointerId) return;
-            const rect = dragRectRef.current;
-            const past =
-                Math.hypot(e.clientX - startX, e.clientY - startY) >
-                DRAG_THRESHOLD;
-            const hoverSquare = rect
-                ? squareAtPoint(rect, e.clientX, e.clientY, files, ranks)
-                : null;
-            setDragState((prev) =>
-                prev
-                    ? {
-                          ...prev,
-                          x: e.clientX,
-                          y: e.clientY,
-                          dragging: prev.dragging || past,
-                          hoverSquare,
-                      }
-                    : prev,
-            );
-        };
-
-        const handleUp = (e: PointerEvent) => {
-            if (e.pointerId !== pointerId) return;
-            setDragState((prev) => {
-                if (prev?.dragging) {
-                    const rect = dragRectRef.current;
-                    const dropSquare = rect
-                        ? squareAtPoint(rect, e.clientX, e.clientY, files, ranks)
-                        : null;
-                    if (dropSquare && dropSquare !== square) {
-                        prevLastMove.current = { from: square, to: dropSquare };
-                        onSquareClick?.(dropSquare);
-                    }
-                }
-                return null;
-            });
-        };
-
-        window.addEventListener("pointermove", handleMove);
-        window.addEventListener("pointerup", handleUp);
-        window.addEventListener("pointercancel", handleUp);
-        return () => {
-            window.removeEventListener("pointermove", handleMove);
-            window.removeEventListener("pointerup", handleUp);
-            window.removeEventListener("pointercancel", handleUp);
-        };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dragState?.square, dragState?.pointerId]);
-
-    const handleSquarePointerDown = (
-        square: string,
-        svgFile: string | null,
-        e: React.PointerEvent,
-    ) => {
-        if (e.button !== 0) return;
+    const handleDragStart = (e: DragStartEvent) => {
+        const square = e.active.id as string;
+        const code = board[square];
+        if (code) setActiveDrag({ square, code });
         onSquareClick?.(square);
-        if (!svgFile || !gridRef.current) return;
-        dragRectRef.current = gridRef.current.getBoundingClientRect();
-        setDragState({
-            square,
-            pointerId: e.pointerId,
-            svgFile,
-            startX: e.clientX,
-            startY: e.clientY,
-            x: e.clientX,
-            y: e.clientY,
-            liftY: e.pointerType === "touch" ? 48 : 0,
-            dragging: false,
-            hoverSquare: null,
-        });
+    };
+
+    const handleDragEnd = (e: DragEndEvent) => {
+        setActiveDrag(null);
+        const from = e.active.id as string;
+        const to = e.over?.id as string | undefined;
+        if (to && to !== from) onSquareClick?.(to);
     };
 
     return (
-        <Box customClass="chess-board">
-            <Box ref={gridRef} customClass="chess-board-grid">
-                {Array.from({ length: 8 }, (_, r) =>
-                    Array.from({ length: 8 }, (_, c) => {
-                        const piece = flipped
-                            ? board[7 - r][7 - c]
-                            : board[r][c];
-                        const isLight = (r + c) % 2 === 0;
-                        const square = `${files[c]}${ranks[r]}`;
-                        const isSelected = selectedSquare === square;
-                        const isLegal = legalMoves.includes(square);
-                        const isCapture = isLegal && !!piece;
+        <DndContext
+            sensors={sensors}
+            modifiers={[snapCenterToCursor, restrictToParentElement]}
+            onDragStart={handleDragStart}
+            onDragEnd={handleDragEnd}
+        >
+            <Box customClass="chess-board">
+                <Box customClass="chess-board-grid" ref={gridRef}>
+                    {Array.from({ length: 8 }, (_, r) =>
+                        Array.from({ length: 8 }, (_, c) => {
+                            const isLight = (r + c) % 2 === 0;
+                            const square = `${files[c]}${ranks[r]}`;
+                            const piece = board[square];
+                            const isSelected = selectedSquare === square;
+                            const isLegal = legalMoves.includes(square);
+                            const isCapture = isLegal && !!piece;
+                            const isAttacked =
+                                attackedSquares.includes(square) && !!piece;
+                            const isCheck = checkSquare === square;
+                            const isStalemate = stalemateSquare === square;
+                            const isFlash = flashSquare === square;
+                            const isPremoveQueued =
+                                premoveSquares.includes(square);
+
+                            const bg = isLight ? LIGHT_SQ : DARK_SQ;
+                            const squareBg = isCheck
+                                ? "radial-gradient(circle, #ff0000 0%, #a00000 100%)"
+                                : isStalemate
+                                  ? "radial-gradient(circle, #f7931a 0%, #b3650f 100%)"
+                                  : bg;
+
+                            return (
+                                <DroppableSquare
+                                    key={square}
+                                    square={square}
+                                    className={`chess-board-square${isFlash ? " square-flash" : ""}${isSelected ? " square-selected" : ""}${isSelected && premoveMode ? " square-selected-premove" : ""}${isPremoveQueued ? " square-premove-queued" : ""}`}
+                                    style={{
+                                        backgroundColor: bg,
+                                        background: squareBg,
+                                        cursor: "pointer",
+                                    }}
+                                    onClick={() => onSquareClick?.(square)}
+                                    onContextMenu={(e) => {
+                                        e.preventDefault();
+                                        onSquareRightClick?.(square);
+                                    }}
+                                    premoveMode={premoveMode}
+                                >
+                                    {c === 0 && (
+                                        <span
+                                            className={`sq-corner-label sq-rank ${isLight ? "label-on-light" : "label-on-dark"}`}
+                                        >
+                                            {ranks[r]}
+                                        </span>
+                                    )}
+                                    {r === 7 && (
+                                        <span
+                                            className={`sq-corner-label sq-file ${isLight ? "label-on-light" : "label-on-dark"}`}
+                                        >
+                                            {files[c]}
+                                        </span>
+                                    )}
+                                    {isLegal && !isCapture && (
+                                        <span
+                                            className={`legal-dot${premoveMode ? " legal-dot-premove" : ""}`}
+                                        />
+                                    )}
+                                    {isCapture && (
+                                        <span
+                                            className={`legal-capture-ring${premoveMode ? " legal-capture-ring-premove" : ""}`}
+                                        />
+                                    )}
+                                    {isAttacked && (
+                                        <span className="water-drop-ripple" />
+                                    )}
+                                </DroppableSquare>
+                            );
+                        }),
+                    )}
+
+                    {Object.entries(board).map(([square, code]) => {
+                        const col = files.indexOf(square[0]);
+                        const row = ranks.indexOf(square[1]);
                         const isAttacked =
-                            attackedSquares.includes(square) && !!piece;
-                        const isCheck = checkSquare === square;
-                        const isStalemate = stalemateSquare === square;
-                        const isFlash = flashSquare === square;
-
-                        const bg = isLight ? LIGHT_SQ : DARK_SQ;
-                        const svgFile = piece ? PIECE_SVG[piece] : null;
-                        const isAnimTarget =
-                            animPiece && lastMove?.to === square;
-                        const isDragOrigin =
-                            dragState?.dragging && dragState.square === square;
-                        const isDragHover =
-                            dragState?.dragging &&
-                            dragState.hoverSquare === square;
-
-                        const squareBg = isCheck
-                            ? "radial-gradient(circle, #ff0000 0%, #a00000 100%)"
-                            : isStalemate
-                              ? "radial-gradient(circle, #f7931a 0%, #b3650f 100%)"
-                              : bg;
-
+                            attackedSquares.includes(square) &&
+                            square !== activeDrag?.square;
+                        const isCheck = square === checkSquare;
+                        const isStalemate = square === stalemateSquare;
                         return (
-                            <Box
-                                key={`${r}-${c}`}
-                                customClass={`chess-board-square${isFlash ? " square-flash" : ""}${isSelected ? " square-selected" : ""}${isSelected && premoveMode ? " square-selected-premove" : ""}${isDragHover ? " square-drag-hover" : ""}`}
-                                style={{
-                                    backgroundColor: bg,
-                                    background: squareBg,
-                                    cursor: "pointer",
-                                }}
-                                onPointerDown={(e) =>
-                                    handleSquarePointerDown(square, svgFile, e)
+                            <DraggablePiece
+                                key={pieceKeys[square]}
+                                square={square}
+                                code={code}
+                                col={col}
+                                row={row}
+                                className={`chess-piece-svg${isAttacked ? " piece-danger" : ""}${isCheck ? " piece-in-check" : ""}${isStalemate ? " piece-in-stalemate" : ""}`}
+                                onClick={() => onSquareClick?.(square)}
+                                draggable={
+                                    !draggableColor ||
+                                    code[0] === draggableColor
                                 }
-                                onContextMenu={(e) => {
-                                    e.preventDefault();
-                                    onSquareRightClick?.(square);
-                                }}
-                            >
-                                {c === 0 && (
-                                    <span
-                                        className={`sq-corner-label sq-rank ${isLight ? "label-on-light" : "label-on-dark"}`}
-                                    >
-                                        {ranks[r]}
-                                    </span>
-                                )}
-                                {r === 7 && (
-                                    <span
-                                        className={`sq-corner-label sq-file ${isLight ? "label-on-light" : "label-on-dark"}`}
-                                    >
-                                        {files[c]}
-                                    </span>
-                                )}
-                                {isLegal && !isCapture && (
-                                    <span
-                                        className={`legal-dot${premoveMode ? " legal-dot-premove" : ""}`}
-                                    />
-                                )}
-                                {isCapture && (
-                                    <span
-                                        className={`legal-capture-ring${premoveMode ? " legal-capture-ring-premove" : ""}`}
-                                    />
-                                )}
-                                {isAttacked && (
-                                    <span className="water-drop-ripple" />
-                                )}
-                                {svgFile && !isAnimTarget && !isDragOrigin && (
-                                    <PieceIcon
-                                        code={svgFile}
-                                        className={`chess-piece-svg${isAttacked ? " piece-danger" : ""}${isCheck ? " piece-in-check" : ""}${isStalemate ? " piece-in-stalemate" : ""}`}
-                                    />
-                                )}
-                            </Box>
-                        );
-                    }),
-                )}
-
-                {}
-                {animPiece && (
-                    <PieceIcon
-                        code={animPiece.svgFile}
-                        className="chess-piece-svg"
-                        style={{
-                            position: "absolute",
-                            width: animPiece.pieceW,
-                            height: animPiece.pieceH,
-                            left: animating ? animPiece.toX : animPiece.fromX,
-                            top: animating ? animPiece.toY : animPiece.fromY,
-                            transition: animating
-                                ? "left 0.28s ease, top 0.28s ease"
-                                : "none",
-                            pointerEvents: "none",
-                            zIndex: 50,
-                        }}
-                    />
-                )}
-
-                {dragState?.dragging &&
-                    dragRectRef.current &&
-                    (() => {
-                        const rect = dragRectRef.current;
-                        const pieceW = (rect.width / 8) * 0.9;
-                        const pieceH = (rect.height / 8) * 0.9;
-                        const rawLeft = dragState.x - rect.left - pieceW / 2;
-                        const rawTop =
-                            dragState.y -
-                            rect.top -
-                            pieceH / 2 -
-                            dragState.liftY;
-                        const left = Math.min(
-                            Math.max(rawLeft, 0),
-                            rect.width - pieceW,
-                        );
-                        const top = Math.min(
-                            Math.max(rawTop, 0),
-                            rect.height - pieceH,
-                        );
-                        return (
-                            <PieceIcon
-                                code={dragState.svgFile}
-                                className="chess-piece-svg chess-piece-dragging"
-                                style={{
-                                    position: "absolute",
-                                    width: pieceW,
-                                    height: pieceH,
-                                    left,
-                                    top,
-                                    pointerEvents: "none",
-                                    zIndex: 60,
-                                }}
                             />
                         );
-                    })()}
+                    })}
+                </Box>
             </Box>
-        </Box>
+            <DragOverlay dropAnimation={null}>
+                {activeDrag && (
+                    <PieceIcon
+                        code={activeDrag.code}
+                        className="chess-piece-svg chess-piece-dragging"
+                        style={{ width: pieceSize, height: pieceSize }}
+                    />
+                )}
+            </DragOverlay>
+        </DndContext>
     );
 }

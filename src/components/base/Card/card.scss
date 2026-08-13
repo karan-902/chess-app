@@ -225,16 +225,6 @@
             height: 10rem;
         }
 
-        &.practice.wide {
-            grid-column: 1 / -1;
-            height: auto;
-            align-self: auto;
-        }
-
-        &.insufficient {
-            opacity: 0.7;
-        }
-
         &.selected {
             border-color: $gold;
             background: alpha($gold, 0.08);

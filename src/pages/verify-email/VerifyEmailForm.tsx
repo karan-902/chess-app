@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { ArrowLeft } from "lucide-react";
-import { OTPInput, type SlotProps } from "input-otp";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import Button from "@/components/base/Button/Button";
+import OtpInput from "@/components/base/OtpInput/OtpInput";
 import { callAPIInterface } from "@/utils";
 import { useReduxDispatch } from "@/redux/hooks";
 import { showToast } from "@/redux/toast.slice";
@@ -27,15 +27,6 @@ import {
 export const OTP_LENGTH = 6;
 const OTP_EXPIRY_SECONDS = 10 * 60;
 const RESEND_COOLDOWN_SECONDS = 30;
-
-function OtpSlot({ char, isActive, hasFakeCaret }: SlotProps) {
-    return (
-        <div className={`otp-slot${isActive ? " otp-slot--active" : ""}`}>
-            {char}
-            {hasFakeCaret && <div className="otp-slot-caret" />}
-        </div>
-    );
-}
 
 function formatMMSS(totalSeconds: number): string {
     const m = Math.floor(totalSeconds / 60);
@@ -170,19 +161,11 @@ export default function VerifyEmailForm({
                 </Box>
             )}
 
-            <OTPInput
-                maxLength={OTP_LENGTH}
+            <OtpInput
+                length={OTP_LENGTH}
                 value={otp}
                 onChange={setOtp}
                 onComplete={handleVerify}
-                containerClassName="otp-input-row"
-                render={({ slots }) => (
-                    <>
-                        {slots.map((slot, i) => (
-                            <OtpSlot key={i} {...slot} />
-                        ))}
-                    </>
-                )}
             />
 
             <Text component="p" customClass="otp-expiry">

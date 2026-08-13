@@ -20,9 +20,23 @@ const OPEN_API_ENDPOINTS = [
     "/verify-user",
     "/forgot-password",
     "/reset-password",
+    "/device/approval-status",
 ];
 const errorStatusCodes = [400, 401, 403, 404, 409, 422, 429];
 const serverErrorStatusCodes = [500, 502, 503, 504];
+
+let fingerprintPromise: Promise<string> | null = null;
+
+export function getDeviceFingerprint(): Promise<string> {
+    if (!fingerprintPromise) {
+        fingerprintPromise = import("@fingerprintjs/fingerprintjs")
+            .then((FingerprintJS) => FingerprintJS.load())
+            .then((agent) => agent.get())
+            .then((result) => result.visitorId)
+            .catch(() => "");
+    }
+    return fingerprintPromise;
+}
 
 let refreshPromise: Promise<string> | null = null;
 

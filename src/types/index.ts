@@ -10,11 +10,13 @@ export type ISSOBody = {
     google_token: string;
     redirect_uri: string;
     confirm_device_switch?: boolean;
+    fingerprint?: string;
 };
 
 export type ILoginBody = {
     email: string;
     password: string;
+    fingerprint?: string;
 };
 
 export type IGenerateTokenBody = {

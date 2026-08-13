@@ -54,6 +54,11 @@ export type ILoginResponse = {
     session_source: SignupMethod;
 };
 
+export type IPendingApprovalResponse = {
+    status: "pending_approval";
+    approval_token: string;
+};
+
 export type IRatingsBreakdown = {
     BULLET: number | null;
     BLITZ: number | null;

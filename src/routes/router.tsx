@@ -7,6 +7,7 @@ import Register from "@/pages/register/Register";
 import ForgotPassword from "@/pages/forgot-password/ForgotPassword";
 import ResetPassword from "@/pages/reset-password/ResetPassword";
 import VerifyEmail from "@/pages/verify-email/VerifyEmail";
+import ApproveDevice from "@/pages/approve-device/ApproveDevice";
 import PlayPage from "@/pages/play/PlayPage";
 import MyMatches from "@/pages/history";
 import Leaderboard from "@/pages/leaderboard";
@@ -28,6 +29,7 @@ export const router = createBrowserRouter([
                     { path: "/verify-email", element: <VerifyEmail /> },
                 ],
             },
+            { path: "/approve-device", element: <ApproveDevice /> },
             {
                 element: <PrivateRoute />,
                 children: [

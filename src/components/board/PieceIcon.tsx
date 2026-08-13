@@ -2,6 +2,7 @@ interface IPieceIconProps {
     code: string;
     className?: string;
     style?: React.CSSProperties;
+    onPointerDown?: (e: React.PointerEvent<SVGSVGElement>) => void;
 }
 
 const PIECE_PATHS: Record<string, React.ReactNode> = {
@@ -279,9 +280,19 @@ const PIECE_PATHS: Record<string, React.ReactNode> = {
     ),
 };
 
-export default function PieceIcon({ code, className, style }: IPieceIconProps) {
+export default function PieceIcon({
+    code,
+    className,
+    style,
+    onPointerDown,
+}: IPieceIconProps) {
     return (
-        <svg className={className} style={style} viewBox="0 0 45 45">
+        <svg
+            className={className}
+            style={style}
+            viewBox="0 0 45 45"
+            onPointerDown={onPointerDown}
+        >
             {PIECE_PATHS[code]}
         </svg>
     );

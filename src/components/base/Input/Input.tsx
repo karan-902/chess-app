@@ -11,6 +11,7 @@ interface IInputProps extends InputBaseProps {
     customClass?: string;
     isError?: boolean;
     helperText?: string;
+    startIcon?: React.ReactNode;
     endIcon?: React.ReactNode;
 }
 
@@ -20,6 +21,7 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
             customClass,
             isError,
             helperText,
+            startIcon,
             endIcon,
             fullWidth,
             type,
@@ -40,6 +42,13 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
                     fullWidth={fullWidth}
                     type={isPassword && showPassword ? "text" : type}
                     inputRef={ref}
+                    startAdornment={
+                        startIcon && (
+                            <InputAdornment position="start">
+                                {startIcon}
+                            </InputAdornment>
+                        )
+                    }
                     endAdornment={
                         isPassword ? (
                             <InputAdornment position="end">

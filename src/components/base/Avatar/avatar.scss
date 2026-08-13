@@ -26,8 +26,7 @@
     transition: box-shadow 0.15s ease;
 
     &.primary {
-        background: alpha($cyan, 0.1);
-        border: 1px solid alpha($cyan, 0.3);
+        border: 1px solid alpha($gold, 0.3);
         color: $cyan;
     }
 

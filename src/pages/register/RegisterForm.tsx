@@ -230,8 +230,7 @@ function EmailFormScreen({ onBack, onRegistered }: IEmailFormScreenProps) {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     isError={
-                        (formik.touched.username &&
-                            !!formik.errors.username) ||
+                        (formik.touched.username && !!formik.errors.username) ||
                         usernameStatus === "taken"
                     }
                     helperText={

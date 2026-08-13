@@ -1,10 +1,10 @@
-export const colorBg = "#100F0C";
-export const colorSurface = "#17150F";
-export const colorBorder = "#29261B";
-export const colorText = "#ECE8DE";
-export const colorMuted = "#8B8779";
-export const colorGold = "#F7931A";
-export const colorGoldContrast = "#100F0C";
+export const colorBg = "#121212";
+export const colorSurface = "#1c1a17";
+export const colorBorder = "#29261b";
+export const colorText = "#f5f2ec";
+export const colorMuted = "#a8a296";
+export const colorGold = "#e8863a";
+export const colorGoldContrast = "#121212";
 export const colorBoardLight = "#c9b48a";
 export const colorBoardDark = "#7a6440";
 

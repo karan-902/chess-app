@@ -276,6 +276,18 @@
         }
     }
 
+    &.room-field {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
+    &.room-field-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
     &.leaderboard-page {
         padding: 1.1rem;
     }
@@ -434,6 +446,9 @@
         min-width: 0;
     }
 
+    &.room-options {
+        align-items: normal;
+    }
     &.match-row {
         display: flex;
         align-items: center;
@@ -558,7 +573,7 @@
         display: flex;
         align-items: center;
         gap: 0.35rem;
-        font-size: $font14;
+        font-size: $font16;
         color: $gold;
         margin-top: 0.3rem;
 
@@ -613,6 +628,7 @@
         height: 100%;
         padding: 1.5rem 1.3rem 1.1rem;
         background: $appBg;
+        overflow-y: auto;
     }
 
     &.gr-secondary {
@@ -721,14 +737,8 @@
         margin-top: 0.5rem;
         padding-top: 0.9rem;
         border-top: 1px solid $appLine;
-        max-height: 4.6rem;
+        max-height: 6rem;
         overflow-y: auto;
-        mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
-        -webkit-mask-image: linear-gradient(
-            to bottom,
-            #000 70%,
-            transparent 100%
-        );
 
         &::-webkit-scrollbar {
             display: none;

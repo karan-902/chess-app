@@ -7,11 +7,17 @@ import Button from "@/components/base/Button/Button";
 import Card from "@/components/base/Card/Card";
 import Drawer from "@/components/base/Drawer/Drawer";
 import Skeleton from "@/components/base/Skeleton/Skeleton";
+import Switch from "@/components/base/Switch/Switch";
+import Input from "@/components/base/Input/Input";
+import Label from "@/components/base/Label/Label";
+import OtpInput from "@/components/base/OtpInput/OtpInput";
+import { Copy, Check, Clipboard } from "lucide-react";
 import BoardPreview from "@/components/board/BoardPreview";
 import { ShatranjLogo } from "@/components/constants";
 import GameRoom from "./GameRoom";
 import { usePools } from "@/hooks/usePools";
 import { useMatchmaking } from "@/hooks/useMatchmaking";
+import { useRoomMatch } from "@/hooks/useRoomMatch";
 import { useWalletBalance } from "@/hooks/useWallet";
 import { CATEGORY_META, QUEUE_TIMEOUT_SECONDS } from "@/constants/config";
 import type { GameCategory, Pool } from "@/types/types";
@@ -24,6 +30,28 @@ import {
     playSheetPracticeLabel,
     playSheetPracticeTitle,
     playSheetPracticeDesc,
+    playSheetFriendLabel,
+    playSheetFriendTitle,
+    playSheetFriendDesc,
+    roomCreateTabLabel,
+    roomJoinTabLabel,
+    roomStakeLabel,
+    roomStakeAmountPlaceholder,
+    roomStakeRequired,
+    roomStakeInsufficientBalance,
+    roomTimeLabel,
+    roomMinutesPlaceholder,
+    roomMinutesSuffix,
+    roomRatedLabel,
+    roomCreateButton,
+    roomJoinCodeLabel,
+    roomPasteLabel,
+    roomJoinButton,
+    roomWaitingTitle,
+    roomWaitingDesc,
+    roomCopyButton,
+    roomCopiedButton,
+    roomCancelButton,
     lobbyPlayNowButton,
     matchmakingPoolCardWinLabel,
     matchmakingPoolCardEntryFee,
@@ -41,6 +69,7 @@ import {
     matchmakingCtaFindOpponentButton,
     historyTimeControlLabel,
     playWagerBadgeDifficultyLabels,
+    MAX_AMOUNT_DIGITS,
 } from "@/constants/messages";
 
 const PRACTICE_DIFFICULTIES: Difficulty[] = ["easy", "medium", "hard"];
@@ -51,6 +80,8 @@ const CATEGORY_ORDER: GameCategory[] = [
     "RAPID",
     "CLASSICAL",
 ];
+
+const ROOM_TABS: Array<"create" | "join"> = ["create", "join"];
 
 function LivePulse() {
     return (
@@ -147,6 +178,24 @@ export default function PlayPage() {
     const [confirmPool, setConfirmPool] = useState<Pool | null>(null);
     const [practiceOpen, setPracticeOpen] = useState(false);
 
+    const {
+        status: roomStatus,
+        roomCode,
+        createRoom,
+        joinRoom,
+        cancelRoom,
+        resetStatus: resetRoomStatus,
+    } = useRoomMatch();
+
+    const [roomOpen, setRoomOpen] = useState(false);
+    const [roomTab, setRoomTab] = useState<"create" | "join">("create");
+    const [roomStake, setRoomStake] = useState("");
+    const [roomStakeError, setRoomStakeError] = useState("");
+    const [roomMinutes, setRoomMinutes] = useState("");
+    const [roomRated, setRoomRated] = useState(false);
+    const [joinCode, setJoinCode] = useState("");
+    const [codeCopied, setCodeCopied] = useState(false);
+
     useEffect(() => {
         if (status !== "queued" || !queuedPool) return;
         setSecondsLeft(QUEUE_TIMEOUT_SECONDS[queuedPool.category]);
@@ -176,8 +225,13 @@ export default function PlayPage() {
 
     const handlePractice = () => {
         setPracticeOpen(false);
+        const gameId = `pvc-${Date.now()}`;
+        const color = Math.random() < 0.5 ? "white" : "black";
+        try {
+            sessionStorage.setItem(`pvc_color:${gameId}`, color);
+        } catch {}
         navigate(
-            `/play?mode=pvc&time=${practiceTimeControl}&difficulty=${practiceDifficulty}&game_id=pvc-${Date.now()}&color=white`,
+            `/play?mode=pvc&time=${practiceTimeControl}&difficulty=${practiceDifficulty}&game_id=${gameId}&color=${color}`,
             { replace: true },
         );
     };
@@ -190,6 +244,70 @@ export default function PlayPage() {
     const handlePracticeCancel = () => {
         setPracticeOpen(false);
         setSheetOpen(true);
+    };
+
+    const handleRoomOpen = () => {
+        setSheetOpen(false);
+        setRoomTab("create");
+        setRoomStake("");
+        setRoomStakeError("");
+        setRoomMinutes("");
+        setRoomRated(false);
+        setJoinCode("");
+        resetRoomStatus();
+        setRoomOpen(true);
+    };
+
+    const handleRoomClose = () => {
+        if (roomStatus === "waiting") cancelRoom();
+        setRoomOpen(false);
+    };
+
+    const handleRoomCancel = () => {
+        cancelRoom();
+        setRoomOpen(false);
+        setSheetOpen(true);
+    };
+
+    const handleCreateRoomSubmit = () => {
+        const stake = Number(roomStake);
+        if (!stake || stake <= 0) {
+            setRoomStakeError(roomStakeRequired);
+            return;
+        }
+        if (stake > usdValue) {
+            setRoomStakeError(roomStakeInsufficientBalance);
+            return;
+        }
+        setRoomStakeError("");
+        const minutes = Number(roomMinutes);
+        if (!minutes || minutes <= 0) return;
+        createRoom(stake, Math.round(minutes * 60), roomRated);
+    };
+
+    const handleJoinRoomSubmit = () => {
+        const code = joinCode.trim();
+        if (!code) return;
+        joinRoom(code);
+    };
+
+    const handleCopyCode = () => {
+        if (!roomCode) return;
+        navigator.clipboard.writeText(roomCode);
+        setCodeCopied(true);
+        setTimeout(() => setCodeCopied(false), 1500);
+    };
+
+    const handlePasteCode = async () => {
+        try {
+            const text = await navigator.clipboard.readText();
+            setJoinCode(
+                text
+                    .toUpperCase()
+                    .replace(/[^A-Z0-9]/g, "")
+                    .slice(0, 6),
+            );
+        } catch {}
     };
 
     const handlePoolPlay = (pool: Pool) => {
@@ -317,11 +435,10 @@ export default function PlayPage() {
                                             variant="contained"
                                             fullWidth
                                             customClass="stake-card-go"
-                                            disabled={!canAfford}
-                                            onClick={
+                                            onClick={() =>
                                                 canAfford
-                                                    ? () => handlePoolPlay(pool)
-                                                    : undefined
+                                                    ? handlePoolPlay(pool)
+                                                    : navigate("/wallet")
                                             }
                                         >
                                             {canAfford
@@ -333,13 +450,7 @@ export default function PlayPage() {
                             })}
                         </>
                     )}
-                    <Card
-                        customClass={classNames(
-                            "stake-card",
-                            "practice",
-                            "wide",
-                        )}
-                    >
+                    <Card customClass={classNames("stake-card", "practice")}>
                         <Text customClass="stake-card-tc">
                             {playSheetPracticeLabel}
                         </Text>
@@ -355,6 +466,26 @@ export default function PlayPage() {
                             fullWidth
                             customClass="stake-card-go"
                             onClick={handlePracticeOpen}
+                        >
+                            {playSheetCardPlayButton}
+                        </Button>
+                    </Card>
+                    <Card customClass={classNames("stake-card", "friend")}>
+                        <Text customClass="stake-card-tc">
+                            {playSheetFriendLabel}
+                        </Text>
+                        <Text customClass="stake-card-practice-title">
+                            {playSheetFriendTitle}
+                        </Text>
+                        <Text customClass="stake-card-fee">
+                            {playSheetFriendDesc}
+                        </Text>
+                        <Button
+                            type="button"
+                            variant="contained"
+                            fullWidth
+                            customClass="stake-card-go"
+                            onClick={handleRoomOpen}
                         >
                             {playSheetCardPlayButton}
                         </Button>
@@ -410,6 +541,202 @@ export default function PlayPage() {
                         </Button>
                     </Box>
                 </Box>
+            </Drawer>
+
+            <Drawer
+                anchor="bottom"
+                open={roomOpen}
+                onClose={handleRoomClose}
+                customClass="room-sheet"
+            >
+                {roomStatus === "waiting" ? (
+                    <Box customClass="matchmaking-searching">
+                        <Text customClass="searching-title">
+                            {roomWaitingTitle}
+                        </Text>
+                        <Text customClass="matches-empty-desc">
+                            {roomWaitingDesc}
+                        </Text>
+                        <Text customClass="searching-timer">{roomCode}</Text>
+                        <Button
+                            type="button"
+                            variant="outlined"
+                            fullWidth
+                            customClass="pool-confirm-cancel-btn"
+                            startIcon={
+                                codeCopied ? (
+                                    <Check size={14} />
+                                ) : (
+                                    <Copy size={14} />
+                                )
+                            }
+                            onClick={handleCopyCode}
+                        >
+                            {codeCopied ? roomCopiedButton : roomCopyButton}
+                        </Button>
+                        <Box customClass="pool-confirm-actions">
+                            <Button
+                                type="button"
+                                variant="outlined"
+                                fullWidth
+                                customClass="pool-confirm-cancel-btn"
+                                onClick={handleRoomCancel}
+                            >
+                                {roomCancelButton}
+                            </Button>
+                        </Box>
+                    </Box>
+                ) : (
+                    <Box customClass="matchmaking-searching room-options">
+                        <ChipSelect
+                            options={ROOM_TABS}
+                            value={roomTab}
+                            onChange={setRoomTab}
+                            label={(t) =>
+                                t === "create"
+                                    ? roomCreateTabLabel
+                                    : roomJoinTabLabel
+                            }
+                            customClass="segment compact"
+                        />
+                        {roomTab === "create" ? (
+                            <>
+                                <Box customClass="room-field">
+                                    <Box customClass="room-field-head">
+                                        <Label
+                                            htmlFor="room-stake"
+                                            customClass="room-field-label"
+                                        >
+                                            {roomStakeLabel}
+                                        </Label>
+                                    </Box>
+                                    <Input
+                                        id="room-stake"
+                                        type="text"
+                                        inputMode="numeric"
+                                        slotProps={{
+                                            input: {
+                                                maxLength: MAX_AMOUNT_DIGITS,
+                                            },
+                                        }}
+                                        fullWidth
+                                        placeholder={roomStakeAmountPlaceholder}
+                                        startIcon={<span>$</span>}
+                                        value={roomStake}
+                                        isError={!!roomStakeError}
+                                        helperText={roomStakeError}
+                                        onChange={(e) => {
+                                            setRoomStake(
+                                                e.target.value.replace(
+                                                    /\D/g,
+                                                    "",
+                                                ),
+                                            );
+                                            setRoomStakeError("");
+                                        }}
+                                    />
+                                </Box>
+                                <Box customClass="room-field">
+                                    <Label
+                                        htmlFor="room-minutes"
+                                        customClass="room-field-label"
+                                    >
+                                        {roomTimeLabel}
+                                    </Label>
+                                    <Input
+                                        id="room-minutes"
+                                        type="text"
+                                        inputMode="numeric"
+                                        fullWidth
+                                        placeholder={roomMinutesPlaceholder}
+                                        endIcon={
+                                            <Text component="span">
+                                                {roomMinutesSuffix}
+                                            </Text>
+                                        }
+                                        value={roomMinutes}
+                                        onChange={(e) =>
+                                            setRoomMinutes(
+                                                e.target.value.replace(
+                                                    /\D/g,
+                                                    "",
+                                                ),
+                                            )
+                                        }
+                                    />
+                                </Box>
+                                <Box
+                                    sx={{ display: "none !important" }}
+                                    customClass="matches-stat-row"
+                                >
+                                    <Text component="span">
+                                        {roomRatedLabel}
+                                    </Text>
+                                    <Switch
+                                        checked={roomRated}
+                                        onChange={(e) =>
+                                            setRoomRated(e.target.checked)
+                                        }
+                                    />
+                                </Box>
+                                <Button
+                                    type="button"
+                                    variant="contained"
+                                    fullWidth
+                                    customClass="stake-card-go"
+                                    isLoading={roomStatus === "creating"}
+                                    loaderOnDark
+                                    onClick={handleCreateRoomSubmit}
+                                >
+                                    {roomCreateButton}
+                                </Button>
+                            </>
+                        ) : (
+                            <>
+                                <Box customClass="room-field">
+                                    <Box customClass="room-field-head">
+                                        <Label customClass="room-field-label">
+                                            {roomJoinCodeLabel}
+                                        </Label>
+                                        <button
+                                            type="button"
+                                            className="room-paste-btn"
+                                            onClick={handlePasteCode}
+                                        >
+                                            <Clipboard size={14} />
+                                            {roomPasteLabel}
+                                        </button>
+                                    </Box>
+                                    <OtpInput
+                                        length={6}
+                                        value={joinCode}
+                                        onChange={(v) =>
+                                            setJoinCode(
+                                                v
+                                                    .toUpperCase()
+                                                    .replace(
+                                                        /[^A-Z0-9]/g,
+                                                        "",
+                                                    ),
+                                            )
+                                        }
+                                    />
+                                </Box>
+                                <Button
+                                    type="button"
+                                    variant="contained"
+                                    fullWidth
+                                    customClass="stake-card-go"
+                                    isLoading={roomStatus === "joining"}
+                                    loaderOnDark
+                                    onClick={handleJoinRoomSubmit}
+                                >
+                                    {roomJoinButton}
+                                </Button>
+                            </>
+                        )}
+                    </Box>
+                )}
             </Drawer>
 
             <Drawer

@@ -21,7 +21,7 @@ body {
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
 
-    @media (min-width: 768px) {
+    @media (min-width: 1024px) {
         display: flex;
         justify-content: center;
         height: 100vh;
@@ -36,10 +36,6 @@ body {
     max-width: 480px;
     height: 100%;
     background: $appBg;
-
-    @media (min-width: 768px) {
-        max-width: 768px;
-    }
 
     @media (min-width: 1024px) {
         max-width: 600px;
@@ -63,13 +59,9 @@ body {
     position: relative;
     transform: translateZ(0);
 
-    @media (min-width: 768px) {
-        max-width: 768px;
-        box-shadow: 0 0 80px -20px rgba(0, 0, 0, 0.85);
-    }
-
     @media (min-width: 1024px) {
         max-width: 600px;
+        box-shadow: 0 0 80px -20px rgba(0, 0, 0, 0.85);
     }
 }
 
@@ -101,48 +93,8 @@ body {
     color: alpha($appText, 0.3);
 }
 
-.otp-input-row {
-    display: flex;
-    gap: 0.6rem;
-    justify-content: center;
-}
-
-.otp-slot {
-    position: relative;
-    width: 2.75rem;
-    height: 3.25rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: $appSecondary;
-    border: 1px solid $appCardBorder;
-    border-radius: $radiusMd;
-    font-family: $fontDisplay;
-    font-size: $font20;
-    color: $appText;
-
-    &--active {
-        border-color: alpha($gold, 0.5);
-        box-shadow: 0 0 0 3px alpha($gold, 0.09);
-    }
-}
-
-.otp-slot-caret {
-    position: absolute;
-    width: 1px;
-    height: 1.4rem;
-    background: $gold;
-    animation: otp-caret-blink 1s step-end infinite;
-}
-
-@keyframes otp-caret-blink {
-    50% {
-        opacity: 0;
-    }
-}
-
 .deposit-speed-logo {
-    height: 1.1rem;
+    height: 1.25rem;
     width: auto;
 }
 
@@ -165,7 +117,6 @@ body {
 .deposit-steps-close {
     position: absolute;
     top: 0;
-    right: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -180,6 +131,14 @@ body {
     &:hover {
         background: rgba(128, 128, 128, 0.3);
     }
+}
+
+.deposit-back-btn {
+    left: 0;
+}
+
+.deposit-steps-close {
+    right: 0;
 }
 
 .deposit-steps-close {
@@ -211,6 +170,19 @@ body {
         color: $paleRed;
         border-color: $paleRed;
     }
+}
+
+.room-paste-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: $font12;
+    font-weight: 700;
+    color: $gold;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
 }
 
 .gr-overlay-btn {

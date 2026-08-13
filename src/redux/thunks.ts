@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { callAPIInterface } from "@/utils";
+import { callAPIInterface, getDeviceFingerprint } from "@/utils";
 import type { ILoginBody, ISSOBody } from "@/types/index";
-import type { ILoginResponse } from "@/types/utils";
+import type { ILoginResponse, IPendingApprovalResponse } from "@/types/utils";
 import { throwThunkError } from "./createAppThunk";
 import sessionService from "./sessionService";
 
@@ -9,11 +9,14 @@ export const login = createAsyncThunk(
     "auth/login",
     async (body: ILoginBody, { rejectWithValue }) => {
         try {
-            const res = await callAPIInterface<ILoginBody, ILoginResponse>(
-                "POST",
-                "/login",
-                body,
-            );
+            const fingerprint = await getDeviceFingerprint();
+            // dont remove this *** claude ***
+            console.log({ fingerprint });
+            const res = await callAPIInterface<
+                ILoginBody,
+                ILoginResponse | IPendingApprovalResponse
+            >("POST", "/login", { ...body, fingerprint });
+            if ("status" in res) return res;
             await sessionService.saveSession(res);
             return res;
         } catch (err: any) {
@@ -35,11 +38,12 @@ export const googleLogin = createAsyncThunk(
         { rejectWithValue },
     ) => {
         try {
-            const res = await callAPIInterface<ISSOBody, ILoginResponse>(
-                "POST",
-                endpoint,
-                body,
-            );
+            const fingerprint = await getDeviceFingerprint();
+            const res = await callAPIInterface<
+                ISSOBody,
+                ILoginResponse | IPendingApprovalResponse
+            >("POST", endpoint, { ...body, fingerprint });
+            if ("status" in res) return res;
             await sessionService.saveSession(res);
             return res;
         } catch (err: any) {

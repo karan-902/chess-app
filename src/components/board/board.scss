@@ -1,8 +1,10 @@
 @use "../../styles/default.scss" as *;
 
 .chess-board {
+    position: relative;
     width: 100%;
     max-width: 400px;
+    touch-action: none;
 }
 
 .chess-board-grid {
@@ -13,6 +15,7 @@
     border-radius: $radiusLg;
     overflow: hidden;
     border: 1px solid $appCardBorder;
+    touch-action: none;
 }
 
 .chess-board-square {
@@ -31,8 +34,16 @@
         box-shadow: inset 0 0 0 3px alpha($paleRed, 0.65);
     }
 
+    &.square-premove-queued {
+        box-shadow: inset 0 0 0 999px alpha($paleRed, 0.35);
+    }
+
     &.square-drag-hover {
         box-shadow: inset 0 0 0 4px alpha($gold, 0.9);
+    }
+
+    &.square-drag-hover-premove {
+        box-shadow: inset 0 0 0 4px alpha($paleRed, 0.9);
     }
 }
 

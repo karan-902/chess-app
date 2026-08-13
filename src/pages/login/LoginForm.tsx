@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router";
 import { ArrowLeft } from "lucide-react";
 import { useFormik, type FormikProps } from "formik";
@@ -9,6 +9,7 @@ import Label from "@/components/base/Label/Label";
 import Input from "@/components/base/Input/Input";
 import Button from "@/components/base/Button/Button";
 import { useGoogleAuth } from "@/hooks/useGoogleAuth";
+import { useDeviceApprovalPoll } from "@/hooks/useDeviceApprovalPoll";
 import SelectCountryScreen from "@/pages/select-country/SelectCountryScreen";
 import { callAPIInterface } from "@/utils";
 import { useReduxDispatch } from "@/redux/hooks";
@@ -16,7 +17,7 @@ import { login } from "@/redux/thunks";
 import { showLoader, hideLoader } from "@/redux/loader.slice";
 import { showToast } from "@/redux/toast.slice";
 import type { IVerifyUserBody } from "@/types/index";
-import type { IVerifyUserResponse } from "@/types/utils";
+import type { ILoginResponse, IVerifyUserResponse } from "@/types/utils";
 import { SignupMethod } from "@/types/utils";
 import {
     authEmailLabel,
@@ -34,6 +35,9 @@ import {
     authLoginContinueButton,
     authLoginSignInButton,
     authLoginEmailNotVerified,
+    authDeviceApprovalTitle,
+    authDeviceApprovalDescription,
+    authDeviceApprovalBack,
 } from "@/constants/messages";
 import { GoogleIcon } from "@/components/constants";
 
@@ -213,15 +217,52 @@ function PasswordScreen({
     );
 }
 
+interface IWaitingApprovalScreenProps {
+    onBack: () => void;
+}
+
+function WaitingApprovalScreen({ onBack }: IWaitingApprovalScreenProps) {
+    return (
+        <Box customClass="auth-form">
+            <Button
+                type="button"
+                startIcon={<ArrowLeft size={16} />}
+                customClass="auth-back-btn"
+                onClick={onBack}
+            >
+                {authDeviceApprovalBack}
+            </Button>
+
+            <Box customClass="auth-heading">
+                <Text component="h1" customClass="auth-title">
+                    {authDeviceApprovalTitle}
+                </Text>
+                <Text component="p" customClass="auth-subtitle">
+                    {authDeviceApprovalDescription}
+                </Text>
+            </Box>
+        </Box>
+    );
+}
+
 export default function LoginForm() {
     const dispatch = useReduxDispatch();
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
-    const [step, setStep] = useState<"email" | "password" | "country">(
-        searchParams.get("step") === "country" ? "country" : "email",
-    );
+    const [step, setStep] = useState<
+        "email" | "password" | "country" | "waiting-approval"
+    >(searchParams.get("step") === "country" ? "country" : "email");
     const [verifiedEmail, setVerifiedEmail] = useState("");
     const [error, setError] = useState<string | null>(null);
+    const devicePoll = useDeviceApprovalPoll();
+
+    const handleApproved = (res: ILoginResponse) => {
+        if (!res.country) {
+            setStep("country");
+            return;
+        }
+        navigate(res.skill_level === null ? "/skill-level" : "/play");
+    };
 
     const emailFormik = useFormik({
         initialValues: { email: "" },
@@ -264,11 +305,17 @@ export default function LoginForm() {
         },
     });
 
-    const { googleLogin, isProcessing } = useGoogleAuth(
+    const { googleLogin, isProcessing, pendingApprovalToken } = useGoogleAuth(
         "/sso-login",
         "login",
         emailFormik.values.email,
     );
+
+    useEffect(() => {
+        if (!pendingApprovalToken) return;
+        setStep("waiting-approval");
+        devicePoll.start(pendingApprovalToken, handleApproved);
+    }, [pendingApprovalToken]);
 
     const passwordFormik = useFormik<IPasswordValues>({
         initialValues: { password: "" },
@@ -280,6 +327,11 @@ export default function LoginForm() {
                 const res = await dispatch(
                     login({ email: verifiedEmail, password: values.password }),
                 ).unwrap();
+                if ("status" in res) {
+                    setStep("waiting-approval");
+                    devicePoll.start(res.approval_token, handleApproved);
+                    return;
+                }
                 if (!res.country) setStep("country");
             } catch (err: any) {
                 if (err?.type === "email_not_verified") {
@@ -311,8 +363,17 @@ export default function LoginForm() {
         setStep("email");
     };
 
+    const handleBackFromApproval = () => {
+        devicePoll.stop();
+        setStep("email");
+    };
+
     if (step === "country") {
         return <SelectCountryScreen />;
+    }
+
+    if (step === "waiting-approval") {
+        return <WaitingApprovalScreen onBack={handleBackFromApproval} />;
     }
 
     if (step === "password") {

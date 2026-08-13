@@ -1,7 +1,7 @@
 import { InputLabel } from "@mui/material";
 import type { InputLabelProps } from "@mui/material";
 import classNames from "classnames";
-
+import "./label.scss";
 interface ILabelProps extends InputLabelProps {
     customClass?: string;
 }

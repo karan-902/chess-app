@@ -166,16 +166,56 @@ export function useChessGame() {
         return chess.get(square as Square)?.color ?? null;
     };
 
-    const getPremoveMoves = (square: string, asColor: "w" | "b"): string[] => {
-        const parts = chess.fen().split(" ");
-        parts[1] = asColor;
-        try {
+    type PremoveEntry = { from: string; to: string; promotion?: string };
+
+    const buildPremoveClone = (
+        priorMoves: PremoveEntry[],
+        asColor: "w" | "b",
+    ) => {
+        let fen = chess.fen();
+        for (const mv of priorMoves) {
+            const parts = fen.split(" ");
+            parts[1] = asColor;
             const clone = new Chess(parts.join(" "));
-            return clone
+            clone.move({
+                from: mv.from as Square,
+                to: mv.to as Square,
+                promotion: mv.promotion ?? "q",
+            });
+            fen = clone.fen();
+        }
+        const parts = fen.split(" ");
+        parts[1] = asColor;
+        return new Chess(parts.join(" "));
+    };
+
+    const getPremoveMoves = (
+        square: string,
+        asColor: "w" | "b",
+        priorMoves: PremoveEntry[] = [],
+    ): string[] => {
+        try {
+            return buildPremoveClone(priorMoves, asColor)
                 .moves({ square: square as Square, verbose: true })
                 .map((m) => m.to);
         } catch {
             return [];
+        }
+    };
+
+    const getPremovePieceColor = (
+        square: string,
+        asColor: "w" | "b",
+        priorMoves: PremoveEntry[] = [],
+    ): "w" | "b" | null => {
+        if (priorMoves.length === 0) return getPieceColor(square);
+        try {
+            return (
+                buildPremoveClone(priorMoves, asColor).get(square as Square)
+                    ?.color ?? null
+            );
+        } catch {
+            return getPieceColor(square);
         }
     };
 
@@ -270,6 +310,7 @@ export function useChessGame() {
         getRandomMove,
         getPieceColor,
         getPremoveMoves,
+        getPremovePieceColor,
         getAttackedSquares,
         getCapturedPieces,
         moveHistory,

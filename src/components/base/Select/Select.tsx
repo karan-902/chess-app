@@ -4,6 +4,7 @@ import {
     Autocomplete,
     TextField,
 } from "@mui/material";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import classNames from "classnames";
 import Box from "../Box/Box";
 import "./select.scss";
@@ -46,6 +47,7 @@ export default function Select({
                     options={options}
                     getOptionLabel={(option) => option.label}
                     value={selected}
+                    popupIcon={<KeyboardArrowDownIcon />}
                     onChange={(_e, next) => onChange(next?.value ?? "")}
                     isOptionEqualToValue={(option, val) =>
                         option.value === val.value
@@ -72,6 +74,7 @@ export default function Select({
                 error={isError}
                 disabled={disabled}
                 fullWidth
+                IconComponent={KeyboardArrowDownIcon}
                 renderValue={(v) =>
                     options.find((o) => o.value === v)?.label ?? placeholder
                 }

@@ -33,7 +33,7 @@ import {
 import Modal from "./base/Modal/Modal";
 
 type Stage = "amount" | "success";
-
+const MAX_AMOUNT_DIGITS = 4;
 export default function WithdrawModal() {
     const dispatch = useReduxDispatch();
     const { openModal, close } = useWalletActionModal();
@@ -81,7 +81,7 @@ export default function WithdrawModal() {
         destination.trim() !== "";
 
     const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        let val = e.target.value.replace(/[^0-9.]/g, "");
+        let val = e.target.value.replace(/[^0-9.]/g, "").replace(/^0+/, "");
         const parts = val.split(".");
         if (parts.length > 2) val = parts[0] + "." + parts.slice(1).join("");
         setAmount(val);
@@ -139,6 +139,9 @@ export default function WithdrawModal() {
                             id="withdraw-amount"
                             type="text"
                             inputMode="decimal"
+                            slotProps={{
+                                input: { maxLength: MAX_AMOUNT_DIGITS },
+                            }}
                             fullWidth
                             value={amount}
                             onChange={handleAmountChange}

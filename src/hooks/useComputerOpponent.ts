@@ -1,13 +1,14 @@
 import { useEffect } from "react";
 import type { Difficulty, GameMode } from "@/types/components";
 
-const COMPUTER_MOVE_DELAY_MS = 1500;
+const COMPUTER_MOVE_DELAY_MS = 3000;
 
 interface IProps {
     mode: GameMode;
     difficulty: Difficulty;
     fen: string;
     turn: "w" | "b";
+    computerSide: "w" | "b";
     gameEnded: boolean;
     bestMove: string | null;
     makeMove: (
@@ -22,17 +23,17 @@ export function useComputerOpponent({
     difficulty,
     fen,
     turn,
+    computerSide,
     gameEnded,
     bestMove,
     makeMove,
     getRandomMove,
 }: IProps) {
-
     useEffect(() => {
         if (
             mode !== "pvc" ||
             difficulty !== "easy" ||
-            turn !== "b" ||
+            turn !== computerSide ||
             gameEnded
         )
             return;
@@ -41,13 +42,13 @@ export function useComputerOpponent({
             if (move) makeMove(move.from, move.to);
         }, COMPUTER_MOVE_DELAY_MS);
         return () => clearTimeout(t);
-    }, [fen, turn, mode, difficulty, gameEnded]);
+    }, [fen, turn, computerSide, mode, difficulty, gameEnded]);
 
     useEffect(() => {
         if (
             mode !== "pvc" ||
             difficulty === "easy" ||
-            turn !== "b" ||
+            turn !== computerSide ||
             !bestMove ||
             gameEnded
         ) {
@@ -58,16 +59,20 @@ export function useComputerOpponent({
             COMPUTER_MOVE_DELAY_MS,
         );
         return () => clearTimeout(t);
-
-    }, [bestMove, turn, mode, difficulty, gameEnded]);
+    }, [bestMove, turn, computerSide, mode, difficulty, gameEnded]);
 
     useEffect(() => {
-        if (mode !== "pvc" || difficulty === "easy" || turn !== "b" || gameEnded)
+        if (
+            mode !== "pvc" ||
+            difficulty === "easy" ||
+            turn !== computerSide ||
+            gameEnded
+        )
             return;
         const fallback = setTimeout(() => {
             const move = getRandomMove();
             if (move) makeMove(move.from, move.to);
         }, 6000);
         return () => clearTimeout(fallback);
-    }, [turn, mode, difficulty, gameEnded]);
+    }, [turn, computerSide, mode, difficulty, gameEnded]);
 }
