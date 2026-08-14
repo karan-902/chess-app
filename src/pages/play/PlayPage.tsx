@@ -695,6 +695,7 @@ export default function PlayPage() {
                                     variant="contained"
                                     fullWidth
                                     customClass="stake-card-go"
+                                    disabled={!roomStake || !roomMinutes}
                                     isLoading={roomStatus === "creating"}
                                     loaderOnDark
                                     onClick={handleCreateRoomSubmit}
@@ -734,6 +735,7 @@ export default function PlayPage() {
                                     variant="contained"
                                     fullWidth
                                     customClass="stake-card-go"
+                                    disabled={joinCode.length !== 6}
                                     isLoading={roomStatus === "joining"}
                                     loaderOnDark
                                     onClick={handleJoinRoomSubmit}
