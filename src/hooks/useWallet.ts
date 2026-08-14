@@ -25,12 +25,6 @@ export const initiateDeposit = (amountUsd: number) =>
         { amount_usd: amountUsd },
     );
 
-export const getPendingDeposit = () =>
-    callAPIInterface<
-        undefined,
-        IInitiateDepositResponse | { status: "none" }
-    >("GET", "/deposit/pending");
-
 export const requestWithdraw = (
     amountUsd: number,
     withdrawMethod: WithdrawMethod,
