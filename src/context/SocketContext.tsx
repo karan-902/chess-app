@@ -339,8 +339,13 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         if (!offer) stopChallengeCountdown();
     };
 
-    const [deviceHandoff, setDeviceHandoff] = useState<string | null>(null);
+    const [deviceHandoff, setDeviceHandoff] = useState<{
+        deviceName: string | null;
+    } | null>(null);
     const deviceHandoffPendingRef = useRef(false);
+    useEffect(() => {
+        deviceHandoffPendingRef.current = deviceHandoff !== null;
+    }, [deviceHandoff]);
     const activityTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const reconnectingRef = useRef(false);
     const holdUntilRef = useRef(_isRefresh ? Date.now() + REFRESH_HOLD_MS : 0);
@@ -462,15 +467,12 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         };
 
         const onDeviceHandoffRequest = (data: { deviceName?: string }) => {
-            deviceHandoffPendingRef.current = true;
-
             setActiveGame(null);
-            setDeviceHandoff(data.deviceName ?? null);
+            setDeviceHandoff({ deviceName: data.deviceName ?? null });
         };
 
         const onDeviceSuperseded = () => {
             setDeviceHandoff(null);
-            deviceHandoffPendingRef.current = false;
             dispatch(
                 showToast({
                     message: deviceHandoffToastSuperseded,
@@ -810,12 +812,10 @@ export function SocketProvider({ children }: { children: ReactNode }) {
     const handleContinueHere = () => {
         socket?.emit("accept_device_handoff");
         setDeviceHandoff(null);
-        deviceHandoffPendingRef.current = false;
     };
 
     const handleStayOnOther = async () => {
         setDeviceHandoff(null);
-        deviceHandoffPendingRef.current = false;
         disconnectSocket();
         await sessionService.deleteSession();
         router.navigate("/login", { replace: true });
@@ -837,7 +837,7 @@ export function SocketProvider({ children }: { children: ReactNode }) {
             {children}
             {deviceHandoff !== null && (
                 <DeviceHandoffModal
-                    deviceName={deviceHandoff || null}
+                    deviceName={deviceHandoff.deviceName}
                     onContinueHere={handleContinueHere}
                     onStayOnOther={handleStayOnOther}
                 />
