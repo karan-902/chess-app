@@ -67,4 +67,10 @@
             0 0 0 1px alpha($paleRed, 0.08),
             0 24px 64px alpha($black, 0.6);
     }
+
+    &.rejoin-game-modal {
+        .modal-title {
+            padding: 0;
+        }
+    }
 }

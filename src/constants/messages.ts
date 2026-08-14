@@ -16,6 +16,11 @@ export const rejoinGameStakeLabel = "Stake";
 export const rejoinGameOpponentLabel = "Opponent";
 export const rejoinGameRejoinButton = "Rejoin Now";
 export const rejoinGameExitButton = "Exit";
+export const rejoinGameForfeitTitle = "Forfeit the game?";
+export const rejoinGameForfeitBody = (stakeAmount: string) =>
+    `Leaving now counts as a resignation — you'll forfeit ${stakeAmount}.`;
+export const rejoinGameForfeitKeepPlayingButton = "Keep Playing";
+export const rejoinGameForfeitConfirmButton = "Forfeit & Exit";
 export const rematchOfferTitle = "Rematch?";
 export const rematchOfferBody = (opponentName: string) =>
     `${opponentName} wants a rematch.`;
