@@ -215,6 +215,22 @@ export interface IMoveConfirmedResponse {
     fen: string;
 }
 
+export interface IgameRestoreResponse {
+    game_id: string;
+    status: string;
+    time_seconds: number;
+    current_fen: string;
+    turn_user_id: string;
+    moves: Array<{
+        from: string;
+        to: string;
+        promotion: string | null;
+        fen: string;
+        player_id: string;
+        move_number: number;
+    }>;
+}
+
 export interface IClockUpdateResponse {
     white_remaining_ms: number;
     black_remaining_ms: number;

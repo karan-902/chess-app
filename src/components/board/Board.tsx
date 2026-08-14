@@ -158,11 +158,7 @@ function DraggablePiece({
                     : "left 0.2s ease, top 0.2s ease",
             }}
         >
-            <PieceIcon
-                code={code}
-                className={className}
-                style={{ width: "96%", height: "96%" }}
-            />
+            <PieceIcon code={code} className={className} />
         </div>
     );
 }

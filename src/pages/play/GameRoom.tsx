@@ -35,6 +35,7 @@ import type {
     ISocketErrorResponse,
     IopponentDisconnectedResponse,
     IopponentReconnectedResponse,
+    IgameRestoreResponse,
     GameCategory,
 } from "@/types/types";
 import {
@@ -207,6 +208,7 @@ export default function GameRoom() {
         makeMove,
         applyOpponentMove,
         confirmMove,
+        restoreGame,
         getLegalMoves,
         isPromotionMove,
         getRandomMove,
@@ -350,6 +352,15 @@ export default function GameRoom() {
             console.log("[socket] move_confirmed received", data);
             confirmMove(data.fen);
         };
+        const onGameRestored = (data: IgameRestoreResponse) => {
+            restoreGame(
+                data.moves.map((m) => ({
+                    from: m.from,
+                    to: m.to,
+                    promotion: m.promotion,
+                })),
+            );
+        };
         const onClockUpdate = (data: IClockUpdateResponse) => {
             syncClock(data.white_remaining_ms, data.black_remaining_ms);
         };
@@ -396,6 +407,7 @@ export default function GameRoom() {
 
         socket.on("opponent_move", onOpponentMove);
         socket.on("move_confirmed", onMoveConfirmed);
+        socket.on("game_restored", onGameRestored);
         socket.on("clock_update", onClockUpdate);
         socket.on("draw_offered", onDrawOffered);
         socket.on("draw_rejected", onDrawRejected);
@@ -409,6 +421,7 @@ export default function GameRoom() {
             socket.off("connect", rejoin);
             socket.off("opponent_move", onOpponentMove);
             socket.off("move_confirmed", onMoveConfirmed);
+            socket.off("game_restored", onGameRestored);
             socket.off("clock_update", onClockUpdate);
             socket.off("draw_offered", onDrawOffered);
             socket.off("draw_rejected", onDrawRejected);

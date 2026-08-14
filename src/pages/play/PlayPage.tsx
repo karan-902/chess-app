@@ -30,9 +30,7 @@ import {
     playSheetPracticeLabel,
     playSheetPracticeTitle,
     playSheetPracticeDesc,
-    playSheetFriendLabel,
     playSheetFriendTitle,
-    playSheetFriendDesc,
     roomCreateTabLabel,
     roomJoinTabLabel,
     roomStakeLabel,
@@ -218,6 +216,11 @@ export default function PlayPage() {
             setConfirmPool(null);
         }
     }, [status]);
+
+    useEffect(() => {
+        if (roomStatus !== "found") return;
+        setRoomOpen(false);
+    }, [roomStatus]);
 
     if (gameId) {
         return <GameRoom />;
@@ -471,14 +474,8 @@ export default function PlayPage() {
                         </Button>
                     </Card>
                     <Card customClass={classNames("stake-card", "friend")}>
-                        <Text customClass="stake-card-tc">
-                            {playSheetFriendLabel}
-                        </Text>
                         <Text customClass="stake-card-practice-title">
                             {playSheetFriendTitle}
-                        </Text>
-                        <Text customClass="stake-card-fee">
-                            {playSheetFriendDesc}
                         </Text>
                         <Button
                             type="button"

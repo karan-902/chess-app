@@ -79,8 +79,8 @@
 }
 
 .chess-piece-svg {
-    width: 82%;
-    height: 82%;
+    width: 96%;
+    height: 96%;
     pointer-events: none;
     position: relative;
     z-index: 2;
@@ -244,8 +244,8 @@
     will-change: transform;
 
     .board-preview-piece-svg {
-        width: 82%;
-        height: 82%;
+        width: 96%;
+        height: 96%;
     }
 
     &.breathing {
@@ -279,8 +279,8 @@
     pointer-events: none;
 
     .board-preview-piece-svg {
-        width: 82%;
-        height: 82%;
+        width: 96%;
+        height: 96%;
     }
 }
 
