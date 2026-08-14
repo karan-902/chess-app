@@ -10,7 +10,7 @@ import { RefreshCw, Swords } from "lucide-react";
 import type { Socket } from "socket.io-client";
 import { connectSocket, disconnectSocket } from "@/lib/socket";
 import { useReduxSelector, useReduxDispatch } from "@/redux/hooks";
-import { showToast } from "@/redux/toast.slice";
+import { showToast } from "@/redux/common/common.slice";
 import { generateToken } from "@/utils";
 import { formateAmount } from "@/utils/formate";
 import sessionService from "@/redux/sessionService";
@@ -702,6 +702,33 @@ export function SocketProvider({ children }: { children: ReactNode }) {
             }
         };
     }, [isLoggedIn, session?.access_token, session?.skill_level]);
+
+    useEffect(() => {
+        if (!socket) return;
+        let lastCheckedAt = 0;
+        const maybeCheckActiveGame = () => {
+            if (Date.now() - lastCheckedAt < 10_000) return;
+            const { pathname, search } = router.state.location;
+            const viewingGameId = new URLSearchParams(search).get("game_id");
+            if (pathname === "/play" && viewingGameId) return;
+            lastCheckedAt = Date.now();
+            socket.emit("check_active_game");
+        };
+
+        const unsubscribeRouter = router.subscribe(maybeCheckActiveGame);
+        const onVisibilityChange = () => {
+            if (document.visibilityState === "visible") maybeCheckActiveGame();
+        };
+        document.addEventListener("visibilitychange", onVisibilityChange);
+
+        return () => {
+            unsubscribeRouter();
+            document.removeEventListener(
+                "visibilitychange",
+                onVisibilityChange,
+            );
+        };
+    }, [socket]);
 
     const handleRejoin = () => {
         if (!activeGame) return;

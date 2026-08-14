@@ -14,7 +14,7 @@ import Label from "@/components/base/Label/Label";
 import Switch from "@/components/base/Switch/Switch";
 import { useReduxSelector, useReduxDispatch } from "@/redux/hooks";
 import { updateSession } from "@/redux/persisted/auth.slice";
-import { showToast } from "@/redux/toast.slice";
+import { showToast } from "@/redux/common/common.slice";
 import { useAppTheme } from "@/context/ThemeContext";
 import { callAPIInterface } from "@/utils";
 import { getAvatarUrl } from "@/utils/avatar";

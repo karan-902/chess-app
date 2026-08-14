@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { CheckCircle2 } from "lucide-react";
 import { useReduxDispatch } from "@/redux/hooks";
-import { showToast } from "@/redux/toast.slice";
+import { showToast } from "@/redux/common/common.slice";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import Button from "@/components/base/Button/Button";

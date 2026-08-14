@@ -652,6 +652,12 @@ export default function PlayPage() {
                                         id="room-minutes"
                                         type="text"
                                         inputMode="numeric"
+                                        slotProps={{
+                                            input: {
+                                                maxLength:
+                                                    MAX_AMOUNT_DIGITS - 2,
+                                            },
+                                        }}
                                         fullWidth
                                         placeholder={roomMinutesPlaceholder}
                                         endIcon={
@@ -703,14 +709,13 @@ export default function PlayPage() {
                                         <Label customClass="room-field-label">
                                             {roomJoinCodeLabel}
                                         </Label>
-                                        <button
-                                            type="button"
+                                        <Button
                                             className="room-paste-btn"
                                             onClick={handlePasteCode}
                                         >
                                             <Clipboard size={14} />
                                             {roomPasteLabel}
-                                        </button>
+                                        </Button>
                                     </Box>
                                     <OtpInput
                                         length={6}
@@ -719,10 +724,7 @@ export default function PlayPage() {
                                             setJoinCode(
                                                 v
                                                     .toUpperCase()
-                                                    .replace(
-                                                        /[^A-Z0-9]/g,
-                                                        "",
-                                                    ),
+                                                    .replace(/[^A-Z0-9]/g, ""),
                                             )
                                         }
                                     />

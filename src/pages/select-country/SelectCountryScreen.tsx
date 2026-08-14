@@ -8,7 +8,7 @@ import Button from "@/components/base/Button/Button";
 import { callAPIInterface } from "@/utils";
 import { useReduxDispatch } from "@/redux/hooks";
 import { updateSession } from "@/redux/persisted/auth.slice";
-import { showToast } from "@/redux/toast.slice";
+import { showToast } from "@/redux/common/common.slice";
 import { COUNTRY_OPTIONS } from "@/constants/config";
 import type { IUpdateProfileBody, IUpdateProfileResponse } from "@/types/utils";
 import {

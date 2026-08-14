@@ -223,6 +223,7 @@ export interface IgameRestoreResponse {
     turn_user_id: string;
     white_remaining_ms: number;
     black_remaining_ms: number;
+    draw_offered_by: string | null;
     moves: Array<{
         from: string;
         to: string;

@@ -2,7 +2,7 @@ import { useNavigate } from "react-router";
 import { callAPIInterface } from "@/utils";
 import sessionService from "@/redux/sessionService";
 import { useReduxSelector, useReduxDispatch } from "@/redux/hooks";
-import { showLoader, hideLoader } from "@/redux/loader.slice";
+import { showLoader, hideLoader } from "@/redux/common/common.slice";
 import type { ILogoutBody } from "@/types/index";
 import type { ILogoutResponse } from "@/types/utils";
 

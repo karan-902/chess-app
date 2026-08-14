@@ -5,7 +5,7 @@ import axios, {
 } from "axios";
 import dayjs from "dayjs";
 import { store } from "@/redux/index";
-import { showToast } from "@/redux/toast.slice";
+import { showToast } from "@/redux/common/common.slice";
 import sessionService from "@/redux/sessionService";
 import { apiRateLimited } from "@/constants/messages";
 import type { IGenerateTokenBody } from "@/types/index";

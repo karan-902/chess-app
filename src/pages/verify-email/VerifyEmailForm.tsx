@@ -6,7 +6,7 @@ import Button from "@/components/base/Button/Button";
 import OtpInput from "@/components/base/OtpInput/OtpInput";
 import { callAPIInterface } from "@/utils";
 import { useReduxDispatch } from "@/redux/hooks";
-import { showToast } from "@/redux/toast.slice";
+import { showToast } from "@/redux/common/common.slice";
 import type { IVerifyEmailBody, IResendOtpBody } from "@/types/index";
 import type { IMessageResponse } from "@/types/utils";
 import {

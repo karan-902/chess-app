@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import { getSocket } from "@/lib/socket";
 import { useSocket } from "@/context/SocketContext";
 import { useReduxDispatch } from "@/redux/hooks";
-import { showToast } from "@/redux/toast.slice";
+import { showToast } from "@/redux/common/common.slice";
 import { secondsToTimeControl } from "@/types/components";
 import type {
     IRoomCreatedResponse,

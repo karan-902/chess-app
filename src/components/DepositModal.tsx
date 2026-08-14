@@ -10,7 +10,7 @@ import Input from "@/components/base/Input/Input";
 import { speedLogo, qrLogo } from "@/components/images";
 import { useWalletActionModal } from "@/context/WalletActionModalContext";
 import { useSocket } from "@/context/SocketContext";
-import { initiateDeposit } from "@/hooks/useWallet";
+import { initiateDeposit, getPendingDeposit } from "@/hooks/useWallet";
 import type { IInitiateDepositResponse } from "@/types/utils";
 import type { ITransactionCompletedEvent } from "@/types/types";
 import {
@@ -116,6 +116,19 @@ export default function DepositModal() {
         setPayment(null);
         setCopied(false);
         setExpired(false);
+    }, [open]);
+
+    useEffect(() => {
+        if (!open) return;
+        getPendingDeposit()
+            .then((res) => {
+                if (res.status === "none") return;
+                setPayment(res);
+                setMethod(res.lightning_payment_request ? "lightning" : "bitcoin");
+                setExpired(false);
+                setStage("qr");
+            })
+            .catch(() => {});
     }, [open]);
 
     useEffect(() => {

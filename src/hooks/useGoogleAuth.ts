@@ -3,8 +3,7 @@ import { useNavigate } from "react-router";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useReduxDispatch } from "@/redux/hooks";
 import { googleLogin as googleLoginThunk } from "@/redux/thunks";
-import { showLoader, hideLoader } from "@/redux/loader.slice";
-import { showToast } from "@/redux/toast.slice";
+import { showLoader, hideLoader, showToast } from "@/redux/common/common.slice";
 
 const CONFIRM_SWITCH_KEY = "ks_sso_confirm_device_switch";
 

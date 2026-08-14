@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
 import localforage from "localforage";
 import authReducer, { type TAuthSessionState } from "./persisted/auth.slice";
-import { loaderReducer } from "./loader.slice";
-import { toastReducer } from "./toast.slice";
+import { commonReducer } from "./common/common.slice";
+import { walletReducer } from "./wallet.slice";
 import {
     persistStore,
     persistReducer,
@@ -30,8 +30,8 @@ const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
 export const store = configureStore({
     reducer: {
         auth: persistedAuthReducer,
-        loader: loaderReducer,
-        toast: toastReducer,
+        common: commonReducer,
+        wallet: walletReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

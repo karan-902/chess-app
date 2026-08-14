@@ -1,7 +1,7 @@
 import { Snackbar, Slide } from "@mui/material";
 import classNames from "classnames";
 import { useReduxDispatch, useReduxSelector } from "@/redux/hooks";
-import { hideToast } from "@/redux/toast.slice";
+import { hideToast } from "@/redux/common/common.slice";
 import AlertMessage from "@/components/base/AlertMessage/AlertMessage";
 
 interface INotificationProps {
@@ -11,7 +11,7 @@ interface INotificationProps {
 export default function Notification({ customClass }: INotificationProps) {
     const dispatch = useReduxDispatch();
     const { open, severity, message, title } = useReduxSelector(
-        (state) => state.toast,
+        (state) => state.common.toast,
     );
     const classes = classNames(customClass, "alert");
 

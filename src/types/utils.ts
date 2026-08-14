@@ -95,7 +95,6 @@ export type IUpdateProfileResponse = IProfileResponse;
 
 export type IWalletBalanceResponse = {
     balance_usd: number;
-    deposit_usd: number;
     win_usd: number;
     withdrawable_usd: number;
     pending_withdrawal_usd: number;

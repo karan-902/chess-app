@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { callAPIInterface } from "@/utils";
 import { useSocket } from "@/context/SocketContext";
+import { useReduxDispatch, useReduxSelector } from "@/redux/hooks";
+import { setWalletBalance, setWalletLoading } from "@/redux/wallet.slice";
 import type {
     IWalletBalanceResponse,
     ITransactionResponse,
@@ -23,6 +25,12 @@ export const initiateDeposit = (amountUsd: number) =>
         { amount_usd: amountUsd },
     );
 
+export const getPendingDeposit = () =>
+    callAPIInterface<
+        undefined,
+        IInitiateDepositResponse | { status: "none" }
+    >("GET", "/deposit/pending");
+
 export const requestWithdraw = (
     amountUsd: number,
     withdrawMethod: WithdrawMethod,
@@ -36,9 +44,9 @@ export const requestWithdraw = (
 
 export function useWalletBalance() {
     const { socket } = useSocket();
-    const [usdValue, setUsdValue] = useState(0);
-    const [withdrawableUsd, setWithdrawableUsd] = useState(0);
-    const [loading, setLoading] = useState(true);
+    const dispatch = useReduxDispatch();
+    const { balanceUsd, pendingWithdrawalUsd, winUsd, withdrawableUsd, loading } =
+        useReduxSelector((state) => state.wallet);
 
     const refetch = useCallback(async () => {
         try {
@@ -46,13 +54,11 @@ export function useWalletBalance() {
                 undefined,
                 IWalletBalanceResponse
             >("GET", "/wallet");
-            setUsdValue(res.balance_usd + res.pending_withdrawal_usd);
-            setWithdrawableUsd(res.withdrawable_usd);
+            dispatch(setWalletBalance(res));
         } catch {
-        } finally {
-            setLoading(false);
+            dispatch(setWalletLoading(false));
         }
-    }, []);
+    }, [dispatch]);
 
     useEffect(() => {
         refetch();
@@ -60,15 +66,19 @@ export function useWalletBalance() {
 
     useEffect(() => {
         if (!socket) return;
-        socket.on("wallet_credited", refetch);
         socket.on("wallet_updated", refetch);
         return () => {
-            socket.off("wallet_credited", refetch);
             socket.off("wallet_updated", refetch);
         };
     }, [socket, refetch]);
 
-    return { usdValue, withdrawableUsd, loading, refetch };
+    return {
+        usdValue: balanceUsd + pendingWithdrawalUsd,
+        withdrawableUsd,
+        winUsd,
+        loading,
+        refetch,
+    };
 }
 
 export function useWallet() {

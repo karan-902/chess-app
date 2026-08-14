@@ -6,7 +6,7 @@ import {
     Navigate,
 } from "react-router";
 import classNames from "classnames";
-import { showToast } from "@/redux/toast.slice";
+import { showToast } from "@/redux/common/common.slice";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
@@ -422,6 +422,12 @@ export default function GameRoom() {
             );
             syncClock(data.white_remaining_ms, data.black_remaining_ms);
             setClockReady(true);
+            if (data.draw_offered_by) {
+                setDrawOffer({
+                    game_id: data.game_id,
+                    offered_by: data.draw_offered_by,
+                });
+            }
         };
         const onClockUpdate = (data: IClockUpdateResponse) => {
             syncClock(data.white_remaining_ms, data.black_remaining_ms);

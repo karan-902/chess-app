@@ -6,7 +6,7 @@ import { useReduxSelector } from "@/redux/hooks";
 import "./backdroploader.scss";
 
 export default function BackdropLoader() {
-    const { open, text } = useReduxSelector((state) => state.loader);
+    const { open, text } = useReduxSelector((state) => state.common.loader);
 
     return (
         <Backdrop open={open} className="common-backdrop-loader">
