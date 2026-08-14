@@ -6,45 +6,30 @@ import {
     useRef,
     type ReactNode,
 } from "react";
-import { RefreshCw, Swords } from "lucide-react";
+
 import type { Socket } from "socket.io-client";
 import { connectSocket, disconnectSocket } from "@/lib/socket";
 import { useReduxSelector, useReduxDispatch } from "@/redux/hooks";
 import { showToast } from "@/redux/common/common.slice";
+import { store } from "@/redux/store";
+import { setActiveGame, setDeviceHandoff } from "@/redux/socketModals.slice";
 import { generateToken } from "@/utils";
 import { formateAmount } from "@/utils/formate";
 import sessionService from "@/redux/sessionService";
 import { router } from "@/routes/router";
-import { secondsToTimeControl } from "@/types/components";
-import Button from "@/components/base/Button/Button";
+import RejoinGameModal from "@/components/RejoinGameModal";
+import DeviceHandoffModal from "@/components/DeviceHandoffModal";
 
 import {
     activityFeedWin,
     deviceHandoffToastSuperseded,
     walletDepositCompletedToast,
     walletWithdrawCompletedToast,
-    friendsChallengeReceivedTitle,
-    friendsChallengeReceivedDesc,
-    friendsChallengeExpiredToast,
-    friendsChallengeDeclinedToast,
-    friendsChallengeCancelledToast,
-    friendsChallengeErrorFallback,
-    friendsRequestAccept,
-    friendsRequestDecline,
 } from "@/constants/messages";
 import type {
     IActivityFeedEvent,
     IActiveGameFoundResponse,
-    IRematchOfferedResponse,
-    IRematchExpiredResponse,
-    IRematchFoundResponse,
     ITransactionCompletedEvent,
-    IChallengeReceivedResponse,
-    IChallengeDeclinedResponse,
-    IChallengeExpiredResponse,
-    IChallengeCancelledResponse,
-    IChallengeErrorResponse,
-    IChallengeMatchFoundResponse,
 } from "@/types/types";
 
 interface IUserCounts {
@@ -53,26 +38,12 @@ interface IUserCounts {
     total: number;
 }
 
-export interface ISentChallenge {
-    friendId: string;
-    friendUsername: string;
-    stakeAmount: number;
-    secondsLeft: number;
-}
-
 interface ISocketContext {
     userCounts: IUserCounts;
     countsReady: boolean;
     myStatus: "active" | "inactive";
     socket: Socket | null;
     recentWins: IActivityFeedEvent[];
-    sentChallenge: ISentChallenge | null;
-    sendChallenge: (
-        friendId: string,
-        friendUsername: string,
-        stakeAmount: number,
-    ) => void;
-    cancelChallenge: () => void;
 }
 
 const RECENT_WINS_LIMIT = 12;
@@ -103,184 +74,12 @@ const _isRefresh = (() => {
     }
 })();
 
-function RematchOfferModal({
-    opponentName,
-    stakeAmount,
-    onAccept,
-    onDismiss,
-}: {
-    opponentName: string;
-    stakeAmount: number;
-    onAccept: () => void;
-    onDismiss: () => void;
-}) {
-    return (
-        <div className="gsm-backdrop" onClick={onDismiss}>
-            <div className="gsm-panel" onClick={(e) => e.stopPropagation()}>
-                <div className="gsm-header">
-                    <RefreshCw
-                        size={16}
-                        style={{ color: "var(--gold, #f7931a)" }}
-                    />
-                    <span className="gsm-modal-title">Rematch Offer</span>
-                </div>
-                <div className="gsm-body" style={{ textAlign: "center" }}>
-                    <p className="device-conflict-desc">
-                        <strong>{opponentName}</strong> wants a rematch for{" "}
-                        <strong>{formateAmount(stakeAmount)}</strong>
-                    </p>
-                </div>
-                <div className="gsm-footer device-conflict-actions">
-                    <Button variant="outlined" fullWidth onClick={onDismiss}>
-                        Decline
-                    </Button>
-                    <Button variant="contained" fullWidth onClick={onAccept}>
-                        Accept
-                    </Button>
-                </div>
-            </div>
-        </div>
-    );
-}
-
-function ChallengeOfferModal({
-    challengerUsername,
-    stakeAmount,
-    onAccept,
-    onDecline,
-}: {
-    challengerUsername: string;
-    stakeAmount: number;
-    onAccept: () => void;
-    onDecline: () => void;
-}) {
-    return (
-        <div className="gsm-backdrop" onClick={onDecline}>
-            <div className="gsm-panel" onClick={(e) => e.stopPropagation()}>
-                <div className="gsm-header">
-                    <Swords
-                        size={16}
-                        style={{ color: "var(--gold, #f7931a)" }}
-                    />
-                    <span className="gsm-modal-title">
-                        {friendsChallengeReceivedTitle}
-                    </span>
-                </div>
-                <div className="gsm-body" style={{ textAlign: "center" }}>
-                    <p className="device-conflict-desc">
-                        {friendsChallengeReceivedDesc(
-                            challengerUsername,
-                            formateAmount(stakeAmount),
-                        )}
-                    </p>
-                </div>
-                <div className="gsm-footer device-conflict-actions">
-                    <Button variant="outlined" fullWidth onClick={onDecline}>
-                        {friendsRequestDecline}
-                    </Button>
-                    <Button variant="contained" fullWidth onClick={onAccept}>
-                        {friendsRequestAccept}
-                    </Button>
-                </div>
-            </div>
-        </div>
-    );
-}
-
-function DeviceHandoffModal({
-    deviceName,
-    onContinueHere,
-    onStayOnOther,
-}: {
-    deviceName: string | null;
-    onContinueHere: () => void;
-    onStayOnOther: () => void;
-}) {
-    return (
-        <div className="gsm-backdrop">
-            <div className="gsm-panel" onClick={(e) => e.stopPropagation()}>
-                <div className="gsm-header">
-                    <span className="gsm-modal-title">Signed in elsewhere</span>
-                </div>
-                <div className="gsm-body" style={{ textAlign: "center" }}>
-                    <p className="device-conflict-desc">
-                        {deviceName
-                            ? `${deviceName} is currently using your session.`
-                            : "Another device is currently using your session."}{" "}
-                        Continuing here will sign that device out.
-                    </p>
-                </div>
-                <div className="gsm-footer device-conflict-actions">
-                    <Button
-                        variant="outlined"
-                        fullWidth
-                        onClick={onStayOnOther}
-                    >
-                        Stay on other device
-                    </Button>
-                    <Button
-                        variant="contained"
-                        fullWidth
-                        onClick={onContinueHere}
-                    >
-                        Continue here
-                    </Button>
-                </div>
-            </div>
-        </div>
-    );
-}
-
-function RejoinGameModal({
-    opponentName,
-    opponentRating,
-    stakeAmount,
-    onRejoin,
-    onExit,
-}: {
-    opponentName: string;
-    opponentRating: number;
-    stakeAmount: number;
-    onRejoin: () => void;
-    onExit: () => void;
-}) {
-    return (
-        <div className="gsm-backdrop">
-            <div className="gsm-panel" onClick={(e) => e.stopPropagation()}>
-                <div className="gsm-header">
-                    <span className="gsm-modal-title">Game in progress</span>
-                </div>
-                <div className="gsm-body" style={{ textAlign: "center" }}>
-                    <p className="device-conflict-desc">
-                        You have an active game vs{" "}
-                        <strong>
-                            {opponentName} ({opponentRating})
-                        </strong>{" "}
-                        for <strong>{formateAmount(stakeAmount)}</strong>.
-                    </p>
-                </div>
-                <div className="gsm-footer device-conflict-actions">
-                    <Button variant="outlined" fullWidth onClick={onExit}>
-                        Exit
-                    </Button>
-                    <Button variant="contained" fullWidth onClick={onRejoin}>
-                        Rejoin
-                    </Button>
-                </div>
-            </div>
-        </div>
-    );
-}
-
 const SocketContext = createContext<ISocketContext>({
     userCounts: DEFAULT_COUNTS,
     countsReady: false,
     myStatus: "inactive",
     socket: null,
     recentWins: [],
-    sentChallenge: null,
-    sendChallenge: () => {},
-    cancelChallenge: () => {},
 });
 
 export function SocketProvider({ children }: { children: ReactNode }) {
@@ -294,58 +93,7 @@ export function SocketProvider({ children }: { children: ReactNode }) {
     const [myStatus, setMyStatus] = useState<"active" | "inactive">("inactive");
     const [socket, setSocket] = useState<Socket | null>(null);
     const [recentWins, setRecentWins] = useState<IActivityFeedEvent[]>([]);
-    const [activeGame, setActiveGame] =
-        useState<IActiveGameFoundResponse | null>(null);
 
-    const [rematchOffer, setRematchOffer] = useState<{
-        gameId: string;
-        opponentUsername: string;
-        stakeAmount: number;
-    } | null>(null);
-
-    const rematchOfferGameIdRef = useRef<string | null>(null);
-    const setRematchOfferState = (offer: typeof rematchOffer) => {
-        rematchOfferGameIdRef.current = offer?.gameId ?? null;
-        setRematchOffer(offer);
-    };
-
-    const [incomingChallenge, setIncomingChallenge] = useState<{
-        challengerId: string;
-        challengerUsername: string;
-        stakeAmount: number;
-    } | null>(null);
-    const incomingChallengerIdRef = useRef<string | null>(null);
-    const setIncomingChallengeState = (offer: typeof incomingChallenge) => {
-        incomingChallengerIdRef.current = offer?.challengerId ?? null;
-        setIncomingChallenge(offer);
-    };
-
-    const [sentChallenge, setSentChallenge] = useState<ISentChallenge | null>(
-        null,
-    );
-    const sentChallengeRef = useRef<ISentChallenge | null>(null);
-    const challengeCountdownRef = useRef<ReturnType<typeof setInterval> | null>(
-        null,
-    );
-    const stopChallengeCountdown = () => {
-        if (challengeCountdownRef.current) {
-            clearInterval(challengeCountdownRef.current);
-            challengeCountdownRef.current = null;
-        }
-    };
-    const setSentChallengeState = (offer: ISentChallenge | null) => {
-        sentChallengeRef.current = offer;
-        setSentChallenge(offer);
-        if (!offer) stopChallengeCountdown();
-    };
-
-    const [deviceHandoff, setDeviceHandoff] = useState<{
-        deviceName: string | null;
-    } | null>(null);
-    const deviceHandoffPendingRef = useRef(false);
-    useEffect(() => {
-        deviceHandoffPendingRef.current = deviceHandoff !== null;
-    }, [deviceHandoff]);
     const activityTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const reconnectingRef = useRef(false);
     const holdUntilRef = useRef(_isRefresh ? Date.now() + REFRESH_HOLD_MS : 0);
@@ -467,12 +215,12 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         };
 
         const onDeviceHandoffRequest = (data: { deviceName?: string }) => {
-            setActiveGame(null);
-            setDeviceHandoff({ deviceName: data.deviceName ?? null });
+            dispatch(setActiveGame(null));
+            dispatch(setDeviceHandoff({ deviceName: data.deviceName ?? null }));
         };
 
         const onDeviceSuperseded = () => {
-            setDeviceHandoff(null);
+            dispatch(setDeviceHandoff(null));
             dispatch(
                 showToast({
                     message: deviceHandoffToastSuperseded,
@@ -521,113 +269,8 @@ export function SocketProvider({ children }: { children: ReactNode }) {
             const viewingGameId = new URLSearchParams(search).get("game_id");
             if (pathname === "/play" && viewingGameId === data.game_id) return;
 
-            if (deviceHandoffPendingRef.current) return;
-            setActiveGame(data);
-        };
-
-        const onRematchOffered = (data: IRematchOfferedResponse) => {
-            if (router.state.location.pathname === "/play") return;
-            if (deviceHandoffPendingRef.current) return;
-            setRematchOfferState({
-                gameId: data.game_id,
-                opponentUsername: data.offered_by_username,
-                stakeAmount: data.stake_amount,
-            });
-        };
-
-        const onRematchExpired = (data: IRematchExpiredResponse) => {
-            if (rematchOfferGameIdRef.current === data.game_id) {
-                setRematchOfferState(null);
-            }
-        };
-
-        const onGlobalRematchFound = (data: IRematchFoundResponse) => {
-            if (rematchOfferGameIdRef.current !== data.from_game_id) return;
-            setRematchOfferState(null);
-            const url =
-                `/play?mode=pvp&time=${secondsToTimeControl(data.time_seconds)}` +
-                `&game_id=${data.game_id}&color=${data.your_color}` +
-                `&opponent=${encodeURIComponent(data.opponent.username)}` +
-                `&opp_rating=${data.opponent.elo_rating}&opp_id=${data.opponent.id}` +
-                `&opp_avatar_seed=${encodeURIComponent(data.opponent.avatar_seed ?? "")}` +
-                `&stake_amount=${data.stake_amount}`;
-            router.navigate(url, { replace: true });
-        };
-
-        const onChallengeReceived = (data: IChallengeReceivedResponse) => {
-            setIncomingChallengeState({
-                challengerId: data.challenger_id,
-                challengerUsername: data.challenger_username,
-                stakeAmount: data.stake_amount,
-            });
-        };
-
-        const onChallengeDeclined = (data: IChallengeDeclinedResponse) => {
-            if (sentChallengeRef.current?.friendId !== data.friend_id) return;
-            const username =
-                sentChallengeRef.current?.friendUsername ?? "Your friend";
-            setSentChallengeState(null);
-            dispatch(
-                showToast({
-                    message: friendsChallengeDeclinedToast(username),
-                    severity: "error",
-                }),
-            );
-        };
-
-        const onChallengeExpired = (data: IChallengeExpiredResponse) => {
-            if (
-                data.friend_id &&
-                sentChallengeRef.current?.friendId === data.friend_id
-            ) {
-                setSentChallengeState(null);
-                dispatch(
-                    showToast({
-                        message: friendsChallengeExpiredToast,
-                        severity: "error",
-                    }),
-                );
-            }
-            if (
-                data.challenger_id &&
-                incomingChallengerIdRef.current === data.challenger_id
-            ) {
-                setIncomingChallengeState(null);
-            }
-        };
-
-        const onChallengeCancelled = (data: IChallengeCancelledResponse) => {
-            if (incomingChallengerIdRef.current !== data.challenger_id) return;
-            setIncomingChallengeState(null);
-            dispatch(
-                showToast({
-                    message: friendsChallengeCancelledToast,
-                    severity: "info",
-                }),
-            );
-        };
-
-        const onChallengeError = (data: IChallengeErrorResponse) => {
-            console.log(data);
-            dispatch(
-                showToast({
-                    message: data.message,
-                    severity: "error",
-                }),
-            );
-        };
-
-        const onChallengeMatchFound = (data: IChallengeMatchFoundResponse) => {
-            setSentChallengeState(null);
-            setIncomingChallengeState(null);
-            const url =
-                `/play?mode=pvp&time=${secondsToTimeControl(data.time_seconds)}` +
-                `&game_id=${data.game_id}&color=${data.your_color}` +
-                `&opponent=${encodeURIComponent(data.opponent.username)}` +
-                `&opp_rating=${data.opponent.elo_rating}&opp_id=${data.opponent.id}` +
-                `&opp_avatar_seed=${encodeURIComponent(data.opponent.avatar_seed ?? "")}` +
-                `&stake_amount=${data.stake_amount}`;
-            router.navigate(url, { replace: true });
+            if (store.getState().socketModals.deviceHandoff !== null) return;
+            dispatch(setActiveGame(data));
         };
 
         sock.on("connect", onConnect);
@@ -635,16 +278,6 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         sock.on("activity_feed", onActivityFeed);
         sock.on("transaction_completed", onTransactionCompleted);
         sock.on("active_game_found", onActiveGameFound);
-        sock.on("rematch_offered", onRematchOffered);
-        sock.on("rematch_expired", onRematchExpired);
-        sock.on("rematch_found", onGlobalRematchFound);
-        sock.on("challenge_received", onChallengeReceived);
-        sock.on("challenge_declined", onChallengeDeclined);
-        sock.on("challenge_expired", onChallengeExpired);
-        sock.on("challenge_cancelled", onChallengeCancelled);
-        sock.on("challenge_error", onChallengeError);
-        sock.on("challenge_match_found", onChallengeMatchFound);
-        sock.on("connect_error", onConnectError);
         sock.on("session_terminated", onSessionTerminated);
         sock.on("device_handoff_request", onDeviceHandoffRequest);
         sock.on("device_superseded", onDeviceSuperseded);
@@ -674,15 +307,6 @@ export function SocketProvider({ children }: { children: ReactNode }) {
             sock.off("activity_feed", onActivityFeed);
             sock.off("transaction_completed", onTransactionCompleted);
             sock.off("active_game_found", onActiveGameFound);
-            sock.off("rematch_offered", onRematchOffered);
-            sock.off("rematch_expired", onRematchExpired);
-            sock.off("rematch_found", onGlobalRematchFound);
-            sock.off("challenge_received", onChallengeReceived);
-            sock.off("challenge_declined", onChallengeDeclined);
-            sock.off("challenge_expired", onChallengeExpired);
-            sock.off("challenge_cancelled", onChallengeCancelled);
-            sock.off("challenge_error", onChallengeError);
-            sock.off("challenge_match_found", onChallengeMatchFound);
             sock.off("connect_error", onConnectError);
             sock.off("session_terminated", onSessionTerminated);
             sock.off("device_handoff_request", onDeviceHandoffRequest);
@@ -732,95 +356,6 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         };
     }, [socket]);
 
-    const handleRejoin = () => {
-        if (!activeGame) return;
-        const url =
-            `/play?mode=pvp&time=${secondsToTimeControl(activeGame.time_seconds)}` +
-            `&game_id=${activeGame.game_id}&color=${activeGame.your_color}` +
-            `&opponent=${encodeURIComponent(activeGame.opponent.username)}` +
-            `&opp_rating=${activeGame.opponent.elo_rating}&opp_id=${activeGame.opponent.id}` +
-            `&opp_avatar_seed=${encodeURIComponent(activeGame.opponent.avatar_seed ?? "")}` +
-            `&stake_amount=${activeGame.stake_amount}`;
-        setActiveGame(null);
-        router.navigate(url, { replace: true });
-    };
-
-    const handleAcceptRematch = () => {
-        if (!rematchOffer) return;
-        socket?.emit("offer_rematch", { game_id: rematchOffer.gameId });
-
-        setRematchOffer(null);
-    };
-
-    const handleDismissRematch = () => {
-        setRematchOfferState(null);
-    };
-
-    const sendChallenge = (
-        friendId: string,
-        friendUsername: string,
-        stakeAmount: number,
-    ) => {
-        if (!socket) return;
-        socket.emit("challenge_friend", {
-            friend_id: friendId,
-            stake_amount: stakeAmount,
-        });
-        setSentChallengeState({
-            friendId,
-            friendUsername,
-            stakeAmount,
-            secondsLeft: 30,
-        });
-        stopChallengeCountdown();
-        challengeCountdownRef.current = setInterval(() => {
-            setSentChallenge((prev) =>
-                prev
-                    ? {
-                          ...prev,
-                          secondsLeft: Math.max(0, prev.secondsLeft - 1),
-                      }
-                    : prev,
-            );
-        }, 1000);
-    };
-
-    const cancelChallenge = () => {
-        if (!socket || !sentChallengeRef.current) return;
-        socket.emit("cancel_challenge", {
-            friend_id: sentChallengeRef.current.friendId,
-        });
-        setSentChallengeState(null);
-    };
-
-    const handleAcceptChallenge = () => {
-        if (!socket || !incomingChallenge) return;
-        socket.emit("accept_challenge", {
-            challenger_id: incomingChallenge.challengerId,
-        });
-        setIncomingChallengeState(null);
-    };
-
-    const handleDeclineChallenge = () => {
-        if (!socket || !incomingChallenge) return;
-        socket.emit("decline_challenge", {
-            challenger_id: incomingChallenge.challengerId,
-        });
-        setIncomingChallengeState(null);
-    };
-
-    const handleContinueHere = () => {
-        socket?.emit("accept_device_handoff");
-        setDeviceHandoff(null);
-    };
-
-    const handleStayOnOther = async () => {
-        setDeviceHandoff(null);
-        disconnectSocket();
-        await sessionService.deleteSession();
-        router.navigate("/login", { replace: true });
-    };
-
     return (
         <SocketContext.Provider
             value={{
@@ -829,49 +364,11 @@ export function SocketProvider({ children }: { children: ReactNode }) {
                 myStatus,
                 socket,
                 recentWins,
-                sentChallenge,
-                sendChallenge,
-                cancelChallenge,
             }}
         >
             {children}
-            {deviceHandoff !== null && (
-                <DeviceHandoffModal
-                    deviceName={deviceHandoff.deviceName}
-                    onContinueHere={handleContinueHere}
-                    onStayOnOther={handleStayOnOther}
-                />
-            )}
-            {activeGame && deviceHandoff === null && (
-                <RejoinGameModal
-                    opponentName={activeGame.opponent.username}
-                    opponentRating={activeGame.opponent.elo_rating}
-                    stakeAmount={activeGame.stake_amount}
-                    onRejoin={handleRejoin}
-                    onExit={() => setActiveGame(null)}
-                />
-            )}
-            {rematchOffer && deviceHandoff === null && !activeGame && (
-                <RematchOfferModal
-                    opponentName={rematchOffer.opponentUsername}
-                    stakeAmount={rematchOffer.stakeAmount}
-                    onAccept={handleAcceptRematch}
-                    onDismiss={handleDismissRematch}
-                />
-            )}
-            {incomingChallenge &&
-                deviceHandoff === null &&
-                !activeGame &&
-                !rematchOffer && (
-                    <ChallengeOfferModal
-                        challengerUsername={
-                            incomingChallenge.challengerUsername
-                        }
-                        stakeAmount={incomingChallenge.stakeAmount}
-                        onAccept={handleAcceptChallenge}
-                        onDecline={handleDeclineChallenge}
-                    />
-                )}
+            <DeviceHandoffModal />
+            <RejoinGameModal />
         </SocketContext.Provider>
     );
 }

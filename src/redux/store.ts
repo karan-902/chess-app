@@ -3,6 +3,7 @@ import localforage from "localforage";
 import authReducer, { type TAuthSessionState } from "./persisted/auth.slice";
 import { commonReducer } from "./common/common.slice";
 import { walletReducer } from "./wallet.slice";
+import { socketModalsReducer } from "./socketModals.slice";
 import {
     persistStore,
     persistReducer,
@@ -32,6 +33,7 @@ export const store = configureStore({
         auth: persistedAuthReducer,
         common: commonReducer,
         wallet: walletReducer,
+        socketModals: socketModalsReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
