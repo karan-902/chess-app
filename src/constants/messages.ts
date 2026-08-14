@@ -404,9 +404,6 @@ export const depositModalMinAmountError = (min: number) =>
 export const depositModalGenerating = "Generating…";
 export const depositModalGenerateFailed =
     "Couldn't generate a payment QR. Please try again.";
-export const depositModalBackAriaLabel = "Back";
-export const depositModalDepositingTitle = (amount: number) =>
-    `Depositing $${Number.isInteger(amount) ? amount : amount.toFixed(2)}`;
 export const depositModalBtcOnlyWarning =
     "Deposits must be in BTC only. Other currencies will be lost.";
 export const depositModalScanHint =

@@ -113,7 +113,6 @@ body {
     cursor: pointer;
 }
 
-.deposit-back-btn,
 .deposit-steps-close {
     position: absolute;
     top: 0;
@@ -131,10 +130,6 @@ body {
     &:hover {
         background: rgba(128, 128, 128, 0.3);
     }
-}
-
-.deposit-back-btn {
-    left: 0;
 }
 
 .deposit-steps-close {

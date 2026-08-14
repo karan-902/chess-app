@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import classNames from "classnames";
-import { Copy, Check, CheckCircle2, ArrowLeft, X as XIcon } from "lucide-react";
+import { Copy, Check, CheckCircle2, X as XIcon } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
@@ -39,8 +39,6 @@ import {
     depositModalAmountRequired,
     depositModalMinAmountError,
     depositModalGenerateFailed,
-    depositModalBackAriaLabel,
-    depositModalDepositingTitle,
     depositModalBtcOnlyWarning,
     depositModalScanHint,
     depositModalCopyButton,
@@ -287,17 +285,6 @@ export default function DepositModal() {
 
             {stage === "qr" && payment && (
                 <Box customClass="deposit-qr-stage">
-                    <button
-                        type="button"
-                        className="deposit-back-btn"
-                        onClick={() => setStage("amount")}
-                        aria-label={depositModalBackAriaLabel}
-                    >
-                        <ArrowLeft size={16} strokeWidth={2} />
-                    </button>
-                    <Text customClass="deposit-heading">
-                        {depositModalDepositingTitle(Number(amount))}
-                    </Text>
 
                     <Box customClass="deposit-method-tabs">
                         <Button
