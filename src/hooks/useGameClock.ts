@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import type { TimeControl } from "@/types/components";
 import { TIME_SECONDS } from "@/types/components";
 import type { GameCategory } from "@/types/types";
@@ -41,20 +41,20 @@ export function useGameClock(timeControl: TimeControl, paused: boolean, turn: "w
         return () => clearInterval(id);
     }, [paused]);
 
-    const reset = () => {
+    const reset = useCallback(() => {
         setWhiteTime(startingSeconds);
         setBlackTime(startingSeconds);
         setTimedOut(null);
         setElapsed(0);
         timedOutRef.current = null;
-    };
+    }, [startingSeconds]);
 
-    const syncClock = (whiteMs: number, blackMs: number) => {
+    const syncClock = useCallback((whiteMs: number, blackMs: number) => {
         setWhiteTime(Math.round(whiteMs / 1000));
         setBlackTime(Math.round(blackMs / 1000));
         setTimedOut(null);
         timedOutRef.current = null;
-    };
+    }, []);
 
     const fmt = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
     const fmtElapsed = (s: number) => {

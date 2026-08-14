@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Chess } from "chess.js";
 import type { Square } from "chess.js";
 import type { MoveRecord } from "@/types/types";
@@ -30,82 +30,100 @@ export function useChessGame() {
         to: string;
     } | null>(null);
 
-    const makeMove = (
-        from: string,
-        to: string,
-        promotion = "q",
-    ): { fen: string; promotion?: string } | null => {
-        try {
-            const move = chess.move({ from, to, promotion });
-            if (move) {
-                playSound(
-                    getMoveSound(move, chess.isCheck(), chess.isGameOver()),
-                );
-                setLastMove({ from, to });
-                const newFen = chess.fen();
-                setFen(newFen);
-                setFenHistory((prev) => [...prev, newFen]);
-                const history = chess.history();
-                const records: MoveRecord[] = [];
-                for (let i = 0; i < history.length; i += 2) {
-                    records.push({
-                        n: i / 2 + 1,
-                        w: history[i],
-                        b: history[i + 1] ?? "",
-                    });
+    const makeMove = useCallback(
+        (
+            from: string,
+            to: string,
+            promotion = "q",
+        ): { fen: string; promotion?: string } | null => {
+            try {
+                const move = chess.move({ from, to, promotion });
+                if (move) {
+                    playSound(
+                        getMoveSound(move, chess.isCheck(), chess.isGameOver()),
+                    );
+                    setLastMove({ from, to });
+                    const newFen = chess.fen();
+                    setFen(newFen);
+                    setFenHistory((prev) => [...prev, newFen]);
+                    const history = chess.history();
+                    const records: MoveRecord[] = [];
+                    for (let i = 0; i < history.length; i += 2) {
+                        records.push({
+                            n: i / 2 + 1,
+                            w: history[i],
+                            b: history[i + 1] ?? "",
+                        });
+                    }
+                    setMoveHistory(records);
+                    return { fen: newFen, promotion: move.promotion };
                 }
-                setMoveHistory(records);
-                return { fen: newFen, promotion: move.promotion };
+                return null;
+            } catch {
+                return null;
             }
-            return null;
-        } catch {
-            return null;
-        }
-    };
+        },
+        [chess],
+    );
 
-    const restoreGame = (
-        moves: Array<{ from: string; to: string; promotion: string | null }>,
-    ) => {
-        chess.reset();
-        const fenHist = [chess.fen()];
-        for (const m of moves) {
-            chess.move({
-                from: m.from,
-                to: m.to,
-                promotion: m.promotion ?? "q",
+    const restoreGame = useCallback(
+        (
+            moves: Array<{ from: string; to: string; promotion: string | null }>,
+        ) => {
+            chess.reset();
+            const fenHist = [chess.fen()];
+            for (const m of moves) {
+                chess.move({
+                    from: m.from,
+                    to: m.to,
+                    promotion: m.promotion ?? "q",
+                });
+                fenHist.push(chess.fen());
+            }
+            const restoredFen = chess.fen();
+            const history = chess.history();
+            const records: MoveRecord[] = [];
+            for (let i = 0; i < history.length; i += 2) {
+                records.push({
+                    n: i / 2 + 1,
+                    w: history[i],
+                    b: history[i + 1] ?? "",
+                });
+            }
+            setFen(restoredFen);
+            setFenHistory(fenHist);
+            setMoveHistory(records);
+            if (moves.length > 0) {
+                const last = moves[moves.length - 1];
+                setLastMove({ from: last.from, to: last.to });
+            }
+        },
+        [chess],
+    );
+
+    const getLegalMoves = useCallback(
+        (square: string): string[] => {
+            const moves = chess.moves({
+                square: square as Square,
+                verbose: true,
             });
-            fenHist.push(chess.fen());
-        }
-        const restoredFen = chess.fen();
-        const history = chess.history();
-        const records: MoveRecord[] = [];
-        for (let i = 0; i < history.length; i += 2) {
-            records.push({
-                n: i / 2 + 1,
-                w: history[i],
-                b: history[i + 1] ?? "",
+            return moves.map((m) => m.to);
+        },
+        [chess],
+    );
+
+    const isPromotionMove = useCallback(
+        (from: string, to: string): boolean => {
+            const moves = chess.moves({
+                square: from as Square,
+                verbose: true,
             });
-        }
-        setFen(restoredFen);
-        setFenHistory(fenHist);
-        setMoveHistory(records);
-        if (moves.length > 0) {
-            const last = moves[moves.length - 1];
-            setLastMove({ from: last.from, to: last.to });
-        }
-    };
+            return moves.some((m) => m.to === to && m.promotion !== undefined);
+        },
+        [chess],
+    );
 
-    const getLegalMoves = (square: string): string[] => {
-        const moves = chess.moves({ square: square as Square, verbose: true });
-        return moves.map((m) => m.to);
-    };
-
-    const isPromotionMove = (from: string, to: string): boolean => {
-        const moves = chess.moves({ square: from as Square, verbose: true });
-        return moves.some((m) => m.to === to && m.promotion !== undefined);
-    };
-
-    const getAttackedSquares = (): string[] => {
+    const getAttackedSquares = useCallback((): string[] => {
         const board = chess.board();
         const currentColor = chess.turn();
         const opponentColor = currentColor === "w" ? "b" : "w";
@@ -122,9 +140,9 @@ export function useChessGame() {
         });
 
         return attacked;
-    };
+    }, [chess]);
 
-    const getCapturedPieces = (): ICapturedPieces => {
+    const getCapturedPieces = useCallback((): ICapturedPieces => {
         const board = chess.board();
         const remaining: Record<"w" | "b", Record<string, number>> = {
             w: { p: 0, n: 0, b: 0, r: 0, q: 0 },
@@ -160,123 +178,146 @@ export function useChessGame() {
             byBlack,
             whiteAdvantage: materialWhite - materialBlack,
         };
-    };
+    }, [chess]);
 
-    const getPieceColor = (square: string): "w" | "b" | null => {
-        return chess.get(square as Square)?.color ?? null;
-    };
+    const getPieceColor = useCallback(
+        (square: string): "w" | "b" | null => {
+            return chess.get(square as Square)?.color ?? null;
+        },
+        [chess],
+    );
 
     type PremoveEntry = { from: string; to: string; promotion?: string };
 
-    const buildPremoveClone = (
-        priorMoves: PremoveEntry[],
-        asColor: "w" | "b",
-    ) => {
-        let fen = chess.fen();
-        for (const mv of priorMoves) {
+    const buildPremoveClone = useCallback(
+        (priorMoves: PremoveEntry[], asColor: "w" | "b") => {
+            let fen = chess.fen();
+            for (const mv of priorMoves) {
+                const parts = fen.split(" ");
+                parts[1] = asColor;
+                const clone = new Chess(parts.join(" "));
+                clone.move({
+                    from: mv.from as Square,
+                    to: mv.to as Square,
+                    promotion: mv.promotion ?? "q",
+                });
+                fen = clone.fen();
+            }
             const parts = fen.split(" ");
             parts[1] = asColor;
-            const clone = new Chess(parts.join(" "));
-            clone.move({
-                from: mv.from as Square,
-                to: mv.to as Square,
-                promotion: mv.promotion ?? "q",
-            });
-            fen = clone.fen();
-        }
-        const parts = fen.split(" ");
-        parts[1] = asColor;
-        return new Chess(parts.join(" "));
-    };
+            return new Chess(parts.join(" "));
+        },
+        [chess],
+    );
 
-    const getPremoveMoves = (
-        square: string,
-        asColor: "w" | "b",
-        priorMoves: PremoveEntry[] = [],
-    ): string[] => {
-        try {
-            return buildPremoveClone(priorMoves, asColor)
-                .moves({ square: square as Square, verbose: true })
-                .map((m) => m.to);
-        } catch {
-            return [];
-        }
-    };
+    const getPremoveMoves = useCallback(
+        (
+            square: string,
+            asColor: "w" | "b",
+            priorMoves: PremoveEntry[] = [],
+        ): string[] => {
+            try {
+                return buildPremoveClone(priorMoves, asColor)
+                    .moves({ square: square as Square, verbose: true })
+                    .map((m) => m.to);
+            } catch {
+                return [];
+            }
+        },
+        [buildPremoveClone],
+    );
 
-    const getPremovePieceColor = (
-        square: string,
-        asColor: "w" | "b",
-        priorMoves: PremoveEntry[] = [],
-    ): "w" | "b" | null => {
-        if (priorMoves.length === 0) return getPieceColor(square);
-        try {
-            return (
-                buildPremoveClone(priorMoves, asColor).get(square as Square)
-                    ?.color ?? null
-            );
-        } catch {
-            return getPieceColor(square);
-        }
-    };
+    const getPremovePieceColor = useCallback(
+        (
+            square: string,
+            asColor: "w" | "b",
+            priorMoves: PremoveEntry[] = [],
+        ): "w" | "b" | null => {
+            if (priorMoves.length === 0) return getPieceColor(square);
+            try {
+                return (
+                    buildPremoveClone(priorMoves, asColor).get(
+                        square as Square,
+                    )?.color ?? null
+                );
+            } catch {
+                return getPieceColor(square);
+            }
+        },
+        [buildPremoveClone, getPieceColor],
+    );
 
-    const getRandomMove = (): { from: string; to: string } | null => {
+    const getRandomMove = useCallback((): {
+        from: string;
+        to: string;
+    } | null => {
         const moves = chess.moves({ verbose: true });
         if (moves.length === 0) return null;
         const m = moves[Math.floor(Math.random() * moves.length)];
         return { from: m.from, to: m.to };
-    };
+    }, [chess]);
 
-    const applyOpponentMove = (
-        from: string,
-        to: string,
-        promotion: string | null,
-        serverFen: string,
-    ) => {
-        try {
-            const move = chess.move({ from, to, promotion: promotion ?? "q" });
-            if (move) {
-                playSound(
-                    getMoveSound(move, chess.isCheck(), chess.isGameOver()),
-                );
-                setLastMove({ from, to });
+    const applyOpponentMove = useCallback(
+        (
+            from: string,
+            to: string,
+            promotion: string | null,
+            serverFen: string,
+        ) => {
+            try {
+                const move = chess.move({
+                    from,
+                    to,
+                    promotion: promotion ?? "q",
+                });
+                if (move) {
+                    playSound(
+                        getMoveSound(move, chess.isCheck(), chess.isGameOver()),
+                    );
+                    setLastMove({ from, to });
 
-                const history = chess.history();
-                const records: MoveRecord[] = [];
-                for (let i = 0; i < history.length; i += 2) {
-                    records.push({
-                        n: i / 2 + 1,
-                        w: history[i],
-                        b: history[i + 1] ?? "",
-                    });
+                    const history = chess.history();
+                    const records: MoveRecord[] = [];
+                    for (let i = 0; i < history.length; i += 2) {
+                        records.push({
+                            n: i / 2 + 1,
+                            w: history[i],
+                            b: history[i + 1] ?? "",
+                        });
+                    }
+                    if (chess.fen() !== serverFen) chess.load(serverFen);
+                    setFen(serverFen);
+                    setFenHistory((prev) => [...prev, serverFen]);
+                    setMoveHistory(records);
                 }
-                if (chess.fen() !== serverFen) chess.load(serverFen);
+            } catch {
+                chess.load(serverFen);
                 setFen(serverFen);
                 setFenHistory((prev) => [...prev, serverFen]);
-                setMoveHistory(records);
+                setLastMove({ from, to });
             }
-        } catch {
+        },
+        [chess],
+    );
+
+    const confirmMove = useCallback(
+        (serverFen: string) => {
+            if (chess.fen() === serverFen) return;
             chess.load(serverFen);
             setFen(serverFen);
-            setFenHistory((prev) => [...prev, serverFen]);
-            setLastMove({ from, to });
-        }
-    };
+            setFenHistory((prev) => [...prev.slice(0, -1), serverFen]);
+        },
+        [chess],
+    );
 
-    const confirmMove = (serverFen: string) => {
-        if (chess.fen() === serverFen) return;
-        chess.load(serverFen);
-        setFen(serverFen);
-        setFenHistory((prev) => [...prev.slice(0, -1), serverFen]);
-    };
-
-    const resetGame = () => {
+    const resetGame = useCallback(() => {
         chess.reset();
         const startFen = chess.fen();
         setFen(startFen);
         setFenHistory([startFen]);
         setMoveHistory([]);
         setLastMove(null);
-    };
+    }, [chess]);
 
     const isGameOver = chess.isGameOver();
     const isCheckmate = chess.isCheckmate();
@@ -285,7 +326,7 @@ export function useChessGame() {
     const turn = chess.turn();
     const inCheck = chess.isCheck();
 
-    const kingSquare = (): string | null => {
+    const kingSquare = useCallback((): string | null => {
         const board = chess.board();
         for (const row of board) {
             for (const cell of row) {
@@ -295,7 +336,7 @@ export function useChessGame() {
             }
         }
         return null;
-    };
+    }, [chess, turn]);
 
     return {
         fen,

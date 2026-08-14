@@ -235,6 +235,10 @@
         font-size: $font20;
         font-weight: 700;
         color: $gold;
+
+        @media screen and (max-width: 568px) {
+            font-size: $font13;
+        }
     }
 
     &.segment-btn-label {
