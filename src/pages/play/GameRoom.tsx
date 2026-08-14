@@ -129,6 +129,34 @@ function setPvcColor(id: string, color: string) {
     } catch {}
 }
 
+type SnapshotMove = { from: string; to: string; promotion: string | null };
+type PvcSnapshot = {
+    moves: SnapshotMove[];
+    whiteMs: number;
+    blackMs: number;
+};
+
+function savePvcSnapshot(id: string, snapshot: PvcSnapshot) {
+    try {
+        sessionStorage.setItem(`pvc_snapshot:${id}`, JSON.stringify(snapshot));
+    } catch {}
+}
+
+function loadPvcSnapshot(id: string): PvcSnapshot | null {
+    try {
+        const raw = sessionStorage.getItem(`pvc_snapshot:${id}`);
+        return raw ? JSON.parse(raw) : null;
+    } catch {
+        return null;
+    }
+}
+
+function clearPvcSnapshot(id: string) {
+    try {
+        sessionStorage.removeItem(`pvc_snapshot:${id}`);
+    } catch {}
+}
+
 function capturedCode(type: string, color: "w" | "b") {
     return `${color}${type.toUpperCase()}`;
 }
@@ -199,6 +227,7 @@ export default function GameRoom() {
         fen,
         fenHistory,
         moveHistory,
+        moveLog,
         lastMove,
         turn,
         inCheck,
@@ -260,8 +289,10 @@ export default function GameRoom() {
     }, [blocker, gameEnded, navigate]);
 
     useEffect(() => {
-        if (gameEnded && gameId) markGameFinished(gameId);
-    }, [gameEnded, gameId]);
+        if (!gameEnded || !gameId) return;
+        markGameFinished(gameId);
+        if (isPvc) clearPvcSnapshot(gameId);
+    }, [gameEnded, gameId, isPvc]);
 
     useEffect(() => {
         setPremoveQueue([]);
@@ -269,11 +300,37 @@ export default function GameRoom() {
     }, [gameId]);
 
     const paused = !!gameEnded || opponentDisconnected;
-    const { whiteTimer, blackTimer, timedOut, syncClock } = useGameClock(
+    const {
+        whiteTimer,
+        blackTimer,
+        whiteTimeMs,
+        blackTimeMs,
+        timedOut,
+        syncClock,
+    } = useGameClock(
         timeControl,
         paused,
         turn,
     );
+
+    useEffect(() => {
+        if (!isPvc || !gameId) return;
+        const snapshot = loadPvcSnapshot(gameId);
+        if (!snapshot) return;
+        restoreGame(snapshot.moves);
+        syncClock(snapshot.whiteMs, snapshot.blackMs);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isPvc, gameId]);
+
+    useEffect(() => {
+        if (!isPvc || !gameId || moveLog.length === 0) return;
+        savePvcSnapshot(gameId, {
+            moves: moveLog,
+            whiteMs: whiteTimeMs,
+            blackMs: blackTimeMs,
+        });
+    }, [isPvc, gameId, moveLog, whiteTimeMs, blackTimeMs]);
+
     const { tabLockStatus, takeOver, notifySuperseded } = useTabLock(
         gameId,
         mode,
@@ -363,7 +420,8 @@ export default function GameRoom() {
                     promotion: m.promotion,
                 })),
             );
-            if (data.moves.length === 0) setClockReady(true);
+            syncClock(data.white_remaining_ms, data.black_remaining_ms);
+            setClockReady(true);
         };
         const onClockUpdate = (data: IClockUpdateResponse) => {
             syncClock(data.white_remaining_ms, data.black_remaining_ms);

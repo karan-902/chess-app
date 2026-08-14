@@ -221,6 +221,8 @@ export interface IgameRestoreResponse {
     time_seconds: number;
     current_fen: string;
     turn_user_id: string;
+    white_remaining_ms: number;
+    black_remaining_ms: number;
     moves: Array<{
         from: string;
         to: string;

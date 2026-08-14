@@ -29,6 +29,9 @@ export function useChessGame() {
         from: string;
         to: string;
     } | null>(null);
+    const [moveLog, setMoveLog] = useState<
+        Array<{ from: string; to: string; promotion: string | null }>
+    >([]);
 
     const makeMove = useCallback(
         (
@@ -56,6 +59,10 @@ export function useChessGame() {
                         });
                     }
                     setMoveHistory(records);
+                    setMoveLog((prev) => [
+                        ...prev,
+                        { from, to, promotion: move.promotion ?? null },
+                    ]);
                     return { fen: newFen, promotion: move.promotion };
                 }
                 return null;
@@ -93,6 +100,7 @@ export function useChessGame() {
             setFen(restoredFen);
             setFenHistory(fenHist);
             setMoveHistory(records);
+            setMoveLog(moves);
             if (moves.length > 0) {
                 const last = moves[moves.length - 1];
                 setLastMove({ from: last.from, to: last.to });
@@ -289,12 +297,14 @@ export function useChessGame() {
                     setFen(serverFen);
                     setFenHistory((prev) => [...prev, serverFen]);
                     setMoveHistory(records);
+                    setMoveLog((prev) => [...prev, { from, to, promotion }]);
                 }
             } catch {
                 chess.load(serverFen);
                 setFen(serverFen);
                 setFenHistory((prev) => [...prev, serverFen]);
                 setLastMove({ from, to });
+                setMoveLog((prev) => [...prev, { from, to, promotion }]);
             }
         },
         [chess],
@@ -317,6 +327,7 @@ export function useChessGame() {
         setFenHistory([startFen]);
         setMoveHistory([]);
         setLastMove(null);
+        setMoveLog([]);
     }, [chess]);
 
     const isGameOver = chess.isGameOver();
@@ -355,6 +366,7 @@ export function useChessGame() {
         getAttackedSquares,
         getCapturedPieces,
         moveHistory,
+        moveLog,
         lastMove,
         isGameOver,
         isCheckmate,

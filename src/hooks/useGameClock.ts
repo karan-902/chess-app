@@ -65,6 +65,8 @@ export function useGameClock(timeControl: TimeControl, paused: boolean, turn: "w
     return {
         whiteTimer: fmt(whiteTime),
         blackTimer: fmt(blackTime),
+        whiteTimeMs: whiteTime * 1000,
+        blackTimeMs: blackTime * 1000,
         timedOut,
         elapsedFormatted: fmtElapsed(elapsed),
         reset,
