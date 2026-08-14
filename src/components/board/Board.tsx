@@ -28,7 +28,7 @@ interface IChessBoardProps {
     checkSquare?: string | null;
     stalemateSquare?: string | null;
     flashSquare?: string | null;
-    onSquareClick?: (square: string) => void;
+    onSquareClick?: (square: string, viaDrag?: boolean) => void;
     onSquareRightClick?: (square: string) => void;
     lastMove?: { from: string; to: string } | null;
     flipped?: boolean;
@@ -236,7 +236,7 @@ export default function Board({
         setActiveDrag(null);
         const from = e.active.id as string;
         const to = e.over?.id as string | undefined;
-        if (to && to !== from) onSquareClick?.(to);
+        if (to && to !== from) onSquareClick?.(to, true);
     };
 
     return (

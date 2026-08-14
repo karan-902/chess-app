@@ -501,7 +501,7 @@ export default function GameRoom() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [turn, gameEnded, playerSide, premoveQueue]);
 
-    const handleSquareClick = (square: string) => {
+    const handleSquareClick = (square: string, viaDrag?: boolean) => {
         if (gameEnded || isReviewing || pendingPromotion) return;
 
         if (turn !== playerSide) {
@@ -534,7 +534,7 @@ export default function GameRoom() {
         }
 
         if (selectedSquare && legalMoves.includes(square)) {
-            if (isPromotionMove(selectedSquare, square)) {
+            if (isPromotionMove(selectedSquare, square) && !viaDrag) {
                 setTimeout(() =>
                     setPendingPromotion({ from: selectedSquare, to: square }),
                 );
