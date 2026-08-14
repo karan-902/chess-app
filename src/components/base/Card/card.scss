@@ -230,6 +230,10 @@
             background: alpha($gold, 0.08);
             box-shadow: 0 0 0 1px alpha($gold, 0.25);
         }
+
+        &.friend {
+            justify-content: space-between;
+        }
     }
 
     .stake-card-live-corner {
