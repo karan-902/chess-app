@@ -1,10 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import type { TimeControl } from "@/types/components";
 import { TIME_SECONDS } from "@/types/components";
+import type { GameCategory } from "@/types/types";
 
 export function useGameClock(timeControl: TimeControl, paused: boolean, turn: "w" | "b") {
-    const [whiteTime, setWhiteTime] = useState(TIME_SECONDS[timeControl]);
-    const [blackTime, setBlackTime] = useState(TIME_SECONDS[timeControl]);
+    const startingSeconds =
+        TIME_SECONDS[timeControl.toUpperCase() as GameCategory];
+    const [whiteTime, setWhiteTime] = useState(startingSeconds);
+    const [blackTime, setBlackTime] = useState(startingSeconds);
     const [timedOut, setTimedOut] = useState<"w" | "b" | null>(null);
     const [elapsed, setElapsed] = useState(0);
 
@@ -39,8 +42,8 @@ export function useGameClock(timeControl: TimeControl, paused: boolean, turn: "w
     }, [paused]);
 
     const reset = () => {
-        setWhiteTime(TIME_SECONDS[timeControl]);
-        setBlackTime(TIME_SECONDS[timeControl]);
+        setWhiteTime(startingSeconds);
+        setBlackTime(startingSeconds);
         setTimedOut(null);
         setElapsed(0);
         timedOutRef.current = null;

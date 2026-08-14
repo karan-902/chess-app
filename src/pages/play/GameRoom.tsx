@@ -10,6 +10,7 @@ import { showToast } from "@/redux/toast.slice";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
+import Skeleton from "@/components/base/Skeleton/Skeleton";
 import ChessBoard from "@/components/board/Board";
 import PieceIcon from "@/components/board/PieceIcon";
 import { useChessGame } from "@/hooks/useChessGame";
@@ -231,6 +232,8 @@ export default function GameRoom() {
         to: string;
     } | null>(null);
     const [gameEnded, setGameEnded] = useState<IgameEndedResponse | null>(null);
+    const [clockReady, setClockReady] = useState(isPvc);
+    const [opponentDisconnected, setOpponentDisconnected] = useState(false);
     const [resignOpen, setResignOpen] = useState(false);
     const bypassBlockRef = useRef(false);
     const blocker = useBlocker(
@@ -265,7 +268,7 @@ export default function GameRoom() {
         setPremoveFrom(null);
     }, [gameId]);
 
-    const paused = !!gameEnded;
+    const paused = !!gameEnded || opponentDisconnected;
     const { whiteTimer, blackTimer, timedOut, syncClock } = useGameClock(
         timeControl,
         paused,
@@ -360,9 +363,11 @@ export default function GameRoom() {
                     promotion: m.promotion,
                 })),
             );
+            if (data.moves.length === 0) setClockReady(true);
         };
         const onClockUpdate = (data: IClockUpdateResponse) => {
             syncClock(data.white_remaining_ms, data.black_remaining_ms);
+            setClockReady(true);
         };
         const onDrawOffered = (data: IdrawOfferedResponse) => {
             if (data.game_id === gameId) setDrawOffer(data);
@@ -386,6 +391,7 @@ export default function GameRoom() {
             data: IopponentDisconnectedResponse,
         ) => {
             if (data.game_id !== gameId) return;
+            setOpponentDisconnected(true);
             dispatch(
                 showToast({
                     message: `${playToastOpponentDisconnectedTitle} — ${playToastOpponentDisconnectedDesc(
@@ -397,6 +403,7 @@ export default function GameRoom() {
         };
         const onOpponentReconnected = (data: IopponentReconnectedResponse) => {
             if (data.game_id !== gameId) return;
+            setOpponentDisconnected(false);
             dispatch(
                 showToast({
                     message: playToastOpponentReconnected,
@@ -442,6 +449,13 @@ export default function GameRoom() {
         opponentId,
         notifySuperseded,
     ]);
+
+    useEffect(() => {
+        if (!socket || !gameId || isPvc) return;
+        const onPageHide = () => socket.emit("leave_game", { game_id: gameId });
+        window.addEventListener("pagehide", onPageHide);
+        return () => window.removeEventListener("pagehide", onPageHide);
+    }, [socket, gameId, isPvc]);
 
     const legalMoves = selectedSquare ? getLegalMoves(selectedSquare) : [];
     const premoveTargets = premoveFrom
@@ -678,7 +692,17 @@ export default function GameRoom() {
                         )}
                     </Box>
                 </Box>
-                <Text customClass="gr-clock">{oppClock}</Text>
+                <Text customClass="gr-clock">
+                    {clockReady ? (
+                        oppClock
+                    ) : (
+                        <Skeleton
+                            variant="rounded"
+                            width="2.5rem"
+                            height="1.5rem"
+                        />
+                    )}
+                </Text>
             </Box>
 
             <Box customClass="gr-board-wrap">
@@ -775,7 +799,17 @@ export default function GameRoom() {
                         )}
                     </Box>
                 </Box>
-                <Text customClass="gr-clock">{myClock}</Text>
+                <Text customClass="gr-clock">
+                    {clockReady ? (
+                        myClock
+                    ) : (
+                        <Skeleton
+                            variant="rounded"
+                            width="2.5rem"
+                            height="1.5rem"
+                        />
+                    )}
+                </Text>
             </Box>
 
             {drawOffer && (

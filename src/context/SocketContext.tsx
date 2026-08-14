@@ -515,7 +515,9 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         };
 
         const onActiveGameFound = (data: IActiveGameFoundResponse) => {
-            if (router.state.location.pathname === "/play") return;
+            const { pathname, search } = router.state.location;
+            const viewingGameId = new URLSearchParams(search).get("game_id");
+            if (pathname === "/play" && viewingGameId === data.game_id) return;
 
             if (deviceHandoffPendingRef.current) return;
             setActiveGame(data);
