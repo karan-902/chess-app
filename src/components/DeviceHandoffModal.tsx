@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router";
 import Modal from "@/components/base/Modal/Modal";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
@@ -8,6 +7,7 @@ import { useReduxSelector, useReduxDispatch } from "@/redux/hooks";
 import { setDeviceHandoff } from "@/redux/socketModals.slice";
 import { disconnectSocket } from "@/lib/socket";
 import sessionService from "@/redux/sessionService";
+import { router } from "@/routes/router";
 import {
     deviceHandoffTitle,
     deviceHandoffBody,
@@ -19,7 +19,6 @@ import {
 export default function DeviceHandoffModal() {
     const { socket } = useSocket();
     const dispatch = useReduxDispatch();
-    const navigate = useNavigate();
     const deviceHandoff = useReduxSelector(
         (state) => state.socketModals.deviceHandoff,
     );
@@ -35,7 +34,7 @@ export default function DeviceHandoffModal() {
         dispatch(setDeviceHandoff(null));
         disconnectSocket();
         await sessionService.deleteSession();
-        navigate("/login", { replace: true });
+        router.navigate("/login", { replace: true });
     };
 
     return (

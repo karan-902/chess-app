@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router";
 import Modal from "@/components/base/Modal/Modal";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
@@ -7,6 +6,7 @@ import { useReduxSelector, useReduxDispatch } from "@/redux/hooks";
 import { setActiveGame } from "@/redux/socketModals.slice";
 import { formateAmount } from "@/utils/formate";
 import { secondsToTimeControl } from "@/types/components";
+import { router } from "@/routes/router";
 import {
     rejoinGameTitle,
     rejoinGameBody,
@@ -18,7 +18,6 @@ import {
 
 export default function RejoinGameModal() {
     const dispatch = useReduxDispatch();
-    const navigate = useNavigate();
     const activeGame = useReduxSelector(
         (state) => state.socketModals.activeGame,
     );
@@ -39,7 +38,7 @@ export default function RejoinGameModal() {
             `&opp_avatar_seed=${encodeURIComponent(activeGame.opponent.avatar_seed ?? "")}` +
             `&stake_amount=${activeGame.stake_amount}`;
         dispatch(setActiveGame(null));
-        navigate(url, { replace: true });
+        router.navigate(url, { replace: true });
     };
 
     return (
