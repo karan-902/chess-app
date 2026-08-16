@@ -334,6 +334,7 @@ function EmailFormScreen({ onBack, onRegistered }: IEmailFormScreenProps) {
                 customClass="auth-submit-btn"
                 disabled={
                     !formik.dirty ||
+                    !formik.isValid ||
                     formik.isSubmitting ||
                     usernameStatus === "taken" ||
                     usernameStatus === "checking"

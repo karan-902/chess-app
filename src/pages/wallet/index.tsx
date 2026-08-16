@@ -189,7 +189,7 @@ function TxItemSkeleton() {
         <Box customClass="wallet-tx-item loading">
             <Box customClass="wallet-tx-row">
                 <Box customClass="wallet-tx-info">
-                    <Skeleton customClass="circle" width={32} height={32} />
+                    <Skeleton variant="circular" width={32} height={32} />
                     <Box customClass="wallet-tx-text">
                         <Skeleton customClass="text" width={110} height={14} />
                         <Skeleton customClass="text" width={60} height={11} />

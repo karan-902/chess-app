@@ -7,6 +7,19 @@ import type {
 } from "@/types/types";
 
 const PAGE_SIZE = 20;
+const RETRY_ATTEMPTS = 2;
+const RETRY_DELAY_MS = 1000;
+
+async function withRetry<T>(fn: () => Promise<T>): Promise<T> {
+    for (let attempt = 0; ; attempt++) {
+        try {
+            return await fn();
+        } catch (err) {
+            if (attempt >= RETRY_ATTEMPTS) throw err;
+            await new Promise((r) => setTimeout(r, RETRY_DELAY_MS));
+        }
+    }
+}
 
 export function useGameHistory(
     type: "own" | "worldwide" = "own",
@@ -27,6 +40,7 @@ export function useGameHistory(
         currentStreak: 0,
     });
     const [statsLoading, setStatsLoading] = useState(true);
+    const [statsError, setStatsError] = useState(false);
 
     const hasMoreRef = useRef(true);
     const pageIdRef = useRef<string | null>(null);
@@ -50,12 +64,11 @@ export function useGameHistory(
                     : "";
 
             try {
-                const res = await callAPIInterface<
-                    undefined,
-                    IGameHistoryResponse
-                >(
-                    "GET",
-                    `/game/history?type=${type}&limit=${PAGE_SIZE}${cursor}`,
+                const res = await withRetry(() =>
+                    callAPIInterface<undefined, IGameHistoryResponse>(
+                        "GET",
+                        `/game/history?type=${type}&limit=${PAGE_SIZE}${cursor}`,
+                    ),
                 );
                 if (activeTypeRef.current !== requestType) return;
                 setItems((prev) =>
@@ -86,9 +99,12 @@ export function useGameHistory(
     useEffect(() => {
         if (!fetchStats) return;
         setStatsLoading(true);
-        callAPIInterface<undefined, IGameHistoryStatsResponse>(
-            "GET",
-            "/game/history/stats",
+        setStatsError(false);
+        withRetry(() =>
+            callAPIInterface<undefined, IGameHistoryStatsResponse>(
+                "GET",
+                "/game/history/stats",
+            ),
         )
             .then((res) =>
                 setStats({
@@ -98,7 +114,7 @@ export function useGameHistory(
                     currentStreak: res.current_streak,
                 }),
             )
-            .catch(() => {})
+            .catch(() => setStatsError(true))
             .finally(() => setStatsLoading(false));
     }, [fetchStats]);
 
@@ -111,5 +127,6 @@ export function useGameHistory(
         loadMore,
         stats,
         statsLoading,
+        statsError,
     };
 }

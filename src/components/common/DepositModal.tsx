@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import classNames from "classnames";
 import { Copy, Check, CheckCircle2, X as XIcon } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
+import Modal from "../base/Modal/Modal";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import Button from "@/components/base/Button/Button";
@@ -51,7 +52,6 @@ import {
     MAX_AMOUNT_DIGITS,
     MIN_DEPOSIT_USD,
 } from "@/constants/messages";
-import Modal from "./base/Modal/Modal";
 
 type Method = "bitcoin" | "lightning";
 type Stage = "amount" | "qr" | "success";
@@ -285,7 +285,6 @@ export default function DepositModal() {
 
             {stage === "qr" && payment && (
                 <Box customClass="deposit-qr-stage">
-
                     <Box customClass="deposit-method-tabs">
                         <Button
                             customClass={classNames(

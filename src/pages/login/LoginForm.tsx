@@ -83,6 +83,7 @@ function EmailScreen({
                     placeholder={authEmailPlaceholder}
                     value={formik.values.email}
                     onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                     isError={formik.touched.email && !!formik.errors.email}
                     helperText={formik.errors.email}
                     customClass="auth-input-underline"
@@ -90,11 +91,7 @@ function EmailScreen({
                 />
             </Box>
 
-            {error && (
-                <Text customClass="auth-error">
-                    {error}
-                </Text>
-            )}
+            {error && <Text customClass="auth-error">{error}</Text>}
 
             <Box customClass="auth-actions">
                 <Button
@@ -194,11 +191,7 @@ function PasswordScreen({
                 </Link>
             </Box>
 
-            {error && (
-                <Text customClass="auth-error">
-                    {error}
-                </Text>
-            )}
+            {error && <Text customClass="auth-error">{error}</Text>}
 
             <Box customClass="auth-actions">
                 <Button

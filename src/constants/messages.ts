@@ -217,7 +217,6 @@ export const roomBalanceLabel = (balance: string) => `Balance ${balance}`;
 export const roomStakeRequired = "Stake amount is required";
 export const roomStakeInsufficientBalance = "Amount exceeds your balance";
 export const roomTimeLabel = "Duration";
-export const roomMinutesPlaceholder = "Enter minutes";
 export const roomMinutesSuffix = "min";
 export const roomRatedLabel = "Rated";
 export const roomCreateButton = "Create room";
@@ -460,6 +459,13 @@ export const matchesSubtabStats = "Stats";
 export const matchesEmptyTitle = "Welcome!";
 export const matchesEmptyDesc =
     "Make your first move — start a staked match from the Play tab and win real money from your opponent.";
+export const matchesLoadError = "Couldn't load your matches right now.";
+
+export const matchesGlobalEmptyTitle = "No games yet";
+export const matchesGlobalEmptyDesc =
+    "Global activity will show up here once matches start rolling in.";
+
+export const matchesStatsLoadError = "Couldn't load your stats right now.";
 
 export const matchesYouLabel = "You";
 export const matchesVsLabel = "VS";

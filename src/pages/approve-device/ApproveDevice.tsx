@@ -1,8 +1,11 @@
 import { useState } from "react";
-import { Link, useSearchParams } from "react-router";
+import { useSearchParams } from "react-router";
+import { CheckCircle2 } from "lucide-react";
+import Box from "@/components/base/Box/Box";
 import Button from "@/components/base/Button/Button";
 import AuthLayout from "@/container/AuthLayout";
 import { callAPIInterface } from "@/utils";
+import { useLogout } from "@/hooks/useLogout";
 import {
     authBackToSignIn,
     deviceApprovePageTitle,
@@ -21,6 +24,12 @@ export default function ApproveDevicePage() {
         token ? "confirm" : "invalid",
     );
     const [submitting, setSubmitting] = useState(false);
+    const logout = useLogout();
+
+    const handleBackToSignIn = (e: React.MouseEvent) => {
+        e.preventDefault();
+        logout();
+    };
 
     const handleApprove = async () => {
         setSubmitting(true);
@@ -42,9 +51,15 @@ export default function ApproveDevicePage() {
             <AuthLayout
                 title={deviceApprovedTitle}
                 subtitle={deviceApprovedDescription}
-                footer={<Link to="/login">{authBackToSignIn}</Link>}
+                footer={
+                    <a href="/login" onClick={handleBackToSignIn}>
+                        {authBackToSignIn}
+                    </a>
+                }
             >
-                {null}
+                <Box customClass="deposit-success-icon">
+                    <CheckCircle2 size={32} strokeWidth={2} />
+                </Box>
             </AuthLayout>
         );
     }
@@ -54,7 +69,11 @@ export default function ApproveDevicePage() {
             <AuthLayout
                 title={deviceApproveInvalidTitle}
                 subtitle={deviceApproveInvalidDescription}
-                footer={<Link to="/login">{authBackToSignIn}</Link>}
+                footer={
+                    <a href="/login" onClick={handleBackToSignIn}>
+                        {authBackToSignIn}
+                    </a>
+                }
             >
                 {null}
             </AuthLayout>

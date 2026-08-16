@@ -17,8 +17,8 @@ import { generateToken } from "@/utils";
 import { formateAmount } from "@/utils/formate";
 import sessionService from "@/redux/sessionService";
 import { router } from "@/routes/router";
-import RejoinGameModal from "@/components/RejoinGameModal";
-import DeviceHandoffModal from "@/components/DeviceHandoffModal";
+import RejoinGameModal from "@/components/common/RejoinGameModal";
+import DeviceHandoffModal from "@/components/common/DeviceHandoffModal";
 
 import {
     activityFeedWin,

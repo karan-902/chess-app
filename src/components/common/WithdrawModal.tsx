@@ -30,7 +30,7 @@ import {
     walletPageWithdrawableLabel,
     depositModalCloseLink,
 } from "@/constants/messages";
-import Modal from "./base/Modal/Modal";
+import Modal from "../base/Modal/Modal";
 
 type Stage = "amount" | "success";
 const MAX_AMOUNT_DIGITS = 4;

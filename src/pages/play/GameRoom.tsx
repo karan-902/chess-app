@@ -25,6 +25,7 @@ import { useWalletBalance } from "@/hooks/useWallet";
 import { useReduxSelector, useReduxDispatch } from "@/redux/hooks";
 import { formateAmount } from "@/utils/formate";
 import { DIFFICULTY_CONFIG } from "@/types/components";
+import { GAME_END_REASON_LABELS } from "@/constants/config";
 import type { TimeControl, GameMode, Difficulty } from "@/types/components";
 import type {
     IopponentMoveResponse,
@@ -65,12 +66,6 @@ import {
     playGameOverRematchButton,
     playGameOverWaitingForOpponent,
     playGameOverAcceptRematchButton,
-    playReasonCheckmate,
-    playReasonResignation,
-    playReasonStalemate,
-    playReasonDraw,
-    playReasonTimeout,
-    playReasonInactivity,
     playReasonGameOver,
     playMoveHistoryReviewing,
     playPromotionTitle,
@@ -83,15 +78,6 @@ import {
 } from "@/constants/messages";
 import Button from "@/components/base/Button/Button";
 import Modal from "@/components/base/Modal/Modal";
-
-const REASON_LABEL: Record<string, string> = {
-    checkmate: playReasonCheckmate,
-    resign: playReasonResignation,
-    draw: playReasonDraw,
-    stalemate: playReasonStalemate,
-    timeout: playReasonTimeout,
-    opponent_disconnected: playReasonInactivity,
-};
 
 const PROMOTION_PIECES = ["q", "r", "b", "n"] as const;
 const PROMOTION_LABEL: Record<(typeof PROMOTION_PIECES)[number], string> = {
@@ -713,7 +699,7 @@ export default function GameRoom() {
             : gameEnded.settlement.loser.usd
         : 0;
     const reasonLabel = gameEnded?.reason
-        ? (REASON_LABEL[gameEnded.reason] ?? playReasonGameOver)
+        ? (GAME_END_REASON_LABELS[gameEnded.reason] ?? playReasonGameOver)
         : "";
 
     return (

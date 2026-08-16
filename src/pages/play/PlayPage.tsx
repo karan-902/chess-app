@@ -40,7 +40,6 @@ import {
     roomStakeRequired,
     roomStakeInsufficientBalance,
     roomTimeLabel,
-    roomMinutesPlaceholder,
     roomMinutesSuffix,
     roomRatedLabel,
     roomCreateButton,
@@ -82,6 +81,76 @@ const CATEGORY_ORDER: GameCategory[] = [
 ];
 
 const ROOM_TABS: Array<"create" | "join"> = ["create", "join"];
+const STAKE_CHIP_AMOUNTS = [25, 50, 100, 250];
+const DURATION_MINUTES = Array.from({ length: 60 }, (_, i) => i + 1);
+const DURATION_WHEEL_ITEM_HEIGHT = 44.8;
+
+function DurationWheel({
+    value,
+    onChange,
+}: {
+    value: number;
+    onChange: (value: number) => void;
+}) {
+    const listRef = useRef<HTMLDivElement>(null);
+    const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
+
+    useEffect(() => {
+        listRef.current?.scrollTo({
+            top: (value - DURATION_MINUTES[0]) * DURATION_WHEEL_ITEM_HEIGHT,
+        });
+    }, []);
+
+    const scrollToValue = (minutes: number) => {
+        listRef.current?.scrollTo({
+            top: (minutes - DURATION_MINUTES[0]) * DURATION_WHEEL_ITEM_HEIGHT,
+            behavior: "smooth",
+        });
+    };
+
+    const handleScroll = () => {
+        clearTimeout(scrollTimeoutRef.current);
+        scrollTimeoutRef.current = setTimeout(() => {
+            const el = listRef.current;
+            if (!el) return;
+            const index = Math.round(el.scrollTop / DURATION_WHEEL_ITEM_HEIGHT);
+            const picked =
+                DURATION_MINUTES[
+                    Math.min(Math.max(index, 0), DURATION_MINUTES.length - 1)
+                ];
+            if (picked !== value) onChange(picked);
+        }, 120);
+    };
+
+    return (
+        <Box customClass="duration-wheel">
+            <Box customClass="duration-wheel-highlight" />
+            <Box
+                customClass="duration-wheel-list"
+                ref={listRef}
+                onScroll={handleScroll}
+            >
+                <Box customClass="duration-wheel-pad" />
+                {DURATION_MINUTES.map((minutes) => (
+                    <Box
+                        key={minutes}
+                        customClass={classNames(
+                            "duration-wheel-item",
+                            minutes === value && "active",
+                        )}
+                        onClick={() => {
+                            onChange(minutes);
+                            scrollToValue(minutes);
+                        }}
+                    >
+                        {minutes} {roomMinutesSuffix}
+                    </Box>
+                ))}
+                <Box customClass="duration-wheel-pad" />
+            </Box>
+        </Box>
+    );
+}
 
 function LivePulse() {
     return (
@@ -191,7 +260,7 @@ export default function PlayPage() {
     const [roomTab, setRoomTab] = useState<"create" | "join">("create");
     const [roomStake, setRoomStake] = useState("");
     const [roomStakeError, setRoomStakeError] = useState("");
-    const [roomMinutes, setRoomMinutes] = useState("");
+    const [roomMinutes, setRoomMinutes] = useState(String(DURATION_MINUTES[4]));
     const [roomRated, setRoomRated] = useState(false);
     const [joinCode, setJoinCode] = useState("");
     const [codeCopied, setCodeCopied] = useState(false);
@@ -640,39 +709,37 @@ export default function PlayPage() {
                                             setRoomStakeError("");
                                         }}
                                     />
+                                    <Box customClass="tx-filter-chip-grid">
+                                        {STAKE_CHIP_AMOUNTS.map((amount) => (
+                                            <Button
+                                                key={amount}
+                                                type="button"
+                                                customClass={classNames(
+                                                    "tx-filter-chip",
+                                                    roomStake ===
+                                                        String(amount) &&
+                                                        "active",
+                                                )}
+                                                onClick={() => {
+                                                    setRoomStake(
+                                                        String(amount),
+                                                    );
+                                                    setRoomStakeError("");
+                                                }}
+                                            >
+                                                ${amount}
+                                            </Button>
+                                        ))}
+                                    </Box>
                                 </Box>
                                 <Box customClass="room-field">
-                                    <Label
-                                        htmlFor="room-minutes"
-                                        customClass="room-field-label"
-                                    >
+                                    <Label customClass="room-field-label">
                                         {roomTimeLabel}
                                     </Label>
-                                    <Input
-                                        id="room-minutes"
-                                        type="text"
-                                        inputMode="numeric"
-                                        slotProps={{
-                                            input: {
-                                                maxLength:
-                                                    MAX_AMOUNT_DIGITS - 2,
-                                            },
-                                        }}
-                                        fullWidth
-                                        placeholder={roomMinutesPlaceholder}
-                                        endIcon={
-                                            <Text component="span">
-                                                {roomMinutesSuffix}
-                                            </Text>
-                                        }
-                                        value={roomMinutes}
-                                        onChange={(e) =>
-                                            setRoomMinutes(
-                                                e.target.value.replace(
-                                                    /\D/g,
-                                                    "",
-                                                ),
-                                            )
+                                    <DurationWheel
+                                        value={Number(roomMinutes)}
+                                        onChange={(minutes) =>
+                                            setRoomMinutes(String(minutes))
                                         }
                                     />
                                 </Box>

@@ -14,6 +14,14 @@ import {
 import type { LucideIcon } from "lucide-react";
 import type { GameCategory } from "@/types/types";
 import type { TransactionType } from "@/types/utils";
+import {
+    playReasonCheckmate,
+    playReasonResignation,
+    playReasonDraw,
+    playReasonStalemate,
+    playReasonTimeout,
+    playReasonInactivity,
+} from "@/constants/messages";
 
 export const CATEGORY_META: Record<
     GameCategory,
@@ -43,6 +51,15 @@ export const TRANSACTION_TYPE_LABELS: Record<TransactionType, string> = {
     SETTLEMENT: "Winnings",
     DRAW_REFUND: "Draw Refunds",
     STAKE_REFUND: "Stake Refunds",
+};
+
+export const GAME_END_REASON_LABELS: Record<string, string> = {
+    checkmate: playReasonCheckmate,
+    resign: playReasonResignation,
+    draw: playReasonDraw,
+    stalemate: playReasonStalemate,
+    timeout: playReasonTimeout,
+    opponent_disconnected: playReasonInactivity,
 };
 
 export const QUEUE_TIMEOUT_SECONDS: Record<GameCategory, number> = {

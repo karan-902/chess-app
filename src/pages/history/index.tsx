@@ -11,7 +11,7 @@ import { useGameHistory } from "@/hooks/useGameHistory";
 import { useReduxSelector } from "@/redux/hooks";
 import { formatMatchDate } from "@/utils";
 import { formateText } from "@/utils/formate";
-import { CATEGORY_META } from "@/constants/config";
+import { CATEGORY_META, GAME_END_REASON_LABELS } from "@/constants/config";
 import type { GameCategory } from "@/types/types";
 import type { IGameHistoryItem } from "@/types/types";
 import {
@@ -20,6 +20,10 @@ import {
     matchesSubtabStats,
     matchesEmptyTitle,
     matchesEmptyDesc,
+    matchesLoadError,
+    matchesGlobalEmptyTitle,
+    matchesGlobalEmptyDesc,
+    matchesStatsLoadError,
     matchesYouLabel,
     matchesVsLabel,
     matchesStatsTitle,
@@ -47,6 +51,8 @@ function MatchRow({
     category,
     endReason,
     amount,
+    stakeAmount,
+    eloChange,
     dateLabel,
     selfName,
 }: {
@@ -55,6 +61,8 @@ function MatchRow({
     category: GameCategory;
     endReason: string;
     amount: number;
+    stakeAmount: number;
+    eloChange: number;
     dateLabel: string;
     selfName?: string;
 }) {
@@ -80,17 +88,30 @@ function MatchRow({
                     </Text>
                     <Box customClass="match-row-meta-row">
                         <Text customClass="match-row-time">
-                            {formateText(endReason)}
+                            {GAME_END_REASON_LABELS[endReason] ??
+                                formateText(endReason)}
+                        </Text>
+                        <Text customClass="match-row-time">
+                            {formateAmount(stakeAmount)} stake
                         </Text>
                         <Text customClass="match-row-time">{dateLabel}</Text>
                     </Box>
                 </Box>
             </Box>
-            <Text component="span" customClass="match-row-amt">
-                {outcome === "win" && `+${formateAmount(amount)}`}
-                {outcome === "loss" && `-${formateAmount(amount)}`}
-                {outcome === "draw" && `${formateAmount(amount)}`}
-            </Text>
+            <Box customClass="match-row-amt-wrap">
+                <Text component="span" customClass="match-row-amt">
+                    {outcome === "win" && `+${formateAmount(amount)}`}
+                    {outcome === "loss" && `-${formateAmount(amount)}`}
+                    {outcome === "draw" &&
+                        `${amount > 0 ? "-" : ""}${formateAmount(amount)}`}
+                </Text>
+                <Text customClass="match-row-time">net</Text>
+                {typeof eloChange === "number" && eloChange !== 0 && (
+                    <Text customClass="match-row-time">
+                        {eloChange > 0 ? `+${eloChange}` : eloChange} elo
+                    </Text>
+                )}
+            </Box>
         </Box>
     );
 }
@@ -156,13 +177,19 @@ function matchRow(
             ? matchesYouLabel
             : item.player?.username
         : undefined;
+    const opponentName =
+        item.opponent?.id === currentUserId
+            ? matchesYouLabel
+            : item.opponent?.username;
     return (
         <MatchRow
             outcome={item.result}
-            opponentName={item.opponent?.username}
+            opponentName={opponentName}
             category={deriveCategory(item.time_seconds)}
             endReason={item.end_reason}
             amount={Math.abs(item.settlement_usd)}
+            stakeAmount={item.stake_amount}
+            eloChange={item.elo_change}
             dateLabel={formatMatchDate(item.played_at)}
             selfName={selfName}
         />
@@ -197,11 +224,19 @@ function matchList(
 export default function MyMatches() {
     const [subtab, setSubtab] = useState<Subtab>("results");
     const currentUserId = useReduxSelector((state) => state.auth.session?.id);
-    const { items, loading, loadingMore, loadMore, stats, statsLoading } =
-        useGameHistory(
-            subtab === "worldwide" ? "worldwide" : "own",
-            subtab === "stats",
-        );
+    const {
+        items,
+        loading,
+        loadingMore,
+        error,
+        loadMore,
+        stats,
+        statsLoading,
+        statsError,
+    } = useGameHistory(
+        subtab === "worldwide" ? "worldwide" : "own",
+        subtab === "stats",
+    );
 
     return (
         <Box customClass="matches-page">
@@ -243,11 +278,13 @@ export default function MyMatches() {
                 ) : items.length === 0 ? (
                     <Box customClass="matches-empty">
                         <Text component="h3" customClass="matches-empty-title">
-                            {matchesEmptyTitle}
+                            {error ? matchesLoadError : matchesEmptyTitle}
                         </Text>
-                        <Text customClass="matches-empty-desc">
-                            {matchesEmptyDesc}
-                        </Text>
+                        {!error && (
+                            <Text customClass="matches-empty-desc">
+                                {matchesEmptyDesc}
+                            </Text>
+                        )}
                     </Box>
                 ) : (
                     matchList(
@@ -264,6 +301,19 @@ export default function MyMatches() {
                     <Card customClass="matches-stat-list">
                         {historySkeletonRows()}
                     </Card>
+                ) : items.length === 0 ? (
+                    <Box customClass="matches-empty">
+                        <Text component="h3" customClass="matches-empty-title">
+                            {error
+                                ? matchesLoadError
+                                : matchesGlobalEmptyTitle}
+                        </Text>
+                        {!error && (
+                            <Text customClass="matches-empty-desc">
+                                {matchesGlobalEmptyDesc}
+                            </Text>
+                        )}
+                    </Box>
                 ) : (
                     matchList(items, true, currentUserId, loadingMore, loadMore)
                 ))}
@@ -281,6 +331,15 @@ export default function MyMatches() {
                     <Card customClass="matches-stat-list">
                         {statsLoading ? (
                             statsSkeletonRows()
+                        ) : statsError ? (
+                            <Box customClass="matches-empty">
+                                <Text
+                                    component="h3"
+                                    customClass="matches-empty-title"
+                                >
+                                    {matchesStatsLoadError}
+                                </Text>
+                            </Box>
                         ) : (
                             <>
                                 <Box customClass="matches-stat-row">
@@ -339,7 +398,7 @@ export default function MyMatches() {
                                         customClass="matches-stat-val"
                                     >
                                         {stats.currentStreak > 0
-                                            ? stats.bestStreak
+                                            ? stats.currentStreak
                                             : matchesStatsFallback}
                                     </Text>
                                 </Box>

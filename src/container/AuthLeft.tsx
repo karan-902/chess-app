@@ -132,7 +132,10 @@ export default function AuthLeft({ variant }: IAuthLeftProps) {
                             >
                                 {q.author}
                             </Text>
-                            <Text component="span" customClass="auth-left-quote-title">
+                            <Text
+                                component="span"
+                                customClass="auth-left-quote-title"
+                            >
                                 {q.title}
                             </Text>
                         </Box>

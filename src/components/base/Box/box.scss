@@ -288,6 +288,65 @@
         justify-content: space-between;
     }
 
+    &.duration-wheel {
+        position: relative;
+        height: 8.4rem;
+        border: 1px solid $appCardBorder;
+        border-radius: 0.75rem;
+    }
+
+    &.duration-wheel-list {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        overflow-y: auto;
+        scroll-snap-type: y mandatory;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
+    &.duration-wheel-pad {
+        height: 2.8rem;
+        flex-shrink: 0;
+    }
+
+    &.duration-wheel-item {
+        height: 2.8rem;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.3rem;
+        scroll-snap-align: center;
+        font-size: $font14;
+        font-family: $fontOutfitMedium;
+        color: $appTextMuted;
+        cursor: pointer;
+        transition:
+            color 0.15s,
+            font-size 0.15s;
+
+        &.active {
+            color: $gold;
+            font-size: $font20;
+            font-family: $fontOutfitExtraBold;
+        }
+    }
+
+    &.duration-wheel-highlight {
+        position: absolute;
+        top: 2.8rem;
+        left: 0;
+        right: 0;
+        height: 2.8rem;
+        border-top: 1px solid $appCardBorder;
+        border-bottom: 1px solid $appCardBorder;
+        pointer-events: none;
+    }
+
     &.leaderboard-page {
         padding: 1.1rem;
     }
@@ -516,6 +575,13 @@
         align-items: center;
         gap: 0.5rem;
         margin-top: 0.15rem;
+    }
+
+    &.match-row-amt-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        flex-shrink: 0;
     }
 
     &.wallet-tx-row {

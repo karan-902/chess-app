@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router";
 import classNames from "classnames";
 import { User as UserIcon } from "lucide-react";
-import AppBar from "./base/AppBar/AppBar";
+import AppBar from "../base/AppBar/AppBar";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import Avatar from "@/components/base/Avatar/Avatar";
@@ -15,7 +15,7 @@ import { useReduxSelector } from "@/redux/hooks";
 import { formateAmount } from "@/utils/formate";
 import { NAV_ITEMS } from "@/constants/config";
 import { profileTitle, appBarLogout, appBarWallet } from "@/constants/messages";
-import IconButton from "./base/IconButton/IconButton";
+import IconButton from "../base/IconButton/IconButton";
 import { getAvatarUrl } from "@/utils/avatar";
 
 export default function Header() {
