@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import classNames from "classnames";
-import { Virtuoso } from "react-virtuoso";
 import { Filter } from "lucide-react";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
@@ -10,6 +9,7 @@ import IconButton from "@/components/base/IconButton/IconButton";
 import Label from "@/components/base/Label/Label";
 import Input from "@/components/base/Input/Input";
 import Skeleton from "@/components/base/Skeleton/Skeleton";
+import VirtualList from "@/components/common/VirtualList";
 import { useWallet } from "@/hooks/useWallet";
 import { useWalletActionModal } from "@/context/WalletActionModalContext";
 import { formateAmount, formateTime } from "@/utils/formate";
@@ -373,8 +373,7 @@ export default function Wallet() {
                 </Box>
             ) : (
                 <Box customClass="wallet-timeline">
-                    <Virtuoso
-                        style={{ height: "100%" }}
+                    <VirtualList<ITransactionResponse>
                         data={transactions}
                         computeItemKey={(_, tx) => tx.id}
                         itemContent={(_, tx) => txRow(tx)}

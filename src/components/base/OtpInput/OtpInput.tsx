@@ -1,4 +1,8 @@
-import { OTPInput, type SlotProps } from "input-otp";
+import {
+    OTPInput,
+    REGEXP_ONLY_DIGITS_AND_CHARS,
+    type SlotProps,
+} from "input-otp";
 import classNames from "classnames";
 import "./otpInput.scss";
 
@@ -8,6 +12,7 @@ interface IOtpInputProps {
     onChange: (value: string) => void;
     onComplete?: (value: string) => void;
     customClass?: string;
+    alphanumeric?: boolean;
 }
 
 function OtpSlot({ char, isActive, hasFakeCaret }: SlotProps) {
@@ -27,6 +32,7 @@ export default function OtpInput({
     onChange,
     onComplete,
     customClass,
+    alphanumeric,
 }: IOtpInputProps) {
     return (
         <OTPInput
@@ -34,6 +40,8 @@ export default function OtpInput({
             value={value}
             onChange={onChange}
             onComplete={onComplete}
+            inputMode={alphanumeric ? "text" : "numeric"}
+            pattern={alphanumeric ? REGEXP_ONLY_DIGITS_AND_CHARS : undefined}
             containerClassName={classNames("common-otp-input", customClass)}
             render={({ slots }) => (
                 <>

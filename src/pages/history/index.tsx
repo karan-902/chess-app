@@ -1,12 +1,12 @@
 import { useState } from "react";
 import classNames from "classnames";
-import { Virtuoso } from "react-virtuoso";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import Badge from "@/components/base/Badge/Badge";
 import Button from "@/components/base/Button/Button";
 import Card from "@/components/base/Card/Card";
 import Skeleton from "@/components/base/Skeleton/Skeleton";
+import VirtualList from "@/components/common/VirtualList";
 import { useGameHistory } from "@/hooks/useGameHistory";
 import { useReduxSelector } from "@/redux/hooks";
 import { formatMatchDate } from "@/utils";
@@ -69,7 +69,7 @@ function MatchRow({
         <Box customClass={classNames("match-row", outcome)}>
             <Box customClass="match-row-info">
                 <Box customClass="match-row-icon">
-                    <CategoryIcon size={15} strokeWidth={2} />
+                    <CategoryIcon className="match-row-svg" strokeWidth={2} />
                 </Box>
                 <Box customClass="match-row-text">
                     <Text customClass="match-row-headline" truncate>
@@ -100,7 +100,6 @@ function MatchRow({
                         {outcome === "draw" &&
                             `${amount > 0 ? "-" : ""}${formateAmount(amount)}`}
                     </Text>
-                    <Text customClass="match-row-net-tag">NET</Text>
                 </Box>
             </Box>
         </Box>
@@ -186,17 +185,22 @@ function matchRow(
     );
 }
 
-function matchList(
-    items: IGameHistoryItem[],
-    showSelf: boolean,
-    currentUserId: string | undefined,
-    loadingMore: boolean,
-    loadMore: () => void,
-) {
+function MatchList({
+    items,
+    showSelf,
+    currentUserId,
+    loadingMore,
+    loadMore,
+}: {
+    items: IGameHistoryItem[];
+    showSelf: boolean;
+    currentUserId: string | undefined;
+    loadingMore: boolean;
+    loadMore: () => void;
+}) {
     return (
         <Card customClass="matches-stat-list match-row-list">
-            <Virtuoso
-                style={{ height: "100%" }}
+            <VirtualList<IGameHistoryItem>
                 data={items}
                 computeItemKey={(_, item) => item.game_id}
                 itemContent={(_, item) =>
@@ -277,13 +281,13 @@ export default function MyMatches() {
                         )}
                     </Box>
                 ) : (
-                    matchList(
-                        items,
-                        false,
-                        currentUserId,
-                        loadingMore,
-                        loadMore,
-                    )
+                    <MatchList
+                        items={items}
+                        showSelf={false}
+                        currentUserId={currentUserId}
+                        loadingMore={loadingMore}
+                        loadMore={loadMore}
+                    />
                 ))}
 
             {subtab === "worldwide" &&
@@ -303,7 +307,13 @@ export default function MyMatches() {
                         )}
                     </Box>
                 ) : (
-                    matchList(items, true, currentUserId, loadingMore, loadMore)
+                    <MatchList
+                        items={items}
+                        showSelf={true}
+                        currentUserId={currentUserId}
+                        loadingMore={loadingMore}
+                        loadMore={loadMore}
+                    />
                 ))}
 
             {subtab === "stats" && (

@@ -147,7 +147,7 @@
     &.stake-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        padding: 20px;
+        // padding: 20px;
         gap: 0.7rem;
     }
 
@@ -155,14 +155,9 @@
         display: flex;
         flex-wrap: wrap;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
+        text-align: left;
         gap: 0.15rem 0.25rem;
-        font-size: clamp(0.625rem, 2vw + 0.4rem, 0.875rem);
-        font-weight: 700;
-        letter-spacing: 0.02em;
-        text-transform: uppercase;
-        font-family: $fontOutfitExtraBold;
-        color: $appTextMuted;
     }
 
     &.matchmaking-searching {
@@ -202,8 +197,8 @@
     &.matches-page {
         display: flex;
         flex-direction: column;
-        height: 100%;
-        padding: 1.1rem;
+        min-height: 100%;
+        padding: 1.1rem 0.7rem;
     }
 
     &.my-matches-segment {
@@ -280,6 +275,57 @@
         display: flex;
         flex-direction: column;
         gap: 0.4rem;
+
+        &.room-stake-field,
+        &.room-duration-field {
+            align-items: center;
+            padding: 1.1rem 1rem;
+            border: 1px solid $appCardBorder;
+            border-radius: 0.85rem;
+            background: $appSurface;
+        }
+
+        &.room-stake-field {
+            gap: 0.25rem;
+        }
+
+        &.room-duration-field {
+            gap: 0.5rem;
+        }
+    }
+
+    &.room-stake-nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    &.room-duration-nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding-bottom: 0.7rem;
+        margin-bottom: 0.2rem;
+        border-bottom: 1px solid $appLine;
+    }
+
+    &.room-duration-nav-spacer {
+        width: 2rem;
+        flex-shrink: 0;
+    }
+
+    &.room-summary-row {
+        display: flex;
+        flex: 1;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+    }
+
+    &.create-room-button-wrap {
+        position: relative;
     }
 
     &.room-field-head {
@@ -290,12 +336,30 @@
 
     &.duration-wheel {
         position: relative;
+        width: 100%;
+        align-self: stretch;
         height: 8.4rem;
+        border-radius: 0.85rem;
+        overflow: hidden;
+    }
+
+    &.duration-wheel-highlight {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 2.8rem;
+        transform: translateY(-50%);
         border: 1px solid $appCardBorder;
-        border-radius: 0.75rem;
+        border-radius: 0.6rem;
+        background: $appSecondary;
+        pointer-events: none;
+        z-index: 0;
     }
 
     &.duration-wheel-list {
+        position: relative;
+        z-index: 1;
         display: flex;
         flex-direction: column;
         height: 100%;
@@ -313,40 +377,6 @@
         flex-shrink: 0;
     }
 
-    &.duration-wheel-item {
-        height: 2.8rem;
-        flex-shrink: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.3rem;
-        scroll-snap-align: center;
-        font-size: $font14;
-        font-family: $fontOutfitMedium;
-        color: $appTextMuted;
-        cursor: pointer;
-        transition:
-            color 0.15s,
-            font-size 0.15s;
-
-        &.active {
-            color: $gold;
-            font-size: $font20;
-            font-family: $fontOutfitExtraBold;
-        }
-    }
-
-    &.duration-wheel-highlight {
-        position: absolute;
-        top: 2.8rem;
-        left: 0;
-        right: 0;
-        height: 2.8rem;
-        border-top: 1px solid $appCardBorder;
-        border-bottom: 1px solid $appCardBorder;
-        pointer-events: none;
-    }
-
     &.leaderboard-page {
         padding: 1.1rem;
     }
@@ -358,7 +388,7 @@
     &.wallet-page {
         display: flex;
         flex-direction: column;
-        height: 100%;
+        min-height: 100%;
         padding: 1.1rem;
     }
 
@@ -376,6 +406,18 @@
         display: flex;
         flex-direction: column;
         min-width: 0;
+    }
+
+    &.profile-meta-row {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        min-width: 0;
+
+        svg {
+            flex-shrink: 0;
+            color: $appTextMuted;
+        }
     }
 
     &.profile-avatar-picker-grid {
@@ -441,6 +483,10 @@
         display: flex;
         flex-wrap: wrap;
         gap: 0.5rem;
+
+        &.room-stake-chips {
+            justify-content: center;
+        }
     }
 
     &.tx-filter-date-row {
@@ -459,9 +505,7 @@
     }
 
     &.wallet-timeline {
-        flex: 1;
-        min-height: 0;
-        overflow: hidden;
+        overflow: visible;
     }
 
     &.wallet-tx-item {
@@ -513,27 +557,15 @@
         align-items: center;
         justify-content: space-between;
         gap: 0.6rem;
-        padding: 0.75rem 0.85rem;
+        padding: 0.95rem 0.9rem;
         margin-bottom: 0.5rem;
         background: $appSurface;
         border: 1px solid $appCardBorder;
-        border-left: 3px solid $appCardBorder;
+        border-left: 1px solid $appCardBorder;
         border-radius: 0.6rem;
 
         &.system {
             background: transparent;
-        }
-
-        &.win {
-            border-left-color: $greenishTeal;
-        }
-
-        &.loss {
-            border-left-color: $paleRed;
-        }
-
-        &.draw {
-            border-left-color: $gold;
         }
 
         &.win .match-row-amt {
@@ -561,18 +593,31 @@
         min-width: 0;
     }
 
+    &.profile-info-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 0.32rem;
+        min-width: 0;
+    }
     &.match-row-icon {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 2rem;
-        height: 2rem;
+        width: 2.5rem;
+        height: 2.5rem;
         flex-shrink: 0;
         border-radius: 0.45rem;
         background: alpha($appText, 0.05);
         border: 1px solid alpha($appText, 0.1);
         color: alpha($appText, 0.5);
-
+        .match-row-svg {
+            width: 14px !important;
+            height: 14px !important;
+            @media screen and (min-width: 400px) {
+                width: 18px !important;
+                height: 18px !important;
+            }
+        }
         .match-row.win & {
             background: alpha($greenishTeal, 0.1);
             border-color: alpha($greenishTeal, 0.25);

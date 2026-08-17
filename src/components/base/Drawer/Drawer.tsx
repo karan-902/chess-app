@@ -2,8 +2,8 @@ import type { ReactNode } from "react";
 import { Drawer as MuiDrawer } from "@mui/material";
 import classNames from "classnames";
 import { X } from "lucide-react";
-import Button from "../Button/Button";
 import "./drawer.scss";
+import IconButton from "../IconButton/IconButton";
 
 interface IDrawerProps {
     open: boolean;
@@ -40,14 +40,14 @@ export default function Drawer({
                 document.querySelector(".app-shell") as HTMLElement
             }
         >
-            <Button
+            <IconButton
                 type="button"
                 customClass="drawer-close-icon"
                 onClick={onClose}
                 aria-label="Close"
             >
                 <X size={18} strokeWidth={2} />
-            </Button>
+            </IconButton>
             {children}
         </MuiDrawer>
     );

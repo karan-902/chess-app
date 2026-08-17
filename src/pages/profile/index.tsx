@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import classNames from "classnames";
-import { Pencil, Check } from "lucide-react";
+import { Pencil, Check, Mail, MapPin } from "lucide-react";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import Card from "@/components/base/Card/Card";
@@ -39,10 +39,7 @@ import {
     profileValidationUsernameMinLength,
     profileUpdateSuccess,
     profileUpdateFailed,
-    profilePersonalInfoLabel,
     profileUsernameLabel,
-    profileEmailLabel,
-    profileCountryLabel,
     profileSaveChangesButton,
     profileAvatarPickerTitle,
     profileAvatarUpdateSuccess,
@@ -345,41 +342,25 @@ export default function Profile() {
                         src={getAvatarUrl(session.avatar_seed)}
                         customClass="lg profile-avatar-ring"
                     />
-                    <Box customClass="profile-id-text">
-                        <Text customClass="profile-id-name" truncate>
-                            {session.username}
-                        </Text>
+                    <Box customClass="profile-info-wrapper">
+                        <Box customClass="profile-id-text">
+                            <Text customClass="profile-id-name" truncate>
+                                {session.username}
+                            </Text>
+                        </Box>
+                        <Box customClass="profile-meta-row">
+                            <Mail size={12} strokeWidth={2} />
+                            <Text customClass="profile-id-handle" truncate>
+                                {session.email}
+                            </Text>
+                        </Box>
+                        <Box customClass="profile-meta-row">
+                            <MapPin size={12} strokeWidth={2} />
+                            <Text customClass="profile-id-handle" truncate>
+                                {session.country}
+                            </Text>
+                        </Box>
                     </Box>
-                </Box>
-            </Card>
-
-            <Text component="h3" customClass="rules-heading">
-                {profilePersonalInfoLabel}
-            </Text>
-            <Card customClass="matches-stat-list">
-                <Box customClass="matches-stat-row">
-                    <Text customClass="matches-stat-title" component="span">
-                        {profileUsernameLabel}
-                    </Text>
-                    <Text component="span" customClass="matches-stat-val">
-                        {session.username}
-                    </Text>
-                </Box>
-                <Box customClass="matches-stat-row">
-                    <Text customClass="matches-stat-title" component="span">
-                        {profileEmailLabel}
-                    </Text>
-                    <Text component="span" customClass="matches-stat-val">
-                        {session.email}
-                    </Text>
-                </Box>
-                <Box customClass="matches-stat-row">
-                    <Text customClass="matches-stat-title" component="span">
-                        {profileCountryLabel}
-                    </Text>
-                    <Text component="span" customClass="matches-stat-val">
-                        {session.country}
-                    </Text>
                 </Box>
             </Card>
 

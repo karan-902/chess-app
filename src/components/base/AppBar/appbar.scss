@@ -46,7 +46,7 @@
         display: flex;
         align-items: center;
         gap: 0.3rem;
-        font-size: 0.78rem;
+        font-size: $font12;
         background: #1f8a5f1a;
         border: 1px solid #1f8a5f4d;
         padding: 0.3rem 0.65rem;
@@ -55,7 +55,7 @@
 
     .appbar-balance-label {
         font-family: $fontOutfitExtraBold;
-        font-size: $font14;
+        font-size: $font16;
         color: $appText;
     }
 }

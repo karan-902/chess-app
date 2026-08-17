@@ -146,7 +146,27 @@
         font-family: $fontOutfitExtraBold;
         color: $appTextMuted;
     }
+    &.duration-wheel-item {
+        height: 2.8rem;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.3rem;
+        scroll-snap-align: center;
+        font-size: $font22 !important;
+        font-family: $fontOutfitMedium;
+        color: $appTextMuted;
+        cursor: pointer;
+        transition:
+            color 0.25s ease,
+            font-size 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 
+        &.active {
+            color: $gold;
+            font-family: $fontOutfitExtraBold;
+        }
+    }
     &.searching-detail-value {
         display: block;
         font-size: $font16;
@@ -169,35 +189,25 @@
 
     &.pool-meta-label,
     &.pool-meta-time {
-        font-size: 0.75rem;
+        font-size: $font14;
         font-family: $fontOutfitMedium;
-    }
-
-    &.pool-meta-time {
-        text-transform: none;
-    }
-
-    &.pool-win-label {
-        display: block;
-        font-size: $font12;
-        color: $appText;
+        color: $appTextMuted;
     }
 
     &.pool-win-amt {
         display: block;
-        font-family: $fontMono;
+        font-family: $fontOutfitExtraBold;
         font-size: $font24;
-        font-weight: 700;
         color: $gold;
-        @media screen and (max-width: 768px) {
-            font-size: $font16;
-        }
+        margin-top: 0.1rem;
     }
 
     &.pool-entry-fee {
         display: block;
-        font-size: $font12;
+        font-size: $font14;
+        font-weight: 600;
         color: $appText;
+        margin-top: 0.25rem;
     }
 
     &.room-balance {
@@ -215,13 +225,38 @@
     }
 
     &.stake-card-tc {
-        font-size: $font12;
+        font-size: $font14;
         font-weight: 700;
         letter-spacing: 0.06em;
         text-transform: uppercase;
         font-family: $fontOutfitMedium;
         color: $appTextMuted;
         margin-bottom: 0.35rem;
+    }
+
+    &.room-summary-text {
+        font-size: $font15;
+        font-family: $fontOutfitSemiBold;
+        color: $appText;
+    }
+
+    &.create-room-fee-chip {
+        position: absolute;
+        top: -0.6rem;
+        right: 0.6rem;
+        font-size: $font12;
+        font-family: $fontOutfitMedium;
+        color: $gold;
+        background: alpha($gold, 0.12);
+        border: 1px solid alpha($gold, 0.3);
+        border-radius: 999px;
+        padding: 0.15rem 0.55rem;
+    }
+
+    &.create-room-button-main {
+        display: block;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
     }
 
     &.stake-card-fee {
@@ -297,10 +332,16 @@
         font-family: $fontOutfitSemiBold;
         line-height: 1.4;
         color: $appText;
+        @media screen and (min-width: 400px) {
+            font-size: $font16;
+        }
     }
 
     &.match-row-time {
         font-size: $font12;
+        @media screen and (min-width: 400px) {
+            font-size: $font13;
+        }
         font-family: $fontOutfitMedium;
         color: $appTextMuted;
         margin-top: 0.15rem;
@@ -310,16 +351,6 @@
         font-family: $fontOutfitExtraBold;
         font-size: $font16;
         flex-shrink: 0;
-    }
-
-    &.match-row-net-tag {
-        font-size: 0.6rem;
-        font-family: $fontOutfitSemiBold;
-        letter-spacing: 0.06em;
-        color: $appTextMuted;
-        border: 1px solid $appCardBorder;
-        border-radius: $radiusSm;
-        padding: 0.05rem 0.3rem;
     }
 
     &.matches-empty-title {
@@ -426,8 +457,8 @@
 
     &.profile-id-name {
         display: block;
-        font-family: $fontDisplay;
-        font-size: $font16;
+        font-family: $fontOutfitExtraBold;
+        font-size: $font18;
         color: $appText;
     }
 
@@ -436,7 +467,6 @@
         font-size: $font12;
         font-family: $fontOutfitExtraBold;
         color: $appTextMuted;
-        margin-top: 0.1rem;
     }
 
     &.edit-profile-title {
@@ -471,7 +501,7 @@
 
     &.wallet-tx-amt {
         font-family: $fontOutfitExtraBold;
-        font-size: $font15;
+        font-size: $font16 !important;
         flex-shrink: 0;
 
         &.pos {

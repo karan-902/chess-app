@@ -143,6 +143,8 @@ export default function WithdrawModal() {
                                 input: { maxLength: MAX_AMOUNT_DIGITS },
                             }}
                             fullWidth
+                            placeholder="0.00"
+                            customClass="amount-input-hero"
                             value={amount}
                             onChange={handleAmountChange}
                             disabled={submitting || !hasWithdrawable}

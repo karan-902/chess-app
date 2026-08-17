@@ -53,6 +53,8 @@ export const TRANSACTION_TYPE_LABELS: Record<TransactionType, string> = {
     STAKE_REFUND: "Stake Refunds",
 };
 
+export const PLATFORM_PAYOUT_MULTIPLIER = 0.88;
+
 export const GAME_END_REASON_LABELS: Record<string, string> = {
     checkmate: playReasonCheckmate,
     resign: playReasonResignation,

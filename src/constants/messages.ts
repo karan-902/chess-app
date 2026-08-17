@@ -18,7 +18,7 @@ export const rejoinGameRejoinButton = "Rejoin Now";
 export const rejoinGameExitButton = "Exit";
 export const rejoinGameForfeitTitle = "Forfeit the game?";
 export const rejoinGameForfeitBody = (stakeAmount: string) =>
-    `Leaving now counts as a resignation — you'll forfeit ${stakeAmount}.`;
+    `Leaving now counts as a resign — you'll forfeit ${stakeAmount}.`;
 export const rejoinGameForfeitKeepPlayingButton = "Keep Playing";
 export const rejoinGameForfeitConfirmButton = "Forfeit & Exit";
 export const rematchOfferTitle = "Rematch?";
@@ -209,28 +209,29 @@ export const playSheetPracticeDesc = "Free to play";
 export const playSheetFriendLabel = "FRIENDLY";
 export const playSheetFriendTitle = "Challenge a Friend";
 export const playSheetFriendDesc = "Custom stake";
-export const roomCreateTabLabel = "Create";
-export const roomJoinTabLabel = "Join";
+export const roomCreateTabLabel = "Create Room";
+export const roomJoinTabLabel = "Join Room";
 export const roomStakeLabel = "Stake amount";
-export const roomStakeAmountPlaceholder = "Enter amount";
 export const roomBalanceLabel = (balance: string) => `Balance ${balance}`;
 export const roomStakeRequired = "Stake amount is required";
 export const roomStakeInsufficientBalance = "Insufficient Balance";
 export const roomTimeLabel = "Duration";
 export const roomMinutesSuffix = "min";
+export const roomPlatformFeeLabel = (percent: number) =>
+    `${percent}% platform fee`;
 export const roomRatedLabel = "Rated";
-export const roomCreateButton = "Create room";
+export const roomCreateButton = "Create";
 export const roomJoinCodeLabel = "Room code";
 export const roomJoinCodePlaceholder = "9RLGSQ";
 export const roomPasteLabel = "Paste";
-export const roomJoinButton = "Join room";
+export const roomJoinButton = "Join";
 export const roomWaitingTitle = "Waiting for opponent";
 export const roomWaitingDesc = "Share this code with your friend";
 export const roomCopyButton = "Copy code";
 export const roomCopiedButton = "Copied!";
 export const roomCancelButton = "Cancel";
 export const playReasonInactivity = "Inactivity";
-export const playReasonResignation = "Resignation";
+export const playReasonResignation = "Resign";
 export const playReasonAgreement = "Agreement";
 export const playReasonTimeout = "Timeout";
 export const playReasonCheckmate = "Checkmate";
@@ -250,7 +251,7 @@ export const playDrawOfferBannerAcceptButton = "Accept";
 export const playDrawOfferBannerDeclineButton = "Decline";
 export const playQuitDialogTitle = "Quit the game?";
 export const playQuitDialogPvpDescription = (stakeAmount: number) =>
-    `Leaving now counts as a resignation — you'll forfeit $${stakeAmount.toFixed(2)}.`;
+    `Leaving now counts as a resign — you'll forfeit $${stakeAmount.toFixed(2)}.`;
 export const playQuitDialogPvcDescription =
     "Your progress in this game will be lost.";
 export const playQuitDialogStayButton = "Stay";
@@ -499,7 +500,7 @@ export const rulesStakingDesc =
     "Every match is winner-take-most. Both players stake the same amount when the game starts; the winner takes the pot minus a 12% platform fee.";
 export const rulesPayoutsTitle = "Payouts";
 export const rulesPayoutsList = [
-    "Checkmate, resignation, or win on time all pay the same amount.",
+    "Checkmate, resign, or win on time all pay the same amount.",
     "Draws split the pot evenly, minus the fee.",
     "Going inactive past your pool's timeout forfeits the game to your opponent.",
 ];

@@ -3,6 +3,7 @@ import { Button as MuiButton, CircularProgress } from "@mui/material";
 import type { ButtonProps } from "@mui/material";
 import classNames from "classnames";
 import "./button.scss";
+import Text from "../Text/Text";
 
 interface IButtonProps extends ButtonProps {
     customClass?: string;
@@ -35,7 +36,7 @@ const Button = forwardRef<HTMLButtonElement, IButtonProps>(function Button(
                     <CircularProgress size={15} color="inherit" />
                 )
             ) : (
-                children
+                <Text customClass="button-text">{children}</Text>
             )}
         </MuiButton>
     );

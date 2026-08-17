@@ -237,6 +237,8 @@ export default function DepositModal() {
                                 input: { maxLength: MAX_AMOUNT_DIGITS },
                             }}
                             fullWidth
+                            placeholder="0.00"
+                            customClass="amount-input-hero"
                             value={amount}
                             onChange={(e) =>
                                 setAmount(

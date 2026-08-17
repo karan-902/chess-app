@@ -11,6 +11,7 @@ import Switch from "@/components/base/Switch/Switch";
 import Input from "@/components/base/Input/Input";
 import Label from "@/components/base/Label/Label";
 import OtpInput from "@/components/base/OtpInput/OtpInput";
+import { formateText } from "@/utils/formate";
 import { Copy, Check, Clipboard } from "lucide-react";
 import BoardPreview from "@/components/board/BoardPreview";
 import { ShatranjLogo } from "@/components/constants";
@@ -36,7 +37,6 @@ import {
     roomCreateTabLabel,
     roomJoinTabLabel,
     roomStakeLabel,
-    roomStakeAmountPlaceholder,
     roomStakeRequired,
     roomStakeInsufficientBalance,
     roomTimeLabel,
@@ -81,8 +81,8 @@ const CATEGORY_ORDER: GameCategory[] = [
 ];
 
 const ROOM_TABS: Array<"create" | "join"> = ["create", "join"];
-const STAKE_CHIP_AMOUNTS = [25, 50, 100, 250];
-const DURATION_MINUTES = Array.from({ length: 60 }, (_, i) => i + 1);
+const STAKE_CHIP_AMOUNTS = [10, 25, 50, 100, 500];
+const DURATION_MINUTES = Array.from({ length: 30 }, (_, i) => i + 1);
 const DURATION_WHEEL_ITEM_HEIGHT = 44.8;
 
 function DurationWheel({
@@ -132,7 +132,7 @@ function DurationWheel({
             >
                 <Box customClass="duration-wheel-pad" />
                 {DURATION_MINUTES.map((minutes) => (
-                    <Box
+                    <Text
                         key={minutes}
                         customClass={classNames(
                             "duration-wheel-item",
@@ -144,7 +144,7 @@ function DurationWheel({
                         }}
                     >
                         {minutes} {roomMinutesSuffix}
-                    </Box>
+                    </Text>
                 ))}
                 <Box customClass="duration-wheel-pad" />
             </Box>
@@ -325,7 +325,7 @@ export default function PlayPage() {
         setRoomTab("create");
         setRoomStake("");
         setRoomStakeError("");
-        setRoomMinutes("");
+        setRoomMinutes(String(DURATION_MINUTES[4]));
         setRoomRated(false);
         setJoinCode("");
         resetRoomStatus();
@@ -471,10 +471,11 @@ export default function PlayPage() {
                                                 customClass="pool-meta-label"
                                                 component="span"
                                             >
-                                                {
+                                                {formateText(
                                                     CATEGORY_META[pool.category]
-                                                        ?.label
-                                                }
+                                                        ?.label ?? "",
+                                                )}{" "}
+                                                &middot;{" "}
                                             </Text>
                                             <Text
                                                 component="span"
@@ -484,7 +485,7 @@ export default function PlayPage() {
                                             </Text>
                                             {pool.active > 0 && <LivePulse />}
                                         </Box>
-                                        <Text customClass="pool-win-label">
+                                        <Text customClass="stake-card-tc">
                                             {matchmakingPoolCardWinLabel}
                                         </Text>
                                         <Text customClass="pool-win-amt">
@@ -675,15 +676,13 @@ export default function PlayPage() {
                         />
                         {roomTab === "create" ? (
                             <>
-                                <Box customClass="room-field">
-                                    <Box customClass="room-field-head">
-                                        <Label
-                                            htmlFor="room-stake"
-                                            customClass="room-field-label"
-                                        >
-                                            {roomStakeLabel}
-                                        </Label>
-                                    </Box>
+                                <Box customClass="room-field room-stake-field">
+                                    <Label
+                                        htmlFor="room-stake"
+                                        customClass="room-field-label room-stake-label"
+                                    >
+                                        {roomStakeLabel}
+                                    </Label>
                                     <Input
                                         id="room-stake"
                                         type="text"
@@ -694,22 +693,25 @@ export default function PlayPage() {
                                             },
                                         }}
                                         fullWidth
-                                        placeholder={roomStakeAmountPlaceholder}
-                                        startIcon={<span>$</span>}
+                                        placeholder="0.00"
+                                        customClass="amount-input-hero"
                                         value={roomStake}
                                         isError={!!roomStakeError}
                                         helperText={roomStakeError}
                                         onChange={(e) => {
                                             setRoomStake(
-                                                e.target.value.replace(
-                                                    /\D/g,
-                                                    "",
-                                                ),
+                                                e.target.value
+                                                    .replace(/\D/g, "")
+                                                    .replace(/^0+/, "")
+                                                    .slice(
+                                                        0,
+                                                        MAX_AMOUNT_DIGITS,
+                                                    ),
                                             );
                                             setRoomStakeError("");
                                         }}
                                     />
-                                    <Box customClass="tx-filter-chip-grid">
+                                    <Box customClass="tx-filter-chip-grid room-stake-chips">
                                         {STAKE_CHIP_AMOUNTS.map((amount) => (
                                             <Button
                                                 key={amount}
@@ -732,8 +734,9 @@ export default function PlayPage() {
                                         ))}
                                     </Box>
                                 </Box>
-                                <Box customClass="room-field">
-                                    <Label customClass="room-field-label">
+
+                                <Box customClass="room-field room-duration-field">
+                                    <Label customClass="room-field-label room-stake-label">
                                         {roomTimeLabel}
                                     </Label>
                                     <DurationWheel
@@ -743,6 +746,7 @@ export default function PlayPage() {
                                         }
                                     />
                                 </Box>
+
                                 <Box
                                     sx={{ display: "none !important" }}
                                     customClass="matches-stat-row"
@@ -757,18 +761,23 @@ export default function PlayPage() {
                                         }
                                     />
                                 </Box>
-                                <Button
-                                    type="button"
-                                    variant="contained"
-                                    fullWidth
-                                    customClass="stake-card-go"
-                                    disabled={!roomStake || !roomMinutes}
-                                    isLoading={roomStatus === "creating"}
-                                    loaderOnDark
-                                    onClick={handleCreateRoomSubmit}
-                                >
-                                    {roomCreateButton}
-                                </Button>
+                                <Box customClass="create-room-button-wrap">
+                                    <Button
+                                        type="button"
+                                        variant="contained"
+                                        fullWidth
+                                        customClass="create-room-button stake-card-go"
+                                        disabled={
+                                            !(Number(roomStake) > 0) ||
+                                            !(Number(roomMinutes) > 0)
+                                        }
+                                        isLoading={roomStatus === "creating"}
+                                        loaderOnDark
+                                        onClick={handleCreateRoomSubmit}
+                                    >
+                                        {roomCreateButton}
+                                    </Button>
+                                </Box>
                             </>
                         ) : (
                             <>
@@ -788,6 +797,7 @@ export default function PlayPage() {
                                     <OtpInput
                                         length={6}
                                         value={joinCode}
+                                        alphanumeric
                                         onChange={(v) =>
                                             setJoinCode(
                                                 v
@@ -801,7 +811,7 @@ export default function PlayPage() {
                                     type="button"
                                     variant="contained"
                                     fullWidth
-                                    customClass="stake-card-go"
+                                    customClass="create-room-button stake-card-go"
                                     disabled={joinCode.length !== 6}
                                     isLoading={roomStatus === "joining"}
                                     loaderOnDark

@@ -1,7 +1,17 @@
 @use "../../../styles/default.scss" as *;
 
 .label {
+    font-family: $fontOutfitSemiBold !important;
+    [data-theme="light"] & {
+        color: #000 !important;
+    }
+
     &.room-field-label {
         text-align: left !important;
+
+        &.room-stake-label {
+            text-align: center !important;
+            width: 100%;
+        }
     }
 }

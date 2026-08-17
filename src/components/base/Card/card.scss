@@ -209,26 +209,23 @@
         padding: 0.9rem 0.6rem;
         text-align: center;
         width: 100%;
-        height: 9.5rem;
-        align-self: start;
         overflow: visible;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
         gap: 0.15rem;
 
-        @media (min-width: 768px) {
-            height: 10rem;
-        }
-
-        @media (min-width: 1024px) {
-            height: 10rem;
-        }
-
         &.selected {
             border-color: $gold;
             background: alpha($gold, 0.08);
             box-shadow: 0 0 0 1px alpha($gold, 0.25);
+        }
+
+        &.insufficient {
+            .pool-win-amt,
+            .pool-entry-fee {
+                opacity: 0.6;
+            }
         }
 
         .stake-card-go {
@@ -260,6 +257,10 @@
         &.match-row-list {
             background: transparent;
             border: none;
+            overflow: visible;
+            box-shadow: none !important;
+            flex: initial;
+            min-height: auto;
         }
     }
 

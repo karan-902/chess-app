@@ -18,6 +18,10 @@
         color 0.15s ease,
         transform 0.1s ease;
 
+    .button-text {
+        font-family: $fontOutfitSemiBold;
+        font-size: 14px;
+    }
     &.Mui-disabled {
         opacity: 0.45;
         cursor: not-allowed;
@@ -83,7 +87,6 @@
     &.play-cta,
     &.stake-card-go {
         background: $gold !important;
-        background-color: $gold !important;
         border: 1px solid $appBtnBorder;
         box-shadow: none;
         border-radius: 0.6rem;
@@ -97,13 +100,31 @@
     &.play-cta {
         width: 50% !important;
         height: 2.85rem;
+        .button-text {
+            font-size: $font18;
+        }
     }
 
     &.stake-card-go {
-        height: 1.9rem;
-        font-size: $font12;
+        height: 2.2rem;
+        .button-text {
+            font-size: $font14;
+        }
         color: $appSurface !important;
+
+        .stake-card.insufficient & {
+            background: transparent !important;
+            border-color: $gold;
+            color: $gold !important;
+        }
     }
+
+    &.create-room-button {
+        .button-text {
+            font-size: $font16 !important;
+        }
+    }
+
 
     &.searching-cancel-btn {
         height: 2.1rem;
@@ -174,32 +195,17 @@
         }
     }
 
-    &.drawer-close-icon {
-        position: absolute;
-        top: 0.875rem;
-        left: 0.875rem;
-        z-index: 1;
-        width: 1.875rem;
-        height: 1.875rem;
-        min-width: 0;
-        padding: 0;
-        border-radius: 50%;
-        background: rgba(128, 128, 128, 0.18);
-        color: $appText;
-
-        &:hover:not(.Mui-disabled) {
-            background: rgba(128, 128, 128, 0.3);
-        }
-    }
     &.my-matches-segment-btn {
         flex: 1;
         text-align: center;
         padding: 0.5rem 0.4rem;
         border-radius: 0.5rem;
-        font-size: $font14;
+
         font-family: $fontOutfitSemiBold;
         color: $appTextMuted;
-
+        .button-text {
+            font-size: $font14;
+        }
         cursor: default;
 
         &.active {

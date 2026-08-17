@@ -1,6 +1,41 @@
 @use "../../../styles/default.scss" as *;
 
 .icon-button {
+    &.room-step-arrow {
+        width: 2rem;
+        height: 2rem;
+        display: flex;
+        align-items: center;
+        min-width: 0;
+        padding: 0;
+        border-radius: 50%;
+        background: alpha($gold, 0.1);
+        border: 1px solid alpha($gold, 0.3);
+        color: $gold;
+
+        &:hover:not(.Mui-disabled) {
+            background: alpha($gold, 0.18);
+            opacity: 1;
+        }
+    }
+
+    &.drawer-close-icon {
+        position: absolute;
+        top: 0.875rem;
+        left: 0.875rem;
+        z-index: 1;
+        width: 1.875rem;
+        height: 1.875rem;
+        min-width: 0;
+        padding: 0;
+        border-radius: 50%;
+        background: rgba(128, 128, 128, 0.18);
+        color: $appText;
+
+        &:hover:not(.Mui-disabled) {
+            background: rgba(128, 128, 128, 0.3);
+        }
+    }
     &.appbar-deposit-btn {
         display: flex;
         align-items: center;
