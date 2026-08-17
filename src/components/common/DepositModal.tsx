@@ -225,8 +225,11 @@ export default function DepositModal() {
                         {depositModalTitle}
                     </Text>
 
-                    <Box customClass="auth-field">
-                        <Label htmlFor="deposit-amount">
+                    <Box customClass="auth-field hero-input-wrapper">
+                        <Label
+                            customClass="deposit-label"
+                            htmlFor="deposit-amount"
+                        >
                             {depositModalAmountLabel}
                         </Label>
                         <Input

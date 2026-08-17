@@ -226,7 +226,7 @@ function EditProfileDrawer({
 
     return (
         <Modal open={open} onClose={handleClose}>
-            <Text customClass="edit-profile-title">{profileEditButton}</Text>
+            <Text customClass="sheet-title">{profileEditButton}</Text>
 
             <Text customClass="edit-profile-section-label">
                 {profileAvatarPickerTitle}

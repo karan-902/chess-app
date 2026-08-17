@@ -15,7 +15,6 @@ import type { WithdrawMethod } from "@/types/utils";
 import {
     withdrawModalTitle,
     withdrawModalWithdrawableCaveat,
-    withdrawModalAmountLabel,
     withdrawModalMethodLabel,
     withdrawModalDestinationLabel,
     withdrawModalDestinationPlaceholder,
@@ -29,6 +28,7 @@ import {
     withdrawModalSuccessDesc,
     walletPageWithdrawableLabel,
     depositModalCloseLink,
+    depositModalAmountLabel,
 } from "@/constants/messages";
 import Modal from "../base/Modal/Modal";
 
@@ -131,9 +131,9 @@ export default function WithdrawModal() {
                         </Text>
                     </Box>
 
-                    <Box customClass="auth-field">
+                    <Box customClass="auth-field hero-input-wrapper">
                         <Label htmlFor="withdraw-amount">
-                            {withdrawModalAmountLabel}
+                            {depositModalAmountLabel}
                         </Label>
                         <Input
                             id="withdraw-amount"

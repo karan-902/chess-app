@@ -663,6 +663,9 @@ export default function PlayPage() {
                     </Box>
                 ) : (
                     <Box customClass="matchmaking-searching room-options">
+                        <Text customClass="sheet-title">
+                            {playSheetFriendTitle}
+                        </Text>
                         <ChipSelect
                             options={ROOM_TABS}
                             value={roomTab}
