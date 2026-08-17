@@ -514,10 +514,26 @@
         justify-content: space-between;
         gap: 0.6rem;
         padding: 0.75rem 0.85rem;
-        border-bottom: 1px solid $appLine;
+        margin-bottom: 0.5rem;
+        background: $appSurface;
+        border: 1px solid $appCardBorder;
+        border-left: 3px solid $appCardBorder;
+        border-radius: 0.6rem;
 
         &.system {
             background: transparent;
+        }
+
+        &.win {
+            border-left-color: $greenishTeal;
+        }
+
+        &.loss {
+            border-left-color: $paleRed;
+        }
+
+        &.draw {
+            border-left-color: $gold;
         }
 
         &.win .match-row-amt {
@@ -552,7 +568,7 @@
         width: 2rem;
         height: 2rem;
         flex-shrink: 0;
-        border-radius: 50%;
+        border-radius: 0.45rem;
         background: alpha($appText, 0.05);
         border: 1px solid alpha($appText, 0.1);
         color: alpha($appText, 0.5);
@@ -570,11 +586,10 @@
         }
     }
 
-    &.match-row-meta-row {
+    &.match-row-amt-row {
         display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        margin-top: 0.15rem;
+        align-items: baseline;
+        gap: 0.3rem;
     }
 
     &.match-row-amt-wrap {

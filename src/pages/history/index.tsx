@@ -52,7 +52,6 @@ function MatchRow({
     endReason,
     amount,
     stakeAmount,
-    eloChange,
     dateLabel,
     selfName,
 }: {
@@ -62,7 +61,6 @@ function MatchRow({
     endReason: string;
     amount: number;
     stakeAmount: number;
-    eloChange: number;
     dateLabel: string;
     selfName?: string;
 }) {
@@ -86,31 +84,24 @@ function MatchRow({
                         )}
                         {opponentName}
                     </Text>
-                    <Box customClass="match-row-meta-row">
-                        <Text customClass="match-row-time">
-                            {GAME_END_REASON_LABELS[endReason] ??
-                                formateText(endReason)}
-                        </Text>
-                        <Text customClass="match-row-time">
-                            {formateAmount(stakeAmount)} stake
-                        </Text>
-                        <Text customClass="match-row-time">{dateLabel}</Text>
-                    </Box>
+                    <Text customClass="match-row-time">
+                        {GAME_END_REASON_LABELS[endReason] ??
+                            formateText(endReason)}{" "}
+                        &middot; {formateAmount(stakeAmount)} stake &middot;{" "}
+                        {dateLabel}
+                    </Text>
                 </Box>
             </Box>
             <Box customClass="match-row-amt-wrap">
-                <Text component="span" customClass="match-row-amt">
-                    {outcome === "win" && `+${formateAmount(amount)}`}
-                    {outcome === "loss" && `-${formateAmount(amount)}`}
-                    {outcome === "draw" &&
-                        `${amount > 0 ? "-" : ""}${formateAmount(amount)}`}
-                </Text>
-                <Text customClass="match-row-time">net</Text>
-                {typeof eloChange === "number" && eloChange !== 0 && (
-                    <Text customClass="match-row-time">
-                        {eloChange > 0 ? `+${eloChange}` : eloChange} elo
+                <Box customClass="match-row-amt-row">
+                    <Text component="span" customClass="match-row-amt">
+                        {outcome === "win" && `+${formateAmount(amount)}`}
+                        {outcome === "loss" && `-${formateAmount(amount)}`}
+                        {outcome === "draw" &&
+                            `${amount > 0 ? "-" : ""}${formateAmount(amount)}`}
                     </Text>
-                )}
+                    <Text customClass="match-row-net-tag">NET</Text>
+                </Box>
             </Box>
         </Box>
     );
@@ -189,7 +180,6 @@ function matchRow(
             endReason={item.end_reason}
             amount={Math.abs(item.settlement_usd)}
             stakeAmount={item.stake_amount}
-            eloChange={item.elo_change}
             dateLabel={formatMatchDate(item.played_at)}
             selfName={selfName}
         />
@@ -204,7 +194,7 @@ function matchList(
     loadMore: () => void,
 ) {
     return (
-        <Card customClass="matches-stat-list">
+        <Card customClass="matches-stat-list match-row-list">
             <Virtuoso
                 style={{ height: "100%" }}
                 data={items}
@@ -272,7 +262,7 @@ export default function MyMatches() {
 
             {subtab === "results" &&
                 (loading ? (
-                    <Card customClass="matches-stat-list">
+                    <Card customClass="matches-stat-list match-row-list">
                         {historySkeletonRows()}
                     </Card>
                 ) : items.length === 0 ? (
@@ -298,15 +288,13 @@ export default function MyMatches() {
 
             {subtab === "worldwide" &&
                 (loading ? (
-                    <Card customClass="matches-stat-list">
+                    <Card customClass="matches-stat-list match-row-list">
                         {historySkeletonRows()}
                     </Card>
                 ) : items.length === 0 ? (
                     <Box customClass="matches-empty">
                         <Text component="h3" customClass="matches-empty-title">
-                            {error
-                                ? matchesLoadError
-                                : matchesGlobalEmptyTitle}
+                            {error ? matchesLoadError : matchesGlobalEmptyTitle}
                         </Text>
                         {!error && (
                             <Text customClass="matches-empty-desc">

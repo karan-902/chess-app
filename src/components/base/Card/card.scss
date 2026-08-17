@@ -256,6 +256,11 @@
         flex: 1;
         min-height: 0;
         border-radius: 0.85rem;
+
+        &.match-row-list {
+            background: transparent;
+            border: none;
+        }
     }
 
     &.profile-id-card {

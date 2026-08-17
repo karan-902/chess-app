@@ -215,7 +215,7 @@ export const roomStakeLabel = "Stake amount";
 export const roomStakeAmountPlaceholder = "Enter amount";
 export const roomBalanceLabel = (balance: string) => `Balance ${balance}`;
 export const roomStakeRequired = "Stake amount is required";
-export const roomStakeInsufficientBalance = "Amount exceeds your balance";
+export const roomStakeInsufficientBalance = "Insufficient Balance";
 export const roomTimeLabel = "Duration";
 export const roomMinutesSuffix = "min";
 export const roomRatedLabel = "Rated";
@@ -328,7 +328,7 @@ export const walletDepositCheckoutHint = "Opening Speed checkout…";
 export const walletDepositInvalidAmount = "Enter an amount to deposit.";
 export const walletWithdrawInvalidAmount = "Enter an amount to withdraw.";
 export const walletWithdrawExceedsBalance =
-    "Amount exceeds your withdrawable balance.";
+    "Insufficient withdrawable balance.";
 export const walletWithdrawInvalidDestination = "Enter a destination address.";
 export const walletWithdrawButtonLoading = "Processing…";
 export const walletWithdrawSuccess = "Withdrawal requested.";
@@ -438,8 +438,7 @@ export const withdrawModalMethodOptions: {
 ];
 export const withdrawModalSubmitButton = "Request withdrawal";
 export const withdrawModalInvalidAmount = "Enter a valid amount";
-export const withdrawModalExceedsBalance =
-    "Amount exceeds your withdrawable balance";
+export const withdrawModalExceedsBalance = "Insufficient withdrawable balance";
 export const withdrawModalInvalidDestination = "Enter a destination address";
 export const withdrawModalFailed = "Withdrawal failed. Please try again.";
 export const withdrawModalSuccessTitle = "Withdrawal requested";

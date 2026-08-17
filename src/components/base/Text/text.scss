@@ -303,12 +303,23 @@
         font-size: $font12;
         font-family: $fontOutfitMedium;
         color: $appTextMuted;
+        margin-top: 0.15rem;
     }
 
     &.match-row-amt {
         font-family: $fontOutfitExtraBold;
         font-size: $font16;
         flex-shrink: 0;
+    }
+
+    &.match-row-net-tag {
+        font-size: 0.6rem;
+        font-family: $fontOutfitSemiBold;
+        letter-spacing: 0.06em;
+        color: $appTextMuted;
+        border: 1px solid $appCardBorder;
+        border-radius: $radiusSm;
+        padding: 0.05rem 0.3rem;
     }
 
     &.matches-empty-title {
