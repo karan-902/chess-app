@@ -24,7 +24,7 @@ export default function ApproveDevicePage() {
         token ? "confirm" : "invalid",
     );
     const [submitting, setSubmitting] = useState(false);
-    const logout = useLogout();
+    const logout = useLogout("Loading...");
 
     const handleBackToSignIn = (e: React.MouseEvent) => {
         e.preventDefault();

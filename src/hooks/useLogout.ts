@@ -6,13 +6,13 @@ import { showLoader, hideLoader } from "@/redux/common/common.slice";
 import type { ILogoutBody } from "@/types/index";
 import type { ILogoutResponse } from "@/types/utils";
 
-export function useLogout() {
+export function useLogout(text?: string) {
     const navigate = useNavigate();
     const dispatch = useReduxDispatch();
     const session = useReduxSelector((s) => s.auth.session);
 
     return async () => {
-        dispatch(showLoader({ text: "Logging out..." }));
+        dispatch(showLoader({ text }));
         try {
             if (session?.session_id) {
                 await callAPIInterface<ILogoutBody, ILogoutResponse>(
