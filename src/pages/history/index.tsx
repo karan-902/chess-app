@@ -66,40 +66,47 @@ function MatchRow({
 }) {
     const CategoryIcon = CATEGORY_META[category].icon;
     return (
-        <Box customClass={classNames("match-row", outcome)}>
-            <Box customClass="match-row-info">
-                <Box customClass="match-row-icon">
-                    <CategoryIcon className="match-row-svg" strokeWidth={2} />
+        <Box customClass="match-row-item">
+            <Box customClass={classNames("match-row", outcome)}>
+                <Box customClass="match-row-info">
+                    <Box customClass="match-row-icon">
+                        <CategoryIcon
+                            className="match-row-svg"
+                            strokeWidth={2}
+                        />
+                    </Box>
+                    <Box customClass="match-row-text">
+                        <Text customClass="match-row-headline" truncate>
+                            {selfName && (
+                                <>
+                                    {selfName}
+                                    <Badge
+                                        customClass="match-row-vs"
+                                        badgeContent={matchesVsLabel}
+                                    />
+                                </>
+                            )}
+                            {opponentName}
+                        </Text>
+                        <Text customClass="match-row-time">
+                            {GAME_END_REASON_LABELS[endReason] ??
+                                formateText(endReason)}{" "}
+                            &middot; {formateAmount(stakeAmount)} stake
+                            &middot; {dateLabel}
+                        </Text>
+                    </Box>
                 </Box>
-                <Box customClass="match-row-text">
-                    <Text customClass="match-row-headline" truncate>
-                        {selfName && (
-                            <>
-                                {selfName}
-                                <Badge
-                                    customClass="match-row-vs"
-                                    badgeContent={matchesVsLabel}
-                                />
-                            </>
-                        )}
-                        {opponentName}
-                    </Text>
-                    <Text customClass="match-row-time">
-                        {GAME_END_REASON_LABELS[endReason] ??
-                            formateText(endReason)}{" "}
-                        &middot; {formateAmount(stakeAmount)} stake &middot;{" "}
-                        {dateLabel}
-                    </Text>
-                </Box>
-            </Box>
-            <Box customClass="match-row-amt-wrap">
-                <Box customClass="match-row-amt-row">
-                    <Text component="span" customClass="match-row-amt">
-                        {outcome === "win" && `+${formateAmount(amount)}`}
-                        {outcome === "loss" && `-${formateAmount(amount)}`}
-                        {outcome === "draw" &&
-                            `${amount > 0 ? "-" : ""}${formateAmount(amount)}`}
-                    </Text>
+                <Box customClass="match-row-amt-wrap">
+                    <Box customClass="match-row-amt-row">
+                        <Text component="span" customClass="match-row-amt">
+                            {outcome === "win" &&
+                                `+${formateAmount(amount)}`}
+                            {outcome === "loss" &&
+                                `-${formateAmount(amount)}`}
+                            {outcome === "draw" &&
+                                `${amount > 0 ? "-" : ""}${formateAmount(amount)}`}
+                        </Text>
+                    </Box>
                 </Box>
             </Box>
         </Box>
@@ -110,22 +117,32 @@ const HISTORY_SKELETON_ROWS = 15;
 
 function MatchRowSkeleton() {
     return (
-        <Box customClass="match-row">
-            <Box customClass="match-row-info">
-                <Box customClass="match-row-icon">
-                    <Skeleton variant="circular" width={18} height={18} />
+        <Box customClass="match-row-item">
+            <Box customClass="match-row">
+                <Box customClass="match-row-info">
+                    <Box customClass="match-row-icon">
+                        <Skeleton
+                            variant="circular"
+                            width={18}
+                            height={18}
+                        />
+                    </Box>
+                    <Box customClass="match-row-text">
+                        <Skeleton
+                            customClass="text"
+                            width={140}
+                            height={14}
+                        />
+                        <Skeleton
+                            customClass="text"
+                            width={90}
+                            height={11}
+                            style={{ marginTop: "0.3rem" }}
+                        />
+                    </Box>
                 </Box>
-                <Box customClass="match-row-text">
-                    <Skeleton customClass="text" width={140} height={14} />
-                    <Skeleton
-                        customClass="text"
-                        width={90}
-                        height={11}
-                        style={{ marginTop: "0.3rem" }}
-                    />
-                </Box>
+                <Skeleton customClass="text" width={48} height={16} />
             </Box>
-            <Skeleton customClass="text" width={48} height={16} />
         </Box>
     );
 }
