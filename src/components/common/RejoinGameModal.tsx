@@ -7,6 +7,7 @@ import { useSocket } from "@/context/SocketContext";
 import { useReduxSelector, useReduxDispatch } from "@/redux/hooks";
 import { setActiveGame } from "@/redux/socketModals.slice";
 import { formateAmount } from "@/utils/formate";
+import { shortenUsername } from "@/utils";
 import { secondsToTimeControl } from "@/types/components";
 import { router } from "@/routes/router";
 import {
@@ -61,14 +62,16 @@ export default function RejoinGameModal() {
                 customClass="rejoin-game-modal"
             >
                 <Text customClass="modal-description">
-                    {rejoinGameBody(activeGame.opponent.username)}
+                    {rejoinGameBody(
+                        shortenUsername(activeGame.opponent.username),
+                    )}
                 </Text>
                 <Box customClass="matches-stat-row">
                     <Text component="span" customClass="matches-stat-title">
                         {rejoinGameOpponentLabel}
                     </Text>
                     <Text component="span" customClass="matches-stat-val">
-                        {activeGame.opponent.username} (
+                        {shortenUsername(activeGame.opponent.username)} (
                         {activeGame.opponent.elo_rating})
                     </Text>
                 </Box>

@@ -9,7 +9,7 @@ import Skeleton from "@/components/base/Skeleton/Skeleton";
 import VirtualList from "@/components/common/VirtualList";
 import { useGameHistory } from "@/hooks/useGameHistory";
 import { useReduxSelector } from "@/redux/hooks";
-import { formatMatchDate } from "@/utils";
+import { formatMatchDate, shortenUsername } from "@/utils";
 import { formateText } from "@/utils/formate";
 import { CATEGORY_META, GAME_END_REASON_LABELS } from "@/constants/config";
 import type { GameCategory } from "@/types/types";
@@ -179,12 +179,12 @@ function matchRow(
     const selfName = showSelf
         ? item.player?.id === currentUserId
             ? matchesYouLabel
-            : item.player?.username
+            : shortenUsername(item.player?.username ?? "")
         : undefined;
     const opponentName =
         item.opponent?.id === currentUserId
             ? matchesYouLabel
-            : item.opponent?.username;
+            : shortenUsername(item.opponent?.username ?? "");
     return (
         <MatchRow
             outcome={item.result}

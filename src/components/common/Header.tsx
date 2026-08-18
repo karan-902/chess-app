@@ -13,6 +13,7 @@ import { useWalletBalance } from "@/hooks/useWallet";
 import { useLogout } from "@/hooks/useLogout";
 import { useReduxSelector } from "@/redux/hooks";
 import { formateAmount } from "@/utils/formate";
+import { shortenUsername } from "@/utils";
 import { NAV_ITEMS } from "@/constants/config";
 import { profileTitle, appBarLogout, appBarWallet } from "@/constants/messages";
 import IconButton from "../base/IconButton/IconButton";
@@ -101,7 +102,8 @@ export default function Header() {
                         />
                         <Box customClass="appbar-dropdown-id">
                             <Text customClass="appbar-dropdown-name">
-                                {session?.username}
+                                {session?.username &&
+                                    shortenUsername(session.username)}
                             </Text>
                         </Box>
                     </Box>

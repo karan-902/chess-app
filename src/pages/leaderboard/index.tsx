@@ -6,6 +6,7 @@ import Skeleton from "@/components/base/Skeleton/Skeleton";
 import { useLeaderboard } from "@/hooks/useLeaderboard";
 import { useReduxSelector } from "@/redux/hooks";
 import { formateAmount } from "@/utils/formate";
+import { shortenUsername } from "@/utils";
 import {
     leaderboardLoadError,
     leaderboardEmpty,
@@ -98,8 +99,8 @@ export default function Leaderboard() {
                             </Text>
                             <Text customClass="lb-name" truncate>
                                 {isMe(player.id)
-                                    ? youLabel(player.username)
-                                    : player.username}
+                                    ? youLabel(shortenUsername(player.username))
+                                    : shortenUsername(player.username)}
                             </Text>
                             <Text customClass="lb-earnings">
                                 {formateAmount(player.earnings)}

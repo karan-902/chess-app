@@ -16,7 +16,7 @@ import { useReduxSelector, useReduxDispatch } from "@/redux/hooks";
 import { updateSession } from "@/redux/persisted/auth.slice";
 import { showToast } from "@/redux/common/common.slice";
 import { useAppTheme } from "@/context/ThemeContext";
-import { callAPIInterface } from "@/utils";
+import { callAPIInterface, shortenUsername } from "@/utils";
 import { getAvatarUrl } from "@/utils/avatar";
 import { formateText } from "@/utils/formate";
 import { CATEGORY_META } from "@/constants/config";
@@ -345,7 +345,7 @@ export default function Profile() {
                     <Box customClass="profile-info-wrapper">
                         <Box customClass="profile-id-text">
                             <Text customClass="profile-id-name" truncate>
-                                {session.username}
+                                {shortenUsername(session.username)}
                             </Text>
                         </Box>
                         <Box customClass="profile-meta-row">

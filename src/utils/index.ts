@@ -93,6 +93,12 @@ export async function getHeaders<TPayload = undefined>(
     };
 }
 
+export function shortenUsername(username: string): string {
+    const trimmed = username?.trim() ?? "";
+    if (/[0-9_-]/.test(trimmed)) return trimmed;
+    return trimmed.split(/\s+/)[0] ?? trimmed;
+}
+
 export function getDisplayName(
     user:
         | { username?: string; first_name?: string; last_name?: string }

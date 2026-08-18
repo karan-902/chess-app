@@ -24,6 +24,7 @@ import { useSocket } from "@/context/SocketContext";
 import { useWalletBalance } from "@/hooks/useWallet";
 import { useReduxSelector, useReduxDispatch } from "@/redux/hooks";
 import { formateAmount } from "@/utils/formate";
+import { shortenUsername } from "@/utils";
 import { DIFFICULTY_CONFIG } from "@/types/components";
 import { GAME_END_REASON_LABELS } from "@/constants/config";
 import type { TimeControl, GameMode, Difficulty } from "@/types/components";
@@ -176,7 +177,7 @@ export default function GameRoom() {
     const opponentName = isPvc
         ? playOpponentFallbackComputer
         : params.get("opponent")
-          ? decodeURIComponent(params.get("opponent")!)
+          ? shortenUsername(decodeURIComponent(params.get("opponent")!))
           : playOpponentFallbackOpponent;
     const opponentRating = Number(params.get("opp_rating") ?? 0);
     const opponentId = params.get("opp_id") ?? undefined;
@@ -820,7 +821,9 @@ export default function GameRoom() {
             >
                 <Box customClass="gr-meta">
                     <Text customClass="gr-name" truncate>
-                        {session?.username}(You)
+                        {session?.username
+                            ? `${shortenUsername(session.username)}(You)`
+                            : ""}
                     </Text>
                     <Text customClass="gr-elo">
                         {isPvc
