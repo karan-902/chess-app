@@ -7,7 +7,7 @@ import {
     authEmailVerificationSentCodeTo,
 } from "@/constants/messages";
 
-export default function VerifyEmailPage() {
+export default function VerifyEmail() {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const email = searchParams.get("email");

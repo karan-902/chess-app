@@ -4,11 +4,12 @@ import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import Button from "@/components/base/Button/Button";
 import OtpInput from "@/components/base/OtpInput/OtpInput";
-import { callAPIInterface } from "@/utils";
+import { callAPIInterface, formatMMSS } from "@/utils";
 import { useReduxDispatch } from "@/redux/hooks";
 import { showToast } from "@/redux/common/common.slice";
 import type { IVerifyEmailBody, IResendOtpBody } from "@/types/index";
 import type { IMessageResponse } from "@/types/utils";
+import type { IVerifyEmailFormProps } from "@/types/components";
 import {
     authLoginBack,
     authEmailVerificationTitle,
@@ -28,19 +29,6 @@ export const OTP_LENGTH = 6;
 const OTP_EXPIRY_SECONDS = 10 * 60;
 const RESEND_COOLDOWN_SECONDS = 30;
 
-function formatMMSS(totalSeconds: number): string {
-    const m = Math.floor(totalSeconds / 60);
-    const s = totalSeconds % 60;
-    return `${m}:${String(s).padStart(2, "0")}`;
-}
-
-interface IVerifyEmailFormProps {
-    email: string;
-    autoSend?: boolean;
-    showHeading?: boolean;
-    onVerified: () => void;
-    onBack?: () => void;
-}
 
 export default function VerifyEmailForm({
     email,
@@ -154,7 +142,7 @@ export default function VerifyEmailForm({
                     <Text component="h2" customClass="otp-title">
                         {authEmailVerificationTitle}
                     </Text>
-                    <Text component="p" customClass="otp-subtitle">
+                    <Text component="p" customClass="otp-subtitle page-subtitle">
                         {authEmailVerificationSentCodeTo(OTP_LENGTH)}{" "}
                         <strong>{email}</strong>
                     </Text>

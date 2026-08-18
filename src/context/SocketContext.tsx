@@ -14,11 +14,10 @@ import { showToast } from "@/redux/common/common.slice";
 import { store } from "@/redux/store";
 import { setActiveGame, setDeviceHandoff } from "@/redux/socketModals.slice";
 import { generateToken } from "@/utils";
-import { formateAmount } from "@/utils/formate";
+import { formatAmount } from "@/utils/format";
 import sessionService from "@/redux/sessionService";
 import { router } from "@/routes/router";
 import RejoinGameModal from "@/components/common/RejoinGameModal";
-import DeviceHandoffModal from "@/components/common/DeviceHandoffModal";
 
 import {
     activityFeedWin,
@@ -48,8 +47,8 @@ interface ISocketContext {
 
 const RECENT_WINS_LIMIT = 12;
 
-const COUNTS_CACHE_KEY = "ks_user_counts";
-const REFRESH_FLAG_KEY = "ks_is_refreshing";
+const COUNTS_CACHE_KEY = "sj_user_counts";
+const REFRESH_FLAG_KEY = "sj_is_refreshing";
 const REFRESH_HOLD_MS = 4000;
 
 const DECREASE_GRACE_MS = 3000;
@@ -243,7 +242,7 @@ export function SocketProvider({ children }: { children: ReactNode }) {
                 showToast({
                     message: activityFeedWin(
                         data.winner_username,
-                        formateAmount(data.prize_usd),
+                        formatAmount(data.prize_usd),
                         streakSuffix,
                     ),
                     severity: "success",
@@ -252,7 +251,7 @@ export function SocketProvider({ children }: { children: ReactNode }) {
         };
 
         const onTransactionCompleted = (data: ITransactionCompletedEvent) => {
-            const amount = formateAmount(data.amount_usd);
+            const amount = formatAmount(data.amount_usd);
             dispatch(
                 showToast({
                     message:
@@ -367,7 +366,7 @@ export function SocketProvider({ children }: { children: ReactNode }) {
             }}
         >
             {children}
-            <DeviceHandoffModal />
+
             <RejoinGameModal />
         </SocketContext.Provider>
     );

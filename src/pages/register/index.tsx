@@ -8,7 +8,7 @@ import {
 } from "@/constants/messages";
 import { Link } from "react-router";
 
-export default function RegisterPage() {
+export default function Register() {
     return (
         <AuthLayout
             title={authRegisterTitle}

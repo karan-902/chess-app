@@ -2,12 +2,13 @@ import * as yup from "yup";
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router";
 import { ArrowLeft } from "lucide-react";
-import { useFormik, type FormikProps } from "formik";
+import { useFormik } from "formik";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import Label from "@/components/base/Label/Label";
 import Input from "@/components/base/Input/Input";
 import Button from "@/components/base/Button/Button";
+import AuthLayout from "@/container/AuthLayout";
 import { useGoogleAuth } from "@/hooks/useGoogleAuth";
 import { useDeviceApprovalPoll } from "@/hooks/useDeviceApprovalPoll";
 import SelectCountryScreen from "@/pages/select-country/SelectCountryScreen";
@@ -18,6 +19,13 @@ import { showLoader, hideLoader, showToast } from "@/redux/common/common.slice";
 import type { IVerifyUserBody } from "@/types/index";
 import type { ILoginResponse, IVerifyUserResponse } from "@/types/utils";
 import { SignupMethod } from "@/types/utils";
+import type {
+    IEmailScreenProps,
+    IPasswordValues,
+    IPasswordScreenProps,
+    IWaitingApprovalScreenProps,
+    LoginStep,
+} from "@/types/components";
 import {
     authEmailLabel,
     authEmailPlaceholder,
@@ -37,6 +45,12 @@ import {
     authDeviceApprovalTitle,
     authDeviceApprovalDescription,
     authDeviceApprovalBack,
+    authLoginTitle,
+    authLoginSubtitle,
+    authLoginNoAccountPrompt,
+    authLoginCreateOneLink,
+    selectCountryTitle,
+    selectCountrySubtitle,
 } from "@/constants/messages";
 import { GoogleIcon } from "@/components/constants";
 
@@ -50,17 +64,6 @@ const emailSchema = yup.object({
 const passwordSchema = yup.object({
     password: yup.string().required(authValidationPasswordRequired),
 });
-
-interface IEmailValues {
-    email: string;
-}
-
-interface IEmailScreenProps {
-    formik: FormikProps<IEmailValues>;
-    error: string | null;
-    isGoogleProcessing: boolean;
-    onGoogleLogin: () => void;
-}
 
 function EmailScreen({
     formik,
@@ -91,7 +94,7 @@ function EmailScreen({
                 />
             </Box>
 
-            {error && <Text customClass="auth-error">{error}</Text>}
+            {error && <Text customClass="warning-text">{error}</Text>}
 
             <Box customClass="auth-actions">
                 <Button
@@ -106,7 +109,7 @@ function EmailScreen({
                 </Button>
 
                 <Box customClass="auth-divider">
-                    <span>{authOr}</span>
+                    <Text component="span">{authOr}</Text>
                 </Box>
 
                 <Button
@@ -125,21 +128,10 @@ function EmailScreen({
     );
 }
 
-interface IPasswordValues {
-    password: string;
-}
-
-interface IPasswordScreenProps {
-    verifiedEmail: string;
-    formik: FormikProps<IPasswordValues>;
-    error: string | null;
-    onChangeEmail: () => void;
-}
-
 function PasswordScreen({
     verifiedEmail,
     formik,
-    error,
+
     onChangeEmail,
 }: IPasswordScreenProps) {
     return (
@@ -191,8 +183,6 @@ function PasswordScreen({
                 </Link>
             </Box>
 
-            {error && <Text customClass="auth-error">{error}</Text>}
-
             <Box customClass="auth-actions">
                 <Button
                     type="submit"
@@ -207,10 +197,6 @@ function PasswordScreen({
             </Box>
         </Box>
     );
-}
-
-interface IWaitingApprovalScreenProps {
-    onBack: () => void;
 }
 
 function WaitingApprovalScreen({ onBack }: IWaitingApprovalScreenProps) {
@@ -229,7 +215,7 @@ function WaitingApprovalScreen({ onBack }: IWaitingApprovalScreenProps) {
                 <Text component="h1" customClass="auth-title">
                     {authDeviceApprovalTitle}
                 </Text>
-                <Text component="p" customClass="auth-subtitle">
+                <Text component="p" customClass="page-subtitle">
                     {authDeviceApprovalDescription}
                 </Text>
             </Box>
@@ -241,9 +227,9 @@ export default function LoginForm() {
     const dispatch = useReduxDispatch();
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
-    const [step, setStep] = useState<
-        "email" | "password" | "country" | "waiting-approval"
-    >(searchParams.get("step") === "country" ? "country" : "email");
+    const [step, setStep] = useState<LoginStep>(
+        searchParams.get("step") === "country" ? "country" : "email",
+    );
     const [verifiedEmail, setVerifiedEmail] = useState("");
     const [error, setError] = useState<string | null>(null);
     const devicePoll = useDeviceApprovalPoll();
@@ -338,9 +324,11 @@ export default function LoginForm() {
                     );
                     return;
                 }
-                setError(
-                    err?.message ??
-                        "Unable to sign in. Check your details and try again.",
+                dispatch(
+                    showToast({
+                        message: err.message,
+                        severity: "error",
+                    }),
                 );
             } finally {
                 setSubmitting(false);
@@ -361,30 +349,61 @@ export default function LoginForm() {
     };
 
     if (step === "country") {
-        return <SelectCountryScreen />;
+        return (
+            <AuthLayout title={selectCountryTitle} subtitle={selectCountrySubtitle}>
+                <SelectCountryScreen showHeading={false} />
+            </AuthLayout>
+        );
     }
 
+    const loginFooter = (
+        <>
+            {authLoginNoAccountPrompt}{" "}
+            <Link to="/register">{authLoginCreateOneLink}</Link>
+        </>
+    );
+
     if (step === "waiting-approval") {
-        return <WaitingApprovalScreen onBack={handleBackFromApproval} />;
+        return (
+            <AuthLayout
+                title={authLoginTitle}
+                subtitle={authLoginSubtitle}
+                footer={loginFooter}
+            >
+                <WaitingApprovalScreen onBack={handleBackFromApproval} />
+            </AuthLayout>
+        );
     }
 
     if (step === "password") {
         return (
-            <PasswordScreen
-                verifiedEmail={verifiedEmail}
-                formik={passwordFormik}
-                error={error}
-                onChangeEmail={handleChangeEmail}
-            />
+            <AuthLayout
+                title={authLoginTitle}
+                subtitle={authLoginSubtitle}
+                footer={loginFooter}
+            >
+                <PasswordScreen
+                    verifiedEmail={verifiedEmail}
+                    formik={passwordFormik}
+                    error={error}
+                    onChangeEmail={handleChangeEmail}
+                />
+            </AuthLayout>
         );
     }
 
     return (
-        <EmailScreen
-            formik={emailFormik}
-            error={error}
-            isGoogleProcessing={isProcessing}
-            onGoogleLogin={() => googleLogin()}
-        />
+        <AuthLayout
+            title={authLoginTitle}
+            subtitle={authLoginSubtitle}
+            footer={loginFooter}
+        >
+            <EmailScreen
+                formik={emailFormik}
+                error={error}
+                isGoogleProcessing={isProcessing}
+                onGoogleLogin={() => googleLogin()}
+            />
+        </AuthLayout>
     );
 }

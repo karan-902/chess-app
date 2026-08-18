@@ -1,0 +1,34 @@
+@use "../../../styles/default.scss" as *;
+
+.chip {
+    height: auto;
+    border-radius: 8px;
+
+    &.gr-move-chip {
+        background: transparent;
+        border: none;
+        margin-right: 0.15rem;
+        cursor: pointer;
+
+        .MuiChip-label {
+            font-family: $fontMono;
+            font-size: $font14;
+            color: $appText;
+            padding: 0.15rem 0.5rem;
+        }
+
+        &:hover {
+            background: $appBtnBg;
+        }
+
+        &.active {
+            width: 50px !important;
+            background: alpha($gold, 0.12);
+
+            .MuiChip-label {
+                color: $gold;
+                font-weight: 700;
+            }
+        }
+    }
+}

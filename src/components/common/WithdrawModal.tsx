@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, ArrowLeft } from "lucide-react";
 import { useReduxDispatch } from "@/redux/hooks";
 import { showToast } from "@/redux/common/common.slice";
 import Box from "@/components/base/Box/Box";
@@ -11,6 +11,7 @@ import Select from "@/components/base/Select/Select";
 import { useWalletActionModal } from "@/context/WalletActionModalContext";
 import { useWalletBalance } from "@/hooks/useWallet";
 import { requestWithdraw } from "@/hooks/useWallet";
+import { formatAmount } from "@/utils/format";
 import type { WithdrawMethod } from "@/types/utils";
 import {
     withdrawModalTitle,
@@ -26,13 +27,20 @@ import {
     withdrawModalFailed,
     withdrawModalSuccessTitle,
     withdrawModalSuccessDesc,
+    withdrawModalPasswordTitle,
+    withdrawModalPasswordDesc,
+    withdrawModalConfirmButton,
     walletPageWithdrawableLabel,
     depositModalCloseLink,
     depositModalAmountLabel,
+    authPasswordLabel,
+    authPasswordPlaceholder,
+    authLoginBack,
+    authLoginIncorrectPassword,
 } from "@/constants/messages";
 import Modal from "../base/Modal/Modal";
 
-type Stage = "amount" | "success";
+type Stage = "amount" | "password" | "success";
 const MAX_AMOUNT_DIGITS = 4;
 export default function WithdrawModal() {
     const dispatch = useReduxDispatch();
@@ -46,6 +54,8 @@ export default function WithdrawModal() {
         withdrawModalMethodOptions[0].value,
     );
     const [destination, setDestination] = useState("");
+    const [password, setPassword] = useState("");
+    const [passwordError, setPasswordError] = useState("");
     const [submitting, setSubmitting] = useState(false);
 
     useEffect(() => {
@@ -54,6 +64,8 @@ export default function WithdrawModal() {
         setAmount("");
         setMethod(withdrawModalMethodOptions[0].value);
         setDestination("");
+        setPassword("");
+        setPasswordError("");
         setSubmitting(false);
     }, [open]);
 
@@ -87,7 +99,7 @@ export default function WithdrawModal() {
         setAmount(val);
     };
 
-    const handleSubmit = async () => {
+    const handleContinue = () => {
         if (!destination.trim()) {
             dispatch(
                 showToast({
@@ -97,15 +109,33 @@ export default function WithdrawModal() {
             );
             return;
         }
+        setStage("password");
+    };
+
+    const handleConfirmWithdraw = async () => {
+        if (!password) return;
+        setPasswordError("");
         setSubmitting(true);
         try {
-            await requestWithdraw(amountUsd, method, destination.trim());
+            await requestWithdraw(
+                amountUsd,
+                method,
+                destination.trim(),
+                password,
+            );
             refetch();
             setStage("success");
-        } catch {
-            dispatch(
-                showToast({ message: withdrawModalFailed, severity: "error" }),
-            );
+        } catch (err: any) {
+            if (err?.response?.data?.type === "invalid_password") {
+                setPasswordError(authLoginIncorrectPassword);
+            } else {
+                dispatch(
+                    showToast({
+                        message: err?.response?.data?.message ?? withdrawModalFailed,
+                        severity: "error",
+                    }),
+                );
+            }
         } finally {
             setSubmitting(false);
         }
@@ -115,18 +145,18 @@ export default function WithdrawModal() {
         <Modal open={open} onClose={close}>
             {stage === "amount" && (
                 <Box customClass="deposit-amount-stage">
-                    <Text customClass="deposit-heading">
+                    <Text customClass="deposit-heading value-heading">
                         {withdrawModalTitle}
                     </Text>
 
                     <Box customClass="withdraw-available">
-                        <Text customClass="withdraw-available-label">
+                        <Text customClass="withdraw-available-label meta-text">
                             {walletPageWithdrawableLabel}
                         </Text>
                         <Text customClass="withdraw-available-amt">
-                            ${withdrawableUsd.toFixed(2)}
+                            {formatAmount(withdrawableUsd)}
                         </Text>
-                        <Text customClass="withdraw-available-caveat">
+                        <Text customClass="withdraw-available-caveat meta-text">
                             {withdrawModalWithdrawableCaveat}
                         </Text>
                     </Box>
@@ -186,11 +216,62 @@ export default function WithdrawModal() {
                         fullWidth
                         variant="contained"
                         customClass="deposit-generate-btn"
-                        onClick={handleSubmit}
-                        isLoading={submitting}
+                        onClick={handleContinue}
                         disabled={!canSubmit}
                     >
                         {withdrawModalSubmitButton}
+                    </Button>
+                </Box>
+            )}
+
+            {stage === "password" && (
+                <Box customClass="deposit-amount-stage">
+                    <Button
+                        type="button"
+                        startIcon={<ArrowLeft size={16} />}
+                        customClass="auth-back-btn"
+                        onClick={() => setStage("amount")}
+                        disabled={submitting}
+                    >
+                        {authLoginBack}
+                    </Button>
+
+                    <Text customClass="deposit-heading value-heading">
+                        {withdrawModalPasswordTitle}
+                    </Text>
+                    <Text customClass="deposit-tagline meta-text">
+                        {withdrawModalPasswordDesc}
+                    </Text>
+
+                    <Box customClass="auth-field">
+                        <Label htmlFor="withdraw-password">
+                            {authPasswordLabel}
+                        </Label>
+                        <Input
+                            id="withdraw-password"
+                            type="password"
+                            placeholder={authPasswordPlaceholder}
+                            fullWidth
+                            value={password}
+                            onChange={(e) => {
+                                setPassword(e.target.value);
+                                setPasswordError("");
+                            }}
+                            disabled={submitting}
+                            isError={!!passwordError}
+                            helperText={passwordError}
+                        />
+                    </Box>
+
+                    <Button
+                        fullWidth
+                        variant="contained"
+                        customClass="deposit-generate-btn"
+                        onClick={handleConfirmWithdraw}
+                        isLoading={submitting}
+                        disabled={!password || submitting}
+                    >
+                        {withdrawModalConfirmButton}
                     </Button>
                 </Box>
             )}
@@ -200,10 +281,10 @@ export default function WithdrawModal() {
                     <Box customClass="deposit-success-icon">
                         <CheckCircle2 size={32} strokeWidth={2} />
                     </Box>
-                    <Text customClass="deposit-heading">
+                    <Text customClass="deposit-heading value-heading">
                         {withdrawModalSuccessTitle}
                     </Text>
-                    <Text customClass="deposit-tagline">
+                    <Text customClass="deposit-tagline meta-text">
                         {withdrawModalSuccessDesc}
                     </Text>
                     <Button

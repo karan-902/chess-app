@@ -7,7 +7,6 @@ import {
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import classNames from "classnames";
 import Box from "../Box/Box";
-import "./select.scss";
 
 export interface ISelectOption {
     value: string;

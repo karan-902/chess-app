@@ -25,12 +25,12 @@ export default function AuthLayout({
                 <Text component="h1" customClass="auth-title">
                     {title}
                 </Text>
-                <Text component="p" customClass="auth-subtitle">
+                <Text component="p" customClass="page-subtitle">
                     {subtitle}
                 </Text>
             </Box>
             {children}
-            {footer && <Text customClass="auth-footer">{footer}</Text>}
+            {footer && <Text customClass="auth-footer caption">{footer}</Text>}
         </Box>
     );
 }

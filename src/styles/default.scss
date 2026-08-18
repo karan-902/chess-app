@@ -90,6 +90,43 @@ $radiusLg: 0.4rem;
 $appCardRadius: 0.625rem;
 $appBtnRadius: 0.5rem;
 
+$rowTitleFontFamily: $fontOutfitMedium;
+$rowTitleFontSize: clamp(#{$font14}, 0.1rem + 1.4vw, #{$font16});
+$rowTitleColor: $appText;
+
+$labelFontFamily: $fontOutfitExtraBold;
+$labelFontSize: $font12;
+$labelColor: $appTextMuted;
+
+$metaTextFontFamily: $fontOutfitMedium;
+$metaTextFontSize: clamp(#{$font12}, 0.5rem + 0.7vw, #{$font13});
+$metaTextColor: $appTextMuted;
+
+$mutedDescFontFamily: $fontOutfitMedium;
+$mutedDescFontSize: $font14;
+$mutedDescColor: $appTextMuted;
+
+$sectionHeadingFontFamily: $fontDisplay;
+$sectionHeadingFontSize: $font16;
+$sectionHeadingColor: $appText;
+
+$sheetTitleFontFamily: $fontDisplay;
+$sheetTitleFontSize: $font18;
+$sheetTitleColor: $appText;
+
+$boldValueFontFamily: $fontOutfitExtraBold;
+$boldValueFontSize: $font16;
+$boldValueColor: $appText;
+
+$warningTextFontSize: $font12;
+$warningTextColor: $paleRed;
+
+$pageSubtitleFontSize: $font14;
+$pageSubtitleColor: alpha($appText, 0.5);
+
+$amountFontFamily: $fontOutfitExtraBold;
+$amountFontSize: clamp(#{$font15}, 0.6rem + 1.4vw, #{$font16});
+
 @font-face {
     font-family: "Outfit-Thin";
     src: url("/fonts/Outfit-Thin.ttf") format("truetype");

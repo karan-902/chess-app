@@ -17,7 +17,7 @@ export default function BackdropLoader() {
                     autoplay
                     className="backdrop-loader-anim"
                 />
-                <Text customClass="backdrop-loader-text">{text}</Text>
+                <Text customClass="caption">{text}</Text>
             </Card>
         </Backdrop>
     );

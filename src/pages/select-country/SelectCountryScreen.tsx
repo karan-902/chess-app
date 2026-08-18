@@ -11,6 +11,7 @@ import { updateSession } from "@/redux/persisted/auth.slice";
 import { showToast } from "@/redux/common/common.slice";
 import { COUNTRY_OPTIONS } from "@/constants/config";
 import type { IUpdateProfileBody, IUpdateProfileResponse } from "@/types/utils";
+import type { ISelectCountryScreenProps } from "@/types/components";
 import {
     selectCountryTitle,
     selectCountrySubtitle,
@@ -25,11 +26,6 @@ import {
 const schema = yup.object({
     country: yup.string().required(authValidationCountryRequired),
 });
-
-interface ISelectCountryScreenProps {
-    showHeading?: boolean;
-    onSelected?: () => void;
-}
 
 export default function SelectCountryScreen({
     showHeading = true,
@@ -72,7 +68,7 @@ export default function SelectCountryScreen({
                     <Text component="h1" customClass="auth-title">
                         {selectCountryTitle}
                     </Text>
-                    <Text component="p" customClass="auth-subtitle">
+                    <Text component="p" customClass="page-subtitle">
                         {selectCountrySubtitle}
                     </Text>
                 </Box>

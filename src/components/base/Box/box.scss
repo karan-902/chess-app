@@ -1,6 +1,10 @@
 @use "../../../styles/default.scss" as *;
 
 .box {
+    &.gr-elo-wrapper {
+        display: flex;
+        gap: 8px;
+    }
     &.auth-page {
         display: flex;
         flex-direction: column;
@@ -560,10 +564,12 @@
     }
     &.match-row {
         display: flex;
+
+        height: 100%;
         align-items: center;
         justify-content: space-between;
         gap: 0.6rem;
-        padding: 0.95rem 0.9rem;
+        padding: 0.9rem 0.9rem;
         background: $appSurface;
         border: 1px solid $appCardBorder;
         border-left: 1px solid $appCardBorder;
@@ -780,16 +786,17 @@
         padding: 0.6rem 0.75rem;
         border: 1px solid transparent;
         border-radius: 0.85rem;
+        flex-shrink: 0;
         transition:
             border-color 0.25s ease,
             background-color 0.25s ease;
 
         &.opp {
-            margin-bottom: 1.3rem;
+            margin-bottom: $font12;
         }
 
         &.me {
-            margin-top: 1.3rem;
+            margin-top: $font12;
         }
 
         &.active {
@@ -807,6 +814,9 @@
         position: relative;
         display: flex;
         justify-content: center;
+        flex-shrink: 0;
+        width: min(100%, 48svh);
+        margin: 0 auto;
     }
 
     &.gr-promotion-overlay {
@@ -862,18 +872,43 @@
         justify-content: center;
         gap: 0.6rem;
         margin-top: 1.1rem;
+        flex-shrink: 0;
     }
 
     &.gr-moves {
         margin-top: 0.5rem;
         padding-top: 0.9rem;
         border-top: 1px solid $appLine;
-        max-height: 6rem;
+        height: 6rem;
+        flex-shrink: 0;
         overflow-y: auto;
 
         &::-webkit-scrollbar {
             display: none;
         }
+    }
+
+    &.gr-move-strip {
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        white-space: nowrap;
+        margin-bottom: 0.9rem;
+        padding-bottom: 0.7rem;
+        border-bottom: 1px solid $appLine;
+        flex-shrink: 0;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
+    &.gr-move-pair {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+        margin-right: 0.6rem;
     }
 
     &.gr-foot {
@@ -882,6 +917,7 @@
         gap: 0.75rem;
         margin-top: auto;
         padding-top: 1.2rem;
+        flex-shrink: 0;
     }
 
     &.gr-resign-actions {

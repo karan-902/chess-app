@@ -52,7 +52,13 @@ import {
     countrySelectSearchPlaceholder,
     countrySelectSelectPlaceholder,
 } from "@/constants/messages";
-import { IEmailFormScreenProps, IEmailFormValues } from "@/types/components";
+import {
+    IEmailFormScreenProps,
+    IEmailFormValues,
+    IMethodScreenProps,
+    Step,
+    UsernameCheckStatus,
+} from "@/types/components";
 
 const USERNAME_CHECK_DEBOUNCE_MS = 500;
 
@@ -76,12 +82,6 @@ const registerSchema = yup.object({
         .oneOf([yup.ref("password")], authValidationPasswordsMustMatch),
     country: yup.string().required(authValidationCountryRequired),
 });
-
-interface IMethodScreenProps {
-    onEmailSelected: () => void;
-    onGoogleSelected: () => void;
-    isGoogleProcessing: boolean;
-}
 
 function MethodScreen({
     onEmailSelected,
@@ -165,9 +165,8 @@ function EmailFormScreen({ onBack, onRegistered }: IEmailFormScreenProps) {
         },
     });
 
-    const [usernameStatus, setUsernameStatus] = useState<
-        "idle" | "checking" | "available" | "taken"
-    >("idle");
+    const [usernameStatus, setUsernameStatus] =
+        useState<UsernameCheckStatus>("idle");
     const usernameDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(
         null,
     );
@@ -346,8 +345,6 @@ function EmailFormScreen({ onBack, onRegistered }: IEmailFormScreenProps) {
         </Box>
     );
 }
-
-type Step = "method" | "email" | "otp";
 
 export default function RegisterForm() {
     const dispatch = useReduxDispatch();

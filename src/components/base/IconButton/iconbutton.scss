@@ -18,6 +18,32 @@
             opacity: 1;
         }
     }
+    &.gr-review-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.9rem;
+        height: 1.9rem;
+        border-radius: 50%;
+        border: 1px solid $appCardBorder;
+        background: $appSurface;
+        font-family: $fontOutfitExtraBold;
+        color: $appTextMuted;
+        cursor: pointer;
+        transition:
+            color 0.15s ease,
+            border-color 0.15s ease;
+
+        &:hover:not(:disabled) {
+            color: $appText;
+            border-color: $appTextMuted;
+        }
+
+        &:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+    }
 
     &.drawer-close-icon {
         position: absolute;

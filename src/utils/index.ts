@@ -11,6 +11,10 @@ import sessionService from "@/redux/sessionService";
 import { apiRateLimited } from "@/constants/messages";
 import type { IGenerateTokenBody } from "@/types/index";
 import type { IGenerateTokenResponse } from "@/types/utils";
+import { IGameRoomNavPayload, TimeControl } from "@/types/components";
+import { TIME_SECONDS } from "@/constants";
+import { GameCategory } from "@/types/types";
+import { getStoredFingerprint, setStoredFingerprint } from "@/utils/storage";
 
 dayjs.extend(duration);
 const OPEN_API_ENDPOINTS = [
@@ -30,11 +34,18 @@ const serverErrorStatusCodes = [500, 502, 503, 504];
 let fingerprintPromise: Promise<string> | null = null;
 
 export function getDeviceFingerprint(): Promise<string> {
+    const stored = getStoredFingerprint();
+    if (stored) return Promise.resolve(stored);
+
     if (!fingerprintPromise) {
         fingerprintPromise = import("@fingerprintjs/fingerprintjs")
             .then((FingerprintJS) => FingerprintJS.load())
             .then((agent) => agent.get())
             .then((result) => result.visitorId)
+            .then((fingerprint) => {
+                if (fingerprint) setStoredFingerprint(fingerprint);
+                return fingerprint;
+            })
             .catch(() => "");
     }
     return fingerprintPromise;
@@ -111,7 +122,28 @@ export function getDisplayName(
         `${user?.first_name ?? ""} ${user?.last_name ?? ""}`.trim() || "Unknown"
     );
 }
-
+export function secondsToTimeControl(seconds: number): TimeControl {
+    const match = (
+        Object.entries(TIME_SECONDS) as [TimeControl, number][]
+    ).find(([, s]) => s === seconds);
+    return match?.[0] ?? "rapid";
+}
+export function deriveCategory(timeSeconds: number): GameCategory {
+    if (timeSeconds <= 120) return "BULLET";
+    if (timeSeconds <= 420) return "BLITZ";
+    if (timeSeconds <= 1200) return "RAPID";
+    return "CLASSICAL";
+}
+export function buildGameRoomUrl(data: IGameRoomNavPayload): string {
+    return (
+        `/play?mode=pvp&time=${secondsToTimeControl(data.time_seconds)}` +
+        `&game_id=${data.game_id}&color=${data.your_color}` +
+        `&opponent=${encodeURIComponent(data.opponent.username)}` +
+        `&opp_rating=${data.opponent.elo_rating}&opp_id=${data.opponent.id}` +
+        `&opp_avatar_seed=${encodeURIComponent(data.opponent.avatar_seed ?? "")}` +
+        `&stake_amount=${data.stake_amount}`
+    );
+}
 export function formatMatchDate(ms: number): string {
     const now = dayjs();
     const then = dayjs(ms);

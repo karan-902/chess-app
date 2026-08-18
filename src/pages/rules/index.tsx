@@ -14,12 +14,12 @@ import {
 export default function Rules() {
     return (
         <Box customClass="rules-page">
-            <Text component="h3" customClass="rules-heading">
+            <Text component="h3" customClass="rules-heading section-heading">
                 {rulesStakingTitle}
             </Text>
             <Text customClass="rules-text">{rulesStakingDesc}</Text>
 
-            <Text component="h3" customClass="rules-heading">
+            <Text component="h3" customClass="rules-heading section-heading">
                 {rulesPayoutsTitle}
             </Text>
             <Text component="ul" customClass="rules-list">
@@ -30,12 +30,12 @@ export default function Rules() {
                 ))}
             </Text>
 
-            <Text component="h3" customClass="rules-heading">
+            <Text component="h3" customClass="rules-heading section-heading">
                 {rulesMatchingTitle}
             </Text>
             <Text customClass="rules-text">{rulesMatchingDesc}</Text>
 
-            <Text customClass="rules-about">
+            <Text customClass="rules-about caption">
                 {rulesAboutVersion}
                 <br />
                 {rulesAboutCredit}

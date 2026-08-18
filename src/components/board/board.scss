@@ -35,6 +35,7 @@
 
     &.square-premove-queued {
         box-shadow: inset 0 0 0 999px alpha($paleRed, 0.35);
+        animation: chess-premove-lock 0.35s ease-out;
     }
 
     &.square-drag-hover {
@@ -84,26 +85,23 @@
     position: relative;
     z-index: 2;
     filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.4));
+
+    &.piece-capture-pending {
+        opacity: 0.4;
+    }
 }
 
 .gr-captured-icon {
-    width: 1.35rem;
-    height: 1.35rem;
+    width: 1.3rem;
+    height: 1.3rem;
     flex-shrink: 0;
-    filter: drop-shadow(0 0 1.5px alpha($gold, 0.4));
 
     &.stacked {
-        margin-left: -1.25rem;
-        // margin-left: -0.55rem;
+        margin-left: -1.2rem;
     }
 
     &.stack-end {
         margin-right: 3px;
-    }
-
-    &.dark-piece * {
-        stroke: $appText !important;
-        stroke-width: 1.3px;
     }
 }
 
@@ -158,6 +156,18 @@
 
 .square-flash {
     animation: chess-square-flash 0.5s ease !important;
+}
+
+@keyframes chess-premove-lock {
+    0% {
+        box-shadow: inset 0 0 0 999px alpha($paleRed, 0.35);
+    }
+    35% {
+        box-shadow: inset 0 0 0 999px alpha($paleRed, 0.75);
+    }
+    100% {
+        box-shadow: inset 0 0 0 999px alpha($paleRed, 0.35);
+    }
 }
 
 @keyframes chess-square-flash {

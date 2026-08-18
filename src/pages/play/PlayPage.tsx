@@ -11,7 +11,7 @@ import Switch from "@/components/base/Switch/Switch";
 import Input from "@/components/base/Input/Input";
 import Label from "@/components/base/Label/Label";
 import OtpInput from "@/components/base/OtpInput/OtpInput";
-import { formateText } from "@/utils/formate";
+import { formatText } from "@/utils/format";
 import { formatMMSS } from "@/utils";
 import { Copy, Check, Clipboard } from "lucide-react";
 import BoardPreview from "@/components/board/BoardPreview";
@@ -22,9 +22,14 @@ import { useMatchmaking } from "@/hooks/useMatchmaking";
 import { useRoomMatch } from "@/hooks/useRoomMatch";
 import { useWalletBalance } from "@/hooks/useWallet";
 import { CATEGORY_META, QUEUE_TIMEOUT_SECONDS } from "@/constants/config";
+import { TIME_SECONDS } from "@/constants";
 import type { GameCategory, Pool } from "@/types/types";
-import { TIME_SECONDS } from "@/types/components";
-import type { Difficulty } from "@/types/components";
+import type {
+    Difficulty,
+    IDurationWheelProps,
+    IChipSelectProps,
+    RoomTab,
+} from "@/types/components";
 import {
     playPageHint,
     playSheetCardPlayButton,
@@ -82,18 +87,12 @@ const CATEGORY_ORDER: GameCategory[] = [
     "CLASSICAL",
 ];
 
-const ROOM_TABS: Array<"create" | "join"> = ["create", "join"];
+const ROOM_TABS: RoomTab[] = ["create", "join"];
 const STAKE_CHIP_AMOUNTS = [10, 25, 50, 100, 500];
 const DURATION_MINUTES = Array.from({ length: 30 }, (_, i) => i + 1);
 const DURATION_WHEEL_ITEM_HEIGHT = 44.8;
 
-function DurationWheel({
-    value,
-    onChange,
-}: {
-    value: number;
-    onChange: (value: number) => void;
-}) {
+function DurationWheel({ value, onChange }: IDurationWheelProps) {
     const listRef = useRef<HTMLDivElement>(null);
     const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
@@ -205,14 +204,7 @@ function ChipSelect<T extends string>({
     label,
     subLabel,
     customClass = "segment",
-}: {
-    options: T[];
-    value: T;
-    onChange: (value: T) => void;
-    label: (option: T) => string;
-    subLabel?: (option: T) => string;
-    customClass?: string;
-}) {
+}: IChipSelectProps<T>) {
     const btnRefs = useRef<Array<HTMLButtonElement | null>>([]);
     const [thumb, setThumb] = useState({ left: 0, width: 0 });
 
@@ -248,7 +240,7 @@ function ChipSelect<T extends string>({
                         {label(option)}
                     </Text>
                     {subLabel && (
-                        <Text component="span" customClass="segment-btn-sub">
+                        <Text component="span" customClass="segment-btn-sub caption">
                             {subLabel(option)}
                         </Text>
                     )}
@@ -287,7 +279,7 @@ export default function PlayPage() {
     } = useRoomMatch();
 
     const [roomOpen, setRoomOpen] = useState(false);
-    const [roomTab, setRoomTab] = useState<"create" | "join">("create");
+    const [roomTab, setRoomTab] = useState<RoomTab>("create");
     const [roomStake, setRoomStake] = useState("");
     const [roomStakeError, setRoomStakeError] = useState("");
     const [roomMinutes, setRoomMinutes] = useState(String(DURATION_MINUTES[4]));
@@ -443,7 +435,7 @@ export default function PlayPage() {
                 <Box customClass="board-wrap">
                     <BoardPreview />
                 </Box>
-                <Text customClass="play-hint">{playPageHint}</Text>
+                <Text customClass="play-hint description">{playPageHint}</Text>
             </Box>
 
             <Box customClass="cta-bottom">
@@ -498,10 +490,10 @@ export default function PlayPage() {
                                                 strokeWidth={2}
                                             />
                                             <Text
-                                                customClass="pool-meta-label"
+                                                customClass="description"
                                                 component="span"
                                             >
-                                                {formateText(
+                                                {formatText(
                                                     CATEGORY_META[pool.category]
                                                         ?.label ?? "",
                                                 )}{" "}
@@ -509,7 +501,7 @@ export default function PlayPage() {
                                             </Text>
                                             <Text
                                                 component="span"
-                                                customClass="pool-meta-time"
+                                                customClass="description"
                                             >
                                                 {timeLabel}
                                             </Text>
@@ -528,7 +520,7 @@ export default function PlayPage() {
                                         </Text>
 
                                         {pool.players > 0 && (
-                                            <Text customClass="pool-opponent-ready">
+                                            <Text customClass="pool-opponent-ready caption">
                                                 {
                                                     matchmakingPoolCardOpponentReady
                                                 }
@@ -562,7 +554,7 @@ export default function PlayPage() {
                         <Text customClass="stake-card-practice-title">
                             {playSheetPracticeTitle}
                         </Text>
-                        <Text customClass="stake-card-fee">
+                        <Text customClass="caption">
                             {playSheetPracticeDesc}
                         </Text>
                         <Button
@@ -582,7 +574,7 @@ export default function PlayPage() {
                         <Text customClass="stake-card-practice-title">
                             {playSheetFriendTitle}
                         </Text>
-                        <Text customClass="stake-card-fee">
+                        <Text customClass="caption">
                             {playSheetFriendDesc}
                         </Text>
                         <Button
@@ -596,7 +588,7 @@ export default function PlayPage() {
                         </Button>
                     </Card>
                 </Box>
-                <Text customClass="sheet-tip">
+                <Text customClass="sheet-tip meta-text">
                     <b>Tip:</b> {playSheetTip}
                 </Text>
             </Drawer>
@@ -656,14 +648,14 @@ export default function PlayPage() {
             >
                 {roomStatus === "waiting" ? (
                     <Box customClass="matchmaking-searching">
-                        <Text customClass="searching-title">
+                        <Text customClass="dialog-title">
                             {roomWaitingTitle}
                         </Text>
-                        <Text customClass="matches-empty-desc">
+                        <Text customClass="matches-empty-desc description">
                             {roomWaitingDesc}
                         </Text>
                         <Text customClass="searching-timer">{roomCode}</Text>
-                        <Text customClass="matches-empty-desc">
+                        <Text customClass="matches-empty-desc description">
                             {roomExpiresIn(formatMMSS(expiresInSeconds))}
                         </Text>
                         <Button
@@ -696,7 +688,7 @@ export default function PlayPage() {
                     </Box>
                 ) : (
                     <Box customClass="matchmaking-searching room-options">
-                        <Text customClass="sheet-title">
+                        <Text customClass="sheet-title dialog-title">
                             {playSheetFriendTitle}
                         </Text>
                         <ChipSelect
@@ -823,7 +815,7 @@ export default function PlayPage() {
                                             {roomJoinCodeLabel}
                                         </Label>
                                         <Button
-                                            className="room-paste-btn"
+                                            customClass="room-paste-btn"
                                             onClick={handlePasteCode}
                                         >
                                             <Clipboard size={14} />
@@ -875,7 +867,7 @@ export default function PlayPage() {
                             </Box>
                             <Text component="span" customClass="live-ring" />
                         </Box>
-                        <Text customClass="searching-title" aria-live="polite">
+                        <Text customClass="dialog-title" aria-live="polite">
                             {status === "found"
                                 ? matchmakingSearchingOpponentFound
                                 : matchmakingSearchingFindingOpponent}
@@ -885,18 +877,18 @@ export default function PlayPage() {
                         </Text>
                         <Box customClass="searching-details">
                             <Box customClass="searching-detail-item">
-                                <Text customClass="searching-detail-label">
+                                <Text customClass="searching-detail-label caption">
                                     {matchmakingSearchingStakeLabel}
                                 </Text>
-                                <Text customClass="searching-detail-value">
+                                <Text customClass="searching-detail-value value-heading">
                                     ${queuedPool?.stake}
                                 </Text>
                             </Box>
                             <Box customClass="searching-detail-item">
-                                <Text customClass="searching-detail-label">
+                                <Text customClass="searching-detail-label caption">
                                     {matchmakingSearchingPrizeLabel}
                                 </Text>
-                                <Text customClass="searching-detail-value win-prize">
+                                <Text customClass="searching-detail-value value-heading win-prize">
                                     ${queuedPool?.prize}
                                 </Text>
                             </Box>
@@ -915,26 +907,26 @@ export default function PlayPage() {
                 ) : (
                     confirmPool && (
                         <Box customClass="matchmaking-searching">
-                            <Text customClass="searching-title">
+                            <Text customClass="dialog-title">
                                 {matchmakingConfirmTitle}
                             </Text>
-                            <Text customClass="matches-empty-desc">
+                            <Text customClass="matches-empty-desc description">
                                 {matchmakingConfirmDescription}
                             </Text>
                             <Box customClass="searching-details">
                                 <Box customClass="searching-detail-item">
-                                    <Text customClass="searching-detail-label">
+                                    <Text customClass="searching-detail-label caption">
                                         {matchmakingSearchingStakeLabel}
                                     </Text>
-                                    <Text customClass="searching-detail-value">
+                                    <Text customClass="searching-detail-value value-heading">
                                         ${confirmPool.stake}
                                     </Text>
                                 </Box>
                                 <Box customClass="searching-detail-item">
-                                    <Text customClass="searching-detail-label">
+                                    <Text customClass="searching-detail-label caption">
                                         {matchmakingSearchingPrizeLabel}
                                     </Text>
-                                    <Text customClass="searching-detail-value win-prize">
+                                    <Text customClass="searching-detail-value value-heading win-prize">
                                         ${confirmPool.prize}
                                     </Text>
                                 </Box>

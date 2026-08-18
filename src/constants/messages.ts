@@ -269,6 +269,11 @@ export const playActionButtonsNewGame = "New Game";
 export const playEnginePanelEngineLine = (score: string) =>
     `Stockfish 16 · Depth 28 · ${score}`;
 export const playMoveHistoryReviewing = "Reviewing";
+export const playMoveHistoryPreviousMoveAriaLabel = "Previous move";
+export const playMoveHistoryNextMoveAriaLabel = "Next move";
+export const playTabLockedTitle = "Game already open";
+export const playTabLockedDescription = "This game is open in another tab.";
+export const playTabLockedTakeOverButton = "Play here instead";
 export const playMoveHistoryNoMovesYet = "No moves yet";
 export const playPlayerRowThinking = "Thinking";
 export const playPlayerRowYourTurn = "Your Turn";
@@ -446,6 +451,9 @@ export const withdrawModalFailed = "Withdrawal failed. Please try again.";
 export const withdrawModalSuccessTitle = "Withdrawal requested";
 export const withdrawModalSuccessDesc =
     "We're processing your withdrawal — it'll arrive shortly.";
+export const withdrawModalPasswordTitle = "Confirm your password";
+export const withdrawModalPasswordDesc = "Enter your password for  withdrawal.";
+export const withdrawModalConfirmButton = "Confirm withdrawal";
 
 export const leaderboardLoadError = "Couldn't load the leaderboard right now.";
 export const leaderboardEmpty = "No ranked players yet.";

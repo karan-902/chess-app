@@ -6,6 +6,7 @@ import Button from "@/components/base/Button/Button";
 import AuthLayout from "@/container/AuthLayout";
 import { callAPIInterface } from "@/utils";
 import { useLogout } from "@/hooks/useLogout";
+import type { ApproveDeviceStatus } from "@/types/components";
 import {
     authBackToSignIn,
     deviceApprovePageTitle,
@@ -17,10 +18,10 @@ import {
     deviceApproveInvalidDescription,
 } from "@/constants/messages";
 
-export default function ApproveDevicePage() {
+export default function ApproveDevice() {
     const [searchParams] = useSearchParams();
     const token = searchParams.get("token");
-    const [status, setStatus] = useState<"confirm" | "approved" | "invalid">(
+    const [status, setStatus] = useState<ApproveDeviceStatus>(
         token ? "confirm" : "invalid",
     );
     const [submitting, setSubmitting] = useState(false);

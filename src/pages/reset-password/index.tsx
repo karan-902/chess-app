@@ -41,7 +41,7 @@ const resetSchema = yup.object({
         .oneOf([yup.ref("password")], authValidationPasswordsMustMatch),
 });
 
-export default function ResetPasswordPage() {
+export default function ResetPassword() {
     const dispatch = useReduxDispatch();
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();

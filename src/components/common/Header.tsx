@@ -12,7 +12,7 @@ import Button from "@/components/base/Button/Button";
 import { useWalletBalance } from "@/hooks/useWallet";
 import { useLogout } from "@/hooks/useLogout";
 import { useReduxSelector } from "@/redux/hooks";
-import { formateAmount } from "@/utils/formate";
+import { formatAmount } from "@/utils/format";
 import { shortenUsername } from "@/utils";
 import { NAV_ITEMS } from "@/constants/config";
 import { profileTitle, appBarLogout, appBarWallet } from "@/constants/messages";
@@ -66,7 +66,7 @@ export default function Header() {
                             />
                         ) : (
                             <Text customClass="appbar-balance-label">
-                                {formateAmount(usdValue)}
+                                {formatAmount(usdValue)}
                             </Text>
                         )}
                     </Box>

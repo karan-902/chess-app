@@ -190,7 +190,7 @@ export default function DepositModal() {
             {stage === "amount" && showSteps && (
                 <Box customClass="deposit-steps">
                     <Box customClass="deposit-steps-head">
-                        <Text customClass="deposit-heading">
+                        <Text customClass="deposit-heading value-heading">
                             {depositModalStepsTitle}
                         </Text>
                         <Button
@@ -206,11 +206,11 @@ export default function DepositModal() {
                             <Text customClass="deposit-step-title">
                                 {step.title}
                             </Text>
-                            <Text customClass="deposit-step-desc">
+                            <Text customClass="deposit-step-desc caption">
                                 {step.desc}
                             </Text>
                             {step.note && (
-                                <Text customClass="deposit-step-note">
+                                <Text customClass="deposit-step-note warning-text">
                                     {step.note}
                                 </Text>
                             )}
@@ -221,7 +221,7 @@ export default function DepositModal() {
 
             {stage === "amount" && !showSteps && (
                 <Box customClass="deposit-amount-stage">
-                    <Text customClass="deposit-heading">
+                    <Text customClass="deposit-heading value-heading">
                         {depositModalTitle}
                     </Text>
 
@@ -263,7 +263,7 @@ export default function DepositModal() {
                             className="deposit-speed-logo"
                         />
                     </Box>
-                    <Text customClass="deposit-tagline">
+                    <Text customClass="deposit-tagline meta-text">
                         {depositModalTagline}
                     </Text>
 
@@ -278,13 +278,13 @@ export default function DepositModal() {
                         {depositModalGenerateButton}
                     </Button>
 
-                    <button
+                    <Button
                         type="button"
-                        className="deposit-howto-link"
+                        customClass="deposit-howto-link"
                         onClick={() => setShowSteps(true)}
                     >
                         {depositModalHowToLink}
-                    </button>
+                    </Button>
                 </Box>
             )}
 
@@ -312,11 +312,11 @@ export default function DepositModal() {
                     </Box>
 
                     {method === "bitcoin" && (
-                        <Text customClass="deposit-warning">
+                        <Text customClass="deposit-warning warning-text">
                             {depositModalBtcOnlyWarning}
                         </Text>
                     )}
-                    <Text customClass="deposit-scan-hint">
+                    <Text customClass="deposit-scan-hint caption">
                         {depositModalScanHint}
                     </Text>
 
@@ -358,6 +358,7 @@ export default function DepositModal() {
                     <Text
                         customClass={classNames(
                             "deposit-timer",
+                            "caption",
                             expired && "expired",
                         )}
                     >
@@ -375,10 +376,10 @@ export default function DepositModal() {
                     <Box customClass="deposit-success-icon">
                         <CheckCircle2 size={32} strokeWidth={2} />
                     </Box>
-                    <Text customClass="deposit-heading">
+                    <Text customClass="deposit-heading value-heading">
                         {depositModalPaymentReceived}
                     </Text>
-                    <Text customClass="deposit-tagline">
+                    <Text customClass="deposit-tagline meta-text">
                         {depositModalPaymentReceivedDesc}
                     </Text>
                     <Button

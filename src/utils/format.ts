@@ -5,19 +5,19 @@ const currencyFormatter = new Intl.NumberFormat("en-US", {
     currency: "USD",
 });
 
-export function formateAmount(amount: number): string {
+export function formatAmount(amount: number): string {
     return currencyFormatter.format(amount);
 }
 
-export function formateTime(date: number | Date): string {
+export function formatTime(date: number | Date): string {
     return dayjs(date).format("h:mm A");
 }
 
-export function formateText(text: string): string {
+export function formatText(text: string): string {
     return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
 }
 
-export function formateTimeControl(time: string): string {
+export function formatTimeControl(time: string): string {
     const [minStr, incStr] = time.split("+");
     const min = parseInt(minStr, 10);
     const inc = parseInt(incStr ?? "0", 10);

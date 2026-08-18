@@ -106,6 +106,7 @@ export type IWithdrawBody = {
     amount_usd: number;
     withdraw_method: WithdrawMethod;
     destination: string;
+    password: string;
 };
 
 export type IWithdrawResponse = IWalletBalanceResponse & {
@@ -202,36 +203,3 @@ export type IMessageResponse = {
     message: string;
 };
 
-export type FriendStatus =
-    | "none"
-    | "pending_sent"
-    | "pending_received"
-    | "friends";
-
-export type IFriendListItem = {
-    id: string;
-    username: string;
-    avatar_seed: string | null;
-    is_online: boolean;
-};
-
-export type IFriendRequestResponse = {
-    id: string;
-    user: {
-        id: string;
-        username: string;
-        avatar_seed: string | null;
-    };
-    created: number;
-};
-
-export type ISearchResultItem = {
-    id: string;
-    username: string;
-    avatar_seed: string | null;
-    friend_status: FriendStatus;
-};
-
-export type ISendFriendRequestBody = {
-    addressee_id: string;
-};

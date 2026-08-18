@@ -1,4 +1,3 @@
-import { Difficulty } from "@/types/components";
 import {
     Rocket,
     Zap,
@@ -71,27 +70,12 @@ export const QUEUE_TIMEOUT_SECONDS: Record<GameCategory, number> = {
     CLASSICAL: 90,
 };
 
-export const PATH_TITLE: Record<string, string> = {
-    "/play": "Play",
-    "/matchmaking": "Find Match",
-    "/history": "Matches",
-    "/wallet": "Wallet",
-    "/leaderboard": "Leaderboard",
-    "/friends": "Friends",
-};
-
 export const NAV_ITEMS = [
     { id: "play", path: "/play", label: "Play" },
     { id: "my-matches", path: "/history", label: "Matches" },
     { id: "leaderboard", path: "/leaderboard", label: "Leaderboard" },
     { id: "rules", path: "/rules", label: "Rules" },
 ];
-
-export const DEPTH_MAP: Record<Difficulty, number> = {
-    easy: 1,
-    medium: 6,
-    hard: 14,
-};
 
 export const COUNTRIES = [
     "Afghanistan",

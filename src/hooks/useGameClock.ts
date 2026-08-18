@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import type { TimeControl } from "@/types/components";
-import { TIME_SECONDS } from "@/types/components";
+import { TIME_SECONDS } from "@/constants";
 import type { GameCategory } from "@/types/types";
 
 type Anchor = { turn: "w" | "b"; at: number; whiteMs: number; blackMs: number };

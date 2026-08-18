@@ -98,6 +98,10 @@ body {
 }
 
 .auth-forgot-link {
+    max-width: 100px;
+    display: flex;
+    align-self: flex-end;
+
     font-size: $font12;
     font-weight: 600;
     color: $gold;
@@ -105,6 +109,7 @@ body {
     background: none;
     border: none;
     padding: 0;
+    text-align: right;
     font-family: inherit;
     cursor: pointer;
 }
@@ -117,190 +122,6 @@ body {
 .deposit-speed-logo {
     height: 1.25rem;
     width: auto;
-}
-
-.deposit-howto-link {
-    display: none;
-    align-self: center;
-    margin-top: 0.9rem;
-    font-size: $font12;
-    font-weight: 600;
-    color: $gold;
-    text-decoration: none;
-    background: none;
-    border: none;
-    padding: 0;
-    font-family: inherit;
-    cursor: pointer;
-}
-
-.deposit-steps-close {
-    position: absolute;
-    top: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 1.875rem;
-    height: 1.875rem;
-    border-radius: 50%;
-    background: rgba(128, 128, 128, 0.18);
-    border: none;
-    color: $appText;
-    cursor: pointer;
-
-    &:hover {
-        background: rgba(128, 128, 128, 0.3);
-    }
-}
-
-.deposit-steps-close {
-    right: 0;
-}
-
-.deposit-steps-close {
-    position: static;
-}
-
-.gr-link {
-    font-size: $font12;
-    font-weight: 500;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-    font-family: $fontOutfitExtraBold;
-    color: $appTextMuted;
-    background: none;
-    border: none;
-    border-bottom: 1px solid transparent;
-    padding: 0;
-    cursor: pointer;
-    transition:
-        color 0.2s ease,
-        border-color 0.2s ease;
-
-    &:hover {
-        color: $appText;
-        border-color: $appTextMuted;
-    }
-
-    &.danger:hover {
-        color: $paleRed;
-        border-color: $paleRed;
-    }
-}
-
-.room-paste-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-    font-size: $font12;
-    font-weight: 700;
-    color: $gold;
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-}
-
-.gr-overlay-btn {
-    flex: 1;
-    font-family: $fontOutfit;
-    font-size: $font12;
-    font-weight: 700;
-    padding: 0.65rem;
-    border-radius: $appBtnRadius;
-    cursor: pointer;
-
-    &.primary {
-        background: $gold;
-        border: none;
-        color: $appBg;
-
-        &:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-    }
-
-    &.secondary {
-        background: transparent;
-        border: 1px solid $appCardBorder;
-        color: $appText;
-    }
-}
-
-.gr-review-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 1.9rem;
-    height: 1.9rem;
-    border-radius: 50%;
-    border: 1px solid $appCardBorder;
-    background: $appSurface;
-    font-family: $fontOutfitExtraBold;
-    color: $appTextMuted;
-    cursor: pointer;
-    transition:
-        color 0.15s ease,
-        border-color 0.15s ease;
-
-    &:hover:not(:disabled) {
-        color: $appText;
-        border-color: $appTextMuted;
-    }
-
-    &:disabled {
-        opacity: 0.35;
-        cursor: not-allowed;
-    }
-}
-
-.gr-action-btn {
-    flex: 1;
-    max-width: 9.5rem;
-    padding: 0.6rem 1rem;
-    border-radius: 999px;
-    border: 1px solid $appCardBorder;
-    background: $appSurface;
-    font-family: $fontOutfitExtraBold;
-    color: $appTextMuted;
-    font-size: $font12;
-    font-weight: 700;
-    cursor: pointer;
-    transition:
-        color 0.15s ease,
-        border-color 0.15s ease;
-
-    &:hover {
-        color: $appText;
-        border-color: $appTextMuted;
-    }
-
-    &.danger {
-        border-color: alpha($paleRed, 0.35);
-        color: $paleRed;
-
-        &:hover {
-            border-color: $paleRed;
-        }
-    }
-}
-
-.gr-promotion-btn {
-    width: 3.5rem;
-    height: 3.5rem;
-    padding: 0;
-    border-radius: 0.85rem;
-    background: $appBg;
-    border: 1px solid $appCardBorder;
-    transition:
-        border-color 0.15s ease,
-        background-color 0.15s ease;
-
-    &:hover:not(:disabled) {
-        background: alpha($gold, 0.1);
-        border-color: $gold;
-    }
 }
 
 .gr-promotion-icon {
@@ -319,18 +140,7 @@ body {
     background-color: transparent;
     border-radius: 10px;
 }
-*:hover::-webkit-scrollbar-thumb {
-    background-color: alpha($gold, 0.2);
-}
-::-webkit-scrollbar-thumb:hover {
-    background-color: alpha($gold, 0.4);
-}
 * {
     scrollbar-width: none;
     scrollbar-color: transparent transparent;
-
-    &:hover {
-        scrollbar-width: thin;
-        scrollbar-color: alpha($gold, 0.2) transparent;
-    }
 }

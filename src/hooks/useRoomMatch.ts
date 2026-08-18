@@ -4,7 +4,7 @@ import { getSocket } from "@/lib/socket";
 import { useSocket } from "@/context/SocketContext";
 import { useReduxDispatch } from "@/redux/hooks";
 import { showToast } from "@/redux/common/common.slice";
-import { secondsToTimeControl } from "@/types/components";
+import { buildGameRoomUrl } from "@/utils";
 import type {
     IRoomCreatedResponse,
     IRoomMatchedResponse,
@@ -72,15 +72,7 @@ export function useRoomMatch() {
 
         const onRoomMatched = (data: IRoomMatchedResponse) => {
             setStatus("found");
-            navigate(
-                `/play?mode=pvp&time=${secondsToTimeControl(data.time_seconds)}` +
-                    `&game_id=${data.game_id}&color=${data.your_color}` +
-                    `&opponent=${encodeURIComponent(data.opponent.username)}` +
-                    `&opp_rating=${data.opponent.elo_rating}&opp_id=${data.opponent.id}` +
-                    `&opp_avatar_seed=${encodeURIComponent(data.opponent.avatar_seed ?? "")}` +
-                    `&stake_amount=${data.stake_amount}`,
-                { replace: true },
-            );
+            navigate(buildGameRoomUrl(data), { replace: true });
         };
 
         const onRoomError = ({ message }: IRoomErrorResponse) => {

@@ -29,11 +29,17 @@ export const requestWithdraw = (
     amountUsd: number,
     withdrawMethod: WithdrawMethod,
     destination: string,
+    password: string,
 ) =>
     callAPIInterface<IWithdrawBody, IWithdrawResponse>(
         "POST",
         "/wallet/withdraw",
-        { amount_usd: amountUsd, withdraw_method: withdrawMethod, destination },
+        {
+            amount_usd: amountUsd,
+            withdraw_method: withdrawMethod,
+            destination,
+            password,
+        },
     );
 
 export function useWalletBalance() {

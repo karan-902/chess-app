@@ -13,8 +13,8 @@ export function useTabLock(gameId: string | undefined, mode: string) {
 
     useEffect(() => {
         if (mode !== "pvp" || !gameId) return;
-        const storageKey = `kg_primary:${gameId}`;
-        const channelName = `kg_game:${gameId}`;
+        const storageKey = `sj_primary:${gameId}`;
+        const channelName = `sj_game:${gameId}`;
         const existing = localStorage.getItem(storageKey);
         const isSecondary =
             !!existing &&
@@ -39,9 +39,7 @@ export function useTabLock(gameId: string | undefined, mode: string) {
                     setStatus("superseded");
                 }
             };
-        } catch {
-
-        }
+        } catch {}
 
         const interval = setInterval(() => {
             const current = localStorage.getItem(storageKey);
@@ -54,7 +52,6 @@ export function useTabLock(gameId: string | undefined, mode: string) {
         const onStorage = (e: StorageEvent) => {
             if (e.key !== storageKey) return;
             if (e.newValue === null) {
-
                 localStorage.setItem(storageKey, `${myId}:${Date.now()}`);
                 setStatus("primary");
             }
@@ -76,22 +73,21 @@ export function useTabLock(gameId: string | undefined, mode: string) {
         };
     }, [gameId, mode, myId]);
 
-        const takeOver = useCallback(() => {
+    const takeOver = useCallback(() => {
         if (!gameId) return;
-        const storageKey = `kg_primary:${gameId}`;
+        const storageKey = `sj_primary:${gameId}`;
         localStorage.setItem(storageKey, `${myId}:${Date.now()}`);
 
         try {
-            const bc = new BroadcastChannel(`kg_game:${gameId}`);
+            const bc = new BroadcastChannel(`sj_game:${gameId}`);
             bc.postMessage({ type: "takeover", tabId: myId });
             bc.close();
-        } catch {
-                    }
+        } catch {}
 
         setStatus("primary");
     }, [gameId, myId]);
 
-        const notifySuperseded = useCallback(() => setStatus("superseded"), []);
+    const notifySuperseded = useCallback(() => setStatus("superseded"), []);
 
     return { tabLockStatus: status, takeOver, notifySuperseded };
 }

@@ -10,14 +10,16 @@ import Label from "@/components/base/Label/Label";
 import Input from "@/components/base/Input/Input";
 import Skeleton from "@/components/base/Skeleton/Skeleton";
 import VirtualList from "@/components/common/VirtualList";
+import EmptyState from "@/components/common/EmptyState";
 import { useWallet } from "@/hooks/useWallet";
 import { useWalletActionModal } from "@/context/WalletActionModalContext";
-import { formateAmount, formateTime } from "@/utils/formate";
+import { formatAmount, formatTime } from "@/utils/format";
 import {
     TRANSACTION_TYPE_ICONS,
     TRANSACTION_TYPE_LABELS,
 } from "@/constants/config";
 import type { ITransactionResponse, TransactionType } from "@/types/utils";
+import type { ITransactionFilterDrawerProps } from "@/types/components";
 import {
     walletPageBalanceLabel,
     walletPageWithdrawableLabel,
@@ -48,8 +50,6 @@ function dayLabel(ms: number): string {
     return date.format("D MMM YYYY");
 }
 
-type DateFilter = { from?: number; to?: number };
-
 function TransactionFilterDrawer({
     open,
     onClose,
@@ -57,14 +57,7 @@ function TransactionFilterDrawer({
     setTypeFilter,
     dateFilter,
     setDateFilter,
-}: {
-    open: boolean;
-    onClose: () => void;
-    typeFilter: TransactionType[];
-    setTypeFilter: (types: TransactionType[]) => void;
-    dateFilter: DateFilter;
-    setDateFilter: (filter: DateFilter) => void;
-}) {
+}: ITransactionFilterDrawerProps) {
     const [draftTypes, setDraftTypes] = useState(typeFilter);
     const [draftFrom, setDraftFrom] = useState("");
     const [draftTo, setDraftTo] = useState("");
@@ -111,7 +104,7 @@ function TransactionFilterDrawer({
     return (
         <Modal open={open} onClose={onClose} customClass="tx-filter-sheet">
             <Box customClass="tx-filter-sheet-content">
-                <Text customClass="deposit-heading">{walletFilterTitle}</Text>
+                <Text customClass="deposit-heading value-heading">{walletFilterTitle}</Text>
 
                 <Box customClass="auth-field">
                     <Label>{walletFilterTypeLabel}</Label>
@@ -221,23 +214,23 @@ function txRow(tx: ITransactionResponse) {
                         <TxIcon size={16} strokeWidth={2} />
                     </Box>
                     <Box customClass="wallet-tx-text">
-                        <Text customClass="wallet-tx-desc">
+                        <Text customClass="row-title">
                             {tx.description}
                         </Text>
-                        <Text customClass="wallet-tx-time">
-                            {dayLabel(tx.created)} - {formateTime(tx.created)}
+                        <Text customClass="meta-text">
+                            {dayLabel(tx.created)} - {formatTime(tx.created)}
                         </Text>
                     </Box>
                 </Box>
                 <Text
                     component="span"
                     customClass={classNames(
-                        "wallet-tx-amt",
+                        "amount-value",
                         tx.amount_usd >= 0 ? "pos" : "neg",
                     )}
                 >
                     {tx.amount_usd >= 0 ? "+" : "-"}
-                    {formateAmount(Math.abs(tx.amount_usd))}
+                    {formatAmount(Math.abs(tx.amount_usd))}
                 </Text>
             </Box>
         </Box>
@@ -276,7 +269,7 @@ export default function Wallet() {
                         <Skeleton customClass="text" width={80} height={24} />
                     ) : (
                         <Text customClass="wallet-split-val">
-                            {formateAmount(usdValue)}
+                            {formatAmount(usdValue)}
                         </Text>
                     )}
                 </Box>
@@ -288,7 +281,7 @@ export default function Wallet() {
                         <Skeleton customClass="text" width={80} height={24} />
                     ) : (
                         <Text customClass="wallet-split-val">
-                            {formateAmount(withdrawableUsd)}
+                            {formatAmount(withdrawableUsd)}
                         </Text>
                     )}
                 </Box>
@@ -368,14 +361,10 @@ export default function Wallet() {
                     ))}
                 </Box>
             ) : transactions.length === 0 ? (
-                <Box customClass="matches-empty">
-                    <Text component="h3" customClass="matches-empty-title">
-                        {walletPageEmptyTitle}
-                    </Text>
-                    <Text customClass="matches-empty-desc">
-                        {walletPageEmptyDesc}
-                    </Text>
-                </Box>
+                <EmptyState
+                    title={walletPageEmptyTitle}
+                    description={walletPageEmptyDesc}
+                />
             ) : (
                 <Box customClass="wallet-timeline">
                     <VirtualList<ITransactionResponse>

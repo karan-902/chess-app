@@ -3,9 +3,10 @@ import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import Card from "@/components/base/Card/Card";
 import Skeleton from "@/components/base/Skeleton/Skeleton";
+import EmptyState from "@/components/common/EmptyState";
 import { useLeaderboard } from "@/hooks/useLeaderboard";
 import { useReduxSelector } from "@/redux/hooks";
-import { formateAmount } from "@/utils/formate";
+import { formatAmount } from "@/utils/format";
 import { shortenUsername } from "@/utils";
 import {
     leaderboardLoadError,
@@ -58,11 +59,9 @@ export default function Leaderboard() {
             {loading ? (
                 <Box>{lbSkeletonRows()}</Box>
             ) : players.length === 0 ? (
-                <Box customClass="matches-empty">
-                    <Text customClass="matches-empty-desc">
-                        {error ? leaderboardLoadError : leaderboardEmpty}
-                    </Text>
-                </Box>
+                <EmptyState
+                    description={error ? leaderboardLoadError : leaderboardEmpty}
+                />
             ) : (
                 <Box>
                     {!meInList && currentUserId && (
@@ -70,12 +69,12 @@ export default function Leaderboard() {
                             <Text customClass="lb-rank">
                                 {leaderboardRankFallback}
                             </Text>
-                            <Text customClass="lb-name" truncate>
+                            <Text customClass="lb-name row-title" truncate>
                                 {currentUsername
                                     ? youLabel(currentUsername)
                                     : matchesYouLabel}
                             </Text>
-                            <Text customClass="lb-earnings">
+                            <Text customClass="lb-earnings amount-value">
                                 {leaderboardRankFallback}
                             </Text>
                         </Card>
@@ -97,13 +96,13 @@ export default function Leaderboard() {
                             >
                                 {player.rank}
                             </Text>
-                            <Text customClass="lb-name" truncate>
+                            <Text customClass="lb-name row-title" truncate>
                                 {isMe(player.id)
                                     ? youLabel(shortenUsername(player.username))
                                     : shortenUsername(player.username)}
                             </Text>
-                            <Text customClass="lb-earnings">
-                                {formateAmount(player.earnings)}
+                            <Text customClass="lb-earnings amount-value">
+                                {formatAmount(player.earnings)}
                             </Text>
                         </Card>
                     ))}

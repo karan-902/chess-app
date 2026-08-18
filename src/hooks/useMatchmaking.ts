@@ -4,6 +4,7 @@ import { getSocket } from "@/lib/socket";
 import { useSocket } from "@/context/SocketContext";
 import { useReduxDispatch } from "@/redux/hooks";
 import { showToast } from "@/redux/common/common.slice";
+import { buildGameRoomUrl } from "@/utils";
 import type {
     Pool,
     ImatchFoundResponse,
@@ -63,11 +64,7 @@ export function useMatchmaking() {
 
         const onMatchFound = (match: ImatchFoundResponse) => {
             setStatus("found");
-            const pool = poolRef.current;
-            navigate(
-                `/play?mode=pvp&time=${pool?.category ?? "rapid"}&game_id=${match.game_id}&color=${match.your_color}&opponent=${encodeURIComponent(match.opponent.username)}&opp_rating=${match.opponent.elo_rating}&opp_id=${match.opponent.id}&opp_avatar_seed=${encodeURIComponent(match.opponent.avatar_seed ?? "")}&stake_amount=${match.stake_amount}`,
-                { replace: true },
-            );
+            navigate(buildGameRoomUrl(match), { replace: true });
         };
 
         const onQueueLeft = (_data: IqueueLeftResponse) => {

@@ -7,13 +7,19 @@ import Button from "@/components/base/Button/Button";
 import Card from "@/components/base/Card/Card";
 import Skeleton from "@/components/base/Skeleton/Skeleton";
 import VirtualList from "@/components/common/VirtualList";
+import EmptyState from "@/components/common/EmptyState";
+import StatRowSkeleton from "@/components/common/StatRowSkeleton";
 import { useGameHistory } from "@/hooks/useGameHistory";
 import { useReduxSelector } from "@/redux/hooks";
-import { formatMatchDate, shortenUsername } from "@/utils";
-import { formateText } from "@/utils/formate";
+import { deriveCategory, formatMatchDate, shortenUsername } from "@/utils";
+import { formatText } from "@/utils/format";
 import { CATEGORY_META, GAME_END_REASON_LABELS } from "@/constants/config";
-import type { GameCategory } from "@/types/types";
 import type { IGameHistoryItem } from "@/types/types";
+import type {
+    IMatchRowProps,
+    IMatchListProps,
+    MatchesSubtab,
+} from "@/types/components";
 import {
     matchesSubtabHistory,
     matchesSubtabGlobal,
@@ -34,16 +40,8 @@ import {
     matchesStatsFallback,
     matchesStatsCurrentStreakLabel,
 } from "@/constants/messages";
-import { formateAmount } from "@/utils/formate";
-
-type Subtab = "results" | "worldwide" | "stats";
-
-function deriveCategory(timeSeconds: number): GameCategory {
-    if (timeSeconds <= 120) return "BULLET";
-    if (timeSeconds <= 420) return "BLITZ";
-    if (timeSeconds <= 1200) return "RAPID";
-    return "CLASSICAL";
-}
+import { formatAmount } from "@/utils/format";
+const HISTORY_SKELETON_ROWS = 15;
 
 function MatchRow({
     outcome,
@@ -54,16 +52,7 @@ function MatchRow({
     stakeAmount,
     dateLabel,
     selfName,
-}: {
-    outcome: "win" | "loss" | "draw";
-    opponentName: string;
-    category: GameCategory;
-    endReason: string;
-    amount: number;
-    stakeAmount: number;
-    dateLabel: string;
-    selfName?: string;
-}) {
+}: IMatchRowProps) {
     const CategoryIcon = CATEGORY_META[category].icon;
     return (
         <Box customClass="match-row-item">
@@ -76,7 +65,7 @@ function MatchRow({
                         />
                     </Box>
                     <Box customClass="match-row-text">
-                        <Text customClass="match-row-headline" truncate>
+                        <Text customClass="match-row-headline row-title" truncate>
                             {selfName && (
                                 <>
                                     {selfName}
@@ -88,23 +77,28 @@ function MatchRow({
                             )}
                             {opponentName}
                         </Text>
-                        <Text customClass="match-row-time">
+                        <Text customClass="match-row-time meta-text">
                             {GAME_END_REASON_LABELS[endReason] ??
-                                formateText(endReason)}{" "}
-                            &middot; {formateAmount(stakeAmount)} stake
-                            &middot; {dateLabel}
+                                formatText(endReason)}{" "}
+                            &middot; {formatAmount(stakeAmount)} stake &middot;{" "}
+                            {dateLabel}
                         </Text>
                     </Box>
                 </Box>
                 <Box customClass="match-row-amt-wrap">
                     <Box customClass="match-row-amt-row">
-                        <Text component="span" customClass="match-row-amt">
-                            {outcome === "win" &&
-                                `+${formateAmount(amount)}`}
-                            {outcome === "loss" &&
-                                `-${formateAmount(amount)}`}
+                        <Text
+                            component="span"
+                            customClass={classNames("amount-value", {
+                                pos: outcome === "win",
+                                neg: outcome === "loss",
+                                neutral: outcome === "draw",
+                            })}
+                        >
+                            {outcome === "win" && `+${formatAmount(amount)}`}
+                            {outcome === "loss" && `-${formatAmount(amount)}`}
                             {outcome === "draw" &&
-                                `${amount > 0 ? "-" : ""}${formateAmount(amount)}`}
+                                `${amount > 0 ? "-" : ""}${formatAmount(amount)}`}
                         </Text>
                     </Box>
                 </Box>
@@ -113,26 +107,16 @@ function MatchRow({
     );
 }
 
-const HISTORY_SKELETON_ROWS = 15;
-
 function MatchRowSkeleton() {
     return (
         <Box customClass="match-row-item">
             <Box customClass="match-row">
                 <Box customClass="match-row-info">
                     <Box customClass="match-row-icon">
-                        <Skeleton
-                            variant="circular"
-                            width={18}
-                            height={18}
-                        />
+                        <Skeleton variant="circular" width={18} height={18} />
                     </Box>
                     <Box customClass="match-row-text">
-                        <Skeleton
-                            customClass="text"
-                            width={140}
-                            height={14}
-                        />
+                        <Skeleton customClass="text" width={140} height={14} />
                         <Skeleton
                             customClass="text"
                             width={90}
@@ -154,15 +138,6 @@ function historySkeletonRows() {
 }
 
 const STATS_SKELETON_ROWS = 5;
-
-function StatRowSkeleton() {
-    return (
-        <Box customClass="matches-stat-row">
-            <Skeleton customClass="text" width={100} height={14} />
-            <Skeleton customClass="text" width={40} height={16} />
-        </Box>
-    );
-}
 
 function statsSkeletonRows() {
     return Array.from({ length: STATS_SKELETON_ROWS }, (_, index) => (
@@ -205,13 +180,7 @@ function MatchList({
     currentUserId,
     loadingMore,
     loadMore,
-}: {
-    items: IGameHistoryItem[];
-    showSelf: boolean;
-    currentUserId: string | undefined;
-    loadingMore: boolean;
-    loadMore: () => void;
-}) {
+}: IMatchListProps) {
     return (
         <Card customClass="matches-stat-list match-row-list">
             <VirtualList<IGameHistoryItem>
@@ -230,7 +199,7 @@ function MatchList({
 }
 
 export default function MyMatches() {
-    const [subtab, setSubtab] = useState<Subtab>("results");
+    const [subtab, setSubtab] = useState<MatchesSubtab>("results");
     const currentUserId = useReduxSelector((state) => state.auth.session?.id);
     const {
         items,
@@ -284,16 +253,10 @@ export default function MyMatches() {
                         {historySkeletonRows()}
                     </Card>
                 ) : items.length === 0 ? (
-                    <Box customClass="matches-empty">
-                        <Text component="h3" customClass="matches-empty-title">
-                            {error ? matchesLoadError : matchesEmptyTitle}
-                        </Text>
-                        {!error && (
-                            <Text customClass="matches-empty-desc">
-                                {matchesEmptyDesc}
-                            </Text>
-                        )}
-                    </Box>
+                    <EmptyState
+                        title={error ? matchesLoadError : matchesEmptyTitle}
+                        description={!error ? matchesEmptyDesc : undefined}
+                    />
                 ) : (
                     <MatchList
                         items={items}
@@ -310,16 +273,14 @@ export default function MyMatches() {
                         {historySkeletonRows()}
                     </Card>
                 ) : items.length === 0 ? (
-                    <Box customClass="matches-empty">
-                        <Text component="h3" customClass="matches-empty-title">
-                            {error ? matchesLoadError : matchesGlobalEmptyTitle}
-                        </Text>
-                        {!error && (
-                            <Text customClass="matches-empty-desc">
-                                {matchesGlobalEmptyDesc}
-                            </Text>
-                        )}
-                    </Box>
+                    <EmptyState
+                        title={
+                            error ? matchesLoadError : matchesGlobalEmptyTitle
+                        }
+                        description={
+                            !error ? matchesGlobalEmptyDesc : undefined
+                        }
+                    />
                 ) : (
                     <MatchList
                         items={items}
@@ -336,7 +297,7 @@ export default function MyMatches() {
                         <Text component="h3" customClass="matches-stats-title">
                             {matchesStatsTitle}
                         </Text>
-                        <Text customClass="matches-stats-subtitle">
+                        <Text customClass="caption">
                             {matchesStatsSubtitle}
                         </Text>
                     </Box>
@@ -344,14 +305,7 @@ export default function MyMatches() {
                         {statsLoading ? (
                             statsSkeletonRows()
                         ) : statsError ? (
-                            <Box customClass="matches-empty">
-                                <Text
-                                    component="h3"
-                                    customClass="matches-empty-title"
-                                >
-                                    {matchesStatsLoadError}
-                                </Text>
-                            </Box>
+                            <EmptyState title={matchesStatsLoadError} />
                         ) : (
                             <>
                                 <Box customClass="matches-stat-row">

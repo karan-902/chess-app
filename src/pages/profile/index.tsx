@@ -12,13 +12,14 @@ import Button from "@/components/base/Button/Button";
 import Input from "@/components/base/Input/Input";
 import Label from "@/components/base/Label/Label";
 import Switch from "@/components/base/Switch/Switch";
+import StatRowSkeleton from "@/components/common/StatRowSkeleton";
 import { useReduxSelector, useReduxDispatch } from "@/redux/hooks";
 import { updateSession } from "@/redux/persisted/auth.slice";
 import { showToast } from "@/redux/common/common.slice";
 import { useAppTheme } from "@/context/ThemeContext";
 import { callAPIInterface, shortenUsername } from "@/utils";
 import { getAvatarUrl } from "@/utils/avatar";
-import { formateText } from "@/utils/formate";
+import { formatText } from "@/utils/format";
 import { CATEGORY_META } from "@/constants/config";
 import type { GameCategory } from "@/types/types";
 import type {
@@ -27,6 +28,7 @@ import type {
     IUpdateProfileResponse,
     IAvatarOptionsResponse,
 } from "@/types/utils";
+import type { IEditProfileDrawerProps } from "@/types/components";
 import {
     profileEditButton,
     profileRatingsByCategoryLabel,
@@ -62,15 +64,6 @@ const profileEditSchema = Yup.object({
         .min(3, profileValidationUsernameMinLength)
         .required(profileValidationUsernameRequired),
 });
-
-function StatRowSkeleton() {
-    return (
-        <Box customClass="matches-stat-row">
-            <Skeleton customClass="text" width={100} height={14} />
-            <Skeleton customClass="text" width={40} height={16} />
-        </Box>
-    );
-}
 
 function ProfileSkeleton() {
     return (
@@ -133,11 +126,7 @@ function EditProfileDrawer({
     open,
     onClose,
     session,
-}: {
-    open: boolean;
-    onClose: () => void;
-    session: ILoginResponse;
-}) {
+}: IEditProfileDrawerProps) {
     const dispatch = useReduxDispatch();
     const [avatarOptions, setAvatarOptions] =
         useState<IAvatarOptionsResponse | null>(null);
@@ -226,9 +215,9 @@ function EditProfileDrawer({
 
     return (
         <Modal open={open} onClose={handleClose}>
-            <Text customClass="sheet-title">{profileEditButton}</Text>
+            <Text customClass="sheet-title dialog-title">{profileEditButton}</Text>
 
-            <Text customClass="edit-profile-section-label">
+            <Text customClass="edit-profile-section-label caption">
                 {profileAvatarPickerTitle}
             </Text>
             <Box customClass="profile-avatar-picker-grid">
@@ -350,13 +339,13 @@ export default function Profile() {
                         </Box>
                         <Box customClass="profile-meta-row">
                             <Mail size={12} strokeWidth={2} />
-                            <Text customClass="profile-id-handle" truncate>
+                            <Text customClass="profile-id-handle caption" truncate>
                                 {session.email}
                             </Text>
                         </Box>
                         <Box customClass="profile-meta-row">
                             <MapPin size={12} strokeWidth={2} />
-                            <Text customClass="profile-id-handle" truncate>
+                            <Text customClass="profile-id-handle caption" truncate>
                                 {session.country}
                             </Text>
                         </Box>
@@ -364,7 +353,7 @@ export default function Profile() {
                 </Box>
             </Card>
 
-            <Text component="h3" customClass="rules-heading">
+            <Text component="h3" customClass="rules-heading section-heading">
                 {profileAppearanceLabel}
             </Text>
             <Card customClass="matches-stat-list">
@@ -376,14 +365,14 @@ export default function Profile() {
                 </Box>
             </Card>
 
-            <Text component="h3" customClass="rules-heading">
+            <Text component="h3" customClass="rules-heading section-heading">
                 {profileRatingsByCategoryLabel}
             </Text>
             <Card customClass="matches-stat-list">
                 {CATEGORY_ORDER.map((category) => (
                     <Box key={category} customClass="matches-stat-row">
                         <Text customClass="matches-stat-title" component="span">
-                            {formateText(CATEGORY_META[category].label)}
+                            {formatText(CATEGORY_META[category].label)}
                         </Text>
                         <Text component="span" customClass="matches-stat-val">
                             {session.ratings[category] ??
@@ -393,7 +382,7 @@ export default function Profile() {
                 ))}
             </Card>
 
-            <Text component="h3" customClass="rules-heading">
+            <Text component="h3" customClass="rules-heading section-heading">
                 {profileStreakWidgetTitle}
             </Text>
             <Card customClass="matches-stat-list">

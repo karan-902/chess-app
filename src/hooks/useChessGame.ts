@@ -235,13 +235,15 @@ export function useChessGame() {
         [buildPremoveClone],
     );
 
-    const getPremovePieceColor = useCallback(
+const getPremovePieceColor = useCallback(
         (
             square: string,
             asColor: "w" | "b",
             priorMoves: PremoveEntry[] = [],
         ): "w" | "b" | null => {
-            if (priorMoves.length === 0) return getPieceColor(square);
+            const realColor = getPieceColor(square);
+            if (realColor && realColor !== asColor) return realColor;
+            if (priorMoves.length === 0) return realColor;
             try {
                 return (
                     buildPremoveClone(priorMoves, asColor).get(
@@ -249,7 +251,7 @@ export function useChessGame() {
                     )?.color ?? null
                 );
             } catch {
-                return getPieceColor(square);
+                return realColor;
             }
         },
         [buildPremoveClone, getPieceColor],

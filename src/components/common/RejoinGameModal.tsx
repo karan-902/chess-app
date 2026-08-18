@@ -6,9 +6,9 @@ import Button from "@/components/base/Button/Button";
 import { useSocket } from "@/context/SocketContext";
 import { useReduxSelector, useReduxDispatch } from "@/redux/hooks";
 import { setActiveGame } from "@/redux/socketModals.slice";
-import { formateAmount } from "@/utils/formate";
+import { formatAmount } from "@/utils/format";
 import { shortenUsername } from "@/utils";
-import { secondsToTimeControl } from "@/types/components";
+import { buildGameRoomUrl } from "@/utils";
 import { router } from "@/routes/router";
 import {
     rejoinGameTitle,
@@ -42,15 +42,8 @@ export default function RejoinGameModal() {
     };
 
     const handleRejoin = () => {
-        const url =
-            `/play?mode=pvp&time=${secondsToTimeControl(activeGame.time_seconds)}` +
-            `&game_id=${activeGame.game_id}&color=${activeGame.your_color}` +
-            `&opponent=${encodeURIComponent(activeGame.opponent.username)}` +
-            `&opp_rating=${activeGame.opponent.elo_rating}&opp_id=${activeGame.opponent.id}` +
-            `&opp_avatar_seed=${encodeURIComponent(activeGame.opponent.avatar_seed ?? "")}` +
-            `&stake_amount=${activeGame.stake_amount}`;
         dispatch(setActiveGame(null));
-        router.navigate(url, { replace: true });
+        router.navigate(buildGameRoomUrl(activeGame), { replace: true });
     };
 
     return (
@@ -80,7 +73,7 @@ export default function RejoinGameModal() {
                         {rejoinGameStakeLabel}
                     </Text>
                     <Text component="span" customClass="matches-stat-val">
-                        {formateAmount(activeGame.stake_amount)}
+                        {formatAmount(activeGame.stake_amount)}
                     </Text>
                 </Box>
                 <Box customClass="modal-actions">
@@ -108,7 +101,7 @@ export default function RejoinGameModal() {
             >
                 <Text customClass="modal-description">
                     {rejoinGameForfeitBody(
-                        formateAmount(activeGame.stake_amount),
+                        formatAmount(activeGame.stake_amount),
                     )}
                 </Text>
                 <Box customClass="modal-actions">

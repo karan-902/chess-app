@@ -32,7 +32,7 @@ const emailSchema = yup.object({
         .required(authValidationEmailRequired),
 });
 
-export default function ForgotPasswordPage() {
+export default function ForgotPassword() {
     const dispatch = useReduxDispatch();
     const [sent, setSent] = useState(false);
 

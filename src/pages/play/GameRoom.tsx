@@ -10,6 +10,7 @@ import { showToast } from "@/redux/common/common.slice";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
+import Chip from "@/components/base/Chip/Chip";
 import Skeleton from "@/components/base/Skeleton/Skeleton";
 import ChessBoard from "@/components/board/Board";
 import PieceIcon from "@/components/board/PieceIcon";
@@ -23,11 +24,28 @@ import { useComputerOpponent } from "@/hooks/useComputerOpponent";
 import { useSocket } from "@/context/SocketContext";
 import { useWalletBalance } from "@/hooks/useWallet";
 import { useReduxSelector, useReduxDispatch } from "@/redux/hooks";
-import { formateAmount } from "@/utils/formate";
+import { formatAmount } from "@/utils/format";
 import { shortenUsername } from "@/utils";
-import { DIFFICULTY_CONFIG } from "@/types/components";
+import {
+    markGameFinished,
+    isGameFinished,
+    getPvcColor,
+    setPvcColor,
+    savePvcSnapshot,
+    loadPvcSnapshot,
+    clearPvcSnapshot,
+} from "@/utils/storage";
+import { DIFFICULTY_CONFIG } from "@/constants/index";
 import { GAME_END_REASON_LABELS } from "@/constants/config";
-import type { TimeControl, GameMode, Difficulty } from "@/types/components";
+import type {
+    TimeControl,
+    GameMode,
+    Difficulty,
+    IPlayerRowProps,
+    IPromotionOverlayProps,
+    IMoveListProps,
+    IGameOverOverlayProps,
+} from "@/types/components";
 import type {
     IopponentMoveResponse,
     IMoveConfirmedResponse,
@@ -44,14 +62,9 @@ import type {
 import {
     playOpponentFallbackOpponent,
     playOpponentFallbackComputer,
-    playResignDialogPvcDescription,
     playWagerBadgeDifficultyLabels,
     playActionButtonsResign,
     playActionButtonsDraw,
-    playResignDialogTitle,
-    playResignDialogPvpDescription,
-    playResignDialogKeepPlayingButton,
-    playResignDialogResignButton,
     playDrawOfferBannerText,
     playDrawOfferBannerAcceptButton,
     playDrawOfferBannerDeclineButton,
@@ -69,6 +82,11 @@ import {
     playGameOverAcceptRematchButton,
     playReasonGameOver,
     playMoveHistoryReviewing,
+    playTabLockedTitle,
+    playTabLockedDescription,
+    playTabLockedTakeOverButton,
+    playMoveHistoryPreviousMoveAriaLabel,
+    playMoveHistoryNextMoveAriaLabel,
     playPromotionTitle,
     playPromotionQueen,
     playPromotionRook,
@@ -78,7 +96,8 @@ import {
     leaderboardRankFallback,
 } from "@/constants/messages";
 import Button from "@/components/base/Button/Button";
-import Modal from "@/components/base/Modal/Modal";
+import ResignModal from "@/components/common/ResignModal";
+import IconButton from "@/components/base/IconButton/IconButton";
 
 const PROMOTION_PIECES = ["q", "r", "b", "n"] as const;
 const PROMOTION_LABEL: Record<(typeof PROMOTION_PIECES)[number], string> = {
@@ -87,62 +106,6 @@ const PROMOTION_LABEL: Record<(typeof PROMOTION_PIECES)[number], string> = {
     b: playPromotionBishop,
     n: playPromotionKnight,
 };
-
-function markGameFinished(id: string) {
-    try {
-        sessionStorage.setItem(`gr_finished:${id}`, "1");
-    } catch {}
-}
-
-function isGameFinished(id: string) {
-    try {
-        return sessionStorage.getItem(`gr_finished:${id}`) === "1";
-    } catch {
-        return false;
-    }
-}
-
-function getPvcColor(id: string): string | null {
-    try {
-        return sessionStorage.getItem(`pvc_color:${id}`);
-    } catch {
-        return null;
-    }
-}
-
-function setPvcColor(id: string, color: string) {
-    try {
-        sessionStorage.setItem(`pvc_color:${id}`, color);
-    } catch {}
-}
-
-type SnapshotMove = { from: string; to: string; promotion: string | null };
-type PvcSnapshot = {
-    moves: SnapshotMove[];
-    whiteMs: number;
-    blackMs: number;
-};
-
-function savePvcSnapshot(id: string, snapshot: PvcSnapshot) {
-    try {
-        sessionStorage.setItem(`pvc_snapshot:${id}`, JSON.stringify(snapshot));
-    } catch {}
-}
-
-function loadPvcSnapshot(id: string): PvcSnapshot | null {
-    try {
-        const raw = sessionStorage.getItem(`pvc_snapshot:${id}`);
-        return raw ? JSON.parse(raw) : null;
-    } catch {
-        return null;
-    }
-}
-
-function clearPvcSnapshot(id: string) {
-    try {
-        sessionStorage.removeItem(`pvc_snapshot:${id}`);
-    } catch {}
-}
 
 function capturedCode(type: string, color: "w" | "b") {
     return `${color}${type.toUpperCase()}`;
@@ -154,6 +117,238 @@ function pairCapturedPieces(types: string[]) {
         stacked: types[i - 1] === type,
         stackEnd: i + 1 < types.length && types[i + 1] !== type,
     }));
+}
+
+function PlayerRow({
+    variant,
+    active,
+    name,
+    eloLabel,
+    capturedPieces,
+    pieceColor,
+    advantage,
+    clock,
+    clockReady,
+}: IPlayerRowProps) {
+    return (
+        <Box
+            customClass={classNames(
+                "gr-row",
+                variant === "opponent" ? "opp" : "me",
+                active && "active",
+            )}
+        >
+            <Box customClass="gr-meta">
+                <Text customClass="gr-name" truncate>
+                    {name}
+                </Text>
+                <Text customClass="gr-elo caption">{eloLabel}</Text>
+
+                <Box customClass="gr-captured">
+                    {pairCapturedPieces(capturedPieces).map(
+                        ({ type, stacked, stackEnd }, i) => (
+                            <PieceIcon
+                                key={i}
+                                className={classNames(
+                                    "gr-captured-icon",
+                                    pieceColor === "b" && "dark-piece",
+                                    stacked && "stacked",
+                                    stackEnd && "stack-end",
+                                )}
+                                code={capturedCode(type, pieceColor)}
+                            />
+                        ),
+                    )}
+                    {advantage !== null && (
+                        <Text
+                            component="span"
+                            customClass="gr-advantage caption"
+                        >
+                            +{advantage}
+                        </Text>
+                    )}
+                </Box>
+            </Box>
+            <Text customClass="gr-clock">
+                {clockReady ? (
+                    clock
+                ) : (
+                    <Skeleton
+                        variant="rounded"
+                        width="2.5rem"
+                        height="1.5rem"
+                    />
+                )}
+            </Text>
+        </Box>
+    );
+}
+
+function PromotionOverlay({
+    playerSide,
+    onSelect,
+    onCancel,
+}: IPromotionOverlayProps) {
+    return (
+        <Box customClass="gr-promotion-overlay" onClick={onCancel}>
+            <Box
+                customClass="gr-promotion-card"
+                onClick={(e) => e.stopPropagation()}
+            >
+                <Text customClass="gr-promotion-label caption">
+                    {playPromotionTitle}
+                </Text>
+                <Box customClass="gr-promotion-options">
+                    {PROMOTION_PIECES.map((piece) => (
+                        <Button
+                            key={piece}
+                            type="button"
+                            customClass="gr-promotion-btn"
+                            onClick={() => onSelect(piece)}
+                            aria-label={PROMOTION_LABEL[piece]}
+                        >
+                            <PieceIcon
+                                code={`${playerSide}${piece.toUpperCase()}`}
+                                className="gr-promotion-icon"
+                            />
+                        </Button>
+                    ))}
+                </Box>
+            </Box>
+        </Box>
+    );
+}
+
+function MoveList({
+    moveHistory,
+    fenHistory,
+    viewIndex,
+    onJump,
+}: IMoveListProps) {
+    const movesRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        movesRef.current?.scrollTo({
+            left: movesRef.current.scrollWidth,
+            behavior: "smooth",
+        });
+    }, [moveHistory.length]);
+
+    if (moveHistory.length === 0) return null;
+
+    return (
+        <Box customClass="gr-move-strip" ref={movesRef}>
+            {moveHistory.map((m, i) => {
+                const effectiveIndex = viewIndex ?? fenHistory.length - 1;
+                const isWhiteActive = effectiveIndex === i * 2 + 1;
+                const isBlackActive = effectiveIndex === i * 2 + 2;
+                return (
+                    <Box key={m.n} customClass="gr-move-pair">
+                        <Text component="span" customClass="gr-move-n">
+                            {m.n}.
+                        </Text>
+                        <Chip
+                            label={m.w}
+                            customClass={classNames(
+                                "gr-move-chip",
+                                isWhiteActive && "active",
+                            )}
+                            onClick={() => onJump(i * 2 + 1)}
+                        />
+                        {m.b && (
+                            <Chip
+                                label={m.b}
+                                customClass={classNames(
+                                    "gr-move-chip",
+                                    isBlackActive && "active",
+                                )}
+                                onClick={() => onJump(i * 2 + 2)}
+                            />
+                        )}
+                    </Box>
+                );
+            })}
+        </Box>
+    );
+}
+
+function GameOverOverlay({
+    gameEnded,
+    reasonLabel,
+    resultHeader,
+    isWinner,
+    isDrawResult,
+    settlementUsd,
+    isPvc,
+    canAffordRematch,
+    rematchStatus,
+    rematchSecs,
+    onNewGame,
+    onRematch,
+}: IGameOverOverlayProps) {
+    return (
+        <Box customClass="gr-overlay">
+            <Text customClass="gr-overlay-badge">{reasonLabel}</Text>
+            <Text customClass="gr-overlay-title">{resultHeader}</Text>
+            {gameEnded.settlement && (
+                <Box customClass="gr-settlement">
+                    <Box customClass="gr-settlement-item">
+                        <Text
+                            customClass={classNames(
+                                "gr-settlement-val",
+                                isWinner && "win",
+                                !isWinner && !isDrawResult && "loss",
+                            )}
+                        >
+                            {formatAmount(settlementUsd)}
+                        </Text>
+                        <Text customClass="gr-settlement-lbl caption">
+                            {playGameOverSettlementLabel}
+                        </Text>
+                    </Box>
+                    {typeof gameEnded.your_elo_gain === "number" && (
+                        <Box customClass="gr-settlement-item">
+                            <Text customClass="gr-settlement-val">
+                                {gameEnded.your_elo_gain >= 0
+                                    ? `+${gameEnded.your_elo_gain}`
+                                    : gameEnded.your_elo_gain}
+                            </Text>
+                            <Text customClass="gr-settlement-lbl caption">
+                                Elo
+                            </Text>
+                        </Box>
+                    )}
+                </Box>
+            )}
+            <Box customClass="gr-overlay-actions">
+                <Button
+                    customClass="gr-overlay-btn secondary"
+                    onClick={onNewGame}
+                >
+                    {playGameOverNewGameButton}
+                </Button>
+                {!isPvc && !canAffordRematch && (
+                    <Text customClass="pool-insufficient-label caption">
+                        {matchmakingPoolCardInsufficientBalance}
+                    </Text>
+                )}
+                {!isPvc && canAffordRematch && (
+                    <Button
+                        customClass="gr-overlay-btn primary"
+                        sx={{ display: "none" }}
+                        onClick={onRematch}
+                        disabled={rematchStatus === "offered"}
+                    >
+                        {rematchStatus === "offered"
+                            ? playGameOverWaitingForOpponent(rematchSecs)
+                            : rematchStatus === "opponent-offered"
+                              ? playGameOverAcceptRematchButton
+                              : playGameOverRematchButton}
+                    </Button>
+                )}
+            </Box>
+        </Box>
+    );
 }
 
 export default function GameRoom() {
@@ -234,7 +429,7 @@ export default function GameRoom() {
         getPremovePieceColor,
     } = useChessGame();
 
-    const { viewIndex, isReviewing, displayFen, goBack, goForward } =
+    const { viewIndex, isReviewing, displayFen, goBack, goForward, jumpTo } =
         useBoardReview(fenHistory);
 
     const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
@@ -294,11 +489,7 @@ export default function GameRoom() {
         blackTimeMs,
         timedOut,
         syncClock,
-    } = useGameClock(
-        timeControl,
-        paused,
-        turn,
-    );
+    } = useGameClock(timeControl, paused, turn);
 
     useEffect(() => {
         if (!isPvc || !gameId) return;
@@ -541,14 +732,17 @@ export default function GameRoom() {
     useEffect(() => {
         if (turn !== playerSide || gameEnded || premoveQueue.length === 0)
             return;
-        const [next, ...rest] = premoveQueue;
-        setPremoveQueue(rest);
-        const result = commitMove(next.from, next.to);
-        if (!result) {
-            setPremoveQueue([]);
-            setFlashSquare(next.from);
-            setTimeout(() => setFlashSquare(null), 500);
-        }
+        const timer = setTimeout(() => {
+            const [next, ...rest] = premoveQueue;
+            setPremoveQueue(rest);
+            const result = commitMove(next.from, next.to);
+            if (!result) {
+                setPremoveQueue([]);
+                setFlashSquare(next.from);
+                setTimeout(() => setFlashSquare(null), 500);
+            }
+        }, 280);
+        return () => clearTimeout(timer);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [turn, gameEnded, playerSide, premoveQueue]);
 
@@ -657,12 +851,14 @@ export default function GameRoom() {
     if (tabLockStatus === "secondary") {
         return (
             <Box customClass="gr-secondary">
-                <Text customClass="gr-heading">{playReasonGameOver}</Text>
-                <Text customClass="gr-elo">
-                    This game is open in another tab.
+                <Text customClass="gr-heading section-heading">
+                    {playTabLockedTitle}
+                </Text>
+                <Text customClass="gr-elo caption">
+                    {playTabLockedDescription}
                 </Text>
                 <Button customClass="gr-link" onClick={takeOver}>
-                    Play here instead
+                    {playTabLockedTakeOverButton}
                 </Button>
             </Box>
         );
@@ -705,68 +901,36 @@ export default function GameRoom() {
 
     return (
         <Box customClass="game-room">
-            <Box
-                customClass={classNames(
-                    "gr-row",
-                    "opp",
-                    !myTurnActive && "active",
-                )}
-            >
-                <Box customClass="gr-meta">
-                    <Text customClass="gr-name" truncate>
-                        {opponentName}
-                    </Text>
-                    <Text customClass="gr-elo">
-                        {isPvc
-                            ? playWagerBadgeDifficultyLabels[difficulty]
-                            : `${opponentRating} elo`}
-                    </Text>
-                    <Box customClass="gr-captured">
-                        {pairCapturedPieces(oppCaptured).map(
-                            ({ type, stacked, stackEnd }, i) => (
-                                <PieceIcon
-                                    key={i}
-                                    className={classNames(
-                                        "gr-captured-icon",
-                                        playerSide === "b" && "dark-piece",
-                                        stacked && "stacked",
-                                        stackEnd && "stack-end",
-                                    )}
-                                    code={capturedCode(type, playerSide)}
-                                />
-                            ),
-                        )}
-                        {myAdvantage < 0 && (
-                            <Text component="span" customClass="gr-advantage">
-                                +{-myAdvantage}
-                            </Text>
-                        )}
-                    </Box>
-                </Box>
-                <Text customClass="gr-clock">
-                    {clockReady ? (
-                        oppClock
-                    ) : (
-                        <Skeleton
-                            variant="rounded"
-                            width="2.5rem"
-                            height="1.5rem"
-                        />
-                    )}
-                </Text>
-            </Box>
+            <MoveList
+                moveHistory={moveHistory}
+                fenHistory={fenHistory}
+                viewIndex={viewIndex}
+                onJump={jumpTo}
+            />
+
+            <PlayerRow
+                variant="opponent"
+                active={!myTurnActive}
+                name={opponentName}
+                eloLabel={
+                    isPvc
+                        ? playWagerBadgeDifficultyLabels[difficulty]
+                        : `${opponentRating} elo`
+                }
+                capturedPieces={oppCaptured}
+                pieceColor={playerSide}
+                advantage={myAdvantage < 0 ? -myAdvantage : null}
+                clock={oppClock}
+                clockReady={clockReady}
+            />
 
             <Box customClass="gr-board-wrap">
                 <ChessBoard
                     fen={boardFen}
-                    selectedSquare={
-                        myTurnActive ? selectedSquare : premoveFrom
-                    }
+                    selectedSquare={myTurnActive ? selectedSquare : premoveFrom}
                     legalMoves={myTurnActive ? legalMoves : premoveTargets}
-                    premoveSquares={premoveQueue.flatMap((m) => [
-                        m.from,
-                        m.to,
-                    ])}
+                    premoveSquares={premoveQueue.flatMap((m) => [m.from, m.to])}
+                    premoveMoves={isReviewing ? [] : premoveQueue}
                     premoveMode={!myTurnActive}
                     draggableColor={playerSide}
                     checkSquare={checkSquare}
@@ -778,92 +942,33 @@ export default function GameRoom() {
                     flipped={playerSide === "b"}
                 />
                 {pendingPromotion && (
-                    <Box
-                        customClass="gr-promotion-overlay"
-                        onClick={handlePromotionCancel}
-                    >
-                        <Box
-                            customClass="gr-promotion-card"
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            <Text customClass="gr-promotion-label">
-                                {playPromotionTitle}
-                            </Text>
-                            <Box customClass="gr-promotion-options">
-                                {PROMOTION_PIECES.map((piece) => (
-                                    <Button
-                                        key={piece}
-                                        type="button"
-                                        customClass="gr-promotion-btn"
-                                        onClick={() =>
-                                            handlePromotionSelect(piece)
-                                        }
-                                        aria-label={PROMOTION_LABEL[piece]}
-                                    >
-                                        <PieceIcon
-                                            code={`${playerSide}${piece.toUpperCase()}`}
-                                            className="gr-promotion-icon"
-                                        />
-                                    </Button>
-                                ))}
-                            </Box>
-                        </Box>
-                    </Box>
+                    <PromotionOverlay
+                        playerSide={playerSide}
+                        onSelect={handlePromotionSelect}
+                        onCancel={handlePromotionCancel}
+                    />
                 )}
             </Box>
 
-            <Box
-                customClass={classNames(
-                    "gr-row",
-                    "me",
-                    myTurnActive && "active",
-                )}
-            >
-                <Box customClass="gr-meta">
-                    <Text customClass="gr-name" truncate>
-                        {session?.username
-                            ? `${shortenUsername(session.username)}(You)`
-                            : ""}
-                    </Text>
-                    <Text customClass="gr-elo">
-                        {isPvc
-                            ? ""
-                            : `${session?.ratings[myCategory] ?? leaderboardRankFallback} elo`}
-                    </Text>
-                    <Box customClass="gr-captured">
-                        {pairCapturedPieces(myCaptured).map(
-                            ({ type, stacked, stackEnd }, i) => (
-                                <PieceIcon
-                                    key={i}
-                                    className={classNames(
-                                        "gr-captured-icon",
-                                        oppColor === "b" && "dark-piece",
-                                        stacked && "stacked",
-                                        stackEnd && "stack-end",
-                                    )}
-                                    code={capturedCode(type, oppColor)}
-                                />
-                            ),
-                        )}
-                        {myAdvantage > 0 && (
-                            <Text component="span" customClass="gr-advantage">
-                                +{myAdvantage}
-                            </Text>
-                        )}
-                    </Box>
-                </Box>
-                <Text customClass="gr-clock">
-                    {clockReady ? (
-                        myClock
-                    ) : (
-                        <Skeleton
-                            variant="rounded"
-                            width="2.5rem"
-                            height="1.5rem"
-                        />
-                    )}
-                </Text>
-            </Box>
+            <PlayerRow
+                variant="self"
+                active={myTurnActive}
+                name={
+                    session?.username
+                        ? `${shortenUsername(session.username)}(You)`
+                        : ""
+                }
+                eloLabel={
+                    isPvc
+                        ? ""
+                        : `${session?.ratings[myCategory] ?? leaderboardRankFallback} elo`
+                }
+                capturedPieces={myCaptured}
+                pieceColor={oppColor}
+                advantage={myAdvantage > 0 ? myAdvantage : null}
+                clock={myClock}
+                clockReady={clockReady}
+            />
 
             {drawOffer && (
                 <Box customClass="gr-draw-banner">
@@ -881,69 +986,25 @@ export default function GameRoom() {
             )}
 
             <Box customClass="gr-review-controls">
-                <Button
+                <IconButton
                     customClass="gr-review-btn"
                     onClick={goBack}
                     disabled={fenHistory.length <= 1}
-                    aria-label="Previous move"
+                    aria-label={playMoveHistoryPreviousMoveAriaLabel}
                 >
                     <ChevronLeft size={16} strokeWidth={2} />
-                </Button>
+                </IconButton>
                 <Text customClass="gr-review-label">
                     {isReviewing ? playMoveHistoryReviewing : ""}
                 </Text>
-                <Button
+                <IconButton
                     customClass="gr-review-btn"
                     onClick={goForward}
                     disabled={!isReviewing}
-                    aria-label="Next move"
+                    aria-label={playMoveHistoryNextMoveAriaLabel}
                 >
                     <ChevronRight size={16} strokeWidth={2} />
-                </Button>
-            </Box>
-
-            <Box customClass="gr-moves">
-                {moveHistory.map((m, i) => {
-                    const effectiveIndex = viewIndex ?? fenHistory.length - 1;
-                    const isWhiteActive = effectiveIndex === i * 2 + 1;
-                    const isBlackActive = effectiveIndex === i * 2 + 2;
-                    return (
-                        <Text
-                            key={m.n}
-                            component="span"
-                            customClass="gr-move-pair"
-                        >
-                            <Text component="span" customClass="gr-move-n">
-                                {m.n}.
-                            </Text>
-                            {isWhiteActive ? (
-                                <Text
-                                    component="span"
-                                    customClass="gr-move-current"
-                                >
-                                    {m.w}
-                                </Text>
-                            ) : (
-                                m.w
-                            )}
-                            {m.b ? (
-                                isBlackActive ? (
-                                    <Text
-                                        component="span"
-                                        customClass="gr-move-current"
-                                    >
-                                        {" "}
-                                        {m.b}
-                                    </Text>
-                                ) : (
-                                    ` ${m.b}`
-                                )
-                            ) : (
-                                ""
-                            )}
-                        </Text>
-                    );
-                })}
+                </IconButton>
             </Box>
 
             <Box customClass="gr-foot">
@@ -963,93 +1024,29 @@ export default function GameRoom() {
                 )}
             </Box>
 
-            <Modal
+            <ResignModal
                 open={resignOpen || (blocker.state === "blocked" && !gameEnded)}
-                onClose={handleKeepPlaying}
-            >
-                <Text customClass="gr-heading">{playResignDialogTitle}</Text>
-                <Text customClass="gr-elo">
-                    {isPvc
-                        ? playResignDialogPvcDescription
-                        : playResignDialogPvpDescription(stakeAmount)}
-                </Text>
-                <Box customClass="gr-resign-actions">
-                    <Button customClass="gr-link" onClick={handleKeepPlaying}>
-                        {playResignDialogKeepPlayingButton}
-                    </Button>
-                    <Button
-                        customClass="gr-link danger"
-                        onClick={handleResignConfirm}
-                    >
-                        {playResignDialogResignButton}
-                    </Button>
-                </Box>
-            </Modal>
+                isPvc={isPvc}
+                stakeAmount={stakeAmount}
+                onKeepPlaying={handleKeepPlaying}
+                onResign={handleResignConfirm}
+            />
 
             {gameEnded && (
-                <Box customClass="gr-overlay">
-                    <Text customClass="gr-overlay-badge">{reasonLabel}</Text>
-                    <Text customClass="gr-overlay-title">{resultHeader}</Text>
-                    {gameEnded.settlement && (
-                        <Box customClass="gr-settlement">
-                            <Box customClass="gr-settlement-item">
-                                <Text
-                                    customClass={classNames(
-                                        "gr-settlement-val",
-                                        isWinner && "win",
-                                        !isWinner && !isDrawResult && "loss",
-                                    )}
-                                >
-                                    {formateAmount(settlementUsd)}
-                                </Text>
-                                <Text customClass="gr-settlement-lbl">
-                                    {playGameOverSettlementLabel}
-                                </Text>
-                            </Box>
-                            {typeof gameEnded.your_elo_gain === "number" && (
-                                <Box customClass="gr-settlement-item">
-                                    <Text customClass="gr-settlement-val">
-                                        {gameEnded.your_elo_gain >= 0
-                                            ? `+${gameEnded.your_elo_gain}`
-                                            : gameEnded.your_elo_gain}
-                                    </Text>
-                                    <Text customClass="gr-settlement-lbl">
-                                        Elo
-                                    </Text>
-                                </Box>
-                            )}
-                        </Box>
-                    )}
-                    <Box customClass="gr-overlay-actions">
-                        <Button
-                            customClass="gr-overlay-btn secondary"
-                            onClick={() => navigate("/play", { replace: true })}
-                        >
-                            {playGameOverNewGameButton}
-                        </Button>
-                        {!isPvc && !canAffordRematch && (
-                            <Text customClass="pool-insufficient-label">
-                                {matchmakingPoolCardInsufficientBalance}
-                            </Text>
-                        )}
-                        {!isPvc && canAffordRematch && (
-                            <Button
-                                customClass="gr-overlay-btn primary"
-                                sx={{ display: "none" }}
-                                onClick={offerRematch}
-                                disabled={rematchStatus === "offered"}
-                            >
-                                {rematchStatus === "offered"
-                                    ? playGameOverWaitingForOpponent(
-                                          rematchSecs,
-                                      )
-                                    : rematchStatus === "opponent-offered"
-                                      ? playGameOverAcceptRematchButton
-                                      : playGameOverRematchButton}
-                            </Button>
-                        )}
-                    </Box>
-                </Box>
+                <GameOverOverlay
+                    gameEnded={gameEnded}
+                    reasonLabel={reasonLabel}
+                    resultHeader={resultHeader}
+                    isWinner={isWinner}
+                    isDrawResult={isDrawResult}
+                    settlementUsd={settlementUsd}
+                    isPvc={isPvc}
+                    canAffordRematch={canAffordRematch}
+                    rematchStatus={rematchStatus}
+                    rematchSecs={rematchSecs}
+                    onNewGame={() => navigate("/play", { replace: true })}
+                    onRematch={offerRematch}
+                />
             )}
         </Box>
     );
