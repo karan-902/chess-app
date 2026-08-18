@@ -12,6 +12,7 @@ import Input from "@/components/base/Input/Input";
 import Label from "@/components/base/Label/Label";
 import OtpInput from "@/components/base/OtpInput/OtpInput";
 import { formateText } from "@/utils/formate";
+import { formatMMSS } from "@/utils";
 import { Copy, Check, Clipboard } from "lucide-react";
 import BoardPreview from "@/components/board/BoardPreview";
 import { ShatranjLogo } from "@/components/constants";
@@ -48,6 +49,7 @@ import {
     roomJoinButton,
     roomWaitingTitle,
     roomWaitingDesc,
+    roomExpiresIn,
     roomCopyButton,
     roomCopiedButton,
     roomCancelButton,
@@ -250,6 +252,7 @@ export default function PlayPage() {
     const {
         status: roomStatus,
         roomCode,
+        expiresInSeconds,
         createRoom,
         joinRoom,
         cancelRoom,
@@ -633,6 +636,9 @@ export default function PlayPage() {
                             {roomWaitingDesc}
                         </Text>
                         <Text customClass="searching-timer">{roomCode}</Text>
+                        <Text customClass="matches-empty-desc">
+                            {roomExpiresIn(formatMMSS(expiresInSeconds))}
+                        </Text>
                         <Button
                             type="button"
                             variant="outlined"

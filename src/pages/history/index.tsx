@@ -112,13 +112,10 @@ function MatchRowSkeleton() {
     return (
         <Box customClass="match-row">
             <Box customClass="match-row-info">
-                <Skeleton
-                    variant="circular"
-                    customClass="circle"
-                    width={32}
-                    height={32}
-                />
-                <Box>
+                <Box customClass="match-row-icon">
+                    <Skeleton variant="circular" width={18} height={18} />
+                </Box>
+                <Box customClass="match-row-text">
                     <Skeleton customClass="text" width={140} height={14} />
                     <Skeleton
                         customClass="text"

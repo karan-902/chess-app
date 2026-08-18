@@ -227,6 +227,7 @@ export const roomPasteLabel = "Paste";
 export const roomJoinButton = "Join";
 export const roomWaitingTitle = "Waiting for opponent";
 export const roomWaitingDesc = "Share this code with your friend";
+export const roomExpiresIn = (mmss: string) => `Expires in ${mmss}`;
 export const roomCopyButton = "Copy code";
 export const roomCopiedButton = "Copied!";
 export const roomCancelButton = "Cancel";

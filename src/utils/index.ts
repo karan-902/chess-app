@@ -4,6 +4,7 @@ import axios, {
     type Method,
 } from "axios";
 import dayjs from "dayjs";
+import duration from "dayjs/plugin/duration";
 import { store } from "@/redux/index";
 import { showToast } from "@/redux/common/common.slice";
 import sessionService from "@/redux/sessionService";
@@ -11,6 +12,7 @@ import { apiRateLimited } from "@/constants/messages";
 import type { IGenerateTokenBody } from "@/types/index";
 import type { IGenerateTokenResponse } from "@/types/utils";
 
+dayjs.extend(duration);
 const OPEN_API_ENDPOINTS = [
     "/register",
     "/login",
@@ -116,6 +118,10 @@ export function formatMatchDate(ms: number): string {
     const minutes = now.diff(then, "minute");
     if (minutes < 60) return `${minutes}m ago`;
     return `${now.diff(then, "hour")}h ago`;
+}
+
+export function formatMMSS(totalSeconds: number): string {
+    return dayjs.duration(Math.max(0, totalSeconds), "seconds").format("m:ss");
 }
 
 export const callAPIInterface = async <

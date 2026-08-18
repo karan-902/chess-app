@@ -106,6 +106,14 @@ export function useRoomMatch() {
         };
     }, [navigate, ctxSocket, dispatch]);
 
+    useEffect(() => {
+        if (status !== "waiting") return;
+        const interval = setInterval(() => {
+            setExpiresInSeconds((s) => Math.max(0, s - 1));
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [status]);
+
     return {
         status,
         roomCode,
