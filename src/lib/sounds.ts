@@ -1,6 +1,6 @@
 const SOUND_FILES = {
-    move: "/sounds/move.mp3",
-    capture: "/sounds/capture.mp3",
+    move: "/sounds/move.wav",
+    capture: "/sounds/capture.wav",
     castle: "/sounds/castle.mp3",
     check: "/sounds/check.mp3",
     promote: "/sounds/promote.mp3",
@@ -10,18 +10,10 @@ const SOUND_FILES = {
 
 export type SoundName = keyof typeof SOUND_FILES;
 
-const audioCache = new Map<SoundName, HTMLAudioElement>();
-
 export function playSound(name: SoundName, volume = 0.5): void {
-    let base = audioCache.get(name);
-    if (!base) {
-        base = new Audio(SOUND_FILES[name]);
-        audioCache.set(name, base);
-    }
-    const instance = base.cloneNode(true) as HTMLAudioElement;
-    instance.volume = volume;
-
-    instance.play().catch(() => {});
+    const audio = new Audio(SOUND_FILES[name]);
+    audio.volume = volume;
+    audio.play().catch(() => {});
 }
 
 interface IMoveSoundInput {

@@ -96,10 +96,13 @@
 }
 
 .appbar-nav-tab {
+    font-size: $font16;
     position: relative;
     padding: 0.625rem 0.625rem 0.75rem;
     font-family: $fontOutfitSemiBold;
-    font-size: $font14;
+    @media screen and (max-width: 600px) {
+        font-size: $font14;
+    }
     font-weight: 600;
     color: $appTextMuted;
     text-decoration: none;

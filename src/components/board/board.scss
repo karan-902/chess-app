@@ -2,10 +2,14 @@
 
 .chess-board {
     position: relative;
+    max-width: 480px;
     width: 100%;
     touch-action: none;
-}
 
+    @media (min-width: 1024px) {
+        max-width: 550px;
+    }
+}
 .chess-board-grid {
     position: relative;
     width: 100%;
@@ -14,6 +18,7 @@
     border-radius: $radiusLg;
     overflow: hidden;
     border: 1px solid $appCardBorder;
+    background: $appCardBorder;
     touch-action: none;
 }
 
@@ -50,6 +55,27 @@
 .chess-piece-dragging {
     filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.5));
     transform: scale(1.08);
+}
+
+.chess-piece-slot {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 12.5%;
+    height: 12.5%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: none;
+    z-index: 2;
+    transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+    outline: none;
+
+    &:focus-visible {
+        outline: 2px solid $gold;
+        outline-offset: 2px;
+    }
 }
 
 .sq-corner-label {
@@ -393,7 +419,8 @@
     .board-preview-piece,
     .board-preview-ghost,
     .board-preview-ring,
-    .board-preview-shimmer {
+    .board-preview-shimmer,
+    .chess-piece-slot {
         transition: none !important;
     }
     .board-preview-piece.breathing,

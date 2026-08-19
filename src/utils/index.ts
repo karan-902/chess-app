@@ -141,7 +141,8 @@ export function buildGameRoomUrl(data: IGameRoomNavPayload): string {
         `&opponent=${encodeURIComponent(data.opponent.username)}` +
         `&opp_rating=${data.opponent.elo_rating}&opp_id=${data.opponent.id}` +
         `&opp_avatar_seed=${encodeURIComponent(data.opponent.avatar_seed ?? "")}` +
-        `&stake_amount=${data.stake_amount}`
+        `&stake_amount=${data.stake_amount}` +
+        (data.room_code ? "&room=1" : "")
     );
 }
 export function formatMatchDate(ms: number): string {

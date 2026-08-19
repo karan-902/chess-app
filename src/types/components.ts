@@ -37,6 +37,7 @@ export interface IGameRoomNavPayload {
     };
     stake_amount: number;
     time_seconds: number;
+    room_code?: string;
 }
 export type Step = "method" | "email" | "otp";
 interface ISnapshotMove {

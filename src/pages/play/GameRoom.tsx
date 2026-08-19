@@ -372,6 +372,7 @@ export default function GameRoom() {
         : params.get("opponent")
           ? shortenUsername(decodeURIComponent(params.get("opponent")!))
           : playOpponentFallbackOpponent;
+    const isRoomMatch = params.get("room") === "1";
     const opponentRating = Number(params.get("opp_rating") ?? 0);
     const opponentId = params.get("opp_id") ?? undefined;
     const stakeAmount = Number(params.get("stake_amount") ?? 0);
@@ -772,8 +773,11 @@ export default function GameRoom() {
             if (
                 getPremovePieceColor(square, playerSide, premoveQueue) ===
                 playerSide
-            )
+            ) {
                 setPremoveFrom(square);
+            } else if (premoveQueue.length > 0) {
+                setPremoveQueue([]);
+            }
             return;
         }
 
@@ -907,7 +911,9 @@ export default function GameRoom() {
                 eloLabel={
                     isPvc
                         ? playWagerBadgeDifficultyLabels[difficulty]
-                        : `${opponentRating} elo`
+                        : isRoomMatch
+                          ? ""
+                          : `${opponentRating} elo`
                 }
                 capturedPieces={oppCaptured}
                 pieceColor={playerSide}
@@ -951,7 +957,7 @@ export default function GameRoom() {
                         : ""
                 }
                 eloLabel={
-                    isPvc
+                    isPvc || isRoomMatch
                         ? ""
                         : `${session?.ratings[myCategory] ?? leaderboardRankFallback} elo`
                 }

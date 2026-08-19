@@ -33,11 +33,11 @@ body {
     margin: 0 auto;
     padding: 0;
     width: 100%;
-    max-width: 480px;
+    max-width: 600px;
     height: 100%;
     background: $appBg;
 
-    @media (min-width: 1024px) {
+    @media (max-width: 1024px) {
         max-width: 479px;
     }
 }
@@ -60,7 +60,7 @@ body {
     transform: translateZ(0);
 
     @media (min-width: 1024px) {
-        max-width: 100;
+        max-width: 100%;
         box-shadow: 0 0 80px -20px rgba(0, 0, 0, 0.85);
     }
 }

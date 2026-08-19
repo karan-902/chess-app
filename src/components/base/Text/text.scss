@@ -352,7 +352,6 @@
         margin-top: 0.15rem;
     }
 
-
     &.matches-empty-title {
         margin-bottom: 0.4rem;
     }
@@ -431,8 +430,8 @@
         font-family: $fontOutfitExtraBold;
         font-size: $font24;
         color: $appText;
-        @media screen and (max-width: 400px) {
-            font-size: $font16;
+        @media screen and (max-width: 600px) {
+            font-size: $font18;
         }
         .wallet-split-block.accent & {
             color: $appText;

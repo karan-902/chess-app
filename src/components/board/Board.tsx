@@ -165,19 +165,11 @@ function DraggablePiece({
             {...listeners}
             {...attributes}
             onClick={onClick}
+            className="chess-piece-slot"
             style={{
-                position: "absolute",
-                left: `${col * 12.5}%`,
-                top: `${row * 12.5}%`,
-                width: "12.5%",
-                height: "12.5%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                touchAction: "none",
+                transform: `translate(${col * 100}%, ${row * 100}%)`,
                 cursor: draggable ? "grab" : "pointer",
                 opacity: isDragging ? 0 : 1,
-                zIndex: 2,
             }}
         >
             <PieceIcon code={code} className={className} />
@@ -219,6 +211,7 @@ export default function Board({
     const landingIdRef = useRef(0);
     const prevLastMoveRef = useRef<{ from: string; to: string } | null>(null);
     const prevPremoveCountRef = useRef(0);
+    const prevPremoveMovesRef = useRef<{ from: string; to: string }[]>([]);
 
     useEffect(() => {
         setArrows([]);
@@ -227,8 +220,12 @@ export default function Board({
 
     useEffect(() => {
         const prev = prevLastMoveRef.current;
+        const alreadyGhosted = prevPremoveMovesRef.current.some(
+            (m) => lastMove && m.from === lastMove.from && m.to === lastMove.to,
+        );
         if (
             lastMove &&
+            !alreadyGhosted &&
             (!prev || prev.from !== lastMove.from || prev.to !== lastMove.to)
         ) {
             const id = ++landingIdRef.current;
@@ -246,6 +243,7 @@ export default function Board({
             }
         }
         prevPremoveCountRef.current = premoveMoves.length;
+        prevPremoveMovesRef.current = premoveMoves;
     }, [premoveMoves]);
 
     useEffect(() => {
@@ -542,7 +540,7 @@ export default function Board({
                                     opacity: 0,
                                 }}
                                 transition={{
-                                    duration: 0.62,
+                                    duration: 0.9,
                                     ease: [0.16, 1, 0.3, 1],
                                 }}
                                 onAnimationComplete={() =>
