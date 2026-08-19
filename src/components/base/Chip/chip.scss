@@ -2,7 +2,7 @@
 
 .chip {
     height: auto;
-    border-radius: 8px;
+    border-radius: 8px !important;
 
     &.gr-move-chip {
         background: transparent;
@@ -15,6 +15,8 @@
             font-size: $font14;
             color: $appText;
             padding: 0.15rem 0.5rem;
+            overflow: visible;
+            text-overflow: unset;
         }
 
         &:hover {
@@ -22,7 +24,7 @@
         }
 
         &.active {
-            width: 50px !important;
+            min-width: 45px;
             background: alpha($gold, 0.12);
 
             .MuiChip-label {

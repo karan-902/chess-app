@@ -268,7 +268,6 @@ export const playActionButtonsResign = "Resign";
 export const playActionButtonsNewGame = "New Game";
 export const playEnginePanelEngineLine = (score: string) =>
     `Stockfish 16 · Depth 28 · ${score}`;
-export const playMoveHistoryReviewing = "Reviewing";
 export const playMoveHistoryPreviousMoveAriaLabel = "Previous move";
 export const playMoveHistoryNextMoveAriaLabel = "Next move";
 export const playTabLockedTitle = "Game already open";

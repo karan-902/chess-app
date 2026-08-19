@@ -81,7 +81,6 @@ import {
     playGameOverWaitingForOpponent,
     playGameOverAcceptRematchButton,
     playReasonGameOver,
-    playMoveHistoryReviewing,
     playTabLockedTitle,
     playTabLockedDescription,
     playTabLockedTakeOverButton,
@@ -226,20 +225,19 @@ function MoveList({
     onJump,
 }: IMoveListProps) {
     const movesRef = useRef<HTMLDivElement>(null);
+    const effectiveIndex = viewIndex ?? fenHistory.length - 1;
 
     useEffect(() => {
-        movesRef.current?.scrollTo({
-            left: movesRef.current.scrollWidth,
-            behavior: "smooth",
-        });
-    }, [moveHistory.length]);
+        movesRef.current
+            ?.querySelector(".active")
+            ?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+    }, [effectiveIndex]);
 
     if (moveHistory.length === 0) return null;
 
     return (
         <Box customClass="gr-move-strip" ref={movesRef}>
             {moveHistory.map((m, i) => {
-                const effectiveIndex = viewIndex ?? fenHistory.length - 1;
                 const isWhiteActive = effectiveIndex === i * 2 + 1;
                 const isBlackActive = effectiveIndex === i * 2 + 2;
                 return (
@@ -539,7 +537,7 @@ export default function GameRoom() {
 
     useEffect(() => {
         if (!isPvc || !isGameOver || gameEnded) return;
-        const winnerIsMe = isCheckmate && turn === "b";
+        const winnerIsMe = isCheckmate && turn === computerSide;
         setGameEnded({
             game_id: gameId ?? "pvc",
             winner_id: !isCheckmate
@@ -561,6 +559,7 @@ export default function GameRoom() {
         isStalemate,
         gameEnded,
         turn,
+        computerSide,
         gameId,
         myUserId,
     ]);
@@ -569,11 +568,11 @@ export default function GameRoom() {
         if (!isPvc || !timedOut || gameEnded) return;
         setGameEnded({
             game_id: gameId ?? "pvc",
-            winner_id: timedOut === "w" ? "computer" : (myUserId ?? "me"),
+            winner_id: timedOut === playerSide ? "computer" : (myUserId ?? "me"),
             reason: "timeout",
             settlement: null,
         });
-    }, [isPvc, timedOut, gameEnded, gameId, myUserId]);
+    }, [isPvc, timedOut, gameEnded, gameId, myUserId, playerSide]);
 
     useEffect(() => {
         if (!socket || !gameId || isPvc) return;
@@ -901,13 +900,6 @@ export default function GameRoom() {
 
     return (
         <Box customClass="game-room">
-            <MoveList
-                moveHistory={moveHistory}
-                fenHistory={fenHistory}
-                viewIndex={viewIndex}
-                onJump={jumpTo}
-            />
-
             <PlayerRow
                 variant="opponent"
                 active={!myTurnActive}
@@ -994,9 +986,12 @@ export default function GameRoom() {
                 >
                     <ChevronLeft size={16} strokeWidth={2} />
                 </IconButton>
-                <Text customClass="gr-review-label">
-                    {isReviewing ? playMoveHistoryReviewing : ""}
-                </Text>
+                <MoveList
+                    moveHistory={moveHistory}
+                    fenHistory={fenHistory}
+                    viewIndex={viewIndex}
+                    onJump={jumpTo}
+                />
                 <IconButton
                     customClass="gr-review-btn"
                     onClick={goForward}
