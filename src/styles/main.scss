@@ -74,7 +74,7 @@ body {
 .app-content {
     flex: 1;
     overflow-y: auto;
-    overscroll-behavior-y: contain;
+    overscroll-behavior-y: none;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: thin;
     scrollbar-color: alpha($appTextMuted, 0.3) transparent;

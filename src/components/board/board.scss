@@ -2,13 +2,13 @@
 
 .chess-board {
     position: relative;
-    max-width: 480px;
+    max-width: 430px;
     width: 100%;
     touch-action: none;
 
-    @media (min-width: 1024px) {
-        max-width: 550px;
-    }
+    // @media (min-width: 1024px) {
+    //     max-width: 500px;
+    // }
 }
 .chess-board-grid {
     position: relative;

@@ -521,13 +521,11 @@ export default function GameRoom() {
     const { bestMove } = useStockfish(
         fen,
         DIFFICULTY_CONFIG[difficulty].depth,
-        isPvc && difficulty !== "easy" && turn === computerSide && !isGameOver,
+        isPvc && turn === computerSide && !isGameOver,
         DIFFICULTY_CONFIG[difficulty].elo,
     );
     useComputerOpponent({
         mode,
-        difficulty,
-        fen,
         turn,
         computerSide,
         gameEnded: isGameOver,

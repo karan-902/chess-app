@@ -315,9 +315,13 @@ const getPremovePieceColor = useCallback(
     const confirmMove = useCallback(
         (serverFen: string) => {
             if (chess.fen() === serverFen) return;
-            chess.load(serverFen);
-            setFen(serverFen);
-            setFenHistory((prev) => [...prev.slice(0, -1), serverFen]);
+            try {
+                chess.load(serverFen);
+                setFen(serverFen);
+                setFenHistory((prev) => [...prev.slice(0, -1), serverFen]);
+            } catch (error) {
+                console.error("[confirmMove] invalid FEN from server", error);
+            }
         },
         [chess],
     );

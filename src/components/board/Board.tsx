@@ -260,6 +260,7 @@ export default function Board({
     const ranks = flipped ? RANKS_FLIP : RANKS;
     const files = flipped ? FILES_FLIP : FILES;
     const board = useMemo(() => boardFromFen(fen), [fen]);
+    const epTarget = fen.split(" ")[3];
     const cellSize = boardWidth / 8;
     const pieceSize = cellSize * 0.96;
 
@@ -455,7 +456,13 @@ export default function Board({
                             const piece = board[square];
                             const isSelected = selectedSquare === square;
                             const isLegal = legalMoves.includes(square);
-                            const isCapture = isLegal && !!piece;
+                            const isEnPassantCapture =
+                                isLegal &&
+                                square === epTarget &&
+                                board[selectedSquare ?? ""]?.[1] === "P" &&
+                                selectedSquare?.[0] !== square[0];
+                            const isCapture =
+                                isLegal && (!!piece || isEnPassantCapture);
                             const isAttacked =
                                 attackedSquares.includes(square) && !!piece;
                             const isCheck = checkSquare === square;

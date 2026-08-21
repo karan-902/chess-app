@@ -1,12 +1,10 @@
 import { useEffect } from "react";
-import type { Difficulty, GameMode } from "@/types/components";
+import type { GameMode } from "@/types/components";
 
-const COMPUTER_MOVE_DELAY_MS = 3000;
+const COMPUTER_MOVE_DELAY_MS = 2500;
 
 interface IProps {
     mode: GameMode;
-    difficulty: Difficulty;
-    fen: string;
     turn: "w" | "b";
     computerSide: "w" | "b";
     gameEnded: boolean;
@@ -20,8 +18,6 @@ interface IProps {
 
 export function useComputerOpponent({
     mode,
-    difficulty,
-    fen,
     turn,
     computerSide,
     gameEnded,
@@ -30,28 +26,7 @@ export function useComputerOpponent({
     getRandomMove,
 }: IProps) {
     useEffect(() => {
-        if (
-            mode !== "pvc" ||
-            difficulty !== "easy" ||
-            turn !== computerSide ||
-            gameEnded
-        )
-            return;
-        const t = setTimeout(() => {
-            const move = getRandomMove();
-            if (move) makeMove(move.from, move.to);
-        }, COMPUTER_MOVE_DELAY_MS);
-        return () => clearTimeout(t);
-    }, [fen, turn, computerSide, mode, difficulty, gameEnded]);
-
-    useEffect(() => {
-        if (
-            mode !== "pvc" ||
-            difficulty === "easy" ||
-            turn !== computerSide ||
-            !bestMove ||
-            gameEnded
-        ) {
+        if (mode !== "pvc" || turn !== computerSide || !bestMove || gameEnded) {
             return;
         }
         const t = setTimeout(
@@ -59,20 +34,14 @@ export function useComputerOpponent({
             COMPUTER_MOVE_DELAY_MS,
         );
         return () => clearTimeout(t);
-    }, [bestMove, turn, computerSide, mode, difficulty, gameEnded]);
+    }, [bestMove, turn, computerSide, mode, gameEnded]);
 
     useEffect(() => {
-        if (
-            mode !== "pvc" ||
-            difficulty === "easy" ||
-            turn !== computerSide ||
-            gameEnded
-        )
-            return;
+        if (mode !== "pvc" || turn !== computerSide || gameEnded) return;
         const fallback = setTimeout(() => {
             const move = getRandomMove();
             if (move) makeMove(move.from, move.to);
         }, 6000);
         return () => clearTimeout(fallback);
-    }, [turn, computerSide, mode, difficulty, gameEnded]);
+    }, [turn, computerSide, mode, gameEnded]);
 }
