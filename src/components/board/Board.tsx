@@ -299,10 +299,41 @@ export default function Board({
     if (lastMove && board[lastMove.to] && !board[lastMove.from]) {
         pieceKeys[lastMove.to] =
             prevKeyMapRef.current[lastMove.from] ?? lastMove.from;
+
+        const isCastle =
+            board[lastMove.to][1] === "K" &&
+            Math.abs(
+                FILES.indexOf(lastMove.to[0]) -
+                    FILES.indexOf(lastMove.from[0]),
+            ) === 2;
+        if (isCastle) {
+            const rank = lastMove.from[1];
+            const kingside = lastMove.to[0] === "g";
+            const rookFrom = `${kingside ? "h" : "a"}${rank}`;
+            const rookTo = `${kingside ? "f" : "d"}${rank}`;
+            if (board[rookTo] && !board[rookFrom]) {
+                pieceKeys[rookTo] =
+                    prevKeyMapRef.current[rookFrom] ?? rookFrom;
+            }
+        }
     }
     useEffect(() => {
         prevKeyMapRef.current = pieceKeys;
     });
+
+    const pieceOrderRef = useRef<Map<string, number>>(new Map());
+    const pieceEntries = Object.entries(board);
+    for (const [square] of pieceEntries) {
+        const key = pieceKeys[square];
+        if (!pieceOrderRef.current.has(key)) {
+            pieceOrderRef.current.set(key, pieceOrderRef.current.size);
+        }
+    }
+    const orderedPieceEntries = [...pieceEntries].sort(
+        (a, b) =>
+            pieceOrderRef.current.get(pieceKeys[a[0]])! -
+            pieceOrderRef.current.get(pieceKeys[b[0]])!,
+    );
 
     const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -489,7 +520,7 @@ export default function Board({
                         }),
                     )}
 
-                    {Object.entries(board).map(([square, code]) => {
+                    {orderedPieceEntries.map(([square, code]) => {
                         const isCaptureTarget =
                             hiddenCaptureSquares.has(square);
                         const displaySquare = resolveDisplaySquare(
