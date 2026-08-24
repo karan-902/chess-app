@@ -72,6 +72,7 @@ import {
     playToastOpponentDisconnectedTitle,
     playToastOpponentDisconnectedDesc,
     playToastOpponentReconnected,
+    playOpponentGraceLabel,
     playGameOverHeaderWin,
     playGameOverHeaderDraw,
     playGameOverHeaderLose,
@@ -128,6 +129,7 @@ function PlayerRow({
     advantage,
     clock,
     clockReady,
+    graceSecondsRemaining,
 }: IPlayerRowProps) {
     return (
         <Box
@@ -142,6 +144,11 @@ function PlayerRow({
                     {name}
                 </Text>
                 <Text customClass="gr-elo caption">{eloLabel}</Text>
+                {typeof graceSecondsRemaining === "number" && (
+                    <Text customClass="gr-grace caption">
+                        {playOpponentGraceLabel(graceSecondsRemaining)}
+                    </Text>
+                )}
 
                 <Box customClass="gr-captured">
                     {pairCapturedPieces(capturedPieces).map(
@@ -444,6 +451,9 @@ export default function GameRoom() {
     const [gameEnded, setGameEnded] = useState<IgameEndedResponse | null>(null);
     const [clockReady, setClockReady] = useState(isPvc);
     const [opponentDisconnected, setOpponentDisconnected] = useState(false);
+    const [graceSecondsRemaining, setGraceSecondsRemaining] = useState<
+        number | null
+    >(null);
     const [resignOpen, setResignOpen] = useState(false);
     const bypassBlockRef = useRef(false);
     const blocker = useBlocker(
@@ -479,6 +489,17 @@ export default function GameRoom() {
         setPremoveQueue([]);
         setPremoveFrom(null);
     }, [gameId]);
+
+    const hasGrace = graceSecondsRemaining !== null;
+    useEffect(() => {
+        if (!hasGrace) return;
+        const id = setInterval(() => {
+            setGraceSecondsRemaining((s) =>
+                s === null ? null : Math.max(0, s - 1),
+            );
+        }, 1000);
+        return () => clearInterval(id);
+    }, [hasGrace]);
 
     const paused = !!gameEnded || opponentDisconnected;
     const {
@@ -622,7 +643,9 @@ export default function GameRoom() {
                 );
         };
         const onGameEnded = (data: IgameEndedResponse) => {
-            if (data.game_id === gameId) setGameEnded(data);
+            if (data.game_id !== gameId) return;
+            setGameEnded(data);
+            setGraceSecondsRemaining(null);
         };
         const onSocketError = (data: ISocketErrorResponse) => {
             dispatch(showToast({ message: data.message, severity: "error" }));
@@ -632,6 +655,7 @@ export default function GameRoom() {
         ) => {
             if (data.game_id !== gameId) return;
             setOpponentDisconnected(true);
+            setGraceSecondsRemaining(data.grace_period_seconds);
             dispatch(
                 showToast({
                     message: `${playToastOpponentDisconnectedTitle} — ${playToastOpponentDisconnectedDesc(
@@ -644,6 +668,7 @@ export default function GameRoom() {
         const onOpponentReconnected = (data: IopponentReconnectedResponse) => {
             if (data.game_id !== gameId) return;
             setOpponentDisconnected(false);
+            setGraceSecondsRemaining(null);
             dispatch(
                 showToast({
                     message: playToastOpponentReconnected,
@@ -918,6 +943,7 @@ export default function GameRoom() {
                 advantage={myAdvantage < 0 ? -myAdvantage : null}
                 clock={oppClock}
                 clockReady={clockReady}
+                graceSecondsRemaining={graceSecondsRemaining}
             />
 
             <Box customClass="gr-board-wrap">

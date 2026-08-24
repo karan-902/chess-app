@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSearchParams, useNavigate } from "react-router";
 import classNames from "classnames";
 import Box from "@/components/base/Box/Box";
@@ -11,6 +11,7 @@ import Switch from "@/components/base/Switch/Switch";
 import Input from "@/components/base/Input/Input";
 import Label from "@/components/base/Label/Label";
 import OtpInput from "@/components/base/OtpInput/OtpInput";
+import ChipSelect from "@/components/common/ChipSelect";
 import { formatText } from "@/utils/format";
 import { formatMMSS } from "@/utils";
 import { Copy, Check, Clipboard } from "lucide-react";
@@ -27,7 +28,6 @@ import type { GameCategory, Pool } from "@/types/types";
 import type {
     Difficulty,
     IDurationWheelProps,
-    IChipSelectProps,
     RoomTab,
 } from "@/types/components";
 import {
@@ -194,59 +194,6 @@ function PoolCardSkeleton() {
                 style={{ marginTop: "auto" }}
             />
         </Card>
-    );
-}
-
-function ChipSelect<T extends string>({
-    options,
-    value,
-    onChange,
-    label,
-    subLabel,
-    customClass = "segment",
-}: IChipSelectProps<T>) {
-    const btnRefs = useRef<Array<HTMLButtonElement | null>>([]);
-    const [thumb, setThumb] = useState({ left: 0, width: 0 });
-
-    useLayoutEffect(() => {
-        const btn = btnRefs.current[options.indexOf(value)];
-        if (!btn) return;
-        setThumb({ left: btn.offsetLeft, width: btn.offsetWidth });
-    }, [value, options]);
-
-    return (
-        <Box customClass={customClass}>
-            <Box
-                customClass="segment-thumb"
-                style={{
-                    width: thumb.width,
-                    transform: `translateX(${thumb.left}px)`,
-                }}
-            />
-            {options.map((option, i) => (
-                <Button
-                    key={option}
-                    ref={(el) => {
-                        btnRefs.current[i] = el;
-                    }}
-                    type="button"
-                    customClass={classNames(
-                        "segment-btn",
-                        value === option && "active",
-                    )}
-                    onClick={() => onChange(option)}
-                >
-                    <Text component="span" customClass="segment-btn-label">
-                        {label(option)}
-                    </Text>
-                    {subLabel && (
-                        <Text component="span" customClass="segment-btn-sub caption">
-                            {subLabel(option)}
-                        </Text>
-                    )}
-                </Button>
-            ))}
-        </Box>
     );
 }
 

@@ -3,12 +3,12 @@ import classNames from "classnames";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import Badge from "@/components/base/Badge/Badge";
-import Button from "@/components/base/Button/Button";
 import Card from "@/components/base/Card/Card";
 import Skeleton from "@/components/base/Skeleton/Skeleton";
 import VirtualList from "@/components/common/VirtualList";
 import EmptyState from "@/components/common/EmptyState";
 import StatRowSkeleton from "@/components/common/StatRowSkeleton";
+import ChipSelect from "@/components/common/ChipSelect";
 import { useGameHistory } from "@/hooks/useGameHistory";
 import { useReduxSelector } from "@/redux/hooks";
 import { deriveCategory, formatMatchDate, shortenUsername } from "@/utils";
@@ -42,6 +42,12 @@ import {
 } from "@/constants/messages";
 import { formatAmount } from "@/utils/format";
 const HISTORY_SKELETON_ROWS = 15;
+const MATCHES_SUBTAB_OPTIONS: MatchesSubtab[] = ["results", "stats", "worldwide"];
+const MATCHES_SUBTAB_LABELS: Record<MatchesSubtab, string> = {
+    results: matchesSubtabHistory,
+    stats: matchesSubtabStats,
+    worldwide: matchesSubtabGlobal,
+};
 
 function MatchRow({
     outcome,
@@ -217,35 +223,12 @@ export default function MyMatches() {
 
     return (
         <Box customClass="matches-page">
-            <Box customClass="segment my-matches-segment">
-                <Button
-                    customClass={classNames(
-                        "my-matches-segment-btn",
-                        subtab === "results" && "active",
-                    )}
-                    onClick={() => setSubtab("results")}
-                >
-                    {matchesSubtabHistory}
-                </Button>
-                <Button
-                    customClass={classNames(
-                        "my-matches-segment-btn",
-                        subtab === "stats" && "active",
-                    )}
-                    onClick={() => setSubtab("stats")}
-                >
-                    {matchesSubtabStats}
-                </Button>
-                <Button
-                    customClass={classNames(
-                        "my-matches-segment-btn",
-                        subtab === "worldwide" && "active",
-                    )}
-                    onClick={() => setSubtab("worldwide")}
-                >
-                    {matchesSubtabGlobal}
-                </Button>
-            </Box>
+            <ChipSelect
+                options={MATCHES_SUBTAB_OPTIONS}
+                value={subtab}
+                onChange={setSubtab}
+                label={(s) => MATCHES_SUBTAB_LABELS[s]}
+            />
 
             {subtab === "results" &&
                 (loading ? (

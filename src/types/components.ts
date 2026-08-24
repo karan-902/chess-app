@@ -62,6 +62,7 @@ export interface IPlayerRowProps {
     advantage: number | null;
     clock: string;
     clockReady: boolean;
+    graceSecondsRemaining?: number | null;
 }
 
 export interface IPromotionOverlayProps {

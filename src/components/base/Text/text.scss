@@ -306,7 +306,7 @@
         transition: color 0.2s ease;
 
         .segment-btn.active & {
-            color: $appSurface;
+            color: #fff;
         }
 
         .segment.category-select & {
@@ -324,7 +324,7 @@
         transition: color 0.2s ease;
 
         .segment-btn.active & {
-            color: $appSurface;
+            color: #fff;
         }
     }
 
@@ -606,6 +606,12 @@
     &.gr-advantage {
         font-weight: 600;
         margin-left: 0.15rem;
+    }
+
+    &.gr-grace {
+        display: block;
+        margin-top: 0.15rem;
+        color: $paleRed;
     }
 
     &.gr-clock {

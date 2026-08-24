@@ -245,6 +245,8 @@ export const playToastOpponentDisconnectedTitle = "Opponent disconnected";
 export const playToastOpponentDisconnectedDesc = (seconds: number) =>
     `Waiting for them to reconnect (${seconds}s)…`;
 export const playToastOpponentReconnected = "Opponent connected!";
+export const playOpponentGraceLabel = (seconds: number) =>
+    `Reconnecting… ${seconds}s`;
 export const playToastOpponentOfferedDraw = "Opponent offered a draw";
 export const playToastDrawDeclined = "Draw offer declined";
 export const playDrawOfferBannerText = "Opponent offered a draw";

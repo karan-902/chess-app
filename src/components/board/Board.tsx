@@ -264,9 +264,30 @@ export default function Board({
     const cellSize = boardWidth / 8;
     const pieceSize = cellSize * 0.96;
 
+    const expandedPremoveMoves = useMemo(() => {
+        const expanded: { from: string; to: string }[] = [];
+        for (const m of premoveMoves) {
+            expanded.push(m);
+            const piece = board[m.from];
+            const isCastle =
+                piece?.[1] === "K" &&
+                Math.abs(FILES.indexOf(m.to[0]) - FILES.indexOf(m.from[0])) ===
+                    2;
+            if (isCastle) {
+                const rank = m.from[1];
+                const kingside = m.to[0] === "g";
+                expanded.push({
+                    from: `${kingside ? "h" : "a"}${rank}`,
+                    to: `${kingside ? "f" : "d"}${rank}`,
+                });
+            }
+        }
+        return expanded;
+    }, [premoveMoves, board]);
+
     const resolveDisplaySquare = (square: string, code: string) => {
         let current = square;
-        for (const m of premoveMoves) {
+        for (const m of expandedPremoveMoves) {
             if (m.from !== current) continue;
             const occupant = board[m.to];
             if (occupant && occupant[0] !== code[0]) break;
@@ -279,7 +300,7 @@ export default function Board({
         const hidden = new Set<string>();
         for (const [square, code] of Object.entries(board)) {
             let current = square;
-            for (const m of premoveMoves) {
+            for (const m of expandedPremoveMoves) {
                 if (m.from !== current) continue;
                 const occupant = board[m.to];
                 if (occupant && occupant[0] !== code[0]) {
@@ -290,7 +311,7 @@ export default function Board({
             }
         }
         return hidden;
-    }, [board, premoveMoves]);
+    }, [board, expandedPremoveMoves]);
 
     const prevKeyMapRef = useRef<Record<string, string>>({});
     const pieceKeys: Record<string, string> = {};

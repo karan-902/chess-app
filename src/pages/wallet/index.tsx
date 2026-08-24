@@ -104,7 +104,9 @@ function TransactionFilterDrawer({
     return (
         <Modal open={open} onClose={onClose} customClass="tx-filter-sheet">
             <Box customClass="tx-filter-sheet-content">
-                <Text customClass="deposit-heading value-heading">{walletFilterTitle}</Text>
+                <Text customClass="deposit-heading value-heading">
+                    {walletFilterTitle}
+                </Text>
 
                 <Box customClass="auth-field">
                     <Label>{walletFilterTypeLabel}</Label>
@@ -214,9 +216,7 @@ function txRow(tx: ITransactionResponse) {
                         <TxIcon size={16} strokeWidth={2} />
                     </Box>
                     <Box customClass="wallet-tx-text">
-                        <Text customClass="row-title">
-                            {tx.description}
-                        </Text>
+                        <Text customClass="row-title">{tx.description}</Text>
                         <Text customClass="meta-text">
                             {dayLabel(tx.created)} - {formatTime(tx.created)}
                         </Text>
@@ -326,13 +326,9 @@ export default function Wallet() {
             </Box>
 
             <Box customClass="wallet-tx-title-row">
-                {transactionsLoading ? (
-                    <Skeleton customClass="text" width={110} height={17} />
-                ) : (
-                    <Text component="h3" customClass="wallet-tx-title">
-                        {walletPageTransactionsTitle}
-                    </Text>
-                )}
+                <Text component="h3" customClass="wallet-tx-title">
+                    {walletPageTransactionsTitle}
+                </Text>
                 <IconButton
                     customClass={classNames(
                         "wallet-tx-filter-trigger",

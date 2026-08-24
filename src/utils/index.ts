@@ -207,6 +207,12 @@ export const callAPIInterface = async <
                 return;
             }
 
+            if (errorType === "session_inactive" || errorType === "session_expired") {
+                await sessionService.deleteSession();
+                reject(err);
+                return;
+            }
+
             if (errorStatus === 429) {
                 store.dispatch(
                     showToast({ message: apiRateLimited, severity: "error" }),
