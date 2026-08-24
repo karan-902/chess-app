@@ -138,6 +138,10 @@
         display: inline-flex;
         align-items: center;
         color: $gold !important;
+
+        &.muted {
+            color: $appTextMuted !important;
+        }
     }
     &.otp-subtitle {
         strong {
@@ -302,7 +306,7 @@
     &.segment-btn-label {
         display: block;
         font-size: $font14;
-        font-family: $fontOutfitExtraBold;
+        font-family: $fontOutfitMedium;
         transition: color 0.2s ease;
 
         .segment-btn.active & {
@@ -352,12 +356,9 @@
         margin-top: 0.15rem;
     }
 
-    &.matches-empty-title {
-        margin-bottom: 0.4rem;
-    }
-
     &.matches-empty-desc {
         line-height: 1.55;
+        max-width: 24rem;
     }
     &.matches-stats-title {
         font-family: $fontOutfitSemiBold;

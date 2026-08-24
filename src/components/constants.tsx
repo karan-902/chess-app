@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import Text from "./base/Text/Text";
 
 export function GoogleIcon({ size = 18 }: { size: number }) {
@@ -31,14 +32,16 @@ export function GoogleIcon({ size = 18 }: { size: number }) {
 
 export function ShatranjLogo({
     size = 42,
+    muted = false,
 }: {
     size: number;
     showText: boolean;
     withCursor?: boolean;
+    muted?: boolean;
 }) {
     return (
         <Text
-            customClass="shatranj-logo"
+            customClass={classNames("shatranj-logo", muted && "muted")}
             sx={{ gap: size * 0.38 }}
             component="span"
         >

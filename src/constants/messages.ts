@@ -490,6 +490,7 @@ export const matchesStatsBestStreakLabel = "Best streak";
 export const matchesStatsCurrentStreakLabel = "Current streak";
 export const matchesStatsFallback = 0;
 
+export const walletPoweredByLabel = "POWERED BY";
 export const walletPageBalanceLabel = "Total Balance";
 export const walletPageWithdrawableLabel = "Withdrawable";
 export const walletPageTransactionsTitle = "Recent Transactions";

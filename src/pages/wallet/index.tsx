@@ -13,6 +13,7 @@ import VirtualList from "@/components/common/VirtualList";
 import EmptyState from "@/components/common/EmptyState";
 import { useWallet } from "@/hooks/useWallet";
 import { useWalletActionModal } from "@/context/WalletActionModalContext";
+import { speedLogo } from "@/components/images";
 import { formatAmount, formatTime } from "@/utils/format";
 import {
     TRANSACTION_TYPE_ICONS,
@@ -34,6 +35,7 @@ import {
     walletFilterResetButton,
     appbarDepositButton,
     withdrawModalTitle,
+    walletPoweredByLabel,
 } from "@/constants/messages";
 import Modal from "@/components/base/Modal/Modal";
 
@@ -323,6 +325,11 @@ export default function Wallet() {
                         </Button>
                     </>
                 )}
+            </Box>
+
+            <Box customClass="powered-by-badge">
+                <Text component="span">{walletPoweredByLabel}</Text>
+                <img src={speedLogo} alt="Speed" className="powered-by-logo" />
             </Box>
 
             <Box customClass="wallet-tx-title-row">
