@@ -4,7 +4,6 @@ const SOUND_FILES = {
     castle: "/sounds/castle.mp3",
     check: "/sounds/check.mp3",
     promote: "/sounds/promote.mp3",
-    "game-start": "/sounds/game-start.mp3",
     "game-end": "/sounds/game-end.mp3",
 } as const;
 

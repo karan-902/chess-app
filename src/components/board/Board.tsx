@@ -19,6 +19,7 @@ import { motion } from "motion/react";
 import classNames from "classnames";
 import Box from "../base/Box/Box";
 import PieceIcon from "./PieceIcon";
+import { playSound } from "@/lib/sounds";
 import "./board.scss";
 
 interface IChessBoardProps {
@@ -144,6 +145,7 @@ function DraggablePiece({
     className,
     onClick,
     draggable,
+    hidden,
 }: {
     square: string;
     code: string;
@@ -152,6 +154,7 @@ function DraggablePiece({
     className: string;
     onClick: () => void;
     draggable: boolean;
+    hidden?: boolean;
 }) {
     const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
         id: square,
@@ -169,13 +172,17 @@ function DraggablePiece({
             style={{
                 transform: `translate(${col * 100}%, ${row * 100}%)`,
                 cursor: draggable ? "grab" : "pointer",
-                opacity: isDragging ? 0 : 1,
+                opacity: isDragging || hidden ? 0 : 1,
             }}
         >
             <PieceIcon code={code} className={className} />
         </div>
     );
 }
+
+const ENTRANCE_WAVE_MS = 160;
+const ENTRANCE_WAVE_COUNT = 4;
+const ENTRANCE_LANDING_MS = 600;
 
 export default function Board({
     fen,
@@ -208,6 +215,24 @@ export default function Board({
     const [landings, setLandings] = useState<{ id: number; square: string }[]>(
         [],
     );
+    const [shimmerPhase, setShimmerPhase] = useState<
+        "idle" | "mounted" | "running"
+    >("mounted");
+    const [captures, setCaptures] = useState<
+        { id: number; square: string; code: string }[]
+    >([]);
+    const captureIdRef = useRef(0);
+    const prevBoardRef = useRef<Record<string, string>>({});
+    const [entranceGhosts, setEntranceGhosts] = useState<
+        { square: string; code: string; wave: number }[] | null
+    >(() =>
+        Object.entries(boardFromFen(fen)).map(([square, code]) => ({
+            square,
+            code,
+            wave: Math.round(Math.abs(FILES.indexOf(square[0]) - 3.5) - 0.5),
+        })),
+    );
+    const [landedWaves, setLandedWaves] = useState(0);
     const landingIdRef = useRef(0);
     const prevLastMoveRef = useRef<{ from: string; to: string } | null>(null);
     const prevPremoveCountRef = useRef(0);
@@ -257,9 +282,78 @@ export default function Board({
         return () => observer.disconnect();
     }, []);
 
+    useEffect(() => {
+        if (!entranceGhosts) return;
+        const timers: ReturnType<typeof setTimeout>[] = [];
+        for (let w = 0; w < ENTRANCE_WAVE_COUNT; w++) {
+            const launchAt = 150 + w * ENTRANCE_WAVE_MS;
+            timers.push(setTimeout(() => setLandedWaves(w + 1), launchAt));
+            timers.push(
+                setTimeout(
+                    () => playSound("move", 0.4),
+                    launchAt + ENTRANCE_LANDING_MS,
+                ),
+            );
+        }
+        timers.push(
+            setTimeout(
+                () => setEntranceGhosts(null),
+                150 +
+                    ENTRANCE_WAVE_COUNT * ENTRANCE_WAVE_MS +
+                    ENTRANCE_LANDING_MS +
+                    100,
+            ),
+        );
+        return () => timers.forEach(clearTimeout);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        const raf = requestAnimationFrame(() => {
+            requestAnimationFrame(() => setShimmerPhase("running"));
+        });
+        const timer = setTimeout(() => setShimmerPhase("idle"), 1400);
+        return () => {
+            cancelAnimationFrame(raf);
+            clearTimeout(timer);
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     const ranks = flipped ? RANKS_FLIP : RANKS;
     const files = flipped ? FILES_FLIP : FILES;
     const board = useMemo(() => boardFromFen(fen), [fen]);
+
+    useEffect(() => {
+        if (!lastMove) return;
+        const prevBoard = prevBoardRef.current;
+        const moving = prevBoard[lastMove.from];
+        if (!moving) return;
+
+        let capturedSquare: string | null = null;
+        if (prevBoard[lastMove.to] && prevBoard[lastMove.to][0] !== moving[0]) {
+            capturedSquare = lastMove.to;
+        } else if (
+            moving[1] === "P" &&
+            lastMove.from[0] !== lastMove.to[0] &&
+            !prevBoard[lastMove.to]
+        ) {
+            capturedSquare = `${lastMove.to[0]}${lastMove.from[1]}`;
+        }
+
+        if (capturedSquare && prevBoard[capturedSquare]) {
+            const id = ++captureIdRef.current;
+            setCaptures((q) => [
+                ...q,
+                { id, square: capturedSquare!, code: prevBoard[capturedSquare!] },
+            ]);
+        }
+    }, [lastMove]);
+
+    useEffect(() => {
+        prevBoardRef.current = board;
+    });
+
     const epTarget = fen.split(" ")[3];
     const cellSize = boardWidth / 8;
     const pieceSize = cellSize * 0.96;
@@ -575,6 +669,7 @@ export default function Board({
                                     !draggableColor ||
                                     code[0] === draggableColor
                                 }
+                                hidden={!!entranceGhosts}
                             />
                         );
                     })}
@@ -608,6 +703,87 @@ export default function Board({
                                     )
                                 }
                             />
+                        );
+                    })}
+
+                    {captures.flatMap(({ id, square, code }) => {
+                        const col = files.indexOf(square[0]);
+                        const row = ranks.indexOf(square[1]);
+                        return [
+                            <motion.div
+                                key={`${id}-flash`}
+                                className="board-preview-flash"
+                                initial={{
+                                    x: `${col * 100}%`,
+                                    y: `${row * 100}%`,
+                                    opacity: 1,
+                                }}
+                                animate={{
+                                    x: `${col * 100}%`,
+                                    y: `${row * 100}%`,
+                                    opacity: 0,
+                                }}
+                                transition={{ duration: 0.4, ease: "easeOut" }}
+                            />,
+                            <motion.div
+                                key={`${id}-piece`}
+                                className="chess-piece-slot"
+                                initial={{
+                                    x: `${col * 100}%`,
+                                    y: `${row * 100}%`,
+                                    scale: 1,
+                                    rotate: 0,
+                                    opacity: 1,
+                                }}
+                                animate={{
+                                    x: `${col * 100}%`,
+                                    y: `${row * 100}%`,
+                                    scale: 1.35,
+                                    rotate: 12,
+                                    opacity: 0,
+                                }}
+                                transition={{ duration: 0.35, ease: "easeOut" }}
+                                onAnimationComplete={() =>
+                                    setCaptures((q) =>
+                                        q.filter((c) => c.id !== id),
+                                    )
+                                }
+                            >
+                                <PieceIcon
+                                    code={code}
+                                    className={`chess-piece-svg${code[0] === "b" ? " piece-black" : ""}`}
+                                />
+                            </motion.div>,
+                        ];
+                    })}
+
+                    {entranceGhosts?.map(({ square, code, wave }) => {
+                        const col = files.indexOf(square[0]);
+                        const targetRow = ranks.indexOf(square[1]);
+                        const offRow = targetRow >= 4 ? 9 : -2;
+                        const landed = wave < landedWaves;
+                        return (
+                            <motion.div
+                                key={square}
+                                className="chess-piece-slot"
+                                initial={{
+                                    x: `${col * 100}%`,
+                                    y: `${offRow * 100}%`,
+                                }}
+                                animate={{
+                                    x: `${col * 100}%`,
+                                    y: `${(landed ? targetRow : offRow) * 100}%`,
+                                }}
+                                transition={{
+                                    duration: ENTRANCE_LANDING_MS / 1000,
+                                    ease: [0.4, 0, 0.2, 1],
+                                }}
+                            >
+                                <PieceIcon
+                                    code={code}
+                                    className={`chess-piece-svg${code[0] === "b" ? " piece-black" : ""}`}
+                                />
+                            </motion.div>
                         );
                     })}
 
@@ -701,6 +877,15 @@ export default function Board({
                                 );
                             })}
                         </svg>
+                    )}
+
+                    {shimmerPhase !== "idle" && (
+                        <Box
+                            customClass={classNames(
+                                "board-preview-shimmer",
+                                shimmerPhase === "running" && "run",
+                            )}
+                        />
                     )}
                 </Box>
             </Box>
