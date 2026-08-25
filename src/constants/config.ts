@@ -72,7 +72,7 @@ export const QUEUE_TIMEOUT_SECONDS: Record<GameCategory, number> = {
 
 export const NAV_ITEMS = [
     { id: "play", path: "/play", label: "Play" },
-    { id: "my-matches", path: "/history", label: "Matches" },
+    { id: "my-matches", path: "/matches", label: "Matches" },
     { id: "leaderboard", path: "/leaderboard", label: "Leaderboard" },
     { id: "rules", path: "/rules", label: "Rules" },
 ];

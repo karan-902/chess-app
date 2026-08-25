@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { CircularProgress } from "@mui/material";
 import { CheckCircle2, ArrowLeft } from "lucide-react";
 import { useReduxDispatch } from "@/redux/hooks";
 import { showToast } from "@/redux/common/common.slice";
@@ -11,6 +12,7 @@ import Select from "@/components/base/Select/Select";
 import { useWalletActionModal } from "@/context/WalletActionModalContext";
 import { useWalletBalance } from "@/hooks/useWallet";
 import { requestWithdraw } from "@/hooks/useWallet";
+import { useModalReady } from "@/hooks/useModalReady";
 import { formatAmount } from "@/utils/format";
 import type { WithdrawMethod } from "@/types/utils";
 import {
@@ -22,6 +24,7 @@ import {
     withdrawModalMethodOptions,
     withdrawModalSubmitButton,
     withdrawModalInvalidAmount,
+    withdrawModalMinAmountError,
     withdrawModalExceedsBalance,
     withdrawModalInvalidDestination,
     withdrawModalFailed,
@@ -37,6 +40,7 @@ import {
     authPasswordPlaceholder,
     authLoginBack,
     authLoginIncorrectPassword,
+    MIN_TRANSACTION_USD,
 } from "@/constants/messages";
 import Modal from "../base/Modal/Modal";
 
@@ -47,6 +51,7 @@ export default function WithdrawModal() {
     const { openModal, close } = useWalletActionModal();
     const { withdrawableUsd, refetch } = useWalletBalance();
     const open = openModal === "withdraw";
+    const ready = useModalReady(open);
 
     const [stage, setStage] = useState<Stage>("amount");
     const [amount, setAmount] = useState("");
@@ -79,13 +84,17 @@ export default function WithdrawModal() {
     const exceedsBalance =
         Math.round(amountUsd * 100) > Math.round(withdrawableUsd * 100);
     const isZeroAmount = amount !== "" && amountUsd <= 0;
+    const isBelowMin =
+        amount !== "" && amountUsd > 0 && amountUsd < MIN_TRANSACTION_USD;
     const amountError = submitting
         ? undefined
         : exceedsBalance
           ? withdrawModalExceedsBalance
           : isZeroAmount
             ? withdrawModalInvalidAmount
-            : undefined;
+            : isBelowMin
+              ? withdrawModalMinAmountError(MIN_TRANSACTION_USD)
+              : undefined;
     const canSubmit =
         hasWithdrawable &&
         amount !== "" &&
@@ -93,7 +102,9 @@ export default function WithdrawModal() {
         destination.trim() !== "";
 
     const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        let val = e.target.value.replace(/[^0-9.]/g, "").replace(/^0+/, "");
+        let val = e.target.value.replace(/[^0-9.]/g, "");
+        if (val.startsWith(".")) val = val.slice(1);
+        val = val.replace(/^0+(?=\d)/, "");
         const parts = val.split(".");
         if (parts.length > 2) val = parts[0] + "." + parts.slice(1).join("");
         setAmount(val);
@@ -142,8 +153,14 @@ export default function WithdrawModal() {
     };
 
     return (
-        <Modal open={open} onClose={close}>
-            {stage === "amount" && (
+        <Modal open={open} onClose={close} customClass="wallet-modal">
+            {!ready && (
+                <Box customClass="modal-loader">
+                    <CircularProgress size={28} />
+                </Box>
+            )}
+
+            {ready && stage === "amount" && (
                 <Box customClass="deposit-amount-stage">
                     <Text customClass="deposit-heading value-heading">
                         {withdrawModalTitle}
@@ -224,7 +241,7 @@ export default function WithdrawModal() {
                 </Box>
             )}
 
-            {stage === "password" && (
+            {ready && stage === "password" && (
                 <Box customClass="deposit-amount-stage">
                     <Button
                         type="button"
@@ -276,7 +293,7 @@ export default function WithdrawModal() {
                 </Box>
             )}
 
-            {stage === "success" && (
+            {ready && stage === "success" && (
                 <Box customClass="deposit-success-stage">
                     <Box customClass="deposit-success-icon">
                         <CheckCircle2 size={32} strokeWidth={2} />

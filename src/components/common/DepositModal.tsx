@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
 import classNames from "classnames";
-import { Copy, Check, CheckCircle2, X as XIcon } from "lucide-react";
+import { CircularProgress } from "@mui/material";
+import {
+    Copy,
+    Check,
+    CheckCircle2,
+    Info,
+    ArrowLeft,
+    X as XIcon,
+} from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import Modal from "../base/Modal/Modal";
 import Box from "@/components/base/Box/Box";
@@ -8,14 +16,17 @@ import Text from "@/components/base/Text/Text";
 import Button from "@/components/base/Button/Button";
 import Label from "@/components/base/Label/Label";
 import Input from "@/components/base/Input/Input";
+import Select from "@/components/base/Select/Select";
 import { speedLogo, qrLogo } from "@/components/images";
 import { useWalletActionModal } from "@/context/WalletActionModalContext";
 import { useSocket } from "@/context/SocketContext";
 import { initiateDeposit } from "@/hooks/useWallet";
+import { useModalReady } from "@/hooks/useModalReady";
 import type { IInitiateDepositResponse } from "@/types/utils";
 import type { ITransactionCompletedEvent } from "@/types/types";
 import {
     depositModalTitle,
+    depositModalDepositingTitle,
     depositModalTagline,
     depositModalHowToLink,
     depositModalSpeedBadge,
@@ -49,12 +60,20 @@ import {
     depositModalPaymentReceived,
     depositModalPaymentReceivedDesc,
     depositModalCloseLink,
+    authLoginBack,
+    walletWithdrawableCaveat,
     MAX_AMOUNT_DIGITS,
-    MIN_DEPOSIT_USD,
+    MIN_TRANSACTION_USD,
 } from "@/constants/messages";
+import IconButton from "../base/IconButton/IconButton";
 
 type Method = "bitcoin" | "lightning";
 type Stage = "amount" | "qr" | "success";
+
+const METHOD_OPTIONS = [
+    { value: "bitcoin", label: depositModalBitcoinTab },
+    { value: "lightning", label: depositModalLightningTab },
+];
 
 const STEPS = [
     {
@@ -92,6 +111,7 @@ export default function DepositModal() {
     const { openModal, close } = useWalletActionModal();
     const { socket } = useSocket();
     const open = openModal === "deposit";
+    const ready = useModalReady(open);
 
     const [stage, setStage] = useState<Stage>("amount");
     const [showSteps, setShowSteps] = useState(false);
@@ -148,15 +168,15 @@ export default function DepositModal() {
         !amount ||
         amount.length > MAX_AMOUNT_DIGITS ||
         Number.isNaN(amountUsd) ||
-        amountUsd < MIN_DEPOSIT_USD;
+        amountUsd < MIN_TRANSACTION_USD;
 
     const handleGenerate = async () => {
         if (!amount) {
             setAmountError(depositModalAmountRequired);
             return;
         }
-        if (amountUsd < MIN_DEPOSIT_USD) {
-            setAmountError(depositModalMinAmountError(MIN_DEPOSIT_USD));
+        if (amountUsd < MIN_TRANSACTION_USD) {
+            setAmountError(depositModalMinAmountError(MIN_TRANSACTION_USD));
             return;
         }
         setAmountError("");
@@ -186,8 +206,14 @@ export default function DepositModal() {
     };
 
     return (
-        <Modal open={open} onClose={close}>
-            {stage === "amount" && showSteps && (
+        <Modal open={open} onClose={close} customClass="wallet-modal">
+            {!ready && (
+                <Box customClass="modal-loader">
+                    <CircularProgress size={28} />
+                </Box>
+            )}
+
+            {ready && stage === "amount" && showSteps && (
                 <Box customClass="deposit-steps">
                     <Box customClass="deposit-steps-head">
                         <Text customClass="deposit-heading value-heading">
@@ -219,11 +245,17 @@ export default function DepositModal() {
                 </Box>
             )}
 
-            {stage === "amount" && !showSteps && (
+            {ready && stage === "amount" && !showSteps && (
                 <Box customClass="deposit-amount-stage">
                     <Text customClass="deposit-heading value-heading">
                         {depositModalTitle}
                     </Text>
+                    <Box customClass="deposit-info-box">
+                        <Info size={16} strokeWidth={2} />
+                        <Text customClass="deposit-info-text caption">
+                            {walletWithdrawableCaveat}
+                        </Text>
+                    </Box>
 
                     <Box customClass="auth-field hero-input-wrapper">
                         <Label
@@ -255,17 +287,21 @@ export default function DepositModal() {
                             helperText={amountError}
                         />
                     </Box>
-                    <Box customClass="deposit-speed-badge">
-                        <Text component="span">{depositModalSpeedBadge}</Text>
-                        <img
-                            src={speedLogo}
-                            alt="Speed"
-                            className="deposit-speed-logo"
-                        />
+                    <Box customClass="deposit-speed-wrapper">
+                        <Box customClass="deposit-speed-badge">
+                            <Text component="span">
+                                {depositModalSpeedBadge}
+                            </Text>
+                            <img
+                                src={speedLogo}
+                                alt="Speed"
+                                className="deposit-speed-logo"
+                            />
+                        </Box>
+                        <Text customClass="deposit-tagline meta-text">
+                            {depositModalTagline}
+                        </Text>
                     </Box>
-                    <Text customClass="deposit-tagline meta-text">
-                        {depositModalTagline}
-                    </Text>
 
                     <Button
                         fullWidth
@@ -288,34 +324,36 @@ export default function DepositModal() {
                 </Box>
             )}
 
-            {stage === "qr" && payment && (
+            {ready && stage === "qr" && payment && (
                 <Box customClass="deposit-qr-stage">
-                    <Box customClass="deposit-method-tabs">
-                        <Button
-                            customClass={classNames(
-                                "deposit-method-btn",
-                                method === "bitcoin" && "active",
-                            )}
-                            onClick={() => setMethod("bitcoin")}
+                    <Box customClass="deposit-qr-header">
+                        <IconButton
+                            customClass="deposit-qr-back-btn"
+                            onClick={() => setStage("amount")}
+                            aria-label={authLoginBack}
                         >
-                            {depositModalBitcoinTab}
-                        </Button>
-                        <Button
-                            customClass={classNames(
-                                "deposit-method-btn",
-                                method === "lightning" && "active",
-                            )}
-                            onClick={() => setMethod("lightning")}
-                        >
-                            {depositModalLightningTab}
-                        </Button>
+                            <ArrowLeft size={16} strokeWidth={2} />
+                        </IconButton>
+                        <Text customClass="deposit-heading value-heading">
+                            {depositModalDepositingTitle(amountUsd)}
+                        </Text>
                     </Box>
 
-                    {method === "bitcoin" && (
-                        <Text customClass="deposit-warning warning-text">
+                    <Box customClass="deposit-info-box">
+                        <Info size={16} strokeWidth={2} />
+                        <Text customClass="deposit-info-text caption">
                             {depositModalBtcOnlyWarning}
                         </Text>
-                    )}
+                    </Box>
+
+                    <Box customClass="auth-field">
+                        <Select
+                            value={method}
+                            onChange={(value) => setMethod(value as Method)}
+                            options={METHOD_OPTIONS}
+                        />
+                    </Box>
+
                     <Text customClass="deposit-scan-hint caption">
                         {depositModalScanHint}
                     </Text>
@@ -324,13 +362,13 @@ export default function DepositModal() {
                         <QRCodeSVG
                             value={address ?? ""}
                             size={220}
-                            bgColor="#ece8de"
-                            fgColor="#100f0c"
+                            bgColor="#ffff"
+                            fgColor="#000"
                             marginSize={2}
                             imageSettings={{
                                 src: qrLogo,
-                                height: 40,
-                                width: 40,
+                                height: 50,
+                                width: 50,
                                 excavate: true,
                             }}
                         />
@@ -371,7 +409,7 @@ export default function DepositModal() {
                 </Box>
             )}
 
-            {stage === "success" && (
+            {ready && stage === "success" && (
                 <Box customClass="deposit-success-stage">
                     <Box customClass="deposit-success-icon">
                         <CheckCircle2 size={32} strokeWidth={2} />

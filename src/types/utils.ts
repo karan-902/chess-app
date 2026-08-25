@@ -100,7 +100,7 @@ export type IWalletBalanceResponse = {
     pending_withdrawal_usd: number;
 };
 
-export type WithdrawMethod = "lightning" | "onchain";
+export type WithdrawMethod = "lightning" | "bitcoin";
 
 export type IWithdrawBody = {
     amount_usd: number;
@@ -202,4 +202,3 @@ export type ILogoutResponse = {
 export type IMessageResponse = {
     message: string;
 };
-

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router";
 import classNames from "classnames";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
@@ -42,9 +43,13 @@ import {
 } from "@/constants/messages";
 import { formatAmount } from "@/utils/format";
 const HISTORY_SKELETON_ROWS = 15;
-const MATCHES_SUBTAB_OPTIONS: MatchesSubtab[] = ["results", "stats", "worldwide"];
+const MATCHES_SUBTAB_OPTIONS: MatchesSubtab[] = [
+    "history",
+    "stats",
+    "worldwide",
+];
 const MATCHES_SUBTAB_LABELS: Record<MatchesSubtab, string> = {
-    results: matchesSubtabHistory,
+    history: matchesSubtabHistory,
     stats: matchesSubtabStats,
     worldwide: matchesSubtabGlobal,
 };
@@ -71,7 +76,10 @@ function MatchRow({
                         />
                     </Box>
                     <Box customClass="match-row-text">
-                        <Text customClass="match-row-headline row-title" truncate>
+                        <Text
+                            customClass="match-row-headline row-title"
+                            truncate
+                        >
                             {selfName && (
                                 <>
                                     {selfName}
@@ -205,7 +213,21 @@ function MatchList({
 }
 
 export default function MyMatches() {
-    const [subtab, setSubtab] = useState<MatchesSubtab>("results");
+    const [searchParams, setSearchParams] = useSearchParams();
+    const tabParam = searchParams.get("tab");
+    const [subtab, setSubtabState] = useState<MatchesSubtab>(
+        MATCHES_SUBTAB_OPTIONS.includes(tabParam as MatchesSubtab)
+            ? (tabParam as MatchesSubtab)
+            : "history",
+    );
+    const setSubtab = (tab: MatchesSubtab) => {
+        setSubtabState(tab);
+        setSearchParams({ tab }, { replace: true });
+    };
+
+    useEffect(() => {
+        if (!tabParam) setSearchParams({ tab: subtab }, { replace: true });
+    }, [tabParam, subtab, setSearchParams]);
     const currentUserId = useReduxSelector((state) => state.auth.session?.id);
     const {
         items,
@@ -230,7 +252,7 @@ export default function MyMatches() {
                 label={(s) => MATCHES_SUBTAB_LABELS[s]}
             />
 
-            {subtab === "results" &&
+            {subtab === "history" &&
                 (loading ? (
                     <Card customClass="matches-stat-list match-row-list">
                         {historySkeletonRows()}

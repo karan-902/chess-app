@@ -1,6 +1,24 @@
 @use "../../../styles/default.scss" as *;
 
 .icon-button {
+    &.deposit-qr-back-btn {
+        position: absolute;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.875rem;
+        height: 1.875rem;
+        border-radius: 50%;
+        background: rgba(128, 128, 128, 0.18);
+        border: none;
+        color: $appText;
+        cursor: pointer;
+
+        &:hover:not(.Mui-disabled) {
+            background: rgba(128, 128, 128, 0.3);
+        }
+    }
     &.room-step-arrow {
         width: 2rem;
         height: 2rem;

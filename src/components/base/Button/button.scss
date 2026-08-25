@@ -156,7 +156,7 @@
 
     &.wallet-deposit-btn,
     &.wallet-withdraw-btn {
-        border: 1px solid $appCardBorder;
+        border: 1px solid $appBtnBorder;
         border-radius: 0.6rem;
         flex: 1;
         height: 2.6rem;
@@ -262,27 +262,6 @@
         }
     }
 
-    &.deposit-method-btn {
-        flex: 1;
-        background: $appSurface;
-        border: 1px solid $appCardBorder;
-        border-radius: 999px;
-        padding: 0.5rem 0.8rem;
-        font-size: $font14;
-        font-family: $fontOutfitExtraBold;
-        color: $appTextMuted;
-
-        &:hover:not(.Mui-disabled) {
-            background: $appSurface;
-        }
-
-        &.active {
-            background: $gold !important;
-            border-color: $gold;
-            color: $appBg;
-        }
-    }
-
     &.deposit-generate-btn {
         margin-top: 1rem;
     }
@@ -311,6 +290,11 @@
         &:hover:not(.Mui-disabled) {
             background: $appBtnBg;
             border-color: alpha($appText, 0.4);
+        }
+        .button-text {
+            display: flex;
+            gap: 5px !important;
+            align-items: center;
         }
     }
 

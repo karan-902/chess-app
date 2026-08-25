@@ -34,7 +34,7 @@ export const router = createBrowserRouter([
                 element: <PrivateRoute />,
                 children: [
                     { path: "/play", element: <PlayPage /> },
-                    { path: "/history", element: <MyMatches /> },
+                    { path: "/matches", element: <MyMatches /> },
                     { path: "/leaderboard", element: <Leaderboard /> },
                     { path: "/rules", element: <Rules /> },
                     { path: "/wallet", element: <Wallet /> },

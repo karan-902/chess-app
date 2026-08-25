@@ -683,6 +683,15 @@
         display: flex;
         flex-direction: column;
     }
+    &.deposit-amount-stage {
+        gap: 12px;
+    }
+    &.modal-loader {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 21rem;
+    }
 
     &.deposit-qr-stage {
         position: relative;
@@ -705,10 +714,29 @@
         color: $greenishTeal;
     }
 
-    &.deposit-method-tabs {
+    &.deposit-qr-header {
+        position: relative;
         display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0.9rem;
+    }
+
+    &.deposit-info-box {
+        display: flex;
+        align-items: flex-start;
         gap: 0.5rem;
-        margin: 0.9rem 0;
+        background: $appSurface;
+        border: 1px solid $appBtnBorder;
+        border-radius: $appBtnRadius;
+        padding: 0.5rem 0.5rem;
+        margin-bottom: 0.9rem;
+        color: $appTextMuted;
+
+        svg {
+            flex-shrink: 0;
+            margin-top: 0.1rem;
+        }
     }
 
     &.withdraw-available {
@@ -719,7 +747,10 @@
         padding: 0.9rem 0.8rem;
         margin: 0.9rem 0 1.2rem;
     }
-
+    &.deposit-speed-wrapper {
+        display: flex;
+        flex-direction: column;
+    }
     &.deposit-speed-badge {
         display: flex;
         align-items: center;
@@ -736,7 +767,6 @@
 
     &.deposit-qr-wrap {
         align-self: center;
-        background: $appText;
         padding: 0.75rem;
         border-radius: 0.625rem;
         margin: 0.9rem 0;
@@ -746,7 +776,6 @@
         display: flex;
         align-items: center;
         gap: 0.5rem;
-        background: $appSecondary;
         border: 1px solid $appCardBorder;
         border-radius: $appBtnRadius;
         padding: 0.5rem 0.6rem;

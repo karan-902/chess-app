@@ -382,6 +382,8 @@ export const walletSortNewest = "Newest first";
 export const walletSortAmount = "Amount (high→low)";
 export const walletTxFilterEmpty = "No transactions in this filter.";
 export const depositModalTitle = "Deposit";
+export const depositModalDepositingTitle = (amount: number) =>
+    `Depositing $${amount}`;
 export const depositModalCloseAriaLabel = "Close deposit modal";
 export const depositModalTagline = "Fast, Secured & Transparent";
 export const depositModalHowToLink = "How to deposit crypto?";
@@ -442,10 +444,12 @@ export const withdrawModalMethodOptions: {
     label: string;
 }[] = [
     { value: "lightning", label: "Lightning" },
-    { value: "onchain", label: "On-chain" },
+    { value: "bitcoin", label: "Bitcoin" },
 ];
 export const withdrawModalSubmitButton = "Request withdrawal";
 export const withdrawModalInvalidAmount = "Enter a valid amount";
+export const withdrawModalMinAmountError = (min: number) =>
+    `Minimum withdrawal amount is $${min}.`;
 export const withdrawModalExceedsBalance = "Insufficient withdrawable balance";
 export const withdrawModalInvalidDestination = "Enter a destination address";
 export const withdrawModalFailed = "Withdrawal failed. Please try again.";
@@ -740,5 +744,5 @@ export const friendsChallengeDeclinedToast = (username: string) =>
 export const friendsChallengeCancelledToast = "The challenge was cancelled.";
 export const friendsChallengeErrorFallback =
     "Something went wrong with that challenge.";
-export const MIN_DEPOSIT_USD = 1;
+export const MIN_TRANSACTION_USD = 1;
 export const MAX_AMOUNT_DIGITS = 4;

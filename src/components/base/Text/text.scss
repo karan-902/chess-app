@@ -32,9 +32,9 @@
     }
 
     &.caption {
-        font-family: $labelFontFamily;
+        font-family: $fontOutfitMedium;
         font-size: $labelFontSize;
-        color: $labelColor;
+        color: $appText;
     }
 
     &.meta-text {
@@ -553,9 +553,9 @@
         line-height: 1.5;
     }
 
-    &.deposit-warning {
-        display: block;
-        margin-bottom: 0.4rem;
+    &.deposit-info-text {
+        flex: 1;
+        line-height: 1.4;
     }
 
     &.deposit-scan-hint {
