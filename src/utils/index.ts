@@ -182,6 +182,12 @@ export const callAPIInterface = async <
             const res = await axios(config);
             resolve(res.data);
         } catch (err: any) {
+            if (err.response?.data?.errors?.[0]) {
+                err.response.data = {
+                    ...err.response.data,
+                    ...err.response.data.errors[0],
+                };
+            }
             const errorData = err.response?.data;
             const errorType = errorData?.type;
             const errorStatus = err.response?.status;
@@ -207,7 +213,10 @@ export const callAPIInterface = async <
                 return;
             }
 
-            if (errorType === "session_inactive" || errorType === "session_expired") {
+            if (
+                errorType === "session_inactive" ||
+                errorType === "session_expired"
+            ) {
                 await sessionService.deleteSession();
                 reject(err);
                 return;
