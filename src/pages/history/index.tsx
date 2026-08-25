@@ -43,15 +43,11 @@ import {
 } from "@/constants/messages";
 import { formatAmount } from "@/utils/format";
 const HISTORY_SKELETON_ROWS = 15;
-const MATCHES_SUBTAB_OPTIONS: MatchesSubtab[] = [
-    "history",
-    "stats",
-    "worldwide",
-];
+const MATCHES_SUBTAB_OPTIONS: MatchesSubtab[] = ["history", "stats", "global"];
 const MATCHES_SUBTAB_LABELS: Record<MatchesSubtab, string> = {
     history: matchesSubtabHistory,
     stats: matchesSubtabStats,
-    worldwide: matchesSubtabGlobal,
+    global: matchesSubtabGlobal,
 };
 
 function MatchRow({
@@ -239,7 +235,7 @@ export default function MyMatches() {
         statsLoading,
         statsError,
     } = useGameHistory(
-        subtab === "worldwide" ? "worldwide" : "own",
+        subtab === "global" ? "worldwide" : "own",
         subtab === "stats",
     );
 
@@ -272,7 +268,7 @@ export default function MyMatches() {
                     />
                 ))}
 
-            {subtab === "worldwide" &&
+            {subtab === "global" &&
                 (loading ? (
                     <Card customClass="matches-stat-list match-row-list">
                         {historySkeletonRows()}

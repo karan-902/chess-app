@@ -196,7 +196,7 @@ export interface IChipSelectProps<T extends string> {
     customClass?: string;
 }
 
-export type MatchesSubtab = "history" | "worldwide" | "stats";
+export type MatchesSubtab = "history" | "global" | "stats";
 export type LoginStep = "email" | "password" | "country" | "waiting-approval";
 export type UsernameCheckStatus = "idle" | "checking" | "available" | "taken";
 export type ApproveDeviceStatus = "confirm" | "approved" | "invalid";
