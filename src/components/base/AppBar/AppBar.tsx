@@ -21,11 +21,22 @@ export default function AppBar({
 }: IAppBarProps) {
     const classes = classNames("appbar", customClass);
     const toolbarClasses = classNames("toolbar", toolbarClass);
+    const isWagezoLogo = true;
     return (
         <MuiAppBar {...props} className={classes} position="static">
             <Toolbar className={toolbarClasses}>
                 <Link to="/play" className="appbar-brand" title="Go to Play">
-                    <ShatranjLogo size={26} showText={false} withCursor />
+                    {isWagezoLogo ? (
+                        <img
+                            src="/images/wagezo.png"
+                            alt="wagezo-logo"
+                            style={{ width: "132px", height: "45px" }}
+                        />
+                    ) : (
+                        <>
+                            <ShatranjLogo showText size={30} />
+                        </>
+                    )}
                 </Link>
                 {children}
             </Toolbar>

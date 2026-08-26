@@ -105,14 +105,16 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 2rem;
-        height: 2rem;
+        width: 1.3rem;
+        height: 1.3rem;
         padding: 0;
         border-radius: 50%;
         color: $appText;
-
+        svg {
+            width: 100%;
+            height: 100%;
+        }
         &.active {
-            background: alpha($gold, 0.12);
             color: $gold;
         }
     }

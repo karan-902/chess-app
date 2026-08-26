@@ -5,10 +5,10 @@ import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import Badge from "@/components/base/Badge/Badge";
 import Card from "@/components/base/Card/Card";
-import Skeleton from "@/components/base/Skeleton/Skeleton";
 import VirtualList from "@/components/common/VirtualList";
 import EmptyState from "@/components/common/EmptyState";
 import StatRowSkeleton from "@/components/common/StatRowSkeleton";
+import MatchRowSkeleton from "@/components/common/MatchRowSkeleton";
 import ChipSelect from "@/components/common/ChipSelect";
 import { useGameHistory } from "@/hooks/useGameHistory";
 import { useReduxSelector } from "@/redux/hooks";
@@ -112,30 +112,6 @@ function MatchRow({
                         </Text>
                     </Box>
                 </Box>
-            </Box>
-        </Box>
-    );
-}
-
-function MatchRowSkeleton() {
-    return (
-        <Box customClass="match-row-item">
-            <Box customClass="match-row">
-                <Box customClass="match-row-info">
-                    <Box customClass="match-row-icon">
-                        <Skeleton variant="circular" width={18} height={18} />
-                    </Box>
-                    <Box customClass="match-row-text">
-                        <Skeleton customClass="text" width={140} height={14} />
-                        <Skeleton
-                            customClass="text"
-                            width={90}
-                            height={11}
-                            style={{ marginTop: "0.3rem" }}
-                        />
-                    </Box>
-                </Box>
-                <Skeleton customClass="text" width={48} height={16} />
             </Box>
         </Box>
     );

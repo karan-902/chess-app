@@ -2,8 +2,8 @@ import classNames from "classnames";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import Card from "@/components/base/Card/Card";
-import Skeleton from "@/components/base/Skeleton/Skeleton";
 import EmptyState from "@/components/common/EmptyState";
+import LbRowSkeleton from "@/components/common/LbRowSkeleton";
 import { useLeaderboard } from "@/hooks/useLeaderboard";
 import { useReduxSelector } from "@/redux/hooks";
 import { formatAmount } from "@/utils/format";
@@ -16,26 +16,6 @@ import {
 } from "@/constants/messages";
 
 const LB_SKELETON_ROWS = 20;
-
-function LbRowSkeleton() {
-    return (
-        <Card customClass="lb-row">
-            <Skeleton
-                variant="circular"
-                width={22}
-                height={22}
-                customClass="circular"
-            />
-            <Skeleton
-                customClass="text"
-                width="45%"
-                height={14}
-                style={{ flex: 1 }}
-            />
-            <Skeleton customClass="text" width={30} height={13} />
-        </Card>
-    );
-}
 
 function lbSkeletonRows() {
     return Array.from({ length: LB_SKELETON_ROWS }, (_, index) => (

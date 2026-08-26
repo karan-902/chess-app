@@ -9,6 +9,7 @@ import Avatar from "@/components/base/Avatar/Avatar";
 import Popover from "@/components/base/Popover/Popover";
 import Skeleton from "@/components/base/Skeleton/Skeleton";
 import Button from "@/components/base/Button/Button";
+import Chip from "@/components/base/Chip/Chip";
 import { useWalletBalance } from "@/hooks/useWallet";
 import { useLogout } from "@/hooks/useLogout";
 import { useReduxSelector } from "@/redux/hooks";
@@ -57,19 +58,14 @@ export default function Header() {
             <Box customClass="appbar-right">
                 <Link to="/wallet" style={{ textDecoration: "none" }}>
                     {" "}
-                    <Box customClass="appbar-balance">
-                        {loading ? (
-                            <Skeleton
-                                customClass="text"
-                                width={44}
-                                height={13}
-                            />
-                        ) : (
-                            <Text customClass="appbar-balance-label">
-                                {formatAmount(usdValue)}
-                            </Text>
-                        )}
-                    </Box>
+                    {loading ? (
+                        <Skeleton customClass="text" width={44} height={13} />
+                    ) : (
+                        <Chip
+                            label={formatAmount(usdValue)}
+                            customClass="appbar-balance"
+                        />
+                    )}
                 </Link>
 
                 {session ? (

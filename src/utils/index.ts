@@ -128,6 +128,9 @@ export function secondsToTimeControl(seconds: number): TimeControl {
     ).find(([, s]) => s === seconds);
     return match?.[0] ?? "rapid";
 }
+export function oppositeSide(side: "w" | "b"): "w" | "b" {
+    return side === "w" ? "b" : "w";
+}
 export function deriveCategory(timeSeconds: number): GameCategory {
     if (timeSeconds <= 120) return "BULLET";
     if (timeSeconds <= 420) return "BLITZ";

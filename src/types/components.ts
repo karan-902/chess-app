@@ -4,9 +4,12 @@ import type {
     IgameEndedResponse,
     IGameHistoryItem,
     MoveRecord,
+    Pool,
 } from "./types";
 import type { ILoginResponse, TransactionType } from "./utils";
 import type { RematchStatus } from "@/hooks/useRematch";
+import type { MatchmakingStatus } from "@/hooks/useMatchmaking";
+import type { RoomStatus } from "@/hooks/useRoomMatch";
 
 export type GameMode = "pvp" | "pvc";
 export type Difficulty = "easy" | "medium" | "hard";
@@ -76,6 +79,12 @@ export interface IMoveListProps {
     fenHistory: string[];
     viewIndex: number | null;
     onJump: (index: number) => void;
+}
+
+export interface IReviewControlsProps extends IMoveListProps {
+    isReviewing: boolean;
+    goBack: () => void;
+    goForward: () => void;
 }
 
 export interface IGameOverOverlayProps {
@@ -185,6 +194,53 @@ export interface IEditProfileDrawerProps {
 export interface IDurationWheelProps {
     value: number;
     onChange: (value: number) => void;
+}
+
+export interface IStakeSheetProps {
+    open: boolean;
+    onClose: () => void;
+    pools: Pool[];
+    poolsLoading: boolean;
+    usdValue: number;
+    onPoolPlay: (pool: Pool) => void;
+    onPracticeOpen: () => void;
+    onRoomOpen: () => void;
+    onInsufficientBalance: () => void;
+}
+
+export interface IPracticeSheetProps {
+    open: boolean;
+    onClose: () => void;
+    onCancel: () => void;
+    onPlay: (difficulty: Difficulty, timeControl: GameCategory) => void;
+}
+
+export interface IRoomSheetProps {
+    open: boolean;
+    onClose: () => void;
+    onCancel: () => void;
+    usdValue: number;
+    roomStatus: RoomStatus;
+    roomCode: string | null;
+    expiresInSeconds: number;
+    onCreateRoom: (
+        stakeUsd: number,
+        durationSeconds: number,
+        rated: boolean,
+    ) => void;
+    onJoinRoom: (code: string) => void;
+}
+
+export interface IPoolConfirmSheetProps {
+    open: boolean;
+    onClose: () => void;
+    status: MatchmakingStatus;
+    queuedPool: Pool | null;
+    confirmPool: Pool | null;
+    secondsLeft: number;
+    onLeaveQueue: () => void;
+    onConfirmJoin: () => void;
+    onConfirmCancel: () => void;
 }
 
 export interface IChipSelectProps<T extends string> {

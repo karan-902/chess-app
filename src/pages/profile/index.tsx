@@ -12,7 +12,7 @@ import Button from "@/components/base/Button/Button";
 import Input from "@/components/base/Input/Input";
 import Label from "@/components/base/Label/Label";
 import Switch from "@/components/base/Switch/Switch";
-import StatRowSkeleton from "@/components/common/StatRowSkeleton";
+import ProfileSkeleton from "@/components/common/ProfileSkeleton";
 import { useReduxSelector, useReduxDispatch } from "@/redux/hooks";
 import { updateSession } from "@/redux/persisted/auth.slice";
 import { showToast } from "@/redux/common/common.slice";
@@ -64,63 +64,6 @@ const profileEditSchema = Yup.object({
         .min(3, profileValidationUsernameMinLength)
         .required(profileValidationUsernameRequired),
 });
-
-function ProfileSkeleton() {
-    return (
-        <Box customClass="profile-page">
-            <Card customClass="profile-id-card">
-                <Box customClass="profile-id-row">
-                    <Skeleton
-                        variant="circular"
-                        customClass="circle"
-                        width={44}
-                        height={44}
-                    />
-                    <Box customClass="profile-id-text">
-                        <Skeleton customClass="text" width={100} height={16} />
-                        <Skeleton
-                            customClass="text"
-                            width={70}
-                            height={12}
-                            style={{ marginTop: "0.3rem" }}
-                        />
-                    </Box>
-                </Box>
-            </Card>
-
-            <Card customClass="matches-stat-list">
-                {Array.from({ length: 6 }, (_, i) => (
-                    <StatRowSkeleton key={i} />
-                ))}
-            </Card>
-
-            <Skeleton
-                customClass="text"
-                width={150}
-                height={17}
-                style={{ margin: "0.9rem 0 0.6rem" }}
-            />
-            <Card customClass="matches-stat-list">
-                {Array.from({ length: 4 }, (_, i) => (
-                    <StatRowSkeleton key={i} />
-                ))}
-            </Card>
-
-            <Skeleton
-                customClass="text"
-                width={70}
-                height={17}
-                style={{ margin: "0.9rem 0 0.6rem" }}
-            />
-            <Card customClass="matches-stat-list">
-                <StatRowSkeleton />
-                <StatRowSkeleton />
-                <StatRowSkeleton />
-                <StatRowSkeleton />
-            </Card>
-        </Box>
-    );
-}
 
 function EditProfileDrawer({
     open,

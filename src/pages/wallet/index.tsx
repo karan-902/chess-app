@@ -11,6 +11,7 @@ import Input from "@/components/base/Input/Input";
 import Skeleton from "@/components/base/Skeleton/Skeleton";
 import VirtualList from "@/components/common/VirtualList";
 import EmptyState from "@/components/common/EmptyState";
+import TxItemSkeleton from "@/components/common/TxItemSkeleton";
 import { useWallet } from "@/hooks/useWallet";
 import { useWalletActionModal } from "@/context/WalletActionModalContext";
 import { speedLogo } from "@/components/images";
@@ -180,28 +181,6 @@ function TransactionFilterDrawer({
 }
 
 const TX_SKELETON_ITEMS = 12;
-
-function TxItemSkeleton() {
-    return (
-        <Box customClass="wallet-tx-item loading">
-            <Box customClass="wallet-tx-row">
-                <Box customClass="wallet-tx-info">
-                    <Skeleton variant="circular" width={32} height={32} />
-                    <Box customClass="wallet-tx-text">
-                        <Skeleton
-                            customClass="text"
-                            width={110}
-                            height={14}
-                            style={{ marginBottom: "0.2rem" }}
-                        />
-                        <Skeleton customClass="text" width={60} height={11} />
-                    </Box>
-                </Box>
-                <Skeleton customClass="text" width={48} height={16} />
-            </Box>
-        </Box>
-    );
-}
 
 function txRow(tx: ITransactionResponse) {
     const TxIcon = TRANSACTION_TYPE_ICONS[tx.type];
