@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
-import { ShatranjLogo } from "@/components/constants";
+import { ChessLogo } from "@/components/constants";
 
 interface IAuthLayoutProps {
     title: ReactNode;
@@ -19,7 +19,7 @@ export default function AuthLayout({
     return (
         <Box customClass="auth-page">
             <Box customClass="auth-brand">
-                <ShatranjLogo size={22} showText={true} />
+                <ChessLogo size={22} showText={true} />
             </Box>
             <Box customClass="auth-heading">
                 <Text component="h1" customClass="auth-title">

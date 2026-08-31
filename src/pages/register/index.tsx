@@ -4,7 +4,7 @@ import {
     authRegisterTitle,
     authRegisterSubtitle,
     authRegisterHaveAccountPrompt,
-    authRegisterSignInLink,
+    authRegisterLoginLink,
 } from "@/constants/messages";
 import { Link } from "react-router";
 
@@ -16,7 +16,7 @@ export default function Register() {
             footer={
                 <>
                     {authRegisterHaveAccountPrompt}{" "}
-                    <Link to="/login">{authRegisterSignInLink}</Link>
+                    <Link to="/login">{authRegisterLoginLink}</Link>
                 </>
             }
         >

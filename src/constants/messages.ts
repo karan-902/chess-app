@@ -55,7 +55,7 @@ export const authValidationUsernameMinLength =
 export const authValidationUsernameTaken = "Username not available";
 export const authValidationCountryRequired = "Country is required";
 export const authLoginTitle = "Welcome Back";
-export const authLoginSubtitle = "Sign in to your Shatranj account";
+export const authLoginSubtitle = "Sign in to your Chess account";
 export const authLoginNoAccountFound = "No account found with this email";
 export const authLoginBack = "Back";
 export const authLoginForgotPassword = "Forgot password?";
@@ -65,15 +65,11 @@ export const authLoginIncorrectPassword = "Incorrect password";
 export const authLoginEmailNotVerified =
     "Please verify your email to continue.";
 export const authLoginNoAccountPrompt = "Don't have an account?";
-export const authLoginCreateOneLink = "Create one";
+export const authLoginSignupLink = "Sign up";
 export const authRegisterTitle = "Create Account";
-export const authRegisterSubtitle = "Choose how you want to join";
+export const authRegisterSubtitle = "Create your account to get started";
 export const authRegisterHaveAccountPrompt = "Already have an account?";
-export const authRegisterSignInLink = "Sign in";
-export const authRegisterEmailMethodTitle = "Email";
-export const authRegisterEmailMethodSub = "Username · password";
-export const authRegisterGoogleMethodTitle = "Google";
-export const authRegisterGoogleMethodSub = "One-tap sign up";
+export const authRegisterLoginLink = "Login";
 export const authRegisterUsernameLabel = "Username";
 export const authRegisterUsernamePlaceholder = "john_doe";
 export const authRegisterCountryLabel = "Country";
@@ -117,7 +113,7 @@ export const authDeviceApprovalDescription =
 export const authDeviceApprovalBack = "Back to login";
 export const deviceApprovePageTitle = "Approve this sign-in?";
 export const deviceApprovePageDescription =
-    "Someone is trying to sign in to your Shatranj account from a new device. If this was you, approve it below.";
+    "Someone is trying to sign in to your Chess account from a new device. If this was you, approve it below.";
 export const deviceApproveButton = "Yes, this was me";
 export const deviceApprovedTitle = "Device approved";
 export const deviceApprovedDescription =
@@ -522,7 +518,7 @@ export const rulesPayoutsList = [
 export const rulesMatchingTitle = "Fair matching";
 export const rulesMatchingDesc =
     "You're matched by rating and stake size, not queue order — so the board you get is close to even before the first move.";
-export const rulesAboutVersion = "Shatranj · v1.0.0";
+export const rulesAboutVersion = "Chess · v1.0.0";
 export const rulesAboutCredit =
     'Piece set "cburnett" by Colin M.L. Burnett, CC BY-SA 3.0';
 

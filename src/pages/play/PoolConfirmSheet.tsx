@@ -2,7 +2,7 @@ import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import Button from "@/components/base/Button/Button";
 import Drawer from "@/components/base/Drawer/Drawer";
-import { ShatranjLogo } from "@/components/constants";
+import { ChessLogo } from "@/components/constants";
 import type { IPoolConfirmSheetProps } from "@/types/components";
 import {
     matchmakingSearchingSecondsLeft,
@@ -39,7 +39,7 @@ export default function PoolConfirmSheet({
                 <Box customClass="matchmaking-searching">
                     <Box customClass="live-ring-wrap searching-ring">
                         <Box customClass="searching-logo">
-                            <ShatranjLogo size={44} showText={false} />
+                            <ChessLogo size={44} showText={false} />
                         </Box>
                         <Text component="span" customClass="live-ring" />
                     </Box>

@@ -1,6 +1,6 @@
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
-import { ShatranjLogo } from "@/components/constants";
+import { ChessLogo } from "@/components/constants";
 
 interface IEmptyStateProps {
     title?: string;
@@ -10,7 +10,7 @@ interface IEmptyStateProps {
 export default function EmptyState({ title, description }: IEmptyStateProps) {
     return (
         <Box customClass="matches-empty">
-            <ShatranjLogo size={44} showText={false} muted />
+            <ChessLogo size={44} showText={false} muted />
             {title && (
                 <Text component="h3" customClass="section-heading">
                     {title}

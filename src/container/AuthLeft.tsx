@@ -2,7 +2,7 @@ import { Fragment, useState, useEffect } from "react";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import Button from "@/components/base/Button/Button";
-import { ShatranjLogo } from "@/components/constants";
+import { ChessLogo } from "@/components/constants";
 import {
     authLeftQuoteAriaLabel,
     authLeftBrandName,
@@ -71,7 +71,7 @@ export default function AuthLeft({ variant }: IAuthLeftProps) {
 
             <Box customClass="auth-left-content">
                 <Box customClass="auth-left-brand">
-                    <ShatranjLogo size={26} showText={false} />
+                    <ChessLogo size={26} showText={false} />
                     <Text component="span" customClass="auth-left-name">
                         {authLeftBrandName}
                     </Text>

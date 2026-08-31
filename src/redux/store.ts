@@ -17,7 +17,7 @@ import {
 import { buildPersistConfig } from "./hooks";
 
 const lf = localforage.createInstance({
-    name: "Shatranj",
+    name: "Chess",
     storeName: "key-value-pairs",
 });
 
@@ -38,7 +38,14 @@ export const store = configureStore({
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
             serializableCheck: {
-                ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+                ignoredActions: [
+                    FLUSH,
+                    REHYDRATE,
+                    PAUSE,
+                    PERSIST,
+                    PURGE,
+                    REGISTER,
+                ],
             },
         }),
 });

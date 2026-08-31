@@ -48,7 +48,7 @@ import {
     authLoginTitle,
     authLoginSubtitle,
     authLoginNoAccountPrompt,
-    authLoginCreateOneLink,
+    authLoginSignupLink,
     selectCountryTitle,
     selectCountrySubtitle,
 } from "@/constants/messages";
@@ -350,7 +350,10 @@ export default function LoginForm() {
 
     if (step === "country") {
         return (
-            <AuthLayout title={selectCountryTitle} subtitle={selectCountrySubtitle}>
+            <AuthLayout
+                title={selectCountryTitle}
+                subtitle={selectCountrySubtitle}
+            >
                 <SelectCountryScreen showHeading={false} />
             </AuthLayout>
         );
@@ -359,7 +362,7 @@ export default function LoginForm() {
     const loginFooter = (
         <>
             {authLoginNoAccountPrompt}{" "}
-            <Link to="/register">{authLoginCreateOneLink}</Link>
+            <Link to="/register">{authLoginSignupLink}</Link>
         </>
     );
 

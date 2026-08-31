@@ -33,7 +33,7 @@
 
     &.caption {
         font-family: $fontOutfitMedium;
-        font-size: $labelFontSize;
+        font-size: $font14;
         color: $appText;
     }
 
@@ -114,17 +114,6 @@
         font-size: $font24;
         font-weight: 700;
         color: $appText;
-    }
-
-    &.reg-method-title {
-        font-size: $font15;
-        font-weight: 600;
-        color: $appText;
-    }
-
-    &.reg-method-sub {
-        font-size: $font12;
-        color: alpha($appText, 0.5);
     }
 
     &.otp-title {
@@ -344,7 +333,7 @@
 
         a {
             color: $gold;
-            text-decoration: none;
+            text-decoration: underline;
             font-weight: 600;
         }
     }

@@ -3,7 +3,7 @@ import type { AppBarProps } from "@mui/material";
 import classNames from "classnames";
 import { Link } from "react-router";
 import type { ReactNode } from "react";
-import { ShatranjLogo } from "@/components/constants";
+import { ChessLogo } from "@/components/constants";
 import "./appbar.scss";
 
 interface IAppBarProps extends AppBarProps {
@@ -26,7 +26,7 @@ export default function AppBar({
         <MuiAppBar {...props} className={classes} position="static">
             <Toolbar className={toolbarClasses}>
                 <Link to="/play" className="appbar-brand" title="Go to Play">
-                    <ShatranjLogo showText size={30} />
+                    <ChessLogo showText size={30} />
                 </Link>
                 {children}
             </Toolbar>

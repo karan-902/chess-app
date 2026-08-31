@@ -25,7 +25,6 @@ export interface IEmailFormValues {
 }
 
 export interface IEmailFormScreenProps {
-    onBack: () => void;
     onRegistered: (email: string, password: string) => void;
 }
 
@@ -42,7 +41,6 @@ export interface IGameRoomNavPayload {
     time_seconds: number;
     room_code?: string;
 }
-export type Step = "method" | "email" | "otp";
 interface ISnapshotMove {
     from: string;
     to: string;
@@ -134,12 +132,6 @@ export interface IPasswordScreenProps {
 
 export interface IWaitingApprovalScreenProps {
     onBack: () => void;
-}
-
-export interface IMethodScreenProps {
-    onEmailSelected: () => void;
-    onGoogleSelected: () => void;
-    isGoogleProcessing: boolean;
 }
 
 export interface IVerifyEmailFormProps {

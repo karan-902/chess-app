@@ -45,8 +45,9 @@ export const requestWithdraw = (
 export function useWalletBalance() {
     const { socket } = useSocket();
     const dispatch = useReduxDispatch();
-    const { balanceUsd, pendingWithdrawalUsd, winUsd, withdrawableUsd, loading } =
-        useReduxSelector((state) => state.wallet);
+    const { balanceUsd, withdrawableUsd, loading } = useReduxSelector(
+        (state) => state.wallet,
+    );
 
     const refetch = useCallback(async () => {
         try {
@@ -73,9 +74,8 @@ export function useWalletBalance() {
     }, [socket, refetch]);
 
     return {
-        usdValue: balanceUsd + pendingWithdrawalUsd,
+        usdValue: balanceUsd,
         withdrawableUsd,
-        winUsd,
         loading,
         refetch,
     };

@@ -1,22 +1,19 @@
 import * as yup from "yup";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router";
-import { ArrowLeft, Mail, ChevronRight, Check } from "lucide-react";
+import { Check } from "lucide-react";
 import { useFormik } from "formik";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import Label from "@/components/base/Label/Label";
 import Input from "@/components/base/Input/Input";
 import Button from "@/components/base/Button/Button";
-import Card from "@/components/base/Card/Card";
 import Select from "@/components/base/Select/Select";
 import VerifyEmailForm from "@/pages/verify-email/VerifyEmailForm";
-import { useGoogleAuth } from "@/hooks/useGoogleAuth";
 import { callAPIInterface } from "@/utils";
 import { useReduxDispatch } from "@/redux/hooks";
 import { login } from "@/redux/thunks";
 import { showLoader, hideLoader, showToast } from "@/redux/common/common.slice";
-import { GoogleIcon } from "@/components/constants";
 import { COUNTRY_OPTIONS } from "@/constants/config";
 import type { IRegisterEmailBody } from "@/types/index";
 import type {
@@ -24,7 +21,6 @@ import type {
     IUsernameAvailableResponse,
 } from "@/types/utils";
 import {
-    authLoginBack,
     authEmailLabel,
     authEmailPlaceholder,
     authPasswordLabel,
@@ -40,10 +36,6 @@ import {
     authValidationUsernameMinLength,
     authValidationUsernameTaken,
     authValidationCountryRequired,
-    authRegisterEmailMethodTitle,
-    authRegisterEmailMethodSub,
-    authRegisterGoogleMethodTitle,
-    authRegisterGoogleMethodSub,
     authRegisterUsernameLabel,
     authRegisterUsernamePlaceholder,
     authRegisterCountryLabel,
@@ -55,8 +47,6 @@ import {
 import {
     IEmailFormScreenProps,
     IEmailFormValues,
-    IMethodScreenProps,
-    Step,
     UsernameCheckStatus,
 } from "@/types/components";
 
@@ -83,50 +73,7 @@ const registerSchema = yup.object({
     country: yup.string().required(authValidationCountryRequired),
 });
 
-function MethodScreen({
-    onEmailSelected,
-    onGoogleSelected,
-    isGoogleProcessing,
-}: IMethodScreenProps) {
-    return (
-        <Box customClass="reg-method-list">
-            <Card customClass="reg-method-row" onClick={onEmailSelected}>
-                <Box customClass="reg-method-icon">
-                    <Mail size={18} />
-                </Box>
-                <Box customClass="reg-method-text">
-                    <Text component="span" customClass="reg-method-title">
-                        {authRegisterEmailMethodTitle}
-                    </Text>
-                    <Text component="span" customClass="reg-method-sub">
-                        {authRegisterEmailMethodSub}
-                    </Text>
-                </Box>
-                <ChevronRight size={16} className="reg-method-arrow" />
-            </Card>
-
-            <Card
-                customClass="reg-method-row"
-                onClick={isGoogleProcessing ? undefined : onGoogleSelected}
-            >
-                <Box customClass="reg-method-icon">
-                    <GoogleIcon size={18} />
-                </Box>
-                <Box customClass="reg-method-text">
-                    <Text component="span" customClass="reg-method-title">
-                        {authRegisterGoogleMethodTitle}
-                    </Text>
-                    <Text component="span" customClass="reg-method-sub">
-                        {authRegisterGoogleMethodSub}
-                    </Text>
-                </Box>
-                <ChevronRight size={16} className="reg-method-arrow" />
-            </Card>
-        </Box>
-    );
-}
-
-function EmailFormScreen({ onBack, onRegistered }: IEmailFormScreenProps) {
+function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
     const dispatch = useReduxDispatch();
     const formik = useFormik<IEmailFormValues>({
         initialValues: {
@@ -209,15 +156,6 @@ function EmailFormScreen({ onBack, onRegistered }: IEmailFormScreenProps) {
             component="form"
             onSubmit={formik.handleSubmit as any}
         >
-            <Button
-                type="button"
-                startIcon={<ArrowLeft size={16} />}
-                customClass="auth-back-btn"
-                onClick={onBack}
-            >
-                {authLoginBack}
-            </Button>
-
             <Box customClass="auth-field">
                 <Label htmlFor="username">{authRegisterUsernameLabel}</Label>
                 <Input
@@ -349,25 +287,10 @@ function EmailFormScreen({ onBack, onRegistered }: IEmailFormScreenProps) {
 export default function RegisterForm() {
     const dispatch = useReduxDispatch();
     const navigate = useNavigate();
-    const [step, setStep] = useState<Step>("method");
     const [pending, setPending] = useState<{
         email: string;
         password: string;
     } | null>(null);
-
-    const { googleLogin, isProcessing } = useGoogleAuth(
-        "/sso-register",
-        "register",
-    );
-
-    useEffect(() => {
-        if (isProcessing)
-            dispatch(showLoader({ text: "Signing in with Google..." }));
-        else dispatch(hideLoader());
-        return () => {
-            dispatch(hideLoader());
-        };
-    }, [isProcessing, dispatch]);
 
     const handleVerified = async () => {
         if (!pending) return;
@@ -384,33 +307,19 @@ export default function RegisterForm() {
         }
     };
 
-    if (step === "otp" && pending) {
+    if (pending) {
         return (
             <VerifyEmailForm
                 email={pending.email}
                 onVerified={handleVerified}
-                onBack={() => setStep("email")}
-            />
-        );
-    }
-
-    if (step === "email") {
-        return (
-            <EmailFormScreen
-                onBack={() => setStep("method")}
-                onRegistered={(email, password) => {
-                    setPending({ email, password });
-                    setStep("otp");
-                }}
+                onBack={() => setPending(null)}
             />
         );
     }
 
     return (
-        <MethodScreen
-            onEmailSelected={() => setStep("email")}
-            onGoogleSelected={() => googleLogin()}
-            isGoogleProcessing={isProcessing}
+        <EmailFormScreen
+            onRegistered={(email, password) => setPending({ email, password })}
         />
     );
 }
