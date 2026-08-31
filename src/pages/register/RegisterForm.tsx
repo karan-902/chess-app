@@ -9,7 +9,6 @@ import Label from "@/components/base/Label/Label";
 import Input from "@/components/base/Input/Input";
 import Button from "@/components/base/Button/Button";
 import Select from "@/components/base/Select/Select";
-import VerifyEmailForm from "@/pages/verify-email/VerifyEmailForm";
 import { callAPIInterface } from "@/utils";
 import { useReduxDispatch } from "@/redux/hooks";
 import { login } from "@/redux/thunks";
@@ -287,39 +286,17 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
 export default function RegisterForm() {
     const dispatch = useReduxDispatch();
     const navigate = useNavigate();
-    const [pending, setPending] = useState<{
-        email: string;
-        password: string;
-    } | null>(null);
 
-    const handleVerified = async () => {
-        if (!pending) return;
+    const handleRegistered = async (email: string, password: string) => {
         dispatch(showLoader({ text: "Setting up your account..." }));
         try {
-            await dispatch(
-                login({ email: pending.email, password: pending.password }),
-            ).unwrap();
+            await dispatch(login({ email, password })).unwrap();
         } catch {
             navigate("/login", { replace: true });
         } finally {
             dispatch(hideLoader());
-            setPending(null);
         }
     };
 
-    if (pending) {
-        return (
-            <VerifyEmailForm
-                email={pending.email}
-                onVerified={handleVerified}
-                onBack={() => setPending(null)}
-            />
-        );
-    }
-
-    return (
-        <EmailFormScreen
-            onRegistered={(email, password) => setPending({ email, password })}
-        />
-    );
+    return <EmailFormScreen onRegistered={handleRegistered} />;
 }
