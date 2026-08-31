@@ -65,18 +65,17 @@ export function useGameHistory(
 
             try {
                 const res = await withRetry(() =>
-                    callAPIInterface<undefined, IGameHistoryResponse>(
+                    callAPIInterface<undefined, IGameHistoryResponse | null>(
                         "GET",
                         `/game/history?type=${type}&limit=${PAGE_SIZE}${cursor}`,
                     ),
                 );
                 if (activeTypeRef.current !== requestType) return;
-                setItems((prev) =>
-                    isFirstLoad ? res.data : [...prev, ...res.data],
-                );
+                const data = res?.data ?? [];
+                setItems((prev) => (isFirstLoad ? data : [...prev, ...data]));
                 setLoadedType(requestType);
-                hasMoreRef.current = res.has_more;
-                pageIdRef.current = res.page_id;
+                hasMoreRef.current = res?.has_more ?? false;
+                pageIdRef.current = res?.page_id ?? null;
             } catch {
                 if (activeTypeRef.current === requestType) setError(true);
             } finally {

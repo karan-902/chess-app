@@ -53,9 +53,10 @@ export function useWalletBalance() {
         try {
             const res = await callAPIInterface<
                 undefined,
-                IWalletBalanceResponse
+                IWalletBalanceResponse | null
             >("GET", "/wallet");
-            dispatch(setWalletBalance(res));
+            if (res) dispatch(setWalletBalance(res));
+            else dispatch(setWalletLoading(false));
         } catch {
             dispatch(setWalletLoading(false));
         }
@@ -128,18 +129,19 @@ export function useWallet() {
             try {
                 const res = await callAPIInterface<
                     ITransactionsFilterBody,
-                    ITransactionsResponse
+                    ITransactionsResponse | null
                 >(
                     "POST",
                     `/wallet/transactions/filter?limit=${PAGE_SIZE}${cursor}`,
                     requestFilter,
                 );
                 if (activeFilterRef.current !== requestFilter) return;
+                const data = res?.data ?? [];
                 setTransactions((prev) =>
-                    isFirstLoad ? res.data : [...prev, ...res.data],
+                    isFirstLoad ? data : [...prev, ...data],
                 );
-                hasMoreRef.current = res.has_more;
-                pageIdRef.current = res.page_id;
+                hasMoreRef.current = res?.has_more ?? false;
+                pageIdRef.current = res?.page_id ?? null;
             } catch {
             } finally {
                 isFetchingRef.current = false;
