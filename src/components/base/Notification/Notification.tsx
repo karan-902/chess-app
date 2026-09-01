@@ -1,4 +1,4 @@
-import { Snackbar, Slide } from "@mui/material";
+import { Snackbar, Slide, Portal } from "@mui/material";
 import classNames from "classnames";
 import { useReduxDispatch, useReduxSelector } from "@/redux/hooks";
 import { hideToast } from "@/redux/common/common.slice";
@@ -24,22 +24,28 @@ export default function Notification({ customClass }: INotificationProps) {
     };
 
     return (
-        <Snackbar
-            anchorOrigin={{ vertical: "top", horizontal: "right" }}
-            open={open}
-            autoHideDuration={1500}
-            onClose={closeNotification}
-            slots={{ transition: Slide }}
-            slotProps={{ transition: { direction: "left" } }}
+        <Portal
+            container={() =>
+                document.querySelector(".app-shell") as HTMLElement
+            }
         >
-            <AlertMessage
-                message={message}
-                severity={severity}
-                variant="standard"
-                className={classes}
+            <Snackbar
+                anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                open={open}
+                autoHideDuration={1500}
+                onClose={closeNotification}
+                slots={{ transition: Slide }}
+                slotProps={{ transition: { direction: "left" } }}
             >
-                {title && title}
-            </AlertMessage>
-        </Snackbar>
+                <AlertMessage
+                    message={message}
+                    severity={severity}
+                    variant="standard"
+                    className={classes}
+                >
+                    {title && title}
+                </AlertMessage>
+            </Snackbar>
+        </Portal>
     );
 }

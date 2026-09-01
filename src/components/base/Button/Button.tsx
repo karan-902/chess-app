@@ -26,7 +26,7 @@ const Button = forwardRef<HTMLButtonElement, IButtonProps>(function Button(
             ref={ref}
             {...props}
             className={classes}
-            disabled={disabled && !isLoading}
+            disabled={disabled || isLoading}
             aria-busy={isLoading || undefined}
         >
             {isLoading ? (

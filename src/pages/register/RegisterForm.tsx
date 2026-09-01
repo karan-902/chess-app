@@ -133,10 +133,7 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
                 const res = await callAPIInterface<
                     undefined,
                     IUsernameAvailableResponse
-                >(
-                    "GET",
-                    `/username-available?username=${encodeURIComponent(trimmed)}`,
-                );
+                >("GET", `/username?q=${encodeURIComponent(trimmed)}`);
                 setUsernameStatus(res.available ? "available" : "taken");
             } catch {
                 setUsernameStatus("idle");
