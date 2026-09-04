@@ -1,0 +1,80 @@
+@use "default.scss" as *;
+
+.modal {
+    width: min(calc(100% - 4rem), 420px);
+    background:
+        linear-gradient(180deg, alpha($appText, 0.02) 0%, transparent 40%),
+        $appSurface;
+    border: 1px solid $appCardBorder;
+    border-radius: $appModalRadius;
+    padding: 1.5rem;
+    box-shadow: 0 24px 64px alpha($black, 0.6);
+
+    &:focus {
+        outline: none;
+    }
+
+    .modal-title {
+        font-family: $fontOutfit;
+        font-size: $font18;
+        font-weight: 700;
+        color: $appText;
+        margin-bottom: 0.4rem;
+    }
+
+    .modal-description {
+        font-family: $fontOutfit;
+        font-size: $font14;
+        color: alpha($appText, 0.5);
+        margin-bottom: 1.25rem;
+        line-height: 1.5;
+    }
+
+    .modal-actions {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 1.25rem;
+    }
+
+    .modal-close-icon {
+        position: absolute;
+        top: 0.75rem;
+        right: 0.75rem;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.75rem;
+        height: 1.75rem;
+        min-width: 0;
+        padding: 0;
+        border-radius: 50%;
+        border: none;
+        color: alpha($appText, 0.55);
+        cursor: pointer;
+        transition:
+            color 0.15s ease,
+            background-color 0.15s ease;
+
+        &:hover {
+            background: alpha($appText, 0.12);
+        }
+    }
+
+    &.modal--danger {
+        border-color: alpha($paleRed, 0.2);
+        box-shadow:
+            0 0 0 1px alpha($paleRed, 0.08),
+            0 24px 64px alpha($black, 0.6);
+    }
+
+    &.rejoin-game-modal {
+        .modal-title {
+            padding: 0;
+        }
+    }
+
+    &.wallet-modal {
+        min-height: 24rem;
+    }
+}

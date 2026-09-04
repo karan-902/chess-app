@@ -1,0 +1,30 @@
+@use "default.scss" as *;
+
+.popper {
+    .tooltip {
+        background: $backdropCenter !important;
+        color: #f5f5f5 !important;
+        font-family: $fontOutfit;
+        font-size: $font12;
+        font-weight: 500;
+        line-height: 1.4;
+        padding: 6px 10px;
+        border-radius: $radiusMd;
+    }
+
+    .MuiTooltip-arrow {
+        color: $backdropCenter;
+    }
+
+    .wallet-tooltip {
+        background: $appSurface !important;
+        color: $appText !important;
+        border: 1px solid $appCardBorder;
+        border-radius: $radiusSm;
+        font-family: $fontOutfit;
+        font-size: $font12;
+        font-weight: 600;
+        padding: 0.35rem 0.6rem;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+    }
+}

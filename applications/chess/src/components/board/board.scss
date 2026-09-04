@@ -1,0 +1,431 @@
+@use "default.scss" as *;
+
+.chess-board {
+    position: relative;
+    max-width: 480px;
+    width: 100%;
+    touch-action: none;
+
+    // @media (min-width: 1024px) {
+    //     max-width: 500px;
+    // }
+}
+.chess-board-grid {
+    position: relative;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    border-radius: $radiusLg;
+    overflow: hidden;
+    border: 1px solid $appCardBorder;
+    background: $appCardBorder;
+    touch-action: none;
+}
+
+.chess-board-square {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: none;
+
+    &.square-selected {
+        box-shadow: inset 0 0 0 3px alpha($gold, 0.65);
+    }
+
+    &.square-selected-premove {
+        box-shadow: inset 0 0 0 3px alpha($paleRed, 0.65);
+    }
+
+    &.square-premove-queued {
+        box-shadow: inset 0 0 0 999px alpha($paleRed, 0.35);
+        animation: chess-premove-lock 0.35s ease-out;
+    }
+
+    &.square-drag-hover {
+        box-shadow: inset 0 0 0 4px alpha($gold, 0.9);
+    }
+
+    &.square-drag-hover-premove {
+        box-shadow: inset 0 0 0 4px alpha($paleRed, 0.9);
+    }
+}
+
+.chess-piece-dragging {
+    filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.5));
+    transform: scale(1.08);
+}
+
+.chess-piece-slot {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 12.5%;
+    height: 12.5%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: none;
+    z-index: 2;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+    outline: none;
+
+    &:focus-visible {
+        outline: 2px solid $gold;
+        outline-offset: 2px;
+    }
+}
+
+.sq-corner-label {
+    position: absolute;
+    font-family: $fontMono;
+    font-size: clamp(7px, 1.1vw, 11px);
+    font-weight: 700;
+    line-height: 1;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.sq-rank {
+    top: 2px;
+    left: 3px;
+}
+.sq-file {
+    bottom: 2px;
+    right: 3px;
+}
+
+.label-on-light {
+    color: alpha($gold, 0.35);
+}
+.label-on-dark {
+    color: alpha($gold, 0.22);
+}
+
+.chess-piece-svg {
+    width: 96%;
+    height: 96%;
+    pointer-events: none;
+    position: relative;
+    z-index: 2;
+    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.4));
+
+    &.piece-capture-pending {
+        opacity: 0.4;
+    }
+}
+
+.gr-captured-icon {
+    width: 1.3rem;
+    height: 1.3rem;
+    flex-shrink: 0;
+
+    &.stacked {
+        margin-left: -1.2rem;
+    }
+
+    &.stack-end {
+        margin-right: 3px;
+    }
+}
+
+.legal-dot {
+    position: absolute;
+    width: 22%;
+    height: 22%;
+    border-radius: 50%;
+    background: alpha($gold, 0.65);
+    pointer-events: none;
+    z-index: 3;
+}
+
+.legal-capture-ring {
+    position: absolute;
+    inset: 0;
+    border: 4px solid alpha($gold, 0.3);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 3;
+}
+
+.legal-dot-premove {
+    background: alpha($paleRed, 0.65);
+}
+
+.legal-capture-ring-premove {
+    border-color: alpha($paleRed, 0.3);
+}
+
+.water-drop-ripple {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: rgba(220, 50, 50, 0.25);
+    pointer-events: none;
+    z-index: 3;
+    animation: chess-water-ripple 1.4s ease-out infinite;
+}
+
+.piece-danger {
+    animation: chess-piece-danger-pulse 1.4s ease-in-out infinite !important;
+}
+
+.piece-in-check {
+    animation: chess-king-check-pulse 0.8s ease-in-out infinite alternate !important;
+}
+
+.piece-in-stalemate {
+    animation: chess-king-stalemate-pulse 0.9s ease-in-out infinite alternate !important;
+}
+
+.square-flash {
+    animation: chess-square-flash 0.5s ease !important;
+}
+
+@keyframes chess-premove-lock {
+    0% {
+        box-shadow: inset 0 0 0 999px alpha($paleRed, 0.35);
+    }
+    35% {
+        box-shadow: inset 0 0 0 999px alpha($paleRed, 0.75);
+    }
+    100% {
+        box-shadow: inset 0 0 0 999px alpha($paleRed, 0.35);
+    }
+}
+
+@keyframes chess-square-flash {
+    0% {
+        background-color: rgba(220, 50, 50, 0.85) !important;
+    }
+    50% {
+        background-color: rgba(220, 50, 50, 0.3) !important;
+    }
+    100% {
+        background-color: rgba(220, 50, 50, 0.85) !important;
+    }
+}
+
+@keyframes chess-water-ripple {
+    0% {
+        transform: scale(0.6);
+        opacity: 0.7;
+    }
+    70% {
+        transform: scale(1.3);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(0.6);
+        opacity: 0;
+    }
+}
+
+@keyframes chess-piece-danger-pulse {
+    0%,
+    100% {
+        transform: scale(1);
+        filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.4));
+    }
+    50% {
+        transform: scale(1.15);
+        filter: drop-shadow(0 0 8px rgba(220, 50, 50, 0.8))
+            drop-shadow(0 2px 3px rgba(0, 0, 0, 0.4));
+    }
+}
+
+@keyframes chess-king-check-pulse {
+    from {
+        filter: drop-shadow(0 0 6px rgba(255, 50, 50, 0.9))
+            drop-shadow(0 2px 3px rgba(0, 0, 0, 0.4));
+        transform: scale(1);
+    }
+    to {
+        filter: drop-shadow(0 0 14px rgba(255, 50, 50, 1))
+            drop-shadow(0 2px 3px rgba(0, 0, 0, 0.4));
+        transform: scale(1.08);
+    }
+}
+
+@keyframes chess-king-stalemate-pulse {
+    from {
+        filter: drop-shadow(0 0 4px alpha($gold, 0.6));
+    }
+    to {
+        filter: drop-shadow(0 0 14px alpha($gold, 1))
+            drop-shadow(0 0 6px alpha($gold, 0.8));
+    }
+}
+
+.board-preview-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.board-preview-piece {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 12.5%;
+    height: 12.5%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.35));
+    will-change: transform;
+
+    .board-preview-piece-svg {
+        width: 96%;
+        height: 96%;
+    }
+
+    &.breathing {
+        animation: board-preview-breathe 0.9s ease-in-out;
+    }
+
+    &.captured {
+        transition:
+            transform 0.35s ease,
+            opacity 0.35s ease;
+        transform: translate(var(--tx), var(--ty)) scale(1.35) rotate(12deg) !important;
+        opacity: 0;
+    }
+
+    &.in-check {
+        animation: board-preview-king-shake 0.45s ease-in-out 3;
+        filter: drop-shadow(0 0 6px alpha($paleRed, 0.9));
+    }
+}
+
+.board-preview-ghost {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 12.5%;
+    height: 12.5%;
+    opacity: 0.55;
+    transition:
+        opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+
+    .board-preview-piece-svg {
+        width: 96%;
+        height: 96%;
+    }
+}
+
+.board-preview-ring {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 12.5%;
+    height: 12.5%;
+    border-radius: 50%;
+    border: 2px solid $gold;
+    box-sizing: border-box;
+    transition:
+        transform 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+        opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+
+    &.danger {
+        border-color: $paleRed;
+    }
+}
+
+.board-preview-flash {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 12.5%;
+    height: 12.5%;
+    background: alpha($paleRed, 0.55);
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+}
+
+.board-preview-check-ring {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 12.5%;
+    height: 12.5%;
+    border-radius: 50%;
+    animation: board-preview-check-pulse 0.75s ease-out 2;
+    pointer-events: none;
+}
+
+.board-preview-shimmer {
+    position: absolute;
+    top: -20%;
+    left: -60%;
+    width: 45%;
+    height: 140%;
+    background: linear-gradient(
+        100deg,
+        transparent 0%,
+        alpha($gold, 0.22) 45%,
+        alpha($gold, 0.4) 50%,
+        alpha($gold, 0.22) 55%,
+        transparent 100%
+    );
+    transform: skewX(-18deg) translateX(0%);
+    transition: transform 1.3s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+
+    &.run {
+        transform: skewX(-18deg) translateX(420%);
+    }
+}
+
+@keyframes board-preview-breathe {
+    0%,
+    100% {
+        transform: translate(var(--tx), var(--ty)) scale(1);
+    }
+    50% {
+        transform: translate(var(--tx), var(--ty)) scale(1.05);
+    }
+}
+
+@keyframes board-preview-king-shake {
+    0%,
+    100% {
+        transform: translate(var(--tx), var(--ty));
+    }
+    25% {
+        transform: translate(calc(var(--tx) - 3px), var(--ty));
+    }
+    75% {
+        transform: translate(calc(var(--tx) + 3px), var(--ty));
+    }
+}
+
+@keyframes board-preview-check-pulse {
+    0% {
+        box-shadow: 0 0 0 0 alpha($paleRed, 0.65);
+    }
+    100% {
+        box-shadow: 0 0 0 22px alpha($paleRed, 0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .board-preview-piece,
+    .board-preview-ghost,
+    .board-preview-ring,
+    .board-preview-shimmer,
+    .chess-piece-slot {
+        transition: none !important;
+    }
+    .board-preview-piece.breathing,
+    .board-preview-piece.in-check,
+    .board-preview-check-ring {
+        animation: none !important;
+    }
+}
