@@ -181,7 +181,7 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
                             />
                         ) : undefined
                     }
-                    customClass="auth-input-underline"
+                    customClass="auth-input"
                     fullWidth
                 />
             </Box>
@@ -198,7 +198,7 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
                     onBlur={formik.handleBlur}
                     isError={formik.touched.email && !!formik.errors.email}
                     helperText={formik.errors.email}
-                    customClass="auth-input-underline"
+                    customClass="auth-input"
                     fullWidth
                 />
             </Box>
@@ -217,7 +217,7 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
                         formik.touched.password && !!formik.errors.password
                     }
                     helperText={formik.errors.password}
-                    customClass="auth-input-underline"
+                    customClass="auth-input"
                     fullWidth
                 />
             </Box>
@@ -234,7 +234,7 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
                     onBlur={formik.handleBlur}
                     isError={formik.touched.confirm && !!formik.errors.confirm}
                     helperText={formik.errors.confirm}
-                    customClass="auth-input-underline"
+                    customClass="auth-input"
                     fullWidth
                 />
             </Box>

@@ -16,15 +16,15 @@ interface IThemeContext {
 }
 
 const ThemeContext = createContext<IThemeContext>({
-    mode: "light",
+    mode: "dark",
     toggleTheme: () => {},
 });
 
 function loadInitialMode(): ThemeMode {
     try {
-        return localStorage.getItem(STORAGE_KEY) === "dark" ? "dark" : "light";
+        return localStorage.getItem(STORAGE_KEY) === "light" ? "light" : "dark";
     } catch {
-        return "light";
+        return "dark";
     }
 }
 

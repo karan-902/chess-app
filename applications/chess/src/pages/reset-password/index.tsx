@@ -126,7 +126,7 @@ export default function ResetPassword() {
                             formik.touched.password && !!formik.errors.password
                         }
                         helperText={formik.errors.password}
-                        customClass="auth-input-underline"
+                        customClass="auth-input"
                         fullWidth
                     />
                 </Box>
@@ -145,7 +145,7 @@ export default function ResetPassword() {
                             formik.touched.confirm && !!formik.errors.confirm
                         }
                         helperText={formik.errors.confirm}
-                        customClass="auth-input-underline"
+                        customClass="auth-input"
                         fullWidth
                     />
                 </Box>

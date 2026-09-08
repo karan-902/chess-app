@@ -314,7 +314,7 @@ export default function RoomSheet({
                                     type="button"
                                     variant="contained"
                                     fullWidth
-                                    customClass="create-room-button stake-card-go"
+                                    customClass="game-cta create-room-btn"
                                     disabled={
                                         !(Number(roomStake) > 0) ||
                                         !(Number(roomMinutes) > 0)
@@ -359,7 +359,7 @@ export default function RoomSheet({
                                 type="button"
                                 variant="contained"
                                 fullWidth
-                                customClass="create-room-button stake-card-go"
+                                customClass="game-cta join-room-btn"
                                 disabled={joinCode.length !== 6}
                                 isLoading={roomStatus === "joining"}
                                 loaderOnDark

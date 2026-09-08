@@ -92,7 +92,7 @@ export default function ForgotPassword() {
                                 formik.touched.email && !!formik.errors.email
                             }
                             helperText={formik.errors.email}
-                            customClass="auth-input-underline"
+                            customClass="auth-input"
                             fullWidth
                         />
                     </Box>

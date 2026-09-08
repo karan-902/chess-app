@@ -89,7 +89,7 @@ function EmailScreen({
                     onBlur={formik.handleBlur}
                     isError={formik.touched.email && !!formik.errors.email}
                     helperText={formik.errors.email}
-                    customClass="auth-input-underline"
+                    customClass="auth-input"
                     fullWidth
                 />
             </Box>
@@ -156,7 +156,7 @@ function PasswordScreen({
                     value={verifiedEmail}
                     disabled
                     readOnly
-                    customClass="auth-input-underline"
+                    customClass="auth-input"
                     fullWidth
                 />
             </Box>
@@ -175,7 +175,7 @@ function PasswordScreen({
                         formik.touched.password && !!formik.errors.password
                     }
                     helperText={formik.errors.password}
-                    customClass="auth-input-underline"
+                    customClass="auth-input"
                     fullWidth
                 />
                 <Link to="/forgot-password" className="auth-forgot-link">

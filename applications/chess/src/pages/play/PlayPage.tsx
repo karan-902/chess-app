@@ -156,7 +156,7 @@ export default function PlayPage() {
                     type="button"
                     variant="contained"
                     fullWidth
-                    customClass="play-cta"
+                    customClass="game-cta play-cta"
                     onClick={() => setSheetOpen(true)}
                 >
                     {lobbyPlayNowButton}

@@ -16,7 +16,7 @@
     cursor: pointer;
 
     .button-text {
-        font-family: $fontOutfitSemiBold;
+        font-family: $fontOutfitSemiBold !important;
         font-size: 14px;
     }
     &.Mui-disabled {
@@ -106,7 +106,7 @@
         }
     }
 
-    &.play-cta,
+    &.game-cta,
     &.stake-card-go {
         background: $gold !important;
         border: 1px solid $appBtnBorder;
@@ -119,18 +119,35 @@
         }
     }
 
-    &.play-cta {
-        width: 50% !important;
-        height: 2.85rem;
+    &.game-cta {
+        height: 2.5rem;
+
         .button-text {
-            font-size: $font18;
+            font-size: $font16;
         }
     }
 
+    &.play-cta {
+        width: 100% !important;
+
+        @media (min-width: 1024px) {
+            width: 320px !important;
+        }
+    }
+
+    &.create-room-btn,
+    &.join-room-btn {
+        width: 100% !important;
+    }
+
     &.stake-card-go {
-        height: 2.2rem;
+        width: 150px !important;
+        height: $font24 !important;
+        min-height: 0px;
+        padding: 0px !important;
+        border-radius: 8px !important;
         .button-text {
-            font-size: $font14;
+            font-size: $font12;
         }
         color: $primaryContrast !important;
 
@@ -138,12 +155,6 @@
             background: transparent !important;
             border-color: $gold;
             color: $gold !important;
-        }
-    }
-
-    &.create-room-button {
-        .button-text {
-            font-size: $font16 !important;
         }
     }
 
@@ -472,7 +483,7 @@
         &.primary {
             background: $gold;
             border: none;
-            color: $appBg;
+            color: $primaryContrast;
 
             &:disabled {
                 opacity: 0.6;

@@ -1,6 +1,7 @@
 @use "default.scss" as *;
 
 .text {
+    font-family: $fontOutfit;
     &.uppercase {
         text-transform: uppercase;
     }
@@ -229,7 +230,7 @@
 
     &.pool-entry-fee {
         display: block;
-        font-size: $font14;
+        font-size: $font12;
         font-weight: 600;
         color: $appText;
         margin-top: 0.25rem;
@@ -248,11 +249,10 @@
 
     &.stake-card-tc {
         font-size: $font14;
-        font-weight: 700;
         letter-spacing: 0.06em;
         text-transform: uppercase;
-        font-family: $fontOutfitMedium;
-        color: $appTextMuted;
+        font-family: $fontOutfitExtraBold;
+        color: $appText;
         margin-bottom: 0.35rem;
     }
 

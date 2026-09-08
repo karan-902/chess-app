@@ -12,7 +12,7 @@ export const deviceHandoffToastSuperseded =
 export const rejoinGameTitle = "Rejoin Match";
 export const rejoinGameBody = (opponentName: string) =>
     `Your match with ${opponentName} is still live. Reconnect now before it's forfeited.`;
-export const rejoinGameStakeLabel = "Stake";
+export const rejoinGameStakeLabel = "Fee";
 export const rejoinGameOpponentLabel = "Opponent";
 export const rejoinGameRejoinButton = "Rejoin Now";
 export const rejoinGameExitButton = "Exit";
@@ -24,7 +24,7 @@ export const rejoinGameForfeitConfirmButton = "Forfeit & Exit";
 export const rematchOfferTitle = "Rematch?";
 export const rematchOfferBody = (opponentName: string) =>
     `${opponentName} wants a rematch.`;
-export const rematchOfferStakeLabel = "Stake";
+export const rematchOfferStakeLabel = "Fee";
 export const rematchOfferAcceptButton = "Accept Rematch";
 export const rematchOfferDismissButton = "Not Now";
 export const activityFeedWin = (
@@ -182,8 +182,8 @@ export const matchmakingRailEmptyText =
 export const matchmakingSearchingOpponentFound = "Opponent found!";
 export const matchmakingSearchingFindingOpponent = "Finding opponent…";
 export const matchmakingSearchingStartingGame = "Starting game now";
-export const matchmakingSearchingTimeLeft = (seconds: number, stake: string) =>
-    `${seconds}s left · ${stake} stake`;
+export const matchmakingSearchingTimeLeft = (seconds: number, fee: string) =>
+    `${seconds}s left · ${fee} fee`;
 export const matchmakingSearchingSecondsLeft = (seconds: number) =>
     `${seconds}s left`;
 export const matchmakingSearchingStakeLabel = "Stake";
@@ -204,12 +204,12 @@ export const playSheetPracticeTitle = "Practice";
 export const playSheetPracticeDesc = "Free to play";
 export const playSheetFriendLabel = "FRIENDLY";
 export const playSheetFriendTitle = "Challenge a Friend";
-export const playSheetFriendDesc = "Custom stake";
+export const playSheetFriendDesc = "Custom fee";
 export const roomCreateTabLabel = "Create Room";
 export const roomJoinTabLabel = "Join Room";
-export const roomStakeLabel = "Stake amount";
+export const roomStakeLabel = "Fee amount";
 export const roomBalanceLabel = (balance: string) => `Balance ${balance}`;
-export const roomStakeRequired = "Stake amount is required";
+export const roomStakeRequired = "Fee amount is required";
 export const roomStakeInsufficientBalance = "Insufficient Balance";
 export const roomTimeLabel = "Duration";
 export const roomMinutesSuffix = "min";

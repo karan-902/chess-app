@@ -5,11 +5,12 @@
     height: 2.75rem;
     background: $appSecondary;
     border: 1px solid $appCardBorder;
-    border-radius: $appInputRadius;
     padding: 0 0.875rem;
     font-family: $fontOutfit;
     font-size: $font14;
-    font-variant-numeric: tabular-nums;
+    padding: 12px !important;
+    box-shadow: none !important;
+    border-radius: $appBtnRadius;
     color: $appText;
     transition:
         border-color 0.15s ease,
@@ -70,22 +71,18 @@
         opacity: 0.4;
     }
 
-    &.auth-input-underline {
-        height: auto;
+    &.auth-input {
+        height: 3rem;
         background: transparent;
-        border: none;
-        border-bottom: 1px solid $appCardBorder;
-        border-radius: 0;
-        padding: 0 0 0.5rem;
+        padding: 0 1rem;
         font-size: $font16;
 
-        &.Mui-focused {
-            border-bottom-color: $gold;
-            box-shadow: none;
+        input::placeholder {
+            color: alpha($appText, 0.35);
         }
 
-        &.Mui-error {
-            border-bottom-color: alpha($paleRed, 0.7);
+        &.Mui-focused {
+            border-color: $gold;
         }
 
         input:-webkit-autofill,

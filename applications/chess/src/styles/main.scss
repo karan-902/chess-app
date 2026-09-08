@@ -13,7 +13,7 @@ body {
     margin: 0;
     height: 100%;
     overflow: hidden;
-    background-color: $appFrame !important;
+    background-color: #000 !important;
     color: $appText;
     font-family: $fontOutfit;
     font-weight: 400;
@@ -85,6 +85,7 @@ body {
     display: flex;
     flex: 1;
     overflow: hidden;
+    background: var(--app-surface);
 }
 
 .app-content {

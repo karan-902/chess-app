@@ -10,6 +10,22 @@
     //     max-width: 500px;
     // }
 }
+
+.lib-board-host {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: $radiusLg;
+    overflow: hidden;
+    border: 1px solid $appCardBorder;
+    background: $appCardBorder;
+    touch-action: none;
+
+    canvas {
+        display: block;
+    }
+}
+
 .chess-board-grid {
     position: relative;
     width: 100%;
