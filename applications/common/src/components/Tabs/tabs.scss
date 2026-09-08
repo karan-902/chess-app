@@ -1,0 +1,24 @@
+@use "default.scss" as *;
+
+.tabs {
+    min-height: 44px;
+
+    .MuiTabs-indicator {
+        height: 2px;
+        border-radius: 2px;
+        background: $gold;
+    }
+}
+
+.tab {
+    text-transform: none;
+    min-height: 44px;
+    color: $appTextMuted;
+    font-family: $fontOutfit;
+
+    &.Mui-selected {
+        color: $gold;
+        font-family: $fontOutfitSemiBold;
+        font-weight: 600;
+    }
+}
