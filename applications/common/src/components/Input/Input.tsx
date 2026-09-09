@@ -4,7 +4,7 @@ import type { InputBaseProps } from "@mui/material";
 import { Eye, EyeOff } from "lucide-react";
 import classNames from "classnames";
 import Box from "../Box/Box";
-import Text from "../Text/Text";
+import AlertMessage from "../AlertMessage/AlertMessage";
 import "./input.scss";
 
 interface IInputProps extends InputBaseProps {
@@ -75,9 +75,7 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
                     }
                 />
                 {isError && helperText && (
-                    <Text component="span" customClass="input-helper-text">
-                        {helperText}
-                    </Text>
+                    <AlertMessage severity="error" message={helperText} />
                 )}
             </Box>
         );
