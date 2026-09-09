@@ -14,7 +14,7 @@ export type SkillLevel = "beginner" | "intermediate" | "advanced" | "expert";
 export type IVerifyUserResponse = {
     email: string;
     signup_method: SignupMethod;
-    email_verified: boolean;
+    is_verified: boolean;
 };
 
 export type IUsernameAvailableResponse = {

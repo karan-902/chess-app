@@ -259,7 +259,7 @@ export default function LoginForm() {
      return;
     }
 
-    if (!res.email_verified) {
+    if (!res.is_verified) {
      dispatch(
       showToast({
        message: authLoginEmailNotVerified,
@@ -311,7 +311,7 @@ export default function LoginForm() {
     }
     if (!res.country) setStep("country");
    } catch (err: any) {
-    if (err?.type === "email_not_verified") {
+    if (err?.type === "account_not_verified") {
      dispatch(
       showToast({
        message: authLoginEmailNotVerified,
