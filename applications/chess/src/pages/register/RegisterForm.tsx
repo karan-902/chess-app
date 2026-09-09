@@ -97,14 +97,16 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
                 );
                 onRegistered(values.email, values.password);
             } catch (err: any) {
-                dispatch(
-                    showToast({
-                        message:
-                            err?.response?.data?.message ??
-                            authRegisterRegistrationFailed,
-                        severity: "error",
-                    }),
-                );
+                if (err?.response) {
+                    dispatch(
+                        showToast({
+                            message:
+                                err.response.data?.message ??
+                                authRegisterRegistrationFailed,
+                            severity: "error",
+                        }),
+                    );
+                }
             } finally {
                 setSubmitting(false);
             }

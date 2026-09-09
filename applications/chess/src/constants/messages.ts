@@ -601,6 +601,7 @@ export const appBarEloCoachmarkText = "Tap to see your rank progress →";
 export const appBarWalletBalanceAriaLabel = "View wallet";
 
 export const apiRateLimited = "Too many attempts, please wait.";
+export const apiSomethingWentWrong = "Something went wrong. Please try later.";
 
 export const authLeftQuoteAriaLabel = (n: number) => `Quote ${n}`;
 export const authLeftBrandName = "SHATRANJ";

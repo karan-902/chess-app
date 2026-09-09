@@ -4,4 +4,5 @@ export const throwThunkError = (error: any) => ({
         error?.message ??
         "Something went wrong",
     status: error?.response?.status ?? 500,
+    isNetworkError: !error?.response,
 });
