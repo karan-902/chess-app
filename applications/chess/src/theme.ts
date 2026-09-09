@@ -29,13 +29,13 @@ import {
 } from "@/constants/colors";
 import type { ThemeMode } from "@/context/ThemeContext";
 
-/* Shared numeric style — odds, BTC amounts, payouts, wallet balances. Inter + tabular figures, never a mono font. */
+/* Shared numeric style — odds, BTC amounts, payouts, wallet balances. Outfit + tabular figures, never a mono font. */
 export const numeric = {
     fontVariantNumeric: "tabular-nums",
     fontFeatureSettings: '"tnum"',
 } as const;
 
-const fontFamily = '"Inter-Regular"';
+const fontFamily = '"Outfit-Regular", system-ui, sans-serif';
 
 export function getMuiTheme(mode: ThemeMode) {
     const isDark = mode === "dark";
@@ -79,36 +79,36 @@ export function getMuiTheme(mode: ThemeMode) {
         typography: {
             fontFamily,
             h1: {
-                fontFamily: "Inter-ExtraBold",
+                fontFamily: "Outfit-ExtraBold",
                 fontWeight: 800,
                 fontSize: "3.25rem",
                 letterSpacing: "-0.04em",
             },
             h2: {
-                fontFamily: "Inter-Bold",
+                fontFamily: "Outfit-Bold",
                 fontWeight: 700,
                 fontSize: "2rem",
                 letterSpacing: "-0.03em",
             },
             h3: {
-                fontFamily: "Inter-Bold",
+                fontFamily: "Outfit-Bold",
                 fontWeight: 700,
                 fontSize: "1.5rem",
                 letterSpacing: "-0.02em",
             },
-            h4: { fontFamily: "Inter-SemiBold", fontWeight: 600 },
-            h5: { fontFamily: "Inter-SemiBold", fontWeight: 600 },
-            h6: { fontFamily: "Inter-SemiBold", fontWeight: 600 },
+            h4: { fontFamily: "Outfit-SemiBold", fontWeight: 600 },
+            h5: { fontFamily: "Outfit-SemiBold", fontWeight: 600 },
+            h6: { fontFamily: "Outfit-SemiBold", fontWeight: 600 },
             body1: { lineHeight: 1.6 },
             body2: { lineHeight: 1.6 },
             button: {
-                fontFamily: "Inter-SemiBold",
+                fontFamily: "Outfit-SemiBold",
                 fontWeight: 600,
                 textTransform: "none",
                 letterSpacing: "0.04em",
             },
             overline: {
-                fontFamily: "Inter-Bold",
+                fontFamily: "Outfit-Bold",
                 fontWeight: 700,
                 fontSize: "0.65rem",
                 letterSpacing: "0.22em",
