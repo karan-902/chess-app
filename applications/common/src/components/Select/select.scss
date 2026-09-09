@@ -1,0 +1,48 @@
+@use "default.scss" as *;
+
+.common-select {
+    width: 100%;
+
+    .MuiInputBase-root {
+        min-height: 2.75rem;
+        background: $appSecondary;
+        border-radius: $appBtnRadius;
+        font-family: $fontOutfit;
+        font-size: $font14;
+        color: $appText;
+        transition:
+            border-color 0.15s ease,
+            box-shadow 0.15s ease;
+
+        .MuiOutlinedInput-notchedOutline {
+            border-color: $appCardBorder;
+        }
+
+        &.Mui-focused {
+            box-shadow: 0 0 0 3px alpha($primary, 0.12);
+
+            .MuiOutlinedInput-notchedOutline {
+                border-color: $primary;
+                border-width: 1px;
+            }
+        }
+
+        &.Mui-error .MuiOutlinedInput-notchedOutline {
+            border-color: alpha($paleRed, 0.6);
+        }
+
+        &.Mui-disabled {
+            opacity: 0.4;
+        }
+    }
+
+    .MuiSelect-icon,
+    .MuiAutocomplete-popupIndicator {
+        color: alpha($appText, 0.4);
+    }
+
+    input::placeholder {
+        color: alpha($appText, 0.35);
+        opacity: 1;
+    }
+}
