@@ -5,5 +5,5 @@ dist/
 .env.development
 .DS_Store
 *.log
-.claude/settings.local.json
+.claude/
 tsconfig.tsbuildinfo
