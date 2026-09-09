@@ -21,7 +21,7 @@ const PAGE_SIZE = 20;
 export const initiateDeposit = (amountUsd: number) =>
  callAPIInterface<IInitiateDepositBody, IInitiateDepositResponse>(
   "POST",
-  "/wallet/deposit",
+  "/wallet/payment-request",
   { amount_usd: amountUsd },
  );
 
