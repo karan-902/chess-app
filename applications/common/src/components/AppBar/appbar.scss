@@ -1,0 +1,150 @@
+@use "default.scss" as *;
+
+.appbar {
+    display: flex;
+    flex-direction: column;
+    background: $appBg !important;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    flex-shrink: 0;
+    box-shadow: none;
+    position: static;
+    box-shadow: none !important;
+
+    .MuiToolbar-root {
+        width: 100%;
+        padding: 0.5rem 1.25rem 0.875rem;
+        min-height: unset;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        &.app-toolbar {
+            background-color: $appBg;
+            // border-bottom: 1px solid $appCardBorder;
+        }
+    }
+
+    .appbar-brand {
+        display: flex;
+        align-items: center;
+        color: $gold;
+        text-decoration: none;
+    }
+
+    .appbar-right {
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+    }
+
+    .appbar-online {
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+    }
+}
+
+.appbar-dropdown-head {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.5rem 0.6rem;
+    border-bottom: 1px solid $appCardBorder;
+    margin-bottom: 0.1rem;
+}
+
+.appbar-dropdown-id {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    min-width: 0;
+}
+
+.appbar-dropdown-name {
+    font-family: $fontOutfit;
+    font-size: $font14;
+    font-weight: 700;
+    color: $appText;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.appbar-nav-tabs {
+    display: flex;
+    align-items: center;
+    gap: $font12;
+    padding: 0 1rem;
+    border-bottom: 1px solid $appLine;
+    flex-shrink: 0;
+}
+
+.appbar-nav-tab {
+    font-size: $font16;
+    position: relative;
+    padding: 0.625rem 0.625rem 0.75rem;
+    font-family: $fontOutfitSemiBold;
+    @media screen and (max-width: 600px) {
+        font-size: $font14;
+    }
+    font-weight: 600;
+    color: $appTextMuted;
+    text-decoration: none;
+    white-space: nowrap;
+
+    &:hover {
+        color: $appText;
+    }
+
+    &.active {
+        color: $appText;
+
+        &::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -0.12rem;
+            height: 2px;
+            background: $gold;
+        }
+    }
+}
+
+.appbar-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    width: 100%;
+    padding: 0.45rem 0.6rem;
+    border-radius: 0.3rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+    text-decoration: none;
+    font-family: $fontOutfit;
+    font-size: $font14;
+    font-weight: 600;
+    color: alpha($appText, 0.65);
+
+    &:hover {
+        background: alpha($appText, 0.06);
+        color: $appText;
+    }
+
+    &.active {
+        background: alpha($gold, 0.12);
+        color: $gold;
+    }
+
+    &.danger {
+        color: $paleRed;
+
+        &:hover {
+            background: alpha($paleRed, 0.12);
+            color: $paleRed;
+        }
+    }
+}
