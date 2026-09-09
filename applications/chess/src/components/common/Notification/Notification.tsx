@@ -23,19 +23,25 @@ export default function Notification({ customClass }: INotificationProps) {
         dispatch(hideToast());
     };
 
+    const rootEl = document.getElementById("root");
+
     return (
-        <Portal
-            container={() =>
-                document.querySelector(".app-shell") as HTMLElement
-            }
-        >
+        <Portal container={rootEl}>
             <Snackbar
                 anchorOrigin={{ vertical: "top", horizontal: "right" }}
                 open={open}
                 autoHideDuration={1500}
                 onClose={closeNotification}
                 slots={{ transition: Slide }}
-                slotProps={{ transition: { direction: "left" } }}
+                slotProps={{
+                    transition: { direction: "left", container: rootEl },
+                }}
+                sx={{
+                    position: "absolute",
+                    top: "1rem",
+                    right: "1rem",
+                    left: "auto",
+                }}
             >
                 <AlertMessage
                     message={message}
