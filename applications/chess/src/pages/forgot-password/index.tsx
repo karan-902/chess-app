@@ -8,8 +8,6 @@ import Input from "@/components/base/Input/Input";
 import Button from "@/components/base/Button/Button";
 import AuthLayout from "@/container/AuthLayout";
 import { callAPIInterface } from "@/utils";
-import { useReduxDispatch } from "@/redux/hooks";
-import { showToast } from "@/redux/common/common.slice";
 import type { IForgotPasswordBody } from "@/types/index";
 import type { IMessageResponse } from "@/types/utils";
 import {
@@ -33,13 +31,14 @@ const emailSchema = yup.object({
 });
 
 export default function ForgotPassword() {
-    const dispatch = useReduxDispatch();
     const [sent, setSent] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const formik = useFormik({
         initialValues: { email: "" },
         validationSchema: emailSchema,
         onSubmit: async (values, { setSubmitting }) => {
+            setError(null);
             try {
                 await callAPIInterface<IForgotPasswordBody, IMessageResponse>(
                     "POST",
@@ -48,14 +47,11 @@ export default function ForgotPassword() {
                 );
                 setSent(true);
             } catch (err: any) {
-                dispatch(
-                    showToast({
-                        message:
-                            err?.response?.data?.message ??
-                            authForgotPasswordFailed,
-                        severity: "error",
-                    }),
-                );
+                if (err?.response) {
+                    setError(
+                        err.response.data?.message ?? authForgotPasswordFailed,
+                    );
+                }
             } finally {
                 setSubmitting(false);
             }
@@ -89,9 +85,15 @@ export default function ForgotPassword() {
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             isError={
-                                formik.touched.email && !!formik.errors.email
+                                (formik.touched.email &&
+                                    !!formik.errors.email) ||
+                                !!error
                             }
-                            helperText={formik.errors.email}
+                            helperText={
+                                (formik.touched.email && formik.errors.email) ||
+                                error ||
+                                undefined
+                            }
                             customClass="auth-input"
                             fullWidth
                         />
