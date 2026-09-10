@@ -19,6 +19,7 @@ import { formatAmount, formatTime } from "@/utils/format";
 import {
  TRANSACTION_TYPE_ICONS,
  TRANSACTION_TYPE_LABELS,
+ TRANSACTION_TYPE_DESCRIPTIONS,
 } from "@/constants/config";
 import type { ITransactionResponse, TransactionType } from "@/types/utils";
 import type { ITransactionFilterDrawerProps } from "@/types/components";
@@ -172,6 +173,9 @@ function txRow(tx: ITransactionResponse) {
       <TxIcon size={16} strokeWidth={2} />
      </Box>
      <Box customClass="wallet-tx-text">
+      <Text customClass="row-title">
+       {TRANSACTION_TYPE_DESCRIPTIONS[tx.transaction_type]}
+      </Text>
       <Text customClass="meta-text">
        {dayLabel(tx.created)} - {formatTime(tx.created)}
       </Text>

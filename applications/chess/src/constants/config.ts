@@ -52,6 +52,16 @@ export const TRANSACTION_TYPE_LABELS: Record<TransactionType, string> = {
  BET_REFUND: "Bet Refunds",
 };
 
+export const TRANSACTION_TYPE_DESCRIPTIONS: Record<TransactionType, string> = {
+ DEPOSIT: "Received",
+ WITHDRAW: "Sent",
+ WITHDRAW_REFUND: "Refund",
+ BET: "Bet",
+ SETTLEMENT: "Won",
+ DRAW_REFUND: "Refund",
+ BET_REFUND: "Refund",
+};
+
 export const PLATFORM_PAYOUT_MULTIPLIER = 0.88;
 
 export const GAME_END_REASON_LABELS: Record<string, string> = {
