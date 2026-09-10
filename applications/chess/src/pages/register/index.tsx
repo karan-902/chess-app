@@ -15,7 +15,8 @@ export default function Register() {
    subtitle={authRegisterSubtitle}
    footer={
     <>
-     {authRegisterHaveAccountPrompt}{" "}
+     {authRegisterHaveAccountPrompt}
+     {"Sai"}
      <Link to="/login">{authRegisterLoginLink}</Link>
     </>
    }
