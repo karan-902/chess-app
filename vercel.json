@@ -1,3 +1,5 @@
 {
+  "buildCommand": "npm run chess:build",
+  "outputDirectory": "applications/chess/dist",
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }

@@ -1,0 +1,42 @@
+@use "default.scss" as *;
+
+.common-otp-input {
+    display: flex;
+    gap: 0.6rem;
+    justify-content: center;
+
+    .otp-slot {
+        position: relative;
+        width: 2.75rem;
+        height: 3.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: $appSecondary;
+        border: 1px solid $appCardBorder;
+        border-radius: $appInputRadius;
+        font-family: $fontDisplay;
+        font-size: $font20;
+        font-variant-numeric: tabular-nums;
+        color: $appText;
+
+        &--active {
+            border-color: $primary;
+            box-shadow: 0 0 0 3px alpha($primary, 0.12);
+        }
+    }
+
+    .otp-slot-caret {
+        position: absolute;
+        width: 1px;
+        height: 1.4rem;
+        background: $gold;
+        animation: otp-caret-blink 1s step-end infinite;
+    }
+}
+
+@keyframes otp-caret-blink {
+    50% {
+        opacity: 0;
+    }
+}
