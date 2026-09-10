@@ -120,7 +120,7 @@ export type TransactionType =
  | "WITHDRAW_REFUND"
  | "BET"
  | "SETTLEMENT"
- | "DRAW_REFUND"
+ | "DRAW"
  | "BET_REFUND";
 
 export type ITransactionsFilterBody = {

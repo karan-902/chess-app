@@ -1,16 +1,9 @@
-import {
- Rocket,
- Zap,
- Timer,
- Crown,
- ArrowDownToLine,
- ArrowUpFromLine,
- Undo2,
- Swords,
- Trophy,
- Handshake,
-} from "lucide-react";
+import { Rocket, Zap, Timer, Crown } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import CallReceived from "@mui/icons-material/CallReceived";
+import CallMade from "@mui/icons-material/CallMade";
+import Handshake from "@mui/icons-material/Handshake";
+import type { SvgIconComponent } from "@mui/icons-material";
 import type { GameCategory } from "@/types/types";
 import type { TransactionType } from "@/types/utils";
 import {
@@ -32,14 +25,14 @@ export const CATEGORY_META: Record<
  CLASSICAL: { icon: Crown, label: "CLASSICAL" },
 };
 
-export const TRANSACTION_TYPE_ICONS: Record<TransactionType, LucideIcon> = {
- DEPOSIT: ArrowDownToLine,
- WITHDRAW: ArrowUpFromLine,
- WITHDRAW_REFUND: Undo2,
- BET: Swords,
- SETTLEMENT: Trophy,
- DRAW_REFUND: Handshake,
- BET_REFUND: Undo2,
+export const TRANSACTION_TYPE_ICONS: Record<TransactionType, SvgIconComponent> = {
+ DEPOSIT: CallReceived,
+ WITHDRAW: CallMade,
+ WITHDRAW_REFUND: CallReceived,
+ BET: CallMade,
+ SETTLEMENT: CallReceived,
+ DRAW: Handshake,
+ BET_REFUND: CallReceived,
 };
 
 export const TRANSACTION_TYPE_LABELS: Record<TransactionType, string> = {
@@ -48,7 +41,7 @@ export const TRANSACTION_TYPE_LABELS: Record<TransactionType, string> = {
  WITHDRAW_REFUND: "Withdraw Refunds",
  BET: "Bets",
  SETTLEMENT: "Winnings",
- DRAW_REFUND: "Draw Refunds",
+ DRAW: "Draw Refunds",
  BET_REFUND: "Bet Refunds",
 };
 
@@ -58,7 +51,7 @@ export const TRANSACTION_TYPE_DESCRIPTIONS: Record<TransactionType, string> = {
  WITHDRAW_REFUND: "Refund",
  BET: "Bet",
  SETTLEMENT: "Won",
- DRAW_REFUND: "Refund",
+ DRAW: "Refund",
  BET_REFUND: "Refund",
 };
 

@@ -1,145 +1,145 @@
 /* Minibet palette — verbatim color tokens from minibet.games (@layer theme). */
 :root {
-  --color-red-100: oklch(93.6% 0.032 17.717);
-  --color-red-400: oklch(70.4% 0.191 22.216);
-  --color-red-500: oklch(63.7% 0.237 25.331);
-  --color-red-600: oklch(57.7% 0.245 27.325);
-  --color-red-700: oklch(50.5% 0.213 27.518);
-  --color-red-900: oklch(39.6% 0.141 25.723);
-  --color-yellow-300: oklch(90.5% 0.182 98.111);
-  --color-yellow-400: oklch(85.2% 0.199 91.936);
-  --color-yellow-500: oklch(79.5% 0.184 86.047);
-  --color-green-100: oklch(96.2% 0.044 156.743);
-  --color-green-500: oklch(72.3% 0.219 149.579);
-  --color-green-600: oklch(62.7% 0.194 149.214);
-  --color-purple-500: oklch(62.7% 0.265 303.9);
-  --color-purple-800: oklch(43.8% 0.218 303.724);
-  --color-gray-50: oklch(98.5% 0.002 247.839);
-  --color-gray-100: oklch(96.7% 0.003 264.542);
-  --color-gray-200: oklch(92.8% 0.006 264.531);
-  --color-gray-300: oklch(87.2% 0.01 258.338);
-  --color-gray-400: oklch(70.7% 0.022 261.325);
-  --color-gray-500: oklch(55.1% 0.027 264.364);
-  --color-gray-600: oklch(44.6% 0.03 256.802);
-  --color-gray-700: oklch(37.3% 0.034 259.733);
-  --color-gray-800: oklch(27.8% 0.033 256.848);
-  --color-gray-900: oklch(21% 0.034 264.665);
-  --color-black: #000;
-  --color-white: #fff;
-  --color-primary: #f7931a;
-  --color-primary-dark: #f0b90b;
-  --color-primary-text: #2d2b36;
-  --color-bg-primary: #212223;
-  --color-bg-border: #343434;
-  --color-bg-secondary: #111;
-  --color-bg-gray: #515152;
-  --color-bg-black: #1c1c1d;
-  --color-bg-tertiary: #3e3e3e;
-  --color-bg-table-gray: #252728;
-  --color-bg-table-bgcolor: #353535;
-  --color-bg-quaternary: #2d2d2e;
-  --color-bg-card: #2d2b36;
-  --color-bg-light: #efefef;
-  --color-bg-content: #2a2b2c;
-  --color-bg-skeleton: #3a3a3b;
-  --color-bg-secondary-button: #565758;
-  --color-bg-hover: #4a4a4a;
-  --color-bg-black-version: #1b1b1b;
-  --color-bg-card-hover: #444150;
-  --color-bg-line-btn-hover: #e8e7e9;
-  --color-line-btn-border: #bab9be;
-  --color-bg-social-pill: #47474759;
-  --color-bg-chat-sent: #352c02;
-  --color-text-primary: #2d2b36;
-  --color-text-secondary: #efefef;
-  --color-text-tertiary: #e8e7e9;
-  --color-text-muted: #7a7880;
-  --color-text-subtle: #bab9be;
-  --color-text-black: #000;
-  --color-text-white: #efefef;
-  --color-text-link: #4285f4;
-  --color-text-graywhite: #bab9be;
-  --color-border-primary: #454447;
-  --color-border-secondary: #504e56;
-  --color-border-gray: #2e2e2e;
-  --color-table-border: #52505a;
-  --color-border-tertiary: #d1d0d3;
-  --color-border-social-pill: #7b7b7b5c;
-  --color-text-green-color: #1cd437;
-  --color-error: #e94235;
-  --color-green: #1cd437;
-  --color-warning: #eab308;
-  --color-accent: #2158fe;
-  --color-text-color: #1e1e1e;
+ --color-red-100: oklch(93.6% 0.032 17.717);
+ --color-red-400: oklch(70.4% 0.191 22.216);
+ --color-red-500: oklch(63.7% 0.237 25.331);
+ --color-red-600: oklch(57.7% 0.245 27.325);
+ --color-red-700: oklch(50.5% 0.213 27.518);
+ --color-red-900: oklch(39.6% 0.141 25.723);
+ --color-yellow-300: oklch(90.5% 0.182 98.111);
+ --color-yellow-400: oklch(85.2% 0.199 91.936);
+ --color-yellow-500: oklch(79.5% 0.184 86.047);
+ --color-green-100: oklch(96.2% 0.044 156.743);
+ --color-green-500: oklch(72.3% 0.219 149.579);
+ --color-green-600: oklch(62.7% 0.194 149.214);
+ --color-purple-500: oklch(62.7% 0.265 303.9);
+ --color-purple-800: oklch(43.8% 0.218 303.724);
+ --color-gray-50: oklch(98.5% 0.002 247.839);
+ --color-gray-100: oklch(96.7% 0.003 264.542);
+ --color-gray-200: oklch(92.8% 0.006 264.531);
+ --color-gray-300: oklch(87.2% 0.01 258.338);
+ --color-gray-400: oklch(70.7% 0.022 261.325);
+ --color-gray-500: oklch(55.1% 0.027 264.364);
+ --color-gray-600: oklch(44.6% 0.03 256.802);
+ --color-gray-700: oklch(37.3% 0.034 259.733);
+ --color-gray-800: oklch(27.8% 0.033 256.848);
+ --color-gray-900: oklch(21% 0.034 264.665);
+ --color-black: #000;
+ --color-white: #fff;
+ --color-primary: #f7931a;
+ --color-primary-dark: #f0b90b;
+ --color-primary-text: #2d2b36;
+ --color-bg-primary: #212223;
+ --color-bg-border: #343434;
+ --color-bg-secondary: #111;
+ --color-bg-gray: #515152;
+ --color-bg-black: #1c1c1d;
+ --color-bg-tertiary: #3e3e3e;
+ --color-bg-table-gray: #252728;
+ --color-bg-table-bgcolor: #353535;
+ --color-bg-quaternary: #2d2d2e;
+ --color-bg-card: #2d2b36;
+ --color-bg-light: #efefef;
+ --color-bg-content: #2a2b2c;
+ --color-bg-skeleton: #3a3a3b;
+ --color-bg-secondary-button: #565758;
+ --color-bg-hover: #4a4a4a;
+ --color-bg-black-version: #1b1b1b;
+ --color-bg-card-hover: #444150;
+ --color-bg-line-btn-hover: #e8e7e9;
+ --color-line-btn-border: #bab9be;
+ --color-bg-social-pill: #47474759;
+ --color-bg-chat-sent: #352c02;
+ --color-text-primary: #2d2b36;
+ --color-text-secondary: #efefef;
+ --color-text-tertiary: #e8e7e9;
+ --color-text-muted: #7a7880;
+ --color-text-subtle: #bab9be;
+ --color-text-black: #000;
+ --color-text-white: #efefef;
+ --color-text-link: #4285f4;
+ --color-text-graywhite: #bab9be;
+ --color-border-primary: #454447;
+ --color-border-secondary: #504e56;
+ --color-border-gray: #2e2e2e;
+ --color-table-border: #52505a;
+ --color-border-tertiary: #d1d0d3;
+ --color-border-social-pill: #7b7b7b5c;
+ --color-text-green-color: #2ecc71;
+ --color-error: #e94235;
+ --color-green: #2ecc71;
+ --color-warning: #eab308;
+ --color-accent: #2158fe;
+ --color-text-color: #1e1e1e;
 }
 
 /*  Dark is the default (applies with no data-theme). */
 :root {
-  color-scheme: dark;
-  --app-bg: var(--color-bg-secondary);
-  --app-secondary: var(--color-bg-content);
-  --app-surface: var(--color-bg-black);
-  --app-card-border: var(--color-border-gray);
-  --app-line: var(--color-bg-border);
-  --app-frame: var(--color-black);
-  --app-text: var(--color-text-secondary);
-  --app-text-muted: var(--color-text-subtle);
-  --app-btn-bg: var(--color-bg-quaternary);
-  --app-btn-border: var(--color-border-secondary);
-  --primary: var(--color-primary);
-  --primary-dark: var(--color-primary-dark);
-  --primary-contrast: #ffffff;
-  --secondary: var(--color-accent);
-  --secondary-contrast: #ffffff;
-  --success: var(--color-green);
-  --warning: var(--color-warning);
-  --error: var(--color-error);
-  --gold: var(--primary);
-  --cyan: var(--color-text-link);
-  --pale-red: var(--error);
-  --brink-pink: #e06a5a;
-  --greenish-teal: var(--success);
-  --backdrop-center: var(--color-bg-content);
-  --backdrop-edge: var(--color-black);
+ color-scheme: dark;
+ --app-bg: var(--color-bg-secondary);
+ --app-secondary: var(--color-bg-content);
+ --app-surface: var(--color-bg-black);
+ --app-card-border: var(--color-border-gray);
+ --app-line: var(--color-bg-border);
+ --app-frame: var(--color-black);
+ --app-text: var(--color-text-secondary);
+ --app-text-muted: var(--color-text-subtle);
+ --app-btn-bg: var(--color-bg-quaternary);
+ --app-btn-border: var(--color-border-secondary);
+ --primary: var(--color-primary);
+ --primary-dark: var(--color-primary-dark);
+ --primary-contrast: #ffffff;
+ --secondary: var(--color-accent);
+ --secondary-contrast: #ffffff;
+ --success: var(--color-green);
+ --warning: var(--color-warning);
+ --error: var(--color-error);
+ --gold: var(--primary);
+ --cyan: var(--color-text-link);
+ --pale-red: var(--error);
+ --brink-pink: #e06a5a;
+ --greenish-teal: #2ecc71;
+ --backdrop-center: var(--color-bg-content);
+ --backdrop-edge: var(--color-black);
 }
 
 /* Light mode — derived (Minibet ships dark only); gold + accents unchanged. */
 :root[data-theme="light"] {
-  color-scheme: light;
-  --app-bg: #f4f5f7;
-  --app-secondary: #eef0f3;
-  --app-surface: #ffffff;
-  --app-card-border: #e3e5ea;
-  --app-line: #eceef1;
-  --app-frame: #e7e9ec;
-  --app-text: #1e1e1e;
-  --app-text-muted: #6b6a72;
-  --app-btn-bg: #eef0f3;
-  --app-btn-border: #d1d0d3;
-  --primary: var(--color-primary);
-  --primary-dark: var(--color-primary-dark);
-  --primary-contrast: #ffffff;
-  --secondary: var(--color-accent);
-  --secondary-contrast: #ffffff;
-  --success: #159a2e;
-  --warning: var(--color-warning);
-  --error: var(--color-error);
-  --gold: var(--primary);
-  --cyan: #2563d9;
-  --pale-red: var(--error);
-  --brink-pink: #e06a5a;
-  --greenish-teal: var(--success);
-  --backdrop-center: #1a1d22;
-  --backdrop-edge: #000000;
+ color-scheme: light;
+ --app-bg: #f4f5f7;
+ --app-secondary: #eef0f3;
+ --app-surface: #ffffff;
+ --app-card-border: #e3e5ea;
+ --app-line: #eceef1;
+ --app-frame: #e7e9ec;
+ --app-text: #1e1e1e;
+ --app-text-muted: #6b6a72;
+ --app-btn-bg: #eef0f3;
+ --app-btn-border: #d1d0d3;
+ --primary: var(--color-primary);
+ --primary-dark: var(--color-primary-dark);
+ --primary-contrast: #ffffff;
+ --secondary: var(--color-accent);
+ --secondary-contrast: #ffffff;
+ --success: #159a2e;
+ --warning: var(--color-warning);
+ --error: var(--color-error);
+ --gold: var(--primary);
+ --cyan: #2563d9;
+ --pale-red: var(--error);
+ --brink-pink: #e06a5a;
+ --greenish-teal: #0cad62;
+ --backdrop-center: #1a1d22;
+ --backdrop-edge: #000000;
 }
 @function alpha($color, $opacity) {
-  @return color-mix(in srgb, #{$color} #{$opacity * 100%}, transparent);
+ @return color-mix(in srgb, #{$color} #{$opacity * 100%}, transparent);
 }
 
 /* Odds, BTC amounts, payouts, wallet balances — Outfit with tabular figures (no mono font). */
 @mixin numeric {
-  font-variant-numeric: tabular-nums;
-  font-feature-settings: "tnum";
+ font-variant-numeric: tabular-nums;
+ font-feature-settings: "tnum";
 }
 
 $paleRed: var(--pale-red);
@@ -251,14 +251,14 @@ $amountFontFamily: $fontOutfitExtraBold;
 $amountFontSize: clamp(#{$font15}, 0.6rem + 1.4vw, #{$font16});
 
 $outfitFaces:
-  "Outfit-Thin", "Outfit-ExtraLight", "Outfit-Light", "Outfit-Regular",
-  "Outfit-Medium", "Outfit-SemiBold", "Outfit-Bold", "Outfit-ExtraBold",
-  "Outfit-Black";
+ "Outfit-Thin", "Outfit-ExtraLight", "Outfit-Light", "Outfit-Regular",
+ "Outfit-Medium", "Outfit-SemiBold", "Outfit-Bold", "Outfit-ExtraBold",
+ "Outfit-Black";
 
 @each $face in $outfitFaces {
-  @font-face {
-    font-family: "#{$face}";
-    src: url("/fonts/#{$face}.woff2") format("woff2");
-    font-display: swap;
-  }
+ @font-face {
+  font-family: "#{$face}";
+  src: url("/fonts/#{$face}.woff2") format("woff2");
+  font-display: swap;
+ }
 }
