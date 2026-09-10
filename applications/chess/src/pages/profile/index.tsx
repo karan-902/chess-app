@@ -6,7 +6,6 @@ import { Pencil, Check, Mail, MapPin } from "lucide-react";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import Card from "@/components/base/Card/Card";
-import Avatar from "@/components/base/Avatar/Avatar";
 import Skeleton from "@/components/base/Skeleton/Skeleton";
 import Button from "@/components/base/Button/Button";
 import Input from "@/components/base/Input/Input";
@@ -19,9 +18,6 @@ import { showToast } from "@/redux/common/common.slice";
 import { useAppTheme } from "@/context/ThemeContext";
 import { callAPIInterface, shortenUsername } from "@/utils";
 import { getAvatarUrl } from "@/utils/avatar";
-import { formatText } from "@/utils/format";
-import { CATEGORY_META } from "@/constants/config";
-import type { GameCategory } from "@/types/types";
 import type {
  ILoginResponse,
  IUpdateProfileBody,
@@ -32,11 +28,6 @@ import type { IEditProfileDrawerProps } from "@/types/components";
 import {
  profileEditButton,
  profileRatingsByCategoryLabel,
- profileStreakWidgetTitle,
- profileStreakWinsSuffix,
- leaderboardRankFallback,
- matchesStatsCurrentStreakLabel,
- matchesStatsBestStreakLabel,
  profileValidationUsernameRequired,
  profileValidationUsernameMinLength,
  profileUpdateSuccess,
@@ -50,13 +41,6 @@ import {
  profileDarkModeLabel,
 } from "@/constants/messages";
 import Modal from "@/components/base/Modal/Modal";
-
-const CATEGORY_ORDER: GameCategory[] = [
- "BULLET",
- "BLITZ",
- "RAPID",
- "CLASSICAL",
-];
 
 const profileEditSchema = Yup.object({
  username: Yup.string()
@@ -259,11 +243,6 @@ export default function Profile() {
     </Button>
 
     <Box customClass="profile-id-row">
-     <Avatar
-      letter={session.username.charAt(0).toUpperCase()}
-      src={getAvatarUrl(session.avatar_seed)}
-      customClass="lg profile-avatar-ring"
-     />
      <Box customClass="profile-info-wrapper">
       <Box customClass="profile-id-text">
        <Text customClass="profile-id-name" truncate>
@@ -315,7 +294,7 @@ export default function Profile() {
                 ))} */}
    </Card>
 
-   <Text component="h3" customClass="rules-heading section-heading">
+   {/* <Text component="h3" customClass="rules-heading section-heading">
     {profileStreakWidgetTitle}
    </Text>
    <Card customClass="matches-stat-list">
@@ -333,7 +312,7 @@ export default function Profile() {
       {session.best_streak} {profileStreakWinsSuffix}
      </Text>
     </Box>
-   </Card>
+   </Card> */}
 
    <EditProfileDrawer
     open={editOpen}
