@@ -170,6 +170,7 @@ export default function DepositModal() {
   }
   setAmountError("");
   setSubmitting(true);
+
   try {
    const res = await paymentRequest(amountUsd);
    setPayment(res);
