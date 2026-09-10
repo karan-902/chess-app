@@ -20,7 +20,7 @@ import Select from "@/components/base/Select/Select";
 import { speedLogo, qrLogo } from "@/components/images";
 import { useWalletActionModal } from "@/context/WalletActionModalContext";
 import { useSocket } from "@/context/SocketContext";
-import { initiateDeposit } from "@/hooks/useWallet";
+import { paymentRequest } from "@/hooks/useWallet";
 import { useModalReady } from "@/hooks/useModalReady";
 import type { IInitiateDepositResponse } from "@/types/utils";
 import type { ITransactionCompletedEvent } from "@/types/types";
@@ -137,10 +137,11 @@ export default function DepositModal() {
  }, [open]);
 
  useEffect(() => {
-  if (stage !== "qr" || !payment?.expires_at) return;
+  if (stage !== "qr" || !payment?.ttl) return;
 
+  const deadline = Date.now() + payment.ttl * 1000;
   const tick = () => {
-   const left = payment.expires_at! - Date.now();
+   const left = deadline - Date.now();
    setRemainingMs(Math.max(0, left));
    if (left <= 0) setExpired(true);
   };
@@ -180,7 +181,7 @@ export default function DepositModal() {
   setAmountError("");
   setSubmitting(true);
   try {
-   const res = await initiateDeposit(amountUsd);
+   const res = await paymentRequest(amountUsd);
    setPayment(res);
    setExpired(false);
    setStage("qr");

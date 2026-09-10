@@ -452,9 +452,6 @@ export const withdrawModalFailed = "Withdrawal failed. Please try again.";
 export const withdrawModalSuccessTitle = "Withdrawal requested";
 export const withdrawModalSuccessDesc =
     "We're processing your withdrawal — it'll arrive shortly.";
-export const withdrawModalPasswordTitle = "Confirm your password";
-export const withdrawModalPasswordDesc = "Enter your password for  withdrawal.";
-export const withdrawModalConfirmButton = "Confirm withdrawal";
 
 export const leaderboardLoadError = "Couldn't load the leaderboard right now.";
 export const leaderboardEmpty = "No ranked players yet.";

@@ -17,14 +17,14 @@ import type {
 
 const PAGE_SIZE = 20;
 
-export const initiateDeposit = (amountUsd: number) =>
+export const paymentRequest = (amountUsd: number) =>
  callAPIInterface<IInitiateDepositBody, IInitiateDepositResponse>(
   "POST",
   "/wallet/payment-request",
   { amount: amountUsd },
  );
 
-export const requestWithdraw = (amountUsd: number, destination: string) =>
+export const withdrawRequest = (amountUsd: number, destination: string) =>
  callAPIInterface<IWithdrawBody, IWithdrawResponse>(
   "POST",
   "/wallet/withdraw",
@@ -45,7 +45,7 @@ export function useWalletBalance() {
   try {
    const res = await callAPIInterface<undefined, IWalletBalanceResponse | null>(
     "GET",
-    "/wallet",
+    "/wallet/balance",
    );
    if (res) dispatch(setWalletBalance(res));
    else dispatch(setWalletLoading(false));
@@ -116,13 +116,9 @@ export function useWallet() {
      : "";
 
    try {
-    const res = await callAPIInterface<
-     ITransactionsFilterBody,
-     ITransactionsResponse | null
-    >(
-     "POST",
-     `/wallet/transactions/filter?limit=${PAGE_SIZE}${cursor}`,
-     requestFilter,
+    const res = await callAPIInterface<undefined, ITransactionsResponse | null>(
+     "GET",
+     `/wallet/transactions?limit=${PAGE_SIZE}${cursor}`,
     );
     if (activeFilterRef.current !== requestFilter) return;
     const data = res?.data ?? [];

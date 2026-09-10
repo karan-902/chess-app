@@ -50,7 +50,7 @@ function dayLabel(ms: number): string {
 
  if (date.isSame(today, "day")) return "Today";
  if (date.isSame(today.subtract(1, "day"), "day")) return "Yesterday";
- return date.format("D MMM YYYY");
+ return date.format("DD/MM/YYYY");
 }
 
 function TransactionFilterDrawer({
