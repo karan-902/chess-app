@@ -16,7 +16,6 @@ import Text from "@/components/base/Text/Text";
 import Button from "@/components/base/Button/Button";
 import Label from "@/components/base/Label/Label";
 import Input from "@/components/base/Input/Input";
-import Select from "@/components/base/Select/Select";
 import { speedLogo, qrLogo } from "@/components/images";
 import { useWalletActionModal } from "@/context/WalletActionModalContext";
 import { useSocket } from "@/context/SocketContext";
@@ -31,8 +30,6 @@ import {
  depositModalHowToLink,
  depositModalSpeedBadge,
  depositModalAmountLabel,
- depositModalBitcoinTab,
- depositModalLightningTab,
  depositModalGenerateButton,
  depositModalStepsTitle,
  depositModalStepsCloseAriaLabel,
@@ -67,13 +64,7 @@ import {
 } from "@/constants/messages";
 import IconButton from "@/components/base/IconButton/IconButton";
 
-type Method = "bitcoin" | "lightning";
 type Stage = "amount" | "qr" | "success";
-
-const METHOD_OPTIONS = [
- { value: "bitcoin", label: depositModalBitcoinTab },
- { value: "lightning", label: depositModalLightningTab },
-];
 
 const STEPS = [
  {
@@ -115,7 +106,6 @@ export default function DepositModal() {
 
  const [stage, setStage] = useState<Stage>("amount");
  const [showSteps, setShowSteps] = useState(false);
- const [method, setMethod] = useState<Method>("bitcoin");
  const [amount, setAmount] = useState("");
  const [amountError, setAmountError] = useState("");
  const [submitting, setSubmitting] = useState(false);
@@ -323,14 +313,6 @@ export default function DepositModal() {
       <Text customClass="deposit-info-text caption">
        {depositModalBtcOnlyWarning}
       </Text>
-     </Box>
-
-     <Box customClass="auth-field">
-      <Select
-       value={method}
-       onChange={(value) => setMethod(value as Method)}
-       options={METHOD_OPTIONS}
-      />
      </Box>
 
      <Text customClass="deposit-scan-hint caption">{depositModalScanHint}</Text>
