@@ -12,7 +12,6 @@ import type {
  IWithdrawResponse,
  IInitiateDepositBody,
  IInitiateDepositResponse,
- WithdrawMethod,
  TransactionType,
 } from "@/types/utils";
 
@@ -22,23 +21,16 @@ export const initiateDeposit = (amountUsd: number) =>
  callAPIInterface<IInitiateDepositBody, IInitiateDepositResponse>(
   "POST",
   "/wallet/payment-request",
-  { amount_usd: amountUsd },
+  { amount: amountUsd },
  );
 
-export const requestWithdraw = (
- amountUsd: number,
- withdrawMethod: WithdrawMethod,
- destination: string,
- password: string,
-) =>
+export const requestWithdraw = (amountUsd: number, destination: string) =>
  callAPIInterface<IWithdrawBody, IWithdrawResponse>(
   "POST",
   "/wallet/withdraw",
   {
-   amount_usd: amountUsd,
-   withdraw_method: withdrawMethod,
+   amount: amountUsd,
    destination,
-   password,
   },
  );
 
