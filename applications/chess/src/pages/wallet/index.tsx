@@ -118,7 +118,7 @@ function TransactionFilterDrawer({
          )}
          onClick={() => toggleType(type)}
         >
-         <TypeIcon size={13} strokeWidth={2.25} />
+         <TypeIcon sx={{ fontSize: 13 }} />
          {TRANSACTION_TYPE_LABELS[type]}
         </Button>
        );
@@ -170,7 +170,7 @@ function txRow(tx: ITransactionResponse) {
    <Box customClass="wallet-tx-row">
     <Box customClass="wallet-tx-info">
      <Box customClass="wallet-tx-icon">
-      <TxIcon size={16} strokeWidth={2} />
+      <TxIcon sx={{ fontSize: 16 }} />
      </Box>
      <Box customClass="wallet-tx-text">
       <Text customClass="row-title">
