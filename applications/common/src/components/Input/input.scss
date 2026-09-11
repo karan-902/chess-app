@@ -64,6 +64,16 @@
 
     &.Mui-focused {
       box-shadow: none;
+      outline: none !important;
+      border: none;
+    }
+  }
+
+  &.wallet-input {
+    &.Mui-focused {
+      outline: none !important;
+      border-color: $appCardBorder;
+      border-radius: $appBtnRadius;
     }
   }
 

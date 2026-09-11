@@ -1,20 +1,26 @@
 import { useEffect, useState } from "react";
 import classNames from "classnames";
 import { CircularProgress } from "@mui/material";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Copy, Check, Info, ArrowLeft, X as XIcon } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import Modal from "@/components/base/Modal/Modal";
+import SuccessCheckmark from "@/components/base/SuccessCheckmark/SuccessCheckmark";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import Button from "@/components/base/Button/Button";
 import Label from "@/components/base/Label/Label";
 import Input from "@/components/base/Input/Input";
-import { speedLogo, qrLogo } from "@/components/images";
+import {
+ speedLogo,
+ qrLogo,
+ walletSuccessLottie,
+ walletTickLottie,
+} from "@/components/images";
 import { useWalletActionModal } from "@/context/WalletActionModalContext";
 import { useSocket } from "@/context/SocketContext";
 import { paymentRequest } from "@/hooks/useWallet";
 import { useModalReady } from "@/hooks/useModalReady";
+import { formatAmount } from "@/utils/format";
 import type { IInitiateDepositResponse } from "@/types/utils";
 import type { ITransactionCompletedEvent } from "@/types/types";
 import {
@@ -49,8 +55,6 @@ import {
  depositModalExpiresIn,
  depositModalExpired,
  depositModalPaymentReceived,
- depositModalPaymentReceivedDesc,
- depositModalCloseLink,
  authLoginBack,
  walletWithdrawableCaveat,
  MAX_AMOUNT_DIGITS,
@@ -146,6 +150,12 @@ export default function DepositModal() {
   };
  }, [stage, socket]);
 
+ useEffect(() => {
+  if (stage !== "success") return;
+  const timer = setTimeout(close, 2800);
+  return () => clearTimeout(timer);
+ }, [stage, close]);
+
  const amountUsd = Number(amount);
  const isAmountInvalid =
   !amount ||
@@ -187,7 +197,16 @@ export default function DepositModal() {
  };
 
  return (
-  <Modal open={open} onClose={close} customClass="wallet-modal">
+  <Modal
+   open={open}
+   onClose={close}
+   hideCloseIcon={stage === "success"}
+   disableRestoreFocus={stage === "success"}
+   customClass={classNames(
+    "wallet-modal",
+    stage === "success" && "wallet-modal-success",
+   )}
+  >
    {!ready && (
     <Box customClass="modal-loader">
      <CircularProgress size={28} />
@@ -356,22 +375,20 @@ export default function DepositModal() {
    {ready && stage === "success" && (
     <Box customClass="deposit-success-stage">
      <Box customClass="deposit-success-icon">
-      <CheckCircleIcon className="success-icon" />
+      <SuccessCheckmark
+       confettiLottieSrc={walletSuccessLottie}
+       tickLottieSrc={walletTickLottie}
+      />
      </Box>
-     <Text customClass="deposit-heading value-heading">
-      {depositModalPaymentReceived}
-     </Text>
-     <Text customClass="deposit-tagline meta-text">
-      {depositModalPaymentReceivedDesc}
-     </Text>
-     <Button
-      fullWidth
-      variant="contained"
-      customClass="deposit-generate-btn"
-      onClick={close}
-     >
-      {depositModalCloseLink}
-     </Button>
+     <Box customClass="deposit-success-amountWrapper">
+      {" "}
+      <Text customClass="deposit-success-amount">
+       {formatAmount(amountUsd)}
+      </Text>
+      <Text customClass="deposit-heading value-heading">
+       {depositModalPaymentReceived}
+      </Text>
+     </Box>
     </Box>
    )}
   </Modal>

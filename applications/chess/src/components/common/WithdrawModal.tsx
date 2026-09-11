@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import classNames from "classnames";
 import { CircularProgress } from "@mui/material";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useReduxDispatch } from "@/redux/hooks";
 import { showToast } from "@/redux/common/common.slice";
 import Box from "@/components/base/Box/Box";
+import SuccessCheckmark from "@/components/base/SuccessCheckmark/SuccessCheckmark";
+import { walletSuccessLottie, walletTickLottie } from "@/components/images";
 import Text from "@/components/base/Text/Text";
 import Button from "@/components/base/Button/Button";
 import Label from "@/components/base/Label/Label";
@@ -29,9 +31,7 @@ import {
  withdrawModalInvalidDestination,
  withdrawModalFailed,
  withdrawModalSuccessTitle,
- withdrawModalSuccessDesc,
  walletPageWithdrawableLabel,
- depositModalCloseLink,
  depositModalAmountLabel,
  MIN_TRANSACTION_USD,
 } from "@/constants/messages";
@@ -39,6 +39,7 @@ import Modal from "@/components/base/Modal/Modal";
 
 type Stage = "amount" | "success";
 const MAX_AMOUNT_DIGITS = 4;
+
 export default function WithdrawModal() {
  const dispatch = useReduxDispatch();
  const { openModal, close } = useWalletActionModal();
@@ -67,6 +68,12 @@ export default function WithdrawModal() {
   if (!open) return;
   refetch();
  }, [open, refetch]);
+
+ useEffect(() => {
+  if (stage !== "success") return;
+  const timer = setTimeout(close, 2800);
+  return () => clearTimeout(timer);
+ }, [stage, close]);
 
  const hasWithdrawable = withdrawableUsd > 0;
  const amountUsd = parseFloat(amount) || 0;
@@ -124,7 +131,16 @@ export default function WithdrawModal() {
  };
 
  return (
-  <Modal open={open} onClose={close} customClass="wallet-modal">
+  <Modal
+   open={open}
+   onClose={close}
+   hideCloseIcon={stage === "success"}
+   disableRestoreFocus={stage === "success"}
+   customClass={classNames(
+    "wallet-modal",
+    stage === "success" && "wallet-modal-success",
+   )}
+  >
    {!ready && (
     <Box customClass="modal-loader">
      <CircularProgress size={28} />
@@ -187,6 +203,7 @@ export default function WithdrawModal() {
        id="withdraw-destination"
        type="text"
        fullWidth
+       customClass="wallet-input"
        placeholder={withdrawModalDestinationPlaceholder}
        value={destination}
        onChange={(e) => setDestination(e.target.value)}
@@ -211,22 +228,19 @@ export default function WithdrawModal() {
    {ready && stage === "success" && (
     <Box customClass="deposit-success-stage">
      <Box customClass="deposit-success-icon">
-      <CheckCircleIcon className="success-icon" />
+      <SuccessCheckmark
+       confettiLottieSrc={walletSuccessLottie}
+       tickLottieSrc={walletTickLottie}
+      />
      </Box>
-     <Text customClass="deposit-heading value-heading">
-      {withdrawModalSuccessTitle}
-     </Text>
-     <Text customClass="deposit-tagline meta-text">
-      {withdrawModalSuccessDesc}
-     </Text>
-     <Button
-      fullWidth
-      variant="contained"
-      customClass="deposit-generate-btn"
-      onClick={close}
-     >
-      {depositModalCloseLink}
-     </Button>
+     <Box customClass="deposit-sucess-amountWrapper">
+      <Text customClass="deposit-success-amount">
+       {formatAmount(amountUsd)}
+      </Text>
+      <Text customClass="deposit-heading value-heading">
+       {withdrawModalSuccessTitle}
+      </Text>
+     </Box>
     </Box>
    )}
   </Modal>
