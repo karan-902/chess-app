@@ -211,7 +211,7 @@ export default function WithdrawModal() {
    {ready && stage === "success" && (
     <Box customClass="deposit-success-stage">
      <Box customClass="deposit-success-icon">
-      <CheckCircleIcon />
+      <CheckCircleIcon className="success-icon" />
      </Box>
      <Text customClass="deposit-heading value-heading">
       {withdrawModalSuccessTitle}

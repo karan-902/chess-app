@@ -687,6 +687,10 @@
   border-radius: 50%;
   background: alpha($greenishTeal, 0.1);
   color: $greenishTeal;
+  .success-icon{
+    width: 4rem !important;
+    height: 4rem !important;
+  }
  }
 
  &.deposit-qr-header {
