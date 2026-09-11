@@ -1,14 +1,8 @@
 import { useEffect, useState } from "react";
 import classNames from "classnames";
 import { CircularProgress } from "@mui/material";
-import {
- Copy,
- Check,
- CheckCircle2,
- Info,
- ArrowLeft,
- X as XIcon,
-} from "lucide-react";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { Copy, Check, Info, ArrowLeft, X as XIcon } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import Modal from "@/components/base/Modal/Modal";
 import Box from "@/components/base/Box/Box";
@@ -361,7 +355,7 @@ export default function DepositModal() {
    {ready && stage === "success" && (
     <Box customClass="deposit-success-stage">
      <Box customClass="deposit-success-icon">
-      <CheckCircle2 size={32} strokeWidth={2} />
+      <CheckCircleIcon />
      </Box>
      <Text customClass="deposit-heading value-heading">
       {depositModalPaymentReceived}
