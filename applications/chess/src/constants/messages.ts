@@ -386,7 +386,6 @@ export const depositModalHowToLink = "How to deposit crypto?";
 export const depositModalSpeedBadge = "Buy crypto instantly with";
 export const depositModalAmountLabel = "Enter Amount";
 export const depositModalGenerateButton = "Generate QR Code";
-export const depositModalCloseLink = "Close";
 export const depositModalStepsTitle = "Follow the steps";
 export const depositModalStepsCloseAriaLabel = "Close steps";
 export const depositModalStep1Title = "Select Cryptocurrency";
@@ -423,7 +422,6 @@ export const depositModalExpired =
  "This QR has expired — go back and generate a new one.";
 export const depositModalPaymentReceived = "Payment received!";
 
-
 export const withdrawModalTitle = "Withdraw";
 export const withdrawModalWithdrawableCaveat =
  "Funds from settled games only — active stakes aren't withdrawable yet.";
@@ -446,9 +444,7 @@ export const withdrawModalMinAmountError = (min: number) =>
 export const withdrawModalExceedsBalance = "Insufficient withdrawable balance";
 export const withdrawModalInvalidDestination = "Enter a destination address";
 export const withdrawModalFailed = "Withdrawal failed. Please try again.";
-export const withdrawModalSuccessTitle = "Withdrawal requested";
-export const withdrawModalSuccessDesc =
- "We're processing your withdrawal — it'll arrive shortly.";
+export const withdrawModalSuccessTitle = "Withdrawal completed";
 
 export const leaderboardLoadError = "Couldn't load the leaderboard right now.";
 export const leaderboardEmpty = "No ranked players yet.";
