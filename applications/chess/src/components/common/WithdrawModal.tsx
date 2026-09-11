@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import classNames from "classnames";
 import { CircularProgress } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useReduxDispatch } from "@/redux/hooks";
@@ -124,7 +125,11 @@ export default function WithdrawModal() {
  };
 
  return (
-  <Modal open={open} onClose={close} customClass="wallet-modal">
+  <Modal
+   open={open}
+   onClose={close}
+   customClass={classNames("wallet-modal", stage === "success" && "wallet-modal-success")}
+  >
    {!ready && (
     <Box customClass="modal-loader">
      <CircularProgress size={28} />

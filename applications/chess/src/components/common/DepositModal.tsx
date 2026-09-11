@@ -49,7 +49,6 @@ import {
  depositModalExpiresIn,
  depositModalExpired,
  depositModalPaymentReceived,
- depositModalPaymentReceivedDesc,
  depositModalCloseLink,
  authLoginBack,
  walletWithdrawableCaveat,
@@ -187,7 +186,14 @@ export default function DepositModal() {
  };
 
  return (
-  <Modal open={open} onClose={close} customClass="wallet-modal">
+  <Modal
+   open={open}
+   onClose={close}
+   customClass={classNames(
+    "wallet-modal",
+    stage === "success" && "wallet-modal-success",
+   )}
+  >
    {!ready && (
     <Box customClass="modal-loader">
      <CircularProgress size={28} />
@@ -361,9 +367,7 @@ export default function DepositModal() {
      <Text customClass="deposit-heading value-heading">
       {depositModalPaymentReceived}
      </Text>
-     <Text customClass="deposit-tagline meta-text">
-      {depositModalPaymentReceivedDesc}
-     </Text>
+
      <Button
       fullWidth
       variant="contained"
