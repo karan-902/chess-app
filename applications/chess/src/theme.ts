@@ -29,12 +29,6 @@ import {
 } from "@/constants/colors";
 import type { ThemeMode } from "@/context/ThemeContext";
 
-/* Shared numeric style — odds, BTC amounts, payouts, wallet balances. Outfit + tabular figures, never a mono font. */
-export const numeric = {
- fontVariantNumeric: "tabular-nums",
- fontFeatureSettings: '"tnum"',
-} as const;
-
 const fontFamily = '"Outfit-Regular", system-ui, sans-serif';
 
 export function getMuiTheme(mode: ThemeMode) {

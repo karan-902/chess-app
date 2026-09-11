@@ -134,12 +134,6 @@
  @return color-mix(in srgb, #{$color} #{$opacity * 100%}, transparent);
 }
 
-/* Odds, BTC amounts, payouts, wallet balances — Outfit with tabular figures (no mono font). */
-@mixin numeric {
- font-variant-numeric: tabular-nums;
- font-feature-settings: "tnum";
-}
-
 $paleRed: var(--pale-red);
 $brinkPink: var(--brink-pink);
 $greenishTeal: var(--greenish-teal);

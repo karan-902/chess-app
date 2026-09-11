@@ -268,6 +268,7 @@ export default function DepositModal() {
      </Box>
 
      <Button
+      type="submit"
       fullWidth
       variant="contained"
       customClass="deposit-generate-btn"
@@ -355,7 +356,7 @@ export default function DepositModal() {
    {ready && stage === "success" && (
     <Box customClass="deposit-success-stage">
      <Box customClass="deposit-success-icon">
-      <CheckCircleIcon />
+      <CheckCircleIcon className="success-icon" />
      </Box>
      <Text customClass="deposit-heading value-heading">
       {depositModalPaymentReceived}

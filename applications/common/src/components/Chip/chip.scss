@@ -15,10 +15,6 @@
   color: $appText;
  }
 
- .MuiChip-label {
-  font-variant-numeric: tabular-nums;
- }
-
  &.gr-move-chip {
   background: transparent;
   border: none;
@@ -81,7 +77,7 @@
    letter-spacing: 0.02em;
    line-height: normal;
    text-align: center;
-   color: $gold;
+   color: $appText;
   }
  }
 }
