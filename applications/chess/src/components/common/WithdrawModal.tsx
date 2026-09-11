@@ -195,6 +195,7 @@ export default function WithdrawModal() {
      </Box>
 
      <Button
+      type="submit"
       fullWidth
       variant="contained"
       customClass="deposit-generate-btn"

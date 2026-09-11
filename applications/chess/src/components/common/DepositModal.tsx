@@ -268,6 +268,7 @@ export default function DepositModal() {
      </Box>
 
      <Button
+      type="submit"
       fullWidth
       variant="contained"
       customClass="deposit-generate-btn"
