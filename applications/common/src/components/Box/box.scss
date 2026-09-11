@@ -1,976 +1,975 @@
 @use "default.scss" as *;
 
 .box {
-    &.gr-elo-wrapper {
-        display: flex;
-        gap: 8px;
-    }
-    &.auth-page {
-        display: flex;
-        flex-direction: column;
-        height: 100dvh;
-        overflow-y: auto;
-        padding: 2.5rem 1.5rem;
-        gap: 1.75rem;
-    }
-
-    &.auth-brand {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    &.auth-heading {
-        display: flex;
-        flex-direction: column;
-        gap: 0.35rem;
-    }
-
-    &.powered-by-badge {
-        display: none;
-        align-items: center;
-        justify-content: center;
-        gap: 0.4rem;
-        margin-bottom: 1rem;
-        color: alpha($appText, 0.4);
-        font-size: $font12;
-
-        span {
-            color: inherit;
-            font-size: inherit;
-            line-height: 1;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-        }
-    }
-
-    &.auth-form {
-        display: flex;
-        flex-direction: column;
-        gap: 1.25rem;
-    }
-    &.hero-input-wrapper {
-        align-items: center;
-    }
-    &.auth-field {
-        display: flex;
-
-        flex-direction: column;
-        gap: 0.4rem;
-    }
-
-    &.auth-actions {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        margin-top: 0.25rem;
-    }
-
-    &.auth-field-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    &.live-ring-wrap {
-        position: relative;
-        width: 0.5rem;
-        height: 0.5rem;
-        flex-shrink: 0;
-
-        &.searching-ring {
-            width: 4.25rem;
-            height: 4.25rem;
-            margin-bottom: 0.4rem;
-        }
-    }
-
-    &.searching-logo {
-        position: absolute;
-        inset: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    &.otp-heading {
-        display: flex;
-        flex-direction: column;
-        gap: 0.35rem;
-    }
-
-    &.auth-divider {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        color: alpha($appText, 0.35);
-        font-family: $fontMono;
-        font-size: $font12;
-        text-transform: uppercase;
-
-        &::before,
-        &::after {
-            content: "";
-            flex: 1;
-            height: 1px;
-            background: $appCardBorder;
-        }
-    }
-
-    &.play-page {
-        display: flex;
-        flex-direction: column;
-        min-height: 100%;
-        padding: 1.1rem;
-    }
-
-    &.play-body {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        min-height: 0;
-    }
-
-    &.board-wrap {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 1.1rem;
-    }
-
-    &.cta-bottom {
-        padding-top: 1.1rem;
-        display: flex;
-        justify-content: center;
-    }
-
-    &.stake-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        // padding: 20px;
-        gap: 0.7rem;
-    }
-
-    &.pool-meta {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: flex-start;
-        text-align: left;
-        gap: 0.15rem 0.25rem;
-    }
-
-    &.matchmaking-searching {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        gap: 0.6rem;
-        padding: 2rem 1rem 1rem;
-
-        &.practice-options {
-            padding: 0.25rem 0 0;
-        }
-    }
-
-    &.searching-details {
-        display: flex;
-        gap: 1.5rem;
-        margin: 0.4rem 0 1rem;
-    }
-
-    &.pool-confirm-actions {
-        display: flex;
-        flex-direction: column;
-        gap: 0.6rem;
-        width: 100%;
-        margin-top: 0.6rem;
-    }
-
-    &.searching-detail-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.15rem;
-    }
-
-    &.matches-page {
-        display: flex;
-        flex-direction: column;
-        min-height: 100%;
-        gap: 1rem;
-        padding: 1.1rem 0.7rem;
-    }
-
-    &.segment {
-        position: relative;
-        display: flex;
-        width: 100%;
-        gap: 0.35rem;
-        background: $appSurface;
-        border: 1px solid $appCardBorder;
-        border-radius: 0.7rem;
-        padding: 0.3rem;
-
-        &.compact {
-            margin-bottom: 0.5rem;
-        }
-
-        &.category-select {
-            gap: 0.25rem;
-            padding: 0.25rem;
-
-            @media (min-width: 768px) {
-                gap: 0.35rem;
-                padding: 0.3rem;
-            }
-        }
-    }
-
-    &.segment-thumb {
-        position: absolute;
-        top: 0.2rem;
-        bottom: 0.2rem;
-        left: 0;
-        border-radius: 0.5rem;
-        background: $gold;
-        transition:
-            transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
-            width 0.28s cubic-bezier(0.16, 1, 0.3, 1);
-        z-index: 0;
-    }
-
-    &.matches-empty {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        gap: 0.85rem;
-        padding: 2.25rem 1rem;
-    }
-
-    &.matches-stats-head {
-        text-align: center;
-        margin-bottom: 1.1rem;
-    }
-
-    &.matches-stat-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 0.5rem;
-        padding: 0.75rem 0.85rem;
-        border-bottom: 1px solid $appLine;
-
-        &:last-child {
-            border-bottom: none;
-        }
-    }
-
-    &.room-field {
-        display: flex;
-        flex-direction: column;
-        gap: 0.4rem;
-
-        &.room-stake-field,
-        &.room-duration-field {
-            align-items: center;
-            padding: 1.1rem 1rem;
-            border: 1px solid $appCardBorder;
-            border-radius: 0.85rem;
-            background: $appSurface;
-        }
-
-        &.room-stake-field {
-            gap: 0.25rem;
-        }
-
-        &.room-duration-field {
-            gap: 0.5rem;
-        }
-    }
-
-    &.room-stake-nav {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-    }
-
-    &.room-duration-nav {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-        padding-bottom: 0.7rem;
-        margin-bottom: 0.2rem;
-        border-bottom: 1px solid $appLine;
-    }
-
-    &.room-duration-nav-spacer {
-        width: 2rem;
-        flex-shrink: 0;
-    }
-
-    &.room-summary-row {
-        display: flex;
-        flex: 1;
-        align-items: center;
-        justify-content: center;
-        gap: 0.6rem;
-    }
-
-    &.create-room-button-wrap {
-        position: relative;
-    }
-
-    &.room-field-head {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    &.duration-wheel {
-        position: relative;
-        width: 100%;
-        align-self: stretch;
-        height: 8.4rem;
-        border-radius: 0.85rem;
-        overflow: hidden;
-    }
-
-    &.duration-wheel-highlight {
-        position: absolute;
-        top: 50%;
-        left: 0;
-        right: 0;
-        height: 2.8rem;
-        transform: translateY(-50%);
-        border: 1px solid $appCardBorder;
-        border-radius: 0.6rem;
-        background: $appSecondary;
-        pointer-events: none;
-        z-index: 0;
-    }
-
-    &.duration-wheel-list {
-        position: relative;
-        z-index: 1;
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        overflow-y: auto;
-        scroll-snap-type: y mandatory;
-        scrollbar-width: none;
-
-        &::-webkit-scrollbar {
-            display: none;
-        }
-    }
-
-    &.duration-wheel-pad {
-        height: 2.8rem;
-        flex-shrink: 0;
-    }
-
-    &.leaderboard-page {
-        padding: 1.1rem;
-    }
-
-    &.rules-page {
-        padding: 1.1rem;
-    }
-
-    &.wallet-page {
-        display: flex;
-        flex-direction: column;
-        min-height: 100%;
-        padding: 1.1rem;
-    }
-
-    &.profile-page {
-        padding: 1.1rem;
-    }
-
-    &.profile-id-row {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-    }
-
-    &.profile-id-text {
-        display: flex;
-        flex-direction: column;
-        min-width: 0;
-    }
-
-    &.profile-meta-row {
-        display: flex;
-        align-items: center;
-        gap: 0.4rem;
-        min-width: 0;
-
-        svg {
-            flex-shrink: 0;
-            color: $appTextMuted;
-        }
-    }
-
-    &.profile-avatar-picker-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, 3.25rem);
-        justify-content: space-between;
-        gap: 0.7rem;
-        margin-bottom: 1.4rem;
-    }
-
-    &.profile-avatar-selected-tick {
-        position: absolute;
-        top: -0.15rem;
-        right: -0.15rem;
-        width: 1.1rem;
-        height: 1.1rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 50%;
-        background: $greenishTeal;
-        border: 1.5px solid $appBg;
-        color: $appBg;
-    }
-
-    &.edit-profile-form {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-    }
-
-    &.wallet-split {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 0.6rem;
-        margin-bottom: 0.8rem;
-    }
-
-    &.wallet-split-block {
-        border: 1px solid $appCardBorder;
-        border-radius: $appCardRadius;
-        padding: 0.9rem 0.85rem;
-    }
-    &.accent {
-        background: alpha($gold, 0.12);
-        border: 1px solid $gold;
-    }
-
-    &.wallet-btn-row {
-        display: flex;
-        gap: 0.5rem;
-        margin-bottom: 1.4rem;
-    }
-
-    &.wallet-tx-title-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 0.6rem;
-    }
-
-    &.tx-filter-chip-grid {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-
-        &.room-stake-chips {
-            justify-content: center;
-        }
-    }
-
-    &.tx-filter-date-row {
-        display: flex;
-        gap: 0.6rem;
-
-        .auth-field {
-            flex: 1;
-        }
-    }
-
-    &.tx-filter-sheet-content {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-    }
-
-    &.wallet-timeline {
-        overflow: visible;
-    }
-
-    &.wallet-tx-item {
-        padding: 0.75rem 0;
-        border-bottom: 1px solid $appLine;
-    }
-
-    &.wallet-tx-info {
-        display: flex;
-        align-items: center;
-        gap: 0.6rem;
-        min-width: 0;
-    }
-
-    &.wallet-tx-icon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 2.5rem;
-        height: 2.5rem;
-        flex-shrink: 0;
-        border-radius: 50%;
-        background: alpha($appText, 0.05);
-        border: 1px solid alpha($appText, 0.1);
-        color: alpha($appText, 0.5);
-
-        .wallet-tx-item.neg & {
-            background: alpha($paleRed, 0.1);
-            border-color: alpha($paleRed, 0.25);
-            color: $brinkPink;
-        }
-
-        .wallet-tx-item:not(.neg) & {
-            background: alpha($greenishTeal, 0.1);
-            border-color: alpha($greenishTeal, 0.25);
-            color: $greenishTeal;
-        }
-    }
-
-    &.wallet-tx-text {
-        min-width: 0;
-    }
-
-    &.room-options {
-        align-items: normal;
-    }
-    &.match-row-item {
-        padding-bottom: 0.5rem;
-    }
-    &.match-row {
-        display: flex;
-
-        height: 100%;
-        align-items: center;
-        justify-content: space-between;
-        gap: 0.6rem;
-        padding: 0.9rem 0.9rem;
-        background: $appSurface;
-        border: 1px solid $appCardBorder;
-        border-left: 1px solid $appCardBorder;
-        border-radius: 0.6rem;
-
-        &.system {
-            background: transparent;
-        }
-
-        &.win .match-row-amt {
-            color: $greenishTeal;
-        }
-
-        &.loss .match-row-amt {
-            color: $paleRed;
-        }
-
-        &.draw .match-row-amt {
-            font-family: $fontOutfitExtraBold;
-            color: $appTextMuted;
-        }
-    }
-
-    &.match-row-info {
-        display: flex;
-        align-items: center;
-        gap: 0.6rem;
-        min-width: 0;
-    }
-
-    &.match-row-text {
-        min-width: 0;
-    }
-
-    &.profile-info-wrapper {
-        display: flex;
-        flex-direction: column;
-        gap: 0.32rem;
-        min-width: 0;
-    }
-    &.match-row-icon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 2.5rem;
-        height: 2.5rem;
-        flex-shrink: 0;
-        border-radius: 0.45rem;
-        background: alpha($appText, 0.05);
-        border: 1px solid alpha($appText, 0.1);
-        color: alpha($appText, 0.5);
-        .match-row-svg {
-            width: 14px !important;
-            height: 14px !important;
-            @media screen and (min-width: 400px) {
-                width: 18px !important;
-                height: 18px !important;
-            }
-        }
-        .match-row.win & {
-            background: alpha($greenishTeal, 0.1);
-            border-color: alpha($greenishTeal, 0.25);
-            color: $greenishTeal;
-        }
-
-        .match-row.loss & {
-            background: alpha($paleRed, 0.1);
-            border-color: alpha($paleRed, 0.25);
-            color: $brinkPink;
-        }
-    }
-
-    &.match-row-amt-row {
-        display: flex;
-        align-items: baseline;
-        gap: 0.3rem;
-    }
-
-    &.match-row-amt-wrap {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        flex-shrink: 0;
-    }
-
-    &.wallet-tx-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 0.6rem;
-    }
-
-    &.deposit-amount-stage,
-    &.deposit-qr-stage,
-    &.deposit-success-stage,
-    &.deposit-steps {
-        display: flex;
-        flex-direction: column;
-    }
-    &.deposit-amount-stage {
-        gap: 12px;
-    }
-    &.modal-loader {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 21rem;
-    }
-
-    &.deposit-qr-stage {
-        position: relative;
-    }
-
-    &.deposit-success-stage {
-        text-align: center;
-        padding: 1rem 0;
-    }
-
-    &.deposit-success-icon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 3.5rem;
-        height: 3.5rem;
-        margin: 0 auto 1rem;
-        border-radius: 50%;
-        background: alpha($greenishTeal, 0.1);
-        color: $greenishTeal;
-    }
-
-    &.deposit-qr-header {
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 0.9rem;
-    }
-
-    &.deposit-info-box {
-        display: flex;
-        align-items: flex-start;
-        gap: 0.5rem;
-        background: $appSurface;
-        border: 1px solid $appBtnBorder;
-        border-radius: $appBtnRadius;
-        padding: 0.5rem 0.5rem;
-        margin-bottom: 0.9rem;
-        color: $appTextMuted;
-
-        svg {
-            flex-shrink: 0;
-            margin-top: 0.1rem;
-        }
-    }
-
-    &.withdraw-available {
-        text-align: center;
-        background: $appSurface;
-        border: 1px solid $appCardBorder;
-        border-radius: $appBtnRadius;
-        padding: 0.9rem 0.8rem;
-        margin: 0.9rem 0 1.2rem;
-    }
-    &.deposit-speed-wrapper {
-        display: flex;
-        flex-direction: column;
-    }
-    &.deposit-speed-badge {
-        display: flex;
-        align-items: center;
-        gap: 0.35rem;
-        font-size: $font16;
-        color: $gold;
-        margin-top: 0.3rem;
-
-        span {
-            color: inherit;
-            font-size: inherit;
-        }
-    }
-
-    &.deposit-qr-wrap {
-        align-self: center;
-        padding: 0.75rem;
-        border-radius: 0.625rem;
-        margin: 0.9rem 0;
-    }
-
-    &.deposit-address-row {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        border: 1px solid $appCardBorder;
-        border-radius: $appBtnRadius;
-        padding: 0.5rem 0.6rem;
-        margin-bottom: 0.7rem;
-    }
-
-    &.deposit-steps-head {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 0.9rem;
-    }
-
-    &.deposit-step {
-        margin-bottom: 0.9rem;
-
-        &:last-child {
-            margin-bottom: 0;
-        }
-    }
-    &.flex {
-        display: flex;
-    }
-    &.items-center {
-        align-items: center;
-    }
-    &.game-room {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        padding: 1.5rem 1.3rem 1.1rem;
-        background: $appBg;
-        overflow-y: auto;
-    }
-
-    &.gr-secondary {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        gap: 0.6rem;
-        height: 100%;
-        padding: 1.5rem;
-    }
-
-    &.gr-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0.6rem 0.75rem;
-        border: 1px solid transparent;
-        border-radius: 0.85rem;
-        flex-shrink: 0;
-        transition:
-            border-color 0.25s ease,
-            background-color 0.25s ease;
-
-        &.opp {
-            margin-bottom: $font12;
-        }
-
-        &.me {
-            margin-top: $font12;
-        }
-
-        &.active {
-            border-color: $gold;
-            background: alpha($gold, 0.06);
-        }
-    }
-
-    &.gr-meta {
-        min-width: 0;
-        flex: 1 1 auto;
-    }
-
-    &.gr-board-wrap {
-        position: relative;
-        display: flex;
-        justify-content: center;
-        flex-shrink: 0;
-        width: min(100%, 48svh);
-        margin: 0 auto;
-    }
-
-    &.gr-promotion-overlay {
-        position: absolute;
-        inset: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: rgba(16, 15, 12, 0.82);
-        backdrop-filter: blur(4px);
-        z-index: 3;
-    }
-
-    &.gr-promotion-card {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.7rem;
-        padding: 1.1rem 1.2rem;
-        background: $appSurface;
-        border: 1px solid $appCardBorder;
-        border-radius: 1rem;
-        box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
-    }
-
-    &.gr-promotion-options {
-        display: flex;
-        gap: 0.55rem;
-    }
-
-    &.gr-captured {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 0.3rem;
-        margin-top: 0.4rem;
-    }
-
-    &.gr-draw-banner {
-        display: flex;
-        align-items: center;
-        gap: 0.6rem;
-        margin-top: 0.9rem;
-        padding: 0.6rem 0.8rem;
-        background: $appSurface;
-        border: 1px solid $appCardBorder;
-        border-radius: $appBtnRadius;
-    }
-
-    &.gr-review-controls {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 0.5rem;
-        margin-top: 1.1rem;
-        flex-shrink: 0;
-    }
-
-    &.gr-moves {
-        margin-top: 0.5rem;
-        padding-top: 0.9rem;
-        border-top: 1px solid $appLine;
-        height: 6rem;
-        flex-shrink: 0;
-        overflow-y: auto;
-
-        &::-webkit-scrollbar {
-            display: none;
-        }
-    }
-
-    &.gr-move-strip {
-        display: flex;
-        align-items: center;
-        flex: 1 1 auto;
-        min-width: 0;
-        overflow-x: auto;
-        white-space: nowrap;
-
-        &::-webkit-scrollbar {
-            display: none;
-        }
-    }
-
-    &.gr-move-pair {
-        display: flex;
-        align-items: center;
-        flex-shrink: 0;
-        margin-right: 0.6rem;
-    }
-
-    &.gr-foot {
-        display: flex;
-        justify-content: center;
-        gap: 0.75rem;
-        margin-top: auto;
-        padding-top: 1.2rem;
-        flex-shrink: 0;
-    }
-
-    &.gr-resign-actions {
-        display: flex;
-        gap: 1.5rem;
-        margin-top: 0.875rem;
-    }
-
-    &.gr-overlay {
-        position: absolute;
-        inset: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 0.7rem;
-        text-align: center;
-        padding: 2rem;
-        background: alpha($appBg, 0.94);
-        backdrop-filter: blur(3px);
-        z-index: 5;
-    }
-
-    &.gr-settlement {
-        display: flex;
-        gap: 1.5rem;
-        margin: 0.3rem 0;
-    }
-
-    &.gr-settlement-item {
-        text-align: center;
-    }
-
-    &.gr-overlay-actions {
-        display: flex;
-        gap: 0.6rem;
-        width: 100%;
-        max-width: 220px;
-        margin-top: 0.4rem;
-    }
+ &.gr-elo-wrapper {
+  display: flex;
+  gap: 8px;
+ }
+ &.auth-page {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow-y: auto;
+  padding: 2.5rem 1.5rem;
+  gap: 1.75rem;
+ }
+
+ &.auth-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+ }
+
+ &.auth-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+ }
+
+ &.powered-by-badge {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+  color: alpha($appText, 0.4);
+  font-size: $font12;
+
+  span {
+   color: inherit;
+   font-size: inherit;
+   line-height: 1;
+   text-transform: uppercase;
+   letter-spacing: 0.04em;
+  }
+ }
+
+ &.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+ }
+ &.hero-input-wrapper {
+  align-items: center;
+ }
+ &.auth-field {
+  display: flex;
+
+  flex-direction: column;
+  gap: 0.4rem;
+ }
+
+ &.auth-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 0.25rem;
+ }
+
+ &.auth-field-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+ }
+
+ &.live-ring-wrap {
+  position: relative;
+  width: 0.5rem;
+  height: 0.5rem;
+  flex-shrink: 0;
+
+  &.searching-ring {
+   width: 4.25rem;
+   height: 4.25rem;
+   margin-bottom: 0.4rem;
+  }
+ }
+
+ &.searching-logo {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+ }
+
+ &.otp-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+ }
+
+ &.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: alpha($appText, 0.35);
+  font-family: $fontMono;
+  font-size: $font12;
+  text-transform: uppercase;
+
+  &::before,
+  &::after {
+   content: "";
+   flex: 1;
+   height: 1px;
+   background: $appCardBorder;
+  }
+ }
+
+ &.play-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding: 1.1rem;
+ }
+
+ &.play-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
+ }
+
+ &.board-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.1rem;
+ }
+
+ &.cta-bottom {
+  padding-top: 1.1rem;
+  display: flex;
+  justify-content: center;
+ }
+
+ &.stake-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  // padding: 20px;
+  gap: 0.7rem;
+ }
+
+ &.pool-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: left;
+  gap: 0.15rem 0.25rem;
+ }
+
+ &.matchmaking-searching {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.6rem;
+  padding: 2rem 1rem 1rem;
+
+  &.practice-options {
+   padding: 0.25rem 0 0;
+  }
+ }
+
+ &.searching-details {
+  display: flex;
+  gap: 1.5rem;
+  margin: 0.4rem 0 1rem;
+ }
+
+ &.pool-confirm-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  width: 100%;
+  margin-top: 0.6rem;
+ }
+
+ &.searching-detail-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+ }
+
+ &.matches-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  gap: 1rem;
+  padding: 1.1rem 0.7rem;
+ }
+
+ &.segment {
+  position: relative;
+  display: flex;
+  width: 100%;
+  gap: 0.35rem;
+  background: $appSurface;
+  border: 1px solid $appCardBorder;
+  border-radius: 0.7rem;
+  padding: 0.3rem;
+
+  &.compact {
+   margin-bottom: 0.5rem;
+  }
+
+  &.category-select {
+   gap: 0.25rem;
+   padding: 0.25rem;
+
+   @media (min-width: 768px) {
+    gap: 0.35rem;
+    padding: 0.3rem;
+   }
+  }
+ }
+
+ &.segment-thumb {
+  position: absolute;
+  top: 0.2rem;
+  bottom: 0.2rem;
+  left: 0;
+  border-radius: 0.5rem;
+  background: $gold;
+  transition:
+   transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+   width 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 0;
+ }
+
+ &.matches-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.85rem;
+  padding: 2.25rem 1rem;
+ }
+
+ &.matches-stats-head {
+  text-align: center;
+  margin-bottom: 1.1rem;
+ }
+
+ &.matches-stat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.75rem 0.85rem;
+  border-bottom: 1px solid $appLine;
+
+  &:last-child {
+   border-bottom: none;
+  }
+ }
+
+ &.room-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+
+  &.room-stake-field,
+  &.room-duration-field {
+   align-items: center;
+   padding: 1.1rem 1rem;
+   border: 1px solid $appCardBorder;
+   border-radius: 0.85rem;
+   background: $appSurface;
+  }
+
+  &.room-stake-field {
+   gap: 0.25rem;
+  }
+
+  &.room-duration-field {
+   gap: 0.5rem;
+  }
+ }
+
+ &.room-stake-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+ }
+
+ &.room-duration-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding-bottom: 0.7rem;
+  margin-bottom: 0.2rem;
+  border-bottom: 1px solid $appLine;
+ }
+
+ &.room-duration-nav-spacer {
+  width: 2rem;
+  flex-shrink: 0;
+ }
+
+ &.room-summary-row {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+ }
+
+ &.create-room-button-wrap {
+  position: relative;
+ }
+
+ &.room-field-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+ }
+
+ &.duration-wheel {
+  position: relative;
+  width: 100%;
+  align-self: stretch;
+  height: 8.4rem;
+  border-radius: 0.85rem;
+  overflow: hidden;
+ }
+
+ &.duration-wheel-highlight {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2.8rem;
+  transform: translateY(-50%);
+  border: 1px solid $appCardBorder;
+  border-radius: 0.6rem;
+  background: $appSecondary;
+  pointer-events: none;
+  z-index: 0;
+ }
+
+ &.duration-wheel-list {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+   display: none;
+  }
+ }
+
+ &.duration-wheel-pad {
+  height: 2.8rem;
+  flex-shrink: 0;
+ }
+
+ &.leaderboard-page {
+  padding: 1.1rem;
+ }
+
+ &.rules-page {
+  padding: 1.1rem;
+ }
+
+ &.wallet-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding: 1.1rem;
+ }
+
+ &.profile-page {
+  padding: 1.1rem;
+ }
+
+ &.profile-id-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+ }
+
+ &.profile-id-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+ }
+
+ &.profile-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+
+  svg {
+   flex-shrink: 0;
+   color: $appTextMuted;
+  }
+ }
+
+ &.profile-avatar-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 3.25rem);
+  justify-content: space-between;
+  gap: 0.7rem;
+  margin-bottom: 1.4rem;
+ }
+
+ &.profile-avatar-selected-tick {
+  position: absolute;
+  top: -0.15rem;
+  right: -0.15rem;
+  width: 1.1rem;
+  height: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: $greenishTeal;
+  border: 1.5px solid $appBg;
+  color: $appBg;
+ }
+
+ &.edit-profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+ }
+
+ &.wallet-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  margin-bottom: 0.8rem;
+ }
+
+ &.wallet-split-block {
+  border: 1px solid $appCardBorder;
+  border-radius: $appCardRadius;
+  padding: 0.9rem 0.85rem;
+ }
+ &.accent {
+  background: alpha($gold, 0.12);
+  border: 1px solid $gold;
+ }
+
+ &.wallet-btn-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.4rem;
+ }
+
+ &.wallet-tx-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+ }
+
+ &.tx-filter-chip-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+  &.room-stake-chips {
+   justify-content: center;
+  }
+ }
+
+ &.tx-filter-date-row {
+  display: flex;
+  gap: 0.6rem;
+
+  .auth-field {
+   flex: 1;
+  }
+ }
+
+ &.tx-filter-sheet-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+ }
+
+ &.wallet-timeline {
+  overflow: visible;
+ }
+
+ &.wallet-tx-item {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid $appLine;
+ }
+
+ &.wallet-tx-info {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 0;
+ }
+
+ &.wallet-tx-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: alpha($appText, 0.05);
+  border: 1px solid alpha($appText, 0.1);
+  color: alpha($appText, 0.5);
+
+  .wallet-tx-item.neg & {
+   background: alpha($paleRed, 0.1);
+   border-color: alpha($paleRed, 0.25);
+   color: $brinkPink;
+  }
+
+  .wallet-tx-item:not(.neg) & {
+   background: alpha($greenishTeal, 0.1);
+   border-color: alpha($greenishTeal, 0.25);
+   color: $greenishTeal;
+  }
+ }
+
+ &.wallet-tx-text {
+  min-width: 0;
+ }
+
+ &.room-options {
+  align-items: normal;
+ }
+ &.match-row-item {
+  padding-bottom: 0.5rem;
+ }
+ &.match-row {
+  display: flex;
+
+  height: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  padding: 0.9rem 0.9rem;
+  background: $appSurface;
+  border: 1px solid $appCardBorder;
+  border-left: 1px solid $appCardBorder;
+  border-radius: 0.6rem;
+
+  &.system {
+   background: transparent;
+  }
+
+  &.win .match-row-amt {
+   color: $greenishTeal;
+  }
+
+  &.loss .match-row-amt {
+   color: $paleRed;
+  }
+
+  &.draw .match-row-amt {
+   font-family: $fontOutfitExtraBold;
+   color: $appTextMuted;
+  }
+ }
+
+ &.match-row-info {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 0;
+ }
+
+ &.match-row-text {
+  min-width: 0;
+ }
+
+ &.profile-info-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.32rem;
+  min-width: 0;
+ }
+ &.match-row-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  flex-shrink: 0;
+  border-radius: 0.45rem;
+  background: alpha($appText, 0.05);
+  border: 1px solid alpha($appText, 0.1);
+  color: alpha($appText, 0.5);
+  .match-row-svg {
+   width: 14px !important;
+   height: 14px !important;
+   @media screen and (min-width: 400px) {
+    width: 18px !important;
+    height: 18px !important;
+   }
+  }
+  .match-row.win & {
+   background: alpha($greenishTeal, 0.1);
+   border-color: alpha($greenishTeal, 0.25);
+   color: $greenishTeal;
+  }
+
+  .match-row.loss & {
+   background: alpha($paleRed, 0.1);
+   border-color: alpha($paleRed, 0.25);
+   color: $brinkPink;
+  }
+ }
+
+ &.match-row-amt-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.3rem;
+ }
+
+ &.match-row-amt-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex-shrink: 0;
+ }
+
+ &.wallet-tx-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+ }
+
+ &.deposit-amount-stage,
+ &.deposit-qr-stage,
+ &.deposit-success-stage,
+ &.deposit-steps {
+  display: flex;
+  flex-direction: column;
+ }
+ &.deposit-amount-stage {
+  gap: 12px;
+ }
+ &.modal-loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 21rem;
+ }
+
+ &.deposit-qr-stage {
+  position: relative;
+ }
+
+ &.deposit-success-stage {
+  text-align: center;
+  padding: 1rem 0;
+ }
+
+ &.deposit-success-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  margin: 0 auto 1rem;
+  border-radius: 50%;
+  background: alpha($greenishTeal, 0.1);
+  color: $greenishTeal;
+ }
+
+ &.deposit-qr-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.9rem;
+ }
+
+ &.deposit-info-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  background: $appSurface;
+  border: 1px solid $appBtnBorder;
+  border-radius: $appBtnRadius;
+  padding: 0.5rem 0.5rem;
+  margin-bottom: 0.9rem;
+  color: $appTextMuted;
+
+  svg {
+   flex-shrink: 0;
+   margin-top: 0.1rem;
+  }
+ }
+
+ &.withdraw-available {
+  text-align: center;
+  background: $appSurface;
+  border: 1px solid $appCardBorder;
+  border-radius: $appBtnRadius;
+  padding: 0.9rem 0.8rem;
+  margin: 0.9rem 0 1.2rem;
+ }
+ &.deposit-speed-wrapper {
+  display: flex;
+  flex-direction: column;
+ }
+ &.deposit-speed-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: $font16;
+  color: $gold;
+  margin-top: 0.3rem;
+
+  span {
+   color: inherit;
+   font-size: inherit;
+  }
+ }
+
+ &.deposit-qr-wrap {
+  align-self: center;
+  padding: 0.75rem;
+  border-radius: 0.625rem;
+  margin: 0.9rem 0;
+ }
+
+ &.deposit-address-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid $appCardBorder;
+  border-radius: $appBtnRadius;
+  padding: 0.5rem 0.6rem;
+  margin-bottom: 0.7rem;
+ }
+
+ &.deposit-steps-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.9rem;
+ }
+
+ &.deposit-step {
+  margin-bottom: 0.9rem;
+
+  &:last-child {
+   margin-bottom: 0;
+  }
+ }
+ &.flex {
+  display: flex;
+ }
+ &.items-center {
+  align-items: center;
+ }
+ &.game-room {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1.5rem 1.3rem 1.1rem;
+  background: $appBg;
+  overflow-y: auto;
+ }
+
+ &.gr-secondary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.6rem;
+  height: 100%;
+  padding: 1.5rem;
+ }
+
+ &.gr-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid transparent;
+  border-radius: 0.85rem;
+  flex-shrink: 0;
+  transition:
+   border-color 0.25s ease,
+   background-color 0.25s ease;
+
+  &.opp {
+   margin-bottom: $font12;
+  }
+
+  &.me {
+   margin-top: $font12;
+  }
+
+  &.active {
+   background: alpha($gold, 0.06);
+  }
+ }
+
+ &.gr-meta {
+  min-width: 0;
+  flex: 1 1 auto;
+ }
+
+ &.gr-board-wrap {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  flex-shrink: 0;
+  width: min(100%, 48svh);
+  margin: 0 auto;
+ }
+
+ &.gr-promotion-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(16, 15, 12, 0.82);
+  backdrop-filter: blur(4px);
+  z-index: 3;
+ }
+
+ &.gr-promotion-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 1.1rem 1.2rem;
+  background: $appSurface;
+  border: 1px solid $appCardBorder;
+  border-radius: 1rem;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+ }
+
+ &.gr-promotion-options {
+  display: flex;
+  gap: 0.55rem;
+ }
+
+ &.gr-captured {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.4rem;
+ }
+
+ &.gr-draw-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.9rem;
+  padding: 0.6rem 0.8rem;
+  background: $appSurface;
+  border: 1px solid $appCardBorder;
+  border-radius: $appBtnRadius;
+ }
+
+ &.gr-review-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 1.1rem;
+  flex-shrink: 0;
+ }
+
+ &.gr-moves {
+  margin-top: 0.5rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid $appLine;
+  height: 6rem;
+  flex-shrink: 0;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+   display: none;
+  }
+ }
+
+ &.gr-move-strip {
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-x: auto;
+  white-space: nowrap;
+
+  &::-webkit-scrollbar {
+   display: none;
+  }
+ }
+
+ &.gr-move-pair {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin-right: 0.6rem;
+ }
+
+ &.gr-foot {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: auto;
+  padding-top: 1.2rem;
+  flex-shrink: 0;
+ }
+
+ &.gr-resign-actions {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.875rem;
+ }
+
+ &.gr-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  text-align: center;
+  padding: 2rem;
+  background: alpha($appBg, 0.94);
+  backdrop-filter: blur(3px);
+  z-index: 5;
+ }
+
+ &.gr-settlement {
+  display: flex;
+  gap: 1.5rem;
+  margin: 0.3rem 0;
+ }
+
+ &.gr-settlement-item {
+  text-align: center;
+ }
+
+ &.gr-overlay-actions {
+  display: flex;
+  gap: 0.6rem;
+  width: 100%;
+  max-width: 220px;
+  margin-top: 0.4rem;
+ }
 }

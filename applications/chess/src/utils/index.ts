@@ -225,7 +225,12 @@ export const callAPIInterface = async <
     return;
    }
 
-   if (errorType === "session_inactive" || errorType === "session_expired") {
+   if (errorType === "session_expired") {
+    if (errorData?.message) {
+     store.dispatch(
+      showToast({ message: errorData.message, severity: "error" }),
+     );
+    }
     await sessionService.deleteSession();
     reject(err);
     return;

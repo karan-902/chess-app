@@ -91,7 +91,6 @@
  --primary-contrast: #ffffff;
  --secondary: var(--color-accent);
  --secondary-contrast: #ffffff;
- --success: var(--color-green);
  --warning: var(--color-warning);
  --error: var(--color-error);
  --gold: var(--primary);
@@ -121,7 +120,6 @@
  --primary-contrast: #ffffff;
  --secondary: var(--color-accent);
  --secondary-contrast: #ffffff;
- --success: #159a2e;
  --warning: var(--color-warning);
  --error: var(--color-error);
  --gold: var(--primary);
@@ -150,7 +148,8 @@ $primaryDark: var(--primary-dark);
 $primaryContrast: var(--primary-contrast);
 $secondary: var(--secondary);
 $secondaryContrast: var(--secondary-contrast);
-$success: var(--success);
+$greenishTeal: var(--greenish-teal);
+$greenishTealLight: var(--color-green);
 $warning: var(--warning);
 $error: var(--error);
 $appFrame: var(--app-frame);
