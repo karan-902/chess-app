@@ -1,0 +1,87 @@
+@use "default.scss" as *;
+
+.chip {
+ height: auto;
+ border-radius: $appChipRadius !important;
+ font-family: $fontOutfitSemiBold;
+ letter-spacing: 0.01em;
+
+ &.MuiChip-outlined {
+  border-color: $appCardBorder;
+ }
+
+ &.MuiChip-filled {
+  background: $appSecondary;
+  color: $appText;
+ }
+
+ .MuiChip-label {
+  font-variant-numeric: tabular-nums;
+ }
+
+ &.gr-move-chip {
+  background: transparent;
+  border: none;
+  margin-right: 0.15rem;
+  border-radius: 4px;
+  cursor: pointer;
+
+  .MuiChip-label {
+   font-family: $fontMono;
+   font-size: $font14;
+   color: $appText;
+   padding: 0.15rem 0.5rem;
+   overflow: visible;
+   text-overflow: unset;
+  }
+
+  &:hover {
+   background: $appBtnBg;
+  }
+
+  &.active {
+   min-width: 45px;
+   background: alpha($gold, 0.12);
+
+   .MuiChip-label {
+    color: $gold;
+    font-weight: 700;
+   }
+  }
+ }
+
+ &.appbar-balance {
+  gap: 0.4rem;
+  height: 32px;
+  font-size: $font14;
+  background: alpha($gold, 0.12);
+  border: 1px solid alpha($gold, 0.3);
+  padding: 0.3rem 0.75rem;
+  border-radius: 4px !important;
+  transition:
+   background 0.15s ease,
+   border-color 0.15s ease;
+
+  &:hover {
+   background: alpha($gold, 0.18);
+   border-color: alpha($gold, 0.45);
+  }
+
+  .MuiChip-icon {
+   margin: 0;
+   width: 20px;
+   height: 20px;
+   color: $gold;
+  }
+  .MuiChip-label {
+   padding: 0;
+   font-family: Outfit-SemiBold;
+   font-size: 15px;
+   font-weight: 600;
+   letter-spacing: 0.02em;
+   line-height: normal;
+   text-align: center;
+   color: $gold;
+  }
+ }
+}
