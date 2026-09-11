@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { CircularProgress } from "@mui/material";
-import { CheckCircle2 } from "lucide-react";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useReduxDispatch } from "@/redux/hooks";
 import { showToast } from "@/redux/common/common.slice";
 import Box from "@/components/base/Box/Box";
@@ -195,6 +195,7 @@ export default function WithdrawModal() {
      </Box>
 
      <Button
+      type="submit"
       fullWidth
       variant="contained"
       customClass="deposit-generate-btn"
@@ -210,7 +211,7 @@ export default function WithdrawModal() {
    {ready && stage === "success" && (
     <Box customClass="deposit-success-stage">
      <Box customClass="deposit-success-icon">
-      <CheckCircle2 size={32} strokeWidth={2} />
+      <CheckCircleIcon />
      </Box>
      <Text customClass="deposit-heading value-heading">
       {withdrawModalSuccessTitle}

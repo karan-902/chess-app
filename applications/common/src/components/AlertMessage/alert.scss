@@ -20,21 +20,20 @@
    font-family: $fontOutfitSemiBold !important;
   }
 
-  :root[data-theme="light"] & {
-   background-color: #ffe8e6;
-   color: #5f2120;
+  //   :root[data-theme="light"] & {
+  //    background-color: #ffe8e6;
+  //    color: #5f2120;
 
-   .MuiAlert-message {
-    color: #5f2120;
-   }
-  }
+  //    .MuiAlert-message {
+  //     color: #5f2120;
+  //    }
+  //   }
  }
 
  &.MuiAlert-standardSuccess {
   .MuiAlert-icon {
    color: $greenishTeal !important;
   }
-  background-color: $success;
  }
 
  &.MuiAlert-standardWarning {
