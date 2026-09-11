@@ -239,19 +239,6 @@ export function SocketProvider({ children }: { children: ReactNode }) {
    );
   };
 
-  const onTransactionCompleted = (data: ITransactionCompletedEvent) => {
-   const amount = formatAmount(data.amount);
-   dispatch(
-    showToast({
-     message:
-      data.type === "DEPOSIT"
-       ? walletDepositCompletedToast(amount)
-       : walletWithdrawCompletedToast(amount),
-     severity: "success",
-    }),
-   );
-  };
-
   const onActiveGameFound = (data: IActiveGameFoundResponse) => {
    const { pathname, search } = router.state.location;
    const viewingGameId = new URLSearchParams(search).get("game_id");
@@ -264,7 +251,6 @@ export function SocketProvider({ children }: { children: ReactNode }) {
   sock.on("connect", onConnect);
   sock.on("user_counts", onUserCounts);
   sock.on("activity_feed", onActivityFeed);
-  sock.on("transaction_completed", onTransactionCompleted);
   sock.on("active_game_found", onActiveGameFound);
   sock.on("session_terminated", onSessionTerminated);
   sock.on("device_handoff_request", onDeviceHandoffRequest);
@@ -293,7 +279,6 @@ export function SocketProvider({ children }: { children: ReactNode }) {
    sock.off("connect", onConnect);
    sock.off("user_counts", onUserCounts);
    sock.off("activity_feed", onActivityFeed);
-   sock.off("transaction_completed", onTransactionCompleted);
    sock.off("active_game_found", onActiveGameFound);
    sock.off("connect_error", onConnectError);
    sock.off("session_terminated", onSessionTerminated);

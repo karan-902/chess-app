@@ -422,8 +422,7 @@ export const depositModalExpiresIn = (mmss: string) => `Expires in ${mmss}`;
 export const depositModalExpired =
  "This QR has expired — go back and generate a new one.";
 export const depositModalPaymentReceived = "Payment received!";
-export const depositModalPaymentReceivedDesc =
- "Your wallet balance has been updated.";
+
 
 export const withdrawModalTitle = "Withdraw";
 export const withdrawModalWithdrawableCaveat =
