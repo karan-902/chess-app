@@ -177,7 +177,7 @@ function txRow(tx: ITransactionResponse) {
        {TRANSACTION_TYPE_DESCRIPTIONS[tx.transaction_type]}
       </Text>
       <Text customClass="meta-text">
-       {dayLabel(tx.created)} - {formatTime(tx.created)}
+       {dayLabel(tx.created)} {formatTime(tx.created)}
       </Text>
      </Box>
     </Box>

@@ -10,6 +10,7 @@ interface IModalProps extends Omit<DialogProps, "title" | "onClose"> {
     title?: string;
     customClass?: string;
     preventOutsideClose?: boolean;
+    hideCloseIcon?: boolean;
 }
 
 export default function Modal({
@@ -19,6 +20,7 @@ export default function Modal({
     children,
     customClass,
     preventOutsideClose,
+    hideCloseIcon,
     ...props
 }: IModalProps) {
     const paperClasses = classNames("modal", customClass);
@@ -39,7 +41,7 @@ export default function Modal({
             {title && (
                 <DialogTitle className="modal-title">{title}</DialogTitle>
             )}
-            {onClose && !preventOutsideClose && (
+            {onClose && !preventOutsideClose && !hideCloseIcon && (
                 <IconButton
                     className="modal-close-icon"
                     onClick={onClose}
