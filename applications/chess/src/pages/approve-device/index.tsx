@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router";
-import { CheckCircle2 } from "lucide-react";
+import CheckCircleIcon from "@mui/icons-material/CheckCircleOutline"
 import Box from "@/components/base/Box/Box";
 import Button from "@/components/base/Button/Button";
 import AuthLayout from "@/container/AuthLayout";
@@ -59,7 +59,7 @@ export default function ApproveDevice() {
                 }
             >
                 <Box customClass="deposit-success-icon">
-                    <CheckCircle2 size={32} strokeWidth={2} />
+                    <CheckCircleIcon className="success-icon"  />
                 </Box>
             </AuthLayout>
         );
