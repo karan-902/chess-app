@@ -671,22 +671,6 @@
         margin-top: 0.15rem;
     }
 
-    &.amount-value,
-    &.appbar-online-label,
-    &.searching-timer,
-    &.pool-win-amt,
-    &.pool-entry-fee,
-    &.wallet-split-val,
-    &.withdraw-available-amt,
-    &.deposit-address,
-    &.deposit-timer,
-    &.room-balance,
-    &.otp-expiry,
-    &.gr-clock,
-    &.gr-move-n,
-    &.gr-settlement-val {
-        @include numeric;
-    }
 }
 
 @keyframes live-pulse {
