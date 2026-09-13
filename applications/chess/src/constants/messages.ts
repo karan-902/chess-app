@@ -362,8 +362,7 @@ export const walletWithdrawMethodOptions: Array<{
  },
 ];
 export const walletWithdrawableLabel = "Available to withdraw";
-export const walletWithdrawableCaveat =
- "Winnings only — deposits aren't withdrawable.";
+export const walletWithdrawableCaveat = "Deposits aren't withdrawable.";
 export const walletEyebrow = "wallet --balance";
 export const walletEmptyTitle = "Fund your account";
 export const walletEmptyDesc =
@@ -423,8 +422,7 @@ export const depositModalExpired =
 export const depositModalPaymentReceived = "Payment received!";
 
 export const withdrawModalTitle = "Withdraw";
-export const withdrawModalWithdrawableCaveat =
- "Funds from settled games only — active stakes aren't withdrawable yet.";
+export const withdrawModalWithdrawableCaveat = "Only winnings are withdrawable.";
 export const withdrawModalAmountLabel = "Amount (USD)";
 export const withdrawModalMethodLabel = "Withdraw via";
 export const withdrawModalDestinationLabel = "Destination";
