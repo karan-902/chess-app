@@ -7,6 +7,7 @@ import {
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import classNames from "classnames";
 import Box from "../Box/Box";
+import AlertMessage from "../AlertMessage/AlertMessage";
 import "./select.scss";
 
 export interface ISelectOption {
@@ -22,6 +23,7 @@ interface ISelectProps {
   searchable?: boolean;
   searchPlaceholder?: string;
   isError?: boolean;
+  helperText?: string;
   disabled?: boolean;
   customClass?: string;
 }
@@ -34,6 +36,7 @@ export default function Select({
   searchable = false,
   searchPlaceholder = "Search…",
   isError,
+  helperText,
   disabled,
   customClass,
 }: ISelectProps) {
@@ -66,6 +69,9 @@ export default function Select({
             />
           )}
         />
+        {isError && helperText && (
+          <AlertMessage severity="error" message={helperText} />
+        )}
       </Box>
     );
   }
@@ -94,6 +100,9 @@ export default function Select({
           </MenuItem>
         ))}
       </MuiSelect>
+      {isError && helperText && (
+        <AlertMessage severity="error" message={helperText} />
+      )}
     </Box>
   );
 }

@@ -20,7 +20,7 @@ import {
  TRANSACTION_TYPE_ICONS,
  TRANSACTION_TYPE_DESCRIPTIONS,
 } from "@/constants/config";
-import type { ITransactionResponse, TransactionType } from "@/types/utils";
+import type { ITransactionResponse } from "@/types/utils";
 import type { ITransactionFilterDrawerProps } from "@/types/components";
 import {
  walletPageBalanceLabel,
@@ -69,11 +69,6 @@ function TransactionFilterDrawer({
   );
   setDraftTo(dateFilter.to ? dayjs(dateFilter.to).format("YYYY-MM-DD") : "");
  }, [open, typeFilter, dateFilter]);
-
- const toggleType = (type: TransactionType) =>
-  setDraftTypes((prev) =>
-   prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type],
-  );
 
  const handleApply = () => {
   setTypeFilter(draftTypes);

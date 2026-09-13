@@ -25,6 +25,7 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
             endIcon,
             fullWidth,
             type,
+            onBlur,
             ...props
         },
         ref,
@@ -42,6 +43,19 @@ const Input = forwardRef<HTMLInputElement, IInputProps>(
                     fullWidth={fullWidth}
                     type={isPassword && showPassword ? "text" : type}
                     inputRef={ref}
+                    onBlur={
+                        // MUI calls onBlur() with no event when `disabled`
+                        // flips true on a focused input to simulate the
+                        // blur browsers won't fire themselves
+                        onBlur &&
+                        ((
+                            event?: React.FocusEvent<
+                                HTMLInputElement | HTMLTextAreaElement
+                            >,
+                        ) => {
+                            if (event) onBlur(event);
+                        })
+                    }
                     startAdornment={
                         startIcon && (
                             <InputAdornment position="start">
