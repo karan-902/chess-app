@@ -4,7 +4,6 @@ import { useNavigate } from "react-router";
 import { Check } from "lucide-react";
 import { useFormik } from "formik";
 import Box from "@/components/base/Box/Box";
-import Text from "@/components/base/Text/Text";
 import Label from "@/components/base/Label/Label";
 import Input from "@/components/base/Input/Input";
 import Button from "@/components/base/Button/Button";
@@ -259,12 +258,8 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
                     placeholder={countrySelectSelectPlaceholder}
                     searchPlaceholder={countrySelectSearchPlaceholder}
                     isError={formik.touched.country && !!formik.errors.country}
+                    helperText={formik.errors.country}
                 />
-                {formik.touched.country && formik.errors.country && (
-                    <Text component="span" customClass="input-helper-text">
-                        {formik.errors.country}
-                    </Text>
-                )}
             </Box>
 
             <Button

@@ -88,12 +88,8 @@ export default function SelectCountryScreen({
                     placeholder={countrySelectSelectPlaceholder}
                     searchPlaceholder={countrySelectSearchPlaceholder}
                     isError={formik.touched.country && !!formik.errors.country}
+                    helperText={formik.errors.country}
                 />
-                {formik.touched.country && formik.errors.country && (
-                    <Text component="span" customClass="input-helper-text">
-                        {formik.errors.country}
-                    </Text>
-                )}
             </Box>
 
             <Button
