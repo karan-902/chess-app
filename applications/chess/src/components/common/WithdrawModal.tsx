@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import classNames from "classnames";
 import { CircularProgress } from "@mui/material";
+import InfoIcon from "@mui/icons-material/Info";
 import { useReduxDispatch } from "@/redux/hooks";
 import { showToast } from "@/redux/common/common.slice";
 import Box from "@/components/base/Box/Box";
@@ -10,20 +11,16 @@ import Text from "@/components/base/Text/Text";
 import Button from "@/components/base/Button/Button";
 import Label from "@/components/base/Label/Label";
 import Input from "@/components/base/Input/Input";
-import Select from "@/components/base/Select/Select";
 import { useWalletActionModal } from "@/context/WalletActionModalContext";
 import { useWalletBalance } from "@/hooks/useWallet";
 import { withdrawRequest } from "@/hooks/useWallet";
 import { useModalReady } from "@/hooks/useModalReady";
 import { formatAmount } from "@/utils/format";
-import type { WithdrawMethod } from "@/types/utils";
 import {
  withdrawModalTitle,
  withdrawModalWithdrawableCaveat,
- withdrawModalMethodLabel,
  withdrawModalDestinationLabel,
  withdrawModalDestinationPlaceholder,
- withdrawModalMethodOptions,
  withdrawModalSubmitButton,
  withdrawModalInvalidAmount,
  withdrawModalMinAmountError,
@@ -31,7 +28,6 @@ import {
  withdrawModalInvalidDestination,
  withdrawModalFailed,
  withdrawModalSuccessTitle,
- walletPageWithdrawableLabel,
  depositModalAmountLabel,
  MIN_TRANSACTION_USD,
 } from "@/constants/messages";
@@ -49,9 +45,7 @@ export default function WithdrawModal() {
 
  const [stage, setStage] = useState<Stage>("amount");
  const [amount, setAmount] = useState("");
- const [method, setMethod] = useState<WithdrawMethod>(
-  withdrawModalMethodOptions[0].value,
- );
+
  const [destination, setDestination] = useState("");
  const [submitting, setSubmitting] = useState(false);
 
@@ -59,7 +53,7 @@ export default function WithdrawModal() {
   if (open) return;
   setStage("amount");
   setAmount("");
-  setMethod(withdrawModalMethodOptions[0].value);
+
   setDestination("");
   setSubmitting(false);
  }, [open]);
@@ -152,15 +146,9 @@ export default function WithdrawModal() {
      <Text customClass="deposit-heading value-heading">
       {withdrawModalTitle}
      </Text>
-
-     <Box customClass="withdraw-available">
-      <Text customClass="withdraw-available-label meta-text">
-       {walletPageWithdrawableLabel}
-      </Text>
-      <Text customClass="withdraw-available-amt">
-       {formatAmount(withdrawableUsd)}
-      </Text>
-      <Text customClass="withdraw-available-caveat meta-text">
+     <Box customClass="deposit-info-box">
+      <InfoIcon sx={{ fontSize: 16 }} />
+      <Text customClass="deposit-info-text caption">
        {withdrawModalWithdrawableCaveat}
       </Text>
      </Box>
@@ -184,17 +172,6 @@ export default function WithdrawModal() {
        helperText={amountError}
       />
      </Box>
-
-     <Box customClass="auth-field">
-      <Label htmlFor="withdraw-method">{withdrawModalMethodLabel}</Label>
-      <Select
-       value={method}
-       onChange={(value) => setMethod(value as WithdrawMethod)}
-       options={withdrawModalMethodOptions}
-       disabled={submitting || !hasWithdrawable}
-      />
-     </Box>
-
      <Box customClass="auth-field">
       <Label htmlFor="withdraw-destination">
        {withdrawModalDestinationLabel}
