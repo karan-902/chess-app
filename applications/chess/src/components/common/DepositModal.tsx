@@ -201,7 +201,7 @@ export default function DepositModal() {
    open={open}
    onClose={close}
    hideCloseIcon={stage === "success"}
-   disableRestoreFocus={stage === "success"}
+   disableRestoreFocus
    customClass={classNames(
     "wallet-modal",
     stage === "success" && "wallet-modal-success",
@@ -335,7 +335,7 @@ export default function DepositModal() {
      <Box customClass="deposit-qr-wrap">
       <QRCodeSVG
        value={address ?? ""}
-       size={220}
+       size={300}
        bgColor="#ffff"
        fgColor="#000"
        marginSize={2}

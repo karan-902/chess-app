@@ -135,7 +135,7 @@ export default function WithdrawModal() {
    open={open}
    onClose={close}
    hideCloseIcon={stage === "success"}
-   disableRestoreFocus={stage === "success"}
+   disableRestoreFocus
    customClass={classNames(
     "wallet-modal",
     stage === "success" && "wallet-modal-success",
