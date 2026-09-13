@@ -87,6 +87,7 @@ function EmailScreen({
      value={formik.values.email}
      onChange={formik.handleChange}
      onBlur={formik.handleBlur}
+     disabled={formik.isSubmitting}
      isError={(formik.touched.email && !!formik.errors.email) || !!error}
      helperText={
       (formik.touched.email && formik.errors.email) || error || undefined
@@ -171,6 +172,7 @@ function PasswordScreen({
      value={formik.values.password}
      onChange={formik.handleChange}
      onBlur={formik.handleBlur}
+     disabled={formik.isSubmitting}
      isError={(formik.touched.password && !!formik.errors.password) || !!error}
      helperText={
       (formik.touched.password && formik.errors.password) || error || undefined

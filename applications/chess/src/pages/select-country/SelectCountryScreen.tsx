@@ -84,6 +84,7 @@ export default function SelectCountryScreen({
                     }}
                     options={COUNTRY_OPTIONS}
                     searchable
+                    disabled={formik.isSubmitting}
                     placeholder={countrySelectSelectPlaceholder}
                     searchPlaceholder={countrySelectSearchPlaceholder}
                     isError={formik.touched.country && !!formik.errors.country}

@@ -163,6 +163,7 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
                     value={formik.values.username}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
+                    disabled={formik.isSubmitting}
                     isError={
                         (formik.touched.username && !!formik.errors.username) ||
                         usernameStatus === "taken"
@@ -198,6 +199,7 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
                     value={formik.values.email}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
+                    disabled={formik.isSubmitting}
                     isError={formik.touched.email && !!formik.errors.email}
                     helperText={formik.errors.email}
                     customClass="auth-input"
@@ -215,6 +217,7 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
                     value={formik.values.password}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
+                    disabled={formik.isSubmitting}
                     isError={
                         formik.touched.password && !!formik.errors.password
                     }
@@ -234,6 +237,7 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
                     value={formik.values.confirm}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
+                    disabled={formik.isSubmitting}
                     isError={formik.touched.confirm && !!formik.errors.confirm}
                     helperText={formik.errors.confirm}
                     customClass="auth-input"
@@ -251,6 +255,7 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
                     }}
                     options={COUNTRY_OPTIONS}
                     searchable
+                    disabled={formik.isSubmitting}
                     placeholder={countrySelectSelectPlaceholder}
                     searchPlaceholder={countrySelectSearchPlaceholder}
                     isError={formik.touched.country && !!formik.errors.country}
