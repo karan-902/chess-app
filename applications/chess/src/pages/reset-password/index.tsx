@@ -122,6 +122,7 @@ export default function ResetPassword() {
                         value={formik.values.password}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
+                        disabled={formik.isSubmitting}
                         isError={
                             formik.touched.password && !!formik.errors.password
                         }
@@ -141,6 +142,7 @@ export default function ResetPassword() {
                         value={formik.values.confirm}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
+                        disabled={formik.isSubmitting}
                         isError={
                             formik.touched.confirm && !!formik.errors.confirm
                         }

@@ -193,6 +193,7 @@ function EditProfileDrawer({
       fullWidth
       isError={!!(formik.touched.username && formik.errors.username)}
       helperText={formik.errors.username}
+      disabled={formik.isSubmitting}
       {...formik.getFieldProps("username")}
      />
     </Box>

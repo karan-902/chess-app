@@ -84,6 +84,7 @@ export default function ForgotPassword() {
                             value={formik.values.email}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
+                            disabled={formik.isSubmitting}
                             isError={
                                 (formik.touched.email &&
                                     !!formik.errors.email) ||
