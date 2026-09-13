@@ -25,25 +25,16 @@ export const CATEGORY_META: Record<
  CLASSICAL: { icon: Crown, label: "CLASSICAL" },
 };
 
-export const TRANSACTION_TYPE_ICONS: Record<TransactionType, SvgIconComponent> = {
- DEPOSIT: CallReceived,
- WITHDRAW: CallMade,
- WITHDRAW_REFUND: CallReceived,
- BET: CallMade,
- SETTLEMENT: CallReceived,
- DRAW: Handshake,
- BET_REFUND: CallReceived,
-};
-
-export const TRANSACTION_TYPE_LABELS: Record<TransactionType, string> = {
- DEPOSIT: "Deposits",
- WITHDRAW: "Withdrawals",
- WITHDRAW_REFUND: "Withdraw Refunds",
- BET: "Bets",
- SETTLEMENT: "Winnings",
- DRAW: "Draw Refunds",
- BET_REFUND: "Bet Refunds",
-};
+export const TRANSACTION_TYPE_ICONS: Record<TransactionType, SvgIconComponent> =
+ {
+  DEPOSIT: CallReceived,
+  WITHDRAW: CallMade,
+  WITHDRAW_REFUND: CallReceived,
+  BET: CallMade,
+  SETTLEMENT: CallReceived,
+  DRAW: Handshake,
+  BET_REFUND: CallReceived,
+ };
 
 export const TRANSACTION_TYPE_DESCRIPTIONS: Record<TransactionType, string> = {
  DEPOSIT: "Received",

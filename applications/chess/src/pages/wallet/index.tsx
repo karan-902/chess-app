@@ -18,7 +18,6 @@ import { speedLogo } from "@/components/images";
 import { formatAmount, formatTime } from "@/utils/format";
 import {
  TRANSACTION_TYPE_ICONS,
- TRANSACTION_TYPE_LABELS,
  TRANSACTION_TYPE_DESCRIPTIONS,
 } from "@/constants/config";
 import type { ITransactionResponse, TransactionType } from "@/types/utils";
@@ -40,10 +39,6 @@ import {
  walletPoweredByLabel,
 } from "@/constants/messages";
 import Modal from "@/components/base/Modal/Modal";
-
-const TX_FILTER_TYPES = Object.keys(
- TRANSACTION_TYPE_LABELS,
-) as TransactionType[];
 
 function dayLabel(ms: number): string {
  const date = dayjs(ms);
@@ -106,24 +101,6 @@ function TransactionFilterDrawer({
 
     <Box customClass="auth-field">
      <Label>{walletFilterTypeLabel}</Label>
-     <Box customClass="tx-filter-chip-grid">
-      {TX_FILTER_TYPES.map((type) => {
-       const TypeIcon = TRANSACTION_TYPE_ICONS[type];
-       return (
-        <Button
-         key={type}
-         customClass={classNames(
-          "tx-filter-chip",
-          draftTypes.includes(type) && "active",
-         )}
-         onClick={() => toggleType(type)}
-        >
-         <TypeIcon sx={{ fontSize: 13 }} />
-         {TRANSACTION_TYPE_LABELS[type]}
-        </Button>
-       );
-      })}
-     </Box>
     </Box>
 
     <Box customClass="tx-filter-date-row">
