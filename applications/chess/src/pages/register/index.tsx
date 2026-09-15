@@ -2,7 +2,6 @@ import AuthLayout from "@/container/AuthLayout";
 import RegisterForm from "./RegisterForm";
 import {
  authRegisterTitle,
- authRegisterSubtitle,
  authRegisterHaveAccountPrompt,
  authRegisterLoginLink,
 } from "@/constants/messages";
@@ -12,7 +11,6 @@ export default function Register() {
  return (
   <AuthLayout
    title={authRegisterTitle}
-   subtitle={authRegisterSubtitle}
    footer={
     <>
      {authRegisterHaveAccountPrompt}

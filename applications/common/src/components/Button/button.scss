@@ -22,6 +22,11 @@
  &.Mui-disabled {
   opacity: 0.45;
   cursor: not-allowed;
+  .button-text {
+   font-family: $fontOutfitSemiBold !important;
+   font-size: 14px !important;
+   color: $white !important;
+  }
  }
 
  &.MuiButton-sizeSmall {

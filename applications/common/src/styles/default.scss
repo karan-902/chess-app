@@ -133,7 +133,7 @@
 @function alpha($color, $opacity) {
  @return color-mix(in srgb, #{$color} #{$opacity * 100%}, transparent);
 }
-
+$white: #fff;
 $paleRed: var(--pale-red);
 $brinkPink: var(--brink-pink);
 $greenishTeal: var(--greenish-teal);

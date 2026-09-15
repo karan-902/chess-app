@@ -35,9 +35,9 @@ export const activityFeedWin = (
 export const authBackLink = "← Back";
 export const authBackToSignIn = "← Back to Sign In";
 export const authEmailLabel = "Email";
-export const authEmailPlaceholder = "johndoe@example.com";
+export const authEmailPlaceholder = "Enter your email";
 export const authPasswordLabel = "Password";
-export const authPasswordPlaceholder = "••••••••";
+export const authPasswordPlaceholder = "Enter password";
 export const authConfirmPasswordLabel = "Confirm Password";
 export const authOr = "or";
 export const authContinueWithGoogle = "Continue with Google";
@@ -60,7 +60,7 @@ export const authLoginNoAccountFound = "No account found with this email";
 export const authLoginBack = "Back";
 export const authLoginForgotPassword = "Forgot password?";
 export const authLoginContinueButton = "Continue";
-export const authLoginSignInButton = "Sign In";
+export const authLoginSignInButton = "Login";
 export const authLoginIncorrectPassword = "Incorrect password";
 export const authLoginEmailNotVerified =
  "Please verify your email to continue.";
@@ -71,9 +71,9 @@ export const authRegisterSubtitle = "Create your account to get started";
 export const authRegisterHaveAccountPrompt = "Already have an account?";
 export const authRegisterLoginLink = "Login";
 export const authRegisterUsernameLabel = "Username";
-export const authRegisterUsernamePlaceholder = "john_doe";
+export const authRegisterUsernamePlaceholder = "Enter username";
 export const authRegisterCountryLabel = "Country";
-export const authRegisterCreateAccountButton = "Create Account";
+export const authRegisterCreateAccountButton = "Register";
 export const authRegisterRegistrationFailed =
  "Registration failed. Please try again.";
 export const authEmailVerificationTitle = "Verify your email";
@@ -422,7 +422,8 @@ export const depositModalExpired =
 export const depositModalPaymentReceived = "Payment received!";
 
 export const withdrawModalTitle = "Withdraw";
-export const withdrawModalWithdrawableCaveat = "Only winnings are withdrawable.";
+export const withdrawModalWithdrawableCaveat =
+ "Only winnings are withdrawable.";
 export const withdrawModalAmountLabel = "Amount (USD)";
 export const withdrawModalMethodLabel = "Withdraw via";
 export const withdrawModalDestinationLabel = "Destination";

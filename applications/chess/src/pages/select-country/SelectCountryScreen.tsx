@@ -82,6 +82,7 @@ export default function SelectCountryScreen({
                         formik.setFieldValue("country", v);
                         formik.setFieldTouched("country", true, false);
                     }}
+                    onBlur={() => formik.setFieldTouched("country", true)}
                     options={COUNTRY_OPTIONS}
                     searchable
                     disabled={formik.isSubmitting}

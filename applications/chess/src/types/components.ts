@@ -20,7 +20,6 @@ export interface IEmailFormValues {
     username: string;
     email: string;
     password: string;
-    confirm: string;
     country: string;
 }
 

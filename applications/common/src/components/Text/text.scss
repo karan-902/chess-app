@@ -329,13 +329,15 @@
  }
 
  &.auth-footer {
-  text-align: center;
   margin-top: auto;
+  text-align: center;
+  font-family: $fontOutfitRegular;
 
   a {
    color: $gold;
    text-decoration: underline;
-   font-weight: 600;
+   font-family: $fontOutfitExtraBold;
+   margin-left: 5px;
   }
  }
 

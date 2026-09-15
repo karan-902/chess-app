@@ -1,48 +1,57 @@
 @use "default.scss" as *;
 
 .common-select {
-    width: 100%;
+ width: 100%;
 
-    .MuiInputBase-root {
-        min-height: 2.75rem;
-        background: $appSecondary;
-        border-radius: $appBtnRadius;
-        font-family: $fontOutfit;
-        font-size: $font14;
-        color: $appText;
-        transition:
-            border-color 0.15s ease,
-            box-shadow 0.15s ease;
+ .MuiInputBase-root {
+  min-height: 2.75rem;
+  background: $appSecondary;
+  border-radius: $appBtnRadius;
+  font-family: $fontOutfit;
+  font-size: $font14;
+  color: $appText;
+  transition:
+   border-color 0.15s ease,
+   box-shadow 0.15s ease;
 
-        .MuiOutlinedInput-notchedOutline {
-            border-color: $appCardBorder;
-        }
+  .MuiOutlinedInput-notchedOutline {
+   border-color: $appCardBorder;
+  }
 
-        &.Mui-focused {
-            box-shadow: 0 0 0 3px alpha($primary, 0.12);
+  &.Mui-focused {
+   outline: 1px solid $primary !important;
+   border-radius: 0.375rem !important;
 
-            .MuiOutlinedInput-notchedOutline {
-                border-color: $primary;
-                border-width: 1px;
-            }
-        }
+   .MuiOutlinedInput-notchedOutline {
+    border: none !important;
+   }
+  }
 
-        &.Mui-error .MuiOutlinedInput-notchedOutline {
-            border-color: alpha($paleRed, 0.6);
-        }
+  &.Mui-error {
+   border-radius: 0.375rem !important;
 
-        &.Mui-disabled {
-            opacity: 0.4;
-        }
-    }
+   .MuiOutlinedInput-notchedOutline {
+    border: 2px solid $paleRed;
+   }
 
-    .MuiSelect-icon,
-    .MuiAutocomplete-popupIndicator {
-        color: alpha($appText, 0.4);
-    }
+   &.Mui-focused .MuiOutlinedInput-notchedOutline {
+    border-color: $paleRed;
+    box-shadow: 0 0 0 3px $paleRed;
+   }
+  }
 
-    input::placeholder {
-        color: alpha($appText, 0.35);
-        opacity: 1;
-    }
+  &.Mui-disabled {
+   opacity: 0.4;
+  }
+ }
+
+ .MuiSelect-icon,
+ .MuiAutocomplete-popupIndicator {
+  color: alpha($appText, 0.4);
+ }
+
+ input::placeholder {
+  color: alpha($appText, 0.35);
+  opacity: 1;
+ }
 }

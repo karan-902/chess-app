@@ -137,7 +137,7 @@ function PasswordScreen({
 }: IPasswordScreenProps) {
  return (
   <Box
-   customClass="auth-form"
+   customClass="auth-form auth-password-stage"
    component="form"
    onSubmit={formik.handleSubmit as any}
   >
