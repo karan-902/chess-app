@@ -19,7 +19,6 @@ import {
  enterEmailForResetLinkText,
  checkInboxForResetLinkText,
  sendResetLinkText,
- somethingWentWrongTryAgainText,
 } from "@/constants/messages";
 
 const emailSchema = yup.object({
@@ -48,7 +47,7 @@ export default function ForgotPassword() {
             } catch (err: any) {
                 if (err?.response) {
                     setError(
-                        err.response.data?.message ?? somethingWentWrongTryAgainText,
+                        err.response.data?.message ?? "",
                     );
                 }
             } finally {

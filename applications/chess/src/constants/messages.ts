@@ -37,7 +37,6 @@ export const enterRegisteredEmailText =
 export const accessYourAccountText = "Access your account";
 export const enterPasswordToAccessText =
  "Enter your password to securely access your account";
-export const noAccountFoundText = "No account found with this email";
 export const backText = "Back";
 export const changeText = "Change";
 export const forgotYourPasswordText = "Forgot your password?";
@@ -55,15 +54,9 @@ export const clearUsernameText = "Clear username";
 export const suggestionsText = "Suggestions";
 export const countryText = "Country";
 export const registerText = "Register";
-export const registrationFailedText = "Registration failed. Please try again.";
 export const verifyYourEmailText = "Verify your email";
 export const sentCodeToText = (length: number) =>
  `We sent a ${length}-digit code to`;
-export const emailVerifiedText = "Email verified!";
-export const invalidOrExpiredCodeText =
- "Invalid or expired code. Please try again.";
-export const newCodeSentText = "A new code has been sent to your email";
-export const resendCodeFailedText = "Couldn't resend code. Please try again.";
 export const codeExpiredText =
  "This code has expired — request a new one below";
 export const codeExpiresInText = (mmss: string) => `Code expires in ${mmss}`;
@@ -76,8 +69,6 @@ export const checkInboxForResetLinkText = "Check your inbox for a reset link.";
 export const enterEmailForResetLinkText =
  "Enter your email and we'll send you a reset link.";
 export const sendResetLinkText = "Send Reset Link";
-export const somethingWentWrongTryAgainText =
- "Something went wrong. Please try again.";
 export const newDeviceDetectedText = "New device detected";
 export const approveSignInEmailedText =
  "We've emailed you to approve this sign-in. This screen will continue automatically once you approve it.";
@@ -195,8 +186,6 @@ export const minDepositAmountText = (min: number) =>
  `Minimum deposit amount is $${min}.`;
 export const maxDepositAmountText = (max: number) =>
  `Maximum deposit amount is $${max}.`;
-export const generateQrFailedText =
- "Couldn't generate a payment QR. Please try again.";
 export const btcOnlyWarningText =
  "Deposits must be in BTC only. Other currencies will be lost.";
 export const scanToDepositText =
@@ -216,7 +205,6 @@ export const minWithdrawalAmountText = (min: number) =>
  `Minimum withdrawal amount is $${min}.`;
 export const insufficientWithdrawableText = "Insufficient withdrawable balance";
 export const enterDestinationText = "Enter a destination address";
-export const withdrawalFailedText = "Withdrawal failed. Please try again.";
 export const withdrawalCompletedText = "Withdrawal completed";
 export const noRankedPlayersText = "No ranked players yet.";
 export const dashText = "–";
@@ -280,7 +268,6 @@ export const searchCountryText = "Search country…";
 export const selectCountryText = "Select country";
 export const walletText = "Wallet";
 export const logOutText = "Log Out";
-export const tooManyAttemptsText = "Too many attempts, please wait.";
 export const somethingWentWrongText = "Something went wrong. Please try later.";
 export const noDataFoundText = "No Data Found";
 export const MIN_TRANSACTION_USD = 1;

@@ -11,7 +11,6 @@ import {
  scoreText,
  grossIncomeText,
  winsText,
- noDataFoundText,
  bestStreakText,
 } from "@/constants/messages";
 import type { ILeaderboardPlayerStatsResponse } from "@/types/types";
@@ -38,7 +37,7 @@ export default function LeaderboardPlayerModal({
                 );
                 if (!isCancelled) setStats(res);
             } catch (err) {
-                showApiErrorToast(err, noDataFoundText);
+                showApiErrorToast(err);
                 if (!isCancelled) onClose();
             }
         };

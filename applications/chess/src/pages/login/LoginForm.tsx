@@ -38,7 +38,6 @@ import {
  emailRequiredText,
  enterValidEmailText,
  passwordRequiredText,
- noAccountFoundText,
  changeText,
  // forgotYourPasswordText,
  // resetNowText,
@@ -295,7 +294,7 @@ export default function LoginForm() {
     setStep("password");
    } catch (err: any) {
     if (err?.response) {
-     setError(err.response.data?.message ?? noAccountFoundText);
+     setError(err.response.data?.message ?? "");
     }
    } finally {
     setSubmitting(false);

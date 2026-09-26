@@ -39,9 +39,7 @@ import {
  suggestionsText,
  countryText,
  registerText,
- registrationFailedText,
  selectCountryText,
- noDataFoundText,
  USERNAME_MAX_LENGTH,
 } from "@/constants/messages";
 import { IEmailFormScreenProps, IEmailFormValues } from "@/types/components";
@@ -89,7 +87,7 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
     );
     onRegistered(values.email, values.password);
    } catch (err) {
-    showApiErrorToast(err, registrationFailedText);
+    showApiErrorToast(err);
    } finally {
     setSubmitting(false);
    }
@@ -120,7 +118,7 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
     );
     setQuickNameSuggestions(res.usernames);
    } catch (err) {
-    showApiErrorToast(err, noDataFoundText);
+    showApiErrorToast(err);
    } finally {
     setLoadingQuickNames(false);
    }
@@ -153,7 +151,7 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
     );
     setUsernameSuggestions(res.usernames);
    } catch (err) {
-    showApiErrorToast(err, noDataFoundText);
+    showApiErrorToast(err);
    } finally {
     setLoadingSuggestions(false);
    }

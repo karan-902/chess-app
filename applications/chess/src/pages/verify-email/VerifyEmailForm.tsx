@@ -3,7 +3,7 @@ import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import Button from "@/components/base/Button/Button";
 import OTPInput from "@/components/base/OtpInput/OtpInput";
-import { callAPIInterface, formatMMSS } from "@/utils";
+import { callAPIInterface, formatMMSS, showApiErrorToast } from "@/utils";
 import { useReduxDispatch } from "@/redux/hooks";
 import { showToast } from "@/redux/common/slice";
 import type { IVerifyEmailBody, IResendOtpBody } from "@/types/index";
@@ -13,10 +13,6 @@ import {
  backText,
  verifyYourEmailText,
  sentCodeToText,
- emailVerifiedText,
- invalidOrExpiredCodeText,
- newCodeSentText,
- resendCodeFailedText,
  codeExpiredText,
  codeExpiresInText,
  verifyEmailText,
@@ -57,31 +53,15 @@ export default function VerifyEmailForm({
         if (otp.length !== OTP_LENGTH || verifying) return;
         setVerifying(true);
         try {
-            await callAPIInterface<IVerifyEmailBody, IMessageResponse>(
+            const res = await callAPIInterface<IVerifyEmailBody, IMessageResponse>(
                 "POST",
                 "/verify-email",
                 { email, otp },
             );
-            dispatch(
-                showToast({
-                    isToastOpen: true,
-                    toastMessage: emailVerifiedText,
-                    toastVariant: "success",
-                }),
-            );
+            dispatch(showToast({ isToastOpen: true, toastMessage: res.message, toastVariant: "success" }));
             onVerified();
-        } catch (err: any) {
-            if (err?.response?.status !== 429) {
-                dispatch(
-                    showToast({
-                        isToastOpen: true,
-                        toastMessage:
-                            err?.response?.data?.message ??
-                            invalidOrExpiredCodeText,
-                        toastVariant: "error",
-                    }),
-                );
-            }
+        } catch (err) {
+            showApiErrorToast(err);
             setOtp("");
         } finally {
             setVerifying(false);
@@ -92,31 +72,17 @@ export default function VerifyEmailForm({
         if (resending || cooldown > 0) return;
         setResending(true);
         try {
-            await callAPIInterface<IResendOtpBody, IMessageResponse>(
+            const res = await callAPIInterface<IResendOtpBody, IMessageResponse>(
                 "POST",
                 "/resend-otp",
                 { email },
             );
-            dispatch(
-                showToast({
-                    isToastOpen: true,
-                    toastMessage: newCodeSentText,
-                    toastVariant: "success",
-                }),
-            );
+            dispatch(showToast({ isToastOpen: true, toastMessage: res.message, toastVariant: "success" }));
             setOtp("");
             setExpirySeconds(OTP_EXPIRY_SECONDS);
             setCooldown(RESEND_COOLDOWN_SECONDS);
-        } catch (err: any) {
-            if (err?.response?.status !== 429) {
-                dispatch(
-                    showToast({
-                        isToastOpen: true,
-                        toastMessage: resendCodeFailedText,
-                        toastVariant: "error",
-                    }),
-                );
-            }
+        } catch (err) {
+            showApiErrorToast(err);
         } finally {
             setResending(false);
         }

@@ -25,7 +25,6 @@ import {
  minWithdrawalAmountText,
  insufficientWithdrawableText,
  enterDestinationText,
- withdrawalFailedText,
  withdrawalCompletedText,
  enterAmountText,
  MIN_TRANSACTION_USD,
@@ -112,15 +111,8 @@ export default function WithdrawModal() {
    await withdrawRequest(amountUsd, destination.trim());
    refetch();
    setStage("success");
-   dispatch(
-    showToast({
-     isToastOpen: true,
-     toastMessage: withdrawalCompletedText,
-     toastVariant: "success",
-    }),
-   );
   } catch (err) {
-   showApiErrorToast(err, withdrawalFailedText);
+   showApiErrorToast(err);
   } finally {
    setSubmitting(false);
   }

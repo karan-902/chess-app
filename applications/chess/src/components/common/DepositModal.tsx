@@ -26,7 +26,6 @@ import {
  amountRequiredText,
  minDepositAmountText,
  maxDepositAmountText,
- generateQrFailedText,
  btcOnlyWarningText,
  scanToDepositText,
  copyText,
@@ -138,7 +137,7 @@ export default function DepositModal() {
    setExpired(false);
    setStage("qr");
   } catch (err: any) {
-   setAmountError(err?.response?.data?.message ?? generateQrFailedText);
+   setAmountError(err?.response?.data?.message ?? "");
   } finally {
    setSubmitting(false);
   }

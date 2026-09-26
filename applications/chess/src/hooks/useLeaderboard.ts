@@ -1,9 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { callAPIInterface, showApiErrorToast } from "@/utils";
 import { useGame } from "@/hooks/useGame";
-import {
- noDataFoundText,
-} from "@/constants/messages";
 import type {
     ILeaderboardPlayer,
     ILeaderboardRequestBody,
@@ -54,7 +51,7 @@ export function useLeaderboard(scope: LeaderboardScope, sort: LeaderboardSort) {
                 pageIdRef.current = res.page_id;
             } catch (err) {
                 if (activeQueryRef.current === query) setError(true);
-                showApiErrorToast(err, noDataFoundText);
+                showApiErrorToast(err);
             } finally {
                 isFetchingRef.current = false;
                 if (activeQueryRef.current === query) {

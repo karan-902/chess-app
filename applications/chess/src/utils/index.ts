@@ -8,10 +8,7 @@ import duration from "dayjs/plugin/duration";
 import { store } from "@/redux/index";
 import { showToast } from "@/redux/common/slice";
 import sessionService from "@gopvp/common/src/util/sessionService";
-import {
- tooManyAttemptsText,
- somethingWentWrongText,
-} from "@/constants/messages";
+import { somethingWentWrongText } from "@/constants/messages";
 import type { IGenerateTokenBody } from "@/types/index";
 import type { IGenerateTokenResponse, ILoginResponse } from "@/types/utils";
 import { IGameRoomNavPayload, TimeControl } from "@/types/components";
@@ -84,13 +81,13 @@ export async function generateToken(): Promise<string> {
  return refreshPromise;
 }
 
-export function showApiErrorToast(err: any, fallbackMessage?: string) {
+export function showApiErrorToast(err: any) {
  const response = err?.response;
  const isAlreadyToasted =
   !response ||
   response.status === 429 ||
   response.data?.type === "session_expired";
- const toastMessage = response?.data?.message ?? fallbackMessage;
+ const toastMessage = response?.data?.message;
  if (isAlreadyToasted || !toastMessage) return;
  store.dispatch(showToast({ isToastOpen: true, toastMessage, toastVariant: "error" }));
 }
@@ -283,8 +280,8 @@ export const callAPIInterface = async <
     return;
    }
 
-   if (errorStatus === 429) {
-    store.dispatch(showToast({ isToastOpen: true, toastMessage: tooManyAttemptsText, toastVariant: "error" }));
+   if (errorStatus === 429 && errorData?.message) {
+    store.dispatch(showToast({ isToastOpen: true, toastMessage: errorData.message, toastVariant: "error" }));
    }
 
    const isKnownError =

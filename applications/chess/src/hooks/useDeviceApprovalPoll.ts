@@ -1,15 +1,12 @@
 import { useEffect, useRef } from "react";
 import { io, type Socket } from "socket.io-client";
-import { callAPIInterface } from "@/utils";
-import { useReduxDispatch } from "@/redux/hooks";
-import { showToast } from "@/redux/common/slice";
+import { callAPIInterface, showApiErrorToast } from "@/utils";
 import sessionService from "@gopvp/common/src/util/sessionService";
 import type { ILoginResponse } from "@/types/utils";
 
 const FALLBACK_POLL_MS = 45000;
 
 export function useDeviceApprovalPoll() {
-    const dispatch = useReduxDispatch();
     const socketRef = useRef<Socket | null>(null);
     const fallbackTimerRef = useRef<ReturnType<typeof setInterval> | null>(
         null,
@@ -40,17 +37,9 @@ export function useDeviceApprovalPoll() {
                 stop();
                 await sessionService.saveSession(res);
                 onApproved(res);
-            } catch (err: any) {
+            } catch (err) {
                 stop();
-                dispatch(
-                    showToast({
-                        isToastOpen: true,
-                        toastMessage:
-                            err?.response?.data?.message ??
-                            "Please log in again.",
-                        toastVariant: "error",
-                    }),
-                );
+                showApiErrorToast(err);
             }
         };
 

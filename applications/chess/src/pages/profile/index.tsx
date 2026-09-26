@@ -30,7 +30,6 @@ import {
  saveChangesText,
  appearanceText,
  darkModeText,
- noDataFoundText,
 } from "@/constants/messages";
 import CustomModal from "@/components/base/Modal/Modal";
 
@@ -133,7 +132,7 @@ export default function Profile() {
      ),
     );
    } catch (err) {
-    showApiErrorToast(err, noDataFoundText);
+    showApiErrorToast(err);
    } finally {
     setLoading(false);
    }

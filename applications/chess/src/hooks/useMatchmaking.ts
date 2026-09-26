@@ -7,7 +7,6 @@ import { showToast } from "@/redux/common/slice";
 import { buildMatchUrl } from "@/utils";
 import { useGame } from "@/hooks/useGame";
 import {
- somethingWentWrongText,
  noOpponentFoundText,
 } from "@/constants/messages";
 import type {
@@ -57,13 +56,10 @@ export function useMatchmaking() {
                 { game, bet: pool.bet, time: pool.time },
                 (err: ISocketAckError | null, data: IPoolJoinAck) => {
                     if (err) {
-                        dispatch(
-                            showToast({
-                                isToastOpen: true,
-                                toastMessage: err.errors[0]?.message ?? somethingWentWrongText,
-                                toastVariant: "error",
-                            }),
-                        );
+                        const toastMessage = err.errors[0]?.message;
+                        if (toastMessage) {
+                            dispatch(showToast({ isToastOpen: true, toastMessage, toastVariant: "error" }));
+                        }
                         resetStatus();
                         return;
                     }

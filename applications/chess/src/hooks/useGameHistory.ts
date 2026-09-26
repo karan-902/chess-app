@@ -1,8 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { callAPIInterface, showApiErrorToast } from "@/utils";
-import {
- noDataFoundText,
-} from "@/constants/messages";
 import type {
  IGameHistoryItem,
  IGameHistoryResponse,
@@ -77,7 +74,7 @@ export function useGameHistory(
     pageIdRef.current = res?.page_id ?? null;
    } catch (err) {
     if (activeTypeRef.current === requestType) setError(true);
-    showApiErrorToast(err, noDataFoundText);
+    showApiErrorToast(err);
    } finally {
     isFetchingRef.current = false;
     if (activeTypeRef.current === requestType) {
@@ -111,7 +108,7 @@ export function useGameHistory(
     );
    } catch (err) {
     setStatsError(true);
-    showApiErrorToast(err, noDataFoundText);
+    showApiErrorToast(err);
    } finally {
     setStatsLoading(false);
    }
