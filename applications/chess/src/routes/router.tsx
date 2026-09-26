@@ -1,19 +1,19 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import Layout from "@/container/Layout";
-import PrivateRoute from "@/container/PrivateRoute";
-import PublicRoute from "@/container/PublicRoute";
-import Login from "@/pages/login";
-import Register from "@/pages/register";
-// import ApproveDevice from "@/pages/approve-device";
-import MyMatches from "@/pages/history";
-import Leaderboard from "@/pages/leaderboard";
-import Rules from "@/pages/rules";
-import Wallet from "@/pages/wallet";
-import Profile from "@/pages/profile";
-import GameRoute from "@/container/GameRoute";
-import GamePlayPage from "@/container/GamePlayPage";
-import EnteredGameRedirect from "@/container/EnteredGameRedirect";
-import { GAME_PAGES } from "@/constants/config";
+import Layout from "@gopvp/chess/src/container/Layout";
+import PrivateRoute from "@gopvp/chess/src/container/PrivateRoute";
+import PublicRoute from "@gopvp/chess/src/container/PublicRoute";
+import Login from "@gopvp/chess/src/pages/login";
+import Register from "@gopvp/chess/src/pages/register";
+// import ApproveDevice from "@gopvp/chess/src/pages/approve-device";
+import MyMatches from "@gopvp/chess/src/pages/history";
+import Leaderboard from "@gopvp/chess/src/pages/leaderboard";
+import Rules from "@gopvp/chess/src/pages/rules";
+import Wallet from "@gopvp/chess/src/pages/wallet";
+import Profile from "@gopvp/chess/src/pages/profile";
+import GameRoute from "@gopvp/chess/src/container/GameRoute";
+import GamePlayPage from "@gopvp/chess/src/container/GamePlayPage";
+import EnteredGameRedirect from "@gopvp/chess/src/container/EnteredGameRedirect";
+import { GAME_PAGES } from "@gopvp/chess/src/constants/config";
 
 export const router = createBrowserRouter([
     {

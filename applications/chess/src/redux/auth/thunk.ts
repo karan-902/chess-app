@@ -5,7 +5,7 @@ import {
 } from "@gopvp/common/src/util/api";
 import type { ILoginBody, IGoogleLoginBody } from "@gopvp/common/src/types/payload";
 import type { ILoginResponse } from "@gopvp/common/src/types/response";
-import { throwThunkError } from "@/redux/createAppThunk";
+import { throwThunkError } from "@gopvp/chess/src/redux/createAppThunk";
 import sessionService from "@gopvp/common/src/util/sessionService";
 
 export const login = createAsyncThunk(

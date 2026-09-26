@@ -7,9 +7,9 @@ import type {
  MatchOutcome,
  MoveRecord,
  PieceColor,
-} from "./index";
-import type { MatchmakingStatus } from "@/hooks/useMatchmaking";
-import type { RoomStatus } from "@/hooks/useRoomMatch";
+} from "@gopvp/chess/src/types/index";
+import type { MatchmakingStatus } from "@gopvp/chess/src/hooks/useMatchmaking";
+import type { RoomStatus } from "@gopvp/chess/src/hooks/useRoomMatch";
 
 export type GameMode = "pvp" | "pvc";
 export type Difficulty = "easy" | "medium" | "hard";

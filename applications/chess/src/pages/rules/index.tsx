@@ -9,7 +9,7 @@ import {
  fairMatchingExplainedText,
  appVersionText,
  pieceSetCreditText,
-} from "@/constants/messages";
+} from "@gopvp/chess/src/constants/messages";
 
 export default function Rules() {
     return (

@@ -1,13 +1,13 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { TIME_SECONDS } from "@/constants";
-import { computerText, difficultyText } from "@/constants/messages";
-import { loadPvcState } from "@/utils/storage";
-import type { Difficulty } from "@/types/component";
+import { TIME_SECONDS } from "@gopvp/chess/src/constants";
+import { computerText, difficultyText } from "@gopvp/chess/src/constants/messages";
+import { loadPvcState } from "@gopvp/chess/src/utils/storage";
+import type { Difficulty } from "@gopvp/chess/src/types/component";
 import type {
  GameCategory,
  IGameRoomPlayer,
  PieceColor,
-} from "@/types/index";
+} from "@gopvp/chess/src/types/index";
 
 export interface IPvcState {
  gameId: string | null;

@@ -10,7 +10,7 @@ import {
     showApiErrorToast,
 } from "@gopvp/common/src/util/api";
 import sessionService from "@gopvp/common/src/util/sessionService";
-import { COUNTRY_OPTIONS } from "@/constants/config";
+import { COUNTRY_OPTIONS } from "@gopvp/chess/src/constants/config";
 import type { IUpdateProfileBody } from "@gopvp/common/src/types/payload";
 import type {
  ILoginResponse,
@@ -24,7 +24,7 @@ import {
  countryText,
  selectCountryText,
  searchCountryText,
-} from "@/constants/messages";
+} from "@gopvp/chess/src/constants/messages";
 
 const schema = yup.object({
  country: yup.string().required(countryRequiredText),

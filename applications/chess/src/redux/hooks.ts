@@ -1,4 +1,4 @@
-import type { AppDispatch, RootState } from "./store";
+import type { AppDispatch, RootState } from "@gopvp/chess/src/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 
 export const useReduxSelector = useSelector.withTypes<RootState>();

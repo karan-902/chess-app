@@ -1,8 +1,8 @@
 import { useState, useCallback } from "react";
 import { Chess } from "chess.js";
 import type { Square } from "chess.js";
-import type { MoveRecord } from "@/types/index";
-import { playSound, getMoveSound } from "@/lib/sounds";
+import type { MoveRecord } from "@gopvp/chess/src/types/index";
+import { playSound, getMoveSound } from "@gopvp/chess/src/lib/sounds";
 
 export const CAPTURE_ORDER = ["p", "n", "b", "r", "q"] as const;
 const STARTING_COUNTS: Record<string, number> = {

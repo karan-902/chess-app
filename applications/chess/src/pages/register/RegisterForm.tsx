@@ -17,10 +17,10 @@ import {
     callAPIInterface,
     showApiErrorToast,
 } from "@gopvp/common/src/util/api";
-import { useReduxDispatch } from "@/redux/hooks";
-import { login } from "@/redux/auth/thunk";
-import { showLoader, hideLoader } from "@/redux/common/slice";
-import { COUNTRY_OPTIONS } from "@/constants/config";
+import { useReduxDispatch } from "@gopvp/chess/src/redux/hooks";
+import { login } from "@gopvp/chess/src/redux/auth/thunk";
+import { showLoader, hideLoader } from "@gopvp/chess/src/redux/common/slice";
+import { COUNTRY_OPTIONS } from "@gopvp/chess/src/constants/config";
 import type { IRegisterBody } from "@gopvp/common/src/types/payload";
 import type { IRegisterResponse, IRandomNameResponse } from "@gopvp/common/src/types/response";
 import {
@@ -44,7 +44,7 @@ import {
  registerText,
  selectCountryText,
  USERNAME_MAX_LENGTH,
-} from "@/constants/messages";
+} from "@gopvp/chess/src/constants/messages";
 import type { IEmailFormScreenProps } from "@gopvp/common/src/types/component";
 
 const USERNAME_CHECK_DEBOUNCE_MS = 700;

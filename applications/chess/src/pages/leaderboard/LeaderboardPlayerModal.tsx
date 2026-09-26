@@ -3,8 +3,8 @@ import CustomModal from "@gopvp/common/src/components/Modal/Modal";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Card from "@gopvp/common/src/components/Card/Card";
-import StatRowSkeleton from "@/components/common/StatRowSkeleton";
-import { useGame } from "@/hooks/useGame";
+import StatRowSkeleton from "@gopvp/chess/src/components/common/StatRowSkeleton";
+import { useGame } from "@gopvp/chess/src/hooks/useGame";
 import {
  callAPIInterface,
  showApiErrorToast,
@@ -15,7 +15,7 @@ import {
  grossIncomeText,
  winsText,
  bestStreakText,
-} from "@/constants/messages";
+} from "@gopvp/chess/src/constants/messages";
 import type { ILeaderboardPlayerResponse } from "@gopvp/common/src/types/response";
 import type { ILeaderboardPlayerModalProps } from "@gopvp/common/src/types/component";
 

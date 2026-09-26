@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 import classNames from "classnames";
 import { CircularProgress } from "@mui/material";
-import { useReduxDispatch } from "@/redux/hooks";
-import { showToast } from "@/redux/common/slice";
+import { useReduxDispatch } from "@gopvp/chess/src/redux/hooks";
+import { showToast } from "@gopvp/chess/src/redux/common/slice";
 import Box from "@gopvp/common/src/components/Box/Box";
 import SuccessCheckmark from "@gopvp/common/src/components/SuccessCheckmark/SuccessCheckmark";
 import { InfoIcon } from "@gopvp/common/src/components/images";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
 import Input from "@gopvp/common/src/components/Input/Input";
-import { useWalletActionModal } from "@/context/WalletActionModalContext";
-import { useWalletBalance } from "@/hooks/useWallet";
-import { withdrawRequest } from "@/hooks/useWallet";
-import { useModalReady } from "@/hooks/useModalReady";
+import { useWalletActionModal } from "@gopvp/chess/src/context/WalletActionModalContext";
+import { useWalletBalance } from "@gopvp/chess/src/hooks/useWallet";
+import { withdrawRequest } from "@gopvp/chess/src/hooks/useWallet";
+import { useModalReady } from "@gopvp/chess/src/hooks/useModalReady";
 import { showApiErrorToast } from "@gopvp/common/src/util/api";
 import { formatAmount } from "@gopvp/common/src/util/format";
 import {
@@ -28,7 +28,7 @@ import {
  withdrawalCompletedText,
  enterAmountText,
  MIN_TRANSACTION_USD,
-} from "@/constants/messages";
+} from "@gopvp/chess/src/constants/messages";
 import CustomModal from "@gopvp/common/src/components/Modal/Modal";
 
 type Stage = "amount" | "success";

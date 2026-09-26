@@ -2,15 +2,15 @@ import { configureStore } from "@reduxjs/toolkit";
 import localforage from "localforage";
 import sessionService from "@gopvp/common/src/util/sessionService";
 import { injectStore } from "@gopvp/common/src/util/injectStore";
-import authReducer, { clearSession, setSession } from "./auth/slice";
-import commonReducer from "./common/slice";
-import walletReducer from "./wallet/slice";
-import socketModalsReducer from "./socketModals/slice";
-import speedReducer, { hydrateSpeed, type ISpeedState } from "./speed/slice";
-import gameReducer from "./game/slice";
-import matchReducer from "./match/slice";
-import pvcReducer from "./pvc/slice";
-import { savePvcState } from "@/utils/storage";
+import authReducer, { clearSession, setSession } from "@gopvp/chess/src/redux/auth/slice";
+import commonReducer from "@gopvp/chess/src/redux/common/slice";
+import walletReducer from "@gopvp/chess/src/redux/wallet/slice";
+import socketModalsReducer from "@gopvp/chess/src/redux/socketModals/slice";
+import speedReducer, { hydrateSpeed, type ISpeedState } from "@gopvp/chess/src/redux/speed/slice";
+import gameReducer from "@gopvp/chess/src/redux/game/slice";
+import matchReducer from "@gopvp/chess/src/redux/match/slice";
+import pvcReducer from "@gopvp/chess/src/redux/pvc/slice";
+import { savePvcState } from "@gopvp/chess/src/utils/storage";
 import type { ILoginResponse } from "@gopvp/common/src/types/response";
 
 export const store = configureStore({

@@ -8,10 +8,10 @@ import Card from "@gopvp/common/src/components/Card/Card";
 import Button from "@gopvp/common/src/components/Button/Button";
 import Input from "@gopvp/common/src/components/Input/Input";
 import CustomSwitch from "@gopvp/common/src/components/Switch/Switch";
-import ProfileSkeleton from "@/components/common/ProfileSkeleton";
-import { useReduxSelector, useReduxDispatch } from "@/redux/hooks";
+import ProfileSkeleton from "@gopvp/chess/src/components/common/ProfileSkeleton";
+import { useReduxSelector, useReduxDispatch } from "@gopvp/chess/src/redux/hooks";
 import sessionService from "@gopvp/common/src/util/sessionService";
-import { useAppTheme } from "@/context/ThemeContext";
+import { useAppTheme } from "@gopvp/chess/src/context/ThemeContext";
 import {
  callAPIInterface,
  showApiErrorToast,
@@ -34,7 +34,7 @@ import {
  saveChangesText,
  appearanceText,
  darkModeText,
-} from "@/constants/messages";
+} from "@gopvp/chess/src/constants/messages";
 import CustomModal from "@gopvp/common/src/components/Modal/Modal";
 
 const profileEditSchema = Yup.object({

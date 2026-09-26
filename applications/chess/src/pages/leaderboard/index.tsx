@@ -4,20 +4,20 @@ import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Card from "@gopvp/common/src/components/Card/Card";
-import FilterDropdown from "@/components/common/FilterDropdown";
-import EmptyState from "@/components/common/EmptyState";
-import LbRowSkeleton from "@/components/common/LbRowSkeleton";
+import FilterDropdown from "@gopvp/chess/src/components/common/FilterDropdown";
+import EmptyState from "@gopvp/chess/src/components/common/EmptyState";
+import LbRowSkeleton from "@gopvp/chess/src/components/common/LbRowSkeleton";
 import VirtualList from "@gopvp/common/src/components/VirtualList/VirtualList";
-import LeaderboardPlayerModal from "@/pages/leaderboard/LeaderboardPlayerModal";
-import { useLeaderboard } from "@/hooks/useLeaderboard";
-import { useReduxSelector } from "@/redux/hooks";
+import LeaderboardPlayerModal from "@gopvp/chess/src/pages/leaderboard/LeaderboardPlayerModal";
+import { useLeaderboard } from "@gopvp/chess/src/hooks/useLeaderboard";
+import { useReduxSelector } from "@gopvp/chess/src/redux/hooks";
 import { formatAmount, shortenUsername } from "@gopvp/common/src/util/format";
 import {
     LEADERBOARD_SCOPES,
     LEADERBOARD_SCOPE_LABELS,
     LEADERBOARD_SORTS,
     LEADERBOARD_SORT_LABELS,
-} from "@/constants/config";
+} from "@gopvp/chess/src/constants/config";
 import type { LeaderboardScope, LeaderboardSort } from "@gopvp/common/src/types/index";
 import type { ILeaderboardRowResponse } from "@gopvp/common/src/types/response";
 import {
@@ -25,7 +25,7 @@ import {
  noRankedPlayersText,
  dashText,
  youText,
-} from "@/constants/messages";
+} from "@gopvp/chess/src/constants/messages";
 
 const LB_SKELETON_ROWS = 20;
 const DEFAULT_SCOPE: LeaderboardScope = "all";

@@ -3,15 +3,15 @@ import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ThemeProvider as MuiThemeProvider, CssBaseline } from "@mui/material";
-import { store, hydrateSession, hydrateSpeedState } from "./redux/index.ts";
-import { SocketProvider } from "./context/SocketContext";
-import { WalletActionModalProvider } from "./context/WalletActionModalContext";
-import { AppThemeProvider, useAppTheme } from "./context/ThemeContext";
+import { store, hydrateSession, hydrateSpeedState } from "@gopvp/chess/src/redux/index.ts";
+import { SocketProvider } from "@gopvp/chess/src/context/SocketContext";
+import { WalletActionModalProvider } from "@gopvp/chess/src/context/WalletActionModalContext";
+import { AppThemeProvider, useAppTheme } from "@gopvp/chess/src/context/ThemeContext";
 import { getMuiTheme } from "@gopvp/common/src/theme";
 import { googleClientId } from "@gopvp/common/src/constants/env";
 
 import "./styles/main.scss";
-import App from "./App.tsx";
+import App from "@gopvp/chess/src/App.tsx";
 
 function Root() {
     const { mode } = useAppTheme();

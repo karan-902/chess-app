@@ -1,10 +1,10 @@
-import AuthLayout from "@/container/AuthLayout";
-import RegisterForm from "./RegisterForm";
+import AuthLayout from "@gopvp/chess/src/container/AuthLayout";
+import RegisterForm from "@gopvp/chess/src/pages/register/RegisterForm";
 import {
  createAccountText,
  haveAccountPromptText,
  loginText,
-} from "@/constants/messages";
+} from "@gopvp/chess/src/constants/messages";
 import { NavLink } from "react-router-dom";
 
 export default function Register() {

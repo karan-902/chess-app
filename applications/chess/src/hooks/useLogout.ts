@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { callAPIInterface, LOGOUT_PATH } from "@gopvp/common/src/util/api";
 import sessionService from "@gopvp/common/src/util/sessionService";
-import { useReduxSelector, useReduxDispatch } from "@/redux/hooks";
-import { showLoader, hideLoader } from "@/redux/common/slice";
+import { useReduxSelector, useReduxDispatch } from "@gopvp/chess/src/redux/hooks";
+import { showLoader, hideLoader } from "@gopvp/chess/src/redux/common/slice";
 
 export function useLogout(text?: string) {
  const navigate = useNavigate();

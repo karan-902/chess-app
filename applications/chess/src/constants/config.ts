@@ -8,7 +8,7 @@ import {
  HandshakeIcon,
 } from "@gopvp/common/src/components/images";
 import type { LucideIcon, SvgIconComponent } from "@gopvp/common/src/components/images";
-import type { GameCategory, MatchOutcome } from "@/types/index";
+import type { GameCategory, MatchOutcome } from "@gopvp/chess/src/types/index";
 import type {
  LeaderboardScope,
  LeaderboardSort,
@@ -28,7 +28,7 @@ import {
  allTimeText,
  topEarnersText,
  mostWinsText,
-} from "@/constants/messages";
+} from "@gopvp/chess/src/constants/messages";
 
 export const LEADERBOARD_SCOPES: LeaderboardScope[] = [
  "daily",

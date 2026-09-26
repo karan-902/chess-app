@@ -2,30 +2,30 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useBlocker, Navigate } from "react-router-dom";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
-import ChessBoard from "@/components/board/Board";
-import PlayerRow from "./PlayerRow";
-import PromotionOverlay from "./PromotionOverlay";
-import ReviewControls from "./ReviewControls";
-import GameOverOverlay from "./GameOverOverlay";
-import { useChessGame } from "@/hooks/useChessGame";
-import { useBoardReview } from "@/hooks/useBoardReview";
-import { useGameClock } from "@/hooks/useGameClock";
-import { useTabLock } from "@/hooks/useTabLock";
-import { useStockfish } from "@/hooks/useStockfish";
-import { useComputerOpponent } from "@/hooks/useComputerOpponent";
-import { useGameRoomSetup } from "@/hooks/useGameRoomSetup";
-import { useGameSocket } from "@/hooks/useGameSocket";
-import { usePvcGameEnd } from "@/hooks/usePvcGameEnd";
-import { oppositeSide } from "@/utils";
-import { markGameFinished, clearPvcSnapshot } from "@/utils/storage";
-import { DIFFICULTY_CONFIG } from "@/constants/index";
+import ChessBoard from "@gopvp/chess/src/components/board/Board";
+import PlayerRow from "@gopvp/chess/src/pages/play/PlayerRow";
+import PromotionOverlay from "@gopvp/chess/src/pages/play/PromotionOverlay";
+import ReviewControls from "@gopvp/chess/src/pages/play/ReviewControls";
+import GameOverOverlay from "@gopvp/chess/src/pages/play/GameOverOverlay";
+import { useChessGame } from "@gopvp/chess/src/hooks/useChessGame";
+import { useBoardReview } from "@gopvp/chess/src/hooks/useBoardReview";
+import { useGameClock } from "@gopvp/chess/src/hooks/useGameClock";
+import { useTabLock } from "@gopvp/chess/src/hooks/useTabLock";
+import { useStockfish } from "@gopvp/chess/src/hooks/useStockfish";
+import { useComputerOpponent } from "@gopvp/chess/src/hooks/useComputerOpponent";
+import { useGameRoomSetup } from "@gopvp/chess/src/hooks/useGameRoomSetup";
+import { useGameSocket } from "@gopvp/chess/src/hooks/useGameSocket";
+import { usePvcGameEnd } from "@gopvp/chess/src/hooks/usePvcGameEnd";
+import { oppositeSide } from "@gopvp/chess/src/utils";
+import { markGameFinished, clearPvcSnapshot } from "@gopvp/chess/src/utils/storage";
+import { DIFFICULTY_CONFIG } from "@gopvp/chess/src/constants/index";
 import {
  GAME_END_REASON_LABELS,
  MATCH_RESULT_OUTCOMES,
-} from "@/constants/config";
-import { useGame } from "@/hooks/useGame";
+} from "@gopvp/chess/src/constants/config";
+import { useGame } from "@gopvp/chess/src/hooks/useGame";
 import type { IMatchResultResponse } from "@gopvp/common/src/types/response";
-import type { IGameRoomProps } from "@/types/component";
+import type { IGameRoomProps } from "@gopvp/chess/src/types/component";
 import {
  resignText,
  drawText,
@@ -36,9 +36,9 @@ import {
  drawUpperText,
  defeatText,
  gameOverText,
-} from "@/constants/messages";
+} from "@gopvp/chess/src/constants/messages";
 import Button from "@gopvp/common/src/components/Button/Button";
-import ResignModal from "@/components/common/ResignModal";
+import ResignModal from "@gopvp/chess/src/components/common/ResignModal";
 
 function pickBySide<T>(side: "w" | "b", whiteVal: T, blackVal: T): T {
  return side === "w" ? whiteVal : blackVal;

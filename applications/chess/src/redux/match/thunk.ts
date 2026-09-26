@@ -1,8 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { getSocket } from "@gopvp/common/src/util/socket";
-import { setMatchState } from "@/redux/match/slice";
-import type { RootState } from "@/redux/store";
-import type { IGameStateResponse } from "@/types/response";
+import { setMatchState } from "@gopvp/chess/src/redux/match/slice";
+import type { RootState } from "@gopvp/chess/src/redux/store";
+import type { IGameStateResponse } from "@gopvp/chess/src/types/response";
 import type {
  IGameNotFoundResponse,
  ISocketAckError,

@@ -1,6 +1,6 @@
 import { readStorage, writeStorage } from "@gopvp/common/src/util/storage";
-import type { IPvcSnapshot } from "@/types/component";
-import type { IPvcState } from "@/redux/pvc/slice";
+import type { IPvcSnapshot } from "@gopvp/chess/src/types/component";
+import type { IPvcState } from "@gopvp/chess/src/redux/pvc/slice";
 
 const PVC_STATE_KEY = "pvc_state";
 

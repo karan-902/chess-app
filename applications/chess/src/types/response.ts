@@ -1,4 +1,4 @@
-import type { PieceColor } from "./index";
+import type { PieceColor } from "@gopvp/chess/src/types/index";
 
 /** gameplay */
 export type IRemainingTime = {

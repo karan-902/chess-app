@@ -11,20 +11,20 @@ import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
 import Button from "@gopvp/common/src/components/Button/Button";
 import CustomChip from "@gopvp/common/src/components/Chip/Chip";
 import { CustomTabs, CustomTab } from "@gopvp/common/src/components/Tabs/Tabs";
-import { useWalletBalance } from "@/hooks/useWallet";
-import { useLogout } from "@/hooks/useLogout";
-import { useReduxSelector } from "@/redux/hooks";
+import { useWalletBalance } from "@gopvp/chess/src/hooks/useWallet";
+import { useLogout } from "@gopvp/chess/src/hooks/useLogout";
+import { useReduxSelector } from "@gopvp/chess/src/redux/hooks";
 import { formatAmount, shortenUsername } from "@gopvp/common/src/util/format";
-import { getGameFromPath, getGameRoutes } from "@/utils";
-import { NAV_ITEMS } from "@/constants/config";
+import { getGameFromPath, getGameRoutes } from "@gopvp/chess/src/utils";
+import { NAV_ITEMS } from "@gopvp/chess/src/constants/config";
 import {
  profileText,
  logOutText,
  walletText,
  backText,
-} from "@/constants/messages";
+} from "@gopvp/chess/src/constants/messages";
 import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
-import { ChessLogo } from "@/components/constants";
+import { ChessLogo } from "@gopvp/chess/src/components/constants";
 
 export default function Header() {
  const { pathname } = useLocation();

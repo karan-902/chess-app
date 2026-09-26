@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
-import PieceIcon from "./PieceIcon";
+import PieceIcon from "@gopvp/chess/src/components/board/PieceIcon";
 import "./board.scss";
 
 const FILES = ["a", "b", "c", "d", "e", "f", "g", "h"];

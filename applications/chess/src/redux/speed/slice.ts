@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { GameSlug } from "@/constants/config";
+import type { GameSlug } from "@gopvp/chess/src/constants/config";
 
 export interface ISpeedLaunchParams {
     acct: string | null;

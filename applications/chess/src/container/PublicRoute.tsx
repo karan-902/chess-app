@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
-import { useReduxSelector } from "@/redux/hooks";
-import EnteredGameRedirect from "@/container/EnteredGameRedirect";
+import { useReduxSelector } from "@gopvp/chess/src/redux/hooks";
+import EnteredGameRedirect from "@gopvp/chess/src/container/EnteredGameRedirect";
 
 function PublicRoute() {
     const isLoggedIn = useReduxSelector((state) => state.auth.isLoggedIn);

@@ -1,9 +1,9 @@
 import { useState } from "react";
-import type { GameMode } from "@/types/component";
+import type { GameMode } from "@gopvp/chess/src/types/component";
 import { shortenUsername } from "@gopvp/common/src/util/format";
-import { oppositeSide } from "@/utils";
-import { isGameFinished } from "@/utils/storage";
-import { useReduxSelector } from "@/redux/hooks";
+import { oppositeSide } from "@gopvp/chess/src/utils";
+import { isGameFinished } from "@gopvp/chess/src/utils/storage";
+import { useReduxSelector } from "@gopvp/chess/src/redux/hooks";
 
 export function useGameRoomSetup(mode: GameMode) {
  const isPvc = mode === "pvc";

@@ -3,7 +3,7 @@ import {
     callAPIInterface,
     showApiErrorToast,
 } from "@gopvp/common/src/util/api";
-import { useGame } from "@/hooks/useGame";
+import { useGame } from "@gopvp/chess/src/hooks/useGame";
 import type { LeaderboardScope, LeaderboardSort } from "@gopvp/common/src/types/index";
 import type { ILeaderboardBody } from "@gopvp/common/src/types/payload";
 import type {

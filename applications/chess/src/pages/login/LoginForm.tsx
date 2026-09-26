@@ -9,14 +9,14 @@ import Text from "@gopvp/common/src/components/Text/Text";
 import Input from "@gopvp/common/src/components/Input/Input";
 import Button from "@gopvp/common/src/components/Button/Button";
 import CustomAvatar from "@gopvp/common/src/components/Avatar/Avatar";
-import AuthLayout from "@/container/AuthLayout";
-import { useGoogleAuth } from "@/hooks/useGoogleAuth";
-// import { useDeviceApprovalPoll } from "@/hooks/useDeviceApprovalPoll";
-import SelectCountryScreen from "@/pages/select-country/SelectCountryScreen";
+import AuthLayout from "@gopvp/chess/src/container/AuthLayout";
+import { useGoogleAuth } from "@gopvp/chess/src/hooks/useGoogleAuth";
+// import { useDeviceApprovalPoll } from "@gopvp/chess/src/hooks/useDeviceApprovalPoll";
+import SelectCountryScreen from "@gopvp/chess/src/pages/select-country/SelectCountryScreen";
 import { callAPIInterface } from "@gopvp/common/src/util/api";
-import { useReduxDispatch } from "@/redux/hooks";
-import { login } from "@/redux/auth/thunk";
-import { showLoader, hideLoader } from "@/redux/common/slice";
+import { useReduxDispatch } from "@gopvp/chess/src/redux/hooks";
+import { login } from "@gopvp/chess/src/redux/auth/thunk";
+import { showLoader, hideLoader } from "@gopvp/chess/src/redux/common/slice";
 import type { IVerifyUserBody } from "@gopvp/common/src/types/payload";
 import type { IVerifyUserResponse } from "@gopvp/common/src/types/response";
 // import type { ILoginResponse } from "@gopvp/common/src/types/response";
@@ -47,7 +47,7 @@ import {
  noAccountPromptText,
  signUpText,
  selectYourCountryText,
-} from "@/constants/messages";
+} from "@gopvp/chess/src/constants/messages";
 
 const emailSchema = yup.object({
  email: yup.string().email(enterValidEmailText).required(emailRequiredText),

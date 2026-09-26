@@ -1,17 +1,17 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { getSocket } from "@gopvp/common/src/util/socket";
-import { useSocket } from "@/context/SocketContext";
-import { useReduxDispatch } from "@/redux/hooks";
-import { showToast } from "@/redux/common/slice";
+import { useSocket } from "@gopvp/chess/src/context/SocketContext";
+import { useReduxDispatch } from "@gopvp/chess/src/redux/hooks";
+import { showToast } from "@gopvp/chess/src/redux/common/slice";
 import { showAckErrorToast } from "@gopvp/common/src/util/api";
-import { buildMatchUrl } from "@/utils";
-import { useGame } from "@/hooks/useGame";
-import { useCountdown } from "@/hooks/useCountdown";
-import { POOL_TIMEOUT_SECONDS } from "@/constants/config";
+import { buildMatchUrl } from "@gopvp/chess/src/utils";
+import { useGame } from "@gopvp/chess/src/hooks/useGame";
+import { useCountdown } from "@gopvp/chess/src/hooks/useCountdown";
+import { POOL_TIMEOUT_SECONDS } from "@gopvp/chess/src/constants/config";
 import {
  noOpponentFoundText,
-} from "@/constants/messages";
+} from "@gopvp/chess/src/constants/messages";
 import type {
     IPoolResponse,
     IMatchmakingResponse,

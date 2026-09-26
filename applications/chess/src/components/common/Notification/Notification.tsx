@@ -2,8 +2,8 @@ import { forwardRef, type ReactElement } from "react";
 import { Snackbar, Slide, Portal } from "@mui/material";
 import type { TransitionProps } from "@mui/material/transitions";
 import classNames from "classnames";
-import { useReduxDispatch, useReduxSelector } from "@/redux/hooks";
-import { hideToast } from "@/redux/common/slice";
+import { useReduxDispatch, useReduxSelector } from "@gopvp/chess/src/redux/hooks";
+import { hideToast } from "@gopvp/chess/src/redux/common/slice";
 import AlertMessage from "@gopvp/common/src/components/AlertMessage/AlertMessage";
 
 const SlideLeft = forwardRef<unknown, TransitionProps & { children: ReactElement }>(

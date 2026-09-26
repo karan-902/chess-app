@@ -9,13 +9,13 @@ import {
 import { CircularProgress } from "@mui/material";
 import { setNavigator } from "@gopvp/common/src/util/navigationService";
 import Box from "@gopvp/common/src/components/Box/Box";
-import BackdropLoader from "@/components/common/BackdropLoader/BackdropLoader";
-import Notification from "@/components/common/Notification/Notification";
-import { useReduxDispatch, useReduxSelector } from "@/redux/hooks";
-import { setEnteredGame, setSpeedLaunchParams } from "@/redux/speed/slice";
-import { fetchGameDetails } from "@/redux/game/thunk";
-import { GAMES, GAME_PAGE_TITLES } from "@/constants/config";
-import { getGameFromPath, isGameSlug } from "@/utils";
+import BackdropLoader from "@gopvp/chess/src/components/common/BackdropLoader/BackdropLoader";
+import Notification from "@gopvp/chess/src/components/common/Notification/Notification";
+import { useReduxDispatch, useReduxSelector } from "@gopvp/chess/src/redux/hooks";
+import { setEnteredGame, setSpeedLaunchParams } from "@gopvp/chess/src/redux/speed/slice";
+import { fetchGameDetails } from "@gopvp/chess/src/redux/game/thunk";
+import { GAMES, GAME_PAGE_TITLES } from "@gopvp/chess/src/constants/config";
+import { getGameFromPath, isGameSlug } from "@gopvp/chess/src/utils";
 
 const APP_NAME = "GoPVP";
 

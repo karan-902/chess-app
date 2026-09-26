@@ -3,8 +3,8 @@ import {
     callAPIInterface,
     showApiErrorToast,
 } from "@gopvp/common/src/util/api";
-import { throwThunkError } from "@/redux/createAppThunk";
-import { finishGameLoad, setGameDetails, startGameLoad } from "@/redux/game/slice";
+import { throwThunkError } from "@gopvp/chess/src/redux/createAppThunk";
+import { finishGameLoad, setGameDetails, startGameLoad } from "@gopvp/chess/src/redux/game/slice";
 import type { IGameResponse } from "@gopvp/common/src/types/response";
 
 export const fetchGameDetails = createAsyncThunk(

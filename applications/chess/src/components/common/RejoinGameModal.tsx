@@ -3,13 +3,13 @@ import CustomModal from "@gopvp/common/src/components/Modal/Modal";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
-import { useSocket } from "@/context/SocketContext";
-import { useReduxSelector, useReduxDispatch } from "@/redux/hooks";
-import { setActiveGame } from "@/redux/socketModals/slice";
-import { clearMatchState } from "@/redux/match/slice";
+import { useSocket } from "@gopvp/chess/src/context/SocketContext";
+import { useReduxSelector, useReduxDispatch } from "@gopvp/chess/src/redux/hooks";
+import { setActiveGame } from "@gopvp/chess/src/redux/socketModals/slice";
+import { clearMatchState } from "@gopvp/chess/src/redux/match/slice";
 import { showAckErrorToast } from "@gopvp/common/src/util/api";
 import { formatAmount, shortenUsername } from "@gopvp/common/src/util/format";
-import { buildMatchUrl, isGameSlug } from "@/utils";
+import { buildMatchUrl, isGameSlug } from "@gopvp/chess/src/utils";
 import { navigateTo } from "@gopvp/common/src/util/navigationService";
 import {
  rejoinMatchText,
@@ -22,7 +22,7 @@ import {
  leavingForfeitsText,
  keepPlayingText,
  forfeitAndExitText,
-} from "@/constants/messages";
+} from "@gopvp/chess/src/constants/messages";
 
 export default function RejoinGameModal() {
     const dispatch = useReduxDispatch();

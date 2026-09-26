@@ -1,23 +1,23 @@
 import { useCallback, useEffect, useState } from "react";
-import { useSocket } from "@/context/SocketContext";
-import { useCountdown } from "@/hooks/useCountdown";
-import { useReduxDispatch, useReduxSelector } from "@/redux/hooks";
-import { showToast } from "@/redux/common/slice";
-import { loadMatchState } from "@/redux/match/thunk";
+import { useSocket } from "@gopvp/chess/src/context/SocketContext";
+import { useCountdown } from "@gopvp/chess/src/hooks/useCountdown";
+import { useReduxDispatch, useReduxSelector } from "@gopvp/chess/src/redux/hooks";
+import { showToast } from "@gopvp/chess/src/redux/common/slice";
+import { loadMatchState } from "@gopvp/chess/src/redux/match/thunk";
 import {
     callAPIInterface,
     showAckErrorToast,
     showApiErrorToast,
 } from "@gopvp/common/src/util/api";
-import { drawOfferDeclinedText } from "@/constants/messages";
+import { drawOfferDeclinedText } from "@gopvp/chess/src/constants/messages";
 import type {
     IDrawOfferEvent,
     IMatchResultResponse,
     ISocketAckError,
 } from "@gopvp/common/src/types/response";
-import type { IMoveEvent, IMoveResponse } from "@/types/response";
-import type { IMoveBody } from "@/types/payload";
-import type { PieceColor } from "@/types/index";
+import type { IMoveEvent, IMoveResponse } from "@gopvp/chess/src/types/response";
+import type { IMoveBody } from "@gopvp/chess/src/types/payload";
+import type { PieceColor } from "@gopvp/chess/src/types/index";
 
 const MATCH_END_EVENTS = [
     "game:resign",

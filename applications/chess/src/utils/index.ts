@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
-import { yesterdayText, justNowText } from "@/constants/messages";
-import { GAMES, GAME_PAGES, type GameSlug } from "@/constants/config";
-import type { GameCategory } from "@/types/index";
+import { yesterdayText, justNowText } from "@gopvp/chess/src/constants/messages";
+import { GAMES, GAME_PAGES, type GameSlug } from "@gopvp/chess/src/constants/config";
+import type { GameCategory } from "@gopvp/chess/src/types/index";
 
 export function oppositeSide(side: "w" | "b"): "w" | "b" {
  return side === "w" ? "b" : "w";

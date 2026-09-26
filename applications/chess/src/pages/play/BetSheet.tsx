@@ -4,10 +4,10 @@ import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
 import Card from "@gopvp/common/src/components/Card/Card";
 import CustomModal from "@gopvp/common/src/components/Modal/Modal";
-import PoolCardSkeleton from "@/components/common/PoolCardSkeleton";
+import PoolCardSkeleton from "@gopvp/chess/src/components/common/PoolCardSkeleton";
 import { formatText } from "@gopvp/common/src/util/format";
-import { deriveCategory, msToSeconds } from "@/utils";
-import { CATEGORY_META } from "@/constants/config";
+import { deriveCategory, msToSeconds } from "@gopvp/chess/src/utils";
+import { CATEGORY_META } from "@gopvp/chess/src/constants/config";
 import type { IBetSheetProps } from "@gopvp/common/src/types/component";
 import {
  playText,
@@ -22,7 +22,7 @@ import {
  entryFeeAmountText,
  addFundsText,
  minutesText,
-} from "@/constants/messages";
+} from "@gopvp/chess/src/constants/messages";
 
 export default function BetSheet({
  open,

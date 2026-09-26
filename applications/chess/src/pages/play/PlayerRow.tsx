@@ -3,13 +3,13 @@ import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import CustomChip from "@gopvp/common/src/components/Chip/Chip";
 import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
-import PieceIcon from "@/components/board/PieceIcon";
-import type { IPlayerRowProps } from "@/types/component";
+import PieceIcon from "@gopvp/chess/src/components/board/PieceIcon";
+import type { IPlayerRowProps } from "@gopvp/chess/src/types/component";
 import {
  youText,
  reconnectingText,
  firstMoveText,
-} from "@/constants/messages";
+} from "@gopvp/chess/src/constants/messages";
 
 function capturedCode(type: string, color: "w" | "b") {
  return `${color}${type.toUpperCase()}`;

@@ -1,8 +1,8 @@
 import Box from "@gopvp/common/src/components/Box/Box";
 import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
-import MoveList from "./MoveList";
-import type { IReviewControlsProps } from "@/types/component";
-import { previousMoveText, nextMoveText } from "@/constants/messages";
+import MoveList from "@gopvp/chess/src/pages/play/MoveList";
+import type { IReviewControlsProps } from "@gopvp/chess/src/types/component";
+import { previousMoveText, nextMoveText } from "@gopvp/chess/src/constants/messages";
 
 export default function ReviewControls({
  moveHistory,

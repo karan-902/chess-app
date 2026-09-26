@@ -3,9 +3,9 @@ import { useSearchParams } from "react-router-dom";
 import { CheckCircleOutlineIcon } from "@gopvp/common/src/components/images";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Button from "@gopvp/common/src/components/Button/Button";
-import AuthLayout from "@/container/AuthLayout";
+import AuthLayout from "@gopvp/chess/src/container/AuthLayout";
 import { callAPIInterface } from "@gopvp/common/src/util/api";
-import { useLogout } from "@/hooks/useLogout";
+import { useLogout } from "@gopvp/chess/src/hooks/useLogout";
 import type { ApproveDeviceStatus } from "@gopvp/common/src/types/component";
 import {
  backToSignInText,
@@ -16,7 +16,7 @@ import {
  returnToOtherDeviceText,
  linkExpiredText,
  approvalLinkInvalidText,
-} from "@/constants/messages";
+} from "@gopvp/chess/src/constants/messages";
 
 export default function ApproveDevice() {
  const [searchParams] = useSearchParams();

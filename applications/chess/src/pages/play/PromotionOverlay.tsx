@@ -1,15 +1,15 @@
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
-import PieceIcon from "@/components/board/PieceIcon";
-import type { IPromotionOverlayProps } from "@/types/component";
+import PieceIcon from "@gopvp/chess/src/components/board/PieceIcon";
+import type { IPromotionOverlayProps } from "@gopvp/chess/src/types/component";
 import {
  promotePawnText,
  queenText,
  rookText,
  bishopText,
  knightText,
-} from "@/constants/messages";
+} from "@gopvp/chess/src/constants/messages";
 
 const PROMOTION_PIECES = ["q", "r", "b", "n"] as const;
 const PROMOTION_LABEL: Record<(typeof PROMOTION_PIECES)[number], string> = {

@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
 import Box from "@gopvp/common/src/components/Box/Box";
-import GameRoom from "./GameRoom";
-import { useSocket } from "@/context/SocketContext";
-import { useGame } from "@/hooks/useGame";
-import { useReduxDispatch, useReduxSelector } from "@/redux/hooks";
-import { clearMatchState } from "@/redux/match/slice";
-import { loadMatchState } from "@/redux/match/thunk";
+import GameRoom from "@gopvp/chess/src/pages/play/GameRoom";
+import { useSocket } from "@gopvp/chess/src/context/SocketContext";
+import { useGame } from "@gopvp/chess/src/hooks/useGame";
+import { useReduxDispatch, useReduxSelector } from "@gopvp/chess/src/redux/hooks";
+import { clearMatchState } from "@gopvp/chess/src/redux/match/slice";
+import { loadMatchState } from "@gopvp/chess/src/redux/match/thunk";
 
 export default function MatchLoader({ matchId }: { matchId: string }) {
  const { socket } = useSocket();

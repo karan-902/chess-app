@@ -3,7 +3,7 @@ import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import CustomChip from "@gopvp/common/src/components/Chip/Chip";
-import type { IMoveListProps } from "@/types/component";
+import type { IMoveListProps } from "@gopvp/chess/src/types/component";
 
 export default function MoveList({
  moveHistory,

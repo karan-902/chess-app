@@ -6,17 +6,17 @@ import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
 import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
 import VirtualList from "@gopvp/common/src/components/VirtualList/VirtualList";
-import EmptyState from "@/components/common/EmptyState";
-import TxItemSkeleton from "@/components/common/TxItemSkeleton";
-import { useWallet } from "@/hooks/useWallet";
-import { useWalletActionModal } from "@/context/WalletActionModalContext";
+import EmptyState from "@gopvp/chess/src/components/common/EmptyState";
+import TxItemSkeleton from "@gopvp/chess/src/components/common/TxItemSkeleton";
+import { useWallet } from "@gopvp/chess/src/hooks/useWallet";
+import { useWalletActionModal } from "@gopvp/chess/src/context/WalletActionModalContext";
 import { speedLogo } from "@gopvp/common/src/components/images";
 import { formatAmount, formatTime } from "@gopvp/common/src/util/format";
 import {
  TRANSACTION_TYPE_ICONS,
  TRANSACTION_TYPE_DESCRIPTIONS,
  DEBIT_TRANSACTION_TYPES,
-} from "@/constants/config";
+} from "@gopvp/chess/src/constants/config";
 import type { ITransactionResponse } from "@gopvp/common/src/types/response";
 import {
  totalBalanceText,
@@ -29,7 +29,7 @@ import {
  poweredByText,
  todayText,
  yesterdayText,
-} from "@/constants/messages";
+} from "@gopvp/chess/src/constants/messages";
 
 function dayLabel(ms: number): string {
  const date = dayjs(ms);

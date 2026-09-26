@@ -9,10 +9,10 @@ import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
 import Input from "@gopvp/common/src/components/Input/Input";
 import { Info, speedLogo, qrLogo } from "@gopvp/common/src/components/images";
-import { useWalletActionModal } from "@/context/WalletActionModalContext";
-import { useSocket } from "@/context/SocketContext";
-import { paymentRequest } from "@/hooks/useWallet";
-import { useModalReady } from "@/hooks/useModalReady";
+import { useWalletActionModal } from "@gopvp/chess/src/context/WalletActionModalContext";
+import { useSocket } from "@gopvp/chess/src/context/SocketContext";
+import { paymentRequest } from "@gopvp/chess/src/hooks/useWallet";
+import { useModalReady } from "@gopvp/chess/src/hooks/useModalReady";
 import { formatAmount } from "@gopvp/common/src/util/format";
 import type {
  IPaymentRequestResponse,
@@ -40,7 +40,7 @@ import {
  MAX_AMOUNT_DIGITS,
  MIN_TRANSACTION_USD,
  MAX_DEPOSIT_USD,
-} from "@/constants/messages";
+} from "@gopvp/chess/src/constants/messages";
 import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
 
 type Stage = "amount" | "qr" | "success";

@@ -1,9 +1,9 @@
 import { useEffect, useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
-import { useReduxDispatch } from "@/redux/hooks";
-import { googleLogin as googleLoginThunk } from "@/redux/auth/thunk";
-import { showLoader, hideLoader, showToast } from "@/redux/common/slice";
+import { useReduxDispatch } from "@gopvp/chess/src/redux/hooks";
+import { googleLogin as googleLoginThunk } from "@gopvp/chess/src/redux/auth/thunk";
+import { showLoader, hideLoader, showToast } from "@gopvp/chess/src/redux/common/slice";
 
 // const CONFIRM_SWITCH_KEY = "ks_sso_confirm_device_switch";
 

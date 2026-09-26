@@ -3,8 +3,8 @@ import {
  callAPIInterface,
  showApiErrorToast,
 } from "@gopvp/common/src/util/api";
-import { throwThunkError } from "@/redux/createAppThunk";
-import { setWalletBalance, setWalletLoading } from "@/redux/wallet/slice";
+import { throwThunkError } from "@gopvp/chess/src/redux/createAppThunk";
+import { setWalletBalance, setWalletLoading } from "@gopvp/chess/src/redux/wallet/slice";
 import type { IBalanceResponse } from "@gopvp/common/src/types/response";
 
 export const fetchWalletBalance = createAsyncThunk(

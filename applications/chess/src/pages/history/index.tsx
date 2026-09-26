@@ -6,26 +6,26 @@ import Text from "@gopvp/common/src/components/Text/Text";
 import CustomBadge from "@gopvp/common/src/components/Badge/Badge";
 import Card from "@gopvp/common/src/components/Card/Card";
 import VirtualList from "@gopvp/common/src/components/VirtualList/VirtualList";
-import EmptyState from "@/components/common/EmptyState";
-import StatRowSkeleton from "@/components/common/StatRowSkeleton";
-import MatchRowSkeleton from "@/components/common/MatchRowSkeleton";
+import EmptyState from "@gopvp/chess/src/components/common/EmptyState";
+import StatRowSkeleton from "@gopvp/chess/src/components/common/StatRowSkeleton";
+import MatchRowSkeleton from "@gopvp/chess/src/components/common/MatchRowSkeleton";
 import Button from "@gopvp/common/src/components/Button/Button";
-import { useGameHistory } from "@/hooks/useGameHistory";
-import { useReduxSelector } from "@/redux/hooks";
+import { useGameHistory } from "@gopvp/chess/src/hooks/useGameHistory";
+import { useReduxSelector } from "@gopvp/chess/src/redux/hooks";
 import {
  shortenUsername,
  formatText,
  formatAmount,
 } from "@gopvp/common/src/util/format";
-import { deriveCategory, formatMatchDate, msToSeconds } from "@/utils";
+import { deriveCategory, formatMatchDate, msToSeconds } from "@gopvp/chess/src/utils";
 import {
  CATEGORY_META,
  GAME_END_REASON_LABELS,
  MATCH_RESULT_OUTCOMES,
-} from "@/constants/config";
+} from "@gopvp/chess/src/constants/config";
 import type { IMatchHistoryItem } from "@gopvp/common/src/types/response";
 import type { IMatchListProps, MatchesSubtab } from "@gopvp/common/src/types/component";
-import type { IMatchRowProps } from "@/types/component";
+import type { IMatchRowProps } from "@gopvp/chess/src/types/component";
 import {
  myResultsText,
  worldwideText,
@@ -44,7 +44,7 @@ import {
  grossIncomeText,
  matchesStatsFallback,
  currentStreakText,
-} from "@/constants/messages";
+} from "@gopvp/chess/src/constants/messages";
 const HISTORY_SKELETON_ROWS = 15;
 const MATCHES_SUBTAB_OPTIONS: MatchesSubtab[] = ["history", "stats", "global"];
 const MATCHES_SUBTAB_LABELS: Record<MatchesSubtab, string> = {

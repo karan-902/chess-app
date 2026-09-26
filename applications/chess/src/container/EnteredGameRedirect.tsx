@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
-import { useReduxSelector } from "@/redux/hooks";
-import { getGameRoutes } from "@/utils";
+import { useReduxSelector } from "@gopvp/chess/src/redux/hooks";
+import { getGameRoutes } from "@gopvp/chess/src/utils";
 
 export default function EnteredGameRedirect() {
     const enteredGame = useReduxSelector((state) => state.speed.enteredGame);

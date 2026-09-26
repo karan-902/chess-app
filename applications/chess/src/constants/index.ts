@@ -1,5 +1,5 @@
-import { Difficulty } from "@/types/component";
-import { GameCategory } from "@/types/index";
+import { Difficulty } from "@gopvp/chess/src/types/component";
+import { GameCategory } from "@gopvp/chess/src/types/index";
 
 export const TIME_SECONDS: Record<GameCategory, number> = {
  BULLET: 60,

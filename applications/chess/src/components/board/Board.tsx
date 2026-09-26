@@ -18,8 +18,8 @@ import {
 import { motion } from "motion/react";
 import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
-import PieceIcon from "./PieceIcon";
-import { playSound } from "@/lib/sounds";
+import PieceIcon from "@gopvp/chess/src/components/board/PieceIcon";
+import { playSound } from "@gopvp/chess/src/lib/sounds";
 import "./board.scss";
 
 interface IChessBoardProps {

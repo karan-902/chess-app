@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import Box from "@gopvp/common/src/components/Box/Box";
-import Header from "@/components/common/Header";
-import DepositModal from "@/components/common/DepositModal";
-import WithdrawModal from "@/components/common/WithdrawModal";
+import Header from "@gopvp/chess/src/components/common/Header";
+import DepositModal from "@gopvp/chess/src/components/common/DepositModal";
+import WithdrawModal from "@gopvp/chess/src/components/common/WithdrawModal";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import { useReduxSelector } from "@/redux/hooks";
-import { useWalletActionModal } from "@/context/WalletActionModalContext";
+import { useReduxSelector } from "@gopvp/chess/src/redux/hooks";
+import { useWalletActionModal } from "@gopvp/chess/src/context/WalletActionModalContext";
 
 function PrivateRoute() {
     const isLoggedIn = useReduxSelector((state) => state.auth.isLoggedIn);

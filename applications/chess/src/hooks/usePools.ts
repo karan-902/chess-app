@@ -3,7 +3,7 @@ import {
     callAPIInterface,
     showApiErrorToast,
 } from "@gopvp/common/src/util/api";
-import { useGame } from "@/hooks/useGame";
+import { useGame } from "@gopvp/chess/src/hooks/useGame";
 import type { IPoolResponse } from "@gopvp/common/src/types/response";
 
 export function usePools() {

@@ -8,8 +8,8 @@ import type {
  IMatchHistoryItem,
  ILeaderboardPlayerResponse,
 } from "@gopvp/common/src/types/response";
-import { useReduxSelector } from "@/redux/hooks";
-import { useGame } from "@/hooks/useGame";
+import { useReduxSelector } from "@gopvp/chess/src/redux/hooks";
+import { useGame } from "@gopvp/chess/src/hooks/useGame";
 
 const RETRY_ATTEMPTS = 2;
 const RETRY_DELAY_MS = 1000;

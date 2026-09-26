@@ -7,13 +7,13 @@ import CustomDrawer from "@gopvp/common/src/components/Drawer/Drawer";
 import Input from "@gopvp/common/src/components/Input/Input";
 import CustomLabel from "@gopvp/common/src/components/Label/Label";
 import OTPInput from "@gopvp/common/src/components/OtpInput/OtpInput";
-import ChipSelect from "@/components/common/ChipSelect";
+import ChipSelect from "@gopvp/chess/src/components/common/ChipSelect";
 import { formatMMSS } from "@gopvp/common/src/util/format";
 import type {
  IDurationWheelProps,
  RoomTab,
 } from "@gopvp/common/src/types/component";
-import type { IRoomSheetProps } from "@/types/component";
+import type { IRoomSheetProps } from "@gopvp/chess/src/types/component";
 import {
  createRoomText,
  joinRoomText,
@@ -38,7 +38,7 @@ import {
  cancelText,
  roomText,
  MAX_AMOUNT_DIGITS,
-} from "@/constants/messages";
+} from "@gopvp/chess/src/constants/messages";
 import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
 
 const ROOM_TABS: RoomTab[] = ["create", "join"];

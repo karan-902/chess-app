@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
-import { ChessLogo } from "@/components/constants";
+import { ChessLogo } from "@gopvp/chess/src/components/constants";
 
 interface IAuthLayoutProps {
  title: ReactNode;

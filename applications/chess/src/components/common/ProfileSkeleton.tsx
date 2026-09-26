@@ -1,7 +1,7 @@
 import Box from "@gopvp/common/src/components/Box/Box";
 import Card from "@gopvp/common/src/components/Card/Card";
 import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
-import StatRowSkeleton from "@/components/common/StatRowSkeleton";
+import StatRowSkeleton from "@gopvp/chess/src/components/common/StatRowSkeleton";
 
 export default function ProfileSkeleton() {
     return (

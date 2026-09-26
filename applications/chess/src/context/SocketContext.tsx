@@ -9,16 +9,16 @@ import {
 
 import type { Socket } from "socket.io-client";
 import { connectSocket, disconnectSocket } from "@gopvp/common/src/util/socket";
-import { useReduxSelector, useReduxDispatch } from "@/redux/hooks";
-import { store } from "@/redux/store";
-import { setActiveGame } from "@/redux/socketModals/slice";
-import { loadMatchState } from "@/redux/match/thunk";
+import { useReduxSelector, useReduxDispatch } from "@gopvp/chess/src/redux/hooks";
+import { store } from "@gopvp/chess/src/redux/store";
+import { setActiveGame } from "@gopvp/chess/src/redux/socketModals/slice";
+import { loadMatchState } from "@gopvp/chess/src/redux/match/thunk";
 import { generateToken } from "@gopvp/common/src/util/api";
-import { isGamePlayPath } from "@/utils";
+import { isGamePlayPath } from "@gopvp/chess/src/utils";
 import sessionService from "@gopvp/common/src/util/sessionService";
-import { router } from "@/routes/router";
+import { router } from "@gopvp/chess/src/routes/router";
 import { navigateTo } from "@gopvp/common/src/util/navigationService";
-import RejoinGameModal from "@/components/common/RejoinGameModal";
+import RejoinGameModal from "@gopvp/chess/src/components/common/RejoinGameModal";
 import type { IActiveGameEvent } from "@gopvp/common/src/types/response";
 
 interface ISocketContext {

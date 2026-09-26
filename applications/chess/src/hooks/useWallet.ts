@@ -3,9 +3,9 @@ import {
  callAPIInterface,
  showApiErrorToast,
 } from "@gopvp/common/src/util/api";
-import { useSocket } from "@/context/SocketContext";
-import { useReduxDispatch, useReduxSelector } from "@/redux/hooks";
-import { fetchWalletBalance } from "@/redux/wallet/thunk";
+import { useSocket } from "@gopvp/chess/src/context/SocketContext";
+import { useReduxDispatch, useReduxSelector } from "@gopvp/chess/src/redux/hooks";
+import { fetchWalletBalance } from "@gopvp/chess/src/redux/wallet/thunk";
 import type {
  IInitiateDepositBody,
  IWithdrawRequestBody,

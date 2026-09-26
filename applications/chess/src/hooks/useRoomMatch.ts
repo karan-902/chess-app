@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { getSocket } from "@gopvp/common/src/util/socket";
-import { useSocket } from "@/context/SocketContext";
+import { useSocket } from "@gopvp/chess/src/context/SocketContext";
 import { showAckErrorToast } from "@gopvp/common/src/util/api";
-import { buildMatchUrl } from "@/utils";
-import { useGame } from "@/hooks/useGame";
-import { useCountdown } from "@/hooks/useCountdown";
+import { buildMatchUrl } from "@gopvp/chess/src/utils";
+import { useGame } from "@gopvp/chess/src/hooks/useGame";
+import { useCountdown } from "@gopvp/chess/src/hooks/useCountdown";
 import type {
  ICreateRoomResponse,
  IMatchmakingResponse,
