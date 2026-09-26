@@ -4,7 +4,7 @@ import {
     AccordionDetails,
 } from "@mui/material";
 import type { AccordionProps } from "@mui/material";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown } from "../images";
 import classNames from "classnames";
 import "./accordion.scss";
 
@@ -19,9 +19,8 @@ export function Accordion({
     children,
     ...props
 }: IAccordionProps) {
-    const classes = classNames("accordion", customClass);
     return (
-        <MuiAccordion {...props} className={classes}>
+        <MuiAccordion {...props} className={classNames("common-accordion", customClass)}>
             <AccordionSummary expandIcon={<ChevronDown size={16} />}>
                 {summary}
             </AccordionSummary>

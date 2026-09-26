@@ -7,7 +7,7 @@ import Card from "@/components/base/Card/Card";
 import FilterDropdown from "@/components/common/FilterDropdown";
 import EmptyState from "@/components/common/EmptyState";
 import LbRowSkeleton from "@/components/common/LbRowSkeleton";
-import VirtualList from "@/components/common/VirtualList";
+import VirtualList from "@/components/base/VirtualList/VirtualList";
 import LeaderboardPlayerModal from "@/pages/leaderboard/LeaderboardPlayerModal";
 import { useLeaderboard } from "@/hooks/useLeaderboard";
 import { useReduxSelector } from "@/redux/hooks";
@@ -98,7 +98,7 @@ export default function Leaderboard() {
                             <Text customClass="lb-rank">
                                 {leaderboardRankFallback}
                             </Text>
-                            <Text customClass="lb-name row-title" truncate>
+                            <Text customClass="lb-name row-title">
                                 {currentUsername
                                     ? youLabel(currentUsername)
                                     : matchesYouLabel}
@@ -135,7 +135,7 @@ export default function Leaderboard() {
                                     >
                                         {rank}
                                     </Text>
-                                    <Text customClass="lb-name row-title" truncate>
+                                    <Text customClass="lb-name row-title">
                                         {isMe(player.id)
                                             ? youLabel(shortenUsername(player.username))
                                             : shortenUsername(player.username)}

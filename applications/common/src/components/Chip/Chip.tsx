@@ -12,8 +12,7 @@ export const CustomChip = forwardRef<HTMLDivElement, IChipProps>(function Custom
     { customClass, ...props },
     ref,
 ) {
-    const classes = classNames("chip", customClass);
-    return <MuiChip ref={ref} {...props} className={classes} />;
+    return <MuiChip ref={ref} {...props} className={classNames("common-chip", customClass)} />;
 });
 
 export default CustomChip;

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import classNames from "classnames";
 import { CircularProgress } from "@mui/material";
-import { Copy, Check, Info, ArrowLeft, X as XIcon } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import CustomModal from "@/components/base/Modal/Modal";
 import SuccessCheckmark from "@/components/base/SuccessCheckmark/SuccessCheckmark";
@@ -9,12 +8,7 @@ import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import Button from "@/components/base/Button/Button";
 import Input from "@/components/base/Input/Input";
-import {
- speedLogo,
- qrLogo,
- walletSuccessLottie,
- walletTickLottie,
-} from "@/components/images";
+import { Info, speedLogo, qrLogo } from "@/components/base/images";
 import { useWalletActionModal } from "@/context/WalletActionModalContext";
 import { useSocket } from "@/context/SocketContext";
 import { paymentRequest } from "@/hooks/useWallet";
@@ -26,24 +20,9 @@ import {
  depositModalTitle,
  depositModalDepositingTitle,
  depositModalTagline,
- depositModalHowToLink,
  depositModalSpeedBadge,
  amountInputLabel,
  depositModalGenerateButton,
- depositModalStepsTitle,
- depositModalStepsCloseAriaLabel,
- depositModalStep1Title,
- depositModalStep1Desc,
- depositModalStep2Title,
- depositModalStep2Desc,
- depositModalStep3Title,
- depositModalStep3Desc,
- depositModalStep3Note,
- depositModalStep4Title,
- depositModalStep4Desc,
- depositModalStep4Note,
- depositModalStep5Title,
- depositModalStep5Desc,
  depositModalAmountRequired,
  depositModalMinAmountError,
  depositModalMaxAmountError,
@@ -65,31 +44,6 @@ import CustomIconButton from "@/components/base/IconButton/IconButton";
 
 type Stage = "amount" | "qr" | "success";
 
-const STEPS = [
- {
-  title: depositModalStep1Title,
-  desc: depositModalStep1Desc,
- },
- {
-  title: depositModalStep2Title,
-  desc: depositModalStep2Desc,
- },
- {
-  title: depositModalStep3Title,
-  desc: depositModalStep3Desc,
-  note: depositModalStep3Note,
- },
- {
-  title: depositModalStep4Title,
-  desc: depositModalStep4Desc,
-  note: depositModalStep4Note,
- },
- {
-  title: depositModalStep5Title,
-  desc: depositModalStep5Desc,
- },
-];
-
 function formatCountdown(ms: number) {
  const totalSeconds = Math.max(0, Math.floor(ms / 1000));
  const minutes = Math.floor(totalSeconds / 60);
@@ -104,7 +58,6 @@ export default function DepositModal() {
  const ready = useModalReady(open);
 
  const [stage, setStage] = useState<Stage>("amount");
- const [showSteps, setShowSteps] = useState(false);
  const [amount, setAmount] = useState("");
  const [amountError, setAmountError] = useState("");
  const [submitting, setSubmitting] = useState(false);
@@ -116,7 +69,6 @@ export default function DepositModal() {
  useEffect(() => {
   if (open) return;
   setStage("amount");
-  setShowSteps(false);
   setAmount("");
   setAmountError("");
   setSubmitting(false);
@@ -218,33 +170,7 @@ export default function DepositModal() {
     </Box>
    )}
 
-   {ready && stage === "amount" && showSteps && (
-    <Box customClass="deposit-steps">
-     <Box customClass="deposit-steps-head">
-      <Text customClass="modal-heading value-heading">
-       {depositModalStepsTitle}
-      </Text>
-      <Button
-       customClass="deposit-steps-close"
-       onClick={() => setShowSteps(false)}
-       aria-label={depositModalStepsCloseAriaLabel}
-      >
-       <XIcon size={16} strokeWidth={2} />
-      </Button>
-     </Box>
-     {STEPS.map((step) => (
-      <Box key={step.title} customClass="deposit-step">
-       <Text customClass="deposit-step-title">{step.title}</Text>
-       <Text customClass="deposit-step-desc caption">{step.desc}</Text>
-       {step.note && (
-        <Text customClass="deposit-step-note warning-text">{step.note}</Text>
-       )}
-      </Box>
-     ))}
-    </Box>
-   )}
-
-   {ready && stage === "amount" && !showSteps && (
+   {ready && stage === "amount" && (
     <Box customClass="wallet-modal-layout">
      <Text customClass="modal-heading value-heading">{depositModalTitle}</Text>
      <Box customClass="modal-info-box">
@@ -300,14 +226,6 @@ export default function DepositModal() {
      >
       {depositModalGenerateButton}
      </Button>
-
-     <Button
-      type="button"
-      customClass="deposit-howto-link"
-      onClick={() => setShowSteps(true)}
-     >
-      {depositModalHowToLink}
-     </Button>
     </Box>
    )}
 
@@ -318,9 +236,8 @@ export default function DepositModal() {
        customClass="deposit-qr-back-btn"
        onClick={() => setStage("amount")}
        aria-label={authLoginBack}
-      >
-       <ArrowLeft size={16} strokeWidth={2} />
-      </CustomIconButton>
+       icon="arrowLeft"
+      />
       <Text customClass="modal-heading value-heading">
        {depositModalDepositingTitle(amountUsd)}
       </Text>
@@ -352,15 +269,14 @@ export default function DepositModal() {
      </Box>
 
      <Box customClass="deposit-address-row">
-      <Text customClass="deposit-address" truncate>
+      <Text customClass="deposit-address">
        {address}
       </Text>
-      <Button customClass="deposit-copy-btn" onClick={handleCopy}>
-       {copied ? (
-        <Check size={14} strokeWidth={2.5} />
-       ) : (
-        <Copy size={14} strokeWidth={2} />
-       )}
+      <Button
+       customClass="deposit-copy-btn"
+       startIcon={copied ? "check" : "copy"}
+       onClick={handleCopy}
+      >
        {copied ? depositModalCopied : depositModalCopyButton}
       </Button>
      </Box>
@@ -378,10 +294,7 @@ export default function DepositModal() {
    {ready && stage === "success" && (
     <Box customClass="modal-success-stage">
      <Box customClass="modal-success-icon">
-      <SuccessCheckmark
-       confettiLottieSrc={walletSuccessLottie}
-       tickLottieSrc={walletTickLottie}
-      />
+      <SuccessCheckmark />
      </Box>
      <Box customClass="deposit-success-amountWrapper">
       {" "}

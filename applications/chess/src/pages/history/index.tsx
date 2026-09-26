@@ -5,7 +5,7 @@ import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import CustomBadge from "@/components/base/Badge/Badge";
 import Card from "@/components/base/Card/Card";
-import VirtualList from "@/components/common/VirtualList";
+import VirtualList from "@/components/base/VirtualList/VirtualList";
 import EmptyState from "@/components/common/EmptyState";
 import StatRowSkeleton from "@/components/common/StatRowSkeleton";
 import MatchRowSkeleton from "@/components/common/MatchRowSkeleton";
@@ -81,7 +81,7 @@ function MatchRow({
       </Box>
      )}
      <Box customClass="match-row-text">
-      <Text customClass="match-row-headline row-title" truncate>
+      <Text customClass="match-row-headline row-title">
        {selfName && (
         <>
          {selfName}

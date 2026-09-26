@@ -7,7 +7,6 @@ const meta: Meta<typeof CustomAppBar> = {
     argTypes: {
         brand: { table: { type: { summary: "ReactNode" } } },
         bottomSlot: { table: { type: { summary: "ReactNode" } } },
-        toolbarClass: { table: { type: { summary: "string" } } },
         customClass: { table: { type: { summary: "string" } } },
     },
     args: { brand: "GoPVP", position: "static" },

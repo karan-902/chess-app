@@ -6,25 +6,20 @@ import "./app-bar.scss";
 
 interface IAppBarProps extends AppBarProps {
     customClass?: string;
-    toolbarClass?: string;
     brand?: ReactNode;
     bottomSlot?: ReactNode;
 }
 
 export function CustomAppBar({
     customClass,
-    toolbarClass,
     brand,
     children,
     bottomSlot,
     ...props
 }: IAppBarProps) {
-    const classes = classNames("appbar", customClass);
-    const toolbarClasses = classNames("toolbar", toolbarClass);
-
     return (
-        <MuiAppBar {...props} className={classes} position="static">
-            <Toolbar className={toolbarClasses}>
+        <MuiAppBar {...props} className={classNames("common-app-bar", customClass)} position="static">
+            <Toolbar>
                 {brand}
                 {children}
             </Toolbar>

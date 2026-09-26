@@ -8,8 +8,7 @@ interface ISkeletonProps extends SkeletonProps {
 }
 
 export function Skeleton({ customClass, ...props }: ISkeletonProps) {
-    const classes = classNames("skeleton", customClass);
-    return <MuiSkeleton {...props} className={classes} />;
+    return <MuiSkeleton {...props} className={classNames("common-skeleton", customClass)} />;
 }
 
 export default Skeleton;

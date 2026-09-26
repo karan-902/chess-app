@@ -7,12 +7,10 @@ import { fetchWalletBalance } from "@/redux/wallet/thunk";
 import type {
  ITransactionResponse,
  ITransactionsResponse,
- ITransactionsFilterBody,
  IWithdrawBody,
  IWithdrawResponse,
  IInitiateDepositBody,
  IInitiateDepositResponse,
- TransactionType,
 } from "@/types/utils";
 
 const PAGE_SIZE = 20;
@@ -77,27 +75,17 @@ export function useWallet() {
  const [transactions, setTransactions] = useState<ITransactionResponse[]>([]);
  const [transactionsLoading, setTransactionsLoading] = useState(true);
  const [loadingMore, setLoadingMore] = useState(false);
- const [typeFilter, setTypeFilter] = useState<TransactionType[]>([]);
- const [dateFilter, setDateFilter] = useState<{
-  from?: number;
-  to?: number;
- }>({});
 
  const hasMoreRef = useRef(true);
  const pageIdRef = useRef<string | null>(null);
  const isFetchingRef = useRef(false);
- const activeFilterRef = useRef<ITransactionsFilterBody | null>(null);
+ const latestRequestIdRef = useRef(0);
 
  const loadTransactions = useCallback(
   async (isFirstLoad: boolean) => {
    if (!isFirstLoad && (isFetchingRef.current || !hasMoreRef.current)) return;
 
-   const requestFilter: ITransactionsFilterBody = {
-    types: typeFilter,
-    from: dateFilter.from,
-    to: dateFilter.to,
-   };
-   activeFilterRef.current = requestFilter;
+   const requestId = ++latestRequestIdRef.current;
    isFetchingRef.current = true;
    isFirstLoad ? setTransactionsLoading(true) : setLoadingMore(true);
 
@@ -111,7 +99,7 @@ export function useWallet() {
      "GET",
      `/wallet/transactions?limit=${PAGE_SIZE}${cursor}`,
     );
-    if (activeFilterRef.current !== requestFilter) return;
+    if (latestRequestIdRef.current !== requestId) return;
     const data = res?.data ?? [];
     setTransactions((prev) => (isFirstLoad ? data : [...prev, ...data]));
     hasMoreRef.current = res?.has_more ?? false;
@@ -120,12 +108,12 @@ export function useWallet() {
     showApiErrorToast(err, walletTransactionsLoadFailed);
    } finally {
     isFetchingRef.current = false;
-    if (activeFilterRef.current === requestFilter) {
+    if (latestRequestIdRef.current === requestId) {
      isFirstLoad ? setTransactionsLoading(false) : setLoadingMore(false);
     }
    }
   },
-  [typeFilter, dateFilter],
+  [],
  );
 
  useEffect(() => {
@@ -155,10 +143,6 @@ export function useWallet() {
   loadingMore,
   hasMore: hasMoreRef.current,
   loadMoreTransactions,
-  typeFilter,
-  setTypeFilter,
-  dateFilter,
-  setDateFilter,
   refetchBalance: loadBalance,
  };
 }

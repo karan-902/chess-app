@@ -1,7 +1,7 @@
 @use "default.scss" as *;
 
-.text {
- font-family: $fontOutfit;
+.common-text {
+ font-family: $fontOutfitRegular;
  white-space: nowrap;
  overflow: hidden;
  text-overflow: ellipsis;
@@ -9,17 +9,44 @@
   text-transform: uppercase;
  }
 
- &.truncate {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+ @each $size,
+  $value
+   in (
+    12: $font12,
+    13: $font13,
+    14: $font14,
+    15: $font15,
+    16: $font16,
+    18: $font18,
+    20: $font20,
+    22: $font22,
+    24: $font24,
+    40: $font40
+   )
+ {
+  &.font-#{$size} {
+   font-size: $value;
+  }
+ }
+
+ @each $weight,
+  $family
+   in (
+    regular: $fontOutfitRegular,
+    medium: $fontOutfitMedium,
+    semibold: $fontOutfitSemiBold,
+    extrabold: $fontOutfitExtraBold
+   )
+ {
+  &.font-#{$weight} {
+   font-family: $family;
+  }
  }
 
  &.color-white {
   color: $appText;
  }
  &.color-muted {
-  font-family: $fontOutfitExtraBold;
   color: $appTextMuted;
  }
  &.color-accent {
@@ -49,50 +76,49 @@
 
  &.meta-text {
   font-family: $fontOutfitSemiBold;
-  font-size: $metaTextFontSize;
-  color: $metaTextColor;
+  font-size: $font12;
+  color: $appTextMuted;
+
+  @media (min-width: 768px) {
+   font-size: $font13;
+  }
  }
 
  &.description {
-  font-family: $mutedDescFontFamily;
+  font-family: $fontOutfitMedium;
   font-size: $font13;
-  color: $mutedDescColor;
+  color: $appTextMuted;
  }
 
  &.section-heading {
-  font-family: $sectionHeadingFontFamily;
-  font-size: $sectionHeadingFontSize;
-  color: $sectionHeadingColor;
+  font-family: $fontOutfitSemiBold;
+  font-size: $font16;
+  color: $appText;
  }
 
  &.dialog-title {
-  font-family: $sheetTitleFontFamily;
-  font-size: $sheetTitleFontSize;
-  color: $sheetTitleColor;
+  font-family: $fontOutfitSemiBold;
+  font-size: $font18;
+  color: $appText;
  }
 
  &.value-heading {
-  font-family: $boldValueFontFamily;
-  font-size: $boldValueFontSize;
-  color: $boldValueColor;
+  font-family: $fontOutfitExtraBold;
+  font-size: $font16;
+  color: $appText;
  }
 
  &.modal-success-amount {
   display: block;
-  font-family: $boldValueFontFamily;
+  font-family: $fontOutfitExtraBold;
   font-size: $font24;
-  color: $boldValueColor;
- }
-
- &.warning-text {
-  font-size: $warningTextFontSize;
-  color: $warningTextColor;
+  color: $appText;
  }
 
  &.page-subtitle {
   width: 100%;
   font-size: $font16;
-  color: $pageSubtitleColor;
+  color: alpha($appText, 0.5);
   white-space: normal;
   line-height: 1.4 !important;
 
@@ -102,17 +128,21 @@
 
  &.row-title {
   font-family: $fontOutfitBold;
-  font-size: $rowTitleFontSize;
-  color: $rowTitleColor;
+  font-size: $font14;
+  color: $appText;
   @media (min-width: 1024px) {
    font-size: $font15;
   }
  }
 
  &.amount-value {
-  font-family: $amountFontFamily;
-  font-size: $amountFontFamily;
+  font-family: $fontOutfitExtraBold;
+  font-size: $font15;
   flex-shrink: 0;
+
+  @media (min-width: 480px) {
+   font-size: $font16;
+  }
 
   &.pos {
    color: $greenishTeal;
@@ -155,14 +185,6 @@
   }
  }
 
- &.auth-brand-name {
-  font-family: $fontDisplay;
-  font-size: $font16;
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  color: $appText;
- }
-
  &.public-title {
   font-family: $fontOutfitExtraBold;
   font-size: $font24;
@@ -171,7 +193,7 @@
  }
 
  &.otp-title {
-  font-family: $fontDisplay;
+  font-family: $fontOutfitSemiBold;
   font-size: $font20;
   font-weight: 700;
   color: $appText;
@@ -198,20 +220,6 @@
   text-align: center;
  }
 
- &.appbar-online-label {
-  font-family: $fontMono;
-  font-size: $font12;
-  font-weight: 700;
-  color: $appText;
- }
-
- &.live-dot {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: $greenishTeal;
- }
-
  &.live-ring {
   position: absolute;
   inset: -0.3rem;
@@ -227,7 +235,7 @@
  }
 
  &.searching-timer {
-  font-family: $fontMono;
+  font-family: $fontOutfitRegular;
   font-size: $font30;
   font-weight: 700;
   color: $gold;
@@ -289,12 +297,6 @@
   color: $appText;
  }
 
- &.room-balance {
-  font-size: $font12;
-  color: alpha($appText, 0.6);
- }
-
- &.pool-opponent-ready,
  &.pool-insufficient-label {
   display: block;
   margin-top: 0.35rem;
@@ -306,31 +308,6 @@
   text-transform: uppercase;
   font-family: $fontOutfitSemiBold;
   color: $appText;
- }
-
- &.room-summary-text {
-  font-size: $font15;
-  font-family: $fontOutfitSemiBold;
-  color: $appText;
- }
-
- &.create-room-fee-chip {
-  position: absolute;
-  top: -0.6rem;
-  right: 0.6rem;
-  font-size: $font12;
-  font-family: $fontOutfitMedium;
-  color: $gold;
-  background: alpha($gold, 0.12);
-  border: 1px solid alpha($gold, 0.3);
-  border-radius: 999px;
-  padding: 0.15rem 0.55rem;
- }
-
- &.create-room-button-main {
-  display: block;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
  }
 
  &.bet-card-practice-title {
@@ -502,13 +479,6 @@
   margin: 0 0 1.1rem;
  }
 
- &.edit-profile-section-label {
-  display: block;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  margin: 0 0 0.6rem;
- }
-
  &.subsection-heading {
   display: block;
   margin: 1.25rem 0 0.5rem;
@@ -520,9 +490,9 @@
 
  &.wallet-tx-group-label {
   display: block;
-  font-family: $labelFontFamily;
-  font-size: $labelFontSize;
-  color: $labelColor;
+  font-family: $fontOutfitExtraBold;
+  font-size: $font12;
+  color: $appTextMuted;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   margin: 0px;
@@ -562,45 +532,6 @@
   display: block;
  }
 
- &.withdraw-available-label {
-  display: block;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
- }
-
- &.withdraw-available-amt {
-  display: block;
-  font-family: $fontOutfitExtraBold;
-  font-size: $font20;
-  font-weight: 700;
-  color: $appText;
-  margin: 0.2rem 0;
- }
-
- &.withdraw-available-caveat {
-  display: block;
-  line-height: 1.4;
- }
-
- &.deposit-step-title {
-  display: block;
-  font-size: $font14;
-  font-weight: 700;
-  color: $appText;
-  margin-bottom: 0.2rem;
- }
-
- &.deposit-step-desc {
-  display: block;
-  line-height: 1.5;
- }
-
- &.deposit-step-note {
-  display: block;
-  margin-top: 0.25rem;
-  line-height: 1.5;
- }
-
  &.modal-info-text {
   flex: 1;
   line-height: 1.4;
@@ -614,7 +545,7 @@
  &.deposit-address {
   flex: 1;
   min-width: 0;
-  font-family: $fontMono;
+  font-family: $fontOutfitRegular;
   font-size: $font12;
   color: $appText;
  }
@@ -630,7 +561,7 @@
 
  &.gr-name {
   display: block;
-  font-family: $fontDisplay;
+  font-family: $fontOutfitSemiBold;
   font-size: $font16;
   font-weight: 400;
   letter-spacing: 0.01em;
@@ -673,7 +604,7 @@
  }
 
  &.gr-move-n {
-  font-family: $fontMono;
+  font-family: $fontOutfitRegular;
   font-size: $font14;
   opacity: 0.85;
   margin-right: 0.3rem;
@@ -685,7 +616,7 @@
  }
 
  &.gr-overlay-badge {
-  font-family: $fontMono;
+  font-family: $fontOutfitRegular;
   font-size: $font12;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -705,7 +636,7 @@
 
  &.gr-settlement-val {
   display: block;
-  font-family: $fontMono;
+  font-family: $fontOutfitRegular;
   font-size: $font16;
   font-weight: 700;
   color: $gold;
@@ -724,6 +655,24 @@
   text-transform: uppercase;
   letter-spacing: 0.04em;
   margin-top: 0.15rem;
+ }
+
+ &.appbar-dropdown-name {
+  font-family: $fontOutfitRegular;
+  font-size: $font14;
+  font-weight: 700;
+  color: $appText;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+ }
+
+ &.modal-description {
+  font-family: $fontOutfitRegular;
+  font-size: $font14;
+  color: alpha($appText, 0.5);
+  margin-bottom: 1.25rem;
+  line-height: 1.5;
  }
 }
 

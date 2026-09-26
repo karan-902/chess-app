@@ -1,20 +1,16 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import dayjs from "dayjs";
 import classNames from "classnames";
-import { Filter } from "lucide-react";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import Button from "@/components/base/Button/Button";
-import CustomIconButton from "@/components/base/IconButton/IconButton";
-import CustomLabel from "@/components/base/Label/Label";
-import Input from "@/components/base/Input/Input";
 import Skeleton from "@/components/base/Skeleton/Skeleton";
-import VirtualList from "@/components/common/VirtualList";
+import VirtualList from "@/components/base/VirtualList/VirtualList";
 import EmptyState from "@/components/common/EmptyState";
 import TxItemSkeleton from "@/components/common/TxItemSkeleton";
 import { useWallet } from "@/hooks/useWallet";
 import { useWalletActionModal } from "@/context/WalletActionModalContext";
-import { speedLogo } from "@/components/images";
+import { speedLogo } from "@/components/base/images";
 import { formatAmount, formatTime } from "@/utils/format";
 import {
  TRANSACTION_TYPE_ICONS,
@@ -22,24 +18,16 @@ import {
  DEBIT_TRANSACTION_TYPES,
 } from "@/constants/config";
 import type { ITransactionResponse } from "@/types/utils";
-import type { ITransactionFilterDrawerProps } from "@/types/components";
 import {
  walletPageBalanceLabel,
  walletPageWithdrawableLabel,
  walletPageTransactionsTitle,
  walletPageEmptyTitle,
  walletPageEmptyDesc,
- walletFilterTitle,
- walletFilterTypeLabel,
- walletFilterFromLabel,
- walletFilterToLabel,
- walletFilterApplyButton,
- walletFilterResetButton,
  appBarDepositButton,
  withdrawModalTitle,
  walletPoweredByLabel,
 } from "@/constants/messages";
-import CustomModal from "@/components/base/Modal/Modal";
 
 function dayLabel(ms: number): string {
  const date = dayjs(ms);
@@ -48,86 +36,6 @@ function dayLabel(ms: number): string {
  if (date.isSame(today, "day")) return "Today";
  if (date.isSame(today.subtract(1, "day"), "day")) return "Yesterday";
  return date.format("D MMM YYYY").toUpperCase();
-}
-
-function TransactionFilterDrawer({
- open,
- onClose,
- typeFilter,
- setTypeFilter,
- dateFilter,
- setDateFilter,
-}: ITransactionFilterDrawerProps) {
- const [draftTypes, setDraftTypes] = useState(typeFilter);
- const [draftFrom, setDraftFrom] = useState("");
- const [draftTo, setDraftTo] = useState("");
-
- useEffect(() => {
-  if (!open) return;
-  setDraftTypes(typeFilter);
-  setDraftFrom(
-   dateFilter.from ? dayjs(dateFilter.from).format("YYYY-MM-DD") : "",
-  );
-  setDraftTo(dateFilter.to ? dayjs(dateFilter.to).format("YYYY-MM-DD") : "");
- }, [open, typeFilter, dateFilter]);
-
- const handleApply = () => {
-  setTypeFilter(draftTypes);
-  setDateFilter({
-   from: draftFrom ? dayjs(draftFrom).startOf("day").valueOf() : undefined,
-   to: draftTo
-    ? dayjs(draftTo).endOf("day").valueOf()
-    : draftFrom
-      ? dayjs(draftFrom).endOf("day").valueOf()
-      : undefined,
-  });
-  onClose();
- };
-
- const handleReset = () => {
-  setTypeFilter([]);
-  setDateFilter({});
-  onClose();
- };
-
- return (
-  <CustomModal open={open} onClose={onClose} customClass="tx-filter-sheet">
-   <Box customClass="tx-filter-sheet-content">
-    <Text customClass="modal-heading value-heading">{walletFilterTitle}</Text>
-
-    <Box customClass="form-field">
-     <CustomLabel>{walletFilterTypeLabel}</CustomLabel>
-    </Box>
-
-    <Box customClass="tx-filter-date-row">
-     <Input
-      id="tx-filter-from"
-      type="date"
-      label={walletFilterFromLabel}
-      fullWidth
-      value={draftFrom}
-      onChange={(e) => setDraftFrom(e.target.value)}
-     />
-     <Input
-      id="tx-filter-to"
-      type="date"
-      label={walletFilterToLabel}
-      fullWidth
-      value={draftTo}
-      onChange={(e) => setDraftTo(e.target.value)}
-      slotProps={{ input: { min: draftFrom || undefined } }}
-     />
-    </Box>
-
-    <Button fullWidth customClass="modal-submit-btn" onClick={handleApply}>
-     {walletFilterApplyButton}
-    </Button>
-    <Button fullWidth customClass="tx-filter-reset-btn" onClick={handleReset}>
-     {walletFilterResetButton}
-    </Button>
-   </Box>
-  </CustomModal>
- );
 }
 
 const TX_SKELETON_ITEMS = 12;
@@ -201,21 +109,12 @@ export default function Wallet() {
   transactionsLoading,
   loadingMore,
   loadMoreTransactions,
-  typeFilter,
-  setTypeFilter,
-  dateFilter,
-  setDateFilter,
  } = useWallet();
  const { openDeposit, openWithdraw } = useWalletActionModal();
- const [filterOpen, setFilterOpen] = useState(false);
  const timelineEntries = useMemo(
   () => buildTimelineEntries(transactions),
   [transactions],
  );
- const hasActiveFilter =
-  typeFilter.length > 0 ||
-  dateFilter.from !== undefined ||
-  dateFilter.to !== undefined;
 
  return (
   <Box customClass="wallet-page">
@@ -247,13 +146,11 @@ export default function Wallet() {
        customClass="wallet-btn-skeleton"
        variant="rectangular"
        height="2.6rem"
-       style={{ flex: 1 }}
       />
       <Skeleton
        customClass="wallet-btn-skeleton"
        variant="rectangular"
        height="2.6rem"
-       style={{ flex: 1 }}
       />
      </>
     ) : (
@@ -287,26 +184,7 @@ export default function Wallet() {
     <Text component="h3" customClass="wallet-tx-title">
      {walletPageTransactionsTitle}
     </Text>
-    <CustomIconButton
-     customClass={classNames(
-      "wallet-tx-filter-trigger",
-      hasActiveFilter && "active",
-     )}
-     onClick={() => setFilterOpen(true)}
-     aria-label={walletFilterTitle}
-    >
-     <Filter size={16} strokeWidth={2} />
-    </CustomIconButton>
    </Box>
-
-   <TransactionFilterDrawer
-    open={filterOpen}
-    onClose={() => setFilterOpen(false)}
-    typeFilter={typeFilter}
-    setTypeFilter={setTypeFilter}
-    dateFilter={dateFilter}
-    setDateFilter={setDateFilter}
-   />
 
    {transactionsLoading ? (
     <Box customClass="wallet-timeline">

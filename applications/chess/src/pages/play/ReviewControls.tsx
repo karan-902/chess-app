@@ -1,4 +1,3 @@
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import Box from "@/components/base/Box/Box";
 import CustomIconButton from "@/components/base/IconButton/IconButton";
 import MoveList from "./MoveList";
@@ -24,9 +23,8 @@ export default function ReviewControls({
                 onClick={goBack}
                 disabled={fenHistory.length <= 1}
                 aria-label={playMoveHistoryPreviousMoveAriaLabel}
-            >
-                <ChevronLeft size={16} strokeWidth={2} />
-            </CustomIconButton>
+                icon="chevronLeft"
+            />
             <MoveList
                 moveHistory={moveHistory}
                 fenHistory={fenHistory}
@@ -38,9 +36,8 @@ export default function ReviewControls({
                 onClick={goForward}
                 disabled={!isReviewing}
                 aria-label={playMoveHistoryNextMoveAriaLabel}
-            >
-                <ChevronRight size={16} strokeWidth={2} />
-            </CustomIconButton>
+                icon="chevronRight"
+            />
         </Box>
     );
 }

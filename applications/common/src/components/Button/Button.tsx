@@ -5,11 +5,14 @@ import type { ButtonProps } from "@mui/material";
 import classNames from "classnames";
 import "./button.scss";
 import Text from "../Text/Text";
+import { icons, type TIconName } from "../images";
 
-interface IButtonProps extends ButtonProps {
+interface IButtonProps extends Omit<ButtonProps, "startIcon" | "endIcon"> {
  customClass?: string;
  isLoading?: boolean;
  loaderOnDark?: boolean;
+ startIcon?: TIconName;
+ endIcon?: TIconName;
 }
 
 export const Button = forwardRef<HTMLButtonElement, IButtonProps>(function Button(
@@ -50,25 +53,25 @@ export const Button = forwardRef<HTMLButtonElement, IButtonProps>(function Butto
   return () => (scope as EventTarget).removeEventListener("keydown", onKeyDown);
  }, [type]);
 
- const classes = classNames("button", customClass, isLoading && "btn--loading");
+ const renderIcon = (name?: TIconName) => {
+  if (!name || isLoading) return undefined;
+  const Icon = icons[name];
+  return <Icon />;
+ };
 
  return (
   <MuiButton
    ref={setRefs}
    type={type}
    {...props}
-   startIcon={isLoading ? undefined : startIcon}
-   endIcon={isLoading ? undefined : endIcon}
-   className={classes}
+   startIcon={renderIcon(startIcon)}
+   endIcon={renderIcon(endIcon)}
+   className={classNames("common-button", customClass, isLoading && "loading")}
    disabled={disabled || isLoading}
    aria-busy={isLoading || undefined}
   >
    {isLoading ? (
-    loaderOnDark ? (
-     <CircularProgress size={20} sx={{ color: "primary.contrastText" }} />
-    ) : (
-     <CircularProgress size={20} color="inherit" />
-    )
+    <CircularProgress size={20} color="inherit" sx={loaderOnDark ? { color: "primary.contrastText" } : undefined} />
    ) : (
     <Text customClass="button-text">{children}</Text>
    )}

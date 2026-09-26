@@ -1,7 +1,7 @@
-import { Dialog as MuiDialog, DialogTitle, IconButton } from "@mui/material";
+import { Dialog as MuiDialog, DialogTitle } from "@mui/material";
 import type { DialogProps } from "@mui/material";
 import classNames from "classnames";
-import { X } from "lucide-react";
+import CustomIconButton from "../IconButton/IconButton";
 import "./modal.scss";
 
 interface IModalProps extends Omit<DialogProps, "title" | "onClose"> {
@@ -23,14 +23,12 @@ export function CustomModal({
     hideCloseIcon,
     ...props
 }: IModalProps) {
-    const paperClasses = classNames("modal", customClass);
-
     return (
         <MuiDialog
             open={open}
             onClose={preventOutsideClose ? undefined : onClose}
             slotProps={{
-                paper: { className: paperClasses },
+                paper: { className: classNames("common-modal", customClass) },
             }}
             disableScrollLock
             container={() =>
@@ -42,13 +40,12 @@ export function CustomModal({
                 <DialogTitle className="modal-title">{title}</DialogTitle>
             )}
             {onClose && !preventOutsideClose && !hideCloseIcon && (
-                <IconButton
-                    className="modal-close-icon"
+                <CustomIconButton
+                    customClass="modal-close-icon"
                     onClick={onClose}
                     aria-label="Close"
-                >
-                    <X size={22} strokeWidth={2} />
-                </IconButton>
+                    icon="x"
+                />
             )}
             {children}
         </MuiDialog>

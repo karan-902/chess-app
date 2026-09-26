@@ -1,11 +1,11 @@
 @use "default.scss" as *;
 
-.label {
+.common-label {
  font-family: $fontOutfitSemiBold !important;
  color: $appText !important;
 
  &.deposit-label {
-  color: $appTextMuted;
+  color: $appTextMuted !important;
  }
  &.room-field-label {
   text-align: left !important;

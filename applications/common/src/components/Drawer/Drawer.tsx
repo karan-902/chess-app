@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import { Drawer as MuiDrawer } from "@mui/material";
 import classNames from "classnames";
-import CloseIcon from "@mui/icons-material/Close";
 import "./drawer.scss";
 import CustomIconButton from "../IconButton/IconButton";
 
@@ -25,12 +24,7 @@ export function CustomDrawer({
    anchor={anchor}
    open={open}
    onClose={onClose}
-   className={classNames("drawer", customClass)}
-   slotProps={{
-    paper: {
-     className: classNames("drawer-panel", `drawer-panel--${anchor}`),
-    },
-   }}
+   className={classNames("common-drawer", customClass)}
    disableScrollLock
    disableAutoFocus
    container={() => document.querySelector(".app-shell") as HTMLElement}
@@ -40,9 +34,8 @@ export function CustomDrawer({
     customClass="drawer-close-icon"
     onClick={onClose}
     aria-label="Close"
-   >
-    <CloseIcon />
-   </CustomIconButton>
+    icon="close"
+   />
    {children}
   </MuiDrawer>
  );

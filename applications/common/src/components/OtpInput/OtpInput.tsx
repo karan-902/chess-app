@@ -18,7 +18,7 @@ interface IOtpInputProps {
 function OtpSlot({ char, isActive, hasFakeCaret }: SlotProps) {
     return (
         <div
-            className={classNames("otp-slot", isActive && "otp-slot--active")}
+            className={classNames("otp-slot", isActive && "active")}
         >
             {char}
             {hasFakeCaret && <div className="otp-slot-caret" />}

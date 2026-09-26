@@ -41,7 +41,7 @@ export default function PlayerRow({
   >
    <Box customClass="gr-meta">
     <Box sx={{ gap: 1 }} customClass="flex">
-     <Text customClass="gr-name" truncate>
+     <Text customClass="gr-name">
       {name}
      </Text>
      {variant === "self" && (

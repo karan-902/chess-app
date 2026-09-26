@@ -7,8 +7,7 @@ interface ISwitchProps extends SwitchProps {
 }
 
 export function CustomSwitch({ customClass, ...props }: ISwitchProps) {
-    const classes = classNames("switch", customClass);
-    return <MuiSwitch {...props} className={classes} />;
+    return <MuiSwitch {...props} className={classNames("common-switch", customClass)} />;
 }
 
 export default CustomSwitch;

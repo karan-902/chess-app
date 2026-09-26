@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Check, ChevronDown, ChevronUp } from "lucide-react";
+import { Check } from "@/components/base/images";
 import Button from "@/components/base/Button/Button";
 import CustomMenu from "@/components/base/Menu/Menu";
 import CustomMenuItem from "@/components/base/MenuItem/MenuItem";
@@ -13,7 +13,6 @@ export default function FilterDropdown<T extends string>({
 }: IFilterDropdownProps<T>) {
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
     const isOpen = !!anchorEl;
-    const ChevronIcon = isOpen ? ChevronUp : ChevronDown;
 
     const selectOption = (option: T) => {
         onChange(option);
@@ -25,7 +24,7 @@ export default function FilterDropdown<T extends string>({
             <Button
                 type="button"
                 customClass="filter-dropdown-btn"
-                endIcon={<ChevronIcon size={18} />}
+                endIcon={isOpen ? "chevronUp" : "chevronDown"}
                 aria-haspopup="menu"
                 aria-expanded={isOpen}
                 onClick={(event) => setAnchorEl(event.currentTarget)}

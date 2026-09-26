@@ -10,7 +10,6 @@ export default function ProfileSkeleton() {
                 <Box customClass="profile-id-row">
                     <Skeleton
                         variant="circular"
-                        customClass="circle"
                         width={44}
                         height={44}
                     />

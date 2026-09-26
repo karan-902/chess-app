@@ -1,6 +1,6 @@
 @use "default.scss" as *;
 
-.popover {
+.common-popover {
  .MuiPopover-paper {
   background: $appSurface;
   border: 1px solid $appCardBorder;
@@ -14,6 +14,34 @@
    display: flex;
    flex-direction: column;
    gap: 0.15rem;
+  }
+
+  .appbar-dropdown-item {
+   display: flex;
+   align-items: center;
+   gap: 0.6rem;
+   width: 100%;
+   padding: 0.45rem 0.6rem;
+   border-radius: 0.3rem;
+   border: none;
+   background: transparent;
+   cursor: pointer;
+   text-align: left;
+   text-decoration: none;
+   font-family: $fontOutfitRegular;
+   font-size: $font14;
+   font-weight: 600;
+   color: alpha($appText, 0.65);
+
+   &:hover {
+    background: alpha($appText, 0.06);
+    color: $appText;
+   }
+
+   &.active {
+    color: $white;
+    background: $gold;
+   }
   }
  }
 }

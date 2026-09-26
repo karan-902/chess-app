@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { ArrowLeft } from "lucide-react";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import Button from "@/components/base/Button/Button";
@@ -133,7 +132,7 @@ export default function VerifyEmailForm({
             {onBack && (
                 <Button
                     type="button"
-                    startIcon={<ArrowLeft size={16} />}
+                    startIcon="arrowLeft"
                     customClass="auth-back-btn"
                     onClick={onBack}
                 >

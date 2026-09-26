@@ -12,31 +12,24 @@
     animation: skeleton-shimmer 1.4s ease-in-out infinite;
 
     &.text {
-        border-radius: $radiusSm;
+        border-radius: 3px;
     }
-    &.circle {
-        border-radius: 50%;
-    }
-    &.rounded {
-        border-radius: $radiusMd;
-    }
-
     &.wallet-btn-skeleton {
         flex: 1;
-        border-radius: $appBtnRadius;
+        border-radius: 4px;
     }
-}
 
-.username-suggestion-skeleton {
-    width: 8rem;
-    height: 1rem;
-    border-radius: $radiusSm;
-}
+    &.username-suggestion-skeleton {
+        width: 8rem;
+        height: 1rem;
+        border-radius: 3px;
+    }
 
-.random-name-chip-skeleton {
-    width: 4.5rem;
-    height: 1.5rem;
-    border-radius: $appChipRadius;
+    &.random-name-chip-skeleton {
+        width: 4.5rem;
+        height: 1.5rem;
+        border-radius: 6px;
+    }
 }
 
 @keyframes skeleton-shimmer {

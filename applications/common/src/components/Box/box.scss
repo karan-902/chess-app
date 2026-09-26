@@ -1,10 +1,6 @@
 @use "default.scss" as *;
 
-.box {
- &.gr-elo-wrapper {
-  display: flex;
-  gap: 8px;
- }
+.common-box {
  &.public-page {
   display: flex;
   flex-direction: column;
@@ -103,11 +99,6 @@
   margin-top: 0.25rem;
  }
 
- &.auth-field-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
- }
 
  &.live-ring-wrap {
   position: relative;
@@ -332,35 +323,6 @@
   }
  }
 
- &.room-bet-nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
- }
-
- &.room-duration-nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding-bottom: 0.7rem;
-  margin-bottom: 0.2rem;
-  border-bottom: 1px solid $appLine;
- }
-
- &.room-duration-nav-spacer {
-  width: 2rem;
-  flex-shrink: 0;
- }
-
- &.room-summary-row {
-  display: flex;
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-  gap: 0.6rem;
- }
 
  &.create-room-button-wrap {
   position: relative;
@@ -465,28 +427,6 @@
   }
  }
 
- &.profile-avatar-picker-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 3.25rem);
-  justify-content: space-between;
-  gap: 0.7rem;
-  margin-bottom: 1.4rem;
- }
-
- &.profile-avatar-selected-tick {
-  position: absolute;
-  top: -0.15rem;
-  right: -0.15rem;
-  width: 1.1rem;
-  height: 1.1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: $greenishTeal;
-  border: 1.5px solid $appBg;
-  color: $appBg;
- }
 
  &.edit-profile-form {
   display: flex;
@@ -503,7 +443,7 @@
 
  &.wallet-split-block {
   border: 1px solid $appCardBorder;
-  border-radius: $appCardRadius;
+  border-radius: 14px;
   padding: 0.9rem 0.85rem;
  }
  &.accent {
@@ -534,20 +474,6 @@
   }
  }
 
- &.tx-filter-date-row {
-  display: flex;
-  gap: 0.6rem;
-
-  .input-element {
-   flex: 1;
-  }
- }
-
- &.tx-filter-sheet-content {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
- }
 
  &.wallet-timeline {
   overflow: visible;
@@ -698,8 +624,7 @@
 
  &.wallet-modal-layout,
  &.deposit-qr-stage,
- &.modal-success-stage,
- &.deposit-steps {
+ &.modal-success-stage {
   display: flex;
   flex-direction: column;
  }
@@ -747,7 +672,7 @@
   gap: 0.5rem;
   background: $appSurface;
   border: 1px solid $appBtnBorder;
-  border-radius: $appBtnRadius;
+  border-radius: 4px;
   padding: 0.5rem 0.5rem;
   margin-bottom: 0.9rem;
   color: $appTextMuted;
@@ -758,14 +683,6 @@
   }
  }
 
- &.withdraw-available {
-  text-align: center;
-  background: $appSurface;
-  border: 1px solid $appCardBorder;
-  border-radius: $appBtnRadius;
-  padding: 0.9rem 0.8rem;
-  margin: 0.9rem 0 1.2rem;
- }
  &.deposit-speed-wrapper {
   display: flex;
   flex-direction: column;
@@ -796,25 +713,11 @@
   align-items: center;
   gap: 0.5rem;
   border: 1px solid $appCardBorder;
-  border-radius: $appBtnRadius;
+  border-radius: 4px;
   padding: 0.5rem 0.6rem;
   margin-bottom: 0.7rem;
  }
 
- &.deposit-steps-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.9rem;
- }
-
- &.deposit-step {
-  margin-bottom: 0.9rem;
-
-  &:last-child {
-   margin-bottom: 0;
-  }
- }
  &.flex {
   display: flex;
  }
@@ -830,19 +733,6 @@
   overflow-y: auto;
  }
 
- &.gr-secondary {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: 0.6rem;
-  height: 100%;
-  padding: 1.5rem;
- }
- &.flex {
-  display: inline-flex;
- }
  &.gr-row {
   display: flex;
   align-items: center;
@@ -938,7 +828,7 @@
   padding: 0.6rem 0.8rem;
   background: $appSurface;
   border: 1px solid $appCardBorder;
-  border-radius: $appBtnRadius;
+  border-radius: 4px;
  }
 
  &.gr-review-controls {
@@ -950,18 +840,6 @@
   flex-shrink: 0;
  }
 
- &.gr-moves {
-  margin-top: 0.5rem;
-  padding-top: 0.9rem;
-  border-top: 1px solid $appLine;
-  height: 6rem;
-  flex-shrink: 0;
-  overflow-y: auto;
-
-  &::-webkit-scrollbar {
-   display: none;
-  }
- }
 
  &.gr-move-strip {
   display: flex;
@@ -1029,6 +907,34 @@
   width: 100%;
   max-width: 220px;
   margin-top: 0.4rem;
+ }
+
+ &.appbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+ }
+
+ &.appbar-dropdown-head {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.5rem 0.6rem;
+  border-bottom: 1px solid $appCardBorder;
+  margin-bottom: 0.1rem;
+ }
+
+ &.appbar-dropdown-id {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+ }
+
+ &.modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
  }
 }
 

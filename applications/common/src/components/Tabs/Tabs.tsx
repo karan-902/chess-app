@@ -11,11 +11,9 @@ interface ITabProps extends TabProps {
 }
 
 export function CustomTabs({ customClass, ...props }: ITabsProps) {
-    const classes = classNames("tabs", customClass);
-    return <MuiTabs {...props} className={classes} />;
+    return <MuiTabs {...props} className={classNames("common-tabs", customClass)} />;
 }
 
 export function CustomTab({ customClass, ...props }: ITabProps) {
-    const classes = classNames("tab", customClass);
-    return <MuiTab {...props} className={classes} />;
+    return <MuiTab {...props} className={classNames("common-tab", customClass)} />;
 }

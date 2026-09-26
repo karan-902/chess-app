@@ -1,15 +1,15 @@
 @use "default.scss" as *;
 
-.button {
+.common-button {
  min-width: 0px !important;
  display: inline-flex;
  align-items: center;
  justify-content: center;
  gap: 0.5rem;
  border: none;
- border-radius: $appBtnRadius;
+ border-radius: 4px;
  min-height: 2.625rem;
- font-family: $fontOutfit;
+ font-family: $fontOutfitRegular;
  font-weight: 600;
  letter-spacing: 0.04em;
  text-transform: none;
@@ -37,23 +37,26 @@
 
   .MuiButton-endIcon {
    margin: 0;
+
+   svg {
+    width: 1.125rem;
+    height: 1.125rem;
+   }
   }
 
   &.active {
    border: 1.5px solid $gold;
   }
  }
- &.Mui-disabled:not(.btn--loading) {
+ &.Mui-disabled:not(.loading) {
   background-color: $appSecondary;
   .button-text {
    font-family: $fontOutfitSemiBold !important;
    font-size: $font14 !important;
    color: $appTextMuted;
   }
-  .MuiButton-icon {
-   .auth-btn-arrow-icon {
-    color: $appTextMuted;
-   }
+  .MuiButton-icon svg {
+   color: $appTextMuted;
   }
 
   :root[data-theme="light"] & {
@@ -71,10 +74,8 @@
  &.MuiButton-contained {
   background: $primary;
   color: $primaryContrast !important;
-  .MuiButton-icon {
-   .auth-btn-arrow-icon {
-    color: $primaryContrast;
-   }
+  .MuiButton-icon svg {
+   color: $primaryContrast;
   }
  }
 
@@ -91,9 +92,8 @@
   }
  }
 
- &.btn--loading {
+ &.loading {
   cursor: wait;
-
   pointer-events: none;
  }
 
@@ -139,6 +139,11 @@
   font-weight: 400;
   font-size: $font14;
 
+  .MuiButton-startIcon svg {
+   width: 1rem;
+   height: 1rem;
+  }
+
   &:hover:not(.Mui-disabled) {
    background: transparent;
    color: alpha($appText, 0.7) !important;
@@ -167,7 +172,7 @@
    font-size: $font12;
   }
 
-  .auth-change-icon {
+  .MuiButton-startIcon svg {
    font-size: $font14;
   }
  }
@@ -178,7 +183,7 @@
 
  &.auth-submit-btn-arrow {
   gap: 0.25rem;
-  .auth-btn-arrow-icon {
+  .MuiButton-endIcon svg {
    font-size: $font20;
    color: $appText;
   }
@@ -207,7 +212,7 @@
  }
 
  &.game-cta,
- &.bet-card-go {
+ &.options-play {
   background: $gold !important;
   border: 1px solid $appBtnBorder;
   box-shadow: none;
@@ -219,17 +224,8 @@
   }
  }
  &.options-play {
-  background: $gold !important;
   padding: 0px;
   height: $font24 !important;
-  border: 1px solid $appBtnBorder;
-  box-shadow: none;
-  border-radius: 0.6rem;
-  color: $primaryContrast !important;
-
-  &:not(.Mui-disabled):hover {
-   opacity: 0.7;
-  }
  }
 
  &.game-cta {
@@ -255,7 +251,7 @@
 
  &.common-play {
   width: min(150px, 100%) !important;
-  height: $font24 + 0.1 !important;
+  height: 26px !important;
   min-height: 0px;
   padding: 0px !important;
   border-radius: 8px !important;
@@ -300,6 +296,11 @@
   font-size: $font12;
   color: $appTextMuted;
 
+  .MuiButton-startIcon svg {
+   width: 0.875rem;
+   height: 0.875rem;
+  }
+
   &:hover:not(.Mui-disabled) {
    background: transparent;
    color: $appText;
@@ -320,48 +321,11 @@
  }
 
  &.wallet-withdraw-btn {
-  border: 1px solid $appBtnBorder;
   color: $appText;
 
   &:hover:not(.Mui-disabled) {
    background: $appBtnBg;
    border-color: alpha($appText, 0.4);
-  }
- }
-
- &.wallet-logout-btn {
-  display: block;
-  width: fit-content;
-  height: auto;
-  margin: 1.5rem auto 0;
-  padding: 0;
-  background: transparent;
-  color: alpha($appText, 0.4);
-  font-weight: 400;
-  font-size: $font14;
-
-  &:hover:not(.Mui-disabled) {
-   background: transparent;
-   color: $paleRed;
-  }
- }
-
- &.subtab-btn {
-  background: $appSurface;
-  border: 1px solid $appCardBorder;
-  border-radius: 999px;
-  padding: 0.44rem 0.8rem;
-  font-size: $font14;
-  font-family: $fontOutfitExtraBold;
-  color: $appTextMuted;
-
-  &:hover:not(.Mui-disabled) {
-   background: $appSurface;
-  }
-
-  &.active {
-   background: $gold !important;
-   color: $appText;
   }
  }
 
@@ -419,17 +383,6 @@
   border-radius: 0.6rem;
  }
 
- &.tx-filter-reset-btn {
-  height: 2.4rem;
-  background: transparent;
-  border: 1px solid $appCardBorder;
-  color: $appTextMuted;
-
-  &:hover:not(.Mui-disabled) {
-   border-color: alpha($paleRed, 0.35);
-   color: $paleRed;
-  }
- }
 
  &.deposit-copy-btn {
   flex-shrink: 0;
@@ -444,23 +397,13 @@
    background: $appBtnBg;
    border-color: alpha($appText, 0.4);
   }
-  .button-text {
-   display: flex;
-   gap: 5px !important;
-   align-items: center;
-  }
- }
+  .MuiButton-startIcon {
+   margin: 0 5px 0 0;
 
- &.auth-left-dot {
-  width: 0.45rem;
-  height: 0.45rem;
-  padding: 0;
-  border-radius: 50%;
-  background: alpha($appText, 0.15);
-
-  &.auth-left-dot--active {
-   width: 1.1rem;
-   background: $gold;
+   svg {
+    width: 0.875rem;
+    height: 0.875rem;
+   }
   }
  }
 
@@ -482,83 +425,12 @@
   }
  }
 
- &.profile-avatar-picker-option {
-  position: relative;
-  width: 3.25rem;
-  height: 3.25rem;
-  aspect-ratio: 1;
-  padding: 0;
-  border-radius: 50%;
-  background: $appSecondary;
-  border: 1.5px solid $appCardBorder;
-
-  img {
-   width: 100%;
-   height: 100%;
-   border-radius: 50%;
-   object-fit: cover;
-  }
-
-  &.selected {
-   border-color: $gold;
-  }
-
-  &:hover:not(.Mui-disabled) {
-   border-color: alpha($gold, 0.6);
-  }
- }
-
  &.profile-save-btn {
   margin-top: 0.4rem;
  }
 
- &.room-paste-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  font-size: $font12;
-  font-weight: 700;
-  color: $gold;
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
- }
 
- &.deposit-howto-link {
-  display: none;
-  align-self: center;
-  margin-top: 0.9rem;
-  font-size: $font12;
-  font-weight: 600;
-  color: $gold;
-  text-decoration: none;
-  background: none;
-  border: none;
-  padding: 0;
-  font-family: inherit;
-  cursor: pointer;
- }
 
- &.deposit-steps-close {
-  position: static;
-  top: 0;
-  right: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.875rem;
-  height: 1.875rem;
-  border-radius: 50%;
-  background: rgba(128, 128, 128, 0.18);
-  border: none;
-  color: $appText;
-  cursor: pointer;
-
-  &:hover {
-   background: rgba(128, 128, 128, 0.3);
-  }
- }
 
  &.gr-link {
   font-size: $font12;
@@ -570,7 +442,6 @@
   border: none;
   border-bottom: 1px solid transparent;
   padding: 0;
-  cursor: pointer;
   transition: border-color 0.2s ease;
 
   .button-text {
@@ -593,12 +464,11 @@
 
  &.gr-overlay-btn {
   flex: 1;
-  font-family: $fontOutfit;
+  font-family: $fontOutfitRegular;
   font-size: $font12;
   font-weight: 700;
   padding: 0.65rem;
-  border-radius: $appBtnRadius;
-  cursor: pointer;
+  border-radius: 4px;
 
   &.primary {
    background: $gold;
@@ -628,7 +498,6 @@
   color: $white;
   font-size: $font12;
   font-weight: 700;
-  cursor: pointer;
   transition:
    color 0.15s ease,
    border-color 0.15s ease;

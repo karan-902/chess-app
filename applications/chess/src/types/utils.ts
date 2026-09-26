@@ -123,11 +123,6 @@ export type TransactionType =
  | "DRAW"
  | "MATCH_CANCELLED";
 
-export type ITransactionsFilterBody = {
- types?: TransactionType[];
- from?: number;
- to?: number;
-};
 
 export type ITransactionResponse = {
  id: string;

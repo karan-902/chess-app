@@ -7,17 +7,13 @@ interface ITooltipProps extends TooltipProps {
     customClass?: string;
 }
 
-export function CustomTooltip({
-    customClass,
-
-    ...props
-}: ITooltipProps) {
+export function CustomTooltip({ customClass, ...props }: ITooltipProps) {
     return (
         <MuiTooltip
             {...props}
             classes={{
-                popper: "popper",
-                tooltip: classNames("tooltip", customClass),
+                popper: "common-tooltip",
+                tooltip: classNames("tooltip-content", customClass),
             }}
         />
     );

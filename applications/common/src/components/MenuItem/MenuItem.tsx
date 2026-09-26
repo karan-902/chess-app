@@ -8,7 +8,7 @@ interface IMenuItemProps extends MenuItemProps {
 
 export function CustomMenuItem({ customClass, ...props }: IMenuItemProps) {
     return (
-        <MuiMenuItem {...props} className={classNames("menu-item", customClass)} />
+        <MuiMenuItem {...props} className={classNames("common-menu-item", customClass)} />
     );
 }
 

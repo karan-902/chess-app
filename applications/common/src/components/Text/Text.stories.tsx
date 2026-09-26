@@ -6,7 +6,6 @@ const meta: Meta<typeof Text> = {
     component: Text,
     argTypes: {
         uppercase: { table: { type: { summary: "boolean" } } },
-        truncate: { table: { type: { summary: "boolean" } } },
         customClass: { table: { type: { summary: "string" } } },
     },
     args: { children: "Checkmate in three moves" },
@@ -17,5 +16,5 @@ type Story = StoryObj<typeof Text>;
 export const Default: Story = {};
 export const Uppercase: Story = { args: { uppercase: true } };
 export const Truncated: Story = {
-    args: { truncate: true, children: "A very long username that should be truncated with an ellipsis", sx: { width: "160px" } },
+    args: { children: "A very long username that should be truncated with an ellipsis", sx: { width: "160px" } },
 };

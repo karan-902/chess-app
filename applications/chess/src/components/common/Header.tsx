@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import classNames from "classnames";
-import PersonIcon from "@mui/icons-material/Person";
-import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { AccountBalanceWalletIcon } from "@/components/base/images";
 import CustomAppBar from "@/components/base/AppBar/AppBar";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
@@ -47,7 +45,6 @@ export default function Header() {
 
  return (
   <CustomAppBar
-   toolbarClass="app-toolbar"
    brand={
     <Link
      to={routes ? routes.PLAY : "/"}
@@ -72,7 +69,7 @@ export default function Header() {
      <Button
       type="button"
       customClass="appbar-back-btn"
-      startIcon={<ArrowBackIcon />}
+      startIcon="arrowBack"
       onClick={() => navigate(routes ? routes.PLAY : "/")}
      >
       {appBarBack}
@@ -101,11 +98,10 @@ export default function Header() {
        pathname === "/profile" && "active",
       )}
       onClick={(e) => setAnchorEl(e.currentTarget)}
-     >
-      <PersonIcon className="person-icon" />
-     </CustomIconButton>
+      icon="person"
+     />
     ) : (
-     <Skeleton customClass="circle" width={28} height={28} />
+     <Skeleton variant="circular" width={28} height={28} />
     )}
 
     <CustomPopover

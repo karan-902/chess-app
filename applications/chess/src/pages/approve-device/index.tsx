@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import CheckCircleIcon from "@mui/icons-material/CheckCircleOutlineOutlined"
+import { CheckCircleOutlineIcon } from "@/components/base/images";
 import Box from "@/components/base/Box/Box";
 import Button from "@/components/base/Button/Button";
 import AuthLayout from "@/container/AuthLayout";
@@ -59,7 +59,7 @@ export default function ApproveDevice() {
                 }
             >
                 <Box customClass="modal-success-icon">
-                    <CheckCircleIcon className="success-icon"  />
+                    <CheckCircleOutlineIcon className="success-icon"  />
                 </Box>
             </AuthLayout>
         );

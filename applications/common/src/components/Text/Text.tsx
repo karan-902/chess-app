@@ -6,25 +6,18 @@ import "./text.scss";
 interface ITextProps extends TypographyProps {
     customClass?: string;
     uppercase?: boolean;
-    truncate?: boolean;
 }
 
 export function Text({
     customClass,
     uppercase,
-    truncate,
     ...props
 }: ITextProps) {
-    const classes = classNames(
-        "text",
-        uppercase && "uppercase",
-        truncate && "truncate",
-        customClass,
-    );
     return (
-        <Typography {...props} className={classes}>
-            {props.children}
-        </Typography>
+        <Typography
+            {...props}
+            className={classNames("common-text", uppercase && "uppercase", customClass)}
+        />
     );
 }
 

@@ -1,7 +1,6 @@
 import { forwardRef, useState } from "react";
 import { InputBase, InputAdornment } from "@mui/material";
 import type { InputBaseProps } from "@mui/material";
-import { Eye, EyeOff } from "lucide-react";
 import classNames from "classnames";
 import Box from "../Box/Box";
 import CustomLabel from "../Label/Label";
@@ -38,10 +37,9 @@ export const Input = forwardRef<HTMLInputElement, IInputProps>(
  ) => {
   const [showPassword, setShowPassword] = useState(false);
   const isPassword = type === "password";
-  const classes = classNames("input", customClass);
 
   return (
-   <Box customClass="input-element">
+   <Box customClass={classNames("common-input", customClass)}>
     {label && (
      <CustomLabel htmlFor={props.id} customClass={labelClassName}>
       {label}
@@ -49,7 +47,6 @@ export const Input = forwardRef<HTMLInputElement, IInputProps>(
     )}
     <InputBase
      {...props}
-     className={classes}
      error={isError}
      fullWidth={fullWidth}
      type={isPassword && showPassword ? "text" : type}
@@ -74,9 +71,8 @@ export const Input = forwardRef<HTMLInputElement, IInputProps>(
          className="input-password-toggle"
          onClick={() => setShowPassword((p) => !p)}
          tabIndex={-1}
-        >
-         {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-        </CustomIconButton>
+         icon={showPassword ? "eyeOff" : "eye"}
+        />
        </InputAdornment>
       ) : (
        endIcon && <InputAdornment position="end">{endIcon}</InputAdornment>

@@ -211,29 +211,9 @@ export const depositModalTitle = "Deposit";
 export const depositModalDepositingTitle = (amount: number) =>
  `Depositing $${amount}`;
 export const depositModalTagline = "Fast, Secured & Transparent";
-export const depositModalHowToLink = "How to deposit crypto?";
 export const depositModalSpeedBadge = "Buy crypto instantly with";
 export const amountInputLabel = "Enter Amount";
 export const depositModalGenerateButton = "Generate QR Code";
-export const depositModalStepsTitle = "Follow the steps";
-export const depositModalStepsCloseAriaLabel = "Close steps";
-export const depositModalStep1Title = "Select Cryptocurrency";
-export const depositModalStep1Desc = "Choose the crypto you want to deposit.";
-export const depositModalStep2Title = "Enter Deposit Amount";
-export const depositModalStep2Desc = "Enter the amount you wish to deposit.";
-export const depositModalStep3Title = "Generate QR Code";
-export const depositModalStep3Desc =
- "Select your network to generate a QR code.";
-export const depositModalStep3Note =
- "Make sure the network (Bitcoin or Lightning) matches your selected method.";
-export const depositModalStep4Title = "Scan QR & Send Funds";
-export const depositModalStep4Desc =
- "Scan the QR with your crypto wallet and authorize the transaction.";
-export const depositModalStep4Note =
- "Sending funds on the wrong network may result in permanent loss.";
-export const depositModalStep5Title = "Wait for Confirmation";
-export const depositModalStep5Desc =
- "Once confirmed, your Chess wallet will be credited.";
 export const depositModalAmountRequired = "Amount is required";
 export const depositModalMinAmountError = (min: number) =>
  `Minimum deposit amount is $${min}.`;
@@ -313,12 +293,6 @@ export const walletPageTransactionsTitle = "Transactions";
 export const walletPageEmptyTitle = "No transactions yet";
 export const walletPageEmptyDesc =
  "Your deposits, withdrawals, and match payouts will show up here.";
-export const walletFilterTitle = "Filter Transactions";
-export const walletFilterTypeLabel = "Type";
-export const walletFilterFromLabel = "From";
-export const walletFilterToLabel = "To";
-export const walletFilterApplyButton = "Apply Filters";
-export const walletFilterResetButton = "Reset";
 
 export const rulesStakingTitle = "How staking works";
 export const rulesStakingDesc =

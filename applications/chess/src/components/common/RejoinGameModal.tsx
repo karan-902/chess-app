@@ -100,7 +100,7 @@ export default function RejoinGameModal() {
                 open={confirmingExit}
                 preventOutsideClose
                 title={rejoinGameForfeitTitle}
-                customClass="rejoin-game-modal modal--danger"
+                customClass="rejoin-game-modal"
             >
                 <Text customClass="modal-description">
                     {rejoinGameForfeitBody(

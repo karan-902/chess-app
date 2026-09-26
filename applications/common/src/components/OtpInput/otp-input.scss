@@ -14,12 +14,12 @@
         justify-content: center;
         background: $appSecondary;
         border: 1px solid $appCardBorder;
-        border-radius: $appInputRadius;
-        font-family: $fontDisplay;
+        border-radius: 4px;
+        font-family: $fontOutfitSemiBold;
         font-size: $font20;
         color: $appText;
 
-        &--active {
+        &.active {
             border-color: $primary;
             box-shadow: 0 0 0 3px alpha($primary, 0.12);
         }

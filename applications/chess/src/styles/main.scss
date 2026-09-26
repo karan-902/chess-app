@@ -1,7 +1,7 @@
 @use "default.scss" as *;
 
 :root {
- --font-outfit: #{$fontOutfit};
+ --font-outfit: #{$fontOutfitRegular};
 }
 
 html {
@@ -15,7 +15,7 @@ body {
  overflow: hidden !important;
  background-color: #000 !important;
  color: $appText !important;
- font-family: $fontOutfit !important;
+ font-family: $fontOutfitRegular !important;
  font-size: $font16 !important;
  line-height: 1.5 !important;
 

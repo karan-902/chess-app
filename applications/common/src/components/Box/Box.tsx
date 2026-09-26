@@ -9,14 +9,9 @@ interface IBoxProps extends BoxProps {
 }
 
 export const Box = forwardRef<HTMLDivElement, IBoxProps>(
-    ({ customClass, ...props }, ref) => {
-        const classes = classNames("box", customClass);
-        return (
-            <MuiBox ref={ref} {...props} className={classes}>
-                {props.children}
-            </MuiBox>
-        );
-    },
+    ({ customClass, ...props }, ref) => (
+        <MuiBox ref={ref} {...props} className={classNames("common-box", customClass)} />
+    ),
 );
 
 Box.displayName = "Box";

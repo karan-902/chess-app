@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import classNames from "classnames";
 import { CircularProgress } from "@mui/material";
-import InfoIcon from "@mui/icons-material/Info";
 import { useReduxDispatch } from "@/redux/hooks";
 import { showToast } from "@/redux/common/slice";
 import Box from "@/components/base/Box/Box";
 import SuccessCheckmark from "@/components/base/SuccessCheckmark/SuccessCheckmark";
-import { walletSuccessLottie, walletTickLottie } from "@/components/images";
+import { InfoIcon } from "@/components/base/images";
 import Text from "@/components/base/Text/Text";
 import Button from "@/components/base/Button/Button";
 import Input from "@/components/base/Input/Input";
@@ -203,10 +202,7 @@ export default function WithdrawModal() {
    {ready && stage === "success" && (
     <Box customClass="modal-success-stage">
      <Box customClass="modal-success-icon">
-      <SuccessCheckmark
-       confettiLottieSrc={walletSuccessLottie}
-       tickLottieSrc={walletTickLottie}
-      />
+      <SuccessCheckmark />
      </Box>
      <Box customClass="deposit-sucess-amountWrapper">
       <Text customClass="modal-success-amount">{formatAmount(amountUsd)}</Text>

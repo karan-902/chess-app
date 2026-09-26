@@ -15,7 +15,7 @@
  position: relative;
  width: 100%;
  aspect-ratio: 1 / 1;
- border-radius: $radiusLg;
+ border-radius: 6px;
  overflow: hidden;
  border: 1px solid $appCardBorder;
  background: $appCardBorder;
@@ -31,7 +31,7 @@
  width: 100%;
  display: grid;
  grid-template-columns: repeat(8, 1fr);
- border-radius: $radiusLg;
+ border-radius: 6px;
  overflow: hidden;
  border: 1px solid $appCardBorder;
  background: $appCardBorder;
@@ -96,7 +96,7 @@
 
 .sq-corner-label {
  position: absolute;
- font-family: $fontMono;
+ font-family: $fontOutfitRegular;
  font-size: clamp(7px, 1.1vw, 11px);
  font-weight: 700;
  line-height: 1;

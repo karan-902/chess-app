@@ -8,8 +8,7 @@ interface IMenuProps extends MenuProps {
 }
 
 export function CustomMenu({ customClass, ...props }: IMenuProps) {
-    const classes = classNames("menu", customClass);
-    return <MuiMenu {...props} className={classes} />;
+    return <MuiMenu {...props} className={classNames("common-menu", customClass)} />;
 }
 
 export default CustomMenu;

@@ -3,12 +3,16 @@ import type { CheckboxProps } from "@mui/material";
 import classNames from "classnames";
 
 interface ICheckboxProps extends CheckboxProps {
-    customClass?: string;
+ customClass?: string;
 }
 
 export function CustomCheckbox({ customClass, ...props }: ICheckboxProps) {
-    const classes = classNames("checkbox", customClass);
-    return <MuiCheckbox {...props} className={classes} />;
+ return (
+  <MuiCheckbox
+   {...props}
+   className={classNames("common-checkbox", customClass)}
+  />
+ );
 }
 
 export default CustomCheckbox;

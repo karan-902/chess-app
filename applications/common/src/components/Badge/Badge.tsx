@@ -8,8 +8,7 @@ interface IBadgeProps extends BadgeProps {
 }
 
 export function CustomBadge({ customClass, ...props }: IBadgeProps) {
-    const classes = classNames("badge", customClass);
-    return <MuiBadge {...props} className={classes} />;
+    return <MuiBadge {...props} className={classNames("common-badge", customClass)} />;
 }
 
 export default CustomBadge;

@@ -1,9 +1,13 @@
-import { Rocket, Zap, Timer, Crown } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
-import CallReceived from "@mui/icons-material/CallReceived";
-import CallMade from "@mui/icons-material/CallMade";
-import Handshake from "@mui/icons-material/Handshake";
-import type { SvgIconComponent } from "@mui/icons-material";
+import {
+ Rocket,
+ Zap,
+ Timer,
+ Crown,
+ CallReceivedIcon,
+ CallMadeIcon,
+ HandshakeIcon,
+} from "@/components/base/images";
+import type { LucideIcon, SvgIconComponent } from "@/components/base/images";
 import type {
  GameCategory,
  LeaderboardScope,
@@ -58,13 +62,13 @@ export const CATEGORY_META: Record<
 
 export const TRANSACTION_TYPE_ICONS: Record<TransactionType, SvgIconComponent> =
  {
-  DEPOSIT: CallReceived,
-  WITHDRAW: CallMade,
-  WITHDRAW_REFUND: CallReceived,
-  BET: CallMade,
-  WIN: CallReceived,
-  DRAW: Handshake,
-  MATCH_CANCELLED: CallReceived,
+  DEPOSIT: CallReceivedIcon,
+  WITHDRAW: CallMadeIcon,
+  WITHDRAW_REFUND: CallReceivedIcon,
+  BET: CallMadeIcon,
+  WIN: CallReceivedIcon,
+  DRAW: HandshakeIcon,
+  MATCH_CANCELLED: CallReceivedIcon,
  };
 
 export const TRANSACTION_TYPE_DESCRIPTIONS: Record<TransactionType, string> = {

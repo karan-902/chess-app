@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { Pencil, Mail, MapPin } from "lucide-react";
+import { Pencil, Mail, MapPin } from "@/components/base/images";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import Card from "@/components/base/Card/Card";
@@ -171,19 +171,19 @@ export default function Profile() {
     <Box customClass="profile-id-row">
      <Box customClass="profile-info-wrapper">
       <Box customClass="profile-id-text">
-       <Text customClass="profile-id-name" truncate>
+       <Text customClass="profile-id-name">
         {shortenUsername(session.username)}
        </Text>
       </Box>
       <Box customClass="profile-meta-row">
        <Mail size={12} strokeWidth={2} />
-       <Text customClass="profile-id-handle caption" truncate>
+       <Text customClass="profile-id-handle caption">
         {session.email}
        </Text>
       </Box>
       <Box customClass="profile-meta-row">
        <MapPin size={12} strokeWidth={2} />
-       <Text customClass="profile-id-handle caption" truncate>
+       <Text customClass="profile-id-handle caption">
         {session.country}
        </Text>
       </Box>

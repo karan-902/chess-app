@@ -4,7 +4,7 @@ import {
  Autocomplete,
  TextField,
 } from "@mui/material";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { KeyboardArrowDownIcon } from "../images";
 import classNames from "classnames";
 import Box from "../Box/Box";
 import AlertMessage from "../AlertMessage/AlertMessage";
@@ -42,12 +42,11 @@ export function CustomSelect({
  disabled,
  customClass,
 }: ISelectProps) {
- const classes = classNames("common-select", customClass);
  const selected = options.find((option) => option.value === value) ?? null;
 
- if (searchable) {
-  return (
-   <Box customClass={classes}>
+ return (
+  <Box customClass={classNames("common-select", customClass)}>
+   {searchable ? (
     <Autocomplete
      options={options}
      getOptionLabel={(option) => option.label}
@@ -66,38 +65,29 @@ export function CustomSelect({
       />
      )}
     />
-    {isError && helperText && (
-     <AlertMessage severity="error" message={helperText} />
-    )}
-   </Box>
-  );
- }
-
- return (
-  <Box customClass={classes}>
-   <MuiSelect
-    value={value}
-    onChange={(e) => onChange(e.target.value)}
-    onBlur={() => onBlur?.()}
-    displayEmpty
-    error={isError}
-    disabled={disabled}
-    fullWidth
-    IconComponent={KeyboardArrowDownIcon}
-    MenuProps={{
-     anchorOrigin: { vertical: "bottom", horizontal: "left" },
-     transformOrigin: { vertical: "top", horizontal: "left" },
-    }}
-    renderValue={(v) =>
-     options.find((o) => o.value === v)?.label ?? placeholder
-    }
-   >
-    {options.map((option) => (
-     <MenuItem key={option.value} value={option.value}>
-      {option.label}
-     </MenuItem>
-    ))}
-   </MuiSelect>
+   ) : (
+    <MuiSelect
+     value={value}
+     onChange={(e) => onChange(e.target.value)}
+     onBlur={() => onBlur?.()}
+     displayEmpty
+     error={isError}
+     disabled={disabled}
+     fullWidth
+     IconComponent={KeyboardArrowDownIcon}
+     MenuProps={{
+      anchorOrigin: { vertical: "bottom", horizontal: "left" },
+      transformOrigin: { vertical: "top", horizontal: "left" },
+     }}
+     renderValue={() => selected?.label ?? placeholder}
+    >
+     {options.map((option) => (
+      <MenuItem key={option.value} value={option.value}>
+       {option.label}
+      </MenuItem>
+     ))}
+    </MuiSelect>
+   )}
    {isError && helperText && (
     <AlertMessage severity="error" message={helperText} />
    )}

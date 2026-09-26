@@ -3,8 +3,6 @@ import { useState, useEffect, useRef } from "react";
 import { NavLink, useSearchParams } from "react-router-dom";
 // import { useNavigate } from "react-router-dom";
 // import { ArrowLeft } from "lucide-react";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import EditIcon from "@mui/icons-material/Edit";
 import { useFormik } from "formik";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
@@ -59,7 +57,6 @@ import {
  selectCountryTitle,
  selectCountrySubtitle,
 } from "@/constants/messages";
-import { GoogleIcon } from "@/components/constants";
 
 const emailSchema = yup.object({
  email: yup
@@ -106,7 +103,7 @@ function EmailScreen({
     type="submit"
     variant="contained"
     fullWidth
-    endIcon={<ArrowForwardIcon className="auth-btn-arrow-icon" />}
+    endIcon="arrowForward"
     customClass="auth-submit-btn auth-submit-btn-arrow"
     disabled={!formik.dirty || formik.isSubmitting}
     isLoading={formik.isSubmitting}
@@ -121,7 +118,7 @@ function EmailScreen({
    <Box customClass="social-stack">
     <Button
      type="button"
-     startIcon={<GoogleIcon size={20} />}
+     startIcon="google"
      variant="outlined"
      fullWidth
      customClass="auth-google-btn"
@@ -159,10 +156,10 @@ function PasswordScreen({
    <Box customClass="auth-account-card">
     <CustomAvatar letter={initials} customClass="md neutral" />
     <Box customClass="auth-account-info">
-     <Text truncate customClass="auth-account-name">
+     <Text customClass="auth-account-name">
       {verifiedUsername}
      </Text>
-     <Text truncate customClass="auth-account-email">
+     <Text customClass="auth-account-email">
       {verifiedEmail}
      </Text>
     </Box>
@@ -170,7 +167,7 @@ function PasswordScreen({
      type="button"
      size="small"
      variant="outlined"
-     startIcon={<EditIcon className="auth-change-icon" />}
+     startIcon="edit"
      customClass="auth-change-btn"
      onClick={onChangeEmail}
     >
@@ -201,7 +198,7 @@ function PasswordScreen({
      type="submit"
      variant="contained"
      fullWidth
-     endIcon={<ArrowForwardIcon className="auth-btn-arrow-icon" />}
+     endIcon="arrowForward"
      customClass="auth-submit-btn auth-submit-btn-arrow"
      disabled={!formik.dirty || formik.isSubmitting}
      isLoading={formik.isSubmitting}

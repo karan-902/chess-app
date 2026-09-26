@@ -6,7 +6,7 @@ import type {
  MoveRecord,
  IPoolResponse,
 } from "./types";
-import type { ILoginResponse, TransactionType } from "./utils";
+import type { ILoginResponse } from "./utils";
 import type { RematchStatus } from "@/hooks/useRematch";
 import type { MatchmakingStatus } from "@/hooks/useMatchmaking";
 import type { RoomStatus } from "@/hooks/useRoomMatch";
@@ -144,17 +144,6 @@ export interface IVerifyEmailFormProps {
 export interface ISelectCountryScreenProps {
  showHeading?: boolean;
  onSelected?: () => void;
-}
-
-export type TxDateFilter = { from?: number; to?: number };
-
-export interface ITransactionFilterDrawerProps {
- open: boolean;
- onClose: () => void;
- typeFilter: TransactionType[];
- setTypeFilter: (types: TransactionType[]) => void;
- dateFilter: TxDateFilter;
- setDateFilter: (filter: TxDateFilter) => void;
 }
 
 export interface IMatchRowProps {

@@ -1,8 +1,8 @@
 @use "default.scss" as *;
 
-.chip {
+.common-chip {
  height: auto;
- border-radius: $appChipRadius !important;
+ border-radius: 6px !important;
  font-family: $fontOutfitSemiBold;
  letter-spacing: 0.01em;
 
@@ -49,22 +49,6 @@
   }
  }
 
- &.gr-pot {
-  height: 28px;
-  align-self: center;
-  margin: 0.5rem auto 0.25rem;
-  background: alpha($gold, 0.16);
-  border: 1px solid alpha($gold, 0.4);
-
-  .MuiChip-label {
-   padding: 0 0.85rem;
-   font-family: $fontOutfitExtraBold;
-   font-size: $font14;
-   letter-spacing: 0.02em;
-   color: $gold;
-  }
- }
-
  &.gr-move-chip {
   background: transparent;
   border: none;
@@ -73,7 +57,7 @@
   cursor: pointer;
 
   .MuiChip-label {
-   font-family: $fontMono;
+   font-family: $fontOutfitRegular;
    font-size: $font14;
    color: $appText;
    padding: 0.15rem 0.5rem;

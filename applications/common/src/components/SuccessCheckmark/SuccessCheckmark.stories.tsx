@@ -5,9 +5,6 @@ const meta: Meta<typeof SuccessCheckmark> = {
     title: "Components/SuccessCheckmark",
     component: SuccessCheckmark,
     argTypes: {
-        confettiGif: { table: { type: { summary: "string" } } },
-        confettiLottieSrc: { table: { type: { summary: "string" } } },
-        tickLottieSrc: { table: { type: { summary: "string" } } },
         customClass: { table: { type: { summary: "string" } } },
     },
 };

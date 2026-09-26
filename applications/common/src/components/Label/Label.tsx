@@ -7,8 +7,7 @@ interface ILabelProps extends InputLabelProps {
 }
 
 export function CustomLabel({ customClass, ...props }: ILabelProps) {
-    const classes = classNames("label", customClass);
-    return <InputLabel {...props} className={classes} />;
+    return <InputLabel {...props} className={classNames("common-label", customClass)} />;
 }
 
 export default CustomLabel;

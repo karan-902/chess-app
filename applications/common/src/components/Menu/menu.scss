@@ -1,6 +1,6 @@
 @use "default.scss" as *;
 
-.menu {
+.common-menu {
  .MuiMenu-list {
   padding: 0px;
  }
@@ -11,42 +11,21 @@
   }
  }
  .MuiPaper-root {
-  z-index: 1300;
-  position: absolute;
-  min-width: 400px;
-  width: auto;
-  max-width: 800px;
-  top: 36px;
-  left: 50%;
-  transform: translate(-50%);
-  box-sizing: border-box;
   box-shadow: 0 4px 7px 3px #0b254b1f;
   border: 1px solid #e4e9ee;
   border-radius: 4px;
   margin-top: 4px;
  }
- &.appbar-account-menu {
-  .MuiPaper-root {
-   top: 41px !important;
-   left: 800px !important;
-   min-width: 200px;
-   .MuiMenu-list {
-    padding: 8px;
-   }
-  }
- }
  &.filter-dropdown-menu {
   .MuiPaper-root {
    min-width: 11rem;
-   margin-top: 4px;
-   max-width: none;
    border: 1px solid $appCardBorder;
-   border-radius: $radiusMd;
+   border-radius: 5px;
    background: $appBg;
    box-shadow: 0 8px 24px rgba($black, 0.4);
   }
 
-  .menu-item {
+  .common-menu-item {
    display: flex;
    align-items: center;
    justify-content: space-between;

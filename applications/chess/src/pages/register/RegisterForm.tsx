@@ -1,8 +1,6 @@
 import * as yup from "yup";
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import CloseIcon from "@mui/icons-material/Close";
 import { useFormik } from "formik";
 import Box from "@/components/base/Box/Box";
 import CustomLabel from "@/components/base/Label/Label";
@@ -232,12 +230,12 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
        <CustomIconButton
         type="button"
         className="input-password-toggle"
+        customClass="username-clear-btn"
         aria-label={authRegisterUsernameClearAriaLabel}
         onClick={() => formik.setFieldValue("username", "")}
         tabIndex={-1}
-       >
-        <CloseIcon sx={{ fontSize: 14 }} />
-       </CustomIconButton>
+        icon="close"
+       />
       ) : undefined
      }
      customClass="form-input"
@@ -368,7 +366,7 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
     type="submit"
     variant="contained"
     fullWidth
-    endIcon={<ArrowForwardIcon className="auth-btn-arrow-icon" />}
+    endIcon="arrowForward"
     customClass="auth-submit-btn auth-submit-btn-arrow"
     disabled={!formik.dirty || !formik.isValid || formik.isSubmitting}
     isLoading={formik.isSubmitting}

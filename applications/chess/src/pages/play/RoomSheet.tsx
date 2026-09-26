@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import classNames from "classnames";
-import { Copy, Check } from "lucide-react";
-import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import Button from "@/components/base/Button/Button";
@@ -190,7 +188,7 @@ export default function RoomSheet({
       variant="outlined"
       fullWidth
       customClass="pool-confirm-cancel-btn"
-      startIcon={codeCopied ? <Check size={14} /> : <Copy size={14} />}
+      startIcon={codeCopied ? "check" : "copy"}
       onClick={handleCopyCode}
      >
       {codeCopied ? roomCopiedButton : roomCopyButton}
@@ -308,9 +306,7 @@ export default function RoomSheet({
        <Box customClass="room-field">
         <Box customClass="room-field-head">
          <CustomLabel customClass="room-field-label">{roomJoinCodeLabel}</CustomLabel>
-         <CustomIconButton customClass="room-paste-btn" onClick={handlePasteCode}>
-          <ContentPasteIcon className="content-paste-icon" />
-         </CustomIconButton>
+         <CustomIconButton customClass="room-paste-btn" onClick={handlePasteCode} icon="contentPaste" />
         </Box>
         <OTPInput
          length={6}
