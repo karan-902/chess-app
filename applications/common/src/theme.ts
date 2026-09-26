@@ -26,8 +26,8 @@ import {
  colorErrorLight,
  colorSuccessLight,
  colorWarningLight,
-} from "@/constants/colors";
-import type { ThemeMode } from "@/context/ThemeContext";
+} from "@gopvp/common/src/constants/colors";
+import type { ThemeMode } from "@gopvp/common/src/types/component";
 
 const fontFamily = '"Outfit-Regular", system-ui, sans-serif';
 

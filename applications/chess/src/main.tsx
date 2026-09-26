@@ -7,7 +7,7 @@ import { store, hydrateSession, hydrateSpeedState } from "./redux/index.ts";
 import { SocketProvider } from "./context/SocketContext";
 import { WalletActionModalProvider } from "./context/WalletActionModalContext";
 import { AppThemeProvider, useAppTheme } from "./context/ThemeContext";
-import { getMuiTheme } from "./theme";
+import { getMuiTheme } from "@gopvp/common/src/theme";
 import { googleClientId } from "@gopvp/common/src/constants/env";
 
 import "./styles/main.scss";

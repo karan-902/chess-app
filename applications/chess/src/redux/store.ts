@@ -1,9 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
 import localforage from "localforage";
 import sessionService from "@gopvp/common/src/util/sessionService";
-import toastService from "@gopvp/common/src/util/toastService";
+import { injectStore } from "@gopvp/common/src/util/injectStore";
 import authReducer, { clearSession, setSession } from "./auth/slice";
-import commonReducer, { showToast } from "./common/slice";
+import commonReducer from "./common/slice";
 import walletReducer from "./wallet/slice";
 import socketModalsReducer from "./socketModals/slice";
 import speedReducer, { hydrateSpeed, type ISpeedState } from "./speed/slice";
@@ -30,11 +30,12 @@ sessionService.subscribe<ILoginResponse>((session) =>
  store.dispatch(session ? setSession(session) : clearSession()),
 );
 
-toastService.subscribe((toast) =>
- store.dispatch(showToast({ isToastOpen: true, ...toast })),
-);
+injectStore(store);
 
-const speedStore = localforage.createInstance({ name: "gopvp", storeName: "speed" });
+const speedStore = localforage.createInstance({
+ name: "gopvp",
+ storeName: "speed",
+});
 const SPEED_STATE_KEY = "state";
 let savedSpeedState = store.getState().speed;
 
@@ -55,7 +56,8 @@ store.subscribe(() => {
 });
 
 export async function hydrateSpeedState() {
- const storedSpeedState = await speedStore.getItem<ISpeedState>(SPEED_STATE_KEY);
+ const storedSpeedState =
+  await speedStore.getItem<ISpeedState>(SPEED_STATE_KEY);
  if (storedSpeedState) store.dispatch(hydrateSpeed(storedSpeedState));
 }
 
@@ -63,12 +65,14 @@ const legacySessionStore = localforage.createInstance({
  name: "Chess",
  storeName: "key-value-pairs",
 });
+
 const LEGACY_SESSION_KEY = "persist:CHESS-SESSION";
 
 export async function hydrateSession() {
  if (await sessionService.init<ILoginResponse>()) return;
  try {
-  const legacyState = await legacySessionStore.getItem<string>(LEGACY_SESSION_KEY);
+  const legacyState =
+   await legacySessionStore.getItem<string>(LEGACY_SESSION_KEY);
   const legacySession: ILoginResponse | null = legacyState
    ? JSON.parse(JSON.parse(legacyState).session)
    : null;

@@ -4,7 +4,7 @@ import axios, {
  type Method,
 } from "axios";
 import sessionService from "@gopvp/common/src/util/sessionService";
-import toastService from "@gopvp/common/src/util/toastService";
+import { showToastMessage } from "@gopvp/common/src/util/injectStore";
 import { readStorage, writeStorage } from "@gopvp/common/src/util/storage";
 import { apiUrl } from "@gopvp/common/src/constants/env";
 import { somethingWentWrongText } from "@gopvp/common/src/constants/messages";
@@ -87,13 +87,13 @@ export function showApiErrorToast(err: any) {
   response.data?.type === "session_expired";
  const toastMessage = response?.data?.message;
  if (isAlreadyToasted || !toastMessage) return;
- toastService.show({ toastMessage, toastVariant: "error" });
+ showToastMessage({ toastMessage, toastVariant: "error" });
 }
 
 export function showAckErrorToast(err: ISocketAckError | null) {
  const toastMessage = err?.errors[0]?.message;
  if (!toastMessage) return;
- toastService.show({ toastMessage, toastVariant: "error" });
+ showToastMessage({ toastMessage, toastVariant: "error" });
 }
 
 async function getHeaders<TPayload = undefined>(
@@ -157,7 +157,7 @@ export const callAPIInterface = async <
    }
 
    if (!err.response) {
-    toastService.show({
+    showToastMessage({
      toastMessage: somethingWentWrongText,
      toastVariant: "error",
     });
@@ -186,7 +186,7 @@ export const callAPIInterface = async <
 
    if (errorType === "session_expired") {
     if (errorData?.message) {
-     toastService.show({
+     showToastMessage({
       toastMessage: errorData.message,
       toastVariant: "error",
      });
@@ -197,7 +197,7 @@ export const callAPIInterface = async <
    }
 
    if (errorStatus === 429 && errorData?.message) {
-    toastService.show({
+    showToastMessage({
      toastMessage: errorData.message,
      toastVariant: "error",
     });

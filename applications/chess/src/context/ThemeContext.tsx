@@ -5,8 +5,7 @@ import {
     useState,
     type ReactNode,
 } from "react";
-
-export type ThemeMode = "dark" | "light";
+import type { ThemeMode } from "@gopvp/common/src/types/component";
 
 const STORAGE_KEY = "sj_theme";
 

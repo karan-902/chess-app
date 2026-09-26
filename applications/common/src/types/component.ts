@@ -6,6 +6,7 @@ export type ApproveDeviceStatus = "confirm" | "approved" | "invalid";
 export type MatchesSubtab = "history" | "global" | "stats";
 export type RoomTab = "create" | "join";
 export type ToastSeverity = "error" | "warning" | "info" | "success";
+export type ThemeMode = "dark" | "light";
 
 export interface IToast {
  toastMessage: string;
