@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { callAPIInterface, showApiErrorToast } from "@/utils";
-import { walletTransactionsLoadFailed } from "@/constants/messages";
+import {
+ noDataFoundText,
+} from "@/constants/messages";
 import { useSocket } from "@/context/SocketContext";
 import { useReduxDispatch, useReduxSelector } from "@/redux/hooks";
 import { fetchWalletBalance } from "@/redux/wallet/thunk";
@@ -105,7 +107,7 @@ export function useWallet() {
     hasMoreRef.current = res?.has_more ?? false;
     pageIdRef.current = res?.page_id ?? null;
    } catch (err) {
-    showApiErrorToast(err, walletTransactionsLoadFailed);
+    showApiErrorToast(err, noDataFoundText);
    } finally {
     isFetchingRef.current = false;
     if (latestRequestIdRef.current === requestId) {

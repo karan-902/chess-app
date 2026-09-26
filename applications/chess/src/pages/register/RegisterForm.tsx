@@ -16,33 +16,32 @@ import CustomMenuItem from "@/components/base/MenuItem/MenuItem";
 import { callAPIInterface, showApiErrorToast } from "@/utils";
 import { useReduxDispatch } from "@/redux/hooks";
 import { login } from "@/redux/auth/thunk";
-import { showLoader, hideLoader, showToast } from "@/redux/common/slice";
+import { showLoader, hideLoader } from "@/redux/common/slice";
 import { COUNTRY_OPTIONS } from "@/constants/config";
 import type { IRegisterEmailBody } from "@/types/index";
 import type { IRegisterResponse, IRandomNameResponse } from "@/types/utils";
 import {
- authEmailLabel,
- authEmailPlaceholder,
- authPasswordLabel,
- authPasswordPlaceholder,
- authValidationEmailRequired,
- authValidationEmailInvalid,
- authValidationPasswordRequired,
- authValidationPasswordMinLength,
- authValidationUsernameRequired,
- authValidationUsernameMinLength,
- authValidationUsernameMaxLength,
- authValidationCountryRequired,
- authRegisterUsernameLabel,
- authRegisterUsernamePlaceholder,
- authRegisterUsernameClearAriaLabel,
- authRegisterQuickNamesLabel,
- authRegisterCountryLabel,
- authRegisterCreateAccountButton,
- authRegisterRegistrationFailed,
- countrySelectSelectPlaceholder,
- authRegisterSuccess,
- usernameSuggestionsFailed,
+ emailText,
+ enterEmailText,
+ passwordText,
+ enterPasswordText,
+ emailRequiredText,
+ enterValidEmailText,
+ passwordRequiredText,
+ passwordMinLengthText,
+ usernameRequiredText,
+ usernameMinLengthText,
+ usernameMaxLengthText,
+ countryRequiredText,
+ usernameText,
+ enterUsernameText,
+ clearUsernameText,
+ suggestionsText,
+ countryText,
+ registerText,
+ registrationFailedText,
+ selectCountryText,
+ noDataFoundText,
  USERNAME_MAX_LENGTH,
 } from "@/constants/messages";
 import { IEmailFormScreenProps, IEmailFormValues } from "@/types/components";
@@ -53,22 +52,21 @@ const registerSchema = yup.object({
  username: yup
   .string()
   .trim()
-  .min(3, authValidationUsernameMinLength)
-  .max(USERNAME_MAX_LENGTH, authValidationUsernameMaxLength)
-  .required(authValidationUsernameRequired),
+  .min(3, usernameMinLengthText)
+  .max(USERNAME_MAX_LENGTH, usernameMaxLengthText)
+  .required(usernameRequiredText),
  email: yup
   .string()
-  .email(authValidationEmailInvalid)
-  .required(authValidationEmailRequired),
+  .email(enterValidEmailText)
+  .required(emailRequiredText),
  password: yup
   .string()
-  .required(authValidationPasswordRequired)
-  .min(8, authValidationPasswordMinLength),
- country: yup.string().required(authValidationCountryRequired),
+  .required(passwordRequiredText)
+  .min(8, passwordMinLengthText),
+ country: yup.string().required(countryRequiredText),
 });
 
 function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
- const dispatch = useReduxDispatch();
  const formik = useFormik<IEmailFormValues>({
   initialValues: {
    username: "",
@@ -89,16 +87,9 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
       country: values.country,
      },
     );
-    dispatch(
-     showToast({
-      isToastOpen: true,
-      toastMessage: authRegisterSuccess,
-      toastVariant: "success",
-     }),
-    );
     onRegistered(values.email, values.password);
    } catch (err) {
-    showApiErrorToast(err, authRegisterRegistrationFailed);
+    showApiErrorToast(err, registrationFailedText);
    } finally {
     setSubmitting(false);
    }
@@ -129,7 +120,7 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
     );
     setQuickNameSuggestions(res.usernames);
    } catch (err) {
-    showApiErrorToast(err, usernameSuggestionsFailed);
+    showApiErrorToast(err, noDataFoundText);
    } finally {
     setLoadingQuickNames(false);
    }
@@ -162,7 +153,7 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
     );
     setUsernameSuggestions(res.usernames);
    } catch (err) {
-    showApiErrorToast(err, usernameSuggestionsFailed);
+    showApiErrorToast(err, noDataFoundText);
    } finally {
     setLoadingSuggestions(false);
    }
@@ -209,8 +200,8 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
     <Input
      id="username"
      name="username"
-     label={authRegisterUsernameLabel}
-     placeholder={authRegisterUsernamePlaceholder}
+     label={usernameText}
+     placeholder={enterUsernameText}
      value={formik.values.username}
      onChange={formik.handleChange}
      onBlur={formik.handleBlur}
@@ -231,7 +222,7 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
         type="button"
         className="input-password-toggle"
         customClass="username-clear-btn"
-        aria-label={authRegisterUsernameClearAriaLabel}
+        aria-label={clearUsernameText}
         onClick={() => formik.setFieldValue("username", "")}
         tabIndex={-1}
         icon="close"
@@ -246,7 +237,7 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
    {(loadingQuickNames || quickNameSuggestions.length > 0) && (
     <Box customClass="random-name-chips-block">
      <Text customClass="random-name-chips-label caption">
-      {authRegisterQuickNamesLabel}
+      {suggestionsText}
      </Text>
      <Box customClass="random-name-chips">
       {loadingQuickNames
@@ -315,8 +306,8 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
     id="email"
     name="email"
     type="email"
-    label={authEmailLabel}
-    placeholder={authEmailPlaceholder}
+    label={emailText}
+    placeholder={enterEmailText}
     value={formik.values.email}
     onChange={formik.handleChange}
     onBlur={formik.handleBlur}
@@ -331,8 +322,8 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
     id="password"
     name="password"
     type="password"
-    label={authPasswordLabel}
-    placeholder={authPasswordPlaceholder}
+    label={passwordText}
+    placeholder={enterPasswordText}
     value={formik.values.password}
     onChange={formik.handleChange}
     onBlur={formik.handleBlur}
@@ -344,7 +335,7 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
    />
 
    <Box customClass="form-field">
-    <CustomLabel htmlFor="country">{authRegisterCountryLabel}</CustomLabel>
+    <CustomLabel htmlFor="country">{countryText}</CustomLabel>
     <CustomSelect
      value={formik.values.country}
      onChange={(v) => {
@@ -355,8 +346,8 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
      options={COUNTRY_OPTIONS}
      searchable
      disabled={formik.isSubmitting}
-     placeholder={countrySelectSelectPlaceholder}
-     searchPlaceholder={countrySelectSelectPlaceholder}
+     placeholder={selectCountryText}
+     searchPlaceholder={selectCountryText}
      isError={formik.touched.country && !!formik.errors.country}
      helperText={formik.errors.country}
     />
@@ -371,7 +362,7 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
     disabled={!formik.dirty || !formik.isValid || formik.isSubmitting}
     isLoading={formik.isSubmitting}
    >
-    {authRegisterCreateAccountButton}
+    {registerText}
    </Button>
   </Box>
  );

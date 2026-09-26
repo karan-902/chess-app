@@ -8,7 +8,10 @@ import duration from "dayjs/plugin/duration";
 import { store } from "@/redux/index";
 import { showToast } from "@/redux/common/slice";
 import sessionService from "@gopvp/common/src/util/sessionService";
-import { apiRateLimited, apiSomethingWentWrong } from "@/constants/messages";
+import {
+ tooManyAttemptsText,
+ somethingWentWrongText,
+} from "@/constants/messages";
 import type { IGenerateTokenBody } from "@/types/index";
 import type { IGenerateTokenResponse, ILoginResponse } from "@/types/utils";
 import { IGameRoomNavPayload, TimeControl } from "@/types/components";
@@ -81,20 +84,15 @@ export async function generateToken(): Promise<string> {
  return refreshPromise;
 }
 
-export function showApiErrorToast(err: any, fallbackMessage: string) {
+export function showApiErrorToast(err: any, fallbackMessage?: string) {
  const response = err?.response;
  const isAlreadyToasted =
   !response ||
   response.status === 429 ||
   response.data?.type === "session_expired";
- if (isAlreadyToasted) return;
- store.dispatch(
-  showToast({
-   isToastOpen: true,
-   toastMessage: response.data?.message ?? fallbackMessage,
-   toastVariant: "error",
-  }),
- );
+ const toastMessage = response?.data?.message ?? fallbackMessage;
+ if (isAlreadyToasted || !toastMessage) return;
+ store.dispatch(showToast({ isToastOpen: true, toastMessage, toastVariant: "error" }));
 }
 
 export async function getHeaders<TPayload = undefined>(
@@ -247,7 +245,7 @@ export const callAPIInterface = async <
     store.dispatch(
      showToast({
       isToastOpen: true,
-      toastMessage: apiSomethingWentWrong,
+      toastMessage: somethingWentWrongText,
       toastVariant: "error",
      }),
     );
@@ -286,7 +284,7 @@ export const callAPIInterface = async <
    }
 
    if (errorStatus === 429) {
-    store.dispatch(showToast({ isToastOpen: true, toastMessage: apiRateLimited, toastVariant: "error" }));
+    store.dispatch(showToast({ isToastOpen: true, toastMessage: tooManyAttemptsText, toastVariant: "error" }));
    }
 
    const isKnownError =

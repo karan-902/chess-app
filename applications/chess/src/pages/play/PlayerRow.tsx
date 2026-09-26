@@ -5,7 +5,10 @@ import CustomChip from "@/components/base/Chip/Chip";
 import Skeleton from "@/components/base/Skeleton/Skeleton";
 import PieceIcon from "@/components/board/PieceIcon";
 import type { IPlayerRowProps } from "@/types/components";
-import { matchesYouLabel, playOpponentGraceLabel } from "@/constants/messages";
+import {
+ youText,
+ reconnectingText,
+} from "@/constants/messages";
 
 function capturedCode(type: string, color: "w" | "b") {
  return `${color}${type.toUpperCase()}`;
@@ -45,13 +48,13 @@ export default function PlayerRow({
       {name}
      </Text>
      {variant === "self" && (
-      <CustomChip label={matchesYouLabel} customClass="gr-elo" />
+      <CustomChip label={youText} customClass="gr-elo" />
      )}
      {eloLabel && <CustomChip label={eloLabel} customClass="gr-elo" />}
     </Box>
     {typeof graceSecondsRemaining === "number" && (
      <Text customClass="gr-grace caption">
-      {playOpponentGraceLabel(graceSecondsRemaining)}
+      {reconnectingText(graceSecondsRemaining)}
      </Text>
     )}
 

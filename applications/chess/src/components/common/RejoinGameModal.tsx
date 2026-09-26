@@ -11,16 +11,16 @@ import { shortenUsername } from "@/utils";
 import { buildGameRoomUrl } from "@/utils";
 import { navigateTo } from "@gopvp/common/src/util/navigationService";
 import {
-    rejoinGameTitle,
-    rejoinGameBody,
-    rejoinGameBetLabel,
-    rejoinGameOpponentLabel,
-    rejoinGameRejoinButton,
-    rejoinGameExitButton,
-    rejoinGameForfeitTitle,
-    rejoinGameForfeitBody,
-    rejoinGameForfeitKeepPlayingButton,
-    rejoinGameForfeitConfirmButton,
+ rejoinMatchText,
+ matchStillLiveText,
+ feeText,
+ opponentText,
+ rejoinNowText,
+ exitText,
+ forfeitGameText,
+ leavingForfeitsText,
+ keepPlayingText,
+ forfeitAndExitText,
 } from "@/constants/messages";
 
 export default function RejoinGameModal() {
@@ -54,17 +54,17 @@ export default function RejoinGameModal() {
             <CustomModal
                 open={!confirmingExit}
                 preventOutsideClose
-                title={rejoinGameTitle}
+                title={rejoinMatchText}
                 customClass="rejoin-game-modal"
             >
                 <Text customClass="modal-description">
-                    {rejoinGameBody(
+                    {matchStillLiveText(
                         shortenUsername(activeGame.opponent.username),
                     )}
                 </Text>
                 <Box customClass="stat-row">
                     <Text component="span" customClass="stat-title">
-                        {rejoinGameOpponentLabel}
+                        {opponentText}
                     </Text>
                     <Text component="span" customClass="stat-val">
                         {shortenUsername(activeGame.opponent.username)} (
@@ -73,7 +73,7 @@ export default function RejoinGameModal() {
                 </Box>
                 <Box customClass="stat-row">
                     <Text component="span" customClass="stat-title">
-                        {rejoinGameBetLabel}
+                        {feeText}
                     </Text>
                     <Text component="span" customClass="stat-val">
                         {formatAmount(activeGame.stake_amount)}
@@ -85,25 +85,25 @@ export default function RejoinGameModal() {
                         fullWidth
                         onClick={() => setConfirmingExit(true)}
                     >
-                        {rejoinGameExitButton}
+                        {exitText}
                     </Button>
                     <Button
                         variant="contained"
                         fullWidth
                         onClick={handleRejoin}
                     >
-                        {rejoinGameRejoinButton}
+                        {rejoinNowText}
                     </Button>
                 </Box>
             </CustomModal>
             <CustomModal
                 open={confirmingExit}
                 preventOutsideClose
-                title={rejoinGameForfeitTitle}
+                title={forfeitGameText}
                 customClass="rejoin-game-modal"
             >
                 <Text customClass="modal-description">
-                    {rejoinGameForfeitBody(
+                    {leavingForfeitsText(
                         formatAmount(activeGame.stake_amount),
                     )}
                 </Text>
@@ -113,14 +113,14 @@ export default function RejoinGameModal() {
                         fullWidth
                         onClick={() => setConfirmingExit(false)}
                     >
-                        {rejoinGameForfeitKeepPlayingButton}
+                        {keepPlayingText}
                     </Button>
                     <Button
                         variant="contained"
                         fullWidth
                         onClick={handleForfeit}
                     >
-                        {rejoinGameForfeitConfirmButton}
+                        {forfeitAndExitText}
                     </Button>
                 </Box>
             </CustomModal>

@@ -4,19 +4,19 @@ import Button from "@/components/base/Button/Button";
 import PieceIcon from "@/components/board/PieceIcon";
 import type { IPromotionOverlayProps } from "@/types/components";
 import {
-    playPromotionTitle,
-    playPromotionQueen,
-    playPromotionRook,
-    playPromotionBishop,
-    playPromotionKnight,
+ promotePawnText,
+ queenText,
+ rookText,
+ bishopText,
+ knightText,
 } from "@/constants/messages";
 
 const PROMOTION_PIECES = ["q", "r", "b", "n"] as const;
 const PROMOTION_LABEL: Record<(typeof PROMOTION_PIECES)[number], string> = {
-    q: playPromotionQueen,
-    r: playPromotionRook,
-    b: playPromotionBishop,
-    n: playPromotionKnight,
+    q: queenText,
+    r: rookText,
+    b: bishopText,
+    n: knightText,
 };
 
 export default function PromotionOverlay({
@@ -31,7 +31,7 @@ export default function PromotionOverlay({
                 onClick={(e) => e.stopPropagation()}
             >
                 <Text customClass="gr-promotion-label caption">
-                    {playPromotionTitle}
+                    {promotePawnText}
                 </Text>
                 <Box customClass="gr-promotion-options">
                     {PROMOTION_PIECES.map((piece) => (

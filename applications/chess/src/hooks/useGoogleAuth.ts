@@ -4,7 +4,6 @@ import { useGoogleLogin } from "@react-oauth/google";
 import { useReduxDispatch } from "@/redux/hooks";
 import { googleLogin as googleLoginThunk } from "@/redux/auth/thunk";
 import { showLoader, hideLoader, showToast } from "@/redux/common/slice";
-import { authLoginSuccess, authGoogleLoginFailed } from "@/constants/messages";
 
 // const CONFIRM_SWITCH_KEY = "ks_sso_confirm_device_switch";
 
@@ -34,20 +33,13 @@ export function useGoogleAuth(hint?: string) {
     //     setPendingApprovalToken(res.approval_token);
     //     return;
     // }
-    dispatch(
-     showToast({
-      isToastOpen: true,
-      toastMessage: authLoginSuccess,
-      toastVariant: "success",
-     }),
-    );
     navigate("/");
    } catch (err: any) {
-    if (!err?.isNetworkError && err?.status !== 429) {
+    if (!err?.isNetworkError && err?.status !== 429 && err?.message) {
      dispatch(
       showToast({
        isToastOpen: true,
-       toastMessage: err?.message ?? authGoogleLoginFailed,
+       toastMessage: err.message,
        toastVariant: "error",
       }),
      );

@@ -12,32 +12,31 @@ import { showToast } from "@/redux/common/slice";
 import type { IResetPasswordBody } from "@/types/index";
 import type { IMessageResponse } from "@/types/utils";
 import {
-    authBackToSignIn,
-    authPasswordPlaceholder,
-    authConfirmPasswordLabel,
-    authValidationPasswordRequired,
-    authValidationPasswordMinLength,
-    authValidationConfirmPasswordRequired,
-    authValidationPasswordsMustMatch,
-    authResetPasswordInvalidLinkTitle,
-    authResetPasswordInvalidLinkDescription,
-    authResetPasswordRequestNewLink,
-    authResetPasswordTitle,
-    authResetPasswordDescription,
-    authResetPasswordNewPasswordLabel,
-    authResetPasswordResetButton,
-    authResetPasswordLinkInvalidOrExpired,
+ backToSignInText,
+ enterPasswordText,
+ confirmPasswordText,
+ passwordRequiredText,
+ passwordMinLengthText,
+ confirmYourPasswordText,
+ passwordsDoNotMatchText,
+ invalidLinkText,
+ resetLinkMissingText,
+ requestNewLinkText,
+ resetPasswordText,
+ chooseNewPasswordText,
+ newPasswordText,
+ resetLinkExpiredText,
 } from "@/constants/messages";
 
 const resetSchema = yup.object({
     password: yup
         .string()
-        .required(authValidationPasswordRequired)
-        .min(8, authValidationPasswordMinLength),
+        .required(passwordRequiredText)
+        .min(8, passwordMinLengthText),
     confirm: yup
         .string()
-        .required(authValidationConfirmPasswordRequired)
-        .oneOf([yup.ref("password")], authValidationPasswordsMustMatch),
+        .required(confirmYourPasswordText)
+        .oneOf([yup.ref("password")], passwordsDoNotMatchText),
 });
 
 export default function ResetPassword() {
@@ -67,7 +66,7 @@ export default function ResetPassword() {
                 dispatch(
                     showToast({
                         isToastOpen: true,
-                        toastMessage: authResetPasswordLinkInvalidOrExpired,
+                        toastMessage: resetLinkExpiredText,
                         toastVariant: "error",
                     }),
                 );
@@ -81,9 +80,9 @@ export default function ResetPassword() {
     if (invalid) {
         return (
             <AuthLayout
-                title={authResetPasswordInvalidLinkTitle}
-                subtitle={authResetPasswordInvalidLinkDescription}
-                footer={<NavLink to="/login">{authBackToSignIn}</NavLink>}
+                title={invalidLinkText}
+                subtitle={resetLinkMissingText}
+                footer={<NavLink to="/login">{backToSignInText}</NavLink>}
             >
                 <NavLink to="/forgot-password" style={{ display: "block" }}>
                     <Button
@@ -92,7 +91,7 @@ export default function ResetPassword() {
                         fullWidth
                         customClass="auth-submit-btn"
                     >
-                        {authResetPasswordRequestNewLink}
+                        {requestNewLinkText}
                     </Button>
                 </NavLink>
             </AuthLayout>
@@ -101,9 +100,9 @@ export default function ResetPassword() {
 
     return (
         <AuthLayout
-            title={authResetPasswordTitle}
-            subtitle={authResetPasswordDescription}
-            footer={<NavLink to="/login">{authBackToSignIn}</NavLink>}
+            title={resetPasswordText}
+            subtitle={chooseNewPasswordText}
+            footer={<NavLink to="/login">{backToSignInText}</NavLink>}
         >
             <Box
                 customClass="auth-form"
@@ -114,8 +113,8 @@ export default function ResetPassword() {
                     id="password"
                     name="password"
                     type="password"
-                    label={authResetPasswordNewPasswordLabel}
-                    placeholder={authPasswordPlaceholder}
+                    label={newPasswordText}
+                    placeholder={enterPasswordText}
                     value={formik.values.password}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -132,8 +131,8 @@ export default function ResetPassword() {
                     id="confirm"
                     name="confirm"
                     type="password"
-                    label={authConfirmPasswordLabel}
-                    placeholder={authPasswordPlaceholder}
+                    label={confirmPasswordText}
+                    placeholder={enterPasswordText}
                     value={formik.values.confirm}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -154,7 +153,7 @@ export default function ResetPassword() {
                     disabled={formik.isSubmitting}
                     isLoading={formik.isSubmitting}
                 >
-                    {authResetPasswordResetButton}
+                    {resetPasswordText}
                 </Button>
             </Box>
         </AuthLayout>

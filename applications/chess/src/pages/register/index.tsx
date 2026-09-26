@@ -1,21 +1,21 @@
 import AuthLayout from "@/container/AuthLayout";
 import RegisterForm from "./RegisterForm";
 import {
- authRegisterTitle,
- authRegisterHaveAccountPrompt,
- authRegisterLoginLink,
+ createAccountText,
+ haveAccountPromptText,
+ loginText,
 } from "@/constants/messages";
 import { NavLink } from "react-router-dom";
 
 export default function Register() {
  return (
   <AuthLayout
-   title={authRegisterTitle}
+   title={createAccountText}
    footer={
     <>
-     {authRegisterHaveAccountPrompt}
+     {haveAccountPromptText}
 
-     <NavLink to="/login">{authRegisterLoginLink}</NavLink>
+     <NavLink to="/login">{loginText}</NavLink>
     </>
    }
   >

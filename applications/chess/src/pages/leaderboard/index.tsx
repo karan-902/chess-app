@@ -25,10 +25,10 @@ import type {
     LeaderboardSort,
 } from "@/types/types";
 import {
-    leaderboardLoadError,
-    leaderboardEmpty,
-    leaderboardRankFallback,
-    matchesYouLabel,
+ noDataFoundText,
+ noRankedPlayersText,
+ dashText,
+ youText,
 } from "@/constants/messages";
 
 const LB_SKELETON_ROWS = 20;
@@ -58,7 +58,7 @@ export default function Leaderboard() {
 
     const isMe = (id: string) => id === currentUserId;
     const meInList = players.some((p) => isMe(p.id));
-    const youLabel = (username: string) => `${username}(${matchesYouLabel})`;
+    const youLabel = (username: string) => `${username}(${youText})`;
     const playerValue = (player: ILeaderboardPlayer) =>
         sort === "wins" ? player.wins ?? 0 : formatAmount(player.win_amount ?? 0);
 
@@ -89,22 +89,22 @@ export default function Leaderboard() {
                 <Box>{lbSkeletonRows()}</Box>
             ) : players.length === 0 ? (
                 <EmptyState
-                    description={error ? leaderboardLoadError : leaderboardEmpty}
+                    description={error ? noDataFoundText : noRankedPlayersText}
                 />
             ) : (
                 <Box>
                     {!meInList && currentUserId && (
                         <Card customClass="lb-row me">
                             <Text customClass="lb-rank">
-                                {leaderboardRankFallback}
+                                {dashText}
                             </Text>
                             <Text customClass="lb-name row-title">
                                 {currentUsername
                                     ? youLabel(currentUsername)
-                                    : matchesYouLabel}
+                                    : youText}
                             </Text>
                             <Text customClass="lb-earnings amount-value">
-                                {leaderboardRankFallback}
+                                {dashText}
                             </Text>
                         </Card>
                     )}

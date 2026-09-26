@@ -10,23 +10,23 @@ import { callAPIInterface } from "@/utils";
 import type { IForgotPasswordBody } from "@/types/index";
 import type { IMessageResponse } from "@/types/utils";
 import {
-    authBackToSignIn,
-    authEmailLabel,
-    authEmailPlaceholder,
-    authValidationEmailRequired,
-    authValidationEmailInvalid,
-    authForgotPasswordTitle,
-    authForgotPasswordDescription,
-    authForgotPasswordSentDescription,
-    authForgotPasswordSendButton,
-    authForgotPasswordFailed,
+ backToSignInText,
+ emailText,
+ enterEmailText,
+ emailRequiredText,
+ enterValidEmailText,
+ forgotPasswordText,
+ enterEmailForResetLinkText,
+ checkInboxForResetLinkText,
+ sendResetLinkText,
+ somethingWentWrongTryAgainText,
 } from "@/constants/messages";
 
 const emailSchema = yup.object({
     email: yup
         .string()
-        .email(authValidationEmailInvalid)
-        .required(authValidationEmailRequired),
+        .email(enterValidEmailText)
+        .required(emailRequiredText),
 });
 
 export default function ForgotPassword() {
@@ -48,7 +48,7 @@ export default function ForgotPassword() {
             } catch (err: any) {
                 if (err?.response) {
                     setError(
-                        err.response.data?.message ?? authForgotPasswordFailed,
+                        err.response.data?.message ?? somethingWentWrongTryAgainText,
                     );
                 }
             } finally {
@@ -59,13 +59,13 @@ export default function ForgotPassword() {
 
     return (
         <AuthLayout
-            title={authForgotPasswordTitle}
+            title={forgotPasswordText}
             subtitle={
                 sent
-                    ? authForgotPasswordSentDescription
-                    : authForgotPasswordDescription
+                    ? checkInboxForResetLinkText
+                    : enterEmailForResetLinkText
             }
-            footer={<NavLink to="/login">{authBackToSignIn}</NavLink>}
+            footer={<NavLink to="/login">{backToSignInText}</NavLink>}
         >
             {!sent && (
                 <Box
@@ -77,8 +77,8 @@ export default function ForgotPassword() {
                         id="email"
                         name="email"
                         type="email"
-                        label={authEmailLabel}
-                        placeholder={authEmailPlaceholder}
+                        label={emailText}
+                        placeholder={enterEmailText}
                         value={formik.values.email}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
@@ -104,7 +104,7 @@ export default function ForgotPassword() {
                         disabled={!formik.dirty || formik.isSubmitting}
                         isLoading={formik.isSubmitting}
                     >
-                        {authForgotPasswordSendButton}
+                        {sendResetLinkText}
                     </Button>
                 </Box>
             )}

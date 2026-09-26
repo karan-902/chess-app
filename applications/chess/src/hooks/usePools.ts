@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { callAPIInterface, showApiErrorToast } from "@/utils";
 import { useGame } from "@/hooks/useGame";
-import { poolsLoadFailed } from "@/constants/messages";
+import {
+ noDataFoundText,
+} from "@/constants/messages";
 import type { IPoolResponse } from "@/types/types";
 
 export function usePools() {
@@ -22,7 +24,7 @@ export function usePools() {
             } catch (err) {
                 setError(true);
                 setPools([]);
-                showApiErrorToast(err, poolsLoadFailed);
+                showApiErrorToast(err, noDataFoundText);
             } finally {
                 setLoading(false);
             }

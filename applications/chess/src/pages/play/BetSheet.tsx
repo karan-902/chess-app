@@ -10,18 +10,18 @@ import { formatText } from "@/utils/format";
 import { CATEGORY_META } from "@/constants/config";
 import type { IBetSheetProps } from "@/types/components";
 import {
- playSheetCardPlayButton,
- playSheetTip,
- playSheetPracticeLabel,
- playSheetPracticeTitle,
- playSheetPracticeDesc,
- playSheetFriendLabel,
- playSheetFriendTitle,
- playSheetFriendDesc,
- matchmakingPoolCardWinLabel,
- matchmakingPoolCardEntryFee,
- matchmakingPoolCardInsufficientBalance,
- historyTimeControlLabel,
+ playText,
+ largestPrizesTipText,
+ forFunText,
+ practiceText,
+ freeToPlayText,
+ friendlyText,
+ roomText,
+ customFeeText,
+ winText,
+ entryFeeAmountText,
+ addFundsText,
+ minutesText,
 } from "@/constants/messages";
 
 export default function BetSheet({
@@ -46,7 +46,7 @@ export default function BetSheet({
        const poolSeconds = msToSeconds(pool.time);
        const category = CATEGORY_META[deriveCategory(poolSeconds)];
        const CategoryIcon = category?.icon;
-       const timeLabel = historyTimeControlLabel(poolSeconds / 60);
+       const timeLabel = minutesText(poolSeconds / 60);
        const canAfford = usdValue >= pool.bet;
        return (
         <Card
@@ -62,10 +62,10 @@ export default function BetSheet({
            {timeLabel}
           </Text>
          </Box>
-         <Text customClass="bet-card-tc">{matchmakingPoolCardWinLabel}</Text>
+         <Text customClass="bet-card-tc">{winText}</Text>
          <Text customClass="pool-win-amt">${pool.prize}</Text>
          <Text customClass="pool-entry-fee">
-          {matchmakingPoolCardEntryFee(`$${pool.bet}`)}
+          {entryFeeAmountText(`$${pool.bet}`)}
          </Text>
 
          <Button
@@ -78,8 +78,8 @@ export default function BetSheet({
           }
          >
           {canAfford
-           ? playSheetCardPlayButton
-           : matchmakingPoolCardInsufficientBalance}
+           ? playText
+           : addFundsText}
          </Button>
         </Card>
        );
@@ -87,9 +87,9 @@ export default function BetSheet({
      </>
     )}
     <Card customClass={classNames("bet-card", "practice")}>
-     <Text customClass="bet-card-tc">{playSheetPracticeLabel}</Text>
-     <Text customClass="bet-card-practice-title">{playSheetPracticeTitle}</Text>
-     <Text customClass="caption">{playSheetPracticeDesc}</Text>
+     <Text customClass="bet-card-tc">{forFunText}</Text>
+     <Text customClass="bet-card-practice-title">{practiceText}</Text>
+     <Text customClass="caption">{freeToPlayText}</Text>
      <Button
       type="button"
       variant="contained"
@@ -97,13 +97,13 @@ export default function BetSheet({
       customClass="common-play"
       onClick={onPracticeOpen}
      >
-      {playSheetCardPlayButton}
+      {playText}
      </Button>
     </Card>
     <Card customClass={classNames("bet-card", "friend")}>
-     <Text customClass="bet-card-tc">{playSheetFriendLabel}</Text>
-     <Text customClass="bet-card-practice-title">{playSheetFriendTitle}</Text>
-     <Text customClass="caption">{playSheetFriendDesc}</Text>
+     <Text customClass="bet-card-tc">{friendlyText}</Text>
+     <Text customClass="bet-card-practice-title">{roomText}</Text>
+     <Text customClass="caption">{customFeeText}</Text>
      <Button
       type="button"
       variant="contained"
@@ -111,12 +111,12 @@ export default function BetSheet({
       customClass="common-play"
       onClick={onRoomOpen}
      >
-      {playSheetCardPlayButton}
+      {playText}
      </Button>
     </Card>
    </Box>
    <Text customClass="sheet-tip meta-text">
-    <b>Tip:</b> {playSheetTip}
+    <b>Tip:</b> {largestPrizesTipText}
    </Text>
   </CustomModal>
  );

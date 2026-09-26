@@ -15,10 +15,10 @@ import type {
     IgameRestoreResponse,
 } from "@/types/types";
 import {
-    playToastDrawDeclined,
-    playToastOpponentDisconnectedTitle,
-    playToastOpponentDisconnectedDesc,
-    playToastOpponentReconnected,
+ drawOfferDeclinedText,
+ opponentDisconnectedText,
+ waitingToReconnectText,
+ opponentConnectedText,
 } from "@/constants/messages";
 
 interface IProps {
@@ -120,7 +120,7 @@ export function useGameSocket({
                 dispatch(
                     showToast({
                         isToastOpen: true,
-                        toastMessage: playToastDrawDeclined,
+                        toastMessage: drawOfferDeclinedText,
                         toastVariant: "info",
                     }),
                 );
@@ -142,7 +142,7 @@ export function useGameSocket({
             dispatch(
                 showToast({
                     isToastOpen: true,
-                    toastMessage: `${playToastOpponentDisconnectedTitle} — ${playToastOpponentDisconnectedDesc(
+                    toastMessage: `${opponentDisconnectedText} — ${waitingToReconnectText(
                         data.grace_period_seconds,
                     )}`,
                     toastVariant: "info",
@@ -156,7 +156,7 @@ export function useGameSocket({
             dispatch(
                 showToast({
                     isToastOpen: true,
-                    toastMessage: playToastOpponentReconnected,
+                    toastMessage: opponentConnectedText,
                     toastVariant: "success",
                 }),
             );

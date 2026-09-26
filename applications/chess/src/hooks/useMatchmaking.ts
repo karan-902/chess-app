@@ -6,7 +6,10 @@ import { useReduxDispatch } from "@/redux/hooks";
 import { showToast } from "@/redux/common/slice";
 import { buildMatchUrl } from "@/utils";
 import { useGame } from "@/hooks/useGame";
-import { apiSomethingWentWrong, matchmakingNoOpponentFound } from "@/constants/messages";
+import {
+ somethingWentWrongText,
+ noOpponentFoundText,
+} from "@/constants/messages";
 import type {
     IPoolResponse,
     IPoolJoinAck,
@@ -57,7 +60,7 @@ export function useMatchmaking() {
                         dispatch(
                             showToast({
                                 isToastOpen: true,
-                                toastMessage: err.errors[0]?.message ?? apiSomethingWentWrong,
+                                toastMessage: err.errors[0]?.message ?? somethingWentWrongText,
                                 toastVariant: "error",
                             }),
                         );
@@ -97,7 +100,7 @@ export function useMatchmaking() {
             dispatch(
                 showToast({
                     isToastOpen: true,
-                    toastMessage: matchmakingNoOpponentFound,
+                    toastMessage: noOpponentFoundText,
                     toastVariant: "info",
                 }),
             );

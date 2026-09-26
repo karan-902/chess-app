@@ -5,12 +5,12 @@ import Button from "@/components/base/Button/Button";
 import { formatAmount } from "@/utils/format";
 import type { IGameOverOverlayProps } from "@/types/components";
 import {
-    playGameOverSettlementLabel,
-    playGameOverNewGameButton,
-    playGameOverRematchButton,
-    playGameOverWaitingForOpponent,
-    playGameOverAcceptRematchButton,
-    matchmakingPoolCardInsufficientBalance,
+ settlementText,
+ backText,
+ rematchText,
+ waitingForOpponentSecondsText,
+ acceptRematchText,
+ addFundsText,
 } from "@/constants/messages";
 
 export default function GameOverOverlay({
@@ -44,7 +44,7 @@ export default function GameOverOverlay({
                             {formatAmount(settlementUsd)}
                         </Text>
                         <Text customClass="gr-settlement-lbl caption">
-                            {playGameOverSettlementLabel}
+                            {settlementText}
                         </Text>
                     </Box>
                     {typeof gameEnded.your_elo_gain === "number" && (
@@ -66,11 +66,11 @@ export default function GameOverOverlay({
                     customClass="gr-overlay-btn secondary"
                     onClick={onNewGame}
                 >
-                    {playGameOverNewGameButton}
+                    {backText}
                 </Button>
                 {!isPvc && !canAffordRematch && (
                     <Text customClass="pool-insufficient-label caption">
-                        {matchmakingPoolCardInsufficientBalance}
+                        {addFundsText}
                     </Text>
                 )}
                 {!isPvc && canAffordRematch && (
@@ -81,10 +81,10 @@ export default function GameOverOverlay({
                         disabled={rematchStatus === "offered"}
                     >
                         {rematchStatus === "offered"
-                            ? playGameOverWaitingForOpponent(rematchSecs)
+                            ? waitingForOpponentSecondsText(rematchSecs)
                             : rematchStatus === "opponent-offered"
-                              ? playGameOverAcceptRematchButton
-                              : playGameOverRematchButton}
+                              ? acceptRematchText
+                              : rematchText}
                     </Button>
                 )}
             </Box>

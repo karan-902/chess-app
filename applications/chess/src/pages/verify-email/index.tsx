@@ -2,9 +2,9 @@ import { NavLink, Navigate, useNavigate, useSearchParams } from "react-router-do
 import AuthLayout from "@/container/AuthLayout";
 import VerifyEmailForm, { OTP_LENGTH } from "./VerifyEmailForm";
 import {
-    authBackToSignIn,
-    authEmailVerificationTitle,
-    authEmailVerificationSentCodeTo,
+ backToSignInText,
+ verifyYourEmailText,
+ sentCodeToText,
 } from "@/constants/messages";
 
 export default function VerifyEmail() {
@@ -16,14 +16,14 @@ export default function VerifyEmail() {
 
     return (
         <AuthLayout
-            title={authEmailVerificationTitle}
+            title={verifyYourEmailText}
             subtitle={
                 <>
-                    {authEmailVerificationSentCodeTo(OTP_LENGTH)}{" "}
+                    {sentCodeToText(OTP_LENGTH)}{" "}
                     <strong>{email}</strong>
                 </>
             }
-            footer={<NavLink to="/login">{authBackToSignIn}</NavLink>}
+            footer={<NavLink to="/login">{backToSignInText}</NavLink>}
         >
             <VerifyEmailForm
                 email={email}

@@ -1,29 +1,29 @@
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import {
-    rulesStakingTitle,
-    rulesStakingDesc,
-    rulesPayoutsTitle,
-    rulesPayoutsList,
-    rulesMatchingTitle,
-    rulesMatchingDesc,
-    rulesAboutVersion,
-    rulesAboutCredit,
+ howStakingWorksText,
+ stakingExplainedText,
+ payoutsText,
+ payoutRulesText,
+ fairMatchingText,
+ fairMatchingExplainedText,
+ appVersionText,
+ pieceSetCreditText,
 } from "@/constants/messages";
 
 export default function Rules() {
     return (
         <Box customClass="rules-page">
             <Text component="h3" customClass="subsection-heading section-heading">
-                {rulesStakingTitle}
+                {howStakingWorksText}
             </Text>
-            <Text customClass="rules-text">{rulesStakingDesc}</Text>
+            <Text customClass="rules-text">{stakingExplainedText}</Text>
 
             <Text component="h3" customClass="subsection-heading section-heading">
-                {rulesPayoutsTitle}
+                {payoutsText}
             </Text>
             <Text component="ul" customClass="rules-list">
-                {rulesPayoutsList.map((item) => (
+                {payoutRulesText.map((item) => (
                     <Text key={item} component="li" customClass="rules-text">
                         {item}
                     </Text>
@@ -31,14 +31,14 @@ export default function Rules() {
             </Text>
 
             <Text component="h3" customClass="subsection-heading section-heading">
-                {rulesMatchingTitle}
+                {fairMatchingText}
             </Text>
-            <Text customClass="rules-text">{rulesMatchingDesc}</Text>
+            <Text customClass="rules-text">{fairMatchingExplainedText}</Text>
 
             <Text customClass="rules-about caption">
-                {rulesAboutVersion}
+                {appVersionText}
                 <br />
-                {rulesAboutCredit}
+                {pieceSetCreditText}
             </Text>
         </Box>
     );

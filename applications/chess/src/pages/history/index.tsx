@@ -27,31 +27,31 @@ import type {
  MatchesSubtab,
 } from "@/types/components";
 import {
- matchesSubtabHistory,
- matchesSubtabGlobal,
- matchesSubtabStats,
- matchesEmptyTitle,
- matchesEmptyDesc,
- matchesLoadError,
- matchesGlobalEmptyTitle,
- matchesGlobalEmptyDesc,
- matchesYouLabel,
- matchesVsLabel,
- matchesStatsTitle,
- matchesStatsBestStreakLabel,
- leaderboardPlayerScoreLabel,
- leaderboardPlayerWinsLabel,
- leaderboardPlayerGrossIncomeLabel,
+ myResultsText,
+ worldwideText,
+ myStatsText,
+ welcomeText,
+ makeFirstMoveText,
+ noDataFoundText,
+ noGamesYetText,
+ globalActivityEmptyText,
+ youText,
+ vsText,
+ chessText,
+ bestStreakText,
+ scoreText,
+ winsText,
+ grossIncomeText,
  matchesStatsFallback,
- matchesStatsCurrentStreakLabel,
+ currentStreakText,
 } from "@/constants/messages";
 import { formatAmount } from "@/utils/format";
 const HISTORY_SKELETON_ROWS = 15;
 const MATCHES_SUBTAB_OPTIONS: MatchesSubtab[] = ["history", "stats", "global"];
 const MATCHES_SUBTAB_LABELS: Record<MatchesSubtab, string> = {
- history: matchesSubtabHistory,
- stats: matchesSubtabStats,
- global: matchesSubtabGlobal,
+ history: myResultsText,
+ stats: myStatsText,
+ global: worldwideText,
 };
 
 function MatchRow({
@@ -87,7 +87,7 @@ function MatchRow({
          {selfName}
          <CustomBadge
           customClass="match-row-vs"
-          badgeContent={matchesVsLabel}
+          badgeContent={vsText}
          />
         </>
        )}
@@ -140,7 +140,7 @@ const RESULT_OUTCOME: Record<MatchResult, IMatchRowProps["outcome"]> = {
 
 function matchRow(item: IGameHistoryItem, currentUsername?: string) {
  const displayName = (username: string) =>
-  username === currentUsername ? matchesYouLabel : shortenUsername(username);
+  username === currentUsername ? youText : shortenUsername(username);
  if ("winner" in item) {
   return (
    <MatchRow
@@ -232,8 +232,8 @@ export default function MyMatches() {
      <Card customClass="stat-list match-row-list">{historySkeletonRows()}</Card>
     ) : items.length === 0 ? (
      <EmptyState
-      title={error ? matchesLoadError : matchesEmptyTitle}
-      description={!error ? matchesEmptyDesc : undefined}
+      title={error ? noDataFoundText : welcomeText}
+      description={!error ? makeFirstMoveText : undefined}
      />
     ) : (
      <MatchList
@@ -249,8 +249,8 @@ export default function MyMatches() {
      <Card customClass="stat-list match-row-list">{historySkeletonRows()}</Card>
     ) : items.length === 0 ? (
      <EmptyState
-      title={error ? matchesLoadError : matchesGlobalEmptyTitle}
-      description={!error ? matchesGlobalEmptyDesc : undefined}
+      title={error ? noDataFoundText : noGamesYetText}
+      description={!error ? globalActivityEmptyText : undefined}
      />
     ) : (
      <MatchList
@@ -265,7 +265,7 @@ export default function MyMatches() {
     <Box customClass="matches-stats">
      <Box customClass="matches-stats-head">
       <Text component="h3" customClass="matches-stats-title">
-       {matchesStatsTitle}
+       {chessText}
       </Text>
      </Box>
      <Card customClass="stat-list">
@@ -273,23 +273,23 @@ export default function MyMatches() {
        ? statsSkeletonRows()
        : [
           {
-           label: leaderboardPlayerScoreLabel,
+           label: scoreText,
            value: Math.round(stats?.score ?? matchesStatsFallback),
           },
           {
-           label: matchesStatsCurrentStreakLabel,
+           label: currentStreakText,
            value: stats?.current_streak ?? matchesStatsFallback,
           },
           {
-           label: matchesStatsBestStreakLabel,
+           label: bestStreakText,
            value: stats?.best_streak ?? matchesStatsFallback,
           },
           {
-           label: leaderboardPlayerWinsLabel,
+           label: winsText,
            value: stats?.wins ?? matchesStatsFallback,
           },
           {
-           label: leaderboardPlayerGrossIncomeLabel,
+           label: grossIncomeText,
            value: formatAmount(stats?.gross_income ?? matchesStatsFallback),
           },
          ].map(({ label, value }) => (

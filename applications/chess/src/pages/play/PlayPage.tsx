@@ -18,7 +18,10 @@ import { useGame } from "@/hooks/useGame";
 import type { IPoolResponse } from "@/types/types";
 import type { Difficulty } from "@/types/components";
 import type { GameCategory } from "@/types/types";
-import { playPageHint, lobbyPlayNowButton } from "@/constants/messages";
+import {
+ tapPlayNowHintText,
+ playNowText,
+} from "@/constants/messages";
 
 export default function PlayPage() {
     const [sheetOpen, setSheetOpen] = useState(false);
@@ -153,7 +156,7 @@ export default function PlayPage() {
                 <Box customClass="board-wrap">
                     <BoardPreview />
                 </Box>
-                <Text customClass="play-hint description">{playPageHint}</Text>
+                <Text customClass="play-hint description">{tapPlayNowHintText}</Text>
             </Box>
 
             <Box customClass="cta-bottom">
@@ -164,7 +167,7 @@ export default function PlayPage() {
                     customClass="game-cta play-cta"
                     onClick={() => setSheetOpen(true)}
                 >
-                    {lobbyPlayNowButton}
+                    {playNowText}
                 </Button>
             </Box>
 

@@ -3,8 +3,8 @@ import CustomIconButton from "@/components/base/IconButton/IconButton";
 import MoveList from "./MoveList";
 import type { IReviewControlsProps } from "@/types/components";
 import {
-    playMoveHistoryPreviousMoveAriaLabel,
-    playMoveHistoryNextMoveAriaLabel,
+ previousMoveText,
+ nextMoveText,
 } from "@/constants/messages";
 
 export default function ReviewControls({
@@ -22,7 +22,7 @@ export default function ReviewControls({
                 customClass="gr-review-btn"
                 onClick={goBack}
                 disabled={fenHistory.length <= 1}
-                aria-label={playMoveHistoryPreviousMoveAriaLabel}
+                aria-label={previousMoveText}
                 icon="chevronLeft"
             />
             <MoveList
@@ -35,7 +35,7 @@ export default function ReviewControls({
                 customClass="gr-review-btn"
                 onClick={goForward}
                 disabled={!isReviewing}
-                aria-label={playMoveHistoryNextMoveAriaLabel}
+                aria-label={nextMoveText}
                 icon="chevronRight"
             />
         </Box>

@@ -4,11 +4,11 @@ import Text from "@/components/base/Text/Text";
 import Button from "@/components/base/Button/Button";
 import type { IResignModalProps } from "@/types/components";
 import {
-    playResignDialogTitle,
-    playResignDialogPvcDescription,
-    playResignDialogPvpDescription,
-    playResignDialogKeepPlayingButton,
-    playResignDialogResignButton,
+ resignTheGameText,
+ loseTheGameText,
+ loseAndForfeitText,
+ keepPlayingText,
+ resignText,
 } from "@/constants/messages";
 
 export default function ResignModal({
@@ -20,18 +20,18 @@ export default function ResignModal({
 }: IResignModalProps) {
     return (
         <CustomModal open={open} onClose={onKeepPlaying}>
-            <Text customClass="gr-heading section-heading">{playResignDialogTitle}</Text>
+            <Text customClass="gr-heading section-heading">{resignTheGameText}</Text>
             <Text customClass="gr-elo caption">
                 {isPvc
-                    ? playResignDialogPvcDescription
-                    : playResignDialogPvpDescription(betAmount)}
+                    ? loseTheGameText
+                    : loseAndForfeitText(betAmount)}
             </Text>
             <Box customClass="gr-resign-actions">
                 <Button customClass="gr-link" onClick={onKeepPlaying}>
-                    {playResignDialogKeepPlayingButton}
+                    {keepPlayingText}
                 </Button>
                 <Button customClass="gr-link danger" onClick={onResign}>
-                    {playResignDialogResignButton}
+                    {resignText}
                 </Button>
             </Box>
         </CustomModal>

@@ -10,18 +10,18 @@ import type { IVerifyEmailBody, IResendOtpBody } from "@/types/index";
 import type { IMessageResponse } from "@/types/utils";
 import type { IVerifyEmailFormProps } from "@/types/components";
 import {
-    authLoginBack,
-    authEmailVerificationTitle,
-    authEmailVerificationSentCodeTo,
-    authEmailVerificationVerifiedSuccess,
-    authEmailVerificationInvalidCode,
-    authEmailVerificationResentSuccess,
-    authEmailVerificationResendFailed,
-    authEmailVerificationExpired,
-    authEmailVerificationExpiresIn,
-    authEmailVerificationVerifyButton,
-    authEmailVerificationResendWithCooldown,
-    authEmailVerificationResendButton,
+ backText,
+ verifyYourEmailText,
+ sentCodeToText,
+ emailVerifiedText,
+ invalidOrExpiredCodeText,
+ newCodeSentText,
+ resendCodeFailedText,
+ codeExpiredText,
+ codeExpiresInText,
+ verifyEmailText,
+ resendCodeCooldownText,
+ resendOtpText,
 } from "@/constants/messages";
 
 export const OTP_LENGTH = 6;
@@ -65,7 +65,7 @@ export default function VerifyEmailForm({
             dispatch(
                 showToast({
                     isToastOpen: true,
-                    toastMessage: authEmailVerificationVerifiedSuccess,
+                    toastMessage: emailVerifiedText,
                     toastVariant: "success",
                 }),
             );
@@ -77,7 +77,7 @@ export default function VerifyEmailForm({
                         isToastOpen: true,
                         toastMessage:
                             err?.response?.data?.message ??
-                            authEmailVerificationInvalidCode,
+                            invalidOrExpiredCodeText,
                         toastVariant: "error",
                     }),
                 );
@@ -100,7 +100,7 @@ export default function VerifyEmailForm({
             dispatch(
                 showToast({
                     isToastOpen: true,
-                    toastMessage: authEmailVerificationResentSuccess,
+                    toastMessage: newCodeSentText,
                     toastVariant: "success",
                 }),
             );
@@ -112,7 +112,7 @@ export default function VerifyEmailForm({
                 dispatch(
                     showToast({
                         isToastOpen: true,
-                        toastMessage: authEmailVerificationResendFailed,
+                        toastMessage: resendCodeFailedText,
                         toastVariant: "error",
                     }),
                 );
@@ -136,17 +136,17 @@ export default function VerifyEmailForm({
                     customClass="auth-back-btn"
                     onClick={onBack}
                 >
-                    {authLoginBack}
+                    {backText}
                 </Button>
             )}
 
             {showHeading && (
                 <Box customClass="otp-heading">
                     <Text component="h2" customClass="otp-title">
-                        {authEmailVerificationTitle}
+                        {verifyYourEmailText}
                     </Text>
                     <Text component="p" customClass="otp-subtitle page-subtitle">
-                        {authEmailVerificationSentCodeTo(OTP_LENGTH)}{" "}
+                        {sentCodeToText(OTP_LENGTH)}{" "}
                         <strong>{email}</strong>
                     </Text>
                 </Box>
@@ -161,8 +161,8 @@ export default function VerifyEmailForm({
 
             <Text component="p" customClass="otp-expiry">
                 {expired
-                    ? authEmailVerificationExpired
-                    : authEmailVerificationExpiresIn(formatMMSS(expirySeconds))}
+                    ? codeExpiredText
+                    : codeExpiresInText(formatMMSS(expirySeconds))}
             </Text>
 
             <Box customClass="auth-actions">
@@ -175,7 +175,7 @@ export default function VerifyEmailForm({
                     disabled={otp.length !== OTP_LENGTH || expired}
                     onClick={handleVerify}
                 >
-                    {authEmailVerificationVerifyButton}
+                    {verifyEmailText}
                 </Button>
 
                 <Button
@@ -187,8 +187,8 @@ export default function VerifyEmailForm({
                     onClick={handleResend}
                 >
                     {cooldown > 0
-                        ? authEmailVerificationResendWithCooldown(cooldown)
-                        : authEmailVerificationResendButton}
+                        ? resendCodeCooldownText(cooldown)
+                        : resendOtpText}
                 </Button>
             </Box>
         </Box>

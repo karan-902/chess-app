@@ -29,44 +29,43 @@ import type {
  LoginStep,
 } from "@/types/components";
 import {
- authEmailLabel,
- authEmailPlaceholder,
- authPasswordLabel,
- authPasswordPlaceholder,
- authOr,
- authContinueWithGoogle,
- authValidationEmailRequired,
- authValidationEmailInvalid,
- authValidationPasswordRequired,
- authLoginNoAccountFound,
- authLoginChangeEmail,
- // authLoginForgotPassword,
- // authLoginResetNow,
- authLoginNextButton,
- authLoginSignInButton,
- authLoginEmailNotVerified,
- // authDeviceApprovalTitle,
- // authDeviceApprovalDescription,
- // authDeviceApprovalBack,
- authLoginTitle,
- authLoginSubtitle,
- authLoginPasswordTitle,
- authLoginPasswordSubtitle,
- authLoginNoAccountPrompt,
- authLoginSignupLink,
- selectCountryTitle,
- selectCountrySubtitle,
+ emailText,
+ enterEmailText,
+ passwordText,
+ enterPasswordText,
+ orText,
+ continueWithGoogleText,
+ emailRequiredText,
+ enterValidEmailText,
+ passwordRequiredText,
+ noAccountFoundText,
+ changeText,
+ // forgotYourPasswordText,
+ // resetNowText,
+ nextText,
+ loginText,
+ verifyEmailToContinueText,
+ // newDeviceDetectedText,
+ // approveSignInEmailedText,
+ // backToLoginText,
+ welcomeBackText,
+ enterRegisteredEmailText,
+ accessYourAccountText,
+ enterPasswordToAccessText,
+ noAccountPromptText,
+ signUpText,
+ selectYourCountryText,
 } from "@/constants/messages";
 
 const emailSchema = yup.object({
  email: yup
   .string()
-  .email(authValidationEmailInvalid)
-  .required(authValidationEmailRequired),
+  .email(enterValidEmailText)
+  .required(emailRequiredText),
 });
 
 const passwordSchema = yup.object({
- password: yup.string().required(authValidationPasswordRequired),
+ password: yup.string().required(passwordRequiredText),
 });
 
 function EmailScreen({
@@ -85,8 +84,8 @@ function EmailScreen({
     id="email"
     name="email"
     type="email"
-    label={authEmailLabel}
-    placeholder={authEmailPlaceholder}
+    label={emailText}
+    placeholder={enterEmailText}
     value={formik.values.email}
     onChange={formik.handleChange}
     onBlur={formik.handleBlur}
@@ -108,11 +107,11 @@ function EmailScreen({
     disabled={!formik.dirty || formik.isSubmitting}
     isLoading={formik.isSubmitting}
    >
-    {authLoginNextButton}
+    {nextText}
    </Button>
 
    <Box customClass="auth-divider">
-    <Text component="span">{authOr}</Text>
+    <Text component="span">{orText}</Text>
    </Box>
 
    <Box customClass="social-stack">
@@ -125,7 +124,7 @@ function EmailScreen({
      onClick={onGoogleLogin}
      disabled={isGoogleProcessing}
     >
-     {authContinueWithGoogle}
+     {continueWithGoogleText}
     </Button>
    </Box>
   </Box>
@@ -171,7 +170,7 @@ function PasswordScreen({
      customClass="auth-change-btn"
      onClick={onChangeEmail}
     >
-     {authLoginChangeEmail}
+     {changeText}
     </Button>
    </Box>
 
@@ -179,8 +178,8 @@ function PasswordScreen({
     id="password"
     name="password"
     type="password"
-    label={authPasswordLabel}
-    placeholder={authPasswordPlaceholder}
+    label={passwordText}
+    placeholder={enterPasswordText}
     value={formik.values.password}
     onChange={formik.handleChange}
     onBlur={formik.handleBlur}
@@ -203,14 +202,14 @@ function PasswordScreen({
      disabled={!formik.dirty || formik.isSubmitting}
      isLoading={formik.isSubmitting}
     >
-     {authLoginSignInButton}
+     {loginText}
     </Button>
    </Box>
 
    {/* <Text customClass="auth-forgot-row">
-    {authLoginForgotPassword}{" "}
+    {forgotYourPasswordText}{" "}
     <NavLink to="/forgot-password" className="auth-forgot-link">
-     {authLoginResetNow}
+     {resetNowText}
     </NavLink>
    </Text> */}
   </Box>
@@ -226,15 +225,15 @@ function PasswordScreen({
 //     customClass="auth-back-btn"
 //     onClick={onBack}
 //    >
-//     {authDeviceApprovalBack}
+//     {backToLoginText}
 //    </Button>
 //
 //    <Box customClass="auth-heading">
 //     <Text component="h1" customClass="auth-title">
-//      {authDeviceApprovalTitle}
+//      {newDeviceDetectedText}
 //     </Text>
 //     <Text component="p" customClass="page-subtitle">
-//      {authDeviceApprovalDescription}
+//      {approveSignInEmailedText}
 //     </Text>
 //    </Box>
 //   </Box>
@@ -279,11 +278,11 @@ export default function LoginForm() {
     }
 
     if (!res.is_verified) {
-     setError(authLoginEmailNotVerified);
+     setError(verifyEmailToContinueText);
      // dispatch(
      //  showToast({
      //   isToastOpen: true,
-     //   toastMessage: authLoginEmailNotVerified,
+     //   toastMessage: verifyEmailToContinueText,
      //   toastVariant: "error",
      //  }),
      // );
@@ -296,7 +295,7 @@ export default function LoginForm() {
     setStep("password");
    } catch (err: any) {
     if (err?.response) {
-     setError(err.response.data?.message ?? authLoginNoAccountFound);
+     setError(err.response.data?.message ?? noAccountFoundText);
     }
    } finally {
     setSubmitting(false);
@@ -342,7 +341,7 @@ export default function LoginForm() {
     //  dispatch(
     //   showToast({
     //    isToastOpen: true,
-    //    toastMessage: authLoginEmailNotVerified,
+    //    toastMessage: verifyEmailToContinueText,
     //    toastVariant: "error",
     //   }),
     //  );
@@ -371,7 +370,7 @@ export default function LoginForm() {
 
  if (step === "country") {
   return (
-   <AuthLayout title={selectCountryTitle} subtitle={selectCountrySubtitle}>
+   <AuthLayout title={selectYourCountryText}>
     <SelectCountryScreen showHeading={false} />
    </AuthLayout>
   );
@@ -379,16 +378,16 @@ export default function LoginForm() {
 
  const loginFooter = (
   <>
-   {authLoginNoAccountPrompt}{" "}
-   <NavLink to="/register">{authLoginSignupLink}</NavLink>
+   {noAccountPromptText}{" "}
+   <NavLink to="/register">{signUpText}</NavLink>
   </>
  );
 
  // if (step === "waiting-approval") {
  //  return (
  //   <AuthLayout
- //    title={authLoginTitle}
- //    subtitle={authLoginSubtitle}
+ //    title={welcomeBackText}
+ //    subtitle={enterRegisteredEmailText}
  //    footer={loginFooter}
  //   >
  //    <WaitingApprovalScreen onBack={handleBackFromApproval} />
@@ -399,8 +398,8 @@ export default function LoginForm() {
  if (step === "password") {
   return (
    <AuthLayout
-    title={authLoginPasswordTitle}
-    subtitle={authLoginPasswordSubtitle}
+    title={accessYourAccountText}
+    subtitle={enterPasswordToAccessText}
    >
     <PasswordScreen
      verifiedEmail={verifiedEmail}
@@ -415,8 +414,8 @@ export default function LoginForm() {
 
  return (
   <AuthLayout
-   title={authLoginTitle}
-   subtitle={authLoginSubtitle}
+   title={welcomeBackText}
+   subtitle={enterRegisteredEmailText}
    footer={loginFooter}
   >
    <EmailScreen

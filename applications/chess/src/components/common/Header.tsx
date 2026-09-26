@@ -18,10 +18,10 @@ import { formatAmount } from "@/utils/format";
 import { getGameFromPath, getGameRoutes, shortenUsername } from "@/utils";
 import { NAV_ITEMS } from "@/constants/config";
 import {
- profileTitle,
- appBarLogout,
- appBarWallet,
- appBarBack,
+ profileText,
+ logOutText,
+ walletText,
+ backText,
 } from "@/constants/messages";
 import CustomIconButton from "@/components/base/IconButton/IconButton";
 import { ChessLogo } from "@/components/constants";
@@ -62,7 +62,7 @@ export default function Header() {
       onChange={(_, value) => navigate(value)}
      >
       {NAV_ITEMS.map((item) => (
-       <CustomTab key={item.id} value={routes[item.page]} label={item.label} />
+       <CustomTab key={item.page} value={routes[item.page]} label={item.label} />
       ))}
      </CustomTabs>
     ) : (
@@ -72,7 +72,7 @@ export default function Header() {
       startIcon="arrowBack"
       onClick={() => navigate(routes ? routes.PLAY : "/")}
      >
-      {appBarBack}
+      {backText}
      </Button>
     )
    }
@@ -130,7 +130,7 @@ export default function Header() {
       }
       onClick={closeMenu}
      >
-      {profileTitle}
+      {profileText}
      </NavLink>
      <NavLink
       to="/wallet"
@@ -139,7 +139,7 @@ export default function Header() {
       }
       onClick={closeMenu}
      >
-      {appBarWallet}
+      {walletText}
      </NavLink>
      <Button
       type="button"
@@ -150,7 +150,7 @@ export default function Header() {
        logout();
       }}
      >
-      {appBarLogout}
+      {logOutText}
      </Button>
     </CustomPopover>
    </Box>

@@ -19,14 +19,14 @@ import {
 } from "@/constants/config";
 import type { ITransactionResponse } from "@/types/utils";
 import {
- walletPageBalanceLabel,
- walletPageWithdrawableLabel,
- walletPageTransactionsTitle,
- walletPageEmptyTitle,
- walletPageEmptyDesc,
- appBarDepositButton,
- withdrawModalTitle,
- walletPoweredByLabel,
+ totalBalanceText,
+ withdrawBalanceText,
+ transactionsText,
+ noTransactionsYetText,
+ transactionsEmptyText,
+ depositText,
+ withdrawText,
+ poweredByText,
 } from "@/constants/messages";
 
 function dayLabel(ms: number): string {
@@ -120,7 +120,7 @@ export default function Wallet() {
   <Box customClass="wallet-page">
    <Box customClass="wallet-split">
     <Box customClass="wallet-split-block accent">
-     <Text customClass="wallet-split-lbl">{walletPageBalanceLabel}</Text>
+     <Text customClass="wallet-split-lbl">{totalBalanceText}</Text>
      {balanceLoading ? (
       <Skeleton customClass="text" width={80} height={24} />
      ) : (
@@ -128,7 +128,7 @@ export default function Wallet() {
      )}
     </Box>
     <Box customClass="wallet-split-block">
-     <Text customClass="wallet-split-lbl">{walletPageWithdrawableLabel}</Text>
+     <Text customClass="wallet-split-lbl">{withdrawBalanceText}</Text>
      {balanceLoading ? (
       <Skeleton customClass="text" width={80} height={24} />
      ) : (
@@ -161,7 +161,7 @@ export default function Wallet() {
        customClass="wallet-deposit-btn"
        onClick={openDeposit}
       >
-       {appBarDepositButton}
+       {depositText}
       </Button>
       <Button
        type="button"
@@ -169,20 +169,20 @@ export default function Wallet() {
        customClass="wallet-withdraw-btn"
        onClick={openWithdraw}
       >
-       {withdrawModalTitle}
+       {withdrawText}
       </Button>
      </>
     )}
    </Box>
 
    <Box customClass="powered-by-badge">
-    <Text component="span">{walletPoweredByLabel}</Text>
+    <Text component="span">{poweredByText}</Text>
     <img src={speedLogo} alt="Speed" className="powered-by-logo" />
    </Box>
 
    <Box customClass="wallet-tx-title-row">
     <Text component="h3" customClass="wallet-tx-title">
-     {walletPageTransactionsTitle}
+     {transactionsText}
     </Text>
    </Box>
 
@@ -194,8 +194,8 @@ export default function Wallet() {
     </Box>
    ) : transactions.length === 0 ? (
     <EmptyState
-     title={walletPageEmptyTitle}
-     description={walletPageEmptyDesc}
+     title={noTransactionsYetText}
+     description={transactionsEmptyText}
     />
    ) : (
     <Box customClass="wallet-timeline">

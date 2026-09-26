@@ -4,8 +4,8 @@ import type { GameCategory } from "@/types/types";
 import { oppositeSide, shortenUsername } from "@/utils";
 import { isGameFinished, getPvcColor, setPvcColor } from "@/utils/storage";
 import {
-    playOpponentFallbackOpponent,
-    playOpponentFallbackComputer,
+ opponentText,
+ computerText,
 } from "@/constants/messages";
 import { useGame } from "@/hooks/useGame";
 
@@ -21,10 +21,10 @@ export function useGameRoomSetup(params: URLSearchParams, usdValue: number) {
     const playerSide: "w" | "b" = params.get("color") === "black" ? "b" : "w";
     const computerSide = oppositeSide(playerSide);
     const opponentName = isPvc
-        ? playOpponentFallbackComputer
+        ? computerText
         : params.get("opponent")
           ? shortenUsername(decodeURIComponent(params.get("opponent")!))
-          : playOpponentFallbackOpponent;
+          : opponentText;
     const isRoomMatch = params.get("room") === "1";
     const opponentRating = Number(params.get("opp_rating") ?? 0);
     const opponentId = params.get("opp_id") ?? undefined;

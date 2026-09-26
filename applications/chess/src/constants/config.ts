@@ -15,18 +15,18 @@ import type {
 } from "@/types/types";
 import type { TransactionType } from "@/types/utils";
 import {
- playReasonCheckmate,
- playReasonResignation,
- playReasonDraw,
- playReasonStalemate,
- playReasonTimeout,
- playReasonInactivity,
- leaderboardScopeDailyLabel,
- leaderboardScopeWeeklyLabel,
- leaderboardScopeMonthlyLabel,
- leaderboardScopeAllLabel,
- leaderboardSortEarningsLabel,
- leaderboardSortWinsLabel,
+ checkmateText,
+ resignText,
+ drawText,
+ stalemateText,
+ timeoutText,
+ inactivityText,
+ dailyText,
+ weeklyText,
+ monthlyText,
+ allTimeText,
+ topEarnersText,
+ mostWinsText,
 } from "@/constants/messages";
 
 export const LEADERBOARD_SCOPES: LeaderboardScope[] = [
@@ -37,17 +37,17 @@ export const LEADERBOARD_SCOPES: LeaderboardScope[] = [
 ];
 
 export const LEADERBOARD_SCOPE_LABELS: Record<LeaderboardScope, string> = {
- daily: leaderboardScopeDailyLabel,
- weekly: leaderboardScopeWeeklyLabel,
- monthly: leaderboardScopeMonthlyLabel,
- all: leaderboardScopeAllLabel,
+ daily: dailyText,
+ weekly: weeklyText,
+ monthly: monthlyText,
+ all: allTimeText,
 };
 
 export const LEADERBOARD_SORTS: LeaderboardSort[] = ["earnings", "wins"];
 
 export const LEADERBOARD_SORT_LABELS: Record<LeaderboardSort, string> = {
- earnings: leaderboardSortEarningsLabel,
- wins: leaderboardSortWinsLabel,
+ earnings: topEarnersText,
+ wins: mostWinsText,
 };
 
 export const CATEGORY_META: Record<
@@ -87,12 +87,12 @@ export const DEBIT_TRANSACTION_TYPES = new Set<TransactionType>([
 ]);
 
 export const GAME_END_REASON_LABELS: Record<string, string> = {
- checkmate: playReasonCheckmate,
- resign: playReasonResignation,
- draw: playReasonDraw,
- stalemate: playReasonStalemate,
- timeout: playReasonTimeout,
- opponent_disconnected: playReasonInactivity,
+ checkmate: checkmateText,
+ resign: resignText,
+ draw: drawText,
+ stalemate: stalemateText,
+ timeout: timeoutText,
+ opponent_disconnected: inactivityText,
 };
 
 export const POOL_TIMEOUT_SECONDS = 60;
@@ -117,14 +117,11 @@ export const GAME_PAGE_TITLES: Record<string, string> = {
  [GAME_PAGES.RULES]: "Rules",
 };
 
-export const NAV_ITEMS = [
- { id: "play", page: "PLAY", label: "Play" },
- { id: "my-matches", page: "MATCHES", label: "Matches" },
- { id: "leaderboard", page: "LEADERBOARD", label: "Leaderboard" },
- { id: "rules", page: "RULES", label: "Rules" },
-] as const;
+export const NAV_ITEMS = (["PLAY", "MATCHES", "LEADERBOARD", "RULES"] as const).map(
+ (page) => ({ page, label: GAME_PAGE_TITLES[GAME_PAGES[page]] }),
+);
 
-export const COUNTRIES = [
+const COUNTRIES = [
  "Afghanistan",
  "Albania",
  "Algeria",

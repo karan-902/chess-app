@@ -5,16 +5,16 @@ import CustomModal from "@/components/base/Modal/Modal";
 import { ChessLogo } from "@/components/constants";
 import type { IPoolConfirmSheetProps } from "@/types/components";
 import {
- matchmakingSearchingSecondsLeft,
- matchmakingSearchingCancelButton,
- matchmakingSearchingFindingOpponent,
- matchmakingSearchingOpponentFound,
- matchmakingSearchingBetLabel,
- matchmakingSearchingPrizeLabel,
- matchmakingConfirmTitle,
- matchmakingConfirmDescription,
- matchmakingConfirmCancelButton,
- matchmakingCtaFindOpponentButton,
+ secondsLeftText,
+ cancelSearchText,
+ findingOpponentText,
+ opponentFoundText,
+ entryFeeText,
+ prizeText,
+ confirmYourMatchText,
+ matchedOnConfirmText,
+ cancelText,
+ findOpponentText,
 } from "@/constants/messages";
 
 export default function PoolConfirmSheet({
@@ -44,16 +44,16 @@ export default function PoolConfirmSheet({
      </Box>
      <Text customClass="dialog-title" aria-live="polite">
       {status === "found"
-       ? matchmakingSearchingOpponentFound
-       : matchmakingSearchingFindingOpponent}
+       ? opponentFoundText
+       : findingOpponentText}
      </Text>
      <Text customClass="searching-timer">
-      {matchmakingSearchingSecondsLeft(secondsLeft)}
+      {secondsLeftText(secondsLeft)}
      </Text>
      <Box customClass="searching-details">
       <Box customClass="searching-detail-item">
        <Text customClass="searching-detail-label caption">
-        {matchmakingSearchingBetLabel}
+        {entryFeeText}
        </Text>
        <Text customClass="searching-detail-value value-heading">
         ${queuedPool?.bet}
@@ -61,7 +61,7 @@ export default function PoolConfirmSheet({
       </Box>
       <Box customClass="searching-detail-item">
        <Text customClass="searching-detail-label caption">
-        {matchmakingSearchingPrizeLabel}
+        {prizeText}
        </Text>
        <Text customClass="searching-detail-value value-heading win-prize">
         ${queuedPool?.prize}
@@ -76,20 +76,20 @@ export default function PoolConfirmSheet({
       disabled={status === "found"}
       onClick={onLeaveQueue}
      >
-      {matchmakingSearchingCancelButton}
+      {cancelSearchText}
      </Button>
     </Box>
    ) : (
     confirmPool && (
      <Box customClass="matchmaking-searching">
-      <Text customClass="dialog-title">{matchmakingConfirmTitle}</Text>
+      <Text customClass="dialog-title">{confirmYourMatchText}</Text>
       <Text customClass="empty-state-desc description">
-       {matchmakingConfirmDescription}
+       {matchedOnConfirmText}
       </Text>
       <Box customClass="searching-details">
        <Box customClass="searching-detail-item">
         <Text customClass="searching-detail-label caption">
-         {matchmakingSearchingBetLabel}
+         {entryFeeText}
         </Text>
         <Text customClass="searching-detail-value value-heading">
          ${confirmPool.bet}
@@ -97,7 +97,7 @@ export default function PoolConfirmSheet({
        </Box>
        <Box customClass="searching-detail-item">
         <Text customClass="searching-detail-label caption">
-         {matchmakingSearchingPrizeLabel}
+         {prizeText}
         </Text>
         <Text customClass="searching-detail-value value-heading win-prize">
          ${confirmPool.prize}
@@ -114,7 +114,7 @@ export default function PoolConfirmSheet({
         loaderOnDark
         onClick={onConfirmJoin}
        >
-        {matchmakingCtaFindOpponentButton}
+        {findOpponentText}
        </Button>
        <Button
         type="button"
@@ -124,7 +124,7 @@ export default function PoolConfirmSheet({
         disabled={status === "joining"}
         onClick={onConfirmCancel}
        >
-        {matchmakingConfirmCancelButton}
+        {cancelText}
        </Button>
       </Box>
      </Box>

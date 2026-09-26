@@ -8,11 +8,11 @@ import { useGame } from "@/hooks/useGame";
 import { callAPIInterface, showApiErrorToast, shortenUsername } from "@/utils";
 import { formatAmount } from "@/utils/format";
 import {
-    leaderboardPlayerScoreLabel,
-    leaderboardPlayerGrossIncomeLabel,
-    leaderboardPlayerWinsLabel,
-    leaderboardPlayerLoadFailed,
-    matchesStatsBestStreakLabel,
+ scoreText,
+ grossIncomeText,
+ winsText,
+ noDataFoundText,
+ bestStreakText,
 } from "@/constants/messages";
 import type { ILeaderboardPlayerStatsResponse } from "@/types/types";
 import type { ILeaderboardPlayerModalProps } from "@/types/components";
@@ -38,7 +38,7 @@ export default function LeaderboardPlayerModal({
                 );
                 if (!isCancelled) setStats(res);
             } catch (err) {
-                showApiErrorToast(err, leaderboardPlayerLoadFailed);
+                showApiErrorToast(err, noDataFoundText);
                 if (!isCancelled) onClose();
             }
         };
@@ -49,10 +49,10 @@ export default function LeaderboardPlayerModal({
     }, [playerId, game, onClose]);
 
     const statRows = stats && [
-        { label: leaderboardPlayerScoreLabel, value: Math.round(stats.score) },
-        { label: leaderboardPlayerWinsLabel, value: stats.wins },
-        { label: matchesStatsBestStreakLabel, value: stats.best_streak },
-        { label: leaderboardPlayerGrossIncomeLabel, value: formatAmount(stats.gross_income) },
+        { label: scoreText, value: Math.round(stats.score) },
+        { label: winsText, value: stats.wins },
+        { label: bestStreakText, value: stats.best_streak },
+        { label: grossIncomeText, value: formatAmount(stats.gross_income) },
     ];
 
     return (

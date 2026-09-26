@@ -33,18 +33,18 @@ import { GAME_END_REASON_LABELS } from "@/constants/config";
 import { useGame } from "@/hooks/useGame";
 import type { IdrawOfferedResponse, IgameEndedResponse } from "@/types/types";
 import {
- playWagerBadgeDifficultyLabels,
- playActionButtonsResign,
- playActionButtonsDraw,
- playDrawOfferBannerText,
- playDrawOfferBannerAcceptButton,
- playDrawOfferBannerDeclineButton,
- playToastDrawDeclined,
- playGameOverHeaderWin,
- playGameOverHeaderDraw,
- playGameOverHeaderLose,
- playReasonGameOver,
- leaderboardRankFallback,
+ difficultyText,
+ resignText,
+ drawText,
+ opponentOfferedDrawText,
+ acceptText,
+ declineText,
+ drawOfferDeclinedText,
+ victoryText,
+ drawUpperText,
+ defeatText,
+ gameOverText,
+ dashText,
 } from "@/constants/messages";
 import Button from "@/components/base/Button/Button";
 import ResignModal from "@/components/common/ResignModal";
@@ -367,7 +367,7 @@ export default function GameRoom() {
  const handleDrawDecline = () => {
   socket?.emit("reject_draw", { game_id: gameId });
   setDrawOffer(null);
-  dispatch(showToast({ isToastOpen: true, toastMessage: playToastDrawDeclined, toastVariant: "info" }));
+  dispatch(showToast({ isToastOpen: true, toastMessage: drawOfferDeclinedText, toastVariant: "info" }));
  };
 
  const boardFen = isReviewing ? displayFen : fen;
@@ -390,14 +390,14 @@ export default function GameRoom() {
  const resultHeader = !gameEnded
   ? ""
   : isDrawResult
-    ? playGameOverHeaderDraw
+    ? drawUpperText
     : isWinner
-      ? playGameOverHeaderWin
-      : playGameOverHeaderLose;
+      ? victoryText
+      : defeatText;
  const settlementUsd =
   gameEnded?.settlement?.[isWinner ? "winner" : "loser"].usd ?? 0;
  const reasonLabel = gameEnded?.reason
-  ? (GAME_END_REASON_LABELS[gameEnded.reason] ?? playReasonGameOver)
+  ? (GAME_END_REASON_LABELS[gameEnded.reason] ?? gameOverText)
   : "";
 
  return (
@@ -408,7 +408,7 @@ export default function GameRoom() {
     name={opponentName}
     eloLabel={
      isPvc
-      ? playWagerBadgeDifficultyLabels[difficulty]
+      ? difficultyText[difficulty]
       : isRoomMatch
         ? ""
         : `${opponentRating} elo`
@@ -462,7 +462,7 @@ export default function GameRoom() {
     eloLabel={
      isPvc || isRoomMatch
       ? ""
-      : `${/* session?.ratings[myCategory] ?? */ leaderboardRankFallback} elo`
+      : `${/* session?.ratings[myCategory] ?? */ dashText} elo`
     }
     capturedPieces={myCaptured}
     pieceColor={oppColor}
@@ -473,12 +473,12 @@ export default function GameRoom() {
 
    {drawOffer && (
     <Box customClass="gr-draw-banner">
-     <Text component="span">{playDrawOfferBannerText}</Text>
+     <Text component="span">{opponentOfferedDrawText}</Text>
      <Button customClass="gr-link" onClick={handleDrawAccept}>
-      {playDrawOfferBannerAcceptButton}
+      {acceptText}
      </Button>
      <Button customClass="gr-link danger" onClick={handleDrawDecline}>
-      {playDrawOfferBannerDeclineButton}
+      {declineText}
      </Button>
     </Box>
    )}
@@ -488,11 +488,11 @@ export default function GameRoom() {
      customClass="gr-action-btn danger"
      onClick={() => setResignOpen(true)}
     >
-     {playActionButtonsResign}
+     {resignText}
     </Button>
     {!isPvc && (
      <Button customClass="gr-action-btn" onClick={handleDrawOffer}>
-      {playActionButtonsDraw}
+      {drawText}
      </Button>
     )}
    </Box>

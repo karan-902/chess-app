@@ -16,24 +16,25 @@ import type {
  RoomTab,
 } from "@/types/components";
 import {
- roomCreateTabLabel,
- roomJoinTabLabel,
- roomBetLabel,
- roomBetRequired,
- roomBetInsufficientBalance,
- roomTimeLabel,
- roomMinutesSuffix,
- roomRatedLabel,
- roomCreateButton,
- roomJoinCodeLabel,
- roomJoinButton,
- roomWaitingTitle,
- roomWaitingDesc,
- roomExpiresIn,
- roomCopyButton,
- roomCopiedButton,
- roomCancelButton,
- playSheetFriendTitle,
+ createRoomText,
+ joinRoomText,
+ feeAmountText,
+ feeAmountRequiredText,
+ insufficientBalanceText,
+ durationText,
+ minText,
+ ratedText,
+ createText,
+ roomCodeText,
+ pasteText,
+ joinText,
+ waitingForOpponentText,
+ shareCodeWithFriendText,
+ expiresInText,
+ copyCodeText,
+ copiedExclaimText,
+ cancelText,
+ roomText,
  MAX_AMOUNT_DIGITS,
 } from "@/constants/messages";
 import CustomIconButton from "@/components/base/IconButton/IconButton";
@@ -89,7 +90,7 @@ function DurationWheel({ value, onChange }: IDurationWheelProps) {
        scrollToValue(minutes);
       }}
      >
-      {minutes} {roomMinutesSuffix}
+      {minutes} {minText}
      </Text>
     ))}
     <Box customClass="duration-wheel-pad" />
@@ -130,11 +131,11 @@ export default function RoomSheet({
  const handleCreateRoomSubmit = () => {
   const bet = Number(roomBet);
   if (!bet || bet <= 0) {
-   setRoomBetError(roomBetRequired);
+   setRoomBetError(feeAmountRequiredText);
    return;
   }
   if (bet > usdValue) {
-   setRoomBetError(roomBetInsufficientBalance);
+   setRoomBetError(insufficientBalanceText);
    return;
   }
   setRoomBetError("");
@@ -177,11 +178,11 @@ export default function RoomSheet({
   >
    {roomStatus === "waiting" ? (
     <Box customClass="matchmaking-searching">
-     <Text customClass="dialog-title">{roomWaitingTitle}</Text>
-     <Text customClass="empty-state-desc description">{roomWaitingDesc}</Text>
+     <Text customClass="dialog-title">{waitingForOpponentText}</Text>
+     <Text customClass="empty-state-desc description">{shareCodeWithFriendText}</Text>
      <Text customClass="searching-timer">{roomCode}</Text>
      <Text customClass="empty-state-desc description">
-      {roomExpiresIn(formatMMSS(expiresInSeconds))}
+      {expiresInText(formatMMSS(expiresInSeconds))}
      </Text>
      <Button
       type="button"
@@ -191,7 +192,7 @@ export default function RoomSheet({
       startIcon={codeCopied ? "check" : "copy"}
       onClick={handleCopyCode}
      >
-      {codeCopied ? roomCopiedButton : roomCopyButton}
+      {codeCopied ? copiedExclaimText : copyCodeText}
      </Button>
      <Box customClass="pool-confirm-actions">
       <Button
@@ -201,18 +202,18 @@ export default function RoomSheet({
        customClass="pool-confirm-cancel-btn"
        onClick={onCancel}
       >
-       {roomCancelButton}
+       {cancelText}
       </Button>
      </Box>
     </Box>
    ) : (
     <Box customClass="matchmaking-searching room-options">
-     <Text customClass="sheet-title dialog-title">{playSheetFriendTitle}</Text>
+     <Text customClass="sheet-title dialog-title">{roomText}</Text>
      <ChipSelect
       options={ROOM_TABS}
       value={roomTab}
       onChange={setRoomTab}
-      label={(t) => (t === "create" ? roomCreateTabLabel : roomJoinTabLabel)}
+      label={(t) => (t === "create" ? createRoomText : joinRoomText)}
       customClass="segment compact"
      />
      {roomTab === "create" ? (
@@ -222,7 +223,7 @@ export default function RoomSheet({
          htmlFor="room-bet"
          customClass="room-field-label room-bet-label"
         >
-         {roomBetLabel}
+         {feeAmountText}
         </CustomLabel>
         <Input
          id="room-bet"
@@ -271,7 +272,7 @@ export default function RoomSheet({
 
        <Box customClass="room-field room-duration-field">
         <CustomLabel customClass="room-field-label room-bet-label">
-         {roomTimeLabel}
+         {durationText}
         </CustomLabel>
         <DurationWheel
          value={Number(roomMinutes)}
@@ -280,7 +281,7 @@ export default function RoomSheet({
        </Box>
 
        <Box sx={{ display: "none !important" }} customClass="stat-row">
-        <Text component="span">{roomRatedLabel}</Text>
+        <Text component="span">{ratedText}</Text>
         <CustomSwitch
          checked={roomRated}
          onChange={(e) => setRoomRated(e.target.checked)}
@@ -297,7 +298,7 @@ export default function RoomSheet({
          loaderOnDark
          onClick={handleCreateRoomSubmit}
         >
-         {roomCreateButton}
+         {createText}
         </Button>
        </Box>
       </>
@@ -305,8 +306,13 @@ export default function RoomSheet({
       <>
        <Box customClass="room-field">
         <Box customClass="room-field-head">
-         <CustomLabel customClass="room-field-label">{roomJoinCodeLabel}</CustomLabel>
-         <CustomIconButton customClass="room-paste-btn" onClick={handlePasteCode} icon="contentPaste" />
+         <CustomLabel customClass="room-field-label">{roomCodeText}</CustomLabel>
+         <CustomIconButton
+          customClass="room-paste-btn"
+          onClick={handlePasteCode}
+          aria-label={pasteText}
+          icon="contentPaste"
+         />
         </Box>
         <OTPInput
          length={6}
@@ -327,7 +333,7 @@ export default function RoomSheet({
         loaderOnDark
         onClick={handleJoinRoomSubmit}
        >
-        {roomJoinButton}
+        {joinText}
        </Button>
       </>
      )}

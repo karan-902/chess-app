@@ -1,6 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { callAPIInterface, showApiErrorToast } from "@/utils";
-import { gameLoadFailed } from "@/constants/messages";
+import {
+ noDataFoundText,
+} from "@/constants/messages";
 import { throwThunkError } from "@/redux/createAppThunk";
 import { finishGameLoad, setGameDetails, startGameLoad } from "@/redux/game/slice";
 import type { IGameDetailsResponse } from "@/types/utils";
@@ -17,7 +19,7 @@ export const fetchGameDetails = createAsyncThunk(
             dispatch(setGameDetails(res));
             return res;
         } catch (err) {
-            showApiErrorToast(err, gameLoadFailed);
+            showApiErrorToast(err, noDataFoundText);
             return rejectWithValue(throwThunkError(err));
         } finally {
             dispatch(finishGameLoad());

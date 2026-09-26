@@ -9,10 +9,10 @@ import type { Difficulty } from "@/types/components";
 import type { GameCategory } from "@/types/types";
 import type { IPracticeSheetProps } from "@/types/components";
 import {
- playSheetCardPlayButton,
- matchmakingConfirmCancelButton,
- playWagerBadgeDifficultyLabels,
- historyTimeControlLabel,
+ playText,
+ cancelText,
+ difficultyText,
+ minutesText,
 } from "@/constants/messages";
 
 const PRACTICE_DIFFICULTIES: Difficulty[] = ["easy", "medium", "hard"];
@@ -44,7 +44,7 @@ export default function PracticeSheet({
      options={PRACTICE_DIFFICULTIES}
      value={difficulty}
      onChange={setDifficulty}
-     label={(d) => playWagerBadgeDifficultyLabels[d]}
+     label={(d) => difficultyText[d]}
      customClass="segment compact"
     />
     <ChipSelect
@@ -52,7 +52,7 @@ export default function PracticeSheet({
      value={timeControl}
      onChange={setTimeControl}
      label={(c) => CATEGORY_META[c]?.label}
-     subLabel={(c) => historyTimeControlLabel(TIME_SECONDS[c] / 60)}
+     subLabel={(c) => minutesText(TIME_SECONDS[c] / 60)}
      customClass="segment category-select"
     />
     <Box customClass="pool-confirm-actions">
@@ -63,7 +63,7 @@ export default function PracticeSheet({
       customClass="options-play"
       onClick={() => onPlay(difficulty, timeControl)}
      >
-      {playSheetCardPlayButton}
+      {playText}
      </Button>
      <Button
       type="button"
@@ -72,7 +72,7 @@ export default function PracticeSheet({
       customClass="pool-confirm-cancel-btn"
       onClick={onCancel}
      >
-      {matchmakingConfirmCancelButton}
+      {cancelText}
      </Button>
     </Box>
    </Box>

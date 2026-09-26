@@ -6,9 +6,7 @@ import CustomLabel from "@/components/base/Label/Label";
 import CustomSelect from "@/components/base/Select/Select";
 import Button from "@/components/base/Button/Button";
 import { callAPIInterface, showApiErrorToast } from "@/utils";
-import { useReduxDispatch } from "@/redux/hooks";
 import sessionService from "@gopvp/common/src/util/sessionService";
-import { showToast } from "@/redux/common/slice";
 import { COUNTRY_OPTIONS } from "@/constants/config";
 import type {
     ILoginResponse,
@@ -17,27 +15,22 @@ import type {
 } from "@/types/utils";
 import type { ISelectCountryScreenProps } from "@/types/components";
 import {
-    selectCountryTitle,
-    selectCountrySubtitle,
-    selectCountryContinueButton,
-    selectCountrySetFailed,
-    authValidationCountryRequired,
-    authRegisterCountryLabel,
-    countrySelectSelectPlaceholder,
-    countrySelectSearchPlaceholder,
- selectCountrySetSuccess,
+ selectYourCountryText,
+ continueText,
+ countryRequiredText,
+ countryText,
+ selectCountryText,
+ searchCountryText,
 } from "@/constants/messages";
 
 const schema = yup.object({
-    country: yup.string().required(authValidationCountryRequired),
+    country: yup.string().required(countryRequiredText),
 });
 
 export default function SelectCountryScreen({
     showHeading = true,
     onSelected,
 }: ISelectCountryScreenProps) {
-    const dispatch = useReduxDispatch();
-
     const formik = useFormik({
         initialValues: { country: "" },
         validationSchema: schema,
@@ -48,16 +41,9 @@ export default function SelectCountryScreen({
                     IUpdateProfileResponse
                 >("PUT", "/profile", { country: values.country });
                 await sessionService.updateSession<ILoginResponse>(updated);
-                dispatch(
-                    showToast({
-                        isToastOpen: true,
-                        toastMessage: selectCountrySetSuccess,
-                        toastVariant: "success",
-                    }),
-                );
                 onSelected?.();
             } catch (err) {
-                showApiErrorToast(err, selectCountrySetFailed);
+                showApiErrorToast(err);
             } finally {
                 setSubmitting(false);
             }
@@ -73,16 +59,13 @@ export default function SelectCountryScreen({
             {showHeading && (
                 <Box customClass="auth-heading">
                     <Text component="h1" customClass="auth-title">
-                        {selectCountryTitle}
-                    </Text>
-                    <Text component="p" customClass="page-subtitle">
-                        {selectCountrySubtitle}
+                        {selectYourCountryText}
                     </Text>
                 </Box>
             )}
 
             <Box customClass="form-field">
-                <CustomLabel htmlFor="country">{authRegisterCountryLabel}</CustomLabel>
+                <CustomLabel htmlFor="country">{countryText}</CustomLabel>
                 <CustomSelect
                     value={formik.values.country}
                     onChange={(v) => {
@@ -93,8 +76,8 @@ export default function SelectCountryScreen({
                     options={COUNTRY_OPTIONS}
                     searchable
                     disabled={formik.isSubmitting}
-                    placeholder={countrySelectSelectPlaceholder}
-                    searchPlaceholder={countrySelectSearchPlaceholder}
+                    placeholder={selectCountryText}
+                    searchPlaceholder={searchCountryText}
                     isError={formik.touched.country && !!formik.errors.country}
                     helperText={formik.errors.country}
                 />
@@ -108,7 +91,7 @@ export default function SelectCountryScreen({
                 disabled={formik.isSubmitting}
                 isLoading={formik.isSubmitting}
             >
-                {selectCountryContinueButton}
+                {continueText}
             </Button>
         </Box>
     );

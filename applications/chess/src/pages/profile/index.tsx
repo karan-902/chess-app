@@ -11,7 +11,6 @@ import CustomSwitch from "@/components/base/Switch/Switch";
 import ProfileSkeleton from "@/components/common/ProfileSkeleton";
 import { useReduxSelector, useReduxDispatch } from "@/redux/hooks";
 import sessionService from "@gopvp/common/src/util/sessionService";
-import { showToast } from "@/redux/common/slice";
 import { useAppTheme } from "@/context/ThemeContext";
 import { callAPIInterface, shortenUsername, showApiErrorToast } from "@/utils";
 import type {
@@ -21,28 +20,26 @@ import type {
 } from "@/types/utils";
 import type { IEditProfileDrawerProps } from "@/types/components";
 import {
- profileEditButton,
- profileRatingsByCategoryLabel,
- profileValidationUsernameRequired,
- profileValidationUsernameMinLength,
- authValidationUsernameMaxLength,
+ editProfileText,
+ ratingsText,
+ usernameRequiredText,
+ usernameMinLengthText,
+ usernameMaxLengthText,
  USERNAME_MAX_LENGTH,
- profileUpdateSuccess,
- profileUpdateFailed,
- profileUsernameLabel,
- profileSaveChangesButton,
- profileAppearanceLabel,
- profileDarkModeLabel,
- profileLoadFailed,
+ usernameText,
+ saveChangesText,
+ appearanceText,
+ darkModeText,
+ noDataFoundText,
 } from "@/constants/messages";
 import CustomModal from "@/components/base/Modal/Modal";
 
 const profileEditSchema = Yup.object({
  username: Yup.string()
   .trim()
-  .min(3, profileValidationUsernameMinLength)
-  .max(USERNAME_MAX_LENGTH, authValidationUsernameMaxLength)
-  .required(profileValidationUsernameRequired),
+  .min(3, usernameMinLengthText)
+  .max(USERNAME_MAX_LENGTH, usernameMaxLengthText)
+  .required(usernameRequiredText),
 });
 
 function EditProfileDrawer({
@@ -50,7 +47,6 @@ function EditProfileDrawer({
  onClose,
  session,
 }: IEditProfileDrawerProps) {
- const dispatch = useReduxDispatch();
  const usernameInputRef = useRef<HTMLInputElement>(null);
 
  useEffect(() => {
@@ -71,16 +67,9 @@ function EditProfileDrawer({
      IUpdateProfileResponse
     >("PUT", "/profile", values);
     await sessionService.updateSession<ILoginResponse>(updated);
-    dispatch(
-     showToast({
-      isToastOpen: true,
-      toastMessage: profileUpdateSuccess,
-      toastVariant: "success",
-     }),
-    );
     onClose();
    } catch (err) {
-    showApiErrorToast(err, profileUpdateFailed);
+    showApiErrorToast(err);
    } finally {
     setSubmitting(false);
    }
@@ -94,7 +83,7 @@ function EditProfileDrawer({
 
  return (
   <CustomModal open={open} onClose={handleClose}>
-   <Text customClass="sheet-title dialog-title">{profileEditButton}</Text>
+   <Text customClass="sheet-title dialog-title">{editProfileText}</Text>
 
    <Box
     component="form"
@@ -103,7 +92,7 @@ function EditProfileDrawer({
    >
     <Input
      id="username"
-     label={profileUsernameLabel}
+     label={usernameText}
      ref={usernameInputRef}
      fullWidth
      isError={!!(formik.touched.username && formik.errors.username)}
@@ -120,7 +109,7 @@ function EditProfileDrawer({
      disabled={!formik.dirty || formik.isSubmitting}
      customClass="profile-save-btn"
     >
-     {profileSaveChangesButton}
+     {saveChangesText}
     </Button>
    </Box>
   </CustomModal>
@@ -144,7 +133,7 @@ export default function Profile() {
      ),
     );
    } catch (err) {
-    showApiErrorToast(err, profileLoadFailed);
+    showApiErrorToast(err, noDataFoundText);
    } finally {
     setLoading(false);
    }
@@ -161,8 +150,8 @@ export default function Profile() {
      type="button"
      variant="outlined"
      customClass="profile-edit-icon-btn"
-     title={profileEditButton}
-     aria-label={profileEditButton}
+     title={editProfileText}
+     aria-label={editProfileText}
      onClick={() => setEditOpen(true)}
     >
      <Pencil size={12} strokeWidth={2} />
@@ -192,19 +181,19 @@ export default function Profile() {
    </Card>
 
    <Text component="h3" customClass="subsection-heading section-heading">
-    {profileAppearanceLabel}
+    {appearanceText}
    </Text>
    <Card customClass="stat-list">
     <Box customClass="stat-row">
      <Text customClass="stat-title" component="span">
-      {profileDarkModeLabel}
+      {darkModeText}
      </Text>
      <CustomSwitch checked={mode === "dark"} onChange={toggleTheme} />
     </Box>
    </Card>
 
    <Text component="h3" customClass="subsection-heading section-heading">
-    {profileRatingsByCategoryLabel}
+    {ratingsText}
    </Text>
    <Card customClass="stat-list"></Card>
 

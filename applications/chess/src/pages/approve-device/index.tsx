@@ -8,14 +8,14 @@ import { callAPIInterface } from "@/utils";
 import { useLogout } from "@/hooks/useLogout";
 import type { ApproveDeviceStatus } from "@/types/components";
 import {
-    authBackToSignIn,
-    deviceApprovePageTitle,
-    deviceApprovePageDescription,
-    deviceApproveButton,
-    deviceApprovedTitle,
-    deviceApprovedDescription,
-    deviceApproveInvalidTitle,
-    deviceApproveInvalidDescription,
+ backToSignInText,
+ approveSignInText,
+ newDeviceSignInAttemptText,
+ yesThisWasMeText,
+ deviceApprovedText,
+ returnToOtherDeviceText,
+ linkExpiredText,
+ approvalLinkInvalidText,
 } from "@/constants/messages";
 
 export default function ApproveDevice() {
@@ -50,11 +50,11 @@ export default function ApproveDevice() {
     if (status === "approved") {
         return (
             <AuthLayout
-                title={deviceApprovedTitle}
-                subtitle={deviceApprovedDescription}
+                title={deviceApprovedText}
+                subtitle={returnToOtherDeviceText}
                 footer={
                     <a href="/login" onClick={handleBackToSignIn}>
-                        {authBackToSignIn}
+                        {backToSignInText}
                     </a>
                 }
             >
@@ -68,11 +68,11 @@ export default function ApproveDevice() {
     if (status === "invalid") {
         return (
             <AuthLayout
-                title={deviceApproveInvalidTitle}
-                subtitle={deviceApproveInvalidDescription}
+                title={linkExpiredText}
+                subtitle={approvalLinkInvalidText}
                 footer={
                     <a href="/login" onClick={handleBackToSignIn}>
-                        {authBackToSignIn}
+                        {backToSignInText}
                     </a>
                 }
             >
@@ -83,8 +83,8 @@ export default function ApproveDevice() {
 
     return (
         <AuthLayout
-            title={deviceApprovePageTitle}
-            subtitle={deviceApprovePageDescription}
+            title={approveSignInText}
+            subtitle={newDeviceSignInAttemptText}
         >
             <Button
                 type="button"
@@ -95,7 +95,7 @@ export default function ApproveDevice() {
                 isLoading={submitting}
                 onClick={handleApprove}
             >
-                {deviceApproveButton}
+                {yesThisWasMeText}
             </Button>
         </AuthLayout>
     );

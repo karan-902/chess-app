@@ -17,25 +17,25 @@ import { formatAmount } from "@/utils/format";
 import type { IInitiateDepositResponse } from "@/types/utils";
 import type { ITransactionCompletedEvent } from "@/types/types";
 import {
- depositModalTitle,
- depositModalDepositingTitle,
- depositModalTagline,
- depositModalSpeedBadge,
- amountInputLabel,
- depositModalGenerateButton,
- depositModalAmountRequired,
- depositModalMinAmountError,
- depositModalMaxAmountError,
- depositModalGenerateFailed,
- depositModalBtcOnlyWarning,
- depositModalScanHint,
- depositModalCopyButton,
- depositModalCopied,
- depositModalExpiresIn,
- depositModalExpired,
- depositModalPaymentReceived,
- authLoginBack,
- walletWithdrawableCaveat,
+ depositText,
+ depositingAmountText,
+ fastSecuredTransparentText,
+ buyCryptoInstantlyText,
+ enterAmountText,
+ generateQrCodeText,
+ amountRequiredText,
+ minDepositAmountText,
+ maxDepositAmountText,
+ generateQrFailedText,
+ btcOnlyWarningText,
+ scanToDepositText,
+ copyText,
+ copiedText,
+ expiresInText,
+ qrExpiredText,
+ paymentReceivedText,
+ backText,
+ depositsNotWithdrawableText,
  MAX_AMOUNT_DIGITS,
  MIN_TRANSACTION_USD,
  MAX_DEPOSIT_USD,
@@ -118,15 +118,15 @@ export default function DepositModal() {
 
  const handleGenerate = async () => {
   if (!amount) {
-   setAmountError(depositModalAmountRequired);
+   setAmountError(amountRequiredText);
    return;
   }
   if (amountUsd < MIN_TRANSACTION_USD) {
-   setAmountError(depositModalMinAmountError(MIN_TRANSACTION_USD));
+   setAmountError(minDepositAmountText(MIN_TRANSACTION_USD));
    return;
   }
   if (amountUsd > MAX_DEPOSIT_USD) {
-   setAmountError(depositModalMaxAmountError(MAX_DEPOSIT_USD));
+   setAmountError(maxDepositAmountText(MAX_DEPOSIT_USD));
    return;
   }
   setAmountError("");
@@ -138,7 +138,7 @@ export default function DepositModal() {
    setExpired(false);
    setStage("qr");
   } catch (err: any) {
-   setAmountError(err?.response?.data?.message ?? depositModalGenerateFailed);
+   setAmountError(err?.response?.data?.message ?? generateQrFailedText);
   } finally {
    setSubmitting(false);
   }
@@ -172,11 +172,11 @@ export default function DepositModal() {
 
    {ready && stage === "amount" && (
     <Box customClass="wallet-modal-layout">
-     <Text customClass="modal-heading value-heading">{depositModalTitle}</Text>
+     <Text customClass="modal-heading value-heading">{depositText}</Text>
      <Box customClass="modal-info-box">
       <Info size={16} strokeWidth={2} />
       <Text customClass="modal-info-text caption">
-       {walletWithdrawableCaveat}
+       {depositsNotWithdrawableText}
       </Text>
      </Box>
 
@@ -185,7 +185,7 @@ export default function DepositModal() {
        id="deposit-amount"
        type="text"
        inputMode="numeric"
-       label={amountInputLabel}
+       label={enterAmountText}
        labelClassName="deposit-label"
        slotProps={{
         input: { maxLength: MAX_AMOUNT_DIGITS },
@@ -209,10 +209,10 @@ export default function DepositModal() {
      </Box>
      <Box customClass="deposit-speed-wrapper">
       <Box customClass="deposit-speed-badge">
-       <Text component="span">{depositModalSpeedBadge}</Text>
+       <Text component="span">{buyCryptoInstantlyText}</Text>
        <img src={speedLogo} alt="Speed" className="deposit-speed-logo" />
       </Box>
-      <Text customClass="deposit-tagline meta-text">{depositModalTagline}</Text>
+      <Text customClass="deposit-tagline meta-text">{fastSecuredTransparentText}</Text>
      </Box>
 
      <Button
@@ -224,7 +224,7 @@ export default function DepositModal() {
       isLoading={submitting}
       disabled={isAmountInvalid}
      >
-      {depositModalGenerateButton}
+      {generateQrCodeText}
      </Button>
     </Box>
    )}
@@ -235,22 +235,22 @@ export default function DepositModal() {
       <CustomIconButton
        customClass="deposit-qr-back-btn"
        onClick={() => setStage("amount")}
-       aria-label={authLoginBack}
+       aria-label={backText}
        icon="arrowLeft"
       />
       <Text customClass="modal-heading value-heading">
-       {depositModalDepositingTitle(amountUsd)}
+       {depositingAmountText(amountUsd)}
       </Text>
      </Box>
 
      <Box customClass="modal-info-box">
       <Info size={16} strokeWidth={2} />
       <Text customClass="modal-info-text caption">
-       {depositModalBtcOnlyWarning}
+       {btcOnlyWarningText}
       </Text>
      </Box>
 
-     <Text customClass="deposit-scan-hint caption">{depositModalScanHint}</Text>
+     <Text customClass="deposit-scan-hint caption">{scanToDepositText}</Text>
 
      <Box customClass="deposit-qr-wrap">
       <QRCodeSVG
@@ -277,7 +277,7 @@ export default function DepositModal() {
        startIcon={copied ? "check" : "copy"}
        onClick={handleCopy}
       >
-       {copied ? depositModalCopied : depositModalCopyButton}
+       {copied ? copiedText : copyText}
       </Button>
      </Box>
 
@@ -285,8 +285,8 @@ export default function DepositModal() {
       customClass={classNames("deposit-timer", "caption", expired && "expired")}
      >
       {expired
-       ? depositModalExpired
-       : depositModalExpiresIn(formatCountdown(remainingMs))}
+       ? qrExpiredText
+       : expiresInText(formatCountdown(remainingMs))}
      </Text>
     </Box>
    )}
@@ -300,7 +300,7 @@ export default function DepositModal() {
       {" "}
       <Text customClass="modal-success-amount">{formatAmount(amountUsd)}</Text>
       <Text customClass="modal-heading value-heading">
-       {depositModalPaymentReceived}
+       {paymentReceivedText}
       </Text>
      </Box>
     </Box>

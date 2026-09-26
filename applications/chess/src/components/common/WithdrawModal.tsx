@@ -16,18 +16,18 @@ import { useModalReady } from "@/hooks/useModalReady";
 import { formatAmount } from "@/utils/format";
 import { showApiErrorToast } from "@/utils";
 import {
- withdrawModalTitle,
- withdrawModalWithdrawableCaveat,
- withdrawModalDestinationLabel,
- withdrawModalDestinationPlaceholder,
- withdrawModalSubmitButton,
- withdrawModalInvalidAmount,
- withdrawModalMinAmountError,
- withdrawModalExceedsBalance,
- withdrawModalInvalidDestination,
- withdrawModalFailed,
- withdrawModalSuccessTitle,
- amountInputLabel,
+ withdrawText,
+ onlyWinningsWithdrawableText,
+ destinationText,
+ btcAddressOrInvoiceText,
+ requestWithdrawalText,
+ enterValidAmountText,
+ minWithdrawalAmountText,
+ insufficientWithdrawableText,
+ enterDestinationText,
+ withdrawalFailedText,
+ withdrawalCompletedText,
+ enterAmountText,
  MIN_TRANSACTION_USD,
 } from "@/constants/messages";
 import CustomModal from "@/components/base/Modal/Modal";
@@ -78,11 +78,11 @@ export default function WithdrawModal() {
  const amountError = submitting
   ? undefined
   : exceedsBalance
-    ? withdrawModalExceedsBalance
+    ? insufficientWithdrawableText
     : isZeroAmount
-      ? withdrawModalInvalidAmount
+      ? enterValidAmountText
       : isBelowMin
-        ? withdrawModalMinAmountError(MIN_TRANSACTION_USD)
+        ? minWithdrawalAmountText(MIN_TRANSACTION_USD)
         : undefined;
  const canSubmit =
   hasWithdrawable && amount !== "" && !amountError && destination.trim() !== "";
@@ -101,7 +101,7 @@ export default function WithdrawModal() {
    dispatch(
     showToast({
      isToastOpen: true,
-     toastMessage: withdrawModalInvalidDestination,
+     toastMessage: enterDestinationText,
      toastVariant: "error",
     }),
    );
@@ -115,12 +115,12 @@ export default function WithdrawModal() {
    dispatch(
     showToast({
      isToastOpen: true,
-     toastMessage: withdrawModalSuccessTitle,
+     toastMessage: withdrawalCompletedText,
      toastVariant: "success",
     }),
    );
   } catch (err) {
-   showApiErrorToast(err, withdrawModalFailed);
+   showApiErrorToast(err, withdrawalFailedText);
   } finally {
    setSubmitting(false);
   }
@@ -145,11 +145,11 @@ export default function WithdrawModal() {
 
    {ready && stage === "amount" && (
     <Box customClass="wallet-modal-layout">
-     <Text customClass="modal-heading value-heading">{withdrawModalTitle}</Text>
+     <Text customClass="modal-heading value-heading">{withdrawText}</Text>
      <Box customClass="modal-info-box">
       <InfoIcon sx={{ fontSize: 16 }} />
       <Text customClass="modal-info-text caption">
-       {withdrawModalWithdrawableCaveat}
+       {onlyWinningsWithdrawableText}
       </Text>
      </Box>
 
@@ -158,7 +158,7 @@ export default function WithdrawModal() {
        id="withdraw-amount"
        type="text"
        inputMode="decimal"
-       label={amountInputLabel}
+       label={enterAmountText}
        slotProps={{
         input: { maxLength: MAX_AMOUNT_DIGITS },
        }}
@@ -176,10 +176,10 @@ export default function WithdrawModal() {
      <Input
       id="withdraw-destination"
       type="text"
-      label={withdrawModalDestinationLabel}
+      label={destinationText}
       fullWidth
       customClass="wallet-input"
-      placeholder={withdrawModalDestinationPlaceholder}
+      placeholder={btcAddressOrInvoiceText}
       value={destination}
       onChange={(e) => setDestination(e.target.value)}
       disabled={submitting || !hasWithdrawable}
@@ -194,7 +194,7 @@ export default function WithdrawModal() {
       isLoading={submitting}
       disabled={!canSubmit || submitting}
      >
-      {withdrawModalSubmitButton}
+      {requestWithdrawalText}
      </Button>
     </Box>
    )}
@@ -207,7 +207,7 @@ export default function WithdrawModal() {
      <Box customClass="deposit-sucess-amountWrapper">
       <Text customClass="modal-success-amount">{formatAmount(amountUsd)}</Text>
       <Text customClass="modal-heading value-heading">
-       {withdrawModalSuccessTitle}
+       {withdrawalCompletedText}
       </Text>
      </Box>
     </Box>

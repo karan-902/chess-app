@@ -1,6 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { callAPIInterface, showApiErrorToast } from "@/utils";
-import { walletBalanceLoadFailed } from "@/constants/messages";
+import {
+ noDataFoundText,
+} from "@/constants/messages";
 import { throwThunkError } from "@/redux/createAppThunk";
 import { setWalletBalance, setWalletLoading } from "@/redux/wallet/slice";
 import type { IWalletBalanceResponse } from "@/types/utils";
@@ -18,7 +20,7 @@ export const fetchWalletBalance = createAsyncThunk(
    return res;
   } catch (err) {
    dispatch(setWalletLoading(false));
-   showApiErrorToast(err, walletBalanceLoadFailed);
+   showApiErrorToast(err, noDataFoundText);
    return rejectWithValue(throwThunkError(err));
   }
  },
