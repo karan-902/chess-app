@@ -4,7 +4,7 @@ import { CheckCircleOutlineIcon } from "@gopvp/common/src/components/images";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Button from "@gopvp/common/src/components/Button/Button";
 import AuthLayout from "@/container/AuthLayout";
-import { callAPIInterface } from "@/utils";
+import { callAPIInterface } from "@gopvp/common/src/util/api";
 import { useLogout } from "@/hooks/useLogout";
 import type { ApproveDeviceStatus } from "@gopvp/common/src/types/component";
 import {

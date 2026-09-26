@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { callAPIInterface, showApiErrorToast } from "@/utils";
+import {
+ callAPIInterface,
+ showApiErrorToast,
+} from "@gopvp/common/src/util/api";
 import type {
  IListResponse,
  IMatchHistoryItem,

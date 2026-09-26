@@ -8,7 +8,7 @@ import {
     callAPIInterface,
     showAckErrorToast,
     showApiErrorToast,
-} from "@/utils";
+} from "@gopvp/common/src/util/api";
 import { drawOfferDeclinedText } from "@/constants/messages";
 import type {
     IDrawOfferEvent,

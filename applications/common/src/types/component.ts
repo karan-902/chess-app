@@ -5,6 +5,12 @@ export type LoginStep = "email" | "password" | "country"; // | "waiting-approval
 export type ApproveDeviceStatus = "confirm" | "approved" | "invalid";
 export type MatchesSubtab = "history" | "global" | "stats";
 export type RoomTab = "create" | "join";
+export type ToastSeverity = "error" | "warning" | "info" | "success";
+
+export interface IToast {
+ toastMessage: string;
+ toastVariant: ToastSeverity;
+}
 
 export interface IEmailValues {
  email: string;

@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getSocket } from "@/lib/socket";
+import { getSocket } from "@gopvp/common/src/util/socket";
 import { setMatchState } from "@/redux/match/slice";
 import type { RootState } from "@/redux/store";
 import type { IGameStateResponse } from "@/types/response";

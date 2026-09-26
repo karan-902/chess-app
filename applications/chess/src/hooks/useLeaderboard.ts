@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { callAPIInterface, showApiErrorToast } from "@/utils";
+import {
+    callAPIInterface,
+    showApiErrorToast,
+} from "@gopvp/common/src/util/api";
 import { useGame } from "@/hooks/useGame";
 import type { LeaderboardScope, LeaderboardSort } from "@gopvp/common/src/types/index";
 import type { ILeaderboardBody } from "@gopvp/common/src/types/payload";

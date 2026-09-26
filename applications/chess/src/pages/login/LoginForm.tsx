@@ -13,7 +13,7 @@ import AuthLayout from "@/container/AuthLayout";
 import { useGoogleAuth } from "@/hooks/useGoogleAuth";
 // import { useDeviceApprovalPoll } from "@/hooks/useDeviceApprovalPoll";
 import SelectCountryScreen from "@/pages/select-country/SelectCountryScreen";
-import { callAPIInterface } from "@/utils";
+import { callAPIInterface } from "@gopvp/common/src/util/api";
 import { useReduxDispatch } from "@/redux/hooks";
 import { login } from "@/redux/auth/thunk";
 import { showLoader, hideLoader } from "@/redux/common/slice";

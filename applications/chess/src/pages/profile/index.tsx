@@ -12,7 +12,11 @@ import ProfileSkeleton from "@/components/common/ProfileSkeleton";
 import { useReduxSelector, useReduxDispatch } from "@/redux/hooks";
 import sessionService from "@gopvp/common/src/util/sessionService";
 import { useAppTheme } from "@/context/ThemeContext";
-import { callAPIInterface, shortenUsername, showApiErrorToast } from "@/utils";
+import {
+ callAPIInterface,
+ showApiErrorToast,
+} from "@gopvp/common/src/util/api";
+import { shortenUsername } from "@gopvp/common/src/util/format";
 import type { IUpdateProfileBody } from "@gopvp/common/src/types/payload";
 import type {
  ILoginResponse,

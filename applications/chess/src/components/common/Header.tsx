@@ -14,8 +14,8 @@ import { CustomTabs, CustomTab } from "@gopvp/common/src/components/Tabs/Tabs";
 import { useWalletBalance } from "@/hooks/useWallet";
 import { useLogout } from "@/hooks/useLogout";
 import { useReduxSelector } from "@/redux/hooks";
-import { formatAmount } from "@/utils/format";
-import { getGameFromPath, getGameRoutes, shortenUsername } from "@/utils";
+import { formatAmount, shortenUsername } from "@gopvp/common/src/util/format";
+import { getGameFromPath, getGameRoutes } from "@/utils";
 import { NAV_ITEMS } from "@/constants/config";
 import {
  profileText,

@@ -11,7 +11,7 @@ import TxItemSkeleton from "@/components/common/TxItemSkeleton";
 import { useWallet } from "@/hooks/useWallet";
 import { useWalletActionModal } from "@/context/WalletActionModalContext";
 import { speedLogo } from "@gopvp/common/src/components/images";
-import { formatAmount, formatTime } from "@/utils/format";
+import { formatAmount, formatTime } from "@gopvp/common/src/util/format";
 import {
  TRANSACTION_TYPE_ICONS,
  TRANSACTION_TYPE_DESCRIPTIONS,

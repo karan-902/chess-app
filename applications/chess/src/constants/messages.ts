@@ -241,7 +241,6 @@ export const searchCountryText = "Search country…";
 export const selectCountryText = "Select country";
 export const walletText = "Wallet";
 export const logOutText = "Log Out";
-export const somethingWentWrongText = "Something went wrong. Please try later.";
 export const noDataFoundText = "No Data Found";
 export const MIN_TRANSACTION_USD = 1;
 export const MAX_DEPOSIT_USD = 99;

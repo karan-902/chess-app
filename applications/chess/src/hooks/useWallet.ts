@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { callAPIInterface, showApiErrorToast } from "@/utils";
+import {
+ callAPIInterface,
+ showApiErrorToast,
+} from "@gopvp/common/src/util/api";
 import { useSocket } from "@/context/SocketContext";
 import { useReduxDispatch, useReduxSelector } from "@/redux/hooks";
 import { fetchWalletBalance } from "@/redux/wallet/thunk";

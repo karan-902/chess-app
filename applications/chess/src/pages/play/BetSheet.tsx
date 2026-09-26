@@ -5,8 +5,8 @@ import Button from "@gopvp/common/src/components/Button/Button";
 import Card from "@gopvp/common/src/components/Card/Card";
 import CustomModal from "@gopvp/common/src/components/Modal/Modal";
 import PoolCardSkeleton from "@/components/common/PoolCardSkeleton";
+import { formatText } from "@gopvp/common/src/util/format";
 import { deriveCategory, msToSeconds } from "@/utils";
-import { formatText } from "@/utils/format";
 import { CATEGORY_META } from "@/constants/config";
 import type { IBetSheetProps } from "@gopvp/common/src/types/component";
 import {

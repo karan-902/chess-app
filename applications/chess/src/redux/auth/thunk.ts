@@ -1,5 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { callAPIInterface, getDeviceFingerprint } from "@/utils";
+import {
+    callAPIInterface,
+    getDeviceFingerprint,
+} from "@gopvp/common/src/util/api";
 import type { ILoginBody, IGoogleLoginBody } from "@gopvp/common/src/types/payload";
 import type { ILoginResponse } from "@gopvp/common/src/types/response";
 import { throwThunkError } from "@/redux/createAppThunk";

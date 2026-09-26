@@ -13,8 +13,8 @@ import { useWalletActionModal } from "@/context/WalletActionModalContext";
 import { useWalletBalance } from "@/hooks/useWallet";
 import { withdrawRequest } from "@/hooks/useWallet";
 import { useModalReady } from "@/hooks/useModalReady";
-import { formatAmount } from "@/utils/format";
-import { showApiErrorToast } from "@/utils";
+import { showApiErrorToast } from "@gopvp/common/src/util/api";
+import { formatAmount } from "@gopvp/common/src/util/format";
 import {
  withdrawText,
  onlyWinningsWithdrawableText,

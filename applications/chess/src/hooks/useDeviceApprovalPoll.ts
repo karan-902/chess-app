@@ -1,6 +1,9 @@
 import { useEffect, useRef } from "react";
 import { io, type Socket } from "socket.io-client";
-import { callAPIInterface, showApiErrorToast } from "@/utils";
+import {
+    callAPIInterface,
+    showApiErrorToast,
+} from "@gopvp/common/src/util/api";
 import sessionService from "@gopvp/common/src/util/sessionService";
 import { socketUrl } from "@gopvp/common/src/constants/env";
 import type { ILoginResponse } from "@gopvp/common/src/types/response";

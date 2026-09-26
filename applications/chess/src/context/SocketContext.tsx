@@ -8,12 +8,13 @@ import {
 } from "react";
 
 import type { Socket } from "socket.io-client";
-import { connectSocket, disconnectSocket } from "@/lib/socket";
+import { connectSocket, disconnectSocket } from "@gopvp/common/src/util/socket";
 import { useReduxSelector, useReduxDispatch } from "@/redux/hooks";
 import { store } from "@/redux/store";
 import { setActiveGame } from "@/redux/socketModals/slice";
 import { loadMatchState } from "@/redux/match/thunk";
-import { generateToken, isGamePlayPath } from "@/utils";
+import { generateToken } from "@gopvp/common/src/util/api";
+import { isGamePlayPath } from "@/utils";
 import sessionService from "@gopvp/common/src/util/sessionService";
 import { router } from "@/routes/router";
 import { navigateTo } from "@gopvp/common/src/util/navigationService";

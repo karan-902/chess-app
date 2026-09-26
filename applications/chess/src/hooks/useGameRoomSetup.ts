@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { GameMode } from "@/types/component";
-import { oppositeSide, shortenUsername } from "@/utils";
+import { shortenUsername } from "@gopvp/common/src/util/format";
+import { oppositeSide } from "@/utils";
 import { isGameFinished } from "@/utils/storage";
 import { useReduxSelector } from "@/redux/hooks";
 

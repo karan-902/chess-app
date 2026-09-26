@@ -11,8 +11,7 @@ import VirtualList from "@gopvp/common/src/components/VirtualList/VirtualList";
 import LeaderboardPlayerModal from "@/pages/leaderboard/LeaderboardPlayerModal";
 import { useLeaderboard } from "@/hooks/useLeaderboard";
 import { useReduxSelector } from "@/redux/hooks";
-import { formatAmount } from "@/utils/format";
-import { shortenUsername } from "@/utils";
+import { formatAmount, shortenUsername } from "@gopvp/common/src/util/format";
 import {
     LEADERBOARD_SCOPES,
     LEADERBOARD_SCOPE_LABELS,

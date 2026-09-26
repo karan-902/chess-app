@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
-import { callAPIInterface, showApiErrorToast } from "@/utils";
+import {
+    callAPIInterface,
+    showApiErrorToast,
+} from "@gopvp/common/src/util/api";
 import { useGame } from "@/hooks/useGame";
 import type { IPoolResponse } from "@gopvp/common/src/types/response";
 

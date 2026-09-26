@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { callAPIInterface, LOGOUT_PATH } from "@/utils";
+import { callAPIInterface, LOGOUT_PATH } from "@gopvp/common/src/util/api";
 import sessionService from "@gopvp/common/src/util/sessionService";
 import { useReduxSelector, useReduxDispatch } from "@/redux/hooks";
 import { showLoader, hideLoader } from "@/redux/common/slice";

@@ -13,7 +13,7 @@ import { useWalletActionModal } from "@/context/WalletActionModalContext";
 import { useSocket } from "@/context/SocketContext";
 import { paymentRequest } from "@/hooks/useWallet";
 import { useModalReady } from "@/hooks/useModalReady";
-import { formatAmount } from "@/utils/format";
+import { formatAmount } from "@gopvp/common/src/util/format";
 import type {
  IPaymentRequestResponse,
  ITransactionCompletedEvent,

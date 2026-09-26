@@ -5,8 +5,11 @@ import Text from "@gopvp/common/src/components/Text/Text";
 import Card from "@gopvp/common/src/components/Card/Card";
 import StatRowSkeleton from "@/components/common/StatRowSkeleton";
 import { useGame } from "@/hooks/useGame";
-import { callAPIInterface, showApiErrorToast, shortenUsername } from "@/utils";
-import { formatAmount } from "@/utils/format";
+import {
+ callAPIInterface,
+ showApiErrorToast,
+} from "@gopvp/common/src/util/api";
+import { shortenUsername, formatAmount } from "@gopvp/common/src/util/format";
 import {
  scoreText,
  grossIncomeText,

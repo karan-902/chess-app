@@ -13,12 +13,11 @@ import Button from "@gopvp/common/src/components/Button/Button";
 import { useGameHistory } from "@/hooks/useGameHistory";
 import { useReduxSelector } from "@/redux/hooks";
 import {
- deriveCategory,
- formatMatchDate,
- msToSeconds,
  shortenUsername,
-} from "@/utils";
-import { formatText } from "@/utils/format";
+ formatText,
+ formatAmount,
+} from "@gopvp/common/src/util/format";
+import { deriveCategory, formatMatchDate, msToSeconds } from "@/utils";
 import {
  CATEGORY_META,
  GAME_END_REASON_LABELS,
@@ -46,7 +45,6 @@ import {
  matchesStatsFallback,
  currentStreakText,
 } from "@/constants/messages";
-import { formatAmount } from "@/utils/format";
 const HISTORY_SKELETON_ROWS = 15;
 const MATCHES_SUBTAB_OPTIONS: MatchesSubtab[] = ["history", "stats", "global"];
 const MATCHES_SUBTAB_LABELS: Record<MatchesSubtab, string> = {

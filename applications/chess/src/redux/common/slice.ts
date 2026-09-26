@@ -1,6 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-
-export type ToastSeverity = "error" | "warning" | "info" | "success";
+import type { ToastSeverity } from "@gopvp/common/src/types/component";
 
 interface ILoaderState {
     open: boolean;

@@ -2,7 +2,7 @@ import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
-import { formatAmount } from "@/utils/format";
+import { formatAmount } from "@gopvp/common/src/util/format";
 import type { IGameOverOverlayProps } from "@/types/component";
 import { settlementText, backText, scoreText } from "@/constants/messages";
 

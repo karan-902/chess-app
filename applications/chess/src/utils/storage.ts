@@ -1,16 +1,8 @@
+import { readStorage, writeStorage } from "@gopvp/common/src/util/storage";
 import type { IPvcSnapshot } from "@/types/component";
 import type { IPvcState } from "@/redux/pvc/slice";
 
-const FINGERPRINT_KEY = "gopvp_fingerprint";
 const PVC_STATE_KEY = "pvc_state";
-
-function readStorage(storage: Storage, key: string): string | null {
- try {
-  return storage.getItem(key);
- } catch {
-  return null;
- }
-}
 
 function readSessionJson<T>(key: string): T | null {
  const raw = readStorage(sessionStorage, key);
@@ -20,18 +12,6 @@ function readSessionJson<T>(key: string): T | null {
   return null;
  }
 }
-
-function writeStorage(storage: Storage, key: string, value: string | null) {
- try {
-  if (value === null) storage.removeItem(key);
-  else storage.setItem(key, value);
- } catch {}
-}
-
-export const getStoredFingerprint = () =>
- readStorage(localStorage, FINGERPRINT_KEY);
-export const setStoredFingerprint = (fingerprint: string) =>
- writeStorage(localStorage, FINGERPRINT_KEY, fingerprint);
 
 export const markGameFinished = (id: string) =>
  writeStorage(sessionStorage, `gr_finished:${id}`, "1");

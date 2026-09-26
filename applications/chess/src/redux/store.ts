@@ -1,8 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
 import localforage from "localforage";
 import sessionService from "@gopvp/common/src/util/sessionService";
+import toastService from "@gopvp/common/src/util/toastService";
 import authReducer, { clearSession, setSession } from "./auth/slice";
-import commonReducer from "./common/slice";
+import commonReducer, { showToast } from "./common/slice";
 import walletReducer from "./wallet/slice";
 import socketModalsReducer from "./socketModals/slice";
 import speedReducer, { hydrateSpeed, type ISpeedState } from "./speed/slice";
@@ -27,6 +28,10 @@ export const store = configureStore({
 
 sessionService.subscribe<ILoginResponse>((session) =>
  store.dispatch(session ? setSession(session) : clearSession()),
+);
+
+toastService.subscribe((toast) =>
+ store.dispatch(showToast({ isToastOpen: true, ...toast })),
 );
 
 const speedStore = localforage.createInstance({ name: "gopvp", storeName: "speed" });

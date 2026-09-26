@@ -1,5 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { callAPIInterface, showApiErrorToast } from "@/utils";
+import {
+    callAPIInterface,
+    showApiErrorToast,
+} from "@gopvp/common/src/util/api";
 import { throwThunkError } from "@/redux/createAppThunk";
 import { finishGameLoad, setGameDetails, startGameLoad } from "@/redux/game/slice";
 import type { IGameResponse } from "@gopvp/common/src/types/response";

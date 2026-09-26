@@ -8,7 +8,7 @@ import Input from "@gopvp/common/src/components/Input/Input";
 import CustomLabel from "@gopvp/common/src/components/Label/Label";
 import OTPInput from "@gopvp/common/src/components/OtpInput/OtpInput";
 import ChipSelect from "@/components/common/ChipSelect";
-import { formatMMSS } from "@/utils";
+import { formatMMSS } from "@gopvp/common/src/util/format";
 import type {
  IDurationWheelProps,
  RoomTab,
