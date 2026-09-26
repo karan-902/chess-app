@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import Text from "./Text";
+import Text from "@gopvp/common/src/components/Text/Text";
 
 const meta: Meta<typeof Text> = {
     title: "Components/Text",

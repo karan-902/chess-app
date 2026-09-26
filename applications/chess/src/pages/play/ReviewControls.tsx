@@ -1,5 +1,5 @@
-import Box from "@/components/base/Box/Box";
-import CustomIconButton from "@/components/base/IconButton/IconButton";
+import Box from "@gopvp/common/src/components/Box/Box";
+import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
 import MoveList from "./MoveList";
 import type { IReviewControlsProps } from "@/types/component";
 import { previousMoveText, nextMoveText } from "@/constants/messages";

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import CustomModal from "@/components/base/Modal/Modal";
-import Box from "@/components/base/Box/Box";
-import Text from "@/components/base/Text/Text";
-import Card from "@/components/base/Card/Card";
+import CustomModal from "@gopvp/common/src/components/Modal/Modal";
+import Box from "@gopvp/common/src/components/Box/Box";
+import Text from "@gopvp/common/src/components/Text/Text";
+import Card from "@gopvp/common/src/components/Card/Card";
 import StatRowSkeleton from "@/components/common/StatRowSkeleton";
 import { useGame } from "@/hooks/useGame";
 import { callAPIInterface, showApiErrorToast, shortenUsername } from "@/utils";

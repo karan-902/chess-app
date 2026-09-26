@@ -4,8 +4,8 @@ import { Button as MuiButton, CircularProgress } from "@mui/material";
 import type { ButtonProps } from "@mui/material";
 import classNames from "classnames";
 import "./button.scss";
-import Text from "../Text/Text";
-import { icons, type TIconName } from "../images";
+import Text from "@gopvp/common/src/components/Text/Text";
+import { icons, type TIconName } from "@gopvp/common/src/components/images";
 
 interface IButtonProps extends Omit<ButtonProps, "startIcon" | "endIcon"> {
  customClass?: string;

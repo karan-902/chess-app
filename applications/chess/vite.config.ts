@@ -19,10 +19,7 @@ const common = path.resolve(__dirname, "../common/src");
 export default defineConfig({
     plugins: [figmaAssetResolver(), react()],
     resolve: {
-        alias: [
-            { find: "@/components/base", replacement: path.join(common, "components") },
-            { find: "@", replacement: path.resolve(__dirname, "./src") },
-        ],
+        alias: [{ find: "@", replacement: path.resolve(__dirname, "./src") }],
     },
 
     css: {

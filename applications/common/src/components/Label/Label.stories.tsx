@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import CustomLabel from "./Label";
+import CustomLabel from "@gopvp/common/src/components/Label/Label";
 
 const meta: Meta<typeof CustomLabel> = {
     title: "Components/CustomLabel",

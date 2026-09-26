@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Check } from "@/components/base/images";
-import Button from "@/components/base/Button/Button";
-import CustomMenu from "@/components/base/Menu/Menu";
-import CustomMenuItem from "@/components/base/MenuItem/MenuItem";
+import { Check } from "@gopvp/common/src/components/images";
+import Button from "@gopvp/common/src/components/Button/Button";
+import CustomMenu from "@gopvp/common/src/components/Menu/Menu";
+import CustomMenuItem from "@gopvp/common/src/components/MenuItem/MenuItem";
 import type { IFilterDropdownProps } from "@gopvp/common/src/types/component";
 
 export default function FilterDropdown<T extends string>({

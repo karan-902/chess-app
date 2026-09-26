@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import classNames from "classnames";
 import { CircularProgress } from "@mui/material";
 import { QRCodeSVG } from "qrcode.react";
-import CustomModal from "@/components/base/Modal/Modal";
-import SuccessCheckmark from "@/components/base/SuccessCheckmark/SuccessCheckmark";
-import Box from "@/components/base/Box/Box";
-import Text from "@/components/base/Text/Text";
-import Button from "@/components/base/Button/Button";
-import Input from "@/components/base/Input/Input";
-import { Info, speedLogo, qrLogo } from "@/components/base/images";
+import CustomModal from "@gopvp/common/src/components/Modal/Modal";
+import SuccessCheckmark from "@gopvp/common/src/components/SuccessCheckmark/SuccessCheckmark";
+import Box from "@gopvp/common/src/components/Box/Box";
+import Text from "@gopvp/common/src/components/Text/Text";
+import Button from "@gopvp/common/src/components/Button/Button";
+import Input from "@gopvp/common/src/components/Input/Input";
+import { Info, speedLogo, qrLogo } from "@gopvp/common/src/components/images";
 import { useWalletActionModal } from "@/context/WalletActionModalContext";
 import { useSocket } from "@/context/SocketContext";
 import { paymentRequest } from "@/hooks/useWallet";
@@ -41,7 +41,7 @@ import {
  MIN_TRANSACTION_USD,
  MAX_DEPOSIT_USD,
 } from "@/constants/messages";
-import CustomIconButton from "@/components/base/IconButton/IconButton";
+import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
 
 type Stage = "amount" | "qr" | "success";
 

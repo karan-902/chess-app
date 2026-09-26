@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
 import classNames from "classnames";
-import Box from "@/components/base/Box/Box";
-import Text from "@/components/base/Text/Text";
-import CustomChip from "@/components/base/Chip/Chip";
+import Box from "@gopvp/common/src/components/Box/Box";
+import Text from "@gopvp/common/src/components/Text/Text";
+import CustomChip from "@gopvp/common/src/components/Chip/Chip";
 import type { IMoveListProps } from "@/types/component";
 
 export default function MoveList({

@@ -18,7 +18,6 @@
         "types": ["node"],
 
         "paths": {
-            "@/components/base/*": ["../common/src/components/*"],
             "@/*": ["./src/*"]
         }
     },

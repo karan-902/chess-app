@@ -1,7 +1,7 @@
 import { Dialog as MuiDialog, DialogTitle } from "@mui/material";
 import type { DialogProps } from "@mui/material";
 import classNames from "classnames";
-import CustomIconButton from "../IconButton/IconButton";
+import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
 import "./modal.scss";
 
 interface IModalProps extends Omit<DialogProps, "title" | "onClose"> {

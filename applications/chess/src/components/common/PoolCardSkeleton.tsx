@@ -1,6 +1,6 @@
-import Card from "@/components/base/Card/Card";
-import Box from "@/components/base/Box/Box";
-import Skeleton from "@/components/base/Skeleton/Skeleton";
+import Card from "@gopvp/common/src/components/Card/Card";
+import Box from "@gopvp/common/src/components/Box/Box";
+import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
 
 export default function PoolCardSkeleton() {
     return (

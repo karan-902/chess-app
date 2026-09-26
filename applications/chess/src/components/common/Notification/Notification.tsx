@@ -4,7 +4,7 @@ import type { TransitionProps } from "@mui/material/transitions";
 import classNames from "classnames";
 import { useReduxDispatch, useReduxSelector } from "@/redux/hooks";
 import { hideToast } from "@/redux/common/slice";
-import AlertMessage from "@/components/base/AlertMessage/AlertMessage";
+import AlertMessage from "@gopvp/common/src/components/AlertMessage/AlertMessage";
 
 const SlideLeft = forwardRef<unknown, TransitionProps & { children: ReactElement }>(
     (props, ref) => (

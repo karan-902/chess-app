@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import CustomIconButton from "./IconButton";
+import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
 
 const meta: Meta<typeof CustomIconButton> = {
     title: "Components/CustomIconButton",

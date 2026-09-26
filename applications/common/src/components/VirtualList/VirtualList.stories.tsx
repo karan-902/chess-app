@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import VirtualList from "./VirtualList";
+import VirtualList from "@gopvp/common/src/components/VirtualList/VirtualList";
 
 const players = Array.from({ length: 50 }, (_, i) => ({ id: `p${i}`, name: `player_${i + 1}` }));
 

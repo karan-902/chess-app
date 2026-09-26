@@ -4,10 +4,10 @@ import {
  Autocomplete,
  TextField,
 } from "@mui/material";
-import { KeyboardArrowDownIcon } from "../images";
+import { KeyboardArrowDownIcon } from "@gopvp/common/src/components/images";
 import classNames from "classnames";
-import Box from "../Box/Box";
-import AlertMessage from "../AlertMessage/AlertMessage";
+import Box from "@gopvp/common/src/components/Box/Box";
+import AlertMessage from "@gopvp/common/src/components/AlertMessage/AlertMessage";
 import "./select.scss";
 
 export interface ISelectOption {

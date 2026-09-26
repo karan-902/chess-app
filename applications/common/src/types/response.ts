@@ -3,7 +3,7 @@ import type {
  SessionState,
  SignupMethod,
  TransactionType,
-} from "./index";
+} from "@gopvp/common/src/types/index";
 
 export type IMessageResponse = {
  message: string;

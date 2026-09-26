@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { Drawer as MuiDrawer } from "@mui/material";
 import classNames from "classnames";
 import "./drawer.scss";
-import CustomIconButton from "../IconButton/IconButton";
+import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
 
 interface IDrawerProps {
  open: boolean;

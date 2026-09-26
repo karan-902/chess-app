@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import OTPInput from "./OtpInput";
+import OTPInput from "@gopvp/common/src/components/OtpInput/OtpInput";
 
 const meta: Meta<typeof OTPInput> = {
     title: "Components/OTPInput",

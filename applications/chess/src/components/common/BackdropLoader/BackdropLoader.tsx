@@ -1,6 +1,6 @@
 import { Backdrop } from "@mui/material";
-import Text from "@/components/base/Text/Text";
-import Card from "@/components/base/Card/Card";
+import Text from "@gopvp/common/src/components/Text/Text";
+import Card from "@gopvp/common/src/components/Card/Card";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { useReduxSelector } from "@/redux/hooks";
 import "./backdrop-loader.scss";

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import CustomAvatar from "./Avatar";
+import CustomAvatar from "@gopvp/common/src/components/Avatar/Avatar";
 
 const meta: Meta<typeof CustomAvatar> = {
     title: "Components/CustomAvatar",

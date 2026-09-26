@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import CustomBadge from "./Badge";
+import CustomBadge from "@gopvp/common/src/components/Badge/Badge";
 
 const meta: Meta<typeof CustomBadge> = {
     title: "Components/CustomBadge",

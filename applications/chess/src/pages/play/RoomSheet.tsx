@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import classNames from "classnames";
-import Box from "@/components/base/Box/Box";
-import Text from "@/components/base/Text/Text";
-import Button from "@/components/base/Button/Button";
-import CustomDrawer from "@/components/base/Drawer/Drawer";
-import Input from "@/components/base/Input/Input";
-import CustomLabel from "@/components/base/Label/Label";
-import OTPInput from "@/components/base/OtpInput/OtpInput";
+import Box from "@gopvp/common/src/components/Box/Box";
+import Text from "@gopvp/common/src/components/Text/Text";
+import Button from "@gopvp/common/src/components/Button/Button";
+import CustomDrawer from "@gopvp/common/src/components/Drawer/Drawer";
+import Input from "@gopvp/common/src/components/Input/Input";
+import CustomLabel from "@gopvp/common/src/components/Label/Label";
+import OTPInput from "@gopvp/common/src/components/OtpInput/OtpInput";
 import ChipSelect from "@/components/common/ChipSelect";
 import { formatMMSS } from "@/utils";
 import type {
@@ -39,7 +39,7 @@ import {
  roomText,
  MAX_AMOUNT_DIGITS,
 } from "@/constants/messages";
-import CustomIconButton from "@/components/base/IconButton/IconButton";
+import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
 
 const ROOM_TABS: RoomTab[] = ["create", "join"];
 const BET_CHIP_AMOUNTS = [10, 25, 50];

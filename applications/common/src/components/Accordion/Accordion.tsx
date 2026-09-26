@@ -4,7 +4,7 @@ import {
     AccordionDetails,
 } from "@mui/material";
 import type { AccordionProps } from "@mui/material";
-import { ChevronDown } from "../images";
+import { ChevronDown } from "@gopvp/common/src/components/images";
 import classNames from "classnames";
 import "./accordion.scss";
 

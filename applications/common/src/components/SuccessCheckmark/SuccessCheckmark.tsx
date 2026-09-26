@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
-import { walletSuccessLottie, walletTickLottie } from "../images";
+import { walletSuccessLottie, walletTickLottie } from "@gopvp/common/src/components/images";
 import "./success-checkmark.scss";
 
 interface ISuccessCheckmarkProps {

@@ -1,6 +1,6 @@
 import { MenuList } from "@mui/material";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import CustomMenuItem from "./MenuItem";
+import CustomMenuItem from "@gopvp/common/src/components/MenuItem/MenuItem";
 
 const meta: Meta<typeof CustomMenuItem> = {
     title: "Components/CustomMenuItem",

@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import classNames from "classnames";
-import { AccountBalanceWalletIcon } from "@/components/base/images";
-import CustomAppBar from "@/components/base/AppBar/AppBar";
-import Box from "@/components/base/Box/Box";
-import Text from "@/components/base/Text/Text";
-import CustomAvatar from "@/components/base/Avatar/Avatar";
-import CustomPopover from "@/components/base/Popover/Popover";
-import Skeleton from "@/components/base/Skeleton/Skeleton";
-import Button from "@/components/base/Button/Button";
-import CustomChip from "@/components/base/Chip/Chip";
-import { CustomTabs, CustomTab } from "@/components/base/Tabs/Tabs";
+import { AccountBalanceWalletIcon } from "@gopvp/common/src/components/images";
+import CustomAppBar from "@gopvp/common/src/components/AppBar/AppBar";
+import Box from "@gopvp/common/src/components/Box/Box";
+import Text from "@gopvp/common/src/components/Text/Text";
+import CustomAvatar from "@gopvp/common/src/components/Avatar/Avatar";
+import CustomPopover from "@gopvp/common/src/components/Popover/Popover";
+import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
+import Button from "@gopvp/common/src/components/Button/Button";
+import CustomChip from "@gopvp/common/src/components/Chip/Chip";
+import { CustomTabs, CustomTab } from "@gopvp/common/src/components/Tabs/Tabs";
 import { useWalletBalance } from "@/hooks/useWallet";
 import { useLogout } from "@/hooks/useLogout";
 import { useReduxSelector } from "@/redux/hooks";
@@ -23,7 +23,7 @@ import {
  walletText,
  backText,
 } from "@/constants/messages";
-import CustomIconButton from "@/components/base/IconButton/IconButton";
+import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
 import { ChessLogo } from "@/components/constants";
 
 export default function Header() {

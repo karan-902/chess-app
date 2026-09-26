@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import CustomAppBar from "./AppBar";
+import CustomAppBar from "@gopvp/common/src/components/AppBar/AppBar";
 
 const meta: Meta<typeof CustomAppBar> = {
     title: "Components/CustomAppBar",

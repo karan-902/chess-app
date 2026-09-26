@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useBlocker, Navigate } from "react-router-dom";
-import Box from "@/components/base/Box/Box";
-import Text from "@/components/base/Text/Text";
+import Box from "@gopvp/common/src/components/Box/Box";
+import Text from "@gopvp/common/src/components/Text/Text";
 import ChessBoard from "@/components/board/Board";
 import PlayerRow from "./PlayerRow";
 import PromotionOverlay from "./PromotionOverlay";
@@ -37,7 +37,7 @@ import {
  defeatText,
  gameOverText,
 } from "@/constants/messages";
-import Button from "@/components/base/Button/Button";
+import Button from "@gopvp/common/src/components/Button/Button";
 import ResignModal from "@/components/common/ResignModal";
 
 function pickBySide<T>(side: "w" | "b", whiteVal: T, blackVal: T): T {

@@ -1,9 +1,9 @@
 import classNames from "classnames";
-import Box from "@/components/base/Box/Box";
-import Text from "@/components/base/Text/Text";
-import Button from "@/components/base/Button/Button";
-import Card from "@/components/base/Card/Card";
-import CustomModal from "@/components/base/Modal/Modal";
+import Box from "@gopvp/common/src/components/Box/Box";
+import Text from "@gopvp/common/src/components/Text/Text";
+import Button from "@gopvp/common/src/components/Button/Button";
+import Card from "@gopvp/common/src/components/Card/Card";
+import CustomModal from "@gopvp/common/src/components/Modal/Modal";
 import PoolCardSkeleton from "@/components/common/PoolCardSkeleton";
 import { deriveCategory, msToSeconds } from "@/utils";
 import { formatText } from "@/utils/format";

@@ -1,16 +1,16 @@
 import { useMemo } from "react";
 import dayjs from "dayjs";
 import classNames from "classnames";
-import Box from "@/components/base/Box/Box";
-import Text from "@/components/base/Text/Text";
-import Button from "@/components/base/Button/Button";
-import Skeleton from "@/components/base/Skeleton/Skeleton";
-import VirtualList from "@/components/base/VirtualList/VirtualList";
+import Box from "@gopvp/common/src/components/Box/Box";
+import Text from "@gopvp/common/src/components/Text/Text";
+import Button from "@gopvp/common/src/components/Button/Button";
+import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
+import VirtualList from "@gopvp/common/src/components/VirtualList/VirtualList";
 import EmptyState from "@/components/common/EmptyState";
 import TxItemSkeleton from "@/components/common/TxItemSkeleton";
 import { useWallet } from "@/hooks/useWallet";
 import { useWalletActionModal } from "@/context/WalletActionModalContext";
-import { speedLogo } from "@/components/base/images";
+import { speedLogo } from "@gopvp/common/src/components/images";
 import { formatAmount, formatTime } from "@/utils/format";
 import {
  TRANSACTION_TYPE_ICONS,

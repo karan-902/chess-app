@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import CustomPopover from "./Popover";
+import CustomPopover from "@gopvp/common/src/components/Popover/Popover";
 
 const meta: Meta<typeof CustomPopover> = {
     title: "Components/CustomPopover",

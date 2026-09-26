@@ -35,7 +35,7 @@ import InfoIcon from "@mui/icons-material/Info";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import PersonIcon from "@mui/icons-material/Person";
 import WarningIcon from "@mui/icons-material/Warning";
-import { imageIconS3Url, lottieBaseUrl } from "../constants/env";
+import { imageIconS3Url, lottieBaseUrl } from "@gopvp/common/src/constants/env";
 
 export type { LucideIcon } from "lucide-react";
 export type { SvgIconComponent } from "@mui/icons-material";

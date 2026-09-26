@@ -2,7 +2,7 @@ import { forwardRef } from "react";
 import { IconButton as MuiIconButton } from "@mui/material";
 import type { IconButtonProps } from "@mui/material";
 import classNames from "classnames";
-import { icons, type TIconName } from "../images";
+import { icons, type TIconName } from "@gopvp/common/src/components/images";
 import "./icon-button.scss";
 
 interface IIconButtonProps extends Omit<IconButtonProps, "children"> {

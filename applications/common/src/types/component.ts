@@ -1,5 +1,5 @@
 import type { FormikProps } from "formik";
-import type { ILoginResponse, IMatchHistoryItem, IPoolResponse } from "./response";
+import type { ILoginResponse, IMatchHistoryItem, IPoolResponse } from "@gopvp/common/src/types/response";
 
 export type LoginStep = "email" | "password" | "country"; // | "waiting-approval"
 export type ApproveDeviceStatus = "confirm" | "approved" | "invalid";

@@ -2,11 +2,11 @@ import { forwardRef, useState } from "react";
 import { InputBase, InputAdornment } from "@mui/material";
 import type { InputBaseProps } from "@mui/material";
 import classNames from "classnames";
-import Box from "../Box/Box";
-import CustomLabel from "../Label/Label";
-import AlertMessage from "../AlertMessage/AlertMessage";
+import Box from "@gopvp/common/src/components/Box/Box";
+import CustomLabel from "@gopvp/common/src/components/Label/Label";
+import AlertMessage from "@gopvp/common/src/components/AlertMessage/AlertMessage";
 import "./input.scss";
-import CustomIconButton from "../IconButton/IconButton";
+import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
 
 interface IInputProps extends InputBaseProps {
  customClass?: string;

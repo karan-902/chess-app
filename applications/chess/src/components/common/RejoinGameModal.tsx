@@ -1,8 +1,8 @@
 import { useState } from "react";
-import CustomModal from "@/components/base/Modal/Modal";
-import Box from "@/components/base/Box/Box";
-import Text from "@/components/base/Text/Text";
-import Button from "@/components/base/Button/Button";
+import CustomModal from "@gopvp/common/src/components/Modal/Modal";
+import Box from "@gopvp/common/src/components/Box/Box";
+import Text from "@gopvp/common/src/components/Text/Text";
+import Button from "@gopvp/common/src/components/Button/Button";
 import { useSocket } from "@/context/SocketContext";
 import { useReduxSelector, useReduxDispatch } from "@/redux/hooks";
 import { setActiveGame } from "@/redux/socketModals/slice";

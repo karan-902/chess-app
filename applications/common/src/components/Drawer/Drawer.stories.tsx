@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import CustomDrawer from "./Drawer";
+import CustomDrawer from "@gopvp/common/src/components/Drawer/Drawer";
 
 const meta: Meta<typeof CustomDrawer> = {
     title: "Components/CustomDrawer",

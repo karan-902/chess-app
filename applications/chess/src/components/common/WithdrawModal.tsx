@@ -3,12 +3,12 @@ import classNames from "classnames";
 import { CircularProgress } from "@mui/material";
 import { useReduxDispatch } from "@/redux/hooks";
 import { showToast } from "@/redux/common/slice";
-import Box from "@/components/base/Box/Box";
-import SuccessCheckmark from "@/components/base/SuccessCheckmark/SuccessCheckmark";
-import { InfoIcon } from "@/components/base/images";
-import Text from "@/components/base/Text/Text";
-import Button from "@/components/base/Button/Button";
-import Input from "@/components/base/Input/Input";
+import Box from "@gopvp/common/src/components/Box/Box";
+import SuccessCheckmark from "@gopvp/common/src/components/SuccessCheckmark/SuccessCheckmark";
+import { InfoIcon } from "@gopvp/common/src/components/images";
+import Text from "@gopvp/common/src/components/Text/Text";
+import Button from "@gopvp/common/src/components/Button/Button";
+import Input from "@gopvp/common/src/components/Input/Input";
 import { useWalletActionModal } from "@/context/WalletActionModalContext";
 import { useWalletBalance } from "@/hooks/useWallet";
 import { withdrawRequest } from "@/hooks/useWallet";
@@ -29,7 +29,7 @@ import {
  enterAmountText,
  MIN_TRANSACTION_USD,
 } from "@/constants/messages";
-import CustomModal from "@/components/base/Modal/Modal";
+import CustomModal from "@gopvp/common/src/components/Modal/Modal";
 
 type Stage = "amount" | "success";
 const MAX_AMOUNT_DIGITS = 2;

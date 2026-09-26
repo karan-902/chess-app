@@ -1,7 +1,7 @@
 import { useState } from "react";
-import Box from "@/components/base/Box/Box";
-import Button from "@/components/base/Button/Button";
-import CustomDrawer from "@/components/base/Drawer/Drawer";
+import Box from "@gopvp/common/src/components/Box/Box";
+import Button from "@gopvp/common/src/components/Button/Button";
+import CustomDrawer from "@gopvp/common/src/components/Drawer/Drawer";
 import ChipSelect from "@/components/common/ChipSelect";
 import { TIME_SECONDS } from "@/constants";
 import { CATEGORY_META } from "@/constants/config";

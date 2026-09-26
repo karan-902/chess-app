@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import Box from "@/components/base/Box/Box";
+import Box from "@gopvp/common/src/components/Box/Box";
 import Header from "@/components/common/Header";
 import DepositModal from "@/components/common/DepositModal";
 import WithdrawModal from "@/components/common/WithdrawModal";

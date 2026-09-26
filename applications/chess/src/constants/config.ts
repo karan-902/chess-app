@@ -6,8 +6,8 @@ import {
  CallReceivedIcon,
  CallMadeIcon,
  HandshakeIcon,
-} from "@/components/base/images";
-import type { LucideIcon, SvgIconComponent } from "@/components/base/images";
+} from "@gopvp/common/src/components/images";
+import type { LucideIcon, SvgIconComponent } from "@gopvp/common/src/components/images";
 import type { GameCategory, MatchOutcome } from "@/types/index";
 import type {
  LeaderboardScope,

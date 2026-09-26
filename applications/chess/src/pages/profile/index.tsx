@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { Pencil, Mail, MapPin } from "@/components/base/images";
-import Box from "@/components/base/Box/Box";
-import Text from "@/components/base/Text/Text";
-import Card from "@/components/base/Card/Card";
-import Button from "@/components/base/Button/Button";
-import Input from "@/components/base/Input/Input";
-import CustomSwitch from "@/components/base/Switch/Switch";
+import { Pencil, Mail, MapPin } from "@gopvp/common/src/components/images";
+import Box from "@gopvp/common/src/components/Box/Box";
+import Text from "@gopvp/common/src/components/Text/Text";
+import Card from "@gopvp/common/src/components/Card/Card";
+import Button from "@gopvp/common/src/components/Button/Button";
+import Input from "@gopvp/common/src/components/Input/Input";
+import CustomSwitch from "@gopvp/common/src/components/Switch/Switch";
 import ProfileSkeleton from "@/components/common/ProfileSkeleton";
 import { useReduxSelector, useReduxDispatch } from "@/redux/hooks";
 import sessionService from "@gopvp/common/src/util/sessionService";
@@ -31,7 +31,7 @@ import {
  appearanceText,
  darkModeText,
 } from "@/constants/messages";
-import CustomModal from "@/components/base/Modal/Modal";
+import CustomModal from "@gopvp/common/src/components/Modal/Modal";
 
 const profileEditSchema = Yup.object({
  username: Yup.string()

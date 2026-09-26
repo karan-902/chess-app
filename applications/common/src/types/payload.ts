@@ -1,4 +1,4 @@
-import type { LeaderboardScope, LeaderboardSort } from "./index";
+import type { LeaderboardScope, LeaderboardSort } from "@gopvp/common/src/types/index";
 
 /** auth */
 export type IVerifyUserBody = {

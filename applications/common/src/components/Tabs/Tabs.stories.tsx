@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { CustomTabs, CustomTab } from "./Tabs";
+import { CustomTabs, CustomTab } from "@gopvp/common/src/components/Tabs/Tabs";
 
 const meta: Meta<typeof CustomTabs> = {
     title: "Components/CustomTabs",

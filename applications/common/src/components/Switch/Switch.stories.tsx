@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import CustomSwitch from "./Switch";
+import CustomSwitch from "@gopvp/common/src/components/Switch/Switch";
 
 const meta: Meta<typeof CustomSwitch> = {
     title: "Components/CustomSwitch",

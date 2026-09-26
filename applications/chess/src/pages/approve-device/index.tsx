@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { CheckCircleOutlineIcon } from "@/components/base/images";
-import Box from "@/components/base/Box/Box";
-import Button from "@/components/base/Button/Button";
+import { CheckCircleOutlineIcon } from "@gopvp/common/src/components/images";
+import Box from "@gopvp/common/src/components/Box/Box";
+import Button from "@gopvp/common/src/components/Button/Button";
 import AuthLayout from "@/container/AuthLayout";
 import { callAPIInterface } from "@/utils";
 import { useLogout } from "@/hooks/useLogout";

@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
 import { setNavigator } from "@gopvp/common/src/util/navigationService";
-import Box from "@/components/base/Box/Box";
+import Box from "@gopvp/common/src/components/Box/Box";
 import BackdropLoader from "@/components/common/BackdropLoader/BackdropLoader";
 import Notification from "@/components/common/Notification/Notification";
 import { useReduxDispatch, useReduxSelector } from "@/redux/hooks";

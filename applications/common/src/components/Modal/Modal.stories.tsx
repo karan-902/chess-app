@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import CustomModal from "./Modal";
+import CustomModal from "@gopvp/common/src/components/Modal/Modal";
 
 const meta: Meta<typeof CustomModal> = {
     title: "Components/CustomModal",

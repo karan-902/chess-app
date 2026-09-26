@@ -2,7 +2,7 @@ import { Alert, type AlertColor, type AlertProps } from "@mui/material";
 import classNames from "classnames";
 import "./alert-message.scss";
 import { forwardRef } from "react";
-import { CheckCircleIcon, ErrorIcon, WarningIcon, InfoIcon } from "../images";
+import { CheckCircleIcon, ErrorIcon, WarningIcon, InfoIcon } from "@gopvp/common/src/components/images";
 
 const iconsForAlert = {
     success: <CheckCircleIcon />,

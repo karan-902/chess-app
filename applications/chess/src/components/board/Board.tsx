@@ -17,7 +17,7 @@ import {
 } from "@dnd-kit/modifiers";
 import { motion } from "motion/react";
 import classNames from "classnames";
-import Box from "@/components/base/Box/Box";
+import Box from "@gopvp/common/src/components/Box/Box";
 import PieceIcon from "./PieceIcon";
 import { playSound } from "@/lib/sounds";
 import "./board.scss";

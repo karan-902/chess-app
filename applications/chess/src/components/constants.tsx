@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import Text from "@/components/base/Text/Text";
+import Text from "@gopvp/common/src/components/Text/Text";
 
 export function ChessLogo({
     size = 42,

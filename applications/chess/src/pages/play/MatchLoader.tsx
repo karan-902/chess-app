@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
-import Box from "@/components/base/Box/Box";
+import Box from "@gopvp/common/src/components/Box/Box";
 import GameRoom from "./GameRoom";
 import { useSocket } from "@/context/SocketContext";
 import { useGame } from "@/hooks/useGame";

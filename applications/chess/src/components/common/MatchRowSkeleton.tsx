@@ -1,5 +1,5 @@
-import Box from "@/components/base/Box/Box";
-import Skeleton from "@/components/base/Skeleton/Skeleton";
+import Box from "@gopvp/common/src/components/Box/Box";
+import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
 
 export default function MatchRowSkeleton() {
     return (

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import SuccessCheckmark from "./SuccessCheckmark";
+import SuccessCheckmark from "@gopvp/common/src/components/SuccessCheckmark/SuccessCheckmark";
 
 const meta: Meta<typeof SuccessCheckmark> = {
     title: "Components/SuccessCheckmark",

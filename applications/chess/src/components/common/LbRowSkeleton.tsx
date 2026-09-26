@@ -1,5 +1,5 @@
-import Card from "@/components/base/Card/Card";
-import Skeleton from "@/components/base/Skeleton/Skeleton";
+import Card from "@gopvp/common/src/components/Card/Card";
+import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
 
 export default function LbRowSkeleton() {
     return (

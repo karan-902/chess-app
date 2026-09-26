@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import CustomSelect from "./Select";
+import CustomSelect from "@gopvp/common/src/components/Select/Select";
 
 const options = [
     { value: "India", label: "India" },

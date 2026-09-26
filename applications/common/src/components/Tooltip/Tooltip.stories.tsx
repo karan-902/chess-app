@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import CustomTooltip from "./Tooltip";
+import CustomTooltip from "@gopvp/common/src/components/Tooltip/Tooltip";
 
 const meta: Meta<typeof CustomTooltip> = {
     title: "Components/CustomTooltip",

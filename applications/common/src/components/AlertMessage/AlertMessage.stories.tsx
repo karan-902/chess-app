@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import AlertMessage from "./AlertMessage";
+import AlertMessage from "@gopvp/common/src/components/AlertMessage/AlertMessage";
 
 const meta: Meta<typeof AlertMessage> = {
     title: "Components/AlertMessage",

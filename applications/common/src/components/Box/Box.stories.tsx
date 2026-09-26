@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import Box from "./Box";
+import Box from "@gopvp/common/src/components/Box/Box";
 
 const meta: Meta<typeof Box> = {
     title: "Components/Box",

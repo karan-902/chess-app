@@ -1,10 +1,10 @@
 import * as yup from "yup";
 import { useFormik } from "formik";
-import Box from "@/components/base/Box/Box";
-import Text from "@/components/base/Text/Text";
-import CustomLabel from "@/components/base/Label/Label";
-import CustomSelect from "@/components/base/Select/Select";
-import Button from "@/components/base/Button/Button";
+import Box from "@gopvp/common/src/components/Box/Box";
+import Text from "@gopvp/common/src/components/Text/Text";
+import CustomLabel from "@gopvp/common/src/components/Label/Label";
+import CustomSelect from "@gopvp/common/src/components/Select/Select";
+import Button from "@gopvp/common/src/components/Button/Button";
 import { callAPIInterface, showApiErrorToast } from "@/utils";
 import sessionService from "@gopvp/common/src/util/sessionService";
 import { COUNTRY_OPTIONS } from "@/constants/config";

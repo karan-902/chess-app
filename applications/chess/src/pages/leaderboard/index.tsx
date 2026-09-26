@@ -1,13 +1,13 @@
 import { useCallback, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import classNames from "classnames";
-import Box from "@/components/base/Box/Box";
-import Text from "@/components/base/Text/Text";
-import Card from "@/components/base/Card/Card";
+import Box from "@gopvp/common/src/components/Box/Box";
+import Text from "@gopvp/common/src/components/Text/Text";
+import Card from "@gopvp/common/src/components/Card/Card";
 import FilterDropdown from "@/components/common/FilterDropdown";
 import EmptyState from "@/components/common/EmptyState";
 import LbRowSkeleton from "@/components/common/LbRowSkeleton";
-import VirtualList from "@/components/base/VirtualList/VirtualList";
+import VirtualList from "@gopvp/common/src/components/VirtualList/VirtualList";
 import LeaderboardPlayerModal from "@/pages/leaderboard/LeaderboardPlayerModal";
 import { useLeaderboard } from "@/hooks/useLeaderboard";
 import { useReduxSelector } from "@/redux/hooks";

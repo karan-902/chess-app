@@ -1,8 +1,8 @@
 import classNames from "classnames";
-import Box from "@/components/base/Box/Box";
-import Text from "@/components/base/Text/Text";
-import CustomChip from "@/components/base/Chip/Chip";
-import Skeleton from "@/components/base/Skeleton/Skeleton";
+import Box from "@gopvp/common/src/components/Box/Box";
+import Text from "@gopvp/common/src/components/Text/Text";
+import CustomChip from "@gopvp/common/src/components/Chip/Chip";
+import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
 import PieceIcon from "@/components/board/PieceIcon";
 import type { IPlayerRowProps } from "@/types/component";
 import {

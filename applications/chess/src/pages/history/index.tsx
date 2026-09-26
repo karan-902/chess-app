@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import classNames from "classnames";
-import Box from "@/components/base/Box/Box";
-import Text from "@/components/base/Text/Text";
-import CustomBadge from "@/components/base/Badge/Badge";
-import Card from "@/components/base/Card/Card";
-import VirtualList from "@/components/base/VirtualList/VirtualList";
+import Box from "@gopvp/common/src/components/Box/Box";
+import Text from "@gopvp/common/src/components/Text/Text";
+import CustomBadge from "@gopvp/common/src/components/Badge/Badge";
+import Card from "@gopvp/common/src/components/Card/Card";
+import VirtualList from "@gopvp/common/src/components/VirtualList/VirtualList";
 import EmptyState from "@/components/common/EmptyState";
 import StatRowSkeleton from "@/components/common/StatRowSkeleton";
 import MatchRowSkeleton from "@/components/common/MatchRowSkeleton";
-import Button from "@/components/base/Button/Button";
+import Button from "@gopvp/common/src/components/Button/Button";
 import { useGameHistory } from "@/hooks/useGameHistory";
 import { useReduxSelector } from "@/redux/hooks";
 import {

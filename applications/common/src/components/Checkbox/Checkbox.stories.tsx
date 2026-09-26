@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import CustomCheckbox from "./Checkbox";
+import CustomCheckbox from "@gopvp/common/src/components/Checkbox/Checkbox";
 
 const meta: Meta<typeof CustomCheckbox> = {
     title: "Components/CustomCheckbox",

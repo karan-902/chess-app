@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import Input from "./Input";
+import Input from "@gopvp/common/src/components/Input/Input";
 
 const meta: Meta<typeof Input> = {
     title: "Components/Input",
