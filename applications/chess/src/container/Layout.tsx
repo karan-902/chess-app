@@ -12,7 +12,8 @@ import Box from "@gopvp/common/src/components/Box/Box";
 import BackdropLoader from "@gopvp/chess/src/components/common/BackdropLoader/BackdropLoader";
 import Notification from "@gopvp/chess/src/components/common/Notification/Notification";
 import { useReduxDispatch, useReduxSelector } from "@gopvp/chess/src/redux/hooks";
-import { setEnteredGame, setSpeedLaunchParams } from "@gopvp/chess/src/redux/speed/slice";
+import { setLaunchParams } from "@gopvp/chess/src/redux/launch/slice";
+import { setEnteredGame } from "@gopvp/chess/src/redux/game/slice";
 import { fetchGameDetails } from "@gopvp/chess/src/redux/game/thunk";
 import { GAMES, GAME_PAGE_TITLES } from "@gopvp/chess/src/constants/config";
 import { getGameFromPath, isGameSlug } from "@gopvp/chess/src/utils";
@@ -35,8 +36,9 @@ export default function Layout() {
  const code = params.get("code");
  const state = params.get("state");
  const acct = params.get("acct");
- const enteredGame = useReduxSelector((state) => state.speed.enteredGame);
- const { requestedSlug, details } = useReduxSelector((state) => state.game);
+ const { enteredGame, requestedSlug, details } = useReduxSelector(
+  (state) => state.game,
+ );
  const gameSlug = getGameFromPath(location.pathname) ?? enteredGame;
  const isGameLoading = !!gameSlug && details?.slug !== gameSlug;
 
@@ -56,7 +58,7 @@ export default function Layout() {
   const balBtc = params.get("bal_btc");
   const balUsdt = params.get("bal_usdt");
   dispatch(
-   setSpeedLaunchParams({
+   setLaunchParams({
     acct,
     lang: params.get("lang"),
     balBtc: balBtc === null ? null : Number(balBtc),

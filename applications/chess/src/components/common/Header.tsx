@@ -29,7 +29,7 @@ import { ChessLogo } from "@gopvp/chess/src/components/constants";
 export default function Header() {
  const { pathname } = useLocation();
  const navigate = useNavigate();
- const enteredGame = useReduxSelector((state) => state.speed.enteredGame);
+ const enteredGame = useReduxSelector((state) => state.game.enteredGame);
  const routes = enteredGame && getGameRoutes(enteredGame);
  const isGamePage = !!getGameFromPath(pathname);
  const activeNavPath =

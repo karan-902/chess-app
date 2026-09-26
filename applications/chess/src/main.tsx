@@ -3,7 +3,11 @@ import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ThemeProvider as MuiThemeProvider, CssBaseline } from "@mui/material";
-import { store, hydrateSession, hydrateSpeedState } from "@gopvp/chess/src/redux/index.ts";
+import {
+    store,
+    hydrateSession,
+    hydratePersistedState,
+} from "@gopvp/chess/src/redux/index.ts";
 import { SocketProvider } from "@gopvp/chess/src/context/SocketContext";
 import { WalletActionModalProvider } from "@gopvp/chess/src/context/WalletActionModalContext";
 import { AppThemeProvider, useAppTheme } from "@gopvp/chess/src/context/ThemeContext";
@@ -34,7 +38,7 @@ function Root() {
 }
 
 const renderApp = async () => {
-    await Promise.all([hydrateSession(), hydrateSpeedState()]);
+    await Promise.all([hydrateSession(), hydratePersistedState()]);
     createRoot(document.getElementById("root")!).render(
         <AppThemeProvider>
             <Root />
