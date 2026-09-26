@@ -8,6 +8,7 @@ import { SocketProvider } from "./context/SocketContext";
 import { WalletActionModalProvider } from "./context/WalletActionModalContext";
 import { AppThemeProvider, useAppTheme } from "./context/ThemeContext";
 import { getMuiTheme } from "./theme";
+import { googleClientId } from "@gopvp/common/src/constants/env";
 
 import "./styles/main.scss";
 import App from "./App.tsx";
@@ -19,7 +20,7 @@ function Root() {
     return (
         <MuiThemeProvider theme={muiTheme}>
             <CssBaseline />
-            <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+            <GoogleOAuthProvider clientId={googleClientId}>
                 <Provider store={store}>
                     <SocketProvider>
                         <WalletActionModalProvider>

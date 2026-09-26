@@ -222,6 +222,9 @@ export const myResultsText = "My results";
 export const worldwideText = "Worldwide";
 export const myStatsText = "My Stats";
 export const welcomeText = "Welcome!";
+export const todayText = "Today";
+export const yesterdayText = "Yesterday";
+export const justNowText = "just now";
 export const makeFirstMoveText =
  "Make your first move — start a staked match from the Play tab and win real money from your opponent.";
 export const noGamesYetText = "No games yet";

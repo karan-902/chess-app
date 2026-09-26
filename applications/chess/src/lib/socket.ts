@@ -1,34 +1,32 @@
 import { io } from "socket.io-client";
 import type { Socket } from "socket.io-client";
+import { socketUrl } from "@gopvp/common/src/constants/env";
 
-const g = globalThis as typeof globalThis & { __ks_socket?: Socket | null };
+const g = globalThis as typeof globalThis & { socket?: Socket | null };
 
 export function connectSocket(accessToken: string): Socket {
-    if (g.__ks_socket) return g.__ks_socket;
+ if (g.socket) return g.socket;
 
-    g.__ks_socket = io(
-        (import.meta.env.VITE_SOCKET_URL ?? "http://localhost:6060").trim(),
-        {
-            auth: { token: accessToken },
-            transports: ["websocket", "polling"],
-            reconnection: true,
-            reconnectionDelay: 2000,
-            reconnectionDelayMax: 5000,
+ g.socket = io(socketUrl, {
+  auth: { token: accessToken },
+  transports: ["websocket", "polling"],
+  reconnection: true,
+  reconnectionDelay: 2000,
+  reconnectionDelayMax: 5000,
 
-            reconnectionAttempts: Infinity,
-        },
-    );
+  reconnectionAttempts: Infinity,
+ });
 
-    return g.__ks_socket;
+ return g.socket;
 }
 
 export function disconnectSocket() {
-    if (g.__ks_socket) {
-        g.__ks_socket.disconnect();
-        g.__ks_socket = null;
-    }
+ if (g.socket) {
+  g.socket.disconnect();
+  g.socket = null;
+ }
 }
 
 export function getSocket(): Socket | null {
-    return g.__ks_socket ?? null;
+ return g.socket ?? null;
 }

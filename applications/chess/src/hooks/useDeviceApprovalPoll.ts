@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { io, type Socket } from "socket.io-client";
 import { callAPIInterface, showApiErrorToast } from "@/utils";
 import sessionService from "@gopvp/common/src/util/sessionService";
+import { socketUrl } from "@gopvp/common/src/constants/env";
 import type { ILoginResponse } from "@/types/utils";
 
 const FALLBACK_POLL_MS = 45000;
@@ -43,9 +44,6 @@ export function useDeviceApprovalPoll() {
             }
         };
 
-        const socketUrl = (
-            import.meta.env.VITE_SOCKET_URL ?? "http://localhost:6060"
-        ).trim();
         socketRef.current = io(`${socketUrl}/device-approval`, {
             auth: { token: approvalToken },
             transports: ["websocket", "polling"],

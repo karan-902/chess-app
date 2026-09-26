@@ -1,66 +1,47 @@
 import type { IPvcSnapshot } from "@/types/components";
 
-const FINGERPRINT_KEY = "sj_fingerprint";
+const FINGERPRINT_KEY = "gopvp_fingerprint";
 
-export function getStoredFingerprint(): string | null {
-    try {
-        return localStorage.getItem(FINGERPRINT_KEY);
-    } catch {
-        return null;
-    }
+function readStorage(storage: Storage, key: string): string | null {
+ try {
+  return storage.getItem(key);
+ } catch {
+  return null;
+ }
 }
 
-export function setStoredFingerprint(fingerprint: string) {
-    try {
-        localStorage.setItem(FINGERPRINT_KEY, fingerprint);
-    } catch {}
+function writeStorage(storage: Storage, key: string, value: string | null) {
+ try {
+  if (value === null) storage.removeItem(key);
+  else storage.setItem(key, value);
+ } catch {}
 }
 
-export function markGameFinished(id: string) {
-    try {
-        sessionStorage.setItem(`gr_finished:${id}`, "1");
-    } catch {}
-}
+export const getStoredFingerprint = () =>
+ readStorage(localStorage, FINGERPRINT_KEY);
+export const setStoredFingerprint = (fingerprint: string) =>
+ writeStorage(localStorage, FINGERPRINT_KEY, fingerprint);
 
-export function isGameFinished(id: string) {
-    try {
-        return sessionStorage.getItem(`gr_finished:${id}`) === "1";
-    } catch {
-        return false;
-    }
-}
+export const markGameFinished = (id: string) =>
+ writeStorage(sessionStorage, `gr_finished:${id}`, "1");
+export const isGameFinished = (id: string) =>
+ readStorage(sessionStorage, `gr_finished:${id}`) === "1";
 
-export function getPvcColor(id: string): string | null {
-    try {
-        return sessionStorage.getItem(`pvc_color:${id}`);
-    } catch {
-        return null;
-    }
-}
+export const getPvcColor = (id: string) =>
+ readStorage(sessionStorage, `pvc_color:${id}`);
+export const setPvcColor = (id: string, color: string) =>
+ writeStorage(sessionStorage, `pvc_color:${id}`, color);
 
-export function setPvcColor(id: string, color: string) {
-    try {
-        sessionStorage.setItem(`pvc_color:${id}`, color);
-    } catch {}
-}
-
-export function savePvcSnapshot(id: string, snapshot: IPvcSnapshot) {
-    try {
-        sessionStorage.setItem(`pvc_snapshot:${id}`, JSON.stringify(snapshot));
-    } catch {}
-}
+export const savePvcSnapshot = (id: string, snapshot: IPvcSnapshot) =>
+ writeStorage(sessionStorage, `pvc_snapshot:${id}`, JSON.stringify(snapshot));
+export const clearPvcSnapshot = (id: string) =>
+ writeStorage(sessionStorage, `pvc_snapshot:${id}`, null);
 
 export function loadPvcSnapshot(id: string): IPvcSnapshot | null {
-    try {
-        const raw = sessionStorage.getItem(`pvc_snapshot:${id}`);
-        return raw ? JSON.parse(raw) : null;
-    } catch {
-        return null;
-    }
-}
-
-export function clearPvcSnapshot(id: string) {
-    try {
-        sessionStorage.removeItem(`pvc_snapshot:${id}`);
-    } catch {}
+ const raw = readStorage(sessionStorage, `pvc_snapshot:${id}`);
+ try {
+  return raw ? JSON.parse(raw) : null;
+ } catch {
+  return null;
+ }
 }

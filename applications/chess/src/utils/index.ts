@@ -8,12 +8,17 @@ import duration from "dayjs/plugin/duration";
 import { store } from "@/redux/index";
 import { showToast } from "@/redux/common/slice";
 import sessionService from "@gopvp/common/src/util/sessionService";
-import { somethingWentWrongText } from "@/constants/messages";
+import {
+ somethingWentWrongText,
+ yesterdayText,
+ justNowText,
+} from "@/constants/messages";
 import type { IGenerateTokenBody } from "@/types/index";
 import type { IGenerateTokenResponse, ILoginResponse } from "@/types/utils";
 import { IGameRoomNavPayload, TimeControl } from "@/types/components";
 import { TIME_SECONDS } from "@/constants";
 import { GAMES, GAME_PAGES, type GameSlug } from "@/constants/config";
+import { apiUrl } from "@gopvp/common/src/constants/env";
 import type { GameCategory, IPoolResponse } from "@/types/types";
 import { getStoredFingerprint, setStoredFingerprint } from "@/utils/storage";
 
@@ -30,8 +35,6 @@ const OPEN_API_ENDPOINTS = [
  // "/device/approval-status",
 ];
 export const LOGOUT_PATH = "/auth/logout";
-const errorStatusCodes = [400, 401, 403, 404, 409, 422, 429];
-const serverErrorStatusCodes = [500, 502, 503, 504];
 
 let fingerprintPromise: Promise<string> | null = null;
 
@@ -92,7 +95,7 @@ export function showApiErrorToast(err: any) {
  store.dispatch(showToast({ isToastOpen: true, toastMessage, toastVariant: "error" }));
 }
 
-export async function getHeaders<TPayload = undefined>(
+async function getHeaders<TPayload = undefined>(
  method: Method,
  path: string,
  data?: TPayload,
@@ -108,7 +111,7 @@ export async function getHeaders<TPayload = undefined>(
  }
 
  return {
-  baseURL: (import.meta.env.VITE_API_URL ?? "http://localhost:6060").trim(),
+  baseURL: apiUrl,
   method,
   url: path,
   data,
@@ -122,7 +125,7 @@ export function shortenUsername(username: string): string {
  return trimmed.split(/\s+/)[0] ?? trimmed;
 }
 
-export function secondsToTimeControl(seconds: number): TimeControl {
+function secondsToTimeControl(seconds: number): TimeControl {
  const match = (Object.entries(TIME_SECONDS) as [TimeControl, number][]).find(
   ([, s]) => s === seconds,
  );
@@ -155,12 +158,9 @@ export function isGamePlayPath(pathname: string): boolean {
 }
 
 export function getGameRoutes(game: GameSlug) {
- return {
-  PLAY: `/${game}/${GAME_PAGES.PLAY}`,
-  MATCHES: `/${game}/${GAME_PAGES.MATCHES}`,
-  LEADERBOARD: `/${game}/${GAME_PAGES.LEADERBOARD}`,
-  RULES: `/${game}/${GAME_PAGES.RULES}`,
- };
+ return Object.fromEntries(
+  Object.entries(GAME_PAGES).map(([key, page]) => [key, `/${game}/${page}`]),
+ ) as Record<keyof typeof GAME_PAGES, string>;
 }
 
 export function buildGameRoomUrl(data: IGameRoomNavPayload, game: GameSlug): string {
@@ -188,11 +188,11 @@ export function formatMatchDate(ms: number): string {
  const now = dayjs();
  const then = dayjs(ms);
  if (!then.isSame(now, "day")) {
-  if (then.isSame(now.subtract(1, "day"), "day")) return "Yesterday";
+  if (then.isSame(now.subtract(1, "day"), "day")) return yesterdayText;
   return then.format("MMMM D, YYYY");
  }
  const diffSeconds = now.diff(then, "second");
- if (diffSeconds < 60) return "just now";
+ if (diffSeconds < 60) return justNowText;
  const minutes = now.diff(then, "minute");
  if (minutes < 60) return `${minutes}m ago`;
  return `${now.diff(then, "hour")}h ago`;
@@ -282,14 +282,6 @@ export const callAPIInterface = async <
 
    if (errorStatus === 429 && errorData?.message) {
     store.dispatch(showToast({ isToastOpen: true, toastMessage: errorData.message, toastVariant: "error" }));
-   }
-
-   const isKnownError =
-    errorStatusCodes.includes(errorStatus) ||
-    serverErrorStatusCodes.includes(errorStatus);
-
-   if (isKnownError) {
-    console.error(errorData?.message || err.message);
    }
 
    reject(err);

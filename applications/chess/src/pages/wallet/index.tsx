@@ -27,14 +27,16 @@ import {
  depositText,
  withdrawText,
  poweredByText,
+ todayText,
+ yesterdayText,
 } from "@/constants/messages";
 
 function dayLabel(ms: number): string {
  const date = dayjs(ms);
  const today = dayjs();
 
- if (date.isSame(today, "day")) return "Today";
- if (date.isSame(today.subtract(1, "day"), "day")) return "Yesterday";
+ if (date.isSame(today, "day")) return todayText;
+ if (date.isSame(today.subtract(1, "day"), "day")) return yesterdayText;
  return date.format("D MMM YYYY").toUpperCase();
 }
 
