@@ -3,7 +3,7 @@ import Text from "@/components/base/Text/Text";
 import Button from "@/components/base/Button/Button";
 import CustomModal from "@/components/base/Modal/Modal";
 import { ChessLogo } from "@/components/constants";
-import type { IPoolConfirmSheetProps } from "@/types/components";
+import type { IPoolConfirmSheetProps } from "@/types/component";
 import {
  secondsLeftText,
  cancelSearchText,
@@ -29,11 +29,7 @@ export default function PoolConfirmSheet({
  onConfirmCancel,
 }: IPoolConfirmSheetProps) {
  return (
-  <CustomModal
-   open={open}
-   onClose={onClose}
-   customClass="pool-confirm-sheet"
-  >
+  <CustomModal open={open} onClose={onClose} customClass="pool-confirm-sheet">
    {status === "queued" || status === "found" ? (
     <Box customClass="matchmaking-searching">
      <Box customClass="live-ring-wrap searching-ring">
@@ -43,26 +39,18 @@ export default function PoolConfirmSheet({
       <Text component="span" customClass="live-ring" />
      </Box>
      <Text customClass="dialog-title" aria-live="polite">
-      {status === "found"
-       ? opponentFoundText
-       : findingOpponentText}
+      {status === "found" ? opponentFoundText : findingOpponentText}
      </Text>
-     <Text customClass="searching-timer">
-      {secondsLeftText(secondsLeft)}
-     </Text>
+     <Text customClass="searching-timer">{secondsLeftText(secondsLeft)}</Text>
      <Box customClass="searching-details">
       <Box customClass="searching-detail-item">
-       <Text customClass="searching-detail-label caption">
-        {entryFeeText}
-       </Text>
+       <Text customClass="searching-detail-label caption">{entryFeeText}</Text>
        <Text customClass="searching-detail-value value-heading">
         ${queuedPool?.bet}
        </Text>
       </Box>
       <Box customClass="searching-detail-item">
-       <Text customClass="searching-detail-label caption">
-        {prizeText}
-       </Text>
+       <Text customClass="searching-detail-label caption">{prizeText}</Text>
        <Text customClass="searching-detail-value value-heading win-prize">
         ${queuedPool?.prize}
        </Text>
@@ -88,17 +76,13 @@ export default function PoolConfirmSheet({
       </Text>
       <Box customClass="searching-details">
        <Box customClass="searching-detail-item">
-        <Text customClass="searching-detail-label caption">
-         {entryFeeText}
-        </Text>
+        <Text customClass="searching-detail-label caption">{entryFeeText}</Text>
         <Text customClass="searching-detail-value value-heading">
          ${confirmPool.bet}
         </Text>
        </Box>
        <Box customClass="searching-detail-item">
-        <Text customClass="searching-detail-label caption">
-         {prizeText}
-        </Text>
+        <Text customClass="searching-detail-label caption">{prizeText}</Text>
         <Text customClass="searching-detail-value value-heading win-prize">
          ${confirmPool.prize}
         </Text>

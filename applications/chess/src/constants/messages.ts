@@ -19,15 +19,12 @@ export const emailText = "Email";
 export const enterEmailText = "Enter your email";
 export const passwordText = "Password";
 export const enterPasswordText = "Enter password";
-export const confirmPasswordText = "Confirm Password";
 export const orText = "or";
 export const continueWithGoogleText = "Continue with Google";
 export const emailRequiredText = "Email is required";
 export const enterValidEmailText = "Enter a valid email";
 export const passwordRequiredText = "Password is required";
 export const passwordMinLengthText = "Password must be at least 8 characters";
-export const confirmYourPasswordText = "Please confirm your password";
-export const passwordsDoNotMatchText = "Passwords do not match";
 export const usernameMaxLengthText =
  "Username can't be longer than 8 characters.";
 export const countryRequiredText = "Country is required";
@@ -54,21 +51,6 @@ export const clearUsernameText = "Clear username";
 export const suggestionsText = "Suggestions";
 export const countryText = "Country";
 export const registerText = "Register";
-export const verifyYourEmailText = "Verify your email";
-export const sentCodeToText = (length: number) =>
- `We sent a ${length}-digit code to`;
-export const codeExpiredText =
- "This code has expired — request a new one below";
-export const codeExpiresInText = (mmss: string) => `Code expires in ${mmss}`;
-export const verifyEmailText = "Verify Email";
-export const resendCodeCooldownText = (seconds: number) =>
- `Resend code (${seconds}s)`;
-export const resendOtpText = "Resend OTP";
-export const forgotPasswordText = "Forgot Password";
-export const checkInboxForResetLinkText = "Check your inbox for a reset link.";
-export const enterEmailForResetLinkText =
- "Enter your email and we'll send you a reset link.";
-export const sendResetLinkText = "Send Reset Link";
 export const newDeviceDetectedText = "New device detected";
 export const approveSignInEmailedText =
  "We've emailed you to approve this sign-in. This screen will continue automatically once you approve it.";
@@ -83,13 +65,6 @@ export const returnToOtherDeviceText =
 export const linkExpiredText = "Link expired";
 export const approvalLinkInvalidText =
  "This approval link is no longer valid. Please try logging in again.";
-export const invalidLinkText = "Invalid Link";
-export const resetLinkMissingText = "This reset link is missing or invalid.";
-export const requestNewLinkText = "Request a new link";
-export const resetPasswordText = "Reset Password";
-export const chooseNewPasswordText = "Choose a new password for your account.";
-export const newPasswordText = "New Password";
-export const resetLinkExpiredText = "Reset link is invalid or has expired.";
 export const depositText = "Deposit";
 export const winText = "Win";
 export const entryFeeAmountText = (fee: string) => `Entry fee ${fee}`;
@@ -124,13 +99,16 @@ export const feeAmountRequiredText = "Fee amount is required";
 export const insufficientBalanceText = "Insufficient Balance";
 export const durationText = "Duration";
 export const minText = "min";
-export const ratedText = "Rated";
 export const createText = "Create";
 export const roomCodeText = "Room code";
 export const pasteText = "Paste";
 export const joinText = "Join";
 export const waitingForOpponentText = "Waiting for opponent";
 export const shareCodeWithFriendText = "Share this code with your friend";
+export const opponentJoinedText = "Friend joined!";
+export const waitingForOwnerText = "Waiting for host to start";
+export const startText = "Start Match";
+export const leaveText = "Leave Room";
 export const copyCodeText = "Copy code";
 export const copiedExclaimText = "Copied!";
 export const inactivityText = "Inactivity";
@@ -141,12 +119,8 @@ export const stalemateText = "Stalemate";
 export const drawText = "Draw";
 export const gameOverText = "Game over";
 export const computerText = "Computer";
-export const opponentDisconnectedText = "Opponent disconnected";
-export const waitingToReconnectText = (seconds: number) =>
- `Waiting for them to reconnect (${seconds}s)…`;
-export const opponentConnectedText = "Opponent connected!";
-export const reconnectingText = (seconds: number) =>
- `Reconnecting… ${seconds}s`;
+export const reconnectingText = "Reconnecting…";
+export const firstMoveText = (seconds: number) => `First move: ${seconds}s`;
 export const drawOfferDeclinedText = "Draw offer declined";
 export const opponentOfferedDrawText = "Opponent offered a draw";
 export const acceptText = "Accept";
@@ -166,10 +140,6 @@ export const victoryText = "VICTORY";
 export const drawUpperText = "DRAW";
 export const defeatText = "DEFEAT";
 export const settlementText = "SETTLEMENT";
-export const rematchText = "Rematch";
-export const waitingForOpponentSecondsText = (secs?: number) =>
- `Waiting for opponent… ${secs}s`;
-export const acceptRematchText = "Accept Rematch";
 export const promotePawnText = "Promote pawn";
 export const queenText = "Queen";
 export const rookText = "Rook";

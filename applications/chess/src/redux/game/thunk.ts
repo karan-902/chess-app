@@ -2,14 +2,14 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { callAPIInterface, showApiErrorToast } from "@/utils";
 import { throwThunkError } from "@/redux/createAppThunk";
 import { finishGameLoad, setGameDetails, startGameLoad } from "@/redux/game/slice";
-import type { IGameDetailsResponse } from "@/types/utils";
+import type { IGameResponse } from "@gopvp/common/src/types/response";
 
 export const fetchGameDetails = createAsyncThunk(
     "game/fetchGameDetails",
     async (slug: string, { dispatch, rejectWithValue }) => {
         dispatch(startGameLoad(slug));
         try {
-            const res = await callAPIInterface<undefined, IGameDetailsResponse>(
+            const res = await callAPIInterface<IGameResponse, undefined>(
                 "GET",
                 `/games/${slug}`,
             );

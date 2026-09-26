@@ -6,9 +6,14 @@ import Button from "@/components/base/Button/Button";
 import { useSocket } from "@/context/SocketContext";
 import { useReduxSelector, useReduxDispatch } from "@/redux/hooks";
 import { setActiveGame } from "@/redux/socketModals/slice";
+import { clearMatchState } from "@/redux/match/slice";
 import { formatAmount } from "@/utils/format";
-import { shortenUsername } from "@/utils";
-import { buildGameRoomUrl } from "@/utils";
+import {
+    buildMatchUrl,
+    isGameSlug,
+    shortenUsername,
+    showAckErrorToast,
+} from "@/utils";
 import { navigateTo } from "@gopvp/common/src/util/navigationService";
 import {
  rejoinMatchText,
@@ -32,20 +37,31 @@ export default function RejoinGameModal() {
     const deviceHandoff = useReduxSelector(
         (state) => state.socketModals.deviceHandoff,
     );
-    const enteredGame = useReduxSelector((state) => state.speed.enteredGame);
+    const { state: match, opponent } = useReduxSelector(
+        (state) => state.match,
+    );
     const [confirmingExit, setConfirmingExit] = useState(false);
 
-    if (!activeGame || deviceHandoff !== null) return null;
+    if (!activeGame || !match || !opponent || deviceHandoff !== null) {
+        return null;
+    }
+
+    const opponentName = shortenUsername(opponent.name);
+    const betAmount = formatAmount(match.bet);
 
     const handleForfeit = () => {
-        socket?.emit("resign_game", { game_id: activeGame.game_id });
+        socket?.emit("game:rejoin:declined", showAckErrorToast);
+        setConfirmingExit(false);
         dispatch(setActiveGame(null));
+        dispatch(clearMatchState());
     };
 
     const handleRejoin = () => {
         dispatch(setActiveGame(null));
-        if (enteredGame) {
-            navigateTo(buildGameRoomUrl(activeGame, enteredGame), { replace: true });
+        if (isGameSlug(activeGame.game_slug)) {
+            navigateTo(buildMatchUrl(activeGame.game_slug, activeGame.match_id), {
+                replace: true,
+            });
         }
     };
 
@@ -58,17 +74,14 @@ export default function RejoinGameModal() {
                 customClass="rejoin-game-modal"
             >
                 <Text customClass="modal-description">
-                    {matchStillLiveText(
-                        shortenUsername(activeGame.opponent.username),
-                    )}
+                    {matchStillLiveText(opponentName)}
                 </Text>
                 <Box customClass="stat-row">
                     <Text component="span" customClass="stat-title">
                         {opponentText}
                     </Text>
                     <Text component="span" customClass="stat-val">
-                        {shortenUsername(activeGame.opponent.username)} (
-                        {activeGame.opponent.elo_rating})
+                        {opponentName} ({opponent.scoreLabel})
                     </Text>
                 </Box>
                 <Box customClass="stat-row">
@@ -76,7 +89,7 @@ export default function RejoinGameModal() {
                         {feeText}
                     </Text>
                     <Text component="span" customClass="stat-val">
-                        {formatAmount(activeGame.stake_amount)}
+                        {betAmount}
                     </Text>
                 </Box>
                 <Box customClass="modal-actions">
@@ -103,9 +116,7 @@ export default function RejoinGameModal() {
                 customClass="rejoin-game-modal"
             >
                 <Text customClass="modal-description">
-                    {leavingForfeitsText(
-                        formatAmount(activeGame.stake_amount),
-                    )}
+                    {leavingForfeitsText(betAmount)}
                 </Text>
                 <Box customClass="modal-actions">
                     <Button

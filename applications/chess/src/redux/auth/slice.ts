@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { ILoginResponse } from "@/types/utils";
+import type { ILoginResponse } from "@gopvp/common/src/types/response";
 
 export type TAuthSessionState = {
     isLoggedIn: boolean;

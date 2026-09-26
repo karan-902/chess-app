@@ -19,11 +19,8 @@ import {
     LEADERBOARD_SORTS,
     LEADERBOARD_SORT_LABELS,
 } from "@/constants/config";
-import type {
-    ILeaderboardPlayer,
-    LeaderboardScope,
-    LeaderboardSort,
-} from "@/types/types";
+import type { LeaderboardScope, LeaderboardSort } from "@gopvp/common/src/types/index";
+import type { ILeaderboardRowResponse } from "@gopvp/common/src/types/response";
 import {
  noDataFoundText,
  noRankedPlayersText,
@@ -59,8 +56,8 @@ export default function Leaderboard() {
     const isMe = (id: string) => id === currentUserId;
     const meInList = players.some((p) => isMe(p.id));
     const youLabel = (username: string) => `${username}(${youText})`;
-    const playerValue = (player: ILeaderboardPlayer) =>
-        sort === "wins" ? player.wins ?? 0 : formatAmount(player.win_amount ?? 0);
+    const playerValue = (player: ILeaderboardRowResponse) =>
+        "wins" in player ? player.wins : formatAmount(player.win_amount);
 
     const setFilter = (key: "scope" | "sort", value: string) => {
         setSearchParams(
@@ -108,7 +105,7 @@ export default function Leaderboard() {
                             </Text>
                         </Card>
                     )}
-                    <VirtualList<ILeaderboardPlayer>
+                    <VirtualList<ILeaderboardRowResponse>
                         data={players}
                         computeItemKey={(_, player) => player.id}
                         endReached={loadMore}

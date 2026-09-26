@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { IWalletBalanceResponse } from "@/types/utils";
+import type { IBalanceResponse } from "@gopvp/common/src/types/response";
 
 interface IWalletState {
  balanceUsd: number;
@@ -17,7 +17,7 @@ const walletSlice = createSlice({
  name: "wallet",
  initialState,
  reducers: {
-  setWalletBalance: (state, action: PayloadAction<IWalletBalanceResponse>) => {
+  setWalletBalance: (state, action: PayloadAction<IBalanceResponse>) => {
    state.balanceUsd = action.payload.total_balance;
    state.withdrawableUsd = action.payload.withdraw_balance;
    state.loading = false;

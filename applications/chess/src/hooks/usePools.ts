@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { callAPIInterface, showApiErrorToast } from "@/utils";
 import { useGame } from "@/hooks/useGame";
-import type { IPoolResponse } from "@/types/types";
+import type { IPoolResponse } from "@gopvp/common/src/types/response";
 
 export function usePools() {
     const { game } = useGame();
@@ -13,7 +13,7 @@ export function usePools() {
         const loadPools = async () => {
             try {
                 setPools(
-                    await callAPIInterface<undefined, IPoolResponse[]>(
+                    await callAPIInterface<IPoolResponse[], undefined>(
                         "GET",
                         `/matchmaking/pools?game=${game}`,
                     ),

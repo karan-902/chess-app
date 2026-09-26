@@ -4,10 +4,11 @@ import Text from "@/components/base/Text/Text";
 import CustomChip from "@/components/base/Chip/Chip";
 import Skeleton from "@/components/base/Skeleton/Skeleton";
 import PieceIcon from "@/components/board/PieceIcon";
-import type { IPlayerRowProps } from "@/types/components";
+import type { IPlayerRowProps } from "@/types/component";
 import {
  youText,
  reconnectingText,
+ firstMoveText,
 } from "@/constants/messages";
 
 function capturedCode(type: string, color: "w" | "b") {
@@ -26,13 +27,14 @@ export default function PlayerRow({
  variant,
  active,
  name,
- eloLabel,
+ scoreLabel,
  capturedPieces,
  pieceColor,
- advantage,
+ // advantage,
  clock,
  clockReady,
- graceSecondsRemaining,
+ isReconnecting,
+ firstMoveSeconds,
 }: IPlayerRowProps) {
  return (
   <Box
@@ -44,17 +46,16 @@ export default function PlayerRow({
   >
    <Box customClass="gr-meta">
     <Box sx={{ gap: 1 }} customClass="flex">
-     <Text customClass="gr-name">
-      {name}
-     </Text>
-     {variant === "self" && (
-      <CustomChip label={youText} customClass="gr-elo" />
-     )}
-     {eloLabel && <CustomChip label={eloLabel} customClass="gr-elo" />}
+     <Text customClass="gr-name">{name}</Text>
+     {variant === "self" && <CustomChip label={youText} customClass="gr-score" />}
+     {scoreLabel && <CustomChip label={scoreLabel} customClass="gr-score" />}
     </Box>
-    {typeof graceSecondsRemaining === "number" && (
+    {isReconnecting && (
+     <Text customClass="gr-grace caption">{reconnectingText}</Text>
+    )}
+    {typeof firstMoveSeconds === "number" && (
      <Text customClass="gr-grace caption">
-      {reconnectingText(graceSecondsRemaining)}
+      {firstMoveText(firstMoveSeconds)}
      </Text>
     )}
 

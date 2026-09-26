@@ -1,36 +1,25 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { IActiveGameFoundResponse } from "@/types/types";
-
-interface IRematchOffer {
- gameId: string;
- opponentUsername: string;
- betAmount: number;
-}
+import type { IActiveGameEvent } from "@gopvp/common/src/types/response";
 
 interface IDeviceHandoff {
  deviceName: string | null;
 }
 
 interface ISocketModalsState {
- activeGame: IActiveGameFoundResponse | null;
+ activeGame: IActiveGameEvent | null;
  deviceHandoff: IDeviceHandoff | null;
- rematchOffer: IRematchOffer | null;
 }
 
 const initialState: ISocketModalsState = {
  activeGame: null,
  deviceHandoff: null,
- rematchOffer: null,
 };
 
 const socketModalsSlice = createSlice({
  name: "socketModals",
  initialState,
  reducers: {
-  setActiveGame: (
-   state,
-   action: PayloadAction<IActiveGameFoundResponse | null>,
-  ) => {
+  setActiveGame: (state, action: PayloadAction<IActiveGameEvent | null>) => {
    state.activeGame = action.payload;
   },
  },

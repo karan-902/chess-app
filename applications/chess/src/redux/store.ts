@@ -7,7 +7,10 @@ import walletReducer from "./wallet/slice";
 import socketModalsReducer from "./socketModals/slice";
 import speedReducer, { hydrateSpeed, type ISpeedState } from "./speed/slice";
 import gameReducer from "./game/slice";
-import type { ILoginResponse } from "@/types/utils";
+import matchReducer from "./match/slice";
+import pvcReducer from "./pvc/slice";
+import { savePvcState } from "@/utils/storage";
+import type { ILoginResponse } from "@gopvp/common/src/types/response";
 
 export const store = configureStore({
  reducer: {
@@ -17,6 +20,8 @@ export const store = configureStore({
   socketModals: socketModalsReducer,
   speed: speedReducer,
   game: gameReducer,
+  match: matchReducer,
+  pvc: pvcReducer,
  },
 });
 
@@ -33,6 +38,15 @@ store.subscribe(() => {
  if (speedState === savedSpeedState) return;
  savedSpeedState = speedState;
  speedStore.setItem(SPEED_STATE_KEY, speedState);
+});
+
+let savedPvcState = store.getState().pvc;
+
+store.subscribe(() => {
+ const pvcState = store.getState().pvc;
+ if (pvcState === savedPvcState) return;
+ savedPvcState = pvcState;
+ savePvcState(pvcState);
 });
 
 export async function hydrateSpeedState() {

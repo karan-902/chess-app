@@ -33,7 +33,7 @@
   }
  }
 
- &.gr-elo {
+ &.gr-score {
   height: 20px;
   margin-top: 0.2rem;
   background: $greenishTeal;
@@ -85,7 +85,7 @@
   height: 32px;
   font-size: $font14;
 
-  background: alpha($gold, 0.12);
+  background: transparent;
   border: 1px solid alpha($gold, 0.3);
   padding: 0.3rem 0.75rem;
   border-radius: 4px !important;

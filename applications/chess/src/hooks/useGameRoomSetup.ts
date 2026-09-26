@@ -1,70 +1,33 @@
 import { useState } from "react";
-import type { TimeControl, GameMode, Difficulty } from "@/types/components";
-import type { GameCategory } from "@/types/types";
+import type { GameMode } from "@/types/component";
 import { oppositeSide, shortenUsername } from "@/utils";
-import { isGameFinished, getPvcColor, setPvcColor } from "@/utils/storage";
-import {
- opponentText,
- computerText,
-} from "@/constants/messages";
-import { useGame } from "@/hooks/useGame";
+import { isGameFinished } from "@/utils/storage";
+import { useReduxSelector } from "@/redux/hooks";
 
-export function useGameRoomSetup(params: URLSearchParams, usdValue: number) {
-    const { routes } = useGame();
-    const mode: GameMode = params.get("mode") === "pvc" ? "pvc" : "pvp";
-    const isPvc = mode === "pvc";
-    const difficulty: Difficulty =
-        (params.get("difficulty") as Difficulty) || "medium";
-    const gameId = params.get("game_id") ?? undefined;
-    const timeControl = (params.get("time") as TimeControl) || "rapid";
-    const myCategory = timeControl.toUpperCase() as GameCategory;
-    const playerSide: "w" | "b" = params.get("color") === "black" ? "b" : "w";
-    const computerSide = oppositeSide(playerSide);
-    const opponentName = isPvc
-        ? computerText
-        : params.get("opponent")
-          ? shortenUsername(decodeURIComponent(params.get("opponent")!))
-          : opponentText;
-    const isRoomMatch = params.get("room") === "1";
-    const opponentRating = Number(params.get("opp_rating") ?? 0);
-    const opponentId = params.get("opp_id") ?? undefined;
-    const betAmount = Number(params.get("stake_amount") ?? 0);
-    const canAffordRematch = usdValue >= betAmount;
+export function useGameRoomSetup(mode: GameMode) {
+ const isPvc = mode === "pvc";
+ const pvc = useReduxSelector((state) => state.pvc);
+ const match = useReduxSelector((state) => state.match);
+ const { self, opponent } = isPvc ? pvc : match;
+ const gameId = isPvc ? (pvc.gameId ?? undefined) : match.state?.match_id;
+ const playerSide = self?.color ?? "w";
 
-    const [wasAlreadyFinished] = useState(
-        () => !!gameId && isGameFinished(gameId),
-    );
+ const [wasAlreadyFinished] = useState(
+  () => !!gameId && isGameFinished(gameId),
+ );
 
-    const [pvcColorRedirect] = useState<string | null>(() => {
-        if (!isPvc || !gameId) return null;
-        const urlColor = params.get("color") ?? "white";
-        const storedColor = getPvcColor(gameId);
-        if (!storedColor) {
-            setPvcColor(gameId, urlColor);
-            return null;
-        }
-        if (storedColor === urlColor) return null;
-        const corrected = new URLSearchParams(params);
-        corrected.set("color", storedColor);
-        return `${routes.PLAY}?${corrected.toString()}`;
-    });
-
-    return {
-        mode,
-        isPvc,
-        difficulty,
-        gameId,
-        timeControl,
-        myCategory,
-        playerSide,
-        computerSide,
-        opponentName,
-        isRoomMatch,
-        opponentRating,
-        opponentId,
-        betAmount,
-        canAffordRematch,
-        wasAlreadyFinished,
-        pvcColorRedirect,
-    };
+ return {
+  isPvc,
+  difficulty: pvc.difficulty,
+  gameId,
+  startingMs: isPvc ? pvc.time : (match.state?.time ?? 0),
+  betAmount: isPvc ? 0 : (match.state?.bet ?? 0),
+  playerSide,
+  computerSide: oppositeSide(playerSide),
+  myName: shortenUsername(self?.name ?? ""),
+  myScoreLabel: self?.scoreLabel ?? "",
+  opponentName: shortenUsername(opponent?.name ?? ""),
+  opponentScoreLabel: opponent?.scoreLabel ?? "",
+  wasAlreadyFinished,
+ };
 }

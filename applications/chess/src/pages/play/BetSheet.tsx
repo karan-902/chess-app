@@ -8,7 +8,7 @@ import PoolCardSkeleton from "@/components/common/PoolCardSkeleton";
 import { deriveCategory, msToSeconds } from "@/utils";
 import { formatText } from "@/utils/format";
 import { CATEGORY_META } from "@/constants/config";
-import type { IBetSheetProps } from "@/types/components";
+import type { IBetSheetProps } from "@gopvp/common/src/types/component";
 import {
  playText,
  largestPrizesTipText,
@@ -77,9 +77,7 @@ export default function BetSheet({
            canAfford ? onPoolPlay(pool) : onInsufficientBalance()
           }
          >
-          {canAfford
-           ? playText
-           : addFundsText}
+          {canAfford ? playText : addFundsText}
          </Button>
         </Card>
        );

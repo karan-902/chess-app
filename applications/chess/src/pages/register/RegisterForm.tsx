@@ -18,8 +18,8 @@ import { useReduxDispatch } from "@/redux/hooks";
 import { login } from "@/redux/auth/thunk";
 import { showLoader, hideLoader } from "@/redux/common/slice";
 import { COUNTRY_OPTIONS } from "@/constants/config";
-import type { IRegisterEmailBody } from "@/types/index";
-import type { IRegisterResponse, IRandomNameResponse } from "@/types/utils";
+import type { IRegisterBody } from "@gopvp/common/src/types/payload";
+import type { IRegisterResponse, IRandomNameResponse } from "@gopvp/common/src/types/response";
 import {
  emailText,
  enterEmailText,
@@ -42,7 +42,7 @@ import {
  selectCountryText,
  USERNAME_MAX_LENGTH,
 } from "@/constants/messages";
-import { IEmailFormScreenProps, IEmailFormValues } from "@/types/components";
+import type { IEmailFormScreenProps } from "@gopvp/common/src/types/component";
 
 const USERNAME_CHECK_DEBOUNCE_MS = 700;
 
@@ -53,10 +53,7 @@ const registerSchema = yup.object({
   .min(3, usernameMinLengthText)
   .max(USERNAME_MAX_LENGTH, usernameMaxLengthText)
   .required(usernameRequiredText),
- email: yup
-  .string()
-  .email(enterValidEmailText)
-  .required(emailRequiredText),
+ email: yup.string().email(enterValidEmailText).required(emailRequiredText),
  password: yup
   .string()
   .required(passwordRequiredText)
@@ -65,7 +62,7 @@ const registerSchema = yup.object({
 });
 
 function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
- const formik = useFormik<IEmailFormValues>({
+ const formik = useFormik<IRegisterBody>({
   initialValues: {
    username: "",
    email: "",
@@ -75,7 +72,7 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
   validationSchema: registerSchema,
   onSubmit: async (values, { setSubmitting }) => {
    try {
-    await callAPIInterface<IRegisterEmailBody, IRegisterResponse>(
+    await callAPIInterface<IRegisterResponse, IRegisterBody>(
      "POST",
      "/auth/register",
      {
@@ -103,16 +100,14 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
  const usernameFieldRef = useRef<HTMLDivElement>(null);
  const suggestionsMenuPaperRef = useRef<HTMLDivElement | null>(null);
  const [suggestionsMenuOpen, setSuggestionsMenuOpen] = useState(false);
- const [quickNameSuggestions, setQuickNameSuggestions] = useState<string[]>(
-  [],
- );
+ const [quickNameSuggestions, setQuickNameSuggestions] = useState<string[]>([]);
  const [loadingQuickNames, setLoadingQuickNames] = useState(false);
 
  useEffect(() => {
   const loadQuickNames = async () => {
    setLoadingQuickNames(true);
    try {
-    const res = await callAPIInterface<undefined, IRandomNameResponse>(
+    const res = await callAPIInterface<IRandomNameResponse, undefined>(
      "GET",
      "/auth/random-name",
     );
@@ -145,7 +140,7 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
    setLoadingSuggestions(true);
    setSuggestionsMenuOpen(true);
    try {
-    const res = await callAPIInterface<undefined, IRandomNameResponse>(
+    const res = await callAPIInterface<IRandomNameResponse, undefined>(
      "GET",
      `/auth/random-name?username=${encodeURIComponent(trimmed)}`,
     );
@@ -266,7 +261,8 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
    <CustomMenu
     anchorEl={usernameFieldRef.current}
     open={
-     suggestionsMenuOpen && (loadingSuggestions || usernameSuggestions.length > 0)
+     suggestionsMenuOpen &&
+     (loadingSuggestions || usernameSuggestions.length > 0)
     }
     onClose={() => setSuggestionsMenuOpen(false)}
     autoFocus={false}

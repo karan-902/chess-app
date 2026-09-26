@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { callAPIInterface, getDeviceFingerprint } from "@/utils";
-import type { ILoginBody, ISSOBody } from "@/types/index";
-import type { ILoginResponse } from "@/types/utils";
+import type { ILoginBody, IGoogleLoginBody } from "@gopvp/common/src/types/payload";
+import type { ILoginResponse } from "@gopvp/common/src/types/response";
 import { throwThunkError } from "@/redux/createAppThunk";
 import sessionService from "@gopvp/common/src/util/sessionService";
 
@@ -10,7 +10,7 @@ export const login = createAsyncThunk(
  async (body: ILoginBody, { rejectWithValue }) => {
   try {
    const fingerprint = await getDeviceFingerprint();
-   const res = await callAPIInterface<ILoginBody, ILoginResponse>(
+   const res = await callAPIInterface<ILoginResponse, ILoginBody>(
     "POST",
     "/auth/login",
     { ...body, fingerprint },
@@ -29,10 +29,10 @@ export const login = createAsyncThunk(
 
 export const googleLogin = createAsyncThunk(
  "auth/googleLogin",
- async (body: ISSOBody, { rejectWithValue }) => {
+ async (body: IGoogleLoginBody, { rejectWithValue }) => {
   try {
    const fingerprint = await getDeviceFingerprint();
-   const res = await callAPIInterface<ISSOBody, ILoginResponse>(
+   const res = await callAPIInterface<ILoginResponse, IGoogleLoginBody>(
     "POST",
     "/auth/sso-login",
     { ...body, fingerprint },

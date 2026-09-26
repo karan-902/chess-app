@@ -1,214 +1,200 @@
-import { useEffect } from "react";
-import type { Socket } from "socket.io-client";
-import type { AppDispatch } from "@/redux/store";
+import { useCallback, useEffect, useState } from "react";
+import { useSocket } from "@/context/SocketContext";
+import { useCountdown } from "@/hooks/useCountdown";
+import { useReduxDispatch, useReduxSelector } from "@/redux/hooks";
 import { showToast } from "@/redux/common/slice";
-import type {
-    IopponentMoveResponse,
-    IMoveConfirmedResponse,
-    IClockUpdateResponse,
-    IdrawOfferedResponse,
-    IdrawRejectedResponse,
-    IgameEndedResponse,
-    ISocketErrorResponse,
-    IopponentDisconnectedResponse,
-    IopponentReconnectedResponse,
-    IgameRestoreResponse,
-} from "@/types/types";
+import { loadMatchState } from "@/redux/match/thunk";
 import {
- drawOfferDeclinedText,
- opponentDisconnectedText,
- waitingToReconnectText,
- opponentConnectedText,
-} from "@/constants/messages";
+    callAPIInterface,
+    showAckErrorToast,
+    showApiErrorToast,
+} from "@/utils";
+import { drawOfferDeclinedText } from "@/constants/messages";
+import type {
+    IDrawOfferEvent,
+    IMatchResultResponse,
+    ISocketAckError,
+} from "@gopvp/common/src/types/response";
+import type { IMoveEvent, IMoveResponse } from "@/types/response";
+import type { IMoveBody } from "@/types/payload";
+import type { PieceColor } from "@/types/index";
+
+const MATCH_END_EVENTS = [
+    "game:resign",
+    "game:rejoin:declined",
+    "game:disconnect",
+    "game:abort",
+];
+
+const toDeadlineAt = (deadlineMs?: number) =>
+    deadlineMs === undefined ? null : Date.now() + deadlineMs;
 
 interface IProps {
-    socket: Socket | null;
-    gameId: string | undefined;
     isPvc: boolean;
-    dispatch: AppDispatch;
-    graceSecondsRemaining: number | null;
-    applyOpponentMove: (
-        from: string,
-        to: string,
-        promotion: string | null,
-        serverFen: string,
-    ) => void;
-    confirmMove: (serverFen: string) => void;
+    applyServerFen: (fen: string) => boolean;
     restoreGame: (
         moves: Array<{ from: string; to: string; promotion: string | null }>,
     ) => void;
     syncClock: (whiteRemainingMs: number, blackRemainingMs: number) => void;
-    notifySuperseded: () => void;
-    setClockReady: (ready: boolean) => void;
-    setDrawOffer: (offer: IdrawOfferedResponse | null) => void;
-    setGameEnded: (ended: IgameEndedResponse) => void;
-    setGraceSecondsRemaining: (
-        update: number | null | ((s: number | null) => number | null),
-    ) => void;
-    setOpponentDisconnected: (disconnected: boolean) => void;
+    setGameEnded: (ended: IMatchResultResponse) => void;
 }
 
 export function useGameSocket({
-    socket,
-    gameId,
     isPvc,
-    dispatch,
-    graceSecondsRemaining,
-    applyOpponentMove,
-    confirmMove,
+    applyServerFen,
     restoreGame,
     syncClock,
-    notifySuperseded,
-    setClockReady,
-    setDrawOffer,
     setGameEnded,
-    setGraceSecondsRemaining,
-    setOpponentDisconnected,
 }: IProps) {
-    const hasGrace = graceSecondsRemaining !== null;
-    useEffect(() => {
-        if (!hasGrace) return;
-        const id = setInterval(() => {
-            setGraceSecondsRemaining((s) =>
-                s === null ? null : Math.max(0, s - 1),
+    const { socket } = useSocket();
+    const dispatch = useReduxDispatch();
+    const userId = useReduxSelector((state) => state.auth.session?.id);
+    const matchState = useReduxSelector((state) => state.match.state);
+    const matchId = matchState?.match_id;
+    const [clockReady, setClockReady] = useState(isPvc);
+    const [drawOffer, setDrawOffer] = useState<IDrawOfferEvent | null>(null);
+    const [isOpponentOffline, setIsOpponentOffline] = useState(false);
+    const [firstMoveDeadlineAt, setFirstMoveDeadlineAt] = useState<
+        number | null
+    >(null);
+    const firstMoveSeconds = useCountdown(firstMoveDeadlineAt);
+
+    const endMatch = useCallback(async () => {
+        setFirstMoveDeadlineAt(null);
+        try {
+            setGameEnded(
+                await callAPIInterface<IMatchResultResponse>(
+                    "GET",
+                    `/matches/match-result/${matchId}`,
+                ),
             );
-        }, 1000);
-        return () => clearInterval(id);
-    }, [hasGrace, setGraceSecondsRemaining]);
+        } catch (err) {
+            showApiErrorToast(err);
+        }
+    }, [matchId, setGameEnded]);
+
+    const resync = useCallback(async () => {
+        if (!matchId) return;
+        if (!(await dispatch(loadMatchState(matchId)).unwrap())) endMatch();
+    }, [matchId, dispatch, endMatch]);
 
     useEffect(() => {
-        if (!socket || !gameId || isPvc) return;
+        if (isPvc || !matchState) return;
+        const { move_history, players } = matchState;
+        const remainingTime = (color: PieceColor) =>
+            players.find((player) => player.color === color)?.remaining_time ??
+            0;
+        const opponent = players.find((player) => player.user_id !== userId);
+        restoreGame(move_history);
+        syncClock(remainingTime("w"), remainingTime("b"));
+        setClockReady(true);
+        setDrawOffer(
+            opponent?.draw_offer ? { offererId: opponent.user_id } : null,
+        );
+        setFirstMoveDeadlineAt(
+            toDeadlineAt(matchState.first_move_deadline_ms),
+        );
+    }, [isPvc, matchState, userId, restoreGame, syncClock]);
 
-        const rejoin = () => socket.emit("rejoin_game", { game_id: gameId });
-        rejoin();
-        socket.on("connect", rejoin);
+    useEffect(() => {
+        if (!socket || isPvc) return;
 
-        const onOpponentMove = (data: IopponentMoveResponse) => {
-            console.log("[socket] opponent_move received", data);
-            applyOpponentMove(data.from, data.to, data.promotion, data.fen);
+        const onMove = (data: IMoveEvent) => {
+            if (!applyServerFen(data.fen)) resync();
+            syncClock(data.remainingTime.white, data.remainingTime.black);
+            setFirstMoveDeadlineAt(toDeadlineAt(data.firstMoveDeadlineMs));
+            if (
+                data.isCheckmate ||
+                data.isStaleMate ||
+                data.isDraw ||
+                data.isTimeout
+            )
+                endMatch();
         };
-        const onMoveConfirmed = (data: IMoveConfirmedResponse) => {
-            console.log("[socket] move_confirmed received", data);
-            confirmMove(data.fen);
-        };
-        const onGameRestored = (data: IgameRestoreResponse) => {
-            restoreGame(
-                data.moves.map((m) => ({
-                    from: m.from,
-                    to: m.to,
-                    promotion: m.promotion,
-                })),
-            );
-            syncClock(data.white_remaining_ms, data.black_remaining_ms);
-            setClockReady(true);
-            if (data.draw_offered_by) {
-                setDrawOffer({
-                    game_id: data.game_id,
-                    offered_by: data.draw_offered_by,
-                });
-            }
-        };
-        const onClockUpdate = (data: IClockUpdateResponse) => {
-            syncClock(data.white_remaining_ms, data.black_remaining_ms);
-            setClockReady(true);
-        };
-        const onDrawOffered = (data: IdrawOfferedResponse) => {
-            if (data.game_id === gameId) setDrawOffer(data);
-        };
-        const onDrawRejected = (data: IdrawRejectedResponse) => {
-            if (data.game_id === gameId)
-                dispatch(
-                    showToast({
-                        isToastOpen: true,
-                        toastMessage: drawOfferDeclinedText,
-                        toastVariant: "info",
-                    }),
-                );
-        };
-        const onGameEnded = (data: IgameEndedResponse) => {
-            if (data.game_id !== gameId) return;
-            setGameEnded(data);
-            setGraceSecondsRemaining(null);
-        };
-        const onSocketError = (data: ISocketErrorResponse) => {
-            dispatch(showToast({ isToastOpen: true, toastMessage: data.message, toastVariant: "error" }));
-        };
-        const onOpponentDisconnected = (
-            data: IopponentDisconnectedResponse,
-        ) => {
-            if (data.game_id !== gameId) return;
-            setOpponentDisconnected(true);
-            setGraceSecondsRemaining(data.grace_period_seconds);
+        const onDrawDecline = () =>
             dispatch(
                 showToast({
                     isToastOpen: true,
-                    toastMessage: `${opponentDisconnectedText} — ${waitingToReconnectText(
-                        data.grace_period_seconds,
-                    )}`,
+                    toastMessage: drawOfferDeclinedText,
                     toastVariant: "info",
                 }),
             );
-        };
-        const onOpponentReconnected = (data: IopponentReconnectedResponse) => {
-            if (data.game_id !== gameId) return;
-            setOpponentDisconnected(false);
-            setGraceSecondsRemaining(null);
-            dispatch(
-                showToast({
-                    isToastOpen: true,
-                    toastMessage: opponentConnectedText,
-                    toastVariant: "success",
-                }),
-            );
-        };
+        const onOpponentOffline = () => setIsOpponentOffline(true);
+        const onOpponentOnline = () => setIsOpponentOffline(false);
 
-        socket.on("opponent_move", onOpponentMove);
-        socket.on("move_confirmed", onMoveConfirmed);
-        socket.on("game_restored", onGameRestored);
-        socket.on("clock_update", onClockUpdate);
-        socket.on("draw_offered", onDrawOffered);
-        socket.on("draw_rejected", onDrawRejected);
-        socket.on("game_ended", onGameEnded);
-        socket.on("tab_superseded", notifySuperseded);
-        socket.on("socket_error", onSocketError);
-        socket.on("opponent_disconnected", onOpponentDisconnected);
-        socket.on("opponent_reconnected", onOpponentReconnected);
+        socket.on("connect", resync);
+        socket.on("game:move", onMove);
+        socket.on("game:draw:offer", setDrawOffer);
+        socket.on("game:draw:decline", onDrawDecline);
+        socket.on("game:opponent:offline", onOpponentOffline);
+        socket.on("game:opponent:online", onOpponentOnline);
+        MATCH_END_EVENTS.forEach((event) => socket.on(event, endMatch));
 
         return () => {
-            socket.off("connect", rejoin);
-            socket.off("opponent_move", onOpponentMove);
-            socket.off("move_confirmed", onMoveConfirmed);
-            socket.off("game_restored", onGameRestored);
-            socket.off("clock_update", onClockUpdate);
-            socket.off("draw_offered", onDrawOffered);
-            socket.off("draw_rejected", onDrawRejected);
-            socket.off("game_ended", onGameEnded);
-            socket.off("tab_superseded", notifySuperseded);
-            socket.off("socket_error", onSocketError);
-            socket.off("opponent_disconnected", onOpponentDisconnected);
-            socket.off("opponent_reconnected", onOpponentReconnected);
+            socket.off("connect", resync);
+            socket.off("game:move", onMove);
+            socket.off("game:draw:offer", setDrawOffer);
+            socket.off("game:draw:decline", onDrawDecline);
+            socket.off("game:opponent:offline", onOpponentOffline);
+            socket.off("game:opponent:online", onOpponentOnline);
+            MATCH_END_EVENTS.forEach((event) => socket.off(event, endMatch));
         };
-    }, [
-        socket,
-        gameId,
-        isPvc,
-        applyOpponentMove,
-        confirmMove,
-        restoreGame,
-        syncClock,
-        dispatch,
-        notifySuperseded,
-        setClockReady,
-        setDrawOffer,
-        setGameEnded,
-        setGraceSecondsRemaining,
-        setOpponentDisconnected,
-    ]);
+    }, [socket, isPvc, applyServerFen, syncClock, resync, endMatch, dispatch]);
 
-    useEffect(() => {
-        if (!socket || !gameId || isPvc) return;
-        const onPageHide = () => socket.emit("leave_game", { game_id: gameId });
-        window.addEventListener("pagehide", onPageHide);
-        return () => window.removeEventListener("pagehide", onPageHide);
-    }, [socket, gameId, isPvc]);
+    const handleMoveAck = (err: ISocketAckError | null, data: IMoveResponse) => {
+        if (err) {
+            showAckErrorToast(err);
+            resync();
+            return;
+        }
+        if (data.error || !applyServerFen(data.fen)) {
+            resync();
+            return;
+        }
+        syncClock(data.remaining_time.white, data.remaining_time.black);
+        setFirstMoveDeadlineAt(toDeadlineAt(data.first_move_deadline_ms));
+        if (
+            data.is_checkmate ||
+            data.is_stalemate ||
+            data.is_draw ||
+            data.is_timeout
+        )
+            endMatch();
+    };
+
+    const sendMove = (from: string, to: string, promotion?: string) => {
+        const body: IMoveBody = { from, to, promotion };
+        setDrawOffer(null);
+        setFirstMoveDeadlineAt(null);
+        socket?.emit("game:move", body, handleMoveAck);
+    };
+
+    const resign = () =>
+        socket?.emit("game:resign", (err: ISocketAckError | null) =>
+            err ? showAckErrorToast(err) : endMatch(),
+        );
+
+    const offerDraw = () => socket?.emit("game:draw:offer", showAckErrorToast);
+
+    const acceptDraw = () => {
+        setDrawOffer(null);
+        socket?.emit("game:draw:accept", handleMoveAck);
+    };
+
+    const declineDraw = () => {
+        setDrawOffer(null);
+        socket?.emit("game:draw:decline", showAckErrorToast);
+    };
+
+    return {
+        clockReady,
+        drawOffer,
+        isOpponentOffline,
+        firstMoveSeconds,
+        sendMove,
+        resign,
+        offerDraw,
+        acceptDraw,
+        declineDraw,
+    };
 }

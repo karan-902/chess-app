@@ -1,11 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import {
- useSearchParams,
- useNavigate,
- useBlocker,
- Navigate,
-} from "react-router-dom";
-import { showToast } from "@/redux/common/slice";
+import { useNavigate, useBlocker, Navigate } from "react-router-dom";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import ChessBoard from "@/components/board/Board";
@@ -17,34 +11,31 @@ import { useChessGame } from "@/hooks/useChessGame";
 import { useBoardReview } from "@/hooks/useBoardReview";
 import { useGameClock } from "@/hooks/useGameClock";
 import { useTabLock } from "@/hooks/useTabLock";
-import { useRematch } from "@/hooks/useRematch";
 import { useStockfish } from "@/hooks/useStockfish";
 import { useComputerOpponent } from "@/hooks/useComputerOpponent";
 import { useGameRoomSetup } from "@/hooks/useGameRoomSetup";
 import { useGameSocket } from "@/hooks/useGameSocket";
 import { usePvcGameEnd } from "@/hooks/usePvcGameEnd";
-import { useSocket } from "@/context/SocketContext";
-import { useWalletBalance } from "@/hooks/useWallet";
-import { useReduxSelector, useReduxDispatch } from "@/redux/hooks";
-import { oppositeSide, shortenUsername } from "@/utils";
+import { oppositeSide } from "@/utils";
 import { markGameFinished, clearPvcSnapshot } from "@/utils/storage";
 import { DIFFICULTY_CONFIG } from "@/constants/index";
-import { GAME_END_REASON_LABELS } from "@/constants/config";
-import { useGame } from "@/hooks/useGame";
-import type { IdrawOfferedResponse, IgameEndedResponse } from "@/types/types";
 import {
- difficultyText,
+ GAME_END_REASON_LABELS,
+ MATCH_RESULT_OUTCOMES,
+} from "@/constants/config";
+import { useGame } from "@/hooks/useGame";
+import type { IMatchResultResponse } from "@gopvp/common/src/types/response";
+import type { IGameRoomProps } from "@/types/component";
+import {
  resignText,
  drawText,
  opponentOfferedDrawText,
  acceptText,
  declineText,
- drawOfferDeclinedText,
  victoryText,
  drawUpperText,
  defeatText,
  gameOverText,
- dashText,
 } from "@/constants/messages";
 import Button from "@/components/base/Button/Button";
 import ResignModal from "@/components/common/ResignModal";
@@ -53,40 +44,27 @@ function pickBySide<T>(side: "w" | "b", whiteVal: T, blackVal: T): T {
  return side === "w" ? whiteVal : blackVal;
 }
 
-export default function GameRoom() {
- const [params] = useSearchParams();
- const dispatch = useReduxDispatch();
- const session = useReduxSelector((state) => state.auth.session);
+export default function GameRoom({ mode }: IGameRoomProps) {
  const navigate = useNavigate();
  const { routes } = useGame();
- const { socket } = useSocket();
- const { usdValue } = useWalletBalance();
- const myUserId = useReduxSelector((state) => state.auth.session?.id);
 
  const {
-  mode,
   isPvc,
   difficulty,
   gameId,
-  timeControl,
-  // myCategory,
+  startingMs,
   playerSide,
   computerSide,
+  myName,
+  myScoreLabel,
   opponentName,
-  isRoomMatch,
-  opponentRating,
+  opponentScoreLabel,
   betAmount,
-  canAffordRematch,
   wasAlreadyFinished,
-  pvcColorRedirect,
- } = useGameRoomSetup(params, usdValue);
+ } = useGameRoomSetup(mode);
 
  if (wasAlreadyFinished) {
   return <Navigate to={routes.PLAY} replace />;
- }
-
- if (pvcColorRedirect) {
-  return <Navigate to={pvcColorRedirect} replace />;
  }
 
  const {
@@ -102,8 +80,7 @@ export default function GameRoom() {
   isCheckmate,
   kingSquare,
   makeMove,
-  applyOpponentMove,
-  confirmMove,
+  applyServerFen,
   restoreGame,
   getLegalMoves,
   isPromotionMove,
@@ -126,14 +103,10 @@ export default function GameRoom() {
   from: string;
   to: string;
  } | null>(null);
- const [gameEnded, setGameEnded] = useState<IgameEndedResponse | null>(null);
- const [clockReady, setClockReady] = useState(isPvc);
- const [opponentDisconnected, setOpponentDisconnected] = useState(false);
- const [graceSecondsRemaining, setGraceSecondsRemaining] = useState<
-  number | null
- >(null);
+ const [gameEnded, setGameEnded] = useState<IMatchResultResponse | null>(
+  null,
+ );
  const [resignOpen, setResignOpen] = useState(false);
- const [drawOffer, setDrawOffer] = useState<IdrawOfferedResponse | null>(null);
 
  const bypassBlockRef = useRef(false);
  const blocker = useBlocker(
@@ -167,7 +140,6 @@ export default function GameRoom() {
   setPremoveFrom(null);
  }, [gameId]);
 
- const paused = !!gameEnded || opponentDisconnected;
  const {
   whiteTimer,
   blackTimer,
@@ -175,14 +147,9 @@ export default function GameRoom() {
   blackTimeMs,
   timedOut,
   syncClock,
- } = useGameClock(timeControl, paused, turn);
+ } = useGameClock(startingMs, !!gameEnded, turn);
 
- const { notifySuperseded } = useTabLock(gameId, mode);
- const {
-  status: rematchStatus,
-  secondsLeft: rematchSecs,
-  offerRematch,
- } = useRematch(gameId);
+ useTabLock(gameId, mode);
 
  const { bestMove } = useStockfish(
   fen,
@@ -210,7 +177,6 @@ export default function GameRoom() {
   isCheckmate,
   isStalemate,
   timedOut,
-  myUserId,
   moveLog,
   whiteTimeMs,
   blackTimeMs,
@@ -220,22 +186,22 @@ export default function GameRoom() {
   setGameEnded,
  });
 
- useGameSocket({
-  socket,
-  gameId,
+ const {
+  clockReady,
+  drawOffer,
+  isOpponentOffline,
+  firstMoveSeconds,
+  sendMove,
+  resign,
+  offerDraw,
+  acceptDraw,
+  declineDraw,
+ } = useGameSocket({
   isPvc,
-  dispatch,
-  graceSecondsRemaining,
-  applyOpponentMove,
-  confirmMove,
+  applyServerFen,
   restoreGame,
   syncClock,
-  notifySuperseded,
-  setClockReady,
-  setDrawOffer,
   setGameEnded,
-  setGraceSecondsRemaining,
-  setOpponentDisconnected,
  });
 
  const legalMoves = selectedSquare ? getLegalMoves(selectedSquare) : [];
@@ -245,26 +211,7 @@ export default function GameRoom() {
 
  const commitMove = (from: string, to: string, promotion?: string) => {
   const result = makeMove(from, to, promotion);
-  if (result && socket && gameId && !isPvc) {
-   const payload = {
-    game_id: gameId,
-    from,
-    to,
-    promotion: result.promotion ?? null,
-    fen: result.fen,
-   };
-   console.log("[socket] emitting make_move", payload, {
-    connected: socket.connected,
-   });
-   socket.emit("move_made", payload);
-  } else {
-   console.log("[pvc] make_move emitted", {
-    hasResult: !!result,
-    hasSocket: !!socket,
-    gameId,
-    isPvc,
-   });
-  }
+  if (result && !isPvc) sendMove(from, to, result.promotion);
   return result;
  };
 
@@ -342,9 +289,9 @@ export default function GameRoom() {
 
  const handleResignConfirm = () => {
   if (isPvc) {
-   endPvcGame("computer", "resign");
+   endPvcGame("loss", "RESIGN");
   } else {
-   socket?.emit("resign_game", { game_id: gameId });
+   resign();
   }
   setResignOpen(false);
   if (blocker.state === "blocked") blocker.proceed();
@@ -353,21 +300,6 @@ export default function GameRoom() {
  const handleKeepPlaying = () => {
   setResignOpen(false);
   if (blocker.state === "blocked") blocker.reset();
- };
-
- const handleDrawOffer = () => {
-  socket?.emit("offer_draw", { game_id: gameId });
- };
-
- const handleDrawAccept = () => {
-  socket?.emit("accept_draw", { game_id: gameId });
-  setDrawOffer(null);
- };
-
- const handleDrawDecline = () => {
-  socket?.emit("reject_draw", { game_id: gameId });
-  setDrawOffer(null);
-  dispatch(showToast({ isToastOpen: true, toastMessage: drawOfferDeclinedText, toastVariant: "info" }));
  };
 
  const boardFen = isReviewing ? displayFen : fen;
@@ -385,8 +317,9 @@ export default function GameRoom() {
  const oppClock = pickBySide(oppColor, whiteTimer, blackTimer);
  const myTurnActive = turn === playerSide;
 
- const isDrawResult = !!gameEnded && gameEnded.winner_id === null;
- const isWinner = !!gameEnded && !!myUserId && gameEnded.winner_id === myUserId;
+ const outcome = gameEnded ? MATCH_RESULT_OUTCOMES[gameEnded.result] : null;
+ const isDrawResult = outcome === "draw";
+ const isWinner = outcome === "win";
  const resultHeader = !gameEnded
   ? ""
   : isDrawResult
@@ -394,10 +327,8 @@ export default function GameRoom() {
     : isWinner
       ? victoryText
       : defeatText;
- const settlementUsd =
-  gameEnded?.settlement?.[isWinner ? "winner" : "loser"].usd ?? 0;
- const reasonLabel = gameEnded?.reason
-  ? (GAME_END_REASON_LABELS[gameEnded.reason] ?? gameOverText)
+ const reasonLabel = gameEnded?.end_reason
+  ? (GAME_END_REASON_LABELS[gameEnded.end_reason] ?? gameOverText)
   : "";
 
  return (
@@ -406,19 +337,14 @@ export default function GameRoom() {
     variant="opponent"
     active={!myTurnActive}
     name={opponentName}
-    eloLabel={
-     isPvc
-      ? difficultyText[difficulty]
-      : isRoomMatch
-        ? ""
-        : `${opponentRating} elo`
-    }
+    scoreLabel={opponentScoreLabel}
     capturedPieces={oppCaptured}
     pieceColor={playerSide}
     advantage={myAdvantage < 0 ? -myAdvantage : null}
     clock={oppClock}
     clockReady={clockReady}
-    graceSecondsRemaining={graceSecondsRemaining}
+    isReconnecting={isOpponentOffline}
+    firstMoveSeconds={myTurnActive ? null : firstMoveSeconds}
    />
 
    <Box customClass="gr-board-wrap">
@@ -458,26 +384,23 @@ export default function GameRoom() {
    <PlayerRow
     variant="self"
     active={myTurnActive}
-    name={session?.username ? shortenUsername(session.username) : ""}
-    eloLabel={
-     isPvc || isRoomMatch
-      ? ""
-      : `${/* session?.ratings[myCategory] ?? */ dashText} elo`
-    }
+    name={myName}
+    scoreLabel={myScoreLabel}
     capturedPieces={myCaptured}
     pieceColor={oppColor}
     advantage={myAdvantage > 0 ? myAdvantage : null}
     clock={myClock}
     clockReady={clockReady}
+    firstMoveSeconds={myTurnActive ? firstMoveSeconds : null}
    />
 
    {drawOffer && (
     <Box customClass="gr-draw-banner">
      <Text component="span">{opponentOfferedDrawText}</Text>
-     <Button customClass="gr-link" onClick={handleDrawAccept}>
+     <Button customClass="gr-link" onClick={acceptDraw}>
       {acceptText}
      </Button>
-     <Button customClass="gr-link danger" onClick={handleDrawDecline}>
+     <Button customClass="gr-link danger" onClick={declineDraw}>
       {declineText}
      </Button>
     </Box>
@@ -491,7 +414,7 @@ export default function GameRoom() {
      {resignText}
     </Button>
     {!isPvc && (
-     <Button customClass="gr-action-btn" onClick={handleDrawOffer}>
+     <Button customClass="gr-action-btn" onClick={offerDraw}>
       {drawText}
      </Button>
     )}
@@ -512,13 +435,7 @@ export default function GameRoom() {
      resultHeader={resultHeader}
      isWinner={isWinner}
      isDrawResult={isDrawResult}
-     settlementUsd={settlementUsd}
-     isPvc={isPvc}
-     canAffordRematch={canAffordRematch}
-     rematchStatus={rematchStatus}
-     rematchSecs={rematchSecs}
      onNewGame={() => navigate(routes.PLAY, { replace: true })}
-     onRematch={offerRematch}
     />
    )}
   </Box>

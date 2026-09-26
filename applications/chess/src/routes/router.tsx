@@ -4,9 +4,6 @@ import PrivateRoute from "@/container/PrivateRoute";
 import PublicRoute from "@/container/PublicRoute";
 import Login from "@/pages/login";
 import Register from "@/pages/register";
-// import ForgotPassword from "@/pages/forgot-password";
-// import ResetPassword from "@/pages/reset-password";
-// import VerifyEmail from "@/pages/verify-email";
 // import ApproveDevice from "@/pages/approve-device";
 import MyMatches from "@/pages/history";
 import Leaderboard from "@/pages/leaderboard";
@@ -27,9 +24,6 @@ export const router = createBrowserRouter([
                 children: [
                     { path: "/login", element: <Login /> },
                     { path: "/register", element: <Register /> },
-                    // { path: "/forgot-password", element: <ForgotPassword /> },
-                    // { path: "/reset-password", element: <ResetPassword /> },
-                    // { path: "/verify-email", element: <VerifyEmail /> },
                 ],
             },
             // { path: "/approve-device", element: <ApproveDevice /> },

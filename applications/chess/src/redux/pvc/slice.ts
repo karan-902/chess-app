@@ -1,0 +1,58 @@
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { TIME_SECONDS } from "@/constants";
+import { computerText, difficultyText } from "@/constants/messages";
+import { loadPvcState } from "@/utils/storage";
+import type { Difficulty } from "@/types/component";
+import type {
+ GameCategory,
+ IGameRoomPlayer,
+ PieceColor,
+} from "@/types/index";
+
+export interface IPvcState {
+ gameId: string | null;
+ difficulty: Difficulty;
+ time: number;
+ self: IGameRoomPlayer | null;
+ opponent: IGameRoomPlayer | null;
+}
+
+interface IStartPvcGamePayload {
+ gameId: string;
+ difficulty: Difficulty;
+ category: GameCategory;
+ color: PieceColor;
+ username: string;
+}
+
+const initialState: IPvcState = {
+ gameId: null,
+ difficulty: "medium",
+ time: 0,
+ self: null,
+ opponent: null,
+};
+
+const pvcSlice = createSlice({
+ name: "pvc",
+ initialState: () => loadPvcState() ?? initialState,
+ reducers: {
+  startPvcGame: (_state, action: PayloadAction<IStartPvcGamePayload>) => {
+   const { gameId, difficulty, category, color, username } = action.payload;
+   return {
+    gameId,
+    difficulty,
+    time: TIME_SECONDS[category] * 1000,
+    self: { name: username, scoreLabel: "", color },
+    opponent: {
+     name: computerText,
+     scoreLabel: difficultyText[difficulty],
+     color: color === "w" ? "b" : "w",
+    },
+   };
+  },
+ },
+});
+
+export const { startPvcGame } = pvcSlice.actions;
+export default pvcSlice.reducer;

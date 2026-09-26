@@ -13,12 +13,12 @@ import { useReduxSelector, useReduxDispatch } from "@/redux/hooks";
 import sessionService from "@gopvp/common/src/util/sessionService";
 import { useAppTheme } from "@/context/ThemeContext";
 import { callAPIInterface, shortenUsername, showApiErrorToast } from "@/utils";
+import type { IUpdateProfileBody } from "@gopvp/common/src/types/payload";
 import type {
  ILoginResponse,
- IUpdateProfileBody,
- IUpdateProfileResponse,
-} from "@/types/utils";
-import type { IEditProfileDrawerProps } from "@/types/components";
+ IProfileResponse,
+} from "@gopvp/common/src/types/response";
+import type { IEditProfileDrawerProps } from "@gopvp/common/src/types/component";
 import {
  editProfileText,
  ratingsText,
@@ -62,9 +62,9 @@ function EditProfileDrawer({
   onSubmit: async (values, { setSubmitting }) => {
    try {
     const updated = await callAPIInterface<
-     IUpdateProfileBody,
-     IUpdateProfileResponse
-    >("PUT", "/profile", values);
+     IProfileResponse,
+     IUpdateProfileBody
+    >("PATCH", "/profile", values);
     await sessionService.updateSession<ILoginResponse>(updated);
     onClose();
    } catch (err) {
@@ -126,7 +126,7 @@ export default function Profile() {
   const loadProfile = async () => {
    try {
     await sessionService.updateSession<ILoginResponse>(
-     await callAPIInterface<undefined, Partial<ILoginResponse>>(
+     await callAPIInterface<Partial<ILoginResponse>, undefined>(
       "GET",
       "/profile",
      ),
@@ -165,15 +165,11 @@ export default function Profile() {
       </Box>
       <Box customClass="profile-meta-row">
        <Mail size={12} strokeWidth={2} />
-       <Text customClass="profile-id-handle caption">
-        {session.email}
-       </Text>
+       <Text customClass="profile-id-handle caption">{session.email}</Text>
       </Box>
       <Box customClass="profile-meta-row">
        <MapPin size={12} strokeWidth={2} />
-       <Text customClass="profile-id-handle caption">
-        {session.country}
-       </Text>
+       <Text customClass="profile-id-handle caption">{session.country}</Text>
       </Box>
      </Box>
     </Box>

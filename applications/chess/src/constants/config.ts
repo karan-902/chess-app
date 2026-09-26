@@ -8,12 +8,13 @@ import {
  HandshakeIcon,
 } from "@/components/base/images";
 import type { LucideIcon, SvgIconComponent } from "@/components/base/images";
+import type { GameCategory, MatchOutcome } from "@/types/index";
 import type {
- GameCategory,
  LeaderboardScope,
  LeaderboardSort,
-} from "@/types/types";
-import type { TransactionType } from "@/types/utils";
+ MatchResult,
+ TransactionType,
+} from "@gopvp/common/src/types/index";
 import {
  checkmateText,
  resignText,
@@ -87,12 +88,19 @@ export const DEBIT_TRANSACTION_TYPES = new Set<TransactionType>([
 ]);
 
 export const GAME_END_REASON_LABELS: Record<string, string> = {
- checkmate: checkmateText,
- resign: resignText,
- draw: drawText,
- stalemate: stalemateText,
- timeout: timeoutText,
- opponent_disconnected: inactivityText,
+ CHECKMATE: checkmateText,
+ RESIGN: resignText,
+ DRAW: drawText,
+ STALEMATE: stalemateText,
+ TIMEOUT: timeoutText,
+ DISCONNECT: inactivityText,
+};
+
+export const MATCH_RESULT_OUTCOMES: Record<MatchResult, MatchOutcome> = {
+ WIN: "win",
+ BET: "loss",
+ DRAW: "draw",
+ MATCH_CANCELLED: "draw",
 };
 
 export const POOL_TIMEOUT_SECONDS = 60;

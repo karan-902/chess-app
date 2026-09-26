@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import { Chess } from "chess.js";
 import type { Square } from "chess.js";
-import type { MoveRecord } from "@/types/types";
+import type { MoveRecord } from "@/types/index";
 import { playSound, getMoveSound } from "@/lib/sounds";
 
 export const CAPTURE_ORDER = ["p", "n", "b", "r", "q"] as const;
@@ -13,6 +13,7 @@ const STARTING_COUNTS: Record<string, number> = {
     q: 1,
 };
 const PIECE_VALUES: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9 };
+const positionKey = (fen: string) => fen.split(" ").slice(0, 4).join(" ");
 
 export interface ICapturedPieces {
     byWhite: string[];
@@ -267,63 +268,16 @@ const getPremovePieceColor = useCallback(
         return { from: m.from, to: m.to };
     }, [chess]);
 
-    const applyOpponentMove = useCallback(
-        (
-            from: string,
-            to: string,
-            promotion: string | null,
-            serverFen: string,
-        ) => {
-            try {
-                const move = chess.move({
-                    from,
-                    to,
-                    promotion: promotion ?? "q",
-                });
-                if (move) {
-                    playSound(
-                        getMoveSound(move, chess.isCheck(), chess.isGameOver()),
-                    );
-                    setLastMove({ from, to });
-
-                    const history = chess.history();
-                    const records: MoveRecord[] = [];
-                    for (let i = 0; i < history.length; i += 2) {
-                        records.push({
-                            n: i / 2 + 1,
-                            w: history[i],
-                            b: history[i + 1] ?? "",
-                        });
-                    }
-                    if (chess.fen() !== serverFen) chess.load(serverFen);
-                    setFen(serverFen);
-                    setFenHistory((prev) => [...prev, serverFen]);
-                    setMoveHistory(records);
-                    setMoveLog((prev) => [...prev, { from, to, promotion }]);
-                }
-            } catch {
-                chess.load(serverFen);
-                setFen(serverFen);
-                setFenHistory((prev) => [...prev, serverFen]);
-                setLastMove({ from, to });
-                setMoveLog((prev) => [...prev, { from, to, promotion }]);
-            }
+    const applyServerFen = useCallback(
+        (serverFen: string): boolean => {
+            const target = positionKey(serverFen);
+            if (positionKey(chess.fen()) === target) return true;
+            const move = chess
+                .moves({ verbose: true })
+                .find((m) => positionKey(m.after) === target);
+            return !!move && !!makeMove(move.from, move.to, move.promotion);
         },
-        [chess],
-    );
-
-    const confirmMove = useCallback(
-        (serverFen: string) => {
-            if (chess.fen() === serverFen) return;
-            try {
-                chess.load(serverFen);
-                setFen(serverFen);
-                setFenHistory((prev) => [...prev.slice(0, -1), serverFen]);
-            } catch (error) {
-                console.error("[confirmMove] invalid FEN from server", error);
-            }
-        },
-        [chess],
+        [chess, makeMove],
     );
 
     const resetGame = useCallback(() => {
@@ -359,8 +313,7 @@ const getPremovePieceColor = useCallback(
         fen,
         fenHistory,
         makeMove,
-        applyOpponentMove,
-        confirmMove,
+        applyServerFen,
         resetGame,
         restoreGame,
         getLegalMoves,

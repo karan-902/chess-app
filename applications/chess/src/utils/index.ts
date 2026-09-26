@@ -13,13 +13,15 @@ import {
  yesterdayText,
  justNowText,
 } from "@/constants/messages";
-import type { IGenerateTokenBody } from "@/types/index";
-import type { IGenerateTokenResponse, ILoginResponse } from "@/types/utils";
-import { IGameRoomNavPayload, TimeControl } from "@/types/components";
-import { TIME_SECONDS } from "@/constants";
+import type { IGenerateTokenBody } from "@gopvp/common/src/types/payload";
+import type {
+ IGenerateTokenResponse,
+ ILoginResponse,
+ ISocketAckError,
+} from "@gopvp/common/src/types/response";
 import { GAMES, GAME_PAGES, type GameSlug } from "@/constants/config";
 import { apiUrl } from "@gopvp/common/src/constants/env";
-import type { GameCategory, IPoolResponse } from "@/types/types";
+import type { GameCategory } from "@/types/index";
 import { getStoredFingerprint, setStoredFingerprint } from "@/utils/storage";
 
 dayjs.extend(duration);
@@ -30,8 +32,6 @@ const OPEN_API_ENDPOINTS = [
  "/auth/generate-token",
  "/auth/verify-user",
  // "/auth/sso-register",
- // "/forgot-password",
- // "/reset-password",
  // "/device/approval-status",
 ];
 export const LOGOUT_PATH = "/auth/logout";
@@ -67,13 +67,17 @@ export async function generateToken(): Promise<string> {
   try {
    const session = await sessionService.loadSession<ILoginResponse>();
    const { access_token, refresh_token } = await callAPIInterface<
-    IGenerateTokenBody,
-    IGenerateTokenResponse
+    IGenerateTokenResponse,
+    IGenerateTokenBody
    >("POST", "/auth/generate-token", {
     refresh_token: session?.refresh_token ?? "",
    });
    if (session) {
-    await sessionService.saveSession({ ...session, access_token, refresh_token });
+    await sessionService.saveSession({
+     ...session,
+     access_token,
+     refresh_token,
+    });
    }
    return access_token;
   } finally {
@@ -92,7 +96,17 @@ export function showApiErrorToast(err: any) {
   response.data?.type === "session_expired";
  const toastMessage = response?.data?.message;
  if (isAlreadyToasted || !toastMessage) return;
- store.dispatch(showToast({ isToastOpen: true, toastMessage, toastVariant: "error" }));
+ store.dispatch(
+  showToast({ isToastOpen: true, toastMessage, toastVariant: "error" }),
+ );
+}
+
+export function showAckErrorToast(err: ISocketAckError | null) {
+ const toastMessage = err?.errors[0]?.message;
+ if (!toastMessage) return;
+ store.dispatch(
+  showToast({ isToastOpen: true, toastMessage, toastVariant: "error" }),
+ );
 }
 
 async function getHeaders<TPayload = undefined>(
@@ -125,12 +139,6 @@ export function shortenUsername(username: string): string {
  return trimmed.split(/\s+/)[0] ?? trimmed;
 }
 
-function secondsToTimeControl(seconds: number): TimeControl {
- const match = (Object.entries(TIME_SECONDS) as [TimeControl, number][]).find(
-  ([, s]) => s === seconds,
- );
- return match?.[0] ?? "rapid";
-}
 export function oppositeSide(side: "w" | "b"): "w" | "b" {
  return side === "w" ? "b" : "w";
 }
@@ -163,26 +171,8 @@ export function getGameRoutes(game: GameSlug) {
  ) as Record<keyof typeof GAME_PAGES, string>;
 }
 
-export function buildGameRoomUrl(data: IGameRoomNavPayload, game: GameSlug): string {
- return (
-  `${getGameRoutes(game).PLAY}?mode=pvp&time=${secondsToTimeControl(data.time_seconds)}` +
-  `&game_id=${data.game_id}&color=${data.your_color}` +
-  `&opponent=${encodeURIComponent(data.opponent.username)}` +
-  `&opp_rating=${data.opponent.elo_rating}&opp_id=${data.opponent.id}` +
-  `&opp_avatar_seed=${encodeURIComponent(data.opponent.avatar_seed ?? "")}` +
-  `&stake_amount=${data.stake_amount}` +
-  (data.room_code ? "&room=1" : "")
- );
-}
-export function buildMatchUrl(
- game: GameSlug,
- matchId: string,
- pool: Pick<IPoolResponse, "bet" | "time">,
-): string {
- return (
-  `${getGameRoutes(game).PLAY}?mode=pvp&game_id=${matchId}` +
-  `&time=${secondsToTimeControl(msToSeconds(pool.time))}&stake_amount=${pool.bet}`
- );
+export function buildMatchUrl(game: GameSlug, matchId: string): string {
+ return `${getGameRoutes(game).PLAY}?match=${matchId}`;
 }
 export function formatMatchDate(ms: number): string {
  const now = dayjs();
@@ -203,8 +193,8 @@ export function formatMMSS(totalSeconds: number): string {
 }
 
 export const callAPIInterface = async <
- TPayload = undefined,
  TResponse = unknown,
+ TPayload = undefined,
 >(
  method: Method,
  path: string,
@@ -272,7 +262,11 @@ export const callAPIInterface = async <
    if (errorType === "session_expired") {
     if (errorData?.message) {
      store.dispatch(
-      showToast({ isToastOpen: true, toastMessage: errorData.message, toastVariant: "error" }),
+      showToast({
+       isToastOpen: true,
+       toastMessage: errorData.message,
+       toastVariant: "error",
+      }),
      );
     }
     await sessionService.deleteSession();
@@ -281,7 +275,13 @@ export const callAPIInterface = async <
    }
 
    if (errorStatus === 429 && errorData?.message) {
-    store.dispatch(showToast({ isToastOpen: true, toastMessage: errorData.message, toastVariant: "error" }));
+    store.dispatch(
+     showToast({
+      isToastOpen: true,
+      toastMessage: errorData.message,
+      toastVariant: "error",
+     }),
+    );
    }
 
    reject(err);

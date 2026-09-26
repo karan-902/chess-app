@@ -13,69 +13,71 @@ import {
  winsText,
  bestStreakText,
 } from "@/constants/messages";
-import type { ILeaderboardPlayerStatsResponse } from "@/types/types";
-import type { ILeaderboardPlayerModalProps } from "@/types/components";
+import type { ILeaderboardPlayerResponse } from "@gopvp/common/src/types/response";
+import type { ILeaderboardPlayerModalProps } from "@gopvp/common/src/types/component";
 
 const STAT_SKELETON_ROWS = 4;
 
 export default function LeaderboardPlayerModal({
-    playerId,
-    onClose,
+ playerId,
+ onClose,
 }: ILeaderboardPlayerModalProps) {
-    const { game } = useGame();
-    const [stats, setStats] = useState<ILeaderboardPlayerStatsResponse | null>(null);
+ const { game } = useGame();
+ const [stats, setStats] = useState<ILeaderboardPlayerResponse | null>(
+  null,
+ );
 
-    useEffect(() => {
-        if (!playerId) return;
-        let isCancelled = false;
-        const loadStats = async () => {
-            setStats(null);
-            try {
-                const res = await callAPIInterface<undefined, ILeaderboardPlayerStatsResponse>(
-                    "GET",
-                    `/leaderboard/${playerId}?game=${game}`,
-                );
-                if (!isCancelled) setStats(res);
-            } catch (err) {
-                showApiErrorToast(err);
-                if (!isCancelled) onClose();
-            }
-        };
-        loadStats();
-        return () => {
-            isCancelled = true;
-        };
-    }, [playerId, game, onClose]);
+ useEffect(() => {
+  if (!playerId) return;
+  let isCancelled = false;
+  const loadStats = async () => {
+   setStats(null);
+   try {
+    const res = await callAPIInterface<
+     ILeaderboardPlayerResponse,
+     undefined
+    >("GET", `/leaderboard/${playerId}?game=${game}`);
+    if (!isCancelled) setStats(res);
+   } catch (err) {
+    showApiErrorToast(err);
+    if (!isCancelled) onClose();
+   }
+  };
+  loadStats();
+  return () => {
+   isCancelled = true;
+  };
+ }, [playerId, game, onClose]);
 
-    const statRows = stats && [
-        { label: scoreText, value: Math.round(stats.score) },
-        { label: winsText, value: stats.wins },
-        { label: bestStreakText, value: stats.best_streak },
-        { label: grossIncomeText, value: formatAmount(stats.gross_income) },
-    ];
+ const statRows = stats && [
+  { label: scoreText, value: Math.round(stats.score) },
+  { label: winsText, value: stats.wins },
+  { label: bestStreakText, value: stats.best_streak },
+  { label: grossIncomeText, value: formatAmount(stats.gross_income) },
+ ];
 
-    return (
-        <CustomModal
-            open={!!playerId}
-            onClose={onClose}
-            title={stats ? shortenUsername(stats.username) : undefined}
-        >
-            <Card customClass="stat-list">
-                {statRows
-                    ? statRows.map(({ label, value }) => (
-                          <Box key={label} customClass="stat-row">
-                              <Text component="span" customClass="stat-title">
-                                  {label}
-                              </Text>
-                              <Text component="span" customClass="stat-val">
-                                  {value}
-                              </Text>
-                          </Box>
-                      ))
-                    : Array.from({ length: STAT_SKELETON_ROWS }, (_, index) => (
-                          <StatRowSkeleton key={index} />
-                      ))}
-            </Card>
-        </CustomModal>
-    );
+ return (
+  <CustomModal
+   open={!!playerId}
+   onClose={onClose}
+   title={stats ? shortenUsername(stats.username) : undefined}
+  >
+   <Card customClass="stat-list">
+    {statRows
+     ? statRows.map(({ label, value }) => (
+        <Box key={label} customClass="stat-row">
+         <Text component="span" customClass="stat-title">
+          {label}
+         </Text>
+         <Text component="span" customClass="stat-val">
+          {value}
+         </Text>
+        </Box>
+       ))
+     : Array.from({ length: STAT_SKELETON_ROWS }, (_, index) => (
+        <StatRowSkeleton key={index} />
+       ))}
+   </Card>
+  </CustomModal>
+ );
 }

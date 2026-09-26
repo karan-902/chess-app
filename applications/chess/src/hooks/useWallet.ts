@@ -4,25 +4,27 @@ import { useSocket } from "@/context/SocketContext";
 import { useReduxDispatch, useReduxSelector } from "@/redux/hooks";
 import { fetchWalletBalance } from "@/redux/wallet/thunk";
 import type {
- ITransactionResponse,
- ITransactionsResponse,
- IWithdrawBody,
- IWithdrawResponse,
  IInitiateDepositBody,
- IInitiateDepositResponse,
-} from "@/types/utils";
+ IWithdrawRequestBody,
+} from "@gopvp/common/src/types/payload";
+import type {
+ IListResponse,
+ IPaymentRequestResponse,
+ ITransactionResponse,
+ IWithdrawResponse,
+} from "@gopvp/common/src/types/response";
 
 const PAGE_SIZE = 20;
 
 export const paymentRequest = (amountUsd: number) =>
- callAPIInterface<IInitiateDepositBody, IInitiateDepositResponse>(
+ callAPIInterface<IPaymentRequestResponse, IInitiateDepositBody>(
   "POST",
   "/wallet/payment-request",
   { amount: amountUsd },
  );
 
 export const withdrawRequest = (amountUsd: number, destination: string) =>
- callAPIInterface<IWithdrawBody, IWithdrawResponse>(
+ callAPIInterface<IWithdrawResponse, IWithdrawRequestBody>(
   "POST",
   "/wallet/withdraw",
   {
@@ -94,7 +96,7 @@ export function useWallet() {
      : "";
 
    try {
-    const res = await callAPIInterface<undefined, ITransactionsResponse | null>(
+    const res = await callAPIInterface<IListResponse<ITransactionResponse> | null, undefined>(
      "GET",
      `/wallet/transactions?limit=${PAGE_SIZE}${cursor}`,
     );

@@ -22,9 +22,6 @@ const APP_NAME = "GoPVP";
 const PAGE_TITLES: Record<string, string> = {
  "/login": "Sign in",
  "/register": "Register",
- // "/forgot-password": "Forgot password",
- // "/reset-password": "Reset password",
- // "/verify-email": "Verify email",
  // "/approve-device": "Approve device",
  "/wallet": "Wallet",
  "/profile": "Profile",

@@ -19,13 +19,14 @@ import {
  shortenUsername,
 } from "@/utils";
 import { formatText } from "@/utils/format";
-import { CATEGORY_META, GAME_END_REASON_LABELS } from "@/constants/config";
-import type { IGameHistoryItem, MatchResult } from "@/types/types";
-import type {
- IMatchRowProps,
- IMatchListProps,
- MatchesSubtab,
-} from "@/types/components";
+import {
+ CATEGORY_META,
+ GAME_END_REASON_LABELS,
+ MATCH_RESULT_OUTCOMES,
+} from "@/constants/config";
+import type { IMatchHistoryItem } from "@gopvp/common/src/types/response";
+import type { IMatchListProps, MatchesSubtab } from "@gopvp/common/src/types/component";
+import type { IMatchRowProps } from "@/types/component";
 import {
  myResultsText,
  worldwideText,
@@ -67,7 +68,7 @@ function MatchRow({
  const CategoryIcon = category && CATEGORY_META[category].icon;
  const metaParts = [
   endReason &&
-   (GAME_END_REASON_LABELS[endReason.toLowerCase()] ?? formatText(endReason)),
+   (GAME_END_REASON_LABELS[endReason] ?? formatText(endReason)),
   betAmount !== undefined && `${formatAmount(betAmount)} stake`,
   dateLabel,
  ].filter(Boolean);
@@ -85,15 +86,14 @@ function MatchRow({
        {selfName && (
         <>
          {selfName}
-         <CustomBadge
-          customClass="match-row-vs"
-          badgeContent={vsText}
-         />
+         <CustomBadge customClass="match-row-vs" badgeContent={vsText} />
         </>
        )}
        {opponentName}
       </Text>
-      <Text customClass="match-row-time meta-text">{metaParts.join(" · ")}</Text>
+      <Text customClass="match-row-time meta-text">
+       {metaParts.join(" · ")}
+      </Text>
      </Box>
     </Box>
     <Box customClass="match-row-amt-wrap">
@@ -131,14 +131,7 @@ function statsSkeletonRows() {
  ));
 }
 
-const RESULT_OUTCOME: Record<MatchResult, IMatchRowProps["outcome"]> = {
- WIN: "win",
- BET: "loss",
- DRAW: "draw",
- MATCH_CANCELLED: "draw",
-};
-
-function matchRow(item: IGameHistoryItem, currentUsername?: string) {
+function matchRow(item: IMatchHistoryItem, currentUsername?: string) {
  const displayName = (username: string) =>
   username === currentUsername ? youText : shortenUsername(username);
  if ("winner" in item) {
@@ -154,7 +147,7 @@ function matchRow(item: IGameHistoryItem, currentUsername?: string) {
  }
  return (
   <MatchRow
-   outcome={RESULT_OUTCOME[item.result]}
+   outcome={MATCH_RESULT_OUTCOMES[item.result]}
    opponentName={shortenUsername(item.opponent)}
    category={deriveCategory(msToSeconds(item.time))}
    endReason={item.end_reason}
@@ -173,7 +166,7 @@ function MatchList({
 }: IMatchListProps) {
  return (
   <Card customClass="stat-list match-row-list">
-   <VirtualList<IGameHistoryItem>
+   <VirtualList<IMatchHistoryItem>
     data={items}
     computeItemKey={(_, item) => item.id}
     itemContent={(_, item) => matchRow(item, currentUsername)}

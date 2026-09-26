@@ -14,8 +14,10 @@ import { useSocket } from "@/context/SocketContext";
 import { paymentRequest } from "@/hooks/useWallet";
 import { useModalReady } from "@/hooks/useModalReady";
 import { formatAmount } from "@/utils/format";
-import type { IInitiateDepositResponse } from "@/types/utils";
-import type { ITransactionCompletedEvent } from "@/types/types";
+import type {
+ IPaymentRequestResponse,
+ ITransactionCompletedEvent,
+} from "@gopvp/common/src/types/response";
 import {
  depositText,
  depositingAmountText,
@@ -60,7 +62,7 @@ export default function DepositModal() {
  const [amount, setAmount] = useState("");
  const [amountError, setAmountError] = useState("");
  const [submitting, setSubmitting] = useState(false);
- const [payment, setPayment] = useState<IInitiateDepositResponse | null>(null);
+ const [payment, setPayment] = useState<IPaymentRequestResponse | null>(null);
  const [copied, setCopied] = useState(false);
  const [remainingMs, setRemainingMs] = useState(0);
  const [expired, setExpired] = useState(false);

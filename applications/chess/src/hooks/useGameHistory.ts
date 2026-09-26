@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { callAPIInterface, showApiErrorToast } from "@/utils";
 import type {
- IGameHistoryItem,
- IGameHistoryResponse,
- ILeaderboardPlayerStatsResponse,
-} from "@/types/types";
+ IListResponse,
+ IMatchHistoryItem,
+ ILeaderboardPlayerResponse,
+} from "@gopvp/common/src/types/response";
 import { useReduxSelector } from "@/redux/hooks";
 import { useGame } from "@/hooks/useGame";
 
@@ -26,14 +26,14 @@ export function useGameHistory(
  type: "own" | "worldwide" = "own",
  fetchStats = false,
 ) {
- const [items, setItems] = useState<IGameHistoryItem[]>([]);
+ const [items, setItems] = useState<IMatchHistoryItem[]>([]);
  const [loading, setLoading] = useState(true);
  const [loadingMore, setLoadingMore] = useState(false);
  const [error, setError] = useState(false);
  const [loadedType, setLoadedType] = useState<"own" | "worldwide" | null>(null);
  const session = useReduxSelector((state) => state.auth.session);
  const { game } = useGame();
- const [stats, setStats] = useState<ILeaderboardPlayerStatsResponse | null>(
+ const [stats, setStats] = useState<ILeaderboardPlayerResponse | null>(
   null,
  );
  const [statsLoading, setStatsLoading] = useState(true);
@@ -61,7 +61,7 @@ export function useGameHistory(
 
    try {
     const res = await withRetry(() =>
-     callAPIInterface<undefined, IGameHistoryResponse | null>(
+     callAPIInterface<IListResponse<IMatchHistoryItem> | null, undefined>(
       "GET",
       `/matches?game=${game}${type === "worldwide" ? "&scope=worldwide" : ""}${cursor}`,
      ),
@@ -100,7 +100,7 @@ export function useGameHistory(
    try {
     setStats(
      await withRetry(() =>
-      callAPIInterface<undefined, ILeaderboardPlayerStatsResponse>(
+      callAPIInterface<ILeaderboardPlayerResponse, undefined>(
        "GET",
        `/leaderboard/${session?.id}?game=${game}`,
       ),

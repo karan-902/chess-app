@@ -3,7 +3,7 @@ import { io, type Socket } from "socket.io-client";
 import { callAPIInterface, showApiErrorToast } from "@/utils";
 import sessionService from "@gopvp/common/src/util/sessionService";
 import { socketUrl } from "@gopvp/common/src/constants/env";
-import type { ILoginResponse } from "@/types/utils";
+import type { ILoginResponse } from "@gopvp/common/src/types/response";
 
 const FALLBACK_POLL_MS = 45000;
 
@@ -29,8 +29,8 @@ export function useDeviceApprovalPoll() {
         const checkStatus = async () => {
             try {
                 const res = await callAPIInterface<
-                    { approval_token: string },
-                    ILoginResponse | { status: "pending" }
+                    ILoginResponse | { status: "pending" },
+                    { approval_token: string }
                 >("POST", "/device/approval-status", {
                     approval_token: approvalToken,
                 });

@@ -1,9 +1,9 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { IGameDetailsResponse } from "@/types/utils";
+import type { IGameResponse } from "@gopvp/common/src/types/response";
 
 interface IGameState {
     requestedSlug: string | null;
-    details: IGameDetailsResponse | null;
+    details: IGameResponse | null;
     isLoading: boolean;
 }
 
@@ -22,7 +22,7 @@ const gameSlice = createSlice({
             state.details = null;
             state.isLoading = true;
         },
-        setGameDetails: (state, action: PayloadAction<IGameDetailsResponse>) => {
+        setGameDetails: (state, action: PayloadAction<IGameResponse>) => {
             state.details = action.payload;
         },
         finishGameLoad: (state) => {

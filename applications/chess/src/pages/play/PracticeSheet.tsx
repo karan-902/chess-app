@@ -5,9 +5,9 @@ import CustomDrawer from "@/components/base/Drawer/Drawer";
 import ChipSelect from "@/components/common/ChipSelect";
 import { TIME_SECONDS } from "@/constants";
 import { CATEGORY_META } from "@/constants/config";
-import type { Difficulty } from "@/types/components";
-import type { GameCategory } from "@/types/types";
-import type { IPracticeSheetProps } from "@/types/components";
+import type { Difficulty } from "@/types/component";
+import type { GameCategory } from "@/types/index";
+import type { IPracticeSheetProps } from "@/types/component";
 import {
  playText,
  cancelText,

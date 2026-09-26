@@ -17,17 +17,10 @@ import { callAPIInterface } from "@/utils";
 import { useReduxDispatch } from "@/redux/hooks";
 import { login } from "@/redux/auth/thunk";
 import { showLoader, hideLoader } from "@/redux/common/slice";
-import type { IVerifyUserBody } from "@/types/index";
-import type { IVerifyUserResponse } from "@/types/utils";
-// import type { ILoginResponse } from "@/types/utils";
-import { SignupMethod } from "@/types/utils";
-import type {
- IEmailScreenProps,
- IPasswordValues,
- IPasswordScreenProps,
- // IWaitingApprovalScreenProps,
- LoginStep,
-} from "@/types/components";
+import type { IVerifyUserBody } from "@gopvp/common/src/types/payload";
+import type { IVerifyUserResponse } from "@gopvp/common/src/types/response";
+// import type { ILoginResponse } from "@gopvp/common/src/types/response";
+import type { IEmailScreenProps, IPasswordValues, IPasswordScreenProps, LoginStep } from "@gopvp/common/src/types/component";
 import {
  emailText,
  enterEmailText,
@@ -57,10 +50,7 @@ import {
 } from "@/constants/messages";
 
 const emailSchema = yup.object({
- email: yup
-  .string()
-  .email(enterValidEmailText)
-  .required(emailRequiredText),
+ email: yup.string().email(enterValidEmailText).required(emailRequiredText),
 });
 
 const passwordSchema = yup.object({
@@ -154,12 +144,8 @@ function PasswordScreen({
    <Box customClass="auth-account-card">
     <CustomAvatar letter={initials} customClass="md neutral" />
     <Box customClass="auth-account-info">
-     <Text customClass="auth-account-name">
-      {verifiedUsername}
-     </Text>
-     <Text customClass="auth-account-email">
-      {verifiedEmail}
-     </Text>
+     <Text customClass="auth-account-name">{verifiedUsername}</Text>
+     <Text customClass="auth-account-email">{verifiedEmail}</Text>
     </Box>
     <Button
      type="button"
@@ -265,13 +251,13 @@ export default function LoginForm() {
   onSubmit: async (values, { setSubmitting }) => {
    setError(null);
    try {
-    const res = await callAPIInterface<IVerifyUserBody, IVerifyUserResponse>(
+    const res = await callAPIInterface<IVerifyUserResponse, IVerifyUserBody>(
      "POST",
      "/auth/verify-user",
      { email: values.email },
     );
 
-    if (res.signup_method === SignupMethod.GOOGLE) {
+    if (res.signup_method === "GOOGLE") {
      googleLogin();
      return;
     }
@@ -377,8 +363,7 @@ export default function LoginForm() {
 
  const loginFooter = (
   <>
-   {noAccountPromptText}{" "}
-   <NavLink to="/register">{signUpText}</NavLink>
+   {noAccountPromptText} <NavLink to="/register">{signUpText}</NavLink>
   </>
  );
 

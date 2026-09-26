@@ -17,7 +17,7 @@ import {
  TRANSACTION_TYPE_DESCRIPTIONS,
  DEBIT_TRANSACTION_TYPES,
 } from "@/constants/config";
-import type { ITransactionResponse } from "@/types/utils";
+import type { ITransactionResponse } from "@gopvp/common/src/types/response";
 import {
  totalBalanceText,
  withdrawBalanceText,

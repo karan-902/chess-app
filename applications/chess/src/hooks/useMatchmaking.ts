@@ -4,23 +4,29 @@ import { getSocket } from "@/lib/socket";
 import { useSocket } from "@/context/SocketContext";
 import { useReduxDispatch } from "@/redux/hooks";
 import { showToast } from "@/redux/common/slice";
-import { buildMatchUrl } from "@/utils";
+import { buildMatchUrl, showAckErrorToast } from "@/utils";
 import { useGame } from "@/hooks/useGame";
+import { useCountdown } from "@/hooks/useCountdown";
+import { POOL_TIMEOUT_SECONDS } from "@/constants/config";
 import {
  noOpponentFoundText,
 } from "@/constants/messages";
 import type {
     IPoolResponse,
-    IPoolJoinAck,
+    IMatchmakingResponse,
     IPoolMatchedEvent,
     ISocketAckError,
-} from "@/types/types";
+} from "@gopvp/common/src/types/response";
 
 export type MatchmakingStatus = "idle" | "joining" | "queued" | "found";
 
 export function useMatchmaking() {
     const [status, setStatus] = useState<MatchmakingStatus>("idle");
     const [queuedPool, setQueuedPool] = useState<IPoolResponse | null>(null);
+    const [queueDeadlineAt, setQueueDeadlineAt] = useState<number | null>(
+        null,
+    );
+    const secondsLeft = useCountdown(queueDeadlineAt);
     const poolRef = useRef<IPoolResponse | null>(null);
     const navigate = useNavigate();
     const { game } = useGame();
@@ -30,6 +36,7 @@ export function useMatchmaking() {
     const resetStatus = useCallback(() => {
         setStatus("idle");
         setQueuedPool(null);
+        setQueueDeadlineAt(null);
         poolRef.current = null;
     }, []);
 
@@ -40,11 +47,10 @@ export function useMatchmaking() {
 
     const openMatch = useCallback(
         (matchId: string) => {
-            const pool = poolRef.current;
-            if (!pool) return;
+            if (!poolRef.current) return;
             poolRef.current = null;
             setStatus("found");
-            navigate(buildMatchUrl(game, matchId, pool), { replace: true });
+            navigate(buildMatchUrl(game, matchId), { replace: true });
         },
         [game, navigate],
     );
@@ -54,24 +60,22 @@ export function useMatchmaking() {
             getSocket()?.emit(
                 "pool:join",
                 { game, bet: pool.bet, time: pool.time },
-                (err: ISocketAckError | null, data: IPoolJoinAck) => {
+                (err: ISocketAckError | null, data: IMatchmakingResponse) => {
                     if (err) {
-                        const toastMessage = err.errors[0]?.message;
-                        if (toastMessage) {
-                            dispatch(showToast({ isToastOpen: true, toastMessage, toastVariant: "error" }));
-                        }
+                        showAckErrorToast(err);
                         resetStatus();
                         return;
                     }
-                    if (data.status === "MATCHED") {
+                    if (data.status === "MATCHED" && data.match_type === "POOL") {
                         openMatch(data.match_id);
                         return;
                     }
+                    setQueueDeadlineAt(Date.now() + POOL_TIMEOUT_SECONDS * 1000);
                     setStatus("queued");
                 },
             );
         },
-        [game, dispatch, resetStatus, openMatch],
+        [game, resetStatus, openMatch],
     );
 
     const joinQueue = (pool: IPoolResponse) => {
@@ -129,5 +133,12 @@ export function useMatchmaking() {
         [],
     );
 
-    return { status, queuedPool, joinQueue, leaveQueue, resetStatus };
+    return {
+        status,
+        queuedPool,
+        secondsLeft: secondsLeft ?? 0,
+        joinQueue,
+        leaveQueue,
+        resetStatus,
+    };
 }
