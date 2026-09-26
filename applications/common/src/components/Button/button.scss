@@ -53,14 +53,10 @@
   .button-text {
    font-family: $fontOutfitSemiBold !important;
    font-size: $font14 !important;
-   color: $appTextMuted;
+   color: $white;
   }
   .MuiButton-icon svg {
-   color: $appTextMuted;
-  }
-
-  :root[data-theme="light"] & {
-   background-color: #d8dce1;
+   color: $white;
   }
  }
 
@@ -383,7 +379,6 @@
   border-radius: 0.6rem;
  }
 
-
  &.deposit-copy-btn {
   flex-shrink: 0;
   background: $appBtnBg;
@@ -428,9 +423,6 @@
  &.profile-save-btn {
   margin-top: 0.4rem;
  }
-
-
-
 
  &.gr-link {
   font-size: $font12;

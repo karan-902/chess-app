@@ -44,5 +44,3 @@ const sessionService = {
 };
 
 export default sessionService;
-// Blue => #081439
-// Yellow => #D4B446

@@ -1,13 +1,13 @@
 /* Dark — Minibet (gold on neutral charcoal). Default. */
-export const colorBg = "#081439";
-export const colorSurface = "#0f1d4a";
-export const colorSurfaceRaised = "#132456";
-export const colorBorder = "#22346e";
+export const colorBg = "#111111";
+export const colorSurface = "#1c1c1d";
+export const colorSurfaceRaised = "#2a2b2c";
+export const colorBorder = "#2e2e2e";
 export const colorText = "#efefef";
 export const colorMuted = "#bab9be";
 export const colorPrimary = "#ff9800";
 export const colorPrimaryDark = colorPrimary;
-export const colorPrimaryContrast = colorBg;
+export const colorPrimaryContrast = "#ffffff";
 export const colorSecondary = "#2158fe";
 export const colorError = "#e94235";
 export const colorSuccess = "#1cd437";
