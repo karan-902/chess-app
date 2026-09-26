@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
-import "./successCheckmark.scss";
+import "./success-checkmark.scss";
 
 interface ISuccessCheckmarkProps {
     customClass?: string;
@@ -9,7 +9,7 @@ interface ISuccessCheckmarkProps {
     tickLottieSrc?: string;
 }
 
-export default function SuccessCheckmark({
+export function SuccessCheckmark({
     customClass,
     confettiGif,
     confettiLottieSrc,
@@ -48,3 +48,5 @@ export default function SuccessCheckmark({
         </div>
     );
 }
+
+export default SuccessCheckmark;

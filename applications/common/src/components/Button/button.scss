@@ -17,15 +17,47 @@
 
  .button-text {
   font-family: $fontOutfitSemiBold !important;
-  font-size: 14px;
+  font-size: $font14;
  }
- &.Mui-disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
+
+ &.filter-dropdown-btn {
+  gap: 0.35rem;
+  height: 40px !important;
+  min-width: 96px !important;
+  padding: 0 0.75rem;
+  border-radius: 1000px;
+  border: 1px solid transparent;
+  background: $appBg;
+  color: $appText;
+
+  .button-text {
+   font-size: $font14;
+   letter-spacing: 0;
+  }
+
+  .MuiButton-endIcon {
+   margin: 0;
+  }
+
+  &.active {
+   border: 1.5px solid $gold;
+  }
+ }
+ &.Mui-disabled:not(.btn--loading) {
+  background-color: $appSecondary;
   .button-text {
    font-family: $fontOutfitSemiBold !important;
-   font-size: 14px !important;
-   color: $white !important;
+   font-size: $font14 !important;
+   color: $appTextMuted;
+  }
+  .MuiButton-icon {
+   .auth-btn-arrow-icon {
+    color: $appTextMuted;
+   }
+  }
+
+  :root[data-theme="light"] & {
+   background-color: #d8dce1;
   }
  }
 
@@ -38,7 +70,12 @@
 
  &.MuiButton-contained {
   background: $primary;
-  color: $primaryContrast;
+  color: $primaryContrast !important;
+  .MuiButton-icon {
+   .auth-btn-arrow-icon {
+    color: $primaryContrast;
+   }
+  }
  }
 
  &.MuiButton-outlined {
@@ -56,6 +93,7 @@
 
  &.btn--loading {
   cursor: wait;
+
   pointer-events: none;
  }
 
@@ -65,6 +103,28 @@
 
  &:active:not(.Mui-disabled) {
   transform: scale(0.98);
+ }
+
+ &.appbar-back-btn {
+  align-self: flex-start;
+  gap: 0.35rem;
+  min-height: 0;
+  padding: 0.75rem 1.1rem;
+  background: transparent;
+  color: $appText;
+
+  .button-text {
+   font-size: $font16;
+   letter-spacing: 0;
+  }
+
+  .MuiButton-startIcon {
+   margin: 0;
+  }
+
+  &:hover:not(.Mui-disabled) {
+   background: transparent;
+  }
  }
 
  &.auth-back-btn {
@@ -86,24 +146,59 @@
  }
 
  &.auth-submit-btn,
- &.deposit-generate-btn,
+ &.modal-submit-btn,
  &.profile-save-btn {
   height: 2.85rem;
  }
 
+ &.auth-change-btn {
+  flex-shrink: 0;
+  gap: 0px;
+  height: auto;
+  padding: 0.4rem 0.7rem;
+  align-items: center;
+  font-size: $font12;
+  border-color: $appCardBorder;
+
+  &:hover:not(.Mui-disabled) {
+   border-color: alpha($appText, 0.4);
+  }
+  .button-text {
+   font-size: $font12;
+  }
+
+  .auth-change-icon {
+   font-size: $font14;
+  }
+ }
+
  &.auth-submit-btn {
-  margin-top: 0.25rem;
+  margin-top: 20px;
+ }
+
+ &.auth-submit-btn-arrow {
+  gap: 0.25rem;
+  .auth-btn-arrow-icon {
+   font-size: $font20;
+   color: $appText;
+  }
  }
 
  &.auth-google-btn {
+  gap: 0px;
   background: transparent;
   border: 1px solid alpha($appText, 0.22);
   box-shadow: none;
-  color: alpha($appText, 0.65);
+  color: $appText;
   font-weight: 600;
   height: 2.85rem;
   border-color: $appCardBorder;
-
+  .MuiButton-icon {
+   margin-right: 5px;
+  }
+  .button-text {
+   margin: 7px 5px;
+  }
   &:hover:not(.Mui-disabled) {
    background: transparent;
    border-color: alpha($appText, 0.4);
@@ -112,7 +207,7 @@
  }
 
  &.game-cta,
- &.stake-card-go {
+ &.bet-card-go {
   background: $gold !important;
   border: 1px solid $appBtnBorder;
   box-shadow: none;
@@ -158,21 +253,27 @@
   width: 100% !important;
  }
 
- &.stake-card-go {
-  width: 150px !important;
-  height: $font24 !important;
+ &.common-play {
+  width: min(150px, 100%) !important;
+  height: $font24 + 0.1 !important;
   min-height: 0px;
   padding: 0px !important;
   border-radius: 8px !important;
   .button-text {
-   font-size: $font12;
+   font-size: $font14;
   }
   color: $primaryContrast !important;
 
-  .stake-card.insufficient & {
+  .bet-card.insufficient & {
    background: transparent !important;
    border-color: $gold;
    color: $gold !important;
+  }
+  @media screen and (max-width: 600px) {
+   height: $font24 !important;
+   .button-text {
+    font-size: $font12;
+   }
   }
  }
 
@@ -313,8 +414,9 @@
   }
  }
 
- &.deposit-generate-btn {
+ &.modal-submit-btn {
   margin-top: 0.5rem;
+  border-radius: 0.6rem;
  }
 
  &.tx-filter-reset-btn {
@@ -503,7 +605,7 @@
    border: none;
    color: $primaryContrast;
 
-   &:disabled {
+   &.Mui-disabled {
     opacity: 0.6;
     cursor: not-allowed;
    }
@@ -518,13 +620,12 @@
 
  &.gr-action-btn {
   flex: 1;
-  max-width: 9.5rem;
-  padding: 0.6rem 1rem;
-
+  max-width: 5rem;
+  padding: 8px;
   border: 1px solid $appCardBorder;
-  background: $appSurface;
+  background: $paleRed;
   font-family: $fontOutfitExtraBold;
-  color: $appTextMuted;
+  color: $white;
   font-size: $font12;
   font-weight: 700;
   cursor: pointer;
@@ -532,17 +633,12 @@
    color 0.15s ease,
    border-color 0.15s ease;
 
-  &:hover {
-   color: $appText;
-   border-color: $appTextMuted;
-  }
-
   &.danger {
-   border-color: alpha($paleRed, 0.35);
-   color: $paleRed;
+   color: $white;
 
    &:hover {
-    border-color: $paleRed;
+    background: $paleRed !important;
+    opacity: 0.7;
    }
   }
  }
@@ -558,7 +654,7 @@
    border-color 0.15s ease,
    background-color 0.15s ease;
 
-  &:hover:not(:disabled) {
+  &:hover:not(.Mui-disabled) {
    background: alpha($gold, 0.1);
    border-color: $gold;
   }

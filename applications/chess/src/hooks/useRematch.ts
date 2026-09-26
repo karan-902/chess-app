@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { getSocket } from "@/lib/socket";
 import { useSocket } from "@/context/SocketContext";
 import { useReduxDispatch } from "@/redux/hooks";
-import { showToast } from "@/redux/common/common.slice";
+import { showToast } from "@/redux/common/slice";
 import { buildGameRoomUrl } from "@/utils";
+import { useGame } from "@/hooks/useGame";
 import type {
     IRematchOfferedResponse,
     IRematchExpiredResponse,
@@ -21,6 +22,7 @@ export function useRematch(gameId: string | undefined) {
     const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
     const statusRef = useRef<RematchStatus>("idle");
     const navigate = useNavigate();
+    const { game } = useGame();
     const { socket: ctxSocket } = useSocket();
     const dispatch = useReduxDispatch();
 
@@ -63,7 +65,7 @@ export function useRematch(gameId: string | undefined) {
             setStatus("idle");
             if (data.message)
                 dispatch(
-                    showToast({ message: data.message, severity: "error" }),
+                    showToast({ isToastOpen: true, toastMessage: data.message, toastVariant: "error" }),
                 );
         };
 
@@ -71,7 +73,7 @@ export function useRematch(gameId: string | undefined) {
             if (data.from_game_id !== gameId) return;
             stopCountdown();
             setStatus("found");
-            navigate(buildGameRoomUrl(data), { replace: true });
+            navigate(buildGameRoomUrl(data, game), { replace: true });
         };
 
         socket.on("rematch_offered", onRematchOffered);

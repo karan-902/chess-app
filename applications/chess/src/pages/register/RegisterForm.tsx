@@ -1,59 +1,62 @@
 import * as yup from "yup";
-import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router";
-import { Check } from "lucide-react";
+import { useState, useEffect, useMemo, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import CloseIcon from "@mui/icons-material/Close";
 import { useFormik } from "formik";
 import Box from "@/components/base/Box/Box";
-import Label from "@/components/base/Label/Label";
+import CustomLabel from "@/components/base/Label/Label";
+import Text from "@/components/base/Text/Text";
 import Input from "@/components/base/Input/Input";
 import Button from "@/components/base/Button/Button";
-import Select from "@/components/base/Select/Select";
-import { callAPIInterface } from "@/utils";
+import CustomChip from "@/components/base/Chip/Chip";
+import CustomSelect from "@/components/base/Select/Select";
+import CustomIconButton from "@/components/base/IconButton/IconButton";
+import Skeleton from "@/components/base/Skeleton/Skeleton";
+import CustomMenu from "@/components/base/Menu/Menu";
+import CustomMenuItem from "@/components/base/MenuItem/MenuItem";
+import { callAPIInterface, showApiErrorToast } from "@/utils";
 import { useReduxDispatch } from "@/redux/hooks";
-import { login } from "@/redux/thunks";
-import { showLoader, hideLoader, showToast } from "@/redux/common/common.slice";
+import { login } from "@/redux/auth/thunk";
+import { showLoader, hideLoader, showToast } from "@/redux/common/slice";
 import { COUNTRY_OPTIONS } from "@/constants/config";
 import type { IRegisterEmailBody } from "@/types/index";
-import type {
- IRegisterResponse,
- IUsernameAvailableResponse,
-} from "@/types/utils";
+import type { IRegisterResponse, IRandomNameResponse } from "@/types/utils";
 import {
  authEmailLabel,
  authEmailPlaceholder,
  authPasswordLabel,
  authPasswordPlaceholder,
- authConfirmPasswordLabel,
  authValidationEmailRequired,
  authValidationEmailInvalid,
  authValidationPasswordRequired,
  authValidationPasswordMinLength,
- authValidationConfirmPasswordRequired,
- authValidationPasswordsMustMatch,
  authValidationUsernameRequired,
  authValidationUsernameMinLength,
- authValidationUsernameTaken,
+ authValidationUsernameMaxLength,
  authValidationCountryRequired,
  authRegisterUsernameLabel,
  authRegisterUsernamePlaceholder,
+ authRegisterUsernameClearAriaLabel,
+ authRegisterQuickNamesLabel,
  authRegisterCountryLabel,
  authRegisterCreateAccountButton,
  authRegisterRegistrationFailed,
  countrySelectSelectPlaceholder,
+ authRegisterSuccess,
+ usernameSuggestionsFailed,
+ USERNAME_MAX_LENGTH,
 } from "@/constants/messages";
-import {
- IEmailFormScreenProps,
- IEmailFormValues,
- UsernameCheckStatus,
-} from "@/types/components";
+import { IEmailFormScreenProps, IEmailFormValues } from "@/types/components";
 
-const USERNAME_CHECK_DEBOUNCE_MS = 500;
+const USERNAME_CHECK_DEBOUNCE_MS = 700;
 
 const registerSchema = yup.object({
  username: yup
   .string()
   .trim()
   .min(3, authValidationUsernameMinLength)
+  .max(USERNAME_MAX_LENGTH, authValidationUsernameMaxLength)
   .required(authValidationUsernameRequired),
  email: yup
   .string()
@@ -63,10 +66,6 @@ const registerSchema = yup.object({
   .string()
   .required(authValidationPasswordRequired)
   .min(8, authValidationPasswordMinLength),
- confirm: yup
-  .string()
-  .required(authValidationConfirmPasswordRequired)
-  .oneOf([yup.ref("password")], authValidationPasswordsMustMatch),
  country: yup.string().required(authValidationCountryRequired),
 });
 
@@ -77,7 +76,6 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
    username: "",
    email: "",
    password: "",
-   confirm: "",
    country: "",
   },
   validationSchema: registerSchema,
@@ -85,7 +83,7 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
    try {
     await callAPIInterface<IRegisterEmailBody, IRegisterResponse>(
      "POST",
-     "/register",
+     "/auth/register",
      {
       username: values.username,
       email: values.email,
@@ -93,147 +91,263 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
       country: values.country,
      },
     );
+    dispatch(
+     showToast({
+      isToastOpen: true,
+      toastMessage: authRegisterSuccess,
+      toastVariant: "success",
+     }),
+    );
     onRegistered(values.email, values.password);
-   } catch (err: any) {
-    if (err?.response) {
-     dispatch(
-      showToast({
-       message: err.response.data?.message ?? authRegisterRegistrationFailed,
-       severity: "error",
-      }),
-     );
-    }
+   } catch (err) {
+    showApiErrorToast(err, authRegisterRegistrationFailed);
    } finally {
     setSubmitting(false);
    }
   },
  });
 
- const [usernameStatus, setUsernameStatus] =
-  useState<UsernameCheckStatus>("idle");
- const usernameDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+ const [usernameSuggestions, setUsernameSuggestions] = useState<string[]>([]);
+ const [loadingSuggestions, setLoadingSuggestions] = useState(false);
+ const suggestionsDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(
+  null,
+ );
+ const suggestionSelectedRef = useRef(false);
+ const usernameFieldRef = useRef<HTMLDivElement>(null);
+ const suggestionsMenuPaperRef = useRef<HTMLDivElement | null>(null);
+ const [suggestionsMenuOpen, setSuggestionsMenuOpen] = useState(false);
+ const [quickNameSuggestions, setQuickNameSuggestions] = useState<string[]>(
+  [],
+ );
+ const [loadingQuickNames, setLoadingQuickNames] = useState(false);
 
  useEffect(() => {
-  if (usernameDebounceRef.current) clearTimeout(usernameDebounceRef.current);
+  const loadQuickNames = async () => {
+   setLoadingQuickNames(true);
+   try {
+    const res = await callAPIInterface<undefined, IRandomNameResponse>(
+     "GET",
+     "/auth/random-name",
+    );
+    setQuickNameSuggestions(res.usernames);
+   } catch (err) {
+    showApiErrorToast(err, usernameSuggestionsFailed);
+   } finally {
+    setLoadingQuickNames(false);
+   }
+  };
+  loadQuickNames();
+ }, []);
 
-  const trimmed = formik.values.username.trim();
-  if (trimmed.length < 3) {
-   setUsernameStatus("idle");
+ useEffect(() => {
+  if (suggestionsDebounceRef.current)
+   clearTimeout(suggestionsDebounceRef.current);
+
+  if (suggestionSelectedRef.current) {
+   suggestionSelectedRef.current = false;
    return;
   }
 
-  setUsernameStatus("checking");
-  usernameDebounceRef.current = setTimeout(async () => {
+  const trimmed = formik.values.username.trim();
+  if (!trimmed || trimmed.length > USERNAME_MAX_LENGTH) {
+   setSuggestionsMenuOpen(false);
+   return;
+  }
+
+  suggestionsDebounceRef.current = setTimeout(async () => {
+   setLoadingSuggestions(true);
+   setSuggestionsMenuOpen(true);
    try {
-    const res = await callAPIInterface<undefined, IUsernameAvailableResponse>(
+    const res = await callAPIInterface<undefined, IRandomNameResponse>(
      "GET",
-     `/username?q=${encodeURIComponent(trimmed)}`,
+     `/auth/random-name?username=${encodeURIComponent(trimmed)}`,
     );
-    setUsernameStatus(res.available ? "available" : "taken");
-   } catch {
-    setUsernameStatus("idle");
+    setUsernameSuggestions(res.usernames);
+   } catch (err) {
+    showApiErrorToast(err, usernameSuggestionsFailed);
+   } finally {
+    setLoadingSuggestions(false);
    }
   }, USERNAME_CHECK_DEBOUNCE_MS);
 
   return () => {
-   if (usernameDebounceRef.current) clearTimeout(usernameDebounceRef.current);
+   if (suggestionsDebounceRef.current)
+    clearTimeout(suggestionsDebounceRef.current);
   };
  }, [formik.values.username]);
 
+ useEffect(() => {
+  if (!suggestionsMenuOpen) return;
+
+  const handleClickAway = (event: MouseEvent) => {
+   const target = event.target as Node;
+   if (usernameFieldRef.current?.contains(target)) return;
+   if (suggestionsMenuPaperRef.current?.contains(target)) return;
+   setSuggestionsMenuOpen(false);
+  };
+
+  document.addEventListener("mousedown", handleClickAway);
+  return () => document.removeEventListener("mousedown", handleClickAway);
+ }, [suggestionsMenuOpen]);
+
+ const suggestionsMenuSlotProps = useMemo(
+  () => ({
+   paper: {
+    ref: suggestionsMenuPaperRef,
+    style: { width: usernameFieldRef.current?.offsetWidth },
+   },
+   backdrop: { style: { pointerEvents: "none" as const } },
+  }),
+  [suggestionsMenuOpen],
+ );
+
  return (
   <Box
-   customClass="auth-form"
+   customClass="gopvp-signup-form"
    component="form"
    onSubmit={formik.handleSubmit as any}
   >
-   <Box customClass="auth-field">
-    <Label htmlFor="username">{authRegisterUsernameLabel}</Label>
+   <Box ref={usernameFieldRef}>
     <Input
      id="username"
      name="username"
+     label={authRegisterUsernameLabel}
      placeholder={authRegisterUsernamePlaceholder}
      value={formik.values.username}
      onChange={formik.handleChange}
      onBlur={formik.handleBlur}
      disabled={formik.isSubmitting}
      isError={
-      (formik.touched.username && !!formik.errors.username) ||
-      usernameStatus === "taken"
+      (formik.touched.username || !!formik.values.username) &&
+      !!formik.errors.username
      }
      helperText={
-      formik.touched.username && formik.errors.username
+      (formik.touched.username || formik.values.username) &&
+      formik.errors.username
        ? formik.errors.username
-       : usernameStatus === "taken"
-         ? authValidationUsernameTaken
-         : undefined
+       : undefined
      }
      endIcon={
-      usernameStatus === "available" ? (
-       <Check size={16} strokeWidth={2.5} className="input-check-icon" />
+      formik.values.username ? (
+       <CustomIconButton
+        type="button"
+        className="input-password-toggle"
+        aria-label={authRegisterUsernameClearAriaLabel}
+        onClick={() => formik.setFieldValue("username", "")}
+        tabIndex={-1}
+       >
+        <CloseIcon sx={{ fontSize: 14 }} />
+       </CustomIconButton>
       ) : undefined
      }
-     customClass="auth-input"
+     customClass="form-input"
      fullWidth
     />
    </Box>
 
-   <Box customClass="auth-field">
-    <Label htmlFor="email">{authEmailLabel}</Label>
-    <Input
-     id="email"
-     name="email"
-     type="email"
-     placeholder={authEmailPlaceholder}
-     value={formik.values.email}
-     onChange={formik.handleChange}
-     onBlur={formik.handleBlur}
-     disabled={formik.isSubmitting}
-     isError={formik.touched.email && !!formik.errors.email}
-     helperText={formik.errors.email}
-     customClass="auth-input"
-     fullWidth
-    />
-   </Box>
+   {(loadingQuickNames || quickNameSuggestions.length > 0) && (
+    <Box customClass="random-name-chips-block">
+     <Text customClass="random-name-chips-label caption">
+      {authRegisterQuickNamesLabel}
+     </Text>
+     <Box customClass="random-name-chips">
+      {loadingQuickNames
+       ? Array.from({ length: 4 }).map((_, i) => (
+          <Skeleton
+           key={i}
+           variant="rounded"
+           customClass="random-name-chip-skeleton"
+          />
+         ))
+       : quickNameSuggestions.map((name) => (
+          <CustomChip
+           key={name}
+           label={name}
+           clickable
+           size="small"
+           customClass="random-name-chip"
+           onClick={() => {
+            suggestionSelectedRef.current = true;
+            formik.setFieldValue("username", name);
+           }}
+          />
+         ))}
+     </Box>
+    </Box>
+   )}
 
-   <Box customClass="auth-field">
-    <Label htmlFor="password">{authPasswordLabel}</Label>
-    <Input
-     id="password"
-     name="password"
-     type="password"
-     placeholder={authPasswordPlaceholder}
-     value={formik.values.password}
-     onChange={formik.handleChange}
-     onBlur={formik.handleBlur}
-     disabled={formik.isSubmitting}
-     isError={formik.touched.password && !!formik.errors.password}
-     helperText={formik.errors.password}
-     customClass="auth-input"
-     fullWidth
-    />
-   </Box>
+   <CustomMenu
+    anchorEl={usernameFieldRef.current}
+    open={
+     suggestionsMenuOpen && (loadingSuggestions || usernameSuggestions.length > 0)
+    }
+    onClose={() => setSuggestionsMenuOpen(false)}
+    autoFocus={false}
+    disableAutoFocus
+    disableEnforceFocus
+    disableRestoreFocus
+    anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+    transformOrigin={{ vertical: "top", horizontal: "left" }}
+    slotProps={suggestionsMenuSlotProps}
+   >
+    {loadingSuggestions
+     ? Array.from({ length: 4 }).map((_, i) => (
+        <CustomMenuItem key={i} disabled>
+         <Skeleton
+          variant="rounded"
+          customClass="username-suggestion-skeleton"
+         />
+        </CustomMenuItem>
+       ))
+     : usernameSuggestions.map((name) => (
+        <CustomMenuItem
+         key={name}
+         onClick={() => {
+          suggestionSelectedRef.current = true;
+          formik.setFieldValue("username", name);
+          setSuggestionsMenuOpen(false);
+         }}
+        >
+         {name}
+        </CustomMenuItem>
+       ))}
+   </CustomMenu>
 
-   <Box customClass="auth-field">
-    <Label htmlFor="confirm">{authConfirmPasswordLabel}</Label>
-    <Input
-     id="confirm"
-     name="confirm"
-     type="password"
-     placeholder={authPasswordPlaceholder}
-     value={formik.values.confirm}
-     onChange={formik.handleChange}
-     onBlur={formik.handleBlur}
-     disabled={formik.isSubmitting}
-     isError={formik.touched.confirm && !!formik.errors.confirm}
-     helperText={formik.errors.confirm}
-     customClass="auth-input"
-     fullWidth
-    />
-   </Box>
+   <Input
+    id="email"
+    name="email"
+    type="email"
+    label={authEmailLabel}
+    placeholder={authEmailPlaceholder}
+    value={formik.values.email}
+    onChange={formik.handleChange}
+    onBlur={formik.handleBlur}
+    disabled={formik.isSubmitting}
+    isError={formik.touched.email && !!formik.errors.email}
+    helperText={formik.errors.email}
+    customClass="form-input"
+    fullWidth
+   />
 
-   <Box customClass="auth-field">
-    <Label htmlFor="country">{authRegisterCountryLabel}</Label>
-    <Select
+   <Input
+    id="password"
+    name="password"
+    type="password"
+    label={authPasswordLabel}
+    placeholder={authPasswordPlaceholder}
+    value={formik.values.password}
+    onChange={formik.handleChange}
+    onBlur={formik.handleBlur}
+    disabled={formik.isSubmitting}
+    isError={formik.touched.password && !!formik.errors.password}
+    helperText={formik.errors.password}
+    customClass="form-input"
+    fullWidth
+   />
+
+   <Box customClass="form-field">
+    <CustomLabel htmlFor="country">{authRegisterCountryLabel}</CustomLabel>
+    <CustomSelect
      value={formik.values.country}
      onChange={(v) => {
       formik.setFieldValue("country", v);
@@ -254,14 +368,9 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
     type="submit"
     variant="contained"
     fullWidth
-    customClass="auth-submit-btn"
-    disabled={
-     !formik.dirty ||
-     !formik.isValid ||
-     formik.isSubmitting ||
-     usernameStatus === "taken" ||
-     usernameStatus === "checking"
-    }
+    endIcon={<ArrowForwardIcon className="auth-btn-arrow-icon" />}
+    customClass="auth-submit-btn auth-submit-btn-arrow"
+    disabled={!formik.dirty || !formik.isValid || formik.isSubmitting}
     isLoading={formik.isSubmitting}
    >
     {authRegisterCreateAccountButton}

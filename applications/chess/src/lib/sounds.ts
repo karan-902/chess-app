@@ -9,10 +9,12 @@ const SOUND_FILES = {
 
 export type SoundName = keyof typeof SOUND_FILES;
 
-export function playSound(name: SoundName, volume = 0.5): void {
+export async function playSound(name: SoundName, volume = 0.5): Promise<void> {
     const audio = new Audio(SOUND_FILES[name]);
     audio.volume = volume;
-    audio.play().catch(() => {});
+    try {
+        await audio.play();
+    } catch {}
 }
 
 interface IMoveSoundInput {

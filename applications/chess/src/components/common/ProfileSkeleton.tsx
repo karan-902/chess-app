@@ -26,7 +26,7 @@ export default function ProfileSkeleton() {
                 </Box>
             </Card>
 
-            <Card customClass="matches-stat-list">
+            <Card customClass="stat-list">
                 {Array.from({ length: 6 }, (_, i) => (
                     <StatRowSkeleton key={i} />
                 ))}
@@ -38,7 +38,7 @@ export default function ProfileSkeleton() {
                 height={17}
                 style={{ margin: "0.9rem 0 0.6rem" }}
             />
-            <Card customClass="matches-stat-list">
+            <Card customClass="stat-list">
                 {Array.from({ length: 4 }, (_, i) => (
                     <StatRowSkeleton key={i} />
                 ))}
@@ -50,7 +50,7 @@ export default function ProfileSkeleton() {
                 height={17}
                 style={{ margin: "0.9rem 0 0.6rem" }}
             />
-            <Card customClass="matches-stat-list">
+            <Card customClass="stat-list">
                 <StatRowSkeleton />
                 <StatRowSkeleton />
                 <StatRowSkeleton />

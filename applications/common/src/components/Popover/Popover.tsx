@@ -8,7 +8,7 @@ interface IPopoverProps extends PopoverProps {
     customClass?: string;
 }
 
-export default function Popover({
+export function CustomPopover({
     customClass,
     open,
     children,
@@ -21,3 +21,5 @@ export default function Popover({
         </MuiPopover>
     );
 }
+
+export default CustomPopover;

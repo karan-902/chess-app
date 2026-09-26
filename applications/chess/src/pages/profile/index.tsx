@@ -1,28 +1,23 @@
 import { useState, useEffect, useRef } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import classNames from "classnames";
-import { Pencil, Check, Mail, MapPin } from "lucide-react";
+import { Pencil, Mail, MapPin } from "lucide-react";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import Card from "@/components/base/Card/Card";
-import Skeleton from "@/components/base/Skeleton/Skeleton";
 import Button from "@/components/base/Button/Button";
 import Input from "@/components/base/Input/Input";
-import Label from "@/components/base/Label/Label";
-import Switch from "@/components/base/Switch/Switch";
+import CustomSwitch from "@/components/base/Switch/Switch";
 import ProfileSkeleton from "@/components/common/ProfileSkeleton";
 import { useReduxSelector, useReduxDispatch } from "@/redux/hooks";
-import { updateSession } from "@/redux/persisted/auth.slice";
-import { showToast } from "@/redux/common/common.slice";
+import sessionService from "@gopvp/common/src/util/sessionService";
+import { showToast } from "@/redux/common/slice";
 import { useAppTheme } from "@/context/ThemeContext";
-import { callAPIInterface, shortenUsername } from "@/utils";
-import { getAvatarUrl } from "@/utils/avatar";
+import { callAPIInterface, shortenUsername, showApiErrorToast } from "@/utils";
 import type {
  ILoginResponse,
  IUpdateProfileBody,
  IUpdateProfileResponse,
- IAvatarOptionsResponse,
 } from "@/types/utils";
 import type { IEditProfileDrawerProps } from "@/types/components";
 import {
@@ -30,22 +25,23 @@ import {
  profileRatingsByCategoryLabel,
  profileValidationUsernameRequired,
  profileValidationUsernameMinLength,
+ authValidationUsernameMaxLength,
+ USERNAME_MAX_LENGTH,
  profileUpdateSuccess,
  profileUpdateFailed,
  profileUsernameLabel,
  profileSaveChangesButton,
- profileAvatarPickerTitle,
- profileAvatarUpdateSuccess,
- profileAvatarUpdateFailed,
  profileAppearanceLabel,
  profileDarkModeLabel,
+ profileLoadFailed,
 } from "@/constants/messages";
-import Modal from "@/components/base/Modal/Modal";
+import CustomModal from "@/components/base/Modal/Modal";
 
 const profileEditSchema = Yup.object({
  username: Yup.string()
   .trim()
   .min(3, profileValidationUsernameMinLength)
+  .max(USERNAME_MAX_LENGTH, authValidationUsernameMaxLength)
   .required(profileValidationUsernameRequired),
 });
 
@@ -55,20 +51,7 @@ function EditProfileDrawer({
  session,
 }: IEditProfileDrawerProps) {
  const dispatch = useReduxDispatch();
- const [avatarOptions, setAvatarOptions] =
-  useState<IAvatarOptionsResponse | null>(null);
- const [savingAvatar, setSavingAvatar] = useState(false);
  const usernameInputRef = useRef<HTMLInputElement>(null);
-
- useEffect(() => {
-  if (!open || avatarOptions) return;
-  callAPIInterface<undefined, IAvatarOptionsResponse>(
-   "GET",
-   "/profile/avatar-options",
-  )
-   .then(setAvatarOptions)
-   .catch(() => {});
- }, [open, avatarOptions]);
 
  useEffect(() => {
   if (!open) return;
@@ -87,21 +70,17 @@ function EditProfileDrawer({
      IUpdateProfileBody,
      IUpdateProfileResponse
     >("PUT", "/profile", values);
-    dispatch(updateSession(updated));
+    await sessionService.updateSession<ILoginResponse>(updated);
     dispatch(
      showToast({
-      message: profileUpdateSuccess,
-      severity: "success",
+      isToastOpen: true,
+      toastMessage: profileUpdateSuccess,
+      toastVariant: "success",
      }),
     );
     onClose();
-   } catch {
-    dispatch(
-     showToast({
-      message: profileUpdateFailed,
-      severity: "error",
-     }),
-    );
+   } catch (err) {
+    showApiErrorToast(err, profileUpdateFailed);
    } finally {
     setSubmitting(false);
    }
@@ -113,90 +92,25 @@ function EditProfileDrawer({
   onClose();
  };
 
- const updateAvatar = async (seed: string) => {
-  if (seed === session.avatar_seed || savingAvatar) return;
-  setSavingAvatar(true);
-  try {
-   const updated = await callAPIInterface<
-    IUpdateProfileBody,
-    IUpdateProfileResponse
-   >("PUT", "/profile", { avatar_seed: seed });
-   dispatch(updateSession(updated));
-   dispatch(
-    showToast({
-     message: profileAvatarUpdateSuccess,
-     severity: "success",
-    }),
-   );
-  } catch {
-   dispatch(
-    showToast({
-     message: profileAvatarUpdateFailed,
-     severity: "error",
-    }),
-   );
-  } finally {
-   setSavingAvatar(false);
-  }
- };
-
  return (
-  <Modal open={open} onClose={handleClose}>
+  <CustomModal open={open} onClose={handleClose}>
    <Text customClass="sheet-title dialog-title">{profileEditButton}</Text>
-
-   <Text customClass="edit-profile-section-label caption">
-    {profileAvatarPickerTitle}
-   </Text>
-   <Box customClass="profile-avatar-picker-grid">
-    {!avatarOptions &&
-     Array.from({ length: 12 }, (_, i) => (
-      <Skeleton
-       key={i}
-       variant="circular"
-       customClass="circle"
-       width={52}
-       height={52}
-      />
-     ))}
-    {avatarOptions?.seeds.map((seed) => (
-     <Button
-      key={seed}
-      type="button"
-      variant="outlined"
-      customClass={classNames(
-       "profile-avatar-picker-option",
-       seed === session.avatar_seed && "selected",
-      )}
-      disabled={savingAvatar}
-      onClick={() => updateAvatar(seed)}
-     >
-      <img src={getAvatarUrl(seed)} alt={seed} width="100%" height="100%" />
-      {seed === session.avatar_seed && (
-       <Box customClass="profile-avatar-selected-tick">
-        <Check size={10} strokeWidth={3} />
-       </Box>
-      )}
-     </Button>
-    ))}
-   </Box>
 
    <Box
     component="form"
     customClass="edit-profile-form"
     onSubmit={formik.handleSubmit as any}
    >
-    <Box customClass="auth-field">
-     <Label htmlFor="username">{profileUsernameLabel}</Label>
-     <Input
-      id="username"
-      ref={usernameInputRef}
-      fullWidth
-      isError={!!(formik.touched.username && formik.errors.username)}
-      helperText={formik.errors.username}
-      disabled={formik.isSubmitting}
-      {...formik.getFieldProps("username")}
-     />
-    </Box>
+    <Input
+     id="username"
+     label={profileUsernameLabel}
+     ref={usernameInputRef}
+     fullWidth
+     isError={!!(formik.touched.username && formik.errors.username)}
+     helperText={formik.errors.username}
+     disabled={formik.isSubmitting}
+     {...formik.getFieldProps("username")}
+    />
 
     <Button
      type="submit"
@@ -209,7 +123,7 @@ function EditProfileDrawer({
      {profileSaveChangesButton}
     </Button>
    </Box>
-  </Modal>
+  </CustomModal>
  );
 }
 
@@ -221,10 +135,21 @@ export default function Profile() {
  const [loading, setLoading] = useState(true);
 
  useEffect(() => {
-  callAPIInterface<undefined, Partial<ILoginResponse>>("GET", "/profile")
-   .then((res) => dispatch(updateSession(res)))
-   .catch(() => {})
-   .finally(() => setLoading(false));
+  const loadProfile = async () => {
+   try {
+    await sessionService.updateSession<ILoginResponse>(
+     await callAPIInterface<undefined, Partial<ILoginResponse>>(
+      "GET",
+      "/profile",
+     ),
+    );
+   } catch (err) {
+    showApiErrorToast(err, profileLoadFailed);
+   } finally {
+    setLoading(false);
+   }
+  };
+  loadProfile();
  }, [dispatch]);
 
  if (!session || loading) return <ProfileSkeleton />;
@@ -266,54 +191,22 @@ export default function Profile() {
     </Box>
    </Card>
 
-   <Text component="h3" customClass="rules-heading section-heading">
+   <Text component="h3" customClass="subsection-heading section-heading">
     {profileAppearanceLabel}
    </Text>
-   <Card customClass="matches-stat-list">
-    <Box customClass="matches-stat-row">
-     <Text customClass="matches-stat-title" component="span">
+   <Card customClass="stat-list">
+    <Box customClass="stat-row">
+     <Text customClass="stat-title" component="span">
       {profileDarkModeLabel}
      </Text>
-     <Switch checked={mode === "dark"} onChange={toggleTheme} />
+     <CustomSwitch checked={mode === "dark"} onChange={toggleTheme} />
     </Box>
    </Card>
 
-   <Text component="h3" customClass="rules-heading section-heading">
+   <Text component="h3" customClass="subsection-heading section-heading">
     {profileRatingsByCategoryLabel}
    </Text>
-   <Card customClass="matches-stat-list">
-    {/* {CATEGORY_ORDER.map((category) => (
-                    <Box key={category} customClass="matches-stat-row">
-                        <Text customClass="matches-stat-title" component="span">
-                            {formatText(CATEGORY_META[category].label)}
-                        </Text>
-                        <Text component="span" customClass="matches-stat-val">
-                            {session.ratings[category] ??
-                                leaderboardRankFallback}
-                        </Text>
-                    </Box>
-                ))} */}
-   </Card>
-
-   {/* <Text component="h3" customClass="rules-heading section-heading">
-    {profileStreakWidgetTitle}
-   </Text>
-   <Card customClass="matches-stat-list">
-    <Box customClass="matches-stat-row">
-     <Text customClass="matches-stat-title" component="span">
-      {matchesStatsCurrentStreakLabel}
-     </Text>
-     <Text component="span" customClass="matches-stat-val">
-      {session.current_streak} {profileStreakWinsSuffix}
-     </Text>
-    </Box>
-    <Box customClass="matches-stat-row">
-     <Text component="span">{matchesStatsBestStreakLabel}</Text>
-     <Text component="span" customClass="matches-stat-val">
-      {session.best_streak} {profileStreakWinsSuffix}
-     </Text>
-    </Box>
-   </Card> */}
+   <Card customClass="stat-list"></Card>
 
    <EditProfileDrawer
     open={editOpen}

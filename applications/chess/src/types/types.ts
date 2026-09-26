@@ -1,48 +1,35 @@
-export type View = "play" | "matchmaking" | "wallet" | "leaderboard";
-export type TBoard = (string | null)[][];
-export type PoolCategory = "all" | "BULLET" | "BLITZ" | "RAPID" | "CLASSICAL";
-export type GameCategory = Exclude<PoolCategory, "all">;
+export type GameCategory = "BULLET" | "BLITZ" | "RAPID" | "CLASSICAL";
 
-export interface Pool {
+export type IPoolResponse = {
  id: string;
- category: GameCategory;
- stake: number;
+ bet: number;
  prize: number;
- time: string;
- timeSeconds: number;
- players: number;
- active: number;
- hot: boolean;
+ time: number;
+};
+
+export interface ISocketAckError {
+ event: string;
+ errors: { message: string; type: string }[];
 }
 
-export interface IPoolStats {
- games: number;
- players: number;
+export interface IMatchPlayer {
+ id: string;
+ username: string;
 }
 
-export interface IPoolsResponse {
- stats: IPoolStats;
- pools: {
-  id: string;
-  stake: number;
-  prize: number;
-  time: string;
-  time_seconds: number;
-  players: number;
-  active: number;
-  hot: boolean;
- }[];
-}
+export type IPoolJoinAck =
+ | { status: "WAITING" }
+ | {
+    status: "MATCHED";
+    match_type: "POOL";
+    match_id: string;
+    players: IMatchPlayer[];
+    first_move_deadline_ms: number;
+   };
 
-export interface IjoinQueueBody {
- stake_amount: number;
- pool_type: PoolCategory;
-}
-
-export interface IqueueJoinedResponse {
- message: string;
- stake_amount: number;
- your_elo: number;
+export interface IPoolMatchedEvent {
+ matchId: string;
+ firstMoveDeadlineMs: number;
 }
 
 export interface ImatchFoundResponse {
@@ -130,54 +117,6 @@ export interface IActiveGameFoundResponse {
  time_seconds: number;
 }
 
-export interface IqueueLeftResponse {
- message: string;
-}
-export interface IqueueErrorResponse {
- message: string;
-}
-export interface IQueueTimeoutResponse {
- message: string;
-}
-
-export interface IChallengeReceivedResponse {
- challenger_id: string;
- challenger_username: string;
- stake_amount: number;
-}
-
-export interface IChallengeDeclinedResponse {
- friend_id: string;
- message?: string;
-}
-
-export interface IChallengeExpiredResponse {
- friend_id?: string;
- challenger_id?: string;
-}
-
-export interface IChallengeCancelledResponse {
- challenger_id: string;
-}
-
-export interface IChallengeErrorResponse {
- message: string;
-}
-
-export interface IChallengeMatchFoundResponse {
- message: string;
- game_id: string;
- stake_amount: number;
- time_seconds: number;
- your_color: "white" | "black";
- opponent: {
-  id: string;
-  username: string;
-  elo_rating: number;
-  avatar_seed: string | null;
- };
-}
-
 export interface ISettlementSide {
  usd: number;
 }
@@ -256,27 +195,38 @@ export interface IopponentReconnectedResponse {
  game_id: string;
 }
 
-export interface IMatchFound extends ImatchFoundResponse {}
+export type LeaderboardScope = "daily" | "weekly" | "monthly" | "all";
+
+export type LeaderboardSort = "earnings" | "wins";
 
 export interface ILeaderboardPlayer {
- rank: number;
  id: string;
  username: string;
- country: string;
- elo_rating: number;
- avatar_seed: string | null;
- earnings: number;
+ win_amount?: number;
+ wins?: number;
+}
+
+export interface ILeaderboardRequestBody {
+ game: string;
+ scope: LeaderboardScope;
+ sort: LeaderboardSort;
+ ending_before?: string;
+}
+
+export interface ILeaderboardPlayerStatsResponse {
+ username: string;
+ score: number;
+ current_streak: number;
+ best_streak: number;
+ gross_income: number;
+ wins: number;
 }
 
 export interface ILeaderboardResponse {
- players: ILeaderboardPlayer[];
-}
-
-export interface IActivityFeedEvent {
- winner_id: string;
- winner_username: string;
- prize_usd: number;
- winner_streak: number;
+ has_more: boolean;
+ object: "list";
+ data: ILeaderboardPlayer[] | null;
+ page_id: string;
 }
 
 export interface ITransactionCompletedEvent {
@@ -284,52 +234,51 @@ export interface ITransactionCompletedEvent {
  amount: number;
 }
 
-export interface IGameHistoryOpponent {
- id: string;
- username: string;
- elo_rating: number;
+export type MatchResult = "WIN" | "BET" | "DRAW" | "MATCH_CANCELLED";
+
+export type MatchEndReason =
+ | "CHECKMATE"
+ | "TIMEOUT"
+ | "RESIGN"
+ | "DRAW"
+ | "DISCONNECT"
+ | "DECLINED"
+ | "ABORT";
+
+export interface IMatchGame {
+ name: string;
+ slug: string;
+ icon: string;
 }
 
-export interface IGameHistoryItem {
- game_id: string;
- player: { id: string; username: string };
- opponent: IGameHistoryOpponent;
- result: "win" | "loss" | "draw";
- end_reason: string;
- elo_change: number;
- stake_amount: number;
- settlement_usd: number;
- time_seconds: number;
- played_at: number;
+export interface IOwnMatchItem {
+ id: string;
+ game: IMatchGame;
+ result: MatchResult;
+ amount: number;
+ opponent: string;
+ end_reason: MatchEndReason;
+ time: number;
+ bet: number;
+ created: number;
 }
+
+export interface IWorldMatchItem {
+ id: string;
+ game: IMatchGame;
+ winner: string;
+ loser: string;
+ amount: number;
+ created: number;
+}
+
+export type IGameHistoryItem = IOwnMatchItem | IWorldMatchItem;
 
 export interface IGameHistoryResponse {
  has_more: boolean;
  object: "list";
  page_id: string | null;
- data: IGameHistoryItem[];
-}
-
-export interface IGameHistoryStatsResponse {
- win_rate: number;
- games: number;
- current_streak: number;
- best_streak: number;
-}
-
-export interface Transaction {
- id: number;
- type: "win" | "loss" | "deposit" | "withdraw";
- desc: string;
- amount: string;
- usd: string;
- time: string;
-}
-
-export interface EngineLine {
- move: string;
- score: string;
- continuation: string;
+ data: IGameHistoryItem[] | null;
 }
 
 export interface MoveRecord {

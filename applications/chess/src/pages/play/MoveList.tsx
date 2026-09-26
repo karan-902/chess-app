@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import classNames from "classnames";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
-import Chip from "@/components/base/Chip/Chip";
+import CustomChip from "@/components/base/Chip/Chip";
 import type { IMoveListProps } from "@/types/components";
 
 export default function MoveList({
@@ -32,7 +32,7 @@ export default function MoveList({
                         <Text component="span" customClass="gr-move-n">
                             {m.n}.
                         </Text>
-                        <Chip
+                        <CustomChip
                             label={m.w}
                             customClass={classNames(
                                 "gr-move-chip",
@@ -41,7 +41,7 @@ export default function MoveList({
                             onClick={() => onJump(i * 2 + 1)}
                         />
                         {m.b && (
-                            <Chip
+                            <CustomChip
                                 label={m.b}
                                 customClass={classNames(
                                     "gr-move-chip",

@@ -10,12 +10,12 @@ interface ITabProps extends TabProps {
     customClass?: string;
 }
 
-export function Tabs({ customClass, ...props }: ITabsProps) {
+export function CustomTabs({ customClass, ...props }: ITabsProps) {
     const classes = classNames("tabs", customClass);
     return <MuiTabs {...props} className={classes} />;
 }
 
-export function Tab({ customClass, ...props }: ITabProps) {
+export function CustomTab({ customClass, ...props }: ITabProps) {
     const classes = classNames("tab", customClass);
     return <MuiTab {...props} className={classes} />;
 }

@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { callAPIInterface } from "@/utils";
+import { callAPIInterface, showApiErrorToast } from "@/utils";
+import { walletTransactionsLoadFailed } from "@/constants/messages";
 import { useSocket } from "@/context/SocketContext";
 import { useReduxDispatch, useReduxSelector } from "@/redux/hooks";
-import { setWalletBalance, setWalletLoading } from "@/redux/wallet.slice";
+import { fetchWalletBalance } from "@/redux/wallet/thunk";
 import type {
- IWalletBalanceResponse,
  ITransactionResponse,
  ITransactionsResponse,
  ITransactionsFilterBody,
@@ -41,17 +41,8 @@ export function useWalletBalance() {
   (state) => state.wallet,
  );
 
- const refetch = useCallback(async () => {
-  try {
-   const res = await callAPIInterface<undefined, IWalletBalanceResponse | null>(
-    "GET",
-    "/wallet/balance",
-   );
-   if (res) dispatch(setWalletBalance(res));
-   else dispatch(setWalletLoading(false));
-  } catch {
-   dispatch(setWalletLoading(false));
-  }
+ const refetch = useCallback(() => {
+  dispatch(fetchWalletBalance());
  }, [dispatch]);
 
  useEffect(() => {
@@ -60,9 +51,9 @@ export function useWalletBalance() {
 
  useEffect(() => {
   if (!socket) return;
-  socket.on("wallet_updated", refetch);
+  socket.on("wallet:updated", refetch);
   return () => {
-   socket.off("wallet_updated", refetch);
+   socket.off("wallet:updated", refetch);
   };
  }, [socket, refetch]);
 
@@ -125,7 +116,8 @@ export function useWallet() {
     setTransactions((prev) => (isFirstLoad ? data : [...prev, ...data]));
     hasMoreRef.current = res?.has_more ?? false;
     pageIdRef.current = res?.page_id ?? null;
-   } catch {
+   } catch (err) {
+    showApiErrorToast(err, walletTransactionsLoadFailed);
    } finally {
     isFetchingRef.current = false;
     if (activeFilterRef.current === requestFilter) {
@@ -143,9 +135,9 @@ export function useWallet() {
  useEffect(() => {
   if (!socket) return;
   const refreshTransactions = () => loadTransactions(true);
-  socket.on("wallet_updated", refreshTransactions);
+  socket.on("wallet:updated", refreshTransactions);
   return () => {
-   socket.off("wallet_updated", refreshTransactions);
+   socket.off("wallet:updated", refreshTransactions);
   };
  }, [socket, loadTransactions]);
 

@@ -29,7 +29,7 @@ interface ISelectProps {
  customClass?: string;
 }
 
-export default function Select({
+export function CustomSelect({
  value,
  onChange,
  onBlur,
@@ -104,3 +104,5 @@ export default function Select({
   </Box>
  );
 }
+
+export default CustomSelect;

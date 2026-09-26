@@ -8,7 +8,7 @@ interface ICardProps extends CardProps {
     customClass?: string;
 }
 
-const Card = forwardRef<HTMLDivElement, ICardProps>(
+export const Card = forwardRef<HTMLDivElement, ICardProps>(
     ({ customClass, onClick, ...props }, ref) => {
         const classes = classNames("card", onClick && "clickable", customClass);
         return (

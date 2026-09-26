@@ -8,7 +8,7 @@ interface IChipProps extends ChipProps {
     customClass?: string;
 }
 
-const Chip = forwardRef<HTMLDivElement, IChipProps>(function Chip(
+export const CustomChip = forwardRef<HTMLDivElement, IChipProps>(function CustomChip(
     { customClass, ...props },
     ref,
 ) {
@@ -16,4 +16,4 @@ const Chip = forwardRef<HTMLDivElement, IChipProps>(function Chip(
     return <MuiChip ref={ref} {...props} className={classes} />;
 });
 
-export default Chip;
+export default CustomChip;

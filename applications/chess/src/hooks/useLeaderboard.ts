@@ -1,42 +1,73 @@
-import { useState, useEffect, useCallback } from "react";
-import { callAPIInterface } from "@/utils";
-import { useSocket } from "@/context/SocketContext";
-import type { ILeaderboardPlayer, ILeaderboardResponse } from "@/types/types";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { callAPIInterface, showApiErrorToast } from "@/utils";
+import { useGame } from "@/hooks/useGame";
+import { leaderboardLoadFailed } from "@/constants/messages";
+import type {
+    ILeaderboardPlayer,
+    ILeaderboardRequestBody,
+    ILeaderboardResponse,
+    LeaderboardScope,
+    LeaderboardSort,
+} from "@/types/types";
 
-export function useLeaderboard() {
-    const { socket: ctxSocket } = useSocket();
+export function useLeaderboard(scope: LeaderboardScope, sort: LeaderboardSort) {
+    const { game } = useGame();
     const [players, setPlayers] = useState<ILeaderboardPlayer[]>([]);
     const [loading, setLoading] = useState(true);
+    const [loadingMore, setLoadingMore] = useState(false);
     const [error, setError] = useState(false);
 
-    const applyResponse = useCallback((data: ILeaderboardResponse) => {
-        setPlayers(data.players);
-    }, []);
+    const hasMoreRef = useRef(false);
+    const pageIdRef = useRef<string | null>(null);
+    const isFetchingRef = useRef(false);
+    const activeQueryRef = useRef("");
+
+    const load = useCallback(
+        async (isFirstLoad: boolean) => {
+            if (!isFirstLoad && (isFetchingRef.current || !hasMoreRef.current)) return;
+
+            const query = `game=${game}&scope=${scope}&sort=${sort}`;
+            activeQueryRef.current = query;
+            isFetchingRef.current = true;
+            isFirstLoad ? setLoading(true) : setLoadingMore(true);
+            setError(false);
+
+            const endingBefore =
+                !isFirstLoad && pageIdRef.current ? pageIdRef.current : undefined;
+
+            try {
+                const res = await callAPIInterface<
+                    ILeaderboardRequestBody,
+                    ILeaderboardResponse
+                >("POST", "/leaderboard", {
+                    game,
+                    scope,
+                    sort,
+                    ending_before: endingBefore,
+                });
+                if (activeQueryRef.current !== query) return;
+                const data = res.data ?? [];
+                setPlayers((prev) => (isFirstLoad ? data : [...prev, ...data]));
+                hasMoreRef.current = res.has_more;
+                pageIdRef.current = res.page_id;
+            } catch (err) {
+                if (activeQueryRef.current === query) setError(true);
+                showApiErrorToast(err, leaderboardLoadFailed);
+            } finally {
+                isFetchingRef.current = false;
+                if (activeQueryRef.current === query) {
+                    isFirstLoad ? setLoading(false) : setLoadingMore(false);
+                }
+            }
+        },
+        [game, scope, sort],
+    );
 
     useEffect(() => {
-        setLoading(true);
-        setError(false);
-        callAPIInterface<undefined, ILeaderboardResponse>("GET", "/leaderboard")
-            .then(applyResponse)
-            .catch(() => setError(true))
-            .finally(() => setLoading(false));
-    }, [applyResponse]);
+        load(true);
+    }, [load]);
 
-    useEffect(() => {
-        if (!ctxSocket) return;
+    const loadMore = useCallback(() => load(false), [load]);
 
-        const onLeaderboardUpdated = (data: ILeaderboardResponse) => {
-            applyResponse(data);
-        };
-
-        ctxSocket.emit("subscribe_leaderboard");
-        ctxSocket.on("leaderboard_updated", onLeaderboardUpdated);
-
-        return () => {
-            ctxSocket.off("leaderboard_updated", onLeaderboardUpdated);
-            ctxSocket.emit("unsubscribe_leaderboard");
-        };
-    }, [applyResponse, ctxSocket]);
-
-    return { players, loading, error };
+    return { players, loading, loadingMore, error, loadMore };
 }

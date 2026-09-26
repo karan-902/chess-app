@@ -3,10 +3,10 @@ import { ArrowLeft } from "lucide-react";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import Button from "@/components/base/Button/Button";
-import OtpInput from "@/components/base/OtpInput/OtpInput";
+import OTPInput from "@/components/base/OtpInput/OtpInput";
 import { callAPIInterface, formatMMSS } from "@/utils";
 import { useReduxDispatch } from "@/redux/hooks";
-import { showToast } from "@/redux/common/common.slice";
+import { showToast } from "@/redux/common/slice";
 import type { IVerifyEmailBody, IResendOtpBody } from "@/types/index";
 import type { IMessageResponse } from "@/types/utils";
 import type { IVerifyEmailFormProps } from "@/types/components";
@@ -65,8 +65,9 @@ export default function VerifyEmailForm({
             );
             dispatch(
                 showToast({
-                    message: authEmailVerificationVerifiedSuccess,
-                    severity: "success",
+                    isToastOpen: true,
+                    toastMessage: authEmailVerificationVerifiedSuccess,
+                    toastVariant: "success",
                 }),
             );
             onVerified();
@@ -74,10 +75,11 @@ export default function VerifyEmailForm({
             if (err?.response?.status !== 429) {
                 dispatch(
                     showToast({
-                        message:
+                        isToastOpen: true,
+                        toastMessage:
                             err?.response?.data?.message ??
                             authEmailVerificationInvalidCode,
-                        severity: "error",
+                        toastVariant: "error",
                     }),
                 );
             }
@@ -98,8 +100,9 @@ export default function VerifyEmailForm({
             );
             dispatch(
                 showToast({
-                    message: authEmailVerificationResentSuccess,
-                    severity: "success",
+                    isToastOpen: true,
+                    toastMessage: authEmailVerificationResentSuccess,
+                    toastVariant: "success",
                 }),
             );
             setOtp("");
@@ -109,8 +112,9 @@ export default function VerifyEmailForm({
             if (err?.response?.status !== 429) {
                 dispatch(
                     showToast({
-                        message: authEmailVerificationResendFailed,
-                        severity: "error",
+                        isToastOpen: true,
+                        toastMessage: authEmailVerificationResendFailed,
+                        toastVariant: "error",
                     }),
                 );
             }
@@ -149,7 +153,7 @@ export default function VerifyEmailForm({
                 </Box>
             )}
 
-            <OtpInput
+            <OTPInput
                 length={OTP_LENGTH}
                 value={otp}
                 onChange={setOtp}

@@ -5,7 +5,7 @@ import {
  authRegisterHaveAccountPrompt,
  authRegisterLoginLink,
 } from "@/constants/messages";
-import { Link } from "react-router";
+import { NavLink } from "react-router-dom";
 
 export default function Register() {
  return (
@@ -15,7 +15,7 @@ export default function Register() {
     <>
      {authRegisterHaveAccountPrompt}
 
-     <Link to="/login">{authRegisterLoginLink}</Link>
+     <NavLink to="/login">{authRegisterLoginLink}</NavLink>
     </>
    }
   >

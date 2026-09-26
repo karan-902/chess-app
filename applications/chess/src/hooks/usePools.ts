@@ -1,74 +1,34 @@
-import { useState, useEffect, useCallback } from "react";
-import { callAPIInterface } from "@/utils";
-import { useSocket } from "@/context/SocketContext";
-import type {
-    Pool,
-    IPoolStats,
-    IPoolsResponse,
-    GameCategory,
-    PoolCategory,
-} from "@/types/types";
+import { useState, useEffect } from "react";
+import { callAPIInterface, showApiErrorToast } from "@/utils";
+import { useGame } from "@/hooks/useGame";
+import { poolsLoadFailed } from "@/constants/messages";
+import type { IPoolResponse } from "@/types/types";
 
-const DEFAULT_STATS: IPoolStats = { games: 0, players: 0 };
-
-function parseCategory(id: string): GameCategory {
-    const prefix = id.split("-")[0]?.toUpperCase();
-    if (
-        prefix === "BULLET" ||
-        prefix === "BLITZ" ||
-        prefix === "RAPID" ||
-        prefix === "CLASSICAL"
-    ) {
-        return prefix;
-    }
-    return "RAPID";
-}
-
-export function usePools(poolType: PoolCategory = "all") {
-    const { socket: ctxSocket } = useSocket();
-    const [pools, setPools] = useState<Pool[]>([]);
-    const [stats, setStats] = useState<IPoolStats>(DEFAULT_STATS);
+export function usePools() {
+    const { game } = useGame();
+    const [pools, setPools] = useState<IPoolResponse[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
 
-    const applyResponse = useCallback((data: IPoolsResponse) => {
-        const parsed: Pool[] = data.pools.map((p) => ({
-            ...p,
-            category: parseCategory(p.id),
-            timeSeconds: p.time_seconds,
-        }));
-        setPools(parsed);
-        setStats(data.stats);
-    }, []);
-
     useEffect(() => {
-        setLoading(true);
-        setError(false);
-        callAPIInterface<undefined, IPoolsResponse>(
-            "GET",
-            `/matchmaking/pools?pool_type=${poolType}`,
-        )
-            .then(applyResponse)
-            .catch(() => {
+        const loadPools = async () => {
+            try {
+                setPools(
+                    await callAPIInterface<undefined, IPoolResponse[]>(
+                        "GET",
+                        `/matchmaking/pools?game=${game}`,
+                    ),
+                );
+            } catch (err) {
                 setError(true);
                 setPools([]);
-                setStats(DEFAULT_STATS);
-            })
-            .finally(() => setLoading(false));
-    }, [applyResponse, poolType]);
-
-    useEffect(() => {
-        if (!ctxSocket) return;
-
-        const onPoolUpdated = (data: IPoolsResponse) => {
-            applyResponse(data);
+                showApiErrorToast(err, poolsLoadFailed);
+            } finally {
+                setLoading(false);
+            }
         };
+        loadPools();
+    }, [game]);
 
-        ctxSocket.on("pool_updated", onPoolUpdated);
-        return () => {
-            ctxSocket.off("pool_updated", onPoolUpdated);
-        };
-    }, [applyResponse, ctxSocket]);
-
-    return { pools, stats, loading, error };
+    return { pools, loading, error };
 }

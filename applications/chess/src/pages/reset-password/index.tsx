@@ -1,15 +1,14 @@
 import * as yup from "yup";
 import { useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router";
+import { NavLink, useNavigate, useSearchParams } from "react-router-dom";
 import { useFormik } from "formik";
 import Box from "@/components/base/Box/Box";
-import Label from "@/components/base/Label/Label";
 import Input from "@/components/base/Input/Input";
 import Button from "@/components/base/Button/Button";
 import AuthLayout from "@/container/AuthLayout";
 import { callAPIInterface } from "@/utils";
 import { useReduxDispatch } from "@/redux/hooks";
-import { showToast } from "@/redux/common/common.slice";
+import { showToast } from "@/redux/common/slice";
 import type { IResetPasswordBody } from "@/types/index";
 import type { IMessageResponse } from "@/types/utils";
 import {
@@ -61,14 +60,15 @@ export default function ResetPassword() {
                     new_password: values.password,
                 });
                 dispatch(
-                    showToast({ message: res.message, severity: "success" }),
+                    showToast({ isToastOpen: true, toastMessage: res.message, toastVariant: "success" }),
                 );
                 navigate("/login", { replace: true });
             } catch {
                 dispatch(
                     showToast({
-                        message: authResetPasswordLinkInvalidOrExpired,
-                        severity: "error",
+                        isToastOpen: true,
+                        toastMessage: authResetPasswordLinkInvalidOrExpired,
+                        toastVariant: "error",
                     }),
                 );
                 setInvalid(true);
@@ -83,9 +83,9 @@ export default function ResetPassword() {
             <AuthLayout
                 title={authResetPasswordInvalidLinkTitle}
                 subtitle={authResetPasswordInvalidLinkDescription}
-                footer={<Link to="/login">{authBackToSignIn}</Link>}
+                footer={<NavLink to="/login">{authBackToSignIn}</NavLink>}
             >
-                <Link to="/forgot-password" style={{ display: "block" }}>
+                <NavLink to="/forgot-password" style={{ display: "block" }}>
                     <Button
                         component="span"
                         variant="contained"
@@ -94,7 +94,7 @@ export default function ResetPassword() {
                     >
                         {authResetPasswordRequestNewLink}
                     </Button>
-                </Link>
+                </NavLink>
             </AuthLayout>
         );
     }
@@ -103,54 +103,48 @@ export default function ResetPassword() {
         <AuthLayout
             title={authResetPasswordTitle}
             subtitle={authResetPasswordDescription}
-            footer={<Link to="/login">{authBackToSignIn}</Link>}
+            footer={<NavLink to="/login">{authBackToSignIn}</NavLink>}
         >
             <Box
                 customClass="auth-form"
                 component="form"
                 onSubmit={formik.handleSubmit as any}
             >
-                <Box customClass="auth-field">
-                    <Label htmlFor="password">
-                        {authResetPasswordNewPasswordLabel}
-                    </Label>
-                    <Input
-                        id="password"
-                        name="password"
-                        type="password"
-                        placeholder={authPasswordPlaceholder}
-                        value={formik.values.password}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        disabled={formik.isSubmitting}
-                        isError={
-                            formik.touched.password && !!formik.errors.password
-                        }
-                        helperText={formik.errors.password}
-                        customClass="auth-input"
-                        fullWidth
-                    />
-                </Box>
+                <Input
+                    id="password"
+                    name="password"
+                    type="password"
+                    label={authResetPasswordNewPasswordLabel}
+                    placeholder={authPasswordPlaceholder}
+                    value={formik.values.password}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    disabled={formik.isSubmitting}
+                    isError={
+                        formik.touched.password && !!formik.errors.password
+                    }
+                    helperText={formik.errors.password}
+                    customClass="form-input"
+                    fullWidth
+                />
 
-                <Box customClass="auth-field">
-                    <Label htmlFor="confirm">{authConfirmPasswordLabel}</Label>
-                    <Input
-                        id="confirm"
-                        name="confirm"
-                        type="password"
-                        placeholder={authPasswordPlaceholder}
-                        value={formik.values.confirm}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        disabled={formik.isSubmitting}
-                        isError={
-                            formik.touched.confirm && !!formik.errors.confirm
-                        }
-                        helperText={formik.errors.confirm}
-                        customClass="auth-input"
-                        fullWidth
-                    />
-                </Box>
+                <Input
+                    id="confirm"
+                    name="confirm"
+                    type="password"
+                    label={authConfirmPasswordLabel}
+                    placeholder={authPasswordPlaceholder}
+                    value={formik.values.confirm}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    disabled={formik.isSubmitting}
+                    isError={
+                        formik.touched.confirm && !!formik.errors.confirm
+                    }
+                    helperText={formik.errors.confirm}
+                    customClass="form-input"
+                    fullWidth
+                />
 
                 <Button
                     type="submit"

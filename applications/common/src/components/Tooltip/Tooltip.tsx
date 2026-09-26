@@ -7,7 +7,7 @@ interface ITooltipProps extends TooltipProps {
     customClass?: string;
 }
 
-export default function Tooltip({
+export function CustomTooltip({
     customClass,
 
     ...props
@@ -22,3 +22,5 @@ export default function Tooltip({
         />
     );
 }
+
+export default CustomTooltip;

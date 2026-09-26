@@ -7,67 +7,73 @@ import "./button.scss";
 import Text from "../Text/Text";
 
 interface IButtonProps extends ButtonProps {
-    customClass?: string;
-    isLoading?: boolean;
-    loaderOnDark?: boolean;
+ customClass?: string;
+ isLoading?: boolean;
+ loaderOnDark?: boolean;
 }
 
-const Button = forwardRef<HTMLButtonElement, IButtonProps>(function Button(
-    { customClass, children, isLoading, disabled, loaderOnDark, type, ...props },
-    ref,
+export const Button = forwardRef<HTMLButtonElement, IButtonProps>(function Button(
+ {
+  customClass,
+  children,
+  isLoading,
+  disabled,
+  loaderOnDark,
+  type,
+  startIcon,
+  endIcon,
+  ...props
+ },
+ ref,
 ) {
-    const buttonRef = useRef<HTMLButtonElement | null>(null);
-    const setRefs = (node: HTMLButtonElement | null) => {
-        buttonRef.current = node;
-        if (typeof ref === "function") ref(node);
-        else if (ref) (ref as MutableRefObject<HTMLButtonElement | null>).current = node;
-    };
+ const buttonRef = useRef<HTMLButtonElement | null>(null);
+ const setRefs = (node: HTMLButtonElement | null) => {
+  buttonRef.current = node;
+  if (typeof ref === "function") ref(node);
+  else if (ref)
+   (ref as MutableRefObject<HTMLButtonElement | null>).current = node;
+ };
 
-    useEffect(() => {
-        const btn = buttonRef.current;
-        if (type !== "submit" || !btn || btn.closest("form")) return;
-        const scope = btn.closest('[role="dialog"]') ?? btn.ownerDocument;
-        const onKeyDown = (e: Event) => {
-            if ((e as KeyboardEvent).key !== "Enter") return;
-            const active = btn.ownerDocument.activeElement;
-            if (!active || active === btn) return;
-            if (active.tagName === "TEXTAREA" || active.tagName === "BUTTON") return;
-            if (!scope.contains(active)) return;
-            btn.click();
-        };
-        (scope as EventTarget).addEventListener("keydown", onKeyDown);
-        return () => (scope as EventTarget).removeEventListener("keydown", onKeyDown);
-    }, [type]);
+ useEffect(() => {
+  const btn = buttonRef.current;
+  if (type !== "submit" || !btn || btn.closest("form")) return;
+  const scope = btn.closest('[role="dialog"]') ?? btn.ownerDocument;
+  const onKeyDown = (e: Event) => {
+   if ((e as KeyboardEvent).key !== "Enter") return;
+   const active = btn.ownerDocument.activeElement;
+   if (!active || active === btn) return;
+   if (active.tagName === "TEXTAREA" || active.tagName === "BUTTON") return;
+   if (!scope.contains(active)) return;
+   btn.click();
+  };
+  (scope as EventTarget).addEventListener("keydown", onKeyDown);
+  return () => (scope as EventTarget).removeEventListener("keydown", onKeyDown);
+ }, [type]);
 
-    const classes = classNames(
-        "button",
-        customClass,
-        isLoading && "btn--loading",
-    );
+ const classes = classNames("button", customClass, isLoading && "btn--loading");
 
-    return (
-        <MuiButton
-            ref={setRefs}
-            type={type}
-            {...props}
-            className={classes}
-            disabled={disabled || isLoading}
-            aria-busy={isLoading || undefined}
-        >
-            {isLoading ? (
-                loaderOnDark ? (
-                    <CircularProgress
-                        size={15}
-                        sx={{ color: "primary.contrastText" }}
-                    />
-                ) : (
-                    <CircularProgress size={15} color="inherit" />
-                )
-            ) : (
-                <Text customClass="button-text">{children}</Text>
-            )}
-        </MuiButton>
-    );
+ return (
+  <MuiButton
+   ref={setRefs}
+   type={type}
+   {...props}
+   startIcon={isLoading ? undefined : startIcon}
+   endIcon={isLoading ? undefined : endIcon}
+   className={classes}
+   disabled={disabled || isLoading}
+   aria-busy={isLoading || undefined}
+  >
+   {isLoading ? (
+    loaderOnDark ? (
+     <CircularProgress size={20} sx={{ color: "primary.contrastText" }} />
+    ) : (
+     <CircularProgress size={20} color="inherit" />
+    )
+   ) : (
+    <Text customClass="button-text">{children}</Text>
+   )}
+  </MuiButton>
+ );
 });
 
 export default Button;

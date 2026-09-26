@@ -17,7 +17,7 @@ export default function EmptyState({ title, description }: IEmptyStateProps) {
                 </Text>
             )}
             {description && (
-                <Text customClass="matches-empty-desc description">
+                <Text customClass="empty-state-desc description">
                     {description}
                 </Text>
             )}

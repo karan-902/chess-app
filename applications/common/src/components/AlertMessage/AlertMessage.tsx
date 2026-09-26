@@ -1,6 +1,6 @@
 import { Alert, type AlertProps } from "@mui/material";
 import classNames from "classnames";
-import "./alert.scss";
+import "./alert-message.scss";
 import { forwardRef } from "react";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
@@ -20,7 +20,7 @@ interface IAlertProps extends AlertProps {
     customClass?: string;
 }
 
-const AlertMessage = forwardRef<HTMLDivElement, IAlertProps>(function AlertMsg(
+export const AlertMessage = forwardRef<HTMLDivElement, IAlertProps>(function AlertMsg(
     { customClass, severity, message, ...props },
     ref,
 ) {

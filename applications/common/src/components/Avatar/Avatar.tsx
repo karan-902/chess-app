@@ -9,7 +9,7 @@ interface IAvatarProps extends AvatarProps {
     online?: boolean;
 }
 
-export default function Avatar({
+export function CustomAvatar({
     letter,
     src,
     online,
@@ -26,3 +26,5 @@ export default function Avatar({
         </span>
     );
 }
+
+export default CustomAvatar;

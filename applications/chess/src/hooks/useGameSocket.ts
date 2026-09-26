@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import type { Socket } from "socket.io-client";
 import type { AppDispatch } from "@/redux/store";
-import { showToast } from "@/redux/common/common.slice";
+import { showToast } from "@/redux/common/slice";
 import type {
     IopponentMoveResponse,
     IMoveConfirmedResponse,
@@ -119,8 +119,9 @@ export function useGameSocket({
             if (data.game_id === gameId)
                 dispatch(
                     showToast({
-                        message: playToastDrawDeclined,
-                        severity: "info",
+                        isToastOpen: true,
+                        toastMessage: playToastDrawDeclined,
+                        toastVariant: "info",
                     }),
                 );
         };
@@ -130,7 +131,7 @@ export function useGameSocket({
             setGraceSecondsRemaining(null);
         };
         const onSocketError = (data: ISocketErrorResponse) => {
-            dispatch(showToast({ message: data.message, severity: "error" }));
+            dispatch(showToast({ isToastOpen: true, toastMessage: data.message, toastVariant: "error" }));
         };
         const onOpponentDisconnected = (
             data: IopponentDisconnectedResponse,
@@ -140,10 +141,11 @@ export function useGameSocket({
             setGraceSecondsRemaining(data.grace_period_seconds);
             dispatch(
                 showToast({
-                    message: `${playToastOpponentDisconnectedTitle} — ${playToastOpponentDisconnectedDesc(
+                    isToastOpen: true,
+                    toastMessage: `${playToastOpponentDisconnectedTitle} — ${playToastOpponentDisconnectedDesc(
                         data.grace_period_seconds,
                     )}`,
-                    severity: "info",
+                    toastVariant: "info",
                 }),
             );
         };
@@ -153,8 +155,9 @@ export function useGameSocket({
             setGraceSecondsRemaining(null);
             dispatch(
                 showToast({
-                    message: playToastOpponentReconnected,
-                    severity: "success",
+                    isToastOpen: true,
+                    toastMessage: playToastOpponentReconnected,
+                    toastVariant: "success",
                 }),
             );
         };

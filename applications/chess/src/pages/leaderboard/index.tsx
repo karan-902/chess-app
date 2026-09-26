@@ -1,13 +1,29 @@
+import { useCallback, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import classNames from "classnames";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import Card from "@/components/base/Card/Card";
+import FilterDropdown from "@/components/common/FilterDropdown";
 import EmptyState from "@/components/common/EmptyState";
 import LbRowSkeleton from "@/components/common/LbRowSkeleton";
+import VirtualList from "@/components/common/VirtualList";
+import LeaderboardPlayerModal from "@/pages/leaderboard/LeaderboardPlayerModal";
 import { useLeaderboard } from "@/hooks/useLeaderboard";
 import { useReduxSelector } from "@/redux/hooks";
 import { formatAmount } from "@/utils/format";
 import { shortenUsername } from "@/utils";
+import {
+    LEADERBOARD_SCOPES,
+    LEADERBOARD_SCOPE_LABELS,
+    LEADERBOARD_SORTS,
+    LEADERBOARD_SORT_LABELS,
+} from "@/constants/config";
+import type {
+    ILeaderboardPlayer,
+    LeaderboardScope,
+    LeaderboardSort,
+} from "@/types/types";
 import {
     leaderboardLoadError,
     leaderboardEmpty,
@@ -16,6 +32,8 @@ import {
 } from "@/constants/messages";
 
 const LB_SKELETON_ROWS = 20;
+const DEFAULT_SCOPE: LeaderboardScope = "all";
+const DEFAULT_SORT: LeaderboardSort = "earnings";
 
 function lbSkeletonRows() {
     return Array.from({ length: LB_SKELETON_ROWS }, (_, index) => (
@@ -24,7 +42,15 @@ function lbSkeletonRows() {
 }
 
 export default function Leaderboard() {
-    const { players, loading, error } = useLeaderboard();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const scopeParam = searchParams.get("scope") as LeaderboardScope;
+    const sortParam = searchParams.get("sort") as LeaderboardSort;
+    const scope = LEADERBOARD_SCOPES.includes(scopeParam) ? scopeParam : DEFAULT_SCOPE;
+    const sort = LEADERBOARD_SORTS.includes(sortParam) ? sortParam : DEFAULT_SORT;
+
+    const { players, loading, loadingMore, error, loadMore } = useLeaderboard(scope, sort);
+    const [selectedPlayerId, setSelectedPlayerId] = useState<string | null>(null);
+    const closePlayerModal = useCallback(() => setSelectedPlayerId(null), []);
     const currentUserId = useReduxSelector((state) => state.auth.session?.id);
     const currentUsername = useReduxSelector(
         (state) => state.auth.session?.username,
@@ -33,9 +59,32 @@ export default function Leaderboard() {
     const isMe = (id: string) => id === currentUserId;
     const meInList = players.some((p) => isMe(p.id));
     const youLabel = (username: string) => `${username}(${matchesYouLabel})`;
+    const playerValue = (player: ILeaderboardPlayer) =>
+        sort === "wins" ? player.wins ?? 0 : formatAmount(player.win_amount ?? 0);
+
+    const setFilter = (key: "scope" | "sort", value: string) => {
+        setSearchParams(
+            { scope, sort, [key]: value },
+            { replace: true },
+        );
+    };
 
     return (
         <Box customClass="leaderboard-page">
+            <Box customClass="filter-pill-row">
+                <FilterDropdown
+                    options={LEADERBOARD_SORTS}
+                    value={sort}
+                    onChange={(value) => setFilter("sort", value)}
+                    label={(value) => LEADERBOARD_SORT_LABELS[value]}
+                />
+                <FilterDropdown
+                    options={LEADERBOARD_SCOPES}
+                    value={scope}
+                    onChange={(value) => setFilter("scope", value)}
+                    label={(value) => LEADERBOARD_SCOPE_LABELS[value]}
+                />
+            </Box>
             {loading ? (
                 <Box>{lbSkeletonRows()}</Box>
             ) : players.length === 0 ? (
@@ -59,35 +108,51 @@ export default function Leaderboard() {
                             </Text>
                         </Card>
                     )}
-                    {players.map((player) => (
-                        <Card
-                            key={player.id}
-                            customClass={classNames(
-                                "lb-row",
-                                isMe(player.id) && "me",
-                            )}
-                        >
-                            <Text
-                                customClass={classNames("lb-rank", {
-                                    gold: player.rank === 1,
-                                    silver: player.rank === 2,
-                                    bronze: player.rank === 3,
-                                })}
-                            >
-                                {player.rank}
-                            </Text>
-                            <Text customClass="lb-name row-title" truncate>
-                                {isMe(player.id)
-                                    ? youLabel(shortenUsername(player.username))
-                                    : shortenUsername(player.username)}
-                            </Text>
-                            <Text customClass="lb-earnings amount-value">
-                                {formatAmount(player.earnings)}
-                            </Text>
-                        </Card>
-                    ))}
+                    <VirtualList<ILeaderboardPlayer>
+                        data={players}
+                        computeItemKey={(_, player) => player.id}
+                        endReached={loadMore}
+                        components={{
+                            Footer: () => (loadingMore ? <LbRowSkeleton /> : null),
+                        }}
+                        itemContent={(index, player) => {
+                            const rank = index + 1;
+                            return (
+                                <Card
+                                    customClass={classNames(
+                                        "lb-row",
+                                        "clickable",
+                                        isMe(player.id) && "me",
+                                    )}
+                                    onClick={() => setSelectedPlayerId(player.id)}
+                                >
+                                    <Text
+                                        customClass={classNames("lb-rank", {
+                                            gold: rank === 1,
+                                            silver: rank === 2,
+                                            bronze: rank === 3,
+                                        })}
+                                    >
+                                        {rank}
+                                    </Text>
+                                    <Text customClass="lb-name row-title" truncate>
+                                        {isMe(player.id)
+                                            ? youLabel(shortenUsername(player.username))
+                                            : shortenUsername(player.username)}
+                                    </Text>
+                                    <Text customClass="lb-earnings amount-value">
+                                        {playerValue(player)}
+                                    </Text>
+                                </Card>
+                            );
+                        }}
+                    />
                 </Box>
             )}
+            <LeaderboardPlayerModal
+                playerId={selectedPlayerId}
+                onClose={closePlayerModal}
+            />
         </Box>
     );
 }

@@ -1,96 +1,114 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import classNames from "classnames";
-import { User as UserIcon } from "lucide-react";
+import PersonIcon from "@mui/icons-material/Person";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
-import AppBar from "@/components/base/AppBar/AppBar";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import CustomAppBar from "@/components/base/AppBar/AppBar";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
-import Avatar from "@/components/base/Avatar/Avatar";
-import Popover from "@/components/base/Popover/Popover";
+import CustomAvatar from "@/components/base/Avatar/Avatar";
+import CustomPopover from "@/components/base/Popover/Popover";
 import Skeleton from "@/components/base/Skeleton/Skeleton";
 import Button from "@/components/base/Button/Button";
-import Chip from "@/components/base/Chip/Chip";
+import CustomChip from "@/components/base/Chip/Chip";
+import { CustomTabs, CustomTab } from "@/components/base/Tabs/Tabs";
 import { useWalletBalance } from "@/hooks/useWallet";
 import { useLogout } from "@/hooks/useLogout";
 import { useReduxSelector } from "@/redux/hooks";
 import { formatAmount } from "@/utils/format";
-import { shortenUsername } from "@/utils";
+import { getGameFromPath, getGameRoutes, shortenUsername } from "@/utils";
 import { NAV_ITEMS } from "@/constants/config";
-import { profileTitle, appBarLogout, appBarWallet } from "@/constants/messages";
-import IconButton from "@/components/base/IconButton/IconButton";
+import {
+ profileTitle,
+ appBarLogout,
+ appBarWallet,
+ appBarBack,
+} from "@/constants/messages";
+import CustomIconButton from "@/components/base/IconButton/IconButton";
 import { ChessLogo } from "@/components/constants";
-import { getAvatarUrl } from "@/utils/avatar";
 
 export default function Header() {
  const { pathname } = useLocation();
+ const navigate = useNavigate();
+ const enteredGame = useReduxSelector((state) => state.speed.enteredGame);
+ const routes = enteredGame && getGameRoutes(enteredGame);
+ const isGamePage = !!getGameFromPath(pathname);
+ const activeNavPath =
+  routes && NAV_ITEMS.some((item) => routes[item.page] === pathname)
+   ? pathname
+   : false;
  const { usdValue, loading } = useWalletBalance();
  const session = useReduxSelector((state) => state.auth.session);
  const logout = useLogout();
  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
- const getAvatar = () => {
-  if (session?.avatar_seed == undefined || session.avatar_seed == null) {
-   return;
-  }
-  return getAvatarUrl(session?.avatar_seed);
- };
  const closeMenu = () => setAnchorEl(null);
 
  return (
-  <AppBar
+  <CustomAppBar
    toolbarClass="app-toolbar"
    brand={
-    <Link to="/play" className="appbar-brand" title="Go to Play">
+    <Link
+     to={routes ? routes.PLAY : "/"}
+     className="appbar-brand"
+     title="Go to Play"
+    >
      <ChessLogo muted={false} showText size={30} />
     </Link>
    }
    bottomSlot={
-    <Box customClass="appbar-nav-tabs">
-     {NAV_ITEMS.map((item) => (
-      <Link
-       key={item.id}
-       to={item.path}
-       className={classNames(
-        "appbar-nav-tab",
-        pathname === item.path && "active",
-       )}
-      >
-       {item.label}
-      </Link>
-     ))}
-    </Box>
+    isGamePage && routes ? (
+     <CustomTabs
+      customClass="appbar-nav-tabs"
+      value={activeNavPath}
+      onChange={(_, value) => navigate(value)}
+     >
+      {NAV_ITEMS.map((item) => (
+       <CustomTab key={item.id} value={routes[item.page]} label={item.label} />
+      ))}
+     </CustomTabs>
+    ) : (
+     <Button
+      type="button"
+      customClass="appbar-back-btn"
+      startIcon={<ArrowBackIcon />}
+      onClick={() => navigate(routes ? routes.PLAY : "/")}
+     >
+      {appBarBack}
+     </Button>
+    )
    }
   >
    <Box customClass="appbar-right">
-    <Link to="/wallet" style={{ textDecoration: "none" }}>
+    <NavLink to="/wallet" style={{ textDecoration: "none" }}>
      {" "}
      {loading ? (
       <Skeleton customClass="text" width={44} height={13} />
      ) : (
-      <Chip
+      <CustomChip
        icon={<AccountBalanceWalletIcon />}
        label={formatAmount(usdValue)}
        customClass="appbar-balance"
       />
      )}
-    </Link>
+    </NavLink>
 
     {session ? (
-     <IconButton
+     <CustomIconButton
       customClass={classNames(
        "appbar-menu-trigger",
        pathname === "/profile" && "active",
       )}
       onClick={(e) => setAnchorEl(e.currentTarget)}
      >
-      <UserIcon size={18} strokeWidth={2.5} />
-     </IconButton>
+      <PersonIcon className="person-icon" />
+     </CustomIconButton>
     ) : (
      <Skeleton customClass="circle" width={28} height={28} />
     )}
 
-    <Popover
+    <CustomPopover
      open={!!anchorEl}
      anchorEl={anchorEl}
      onClose={closeMenu}
@@ -99,19 +117,34 @@ export default function Header() {
      customClass="appbar-account-popover"
     >
      <Box customClass="appbar-dropdown-head">
-      <Avatar letter="" src={getAvatar()} customClass="sm primary" />
+      <CustomAvatar
+       letter={session?.username?.charAt(0).toUpperCase() ?? ""}
+       customClass="sm primary"
+      />
       <Box customClass="appbar-dropdown-id">
        <Text customClass="appbar-dropdown-name">
         {session?.username && shortenUsername(session.username)}
        </Text>
       </Box>
      </Box>
-     <Link to="/profile" className="appbar-dropdown-item" onClick={closeMenu}>
+     <NavLink
+      to="/profile"
+      className={({ isActive }) =>
+       classNames("appbar-dropdown-item", isActive && "active")
+      }
+      onClick={closeMenu}
+     >
       {profileTitle}
-     </Link>
-     <Link to="/wallet" className="appbar-dropdown-item" onClick={closeMenu}>
+     </NavLink>
+     <NavLink
+      to="/wallet"
+      className={({ isActive }) =>
+       classNames("appbar-dropdown-item", isActive && "active")
+      }
+      onClick={closeMenu}
+     >
       {appBarWallet}
-     </Link>
+     </NavLink>
      <Button
       type="button"
       sx={{ justifyContent: "flex-start" }}
@@ -123,8 +156,8 @@ export default function Header() {
      >
       {appBarLogout}
      </Button>
-    </Popover>
+    </CustomPopover>
    </Box>
-  </AppBar>
+  </CustomAppBar>
  );
 }

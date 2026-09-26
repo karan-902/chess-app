@@ -3,12 +3,11 @@ import classNames from "classnames";
 import { CircularProgress } from "@mui/material";
 import { Copy, Check, Info, ArrowLeft, X as XIcon } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
-import Modal from "@/components/base/Modal/Modal";
+import CustomModal from "@/components/base/Modal/Modal";
 import SuccessCheckmark from "@/components/base/SuccessCheckmark/SuccessCheckmark";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import Button from "@/components/base/Button/Button";
-import Label from "@/components/base/Label/Label";
 import Input from "@/components/base/Input/Input";
 import {
  speedLogo,
@@ -29,7 +28,7 @@ import {
  depositModalTagline,
  depositModalHowToLink,
  depositModalSpeedBadge,
- depositModalAmountLabel,
+ amountInputLabel,
  depositModalGenerateButton,
  depositModalStepsTitle,
  depositModalStepsCloseAriaLabel,
@@ -47,6 +46,7 @@ import {
  depositModalStep5Desc,
  depositModalAmountRequired,
  depositModalMinAmountError,
+ depositModalMaxAmountError,
  depositModalGenerateFailed,
  depositModalBtcOnlyWarning,
  depositModalScanHint,
@@ -59,8 +59,9 @@ import {
  walletWithdrawableCaveat,
  MAX_AMOUNT_DIGITS,
  MIN_TRANSACTION_USD,
+ MAX_DEPOSIT_USD,
 } from "@/constants/messages";
-import IconButton from "@/components/base/IconButton/IconButton";
+import CustomIconButton from "@/components/base/IconButton/IconButton";
 
 type Stage = "amount" | "qr" | "success";
 
@@ -144,9 +145,9 @@ export default function DepositModal() {
   const onCompleted = (data: ITransactionCompletedEvent) => {
    if (data.type === "DEPOSIT") setStage("success");
   };
-  socket.on("transaction_completed", onCompleted);
+  socket.on("transaction:completed", onCompleted);
   return () => {
-   socket.off("transaction_completed", onCompleted);
+   socket.off("transaction:completed", onCompleted);
   };
  }, [stage, socket]);
 
@@ -172,6 +173,10 @@ export default function DepositModal() {
    setAmountError(depositModalMinAmountError(MIN_TRANSACTION_USD));
    return;
   }
+  if (amountUsd > MAX_DEPOSIT_USD) {
+   setAmountError(depositModalMaxAmountError(MAX_DEPOSIT_USD));
+   return;
+  }
   setAmountError("");
   setSubmitting(true);
 
@@ -180,8 +185,8 @@ export default function DepositModal() {
    setPayment(res);
    setExpired(false);
    setStage("qr");
-  } catch {
-   setAmountError(depositModalGenerateFailed);
+  } catch (err: any) {
+   setAmountError(err?.response?.data?.message ?? depositModalGenerateFailed);
   } finally {
    setSubmitting(false);
   }
@@ -197,7 +202,7 @@ export default function DepositModal() {
  };
 
  return (
-  <Modal
+  <CustomModal
    open={open}
    onClose={close}
    hideCloseIcon={stage === "success"}
@@ -216,7 +221,7 @@ export default function DepositModal() {
    {ready && stage === "amount" && showSteps && (
     <Box customClass="deposit-steps">
      <Box customClass="deposit-steps-head">
-      <Text customClass="deposit-heading value-heading">
+      <Text customClass="modal-heading value-heading">
        {depositModalStepsTitle}
       </Text>
       <Button
@@ -240,29 +245,27 @@ export default function DepositModal() {
    )}
 
    {ready && stage === "amount" && !showSteps && (
-    <Box customClass="deposit-amount-stage">
-     <Text customClass="deposit-heading value-heading">
-      {depositModalTitle}
-     </Text>
-     <Box customClass="deposit-info-box">
+    <Box customClass="wallet-modal-layout">
+     <Text customClass="modal-heading value-heading">{depositModalTitle}</Text>
+     <Box customClass="modal-info-box">
       <Info size={16} strokeWidth={2} />
-      <Text customClass="deposit-info-text caption">
+      <Text customClass="modal-info-text caption">
        {walletWithdrawableCaveat}
       </Text>
      </Box>
 
-     <Box customClass="auth-field hero-input-wrapper">
-      <Label customClass="deposit-label" htmlFor="deposit-amount">
-       {depositModalAmountLabel}
-      </Label>
+     <Box customClass="hero-input-wrapper">
       <Input
        id="deposit-amount"
        type="text"
        inputMode="numeric"
+       label={amountInputLabel}
+       labelClassName="deposit-label"
        slotProps={{
         input: { maxLength: MAX_AMOUNT_DIGITS },
        }}
        fullWidth
+       disabled={submitting}
        placeholder="0.00"
        customClass="amount-input-hero"
        value={amount}
@@ -290,7 +293,7 @@ export default function DepositModal() {
       type="submit"
       fullWidth
       variant="contained"
-      customClass="deposit-generate-btn"
+      customClass="modal-submit-btn"
       onClick={handleGenerate}
       isLoading={submitting}
       disabled={isAmountInvalid}
@@ -311,21 +314,21 @@ export default function DepositModal() {
    {ready && stage === "qr" && payment && (
     <Box customClass="deposit-qr-stage">
      <Box customClass="deposit-qr-header">
-      <IconButton
+      <CustomIconButton
        customClass="deposit-qr-back-btn"
        onClick={() => setStage("amount")}
        aria-label={authLoginBack}
       >
        <ArrowLeft size={16} strokeWidth={2} />
-      </IconButton>
-      <Text customClass="deposit-heading value-heading">
+      </CustomIconButton>
+      <Text customClass="modal-heading value-heading">
        {depositModalDepositingTitle(amountUsd)}
       </Text>
      </Box>
 
-     <Box customClass="deposit-info-box">
+     <Box customClass="modal-info-box">
       <Info size={16} strokeWidth={2} />
-      <Text customClass="deposit-info-text caption">
+      <Text customClass="modal-info-text caption">
        {depositModalBtcOnlyWarning}
       </Text>
      </Box>
@@ -373,8 +376,8 @@ export default function DepositModal() {
    )}
 
    {ready && stage === "success" && (
-    <Box customClass="deposit-success-stage">
-     <Box customClass="deposit-success-icon">
+    <Box customClass="modal-success-stage">
+     <Box customClass="modal-success-icon">
       <SuccessCheckmark
        confettiLottieSrc={walletSuccessLottie}
        tickLottieSrc={walletTickLottie}
@@ -382,15 +385,13 @@ export default function DepositModal() {
      </Box>
      <Box customClass="deposit-success-amountWrapper">
       {" "}
-      <Text customClass="deposit-success-amount">
-       {formatAmount(amountUsd)}
-      </Text>
-      <Text customClass="deposit-heading value-heading">
+      <Text customClass="modal-success-amount">{formatAmount(amountUsd)}</Text>
+      <Text customClass="modal-heading value-heading">
        {depositModalPaymentReceived}
       </Text>
      </Box>
     </Box>
    )}
-  </Modal>
+  </CustomModal>
  );
 }

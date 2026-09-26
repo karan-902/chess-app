@@ -5,10 +5,10 @@
 
  .MuiInputBase-root {
   min-height: 2.75rem;
-  background: $appSecondary;
+  background: none;
   border-radius: $appBtnRadius;
   font-family: $fontOutfit;
-  font-size: $font14;
+  font-size: $font15;
   color: $appText;
   transition:
    border-color 0.15s ease,
@@ -19,7 +19,7 @@
   }
 
   &.Mui-focused {
-   outline: 1px solid $primary !important;
+   outline: 2px solid $primary !important;
    border-radius: 0.375rem !important;
 
    .MuiOutlinedInput-notchedOutline {

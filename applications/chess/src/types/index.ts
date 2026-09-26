@@ -6,10 +6,10 @@ export type IRegisterEmailBody = {
 };
 
 export type ISSOBody = {
-    signup_method: "google";
-    google_token: string;
+    // signup_method: "google";
+    code: string;
     redirect_uri: string;
-    confirm_device_switch?: boolean;
+    // confirm_device_switch?: boolean;
     fingerprint?: string;
 };
 
@@ -21,16 +21,16 @@ export type ILoginBody = {
 
 export type IGenerateTokenBody = {
     refresh_token: string;
-    source?: string;
+    // source?: string;
 };
 
 export type IVerifyUserBody = {
     email: string;
 };
 
-export type ILogoutBody = {
-    session_id: string;
-};
+// export type ILogoutBody = {
+//     session_id: string;
+// };
 
 export type IForgotPasswordBody = {
     email: string;

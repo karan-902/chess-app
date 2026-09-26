@@ -4,7 +4,11 @@ import CallReceived from "@mui/icons-material/CallReceived";
 import CallMade from "@mui/icons-material/CallMade";
 import Handshake from "@mui/icons-material/Handshake";
 import type { SvgIconComponent } from "@mui/icons-material";
-import type { GameCategory } from "@/types/types";
+import type {
+ GameCategory,
+ LeaderboardScope,
+ LeaderboardSort,
+} from "@/types/types";
 import type { TransactionType } from "@/types/utils";
 import {
  playReasonCheckmate,
@@ -13,7 +17,34 @@ import {
  playReasonStalemate,
  playReasonTimeout,
  playReasonInactivity,
+ leaderboardScopeDailyLabel,
+ leaderboardScopeWeeklyLabel,
+ leaderboardScopeMonthlyLabel,
+ leaderboardScopeAllLabel,
+ leaderboardSortEarningsLabel,
+ leaderboardSortWinsLabel,
 } from "@/constants/messages";
+
+export const LEADERBOARD_SCOPES: LeaderboardScope[] = [
+ "daily",
+ "weekly",
+ "monthly",
+ "all",
+];
+
+export const LEADERBOARD_SCOPE_LABELS: Record<LeaderboardScope, string> = {
+ daily: leaderboardScopeDailyLabel,
+ weekly: leaderboardScopeWeeklyLabel,
+ monthly: leaderboardScopeMonthlyLabel,
+ all: leaderboardScopeAllLabel,
+};
+
+export const LEADERBOARD_SORTS: LeaderboardSort[] = ["earnings", "wins"];
+
+export const LEADERBOARD_SORT_LABELS: Record<LeaderboardSort, string> = {
+ earnings: leaderboardSortEarningsLabel,
+ wins: leaderboardSortWinsLabel,
+};
 
 export const CATEGORY_META: Record<
  GameCategory,
@@ -31,9 +62,9 @@ export const TRANSACTION_TYPE_ICONS: Record<TransactionType, SvgIconComponent> =
   WITHDRAW: CallMade,
   WITHDRAW_REFUND: CallReceived,
   BET: CallMade,
-  SETTLEMENT: CallReceived,
+  WIN: CallReceived,
   DRAW: Handshake,
-  BET_REFUND: CallReceived,
+  MATCH_CANCELLED: CallReceived,
  };
 
 export const TRANSACTION_TYPE_DESCRIPTIONS: Record<TransactionType, string> = {
@@ -41,12 +72,15 @@ export const TRANSACTION_TYPE_DESCRIPTIONS: Record<TransactionType, string> = {
  WITHDRAW: "Sent",
  WITHDRAW_REFUND: "Refund",
  BET: "Bet",
- SETTLEMENT: "Won",
+ WIN: "Won",
  DRAW: "Refund",
- BET_REFUND: "Refund",
+ MATCH_CANCELLED: "Refund",
 };
 
-export const PLATFORM_PAYOUT_MULTIPLIER = 0.88;
+export const DEBIT_TRANSACTION_TYPES = new Set<TransactionType>([
+ "WITHDRAW",
+ "BET",
+]);
 
 export const GAME_END_REASON_LABELS: Record<string, string> = {
  checkmate: playReasonCheckmate,
@@ -57,19 +91,34 @@ export const GAME_END_REASON_LABELS: Record<string, string> = {
  opponent_disconnected: playReasonInactivity,
 };
 
-export const QUEUE_TIMEOUT_SECONDS: Record<GameCategory, number> = {
- BULLET: 30,
- BLITZ: 45,
- RAPID: 60,
- CLASSICAL: 90,
+export const POOL_TIMEOUT_SECONDS = 60;
+
+export const GAMES = {
+ chess: { label: "Chess" },
+} as const;
+
+export type GameSlug = keyof typeof GAMES;
+
+export const GAME_PAGES = {
+ PLAY: "play",
+ MATCHES: "matches",
+ LEADERBOARD: "leaderboard",
+ RULES: "rules",
+} as const;
+
+export const GAME_PAGE_TITLES: Record<string, string> = {
+ [GAME_PAGES.PLAY]: "Play",
+ [GAME_PAGES.MATCHES]: "Matches",
+ [GAME_PAGES.LEADERBOARD]: "Leaderboard",
+ [GAME_PAGES.RULES]: "Rules",
 };
 
 export const NAV_ITEMS = [
- { id: "play", path: "/play", label: "Play" },
- { id: "my-matches", path: "/matches", label: "Matches" },
- { id: "leaderboard", path: "/leaderboard", label: "Leaderboard" },
- { id: "rules", path: "/rules", label: "Rules" },
-];
+ { id: "play", page: "PLAY", label: "Play" },
+ { id: "my-matches", page: "MATCHES", label: "Matches" },
+ { id: "leaderboard", page: "LEADERBOARD", label: "Leaderboard" },
+ { id: "rules", page: "RULES", label: "Rules" },
+] as const;
 
 export const COUNTRIES = [
  "Afghanistan",

@@ -1,10 +1,10 @@
 import {
-    OTPInput,
+    OTPInput as InputOtp,
     REGEXP_ONLY_DIGITS_AND_CHARS,
     type SlotProps,
 } from "input-otp";
 import classNames from "classnames";
-import "./otpInput.scss";
+import "./otp-input.scss";
 
 interface IOtpInputProps {
     length: number;
@@ -26,7 +26,7 @@ function OtpSlot({ char, isActive, hasFakeCaret }: SlotProps) {
     );
 }
 
-export default function OtpInput({
+export function OTPInput({
     length,
     value,
     onChange,
@@ -35,7 +35,7 @@ export default function OtpInput({
     alphanumeric,
 }: IOtpInputProps) {
     return (
-        <OTPInput
+        <InputOtp
             maxLength={length}
             value={value}
             onChange={onChange}
@@ -53,3 +53,5 @@ export default function OtpInput({
         />
     );
 }
+
+export default OTPInput;

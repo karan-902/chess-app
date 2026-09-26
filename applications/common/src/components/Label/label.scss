@@ -1,20 +1,18 @@
 @use "default.scss" as *;
 
 .label {
-    font-family: $fontOutfitSemiBold;
-    color: $appText;
+ font-family: $fontOutfitSemiBold !important;
+ color: $appText !important;
 
-    &.deposit-label {
-        font-family: $fontOutfitMedium;
-        color: $appTextMuted;
-    }
-    &.room-field-label {
-        text-align: left !important;
-        font-family: $fontOutfitExtraBold;
+ &.deposit-label {
+  color: $appTextMuted;
+ }
+ &.room-field-label {
+  text-align: left !important;
 
-        &.room-stake-label {
-            text-align: center !important;
-            width: 100%;
-        }
-    }
+  &.room-bet-label {
+   text-align: center !important;
+   width: 100%;
+  }
+ }
 }

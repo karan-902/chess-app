@@ -3,7 +3,7 @@ import Box from "@/components/base/Box/Box";
 import Header from "@/components/common/Header";
 import DepositModal from "@/components/common/DepositModal";
 import WithdrawModal from "@/components/common/WithdrawModal";
-import { Navigate, Outlet, useLocation } from "react-router";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useReduxSelector } from "@/redux/hooks";
 import { useWalletActionModal } from "@/context/WalletActionModalContext";
 

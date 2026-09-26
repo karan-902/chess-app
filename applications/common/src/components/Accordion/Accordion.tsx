@@ -13,7 +13,7 @@ interface IAccordionProps extends AccordionProps {
     summary: React.ReactNode;
 }
 
-export default function Accordion({
+export function Accordion({
     customClass,
     summary,
     children,
@@ -29,3 +29,5 @@ export default function Accordion({
         </MuiAccordion>
     );
 }
+
+export default Accordion;

@@ -2,13 +2,13 @@ import { forwardRef } from "react";
 import { IconButton as MuiIconButton } from "@mui/material";
 import type { IconButtonProps } from "@mui/material";
 import classNames from "classnames";
-import "./iconbutton.scss";
+import "./icon-button.scss";
 
 interface IIconButtonProps extends IconButtonProps {
     customClass?: string;
 }
 
-const IconButton = forwardRef<HTMLButtonElement, IIconButtonProps>(
+export const CustomIconButton = forwardRef<HTMLButtonElement, IIconButtonProps>(
     ({ customClass, children, ...props }, ref) => {
         const classes = classNames("icon-button", customClass);
 
@@ -20,6 +20,6 @@ const IconButton = forwardRef<HTMLButtonElement, IIconButtonProps>(
     },
 );
 
-IconButton.displayName = "IconButton";
+CustomIconButton.displayName = "CustomIconButton";
 
-export default IconButton;
+export default CustomIconButton;

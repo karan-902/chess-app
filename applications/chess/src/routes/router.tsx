@@ -1,19 +1,22 @@
-import { createBrowserRouter, Navigate } from "react-router";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import Layout from "@/container/Layout";
 import PrivateRoute from "@/container/PrivateRoute";
 import PublicRoute from "@/container/PublicRoute";
 import Login from "@/pages/login";
 import Register from "@/pages/register";
-import ForgotPassword from "@/pages/forgot-password";
-import ResetPassword from "@/pages/reset-password";
-import VerifyEmail from "@/pages/verify-email";
-import ApproveDevice from "@/pages/approve-device";
-import PlayPage from "@/pages/play/PlayPage";
+// import ForgotPassword from "@/pages/forgot-password";
+// import ResetPassword from "@/pages/reset-password";
+// import VerifyEmail from "@/pages/verify-email";
+// import ApproveDevice from "@/pages/approve-device";
 import MyMatches from "@/pages/history";
 import Leaderboard from "@/pages/leaderboard";
 import Rules from "@/pages/rules";
 import Wallet from "@/pages/wallet";
 import Profile from "@/pages/profile";
+import GameRoute from "@/container/GameRoute";
+import GamePlayPage from "@/container/GamePlayPage";
+import EnteredGameRedirect from "@/container/EnteredGameRedirect";
+import { GAME_PAGES } from "@/constants/config";
 
 export const router = createBrowserRouter([
     {
@@ -24,22 +27,30 @@ export const router = createBrowserRouter([
                 children: [
                     { path: "/login", element: <Login /> },
                     { path: "/register", element: <Register /> },
-                    { path: "/forgot-password", element: <ForgotPassword /> },
-                    { path: "/reset-password", element: <ResetPassword /> },
-                    { path: "/verify-email", element: <VerifyEmail /> },
+                    // { path: "/forgot-password", element: <ForgotPassword /> },
+                    // { path: "/reset-password", element: <ResetPassword /> },
+                    // { path: "/verify-email", element: <VerifyEmail /> },
                 ],
             },
-            { path: "/approve-device", element: <ApproveDevice /> },
+            // { path: "/approve-device", element: <ApproveDevice /> },
             {
                 element: <PrivateRoute />,
                 children: [
-                    { path: "/play", element: <PlayPage /> },
-                    { path: "/matches", element: <MyMatches /> },
-                    { path: "/leaderboard", element: <Leaderboard /> },
-                    { path: "/rules", element: <Rules /> },
+                    {
+                        path: "/:game",
+                        element: <GameRoute />,
+                        children: [
+                            { index: true, element: <Navigate to={GAME_PAGES.PLAY} replace /> },
+                            { path: GAME_PAGES.PLAY, element: <GamePlayPage /> },
+                            { path: GAME_PAGES.MATCHES, element: <MyMatches /> },
+                            { path: GAME_PAGES.LEADERBOARD, element: <Leaderboard /> },
+                            { path: GAME_PAGES.RULES, element: <Rules /> },
+                        ],
+                    },
                     { path: "/wallet", element: <Wallet /> },
                     { path: "/profile", element: <Profile /> },
-                    { index: true, element: <Navigate to="/play" replace /> },
+                    { index: true, element: <EnteredGameRedirect /> },
+                    { path: "*", element: <EnteredGameRedirect /> },
                 ],
             },
         ],

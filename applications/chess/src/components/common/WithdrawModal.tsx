@@ -3,19 +3,19 @@ import classNames from "classnames";
 import { CircularProgress } from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
 import { useReduxDispatch } from "@/redux/hooks";
-import { showToast } from "@/redux/common/common.slice";
+import { showToast } from "@/redux/common/slice";
 import Box from "@/components/base/Box/Box";
 import SuccessCheckmark from "@/components/base/SuccessCheckmark/SuccessCheckmark";
 import { walletSuccessLottie, walletTickLottie } from "@/components/images";
 import Text from "@/components/base/Text/Text";
 import Button from "@/components/base/Button/Button";
-import Label from "@/components/base/Label/Label";
 import Input from "@/components/base/Input/Input";
 import { useWalletActionModal } from "@/context/WalletActionModalContext";
 import { useWalletBalance } from "@/hooks/useWallet";
 import { withdrawRequest } from "@/hooks/useWallet";
 import { useModalReady } from "@/hooks/useModalReady";
 import { formatAmount } from "@/utils/format";
+import { showApiErrorToast } from "@/utils";
 import {
  withdrawModalTitle,
  withdrawModalWithdrawableCaveat,
@@ -28,13 +28,13 @@ import {
  withdrawModalInvalidDestination,
  withdrawModalFailed,
  withdrawModalSuccessTitle,
- depositModalAmountLabel,
+ amountInputLabel,
  MIN_TRANSACTION_USD,
 } from "@/constants/messages";
-import Modal from "@/components/base/Modal/Modal";
+import CustomModal from "@/components/base/Modal/Modal";
 
 type Stage = "amount" | "success";
-const MAX_AMOUNT_DIGITS = 4;
+const MAX_AMOUNT_DIGITS = 2;
 
 export default function WithdrawModal() {
  const dispatch = useReduxDispatch();
@@ -101,8 +101,9 @@ export default function WithdrawModal() {
   if (!destination.trim()) {
    dispatch(
     showToast({
-     message: withdrawModalInvalidDestination,
-     severity: "error",
+     isToastOpen: true,
+     toastMessage: withdrawModalInvalidDestination,
+     toastVariant: "error",
     }),
    );
    return;
@@ -112,20 +113,22 @@ export default function WithdrawModal() {
    await withdrawRequest(amountUsd, destination.trim());
    refetch();
    setStage("success");
-  } catch (err: any) {
    dispatch(
     showToast({
-     message: err?.response?.data?.message ?? withdrawModalFailed,
-     severity: "error",
+     isToastOpen: true,
+     toastMessage: withdrawModalSuccessTitle,
+     toastVariant: "success",
     }),
    );
+  } catch (err) {
+   showApiErrorToast(err, withdrawModalFailed);
   } finally {
    setSubmitting(false);
   }
  };
 
  return (
-  <Modal
+  <CustomModal
    open={open}
    onClose={close}
    hideCloseIcon={stage === "success"}
@@ -142,23 +145,21 @@ export default function WithdrawModal() {
    )}
 
    {ready && stage === "amount" && (
-    <Box customClass="deposit-amount-stage">
-     <Text customClass="deposit-heading value-heading">
-      {withdrawModalTitle}
-     </Text>
-     <Box customClass="deposit-info-box">
+    <Box customClass="wallet-modal-layout">
+     <Text customClass="modal-heading value-heading">{withdrawModalTitle}</Text>
+     <Box customClass="modal-info-box">
       <InfoIcon sx={{ fontSize: 16 }} />
-      <Text customClass="deposit-info-text caption">
+      <Text customClass="modal-info-text caption">
        {withdrawModalWithdrawableCaveat}
       </Text>
      </Box>
 
-     <Box customClass="auth-field hero-input-wrapper">
-      <Label htmlFor="withdraw-amount">{depositModalAmountLabel}</Label>
+     <Box customClass="hero-input-wrapper">
       <Input
        id="withdraw-amount"
        type="text"
        inputMode="decimal"
+       label={amountInputLabel}
        slotProps={{
         input: { maxLength: MAX_AMOUNT_DIGITS },
        }}
@@ -172,27 +173,24 @@ export default function WithdrawModal() {
        helperText={amountError}
       />
      </Box>
-     <Box customClass="auth-field">
-      <Label htmlFor="withdraw-destination">
-       {withdrawModalDestinationLabel}
-      </Label>
-      <Input
-       id="withdraw-destination"
-       type="text"
-       fullWidth
-       customClass="wallet-input"
-       placeholder={withdrawModalDestinationPlaceholder}
-       value={destination}
-       onChange={(e) => setDestination(e.target.value)}
-       disabled={submitting || !hasWithdrawable}
-      />
-     </Box>
+
+     <Input
+      id="withdraw-destination"
+      type="text"
+      label={withdrawModalDestinationLabel}
+      fullWidth
+      customClass="wallet-input"
+      placeholder={withdrawModalDestinationPlaceholder}
+      value={destination}
+      onChange={(e) => setDestination(e.target.value)}
+      disabled={submitting || !hasWithdrawable}
+     />
 
      <Button
       type="submit"
       fullWidth
       variant="contained"
-      customClass="deposit-generate-btn"
+      customClass="modal-submit-btn"
       onClick={handleWithdraw}
       isLoading={submitting}
       disabled={!canSubmit || submitting}
@@ -203,23 +201,21 @@ export default function WithdrawModal() {
    )}
 
    {ready && stage === "success" && (
-    <Box customClass="deposit-success-stage">
-     <Box customClass="deposit-success-icon">
+    <Box customClass="modal-success-stage">
+     <Box customClass="modal-success-icon">
       <SuccessCheckmark
        confettiLottieSrc={walletSuccessLottie}
        tickLottieSrc={walletTickLottie}
       />
      </Box>
      <Box customClass="deposit-sucess-amountWrapper">
-      <Text customClass="deposit-success-amount">
-       {formatAmount(amountUsd)}
-      </Text>
-      <Text customClass="deposit-heading value-heading">
+      <Text customClass="modal-success-amount">{formatAmount(amountUsd)}</Text>
+      <Text customClass="modal-heading value-heading">
        {withdrawModalSuccessTitle}
       </Text>
      </Box>
     </Box>
    )}
-  </Modal>
+  </CustomModal>
  );
 }

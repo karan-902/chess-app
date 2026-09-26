@@ -2,7 +2,7 @@ import { AppBar as MuiAppBar, Toolbar } from "@mui/material";
 import type { AppBarProps } from "@mui/material";
 import classNames from "classnames";
 import type { ReactNode } from "react";
-import "./appbar.scss";
+import "./app-bar.scss";
 
 interface IAppBarProps extends AppBarProps {
     customClass?: string;
@@ -11,7 +11,7 @@ interface IAppBarProps extends AppBarProps {
     bottomSlot?: ReactNode;
 }
 
-export default function AppBar({
+export function CustomAppBar({
     customClass,
     toolbarClass,
     brand,
@@ -32,3 +32,5 @@ export default function AppBar({
         </MuiAppBar>
     );
 }
+
+export default CustomAppBar;

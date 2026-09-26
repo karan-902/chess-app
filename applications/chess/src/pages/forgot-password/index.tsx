@@ -1,9 +1,8 @@
 import * as yup from "yup";
 import { useState } from "react";
-import { Link } from "react-router";
+import { NavLink } from "react-router-dom";
 import { useFormik } from "formik";
 import Box from "@/components/base/Box/Box";
-import Label from "@/components/base/Label/Label";
 import Input from "@/components/base/Input/Input";
 import Button from "@/components/base/Button/Button";
 import AuthLayout from "@/container/AuthLayout";
@@ -66,7 +65,7 @@ export default function ForgotPassword() {
                     ? authForgotPasswordSentDescription
                     : authForgotPasswordDescription
             }
-            footer={<Link to="/login">{authBackToSignIn}</Link>}
+            footer={<NavLink to="/login">{authBackToSignIn}</NavLink>}
         >
             {!sent && (
                 <Box
@@ -74,31 +73,28 @@ export default function ForgotPassword() {
                     component="form"
                     onSubmit={formik.handleSubmit as any}
                 >
-                    <Box customClass="auth-field">
-                        <Label htmlFor="email">{authEmailLabel}</Label>
-                        <Input
-                            id="email"
-                            name="email"
-                            type="email"
-                            placeholder={authEmailPlaceholder}
-                            value={formik.values.email}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            disabled={formik.isSubmitting}
-                            isError={
-                                (formik.touched.email &&
-                                    !!formik.errors.email) ||
-                                !!error
-                            }
-                            helperText={
-                                (formik.touched.email && formik.errors.email) ||
-                                error ||
-                                undefined
-                            }
-                            customClass="auth-input"
-                            fullWidth
-                        />
-                    </Box>
+                    <Input
+                        id="email"
+                        name="email"
+                        type="email"
+                        label={authEmailLabel}
+                        placeholder={authEmailPlaceholder}
+                        value={formik.values.email}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        disabled={formik.isSubmitting}
+                        isError={
+                            (formik.touched.email && !!formik.errors.email) ||
+                            !!error
+                        }
+                        helperText={
+                            (formik.touched.email && formik.errors.email) ||
+                            error ||
+                            undefined
+                        }
+                        customClass="form-input"
+                        fullWidth
+                    />
 
                     <Button
                         type="submit"

@@ -3,7 +3,7 @@ import Text from "@/components/base/Text/Text";
 import Card from "@/components/base/Card/Card";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { useReduxSelector } from "@/redux/hooks";
-import "./backdroploader.scss";
+import "./backdrop-loader.scss";
 
 export default function BackdropLoader() {
     const { open, text } = useReduxSelector((state) => state.common.loader);

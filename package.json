@@ -8,6 +8,7 @@
     "scripts": {
         "chess": "npm run dev -w @gopvp/chess",
         "chess:build": "npm run build -w @gopvp/chess",
-        "build": "npm run build --workspaces --if-present"
+        "build": "npm run build --workspaces --if-present",
+        "storybook": "npm run storybook -w @gopvp/common"
     }
 }

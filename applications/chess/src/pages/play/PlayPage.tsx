@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import { useSearchParams, useNavigate } from "react-router";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import Button from "@/components/base/Button/Button";
 import BoardPreview from "@/components/board/BoardPreview";
 import GameRoom from "./GameRoom";
-import StakeSheet from "./StakeSheet";
+import BetSheet from "./BetSheet";
 import PracticeSheet from "./PracticeSheet";
 import RoomSheet from "./RoomSheet";
 import PoolConfirmSheet from "./PoolConfirmSheet";
@@ -13,8 +13,9 @@ import { usePools } from "@/hooks/usePools";
 import { useMatchmaking } from "@/hooks/useMatchmaking";
 import { useRoomMatch } from "@/hooks/useRoomMatch";
 import { useWalletBalance } from "@/hooks/useWallet";
-import { QUEUE_TIMEOUT_SECONDS } from "@/constants/config";
-import type { Pool } from "@/types/types";
+import { POOL_TIMEOUT_SECONDS } from "@/constants/config";
+import { useGame } from "@/hooks/useGame";
+import type { IPoolResponse } from "@/types/types";
 import type { Difficulty } from "@/types/components";
 import type { GameCategory } from "@/types/types";
 import { playPageHint, lobbyPlayNowButton } from "@/constants/messages";
@@ -23,6 +24,7 @@ export default function PlayPage() {
     const [sheetOpen, setSheetOpen] = useState(false);
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
+    const { routes } = useGame();
     const { pools, loading: poolsLoading } = usePools();
     const { usdValue } = useWalletBalance();
     const { status, queuedPool, joinQueue, leaveQueue, resetStatus } =
@@ -30,7 +32,7 @@ export default function PlayPage() {
     const [secondsLeft, setSecondsLeft] = useState(0);
     const gameId = searchParams.get("game_id");
     const [confirmOpen, setConfirmOpen] = useState(false);
-    const [confirmPool, setConfirmPool] = useState<Pool | null>(null);
+    const [confirmPool, setConfirmPool] = useState<IPoolResponse | null>(null);
     const [practiceOpen, setPracticeOpen] = useState(false);
     const [roomOpen, setRoomOpen] = useState(false);
 
@@ -42,11 +44,14 @@ export default function PlayPage() {
         joinRoom,
         cancelRoom,
         resetStatus: resetRoomStatus,
-    } = useRoomMatch();
+    } = useRoomMatch(() => {
+        setRoomOpen(false);
+        navigate(routes.PLAY, { replace: true });
+    });
 
     useEffect(() => {
         if (status !== "queued" || !queuedPool) return;
-        setSecondsLeft(QUEUE_TIMEOUT_SECONDS[queuedPool.category]);
+        setSecondsLeft(POOL_TIMEOUT_SECONDS);
         const interval = setInterval(() => {
             setSecondsLeft((s) => Math.max(s - 1, 0));
         }, 1000);
@@ -87,7 +92,7 @@ export default function PlayPage() {
             sessionStorage.setItem(`pvc_color:${gameId}`, color);
         } catch {}
         navigate(
-            `/play?mode=pvc&time=${timeControl}&difficulty=${difficulty}&game_id=${gameId}&color=${color}`,
+            `${routes.PLAY}?mode=pvc&time=${timeControl}&difficulty=${difficulty}&game_id=${gameId}&color=${color}`,
             { replace: true },
         );
     };
@@ -119,7 +124,7 @@ export default function PlayPage() {
         setSheetOpen(true);
     };
 
-    const handlePoolPlay = (pool: Pool) => {
+    const handlePoolPlay = (pool: IPoolResponse) => {
         setSheetOpen(false);
         setConfirmPool(pool);
         setConfirmOpen(true);
@@ -136,7 +141,7 @@ export default function PlayPage() {
         setSheetOpen(true);
     };
 
-    const handleConfirmDrawerClose = () => {
+    const handleConfirmClose = () => {
         if (status === "joining" || status === "queued") leaveQueue();
         setConfirmOpen(false);
         setConfirmPool(null);
@@ -163,7 +168,7 @@ export default function PlayPage() {
                 </Button>
             </Box>
 
-            <StakeSheet
+            <BetSheet
                 open={sheetOpen}
                 onClose={() => setSheetOpen(false)}
                 pools={pools}
@@ -196,7 +201,7 @@ export default function PlayPage() {
 
             <PoolConfirmSheet
                 open={confirmOpen}
-                onClose={handleConfirmDrawerClose}
+                onClose={handleConfirmClose}
                 status={status}
                 queuedPool={queuedPool}
                 confirmPool={confirmPool}

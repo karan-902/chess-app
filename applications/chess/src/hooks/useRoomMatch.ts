@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { getSocket } from "@/lib/socket";
 import { useSocket } from "@/context/SocketContext";
 import { useReduxDispatch } from "@/redux/hooks";
-import { showToast } from "@/redux/common/common.slice";
+import { showToast } from "@/redux/common/slice";
 import { buildGameRoomUrl } from "@/utils";
+import { useGame } from "@/hooks/useGame";
 import type {
     IRoomCreatedResponse,
     IRoomMatchedResponse,
@@ -14,12 +15,15 @@ import type {
 
 export type RoomStatus = "idle" | "creating" | "waiting" | "joining" | "found";
 
-export function useRoomMatch() {
+export function useRoomMatch(onRoomExpired?: () => void) {
     const [status, setStatus] = useState<RoomStatus>("idle");
+    const onRoomExpiredRef = useRef(onRoomExpired);
+    onRoomExpiredRef.current = onRoomExpired;
     const [roomCode, setRoomCode] = useState<string | null>(null);
     const [expiresInSeconds, setExpiresInSeconds] = useState(0);
     const codeRef = useRef<string | null>(null);
     const navigate = useNavigate();
+    const { game } = useGame();
     const { socket: ctxSocket } = useSocket();
     const dispatch = useReduxDispatch();
 
@@ -30,7 +34,7 @@ export function useRoomMatch() {
     };
 
     const createRoom = (
-        stakeAmount: number,
+        betAmount: number,
         timeSeconds: number,
         isRated: boolean = false,
     ) => {
@@ -38,7 +42,7 @@ export function useRoomMatch() {
         if (!socket) return;
         setStatus("creating");
         socket.emit("create_room", {
-            stake_amount: stakeAmount,
+            stake_amount: betAmount,
             time_seconds: timeSeconds,
             is_rated: isRated,
         });
@@ -72,16 +76,16 @@ export function useRoomMatch() {
 
         const onRoomMatched = (data: IRoomMatchedResponse) => {
             setStatus("found");
-            navigate(buildGameRoomUrl(data), { replace: true });
+            navigate(buildGameRoomUrl(data, game), { replace: true });
         };
 
         const onRoomError = ({ message }: IRoomErrorResponse) => {
-            dispatch(showToast({ message, severity: "error" }));
+            dispatch(showToast({ isToastOpen: true, toastMessage: message, toastVariant: "error" }));
             resetStatus();
         };
 
         const onRoomExpired = ({ message }: IRoomExpiredResponse) => {
-            if (message) dispatch(showToast({ message, severity: "info" }));
+            if (message) dispatch(showToast({ isToastOpen: true, toastMessage: message, toastVariant: "info" }));
             resetStatus();
         };
 
@@ -105,6 +109,12 @@ export function useRoomMatch() {
         }, 1000);
         return () => clearInterval(interval);
     }, [status]);
+
+    useEffect(() => {
+        if (status !== "waiting" || expiresInSeconds > 0) return;
+        resetStatus();
+        onRoomExpiredRef.current?.();
+    }, [status, expiresInSeconds]);
 
     return {
         status,

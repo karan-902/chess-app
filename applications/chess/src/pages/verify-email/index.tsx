@@ -1,4 +1,4 @@
-import { Link, Navigate, useNavigate, useSearchParams } from "react-router";
+import { NavLink, Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import AuthLayout from "@/container/AuthLayout";
 import VerifyEmailForm, { OTP_LENGTH } from "./VerifyEmailForm";
 import {
@@ -23,7 +23,7 @@ export default function VerifyEmail() {
                     <strong>{email}</strong>
                 </>
             }
-            footer={<Link to="/login">{authBackToSignIn}</Link>}
+            footer={<NavLink to="/login">{authBackToSignIn}</NavLink>}
         >
             <VerifyEmailForm
                 email={email}

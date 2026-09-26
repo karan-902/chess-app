@@ -1,29 +1,33 @@
 import * as yup from "yup";
-import { useState, useEffect } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router";
-import { ArrowLeft } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { NavLink, useSearchParams } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
+// import { ArrowLeft } from "lucide-react";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import EditIcon from "@mui/icons-material/Edit";
 import { useFormik } from "formik";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
-import Label from "@/components/base/Label/Label";
 import Input from "@/components/base/Input/Input";
 import Button from "@/components/base/Button/Button";
+import CustomAvatar from "@/components/base/Avatar/Avatar";
 import AuthLayout from "@/container/AuthLayout";
 import { useGoogleAuth } from "@/hooks/useGoogleAuth";
-import { useDeviceApprovalPoll } from "@/hooks/useDeviceApprovalPoll";
+// import { useDeviceApprovalPoll } from "@/hooks/useDeviceApprovalPoll";
 import SelectCountryScreen from "@/pages/select-country/SelectCountryScreen";
 import { callAPIInterface } from "@/utils";
 import { useReduxDispatch } from "@/redux/hooks";
-import { login } from "@/redux/thunks";
-import { showLoader, hideLoader, showToast } from "@/redux/common/common.slice";
+import { login } from "@/redux/auth/thunk";
+import { showLoader, hideLoader } from "@/redux/common/slice";
 import type { IVerifyUserBody } from "@/types/index";
-import type { ILoginResponse, IVerifyUserResponse } from "@/types/utils";
+import type { IVerifyUserResponse } from "@/types/utils";
+// import type { ILoginResponse } from "@/types/utils";
 import { SignupMethod } from "@/types/utils";
 import type {
  IEmailScreenProps,
  IPasswordValues,
  IPasswordScreenProps,
- IWaitingApprovalScreenProps,
+ // IWaitingApprovalScreenProps,
  LoginStep,
 } from "@/types/components";
 import {
@@ -37,16 +41,19 @@ import {
  authValidationEmailInvalid,
  authValidationPasswordRequired,
  authLoginNoAccountFound,
- authLoginBack,
- authLoginForgotPassword,
- authLoginContinueButton,
+ authLoginChangeEmail,
+ // authLoginForgotPassword,
+ // authLoginResetNow,
+ authLoginNextButton,
  authLoginSignInButton,
  authLoginEmailNotVerified,
- authDeviceApprovalTitle,
- authDeviceApprovalDescription,
- authDeviceApprovalBack,
+ // authDeviceApprovalTitle,
+ // authDeviceApprovalDescription,
+ // authDeviceApprovalBack,
  authLoginTitle,
  authLoginSubtitle,
+ authLoginPasswordTitle,
+ authLoginPasswordSubtitle,
  authLoginNoAccountPrompt,
  authLoginSignupLink,
  selectCountryTitle,
@@ -73,46 +80,45 @@ function EmailScreen({
 }: IEmailScreenProps) {
  return (
   <Box
-   customClass="auth-form"
+   customClass="gopvp-email-form"
    component="form"
    onSubmit={formik.handleSubmit as any}
   >
-   <Box customClass="auth-field">
-    <Label htmlFor="email">{authEmailLabel}</Label>
-    <Input
-     id="email"
-     name="email"
-     type="email"
-     placeholder={authEmailPlaceholder}
-     value={formik.values.email}
-     onChange={formik.handleChange}
-     onBlur={formik.handleBlur}
-     disabled={formik.isSubmitting}
-     isError={(formik.touched.email && !!formik.errors.email) || !!error}
-     helperText={
-      (formik.touched.email && formik.errors.email) || error || undefined
-     }
-     customClass="auth-input"
-     fullWidth
-    />
+   <Input
+    id="email"
+    name="email"
+    type="email"
+    label={authEmailLabel}
+    placeholder={authEmailPlaceholder}
+    value={formik.values.email}
+    onChange={formik.handleChange}
+    onBlur={formik.handleBlur}
+    disabled={formik.isSubmitting}
+    isError={(formik.touched.email && !!formik.errors.email) || !!error}
+    helperText={
+     (formik.touched.email && formik.errors.email) || error || undefined
+    }
+    customClass="form-input"
+    fullWidth
+   />
+
+   <Button
+    type="submit"
+    variant="contained"
+    fullWidth
+    endIcon={<ArrowForwardIcon className="auth-btn-arrow-icon" />}
+    customClass="auth-submit-btn auth-submit-btn-arrow"
+    disabled={!formik.dirty || formik.isSubmitting}
+    isLoading={formik.isSubmitting}
+   >
+    {authLoginNextButton}
+   </Button>
+
+   <Box customClass="auth-divider">
+    <Text component="span">{authOr}</Text>
    </Box>
 
-   <Box customClass="auth-actions">
-    <Button
-     type="submit"
-     variant="contained"
-     fullWidth
-     customClass="auth-submit-btn"
-     disabled={!formik.dirty || formik.isSubmitting}
-     isLoading={formik.isSubmitting}
-    >
-     {authLoginContinueButton}
-    </Button>
-
-    <Box customClass="auth-divider">
-     <Text component="span">{authOr}</Text>
-    </Box>
-
+   <Box customClass="social-stack">
     <Button
      type="button"
      startIcon={<GoogleIcon size={20} />}
@@ -131,118 +137,132 @@ function EmailScreen({
 
 function PasswordScreen({
  verifiedEmail,
+ verifiedUsername,
  formik,
  error,
  onChangeEmail,
 }: IPasswordScreenProps) {
+ const initials = verifiedUsername
+  .trim()
+  .split(/\s+/)
+  .map((part) => part.charAt(0))
+  .join("")
+  .slice(0, 2)
+  .toUpperCase();
+
  return (
   <Box
-   customClass="auth-form auth-password-stage"
+   customClass="gopvp-login-form auth-password-stage"
    component="form"
    onSubmit={formik.handleSubmit as any}
   >
-   <Button
-    type="button"
-    startIcon={<ArrowLeft size={16} />}
-    customClass="auth-back-btn"
-    onClick={onChangeEmail}
-   >
-    {authLoginBack}
-   </Button>
-
-   <Box customClass="auth-field">
-    <Label htmlFor="verified-email">{authEmailLabel}</Label>
-    <Input
-     id="verified-email"
-     value={verifiedEmail}
-     disabled
-     readOnly
-     customClass="auth-input"
-     fullWidth
-    />
+   <Box customClass="auth-account-card">
+    <CustomAvatar letter={initials} customClass="md neutral" />
+    <Box customClass="auth-account-info">
+     <Text truncate customClass="auth-account-name">
+      {verifiedUsername}
+     </Text>
+     <Text truncate customClass="auth-account-email">
+      {verifiedEmail}
+     </Text>
+    </Box>
+    <Button
+     type="button"
+     size="small"
+     variant="outlined"
+     startIcon={<EditIcon className="auth-change-icon" />}
+     customClass="auth-change-btn"
+     onClick={onChangeEmail}
+    >
+     {authLoginChangeEmail}
+    </Button>
    </Box>
 
-   <Box customClass="auth-field">
-    <Label htmlFor="password">{authPasswordLabel}</Label>
-    <Input
-     id="password"
-     name="password"
-     type="password"
-     placeholder={authPasswordPlaceholder}
-     value={formik.values.password}
-     onChange={formik.handleChange}
-     onBlur={formik.handleBlur}
-     disabled={formik.isSubmitting}
-     isError={(formik.touched.password && !!formik.errors.password) || !!error}
-     helperText={
-      (formik.touched.password && formik.errors.password) || error || undefined
-     }
-     customClass="auth-input"
-     fullWidth
-    />
-    <Link to="/forgot-password" className="auth-forgot-link">
-     {authLoginForgotPassword}
-    </Link>
-   </Box>
+   <Input
+    id="password"
+    name="password"
+    type="password"
+    label={authPasswordLabel}
+    placeholder={authPasswordPlaceholder}
+    value={formik.values.password}
+    onChange={formik.handleChange}
+    onBlur={formik.handleBlur}
+    disabled={formik.isSubmitting}
+    isError={(formik.touched.password && !!formik.errors.password) || !!error}
+    helperText={
+     (formik.touched.password && formik.errors.password) || error || undefined
+    }
+    customClass="form-input"
+    fullWidth
+   />
 
    <Box customClass="auth-actions">
     <Button
      type="submit"
      variant="contained"
      fullWidth
-     customClass="auth-submit-btn"
+     endIcon={<ArrowForwardIcon className="auth-btn-arrow-icon" />}
+     customClass="auth-submit-btn auth-submit-btn-arrow"
      disabled={!formik.dirty || formik.isSubmitting}
      isLoading={formik.isSubmitting}
     >
      {authLoginSignInButton}
     </Button>
    </Box>
+
+   {/* <Text customClass="auth-forgot-row">
+    {authLoginForgotPassword}{" "}
+    <NavLink to="/forgot-password" className="auth-forgot-link">
+     {authLoginResetNow}
+    </NavLink>
+   </Text> */}
   </Box>
  );
 }
 
-function WaitingApprovalScreen({ onBack }: IWaitingApprovalScreenProps) {
- return (
-  <Box customClass="auth-form">
-   <Button
-    type="button"
-    startIcon={<ArrowLeft size={16} />}
-    customClass="auth-back-btn"
-    onClick={onBack}
-   >
-    {authDeviceApprovalBack}
-   </Button>
-
-   <Box customClass="auth-heading">
-    <Text component="h1" customClass="auth-title">
-     {authDeviceApprovalTitle}
-    </Text>
-    <Text component="p" customClass="page-subtitle">
-     {authDeviceApprovalDescription}
-    </Text>
-   </Box>
-  </Box>
- );
-}
+// function WaitingApprovalScreen({ onBack }: IWaitingApprovalScreenProps) {
+//  return (
+//   <Box customClass="auth-form">
+//    <Button
+//     type="button"
+//     startIcon={<ArrowLeft size={16} />}
+//     customClass="auth-back-btn"
+//     onClick={onBack}
+//    >
+//     {authDeviceApprovalBack}
+//    </Button>
+//
+//    <Box customClass="auth-heading">
+//     <Text component="h1" customClass="auth-title">
+//      {authDeviceApprovalTitle}
+//     </Text>
+//     <Text component="p" customClass="page-subtitle">
+//      {authDeviceApprovalDescription}
+//     </Text>
+//    </Box>
+//   </Box>
+//  );
+// }
 
 export default function LoginForm() {
  const dispatch = useReduxDispatch();
- const navigate = useNavigate();
+ // const navigate = useNavigate();
  const [searchParams] = useSearchParams();
  const [step, setStep] = useState<LoginStep>(
   searchParams.get("step") === "country" ? "country" : "email",
  );
  const [verifiedEmail, setVerifiedEmail] = useState("");
+ const [verifiedUsername, setVerifiedUsername] = useState("");
  const [error, setError] = useState<string | null>(null);
- const devicePoll = useDeviceApprovalPoll();
+ // const devicePoll = useDeviceApprovalPoll();
 
- const handleApproved = (res: ILoginResponse) => {
-  if (!res.country) {
-   setStep("country");
-   return;
-  }
-  navigate(res.skill_level === null ? "/skill-level" : "/play");
- };
+ // const handleApproved = (res: ILoginResponse) => {
+ //  if (!res.country) {
+ //   setStep("country");
+ //   return;
+ //  }
+ //  navigate(res.skill_level === null ? "/skill-level" : "/play");
+ // };
 
  const emailFormik = useFormik({
   initialValues: { email: "" },
@@ -252,7 +272,7 @@ export default function LoginForm() {
    try {
     const res = await callAPIInterface<IVerifyUserBody, IVerifyUserResponse>(
      "POST",
-     "/verify-user",
+     "/auth/verify-user",
      { email: values.email },
     );
 
@@ -262,17 +282,20 @@ export default function LoginForm() {
     }
 
     if (!res.is_verified) {
-     dispatch(
-      showToast({
-       message: authLoginEmailNotVerified,
-       severity: "error",
-      }),
-     );
-     navigate(`/verify-email?email=${encodeURIComponent(values.email)}`);
+     setError(authLoginEmailNotVerified);
+     // dispatch(
+     //  showToast({
+     //   isToastOpen: true,
+     //   toastMessage: authLoginEmailNotVerified,
+     //   toastVariant: "error",
+     //  }),
+     // );
+     // navigate(`/verify-email?email=${encodeURIComponent(values.email)}`);
      return;
     }
 
     setVerifiedEmail(values.email);
+    setVerifiedUsername(res.username);
     setStep("password");
    } catch (err: any) {
     if (err?.response) {
@@ -284,17 +307,21 @@ export default function LoginForm() {
   },
  });
 
- const { googleLogin, isProcessing, pendingApprovalToken } = useGoogleAuth(
-  "/sso-login",
-  "login",
-  emailFormik.values.email,
- );
+ const { googleLogin, isProcessing } = useGoogleAuth(emailFormik.values.email);
+
+ // useEffect(() => {
+ //  if (!pendingApprovalToken) return;
+ //  setStep("waiting-approval");
+ //  devicePoll.start(pendingApprovalToken, handleApproved);
+ // }, [pendingApprovalToken]);
+
+ const focusEmailRef = useRef(false);
 
  useEffect(() => {
-  if (!pendingApprovalToken) return;
-  setStep("waiting-approval");
-  devicePoll.start(pendingApprovalToken, handleApproved);
- }, [pendingApprovalToken]);
+  if (step !== "email" || !focusEmailRef.current) return;
+  document.getElementById("email")?.focus();
+  focusEmailRef.current = false;
+ }, [step]);
 
  const passwordFormik = useFormik<IPasswordValues>({
   initialValues: { password: "" },
@@ -306,23 +333,25 @@ export default function LoginForm() {
     const res = await dispatch(
      login({ email: verifiedEmail, password: values.password }),
     ).unwrap();
-    if ("status" in res) {
-     setStep("waiting-approval");
-     devicePoll.start(res.approval_token, handleApproved);
-     return;
-    }
+    // if ("status" in res) {
+    //  setStep("waiting-approval");
+    //  devicePoll.start(res.approval_token, handleApproved);
+    //  return;
+    // }
+
     if (!res.country) setStep("country");
    } catch (err: any) {
-    if (err?.type === "account_not_verified") {
-     dispatch(
-      showToast({
-       message: authLoginEmailNotVerified,
-       severity: "error",
-      }),
-     );
-     navigate(`/verify-email?email=${encodeURIComponent(verifiedEmail)}`);
-     return;
-    }
+    // if (err?.type === "account_not_verified") {
+    //  dispatch(
+    //   showToast({
+    //    isToastOpen: true,
+    //    toastMessage: authLoginEmailNotVerified,
+    //    toastVariant: "error",
+    //   }),
+    //  );
+    //  navigate(`/verify-email?email=${encodeURIComponent(verifiedEmail)}`);
+    //  return;
+    // }
     if (!err?.isNetworkError) setError(err.message);
    } finally {
     setSubmitting(false);
@@ -334,13 +363,14 @@ export default function LoginForm() {
  const handleChangeEmail = () => {
   setError(null);
   passwordFormik.resetForm();
+  focusEmailRef.current = true;
   setStep("email");
  };
 
- const handleBackFromApproval = () => {
-  devicePoll.stop();
-  setStep("email");
- };
+ // const handleBackFromApproval = () => {
+ //  devicePoll.stop();
+ //  setStep("email");
+ // };
 
  if (step === "country") {
   return (
@@ -352,31 +382,32 @@ export default function LoginForm() {
 
  const loginFooter = (
   <>
-   {authLoginNoAccountPrompt} <Link to="/register">{authLoginSignupLink}</Link>
+   {authLoginNoAccountPrompt}{" "}
+   <NavLink to="/register">{authLoginSignupLink}</NavLink>
   </>
  );
 
- if (step === "waiting-approval") {
-  return (
-   <AuthLayout
-    title={authLoginTitle}
-    subtitle={authLoginSubtitle}
-    footer={loginFooter}
-   >
-    <WaitingApprovalScreen onBack={handleBackFromApproval} />
-   </AuthLayout>
-  );
- }
+ // if (step === "waiting-approval") {
+ //  return (
+ //   <AuthLayout
+ //    title={authLoginTitle}
+ //    subtitle={authLoginSubtitle}
+ //    footer={loginFooter}
+ //   >
+ //    <WaitingApprovalScreen onBack={handleBackFromApproval} />
+ //   </AuthLayout>
+ //  );
+ // }
 
  if (step === "password") {
   return (
    <AuthLayout
-    title={authLoginTitle}
-    subtitle={authLoginSubtitle}
-    footer={loginFooter}
+    title={authLoginPasswordTitle}
+    subtitle={authLoginPasswordSubtitle}
    >
     <PasswordScreen
      verifiedEmail={verifiedEmail}
+     verifiedUsername={verifiedUsername}
      formik={passwordFormik}
      error={error}
      onChangeEmail={handleChangeEmail}

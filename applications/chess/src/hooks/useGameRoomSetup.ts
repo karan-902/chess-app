@@ -7,8 +7,10 @@ import {
     playOpponentFallbackOpponent,
     playOpponentFallbackComputer,
 } from "@/constants/messages";
+import { useGame } from "@/hooks/useGame";
 
 export function useGameRoomSetup(params: URLSearchParams, usdValue: number) {
+    const { routes } = useGame();
     const mode: GameMode = params.get("mode") === "pvc" ? "pvc" : "pvp";
     const isPvc = mode === "pvc";
     const difficulty: Difficulty =
@@ -26,8 +28,8 @@ export function useGameRoomSetup(params: URLSearchParams, usdValue: number) {
     const isRoomMatch = params.get("room") === "1";
     const opponentRating = Number(params.get("opp_rating") ?? 0);
     const opponentId = params.get("opp_id") ?? undefined;
-    const stakeAmount = Number(params.get("stake_amount") ?? 0);
-    const canAffordRematch = usdValue >= stakeAmount;
+    const betAmount = Number(params.get("stake_amount") ?? 0);
+    const canAffordRematch = usdValue >= betAmount;
 
     const [wasAlreadyFinished] = useState(
         () => !!gameId && isGameFinished(gameId),
@@ -44,7 +46,7 @@ export function useGameRoomSetup(params: URLSearchParams, usdValue: number) {
         if (storedColor === urlColor) return null;
         const corrected = new URLSearchParams(params);
         corrected.set("color", storedColor);
-        return `/play?${corrected.toString()}`;
+        return `${routes.PLAY}?${corrected.toString()}`;
     });
 
     return {
@@ -60,7 +62,7 @@ export function useGameRoomSetup(params: URLSearchParams, usdValue: number) {
         isRoomMatch,
         opponentRating,
         opponentId,
-        stakeAmount,
+        betAmount,
         canAffordRematch,
         wasAlreadyFinished,
         pvcColorRedirect,

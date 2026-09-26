@@ -4,7 +4,7 @@ import Skeleton from "@/components/base/Skeleton/Skeleton";
 
 export default function PoolCardSkeleton() {
     return (
-        <Card customClass="stake-card">
+        <Card customClass="bet-card">
             <Box customClass="pool-meta">
                 <Skeleton variant="circular" width={14} height={14} />
                 <Skeleton customClass="text" width={78} height={14} />

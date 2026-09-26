@@ -79,7 +79,7 @@
   opacity: 0.4;
  }
 
- &.auth-input {
+ &.form-input {
   height: 3rem;
   background: transparent;
   padding: 0 1rem;
@@ -101,7 +101,7 @@
  }
 }
 
-.input-wrap {
+.input-element {
  display: flex;
  flex-direction: column;
  gap: 0.35rem;

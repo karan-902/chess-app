@@ -1,8 +1,21 @@
+import { forwardRef, type ReactElement } from "react";
 import { Snackbar, Slide, Portal } from "@mui/material";
+import type { TransitionProps } from "@mui/material/transitions";
 import classNames from "classnames";
 import { useReduxDispatch, useReduxSelector } from "@/redux/hooks";
-import { hideToast } from "@/redux/common/common.slice";
+import { hideToast } from "@/redux/common/slice";
 import AlertMessage from "@/components/base/AlertMessage/AlertMessage";
+
+const SlideLeft = forwardRef<unknown, TransitionProps & { children: ReactElement }>(
+    (props, ref) => (
+        <Slide
+            ref={ref}
+            {...props}
+            direction="left"
+            container={document.getElementById("root")}
+        />
+    ),
+);
 
 interface INotificationProps {
     customClass?: string;
@@ -10,7 +23,7 @@ interface INotificationProps {
 
 export default function Notification({ customClass }: INotificationProps) {
     const dispatch = useReduxDispatch();
-    const { open, severity, message, title } = useReduxSelector(
+    const { isToastOpen, toastVariant, toastMessage, toastTitle } = useReduxSelector(
         (state) => state.common.toast,
     );
     const classes = classNames(customClass, "alert");
@@ -29,13 +42,10 @@ export default function Notification({ customClass }: INotificationProps) {
         <Portal container={rootEl}>
             <Snackbar
                 anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                open={open}
+                open={isToastOpen}
                 autoHideDuration={1500}
                 onClose={closeNotification}
-                slots={{ transition: Slide }}
-                slotProps={{
-                    transition: { direction: "left", container: rootEl },
-                }}
+                slots={{ transition: SlideLeft }}
                 sx={{
                     position: "absolute",
                     top: "1rem",
@@ -44,12 +54,12 @@ export default function Notification({ customClass }: INotificationProps) {
                 }}
             >
                 <AlertMessage
-                    message={message}
-                    severity={severity}
+                    message={toastMessage}
+                    severity={toastVariant}
                     variant="standard"
                     className={classes}
                 >
-                    {title && title}
+                    {toastTitle && toastTitle}
                 </AlertMessage>
             </Snackbar>
         </Portal>

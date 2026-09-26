@@ -2,8 +2,8 @@ import { useEffect, useRef } from "react";
 import { io, type Socket } from "socket.io-client";
 import { callAPIInterface } from "@/utils";
 import { useReduxDispatch } from "@/redux/hooks";
-import { showToast } from "@/redux/common/common.slice";
-import sessionService from "@/redux/sessionService";
+import { showToast } from "@/redux/common/slice";
+import sessionService from "@gopvp/common/src/util/sessionService";
 import type { ILoginResponse } from "@/types/utils";
 
 const FALLBACK_POLL_MS = 45000;
@@ -44,10 +44,11 @@ export function useDeviceApprovalPoll() {
                 stop();
                 dispatch(
                     showToast({
-                        message:
+                        isToastOpen: true,
+                        toastMessage:
                             err?.response?.data?.message ??
                             "Please log in again.",
-                        severity: "error",
+                        toastVariant: "error",
                     }),
                 );
             }

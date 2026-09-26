@@ -6,7 +6,9 @@ interface ICheckboxProps extends CheckboxProps {
     customClass?: string;
 }
 
-export default function Checkbox({ customClass, ...props }: ICheckboxProps) {
+export function CustomCheckbox({ customClass, ...props }: ICheckboxProps) {
     const classes = classNames("checkbox", customClass);
     return <MuiCheckbox {...props} className={classes} />;
 }
+
+export default CustomCheckbox;

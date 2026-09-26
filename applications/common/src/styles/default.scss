@@ -26,8 +26,14 @@
  --color-gray-900: oklch(21% 0.034 264.665);
  --color-black: #000;
  --color-white: #fff;
- --color-primary: #f7931a;
- --color-primary-dark: #f0b90b;
+ --color-primary: #ff9800;
+ --color-primary-dark: #ff9800;
+ --color-brand-blue: #081439;
+ --color-brand-blue-surface: #0f1d4a;
+ --color-brand-blue-raised: #132456;
+ --color-brand-blue-border: #22346e;
+ --color-brand-blue-line: #1b2a5e;
+ --color-brand-blue-deep: #040a1f;
  --color-primary-text: #2d2b36;
  --color-bg-primary: #212223;
  --color-bg-border: #343434;
@@ -76,19 +82,19 @@
 /*  Dark is the default (applies with no data-theme). */
 :root {
  color-scheme: dark;
- --app-bg: var(--color-bg-secondary);
- --app-secondary: var(--color-bg-content);
- --app-surface: var(--color-bg-black);
- --app-card-border: var(--color-border-gray);
- --app-line: var(--color-bg-border);
- --app-frame: var(--color-black);
+ --app-bg: var(--color-brand-blue);
+ --app-secondary: var(--color-brand-blue-raised);
+ --app-surface: var(--color-brand-blue-surface);
+ --app-card-border: var(--color-brand-blue-border);
+ --app-line: var(--color-brand-blue-line);
+ --app-frame: var(--color-brand-blue-deep);
  --app-text: var(--color-text-secondary);
  --app-text-muted: var(--color-text-subtle);
- --app-btn-bg: var(--color-bg-quaternary);
- --app-btn-border: var(--color-border-secondary);
+ --app-btn-bg: var(--color-brand-blue-raised);
+ --app-btn-border: var(--color-brand-blue-border);
  --primary: var(--color-primary);
  --primary-dark: var(--color-primary-dark);
- --primary-contrast: #ffffff;
+ --primary-contrast: var(--color-brand-blue);
  --secondary: var(--color-accent);
  --secondary-contrast: #ffffff;
  --warning: var(--color-warning);
@@ -98,23 +104,23 @@
  --pale-red: var(--error);
  --brink-pink: #e06a5a;
  --greenish-teal: #2ecc71;
- --backdrop-center: var(--color-bg-content);
- --backdrop-edge: var(--color-black);
+ --backdrop-center: var(--color-brand-blue-surface);
+ --backdrop-edge: var(--color-brand-blue-deep);
 }
 
 /* Light mode — derived (Minibet ships dark only); gold + accents unchanged. */
 :root[data-theme="light"] {
  color-scheme: light;
- --app-bg: #f4f5f7;
- --app-secondary: #eef0f3;
+ --app-bg: #f7fafc;
+ --app-secondary: #e4e7ec;
  --app-surface: #ffffff;
- --app-card-border: #e3e5ea;
- --app-line: #eceef1;
- --app-frame: #e7e9ec;
+ --app-card-border: #d9dde3;
+ --app-line: #e3e6eb;
+ --app-frame: #dfe2e7;
  --app-text: #1e1e1e;
- --app-text-muted: #6b6a72;
- --app-btn-bg: #eef0f3;
- --app-btn-border: #d1d0d3;
+ --app-text-muted: #63666d;
+ --app-btn-bg: #e4e7ec;
+ --app-btn-border: #c6cad0;
  --primary: var(--color-primary);
  --primary-dark: var(--color-primary-dark);
  --primary-contrast: #ffffff;
@@ -200,7 +206,7 @@ $radiusMd: 0.3rem;
 $radiusLg: 0.4rem;
 
 $appCardRadius: 0.875rem;
-$appModalRadius: 0.875rem;
+$appModalRadius: 1rem;
 $appBtnRadius: 0.25rem;
 $appInputRadius: 0.25rem;
 $appAccordionRadius: 0.625rem;

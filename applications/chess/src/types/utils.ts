@@ -1,6 +1,6 @@
 export enum SignupMethod {
- EMAIL = "email",
- GOOGLE = "google",
+ EMAIL = "EMAIL",
+ GOOGLE = "GOOGLE",
 }
 
 export enum SessionState {
@@ -13,51 +13,53 @@ export type SkillLevel = "beginner" | "intermediate" | "advanced" | "expert";
 
 export type IVerifyUserResponse = {
  email: string;
+ username: string;
  signup_method: SignupMethod;
  is_verified: boolean;
 };
 
-export type IUsernameAvailableResponse = {
- available: boolean;
+export type IRandomNameResponse = {
+ usernames: string[];
 };
 
 export type IRegisterResponse = {
  id: string;
- first_name: string;
- last_name: string;
  username: string;
  email: string;
  country: string;
- signup_method: SignupMethod;
- elo_rating: number | null;
- current_streak: number;
- best_streak: number;
- skill_level: SkillLevel | null;
  created: number;
+ // first_name: string;
+ // last_name: string;
+ // signup_method: SignupMethod;
+ // elo_rating: number | null;
+ // current_streak: number;
+ // best_streak: number;
+ // skill_level: SkillLevel | null;
 };
 
 export type ILoginResponse = {
  id: string;
+ session_id: string;
  username: string;
  email: string;
  country: string;
- ratings: IRatingsBreakdown;
- current_streak: number;
- best_streak: number;
- skill_level: SkillLevel | null;
- last_login: number | null;
- avatar_seed: string | null;
- access_token: string;
- refresh_token: string;
- session_id: string;
  session_state: SessionState;
  session_source: SignupMethod;
+ is_verified: boolean;
+ access_token: string;
+ refresh_token: string;
+ last_login: number | null;
+ // ratings: IRatingsBreakdown;
+ // current_streak: number;
+ // best_streak: number;
+ // skill_level: SkillLevel | null;
+ // avatar_seed: string | null;
 };
 
-export type IPendingApprovalResponse = {
- status: "pending_approval";
- approval_token: string;
-};
+// export type IPendingApprovalResponse = {
+//  status: "pending_approval";
+//  approval_token: string;
+// };
 
 export type IRatingsBreakdown = {
  BULLET: number | null;
@@ -98,8 +100,6 @@ export type IWalletBalanceResponse = {
  withdraw_balance: number;
 };
 
-export type WithdrawMethod = "lightning" | "bitcoin";
-
 export type IWithdrawBody = {
  amount: number;
  destination: string;
@@ -119,9 +119,9 @@ export type TransactionType =
  | "WITHDRAW"
  | "WITHDRAW_REFUND"
  | "BET"
- | "SETTLEMENT"
+ | "WIN"
  | "DRAW"
- | "BET_REFUND";
+ | "MATCH_CANCELLED";
 
 export type ITransactionsFilterBody = {
  types?: TransactionType[];
@@ -156,46 +156,24 @@ export type IInitiateDepositResponse = {
  ttl: number;
 };
 
-export type IAvatarOptionsResponse = {
- style: string;
- seeds: string[];
-};
 
-export type IGameRestoreResponse = {
- game_id: string;
- status: "ONGOING" | "COMPLETED" | "ABANDONED";
- time_seconds: number;
- current_fen: string;
- turn_user_id: string;
- white_player: {
-  id: string;
-  username: string;
-  elo_rating: number;
-  avatar_seed: string | null;
- };
- black_player: {
-  id: string;
-  username: string;
-  elo_rating: number;
-  avatar_seed: string | null;
- };
- moves: Array<{
-  from: string;
-  to: string;
-  promotion: string | null;
-  fen: string;
-  player_id: string;
-  move_number: number;
- }>;
+export type IGameDetailsResponse = {
+ id: string;
+ slug: string;
+ name: string;
+ icon: string;
+ description: string;
+ is_active: boolean;
 };
 
 export type IGenerateTokenResponse = {
  access_token: string;
+ refresh_token: string;
 };
 
-export type ILogoutResponse = {
- message: string;
-};
+// export type ILogoutResponse = {
+//  message: string;
+// };
 
 export type IMessageResponse = {
  message: string;

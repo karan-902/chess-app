@@ -13,7 +13,7 @@ interface IModalProps extends Omit<DialogProps, "title" | "onClose"> {
     hideCloseIcon?: boolean;
 }
 
-export default function Modal({
+export function CustomModal({
     open,
     onClose,
     title,
@@ -54,3 +54,5 @@ export default function Modal({
         </MuiDialog>
     );
 }
+
+export default CustomModal;

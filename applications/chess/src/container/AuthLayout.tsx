@@ -17,12 +17,12 @@ export default function AuthLayout({
  children,
 }: IAuthLayoutProps) {
  return (
-  <Box customClass="auth-page">
-   <Box customClass="auth-brand">
+  <Box customClass="public-page">
+   <Box customClass="public-brand">
     <ChessLogo size={22} showText={true} />
    </Box>
-   <Box customClass="auth-heading">
-    <Text component="h1" customClass="auth-title">
+   <Box customClass="public-heading">
+    <Text component="h1" customClass="public-title">
      {title}
     </Text>
     <Text component="p" customClass="page-subtitle">
@@ -30,7 +30,7 @@ export default function AuthLayout({
     </Text>
    </Box>
    {children}
-   {footer && <Text customClass="auth-footer caption">{footer}</Text>}
+   {footer && <Text customClass="public-footer caption">{footer}</Text>}
   </Box>
  );
 }

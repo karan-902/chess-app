@@ -8,7 +8,7 @@ interface IBoxProps extends BoxProps {
     customClass?: string;
 }
 
-const Box = forwardRef<HTMLDivElement, IBoxProps>(
+export const Box = forwardRef<HTMLDivElement, IBoxProps>(
     ({ customClass, ...props }, ref) => {
         const classes = classNames("box", customClass);
         return (

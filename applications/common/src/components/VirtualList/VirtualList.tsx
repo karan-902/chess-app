@@ -16,7 +16,7 @@ interface IVirtualListProps<T> {
     customClass?: string;
 }
 
-export default function VirtualList<T>({
+export function VirtualList<T>({
     data,
     itemKey,
     renderItem,
@@ -70,3 +70,5 @@ export default function VirtualList<T>({
         </Box>
     );
 }
+
+export default VirtualList;

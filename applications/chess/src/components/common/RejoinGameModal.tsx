@@ -1,19 +1,19 @@
 import { useState } from "react";
-import Modal from "@/components/base/Modal/Modal";
+import CustomModal from "@/components/base/Modal/Modal";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import Button from "@/components/base/Button/Button";
 import { useSocket } from "@/context/SocketContext";
 import { useReduxSelector, useReduxDispatch } from "@/redux/hooks";
-import { setActiveGame } from "@/redux/socketModals.slice";
+import { setActiveGame } from "@/redux/socketModals/slice";
 import { formatAmount } from "@/utils/format";
 import { shortenUsername } from "@/utils";
 import { buildGameRoomUrl } from "@/utils";
-import { router } from "@/routes/router";
+import { navigateTo } from "@gopvp/common/src/util/navigationService";
 import {
     rejoinGameTitle,
     rejoinGameBody,
-    rejoinGameStakeLabel,
+    rejoinGameBetLabel,
     rejoinGameOpponentLabel,
     rejoinGameRejoinButton,
     rejoinGameExitButton,
@@ -32,6 +32,7 @@ export default function RejoinGameModal() {
     const deviceHandoff = useReduxSelector(
         (state) => state.socketModals.deviceHandoff,
     );
+    const enteredGame = useReduxSelector((state) => state.speed.enteredGame);
     const [confirmingExit, setConfirmingExit] = useState(false);
 
     if (!activeGame || deviceHandoff !== null) return null;
@@ -43,12 +44,14 @@ export default function RejoinGameModal() {
 
     const handleRejoin = () => {
         dispatch(setActiveGame(null));
-        router.navigate(buildGameRoomUrl(activeGame), { replace: true });
+        if (enteredGame) {
+            navigateTo(buildGameRoomUrl(activeGame, enteredGame), { replace: true });
+        }
     };
 
     return (
         <>
-            <Modal
+            <CustomModal
                 open={!confirmingExit}
                 preventOutsideClose
                 title={rejoinGameTitle}
@@ -59,20 +62,20 @@ export default function RejoinGameModal() {
                         shortenUsername(activeGame.opponent.username),
                     )}
                 </Text>
-                <Box customClass="matches-stat-row">
-                    <Text component="span" customClass="matches-stat-title">
+                <Box customClass="stat-row">
+                    <Text component="span" customClass="stat-title">
                         {rejoinGameOpponentLabel}
                     </Text>
-                    <Text component="span" customClass="matches-stat-val">
+                    <Text component="span" customClass="stat-val">
                         {shortenUsername(activeGame.opponent.username)} (
                         {activeGame.opponent.elo_rating})
                     </Text>
                 </Box>
-                <Box customClass="matches-stat-row">
-                    <Text component="span" customClass="matches-stat-title">
-                        {rejoinGameStakeLabel}
+                <Box customClass="stat-row">
+                    <Text component="span" customClass="stat-title">
+                        {rejoinGameBetLabel}
                     </Text>
-                    <Text component="span" customClass="matches-stat-val">
+                    <Text component="span" customClass="stat-val">
                         {formatAmount(activeGame.stake_amount)}
                     </Text>
                 </Box>
@@ -92,8 +95,8 @@ export default function RejoinGameModal() {
                         {rejoinGameRejoinButton}
                     </Button>
                 </Box>
-            </Modal>
-            <Modal
+            </CustomModal>
+            <CustomModal
                 open={confirmingExit}
                 preventOutsideClose
                 title={rejoinGameForfeitTitle}
@@ -120,7 +123,7 @@ export default function RejoinGameModal() {
                         {rejoinGameForfeitConfirmButton}
                     </Button>
                 </Box>
-            </Modal>
+            </CustomModal>
         </>
     );
 }

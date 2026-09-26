@@ -1,4 +1,4 @@
-import Modal from "@/components/base/Modal/Modal";
+import CustomModal from "@/components/base/Modal/Modal";
 import Box from "@/components/base/Box/Box";
 import Text from "@/components/base/Text/Text";
 import Button from "@/components/base/Button/Button";
@@ -14,17 +14,17 @@ import {
 export default function ResignModal({
     open,
     isPvc,
-    stakeAmount,
+    betAmount,
     onKeepPlaying,
     onResign,
 }: IResignModalProps) {
     return (
-        <Modal open={open} onClose={onKeepPlaying}>
+        <CustomModal open={open} onClose={onKeepPlaying}>
             <Text customClass="gr-heading section-heading">{playResignDialogTitle}</Text>
             <Text customClass="gr-elo caption">
                 {isPvc
                     ? playResignDialogPvcDescription
-                    : playResignDialogPvpDescription(stakeAmount)}
+                    : playResignDialogPvpDescription(betAmount)}
             </Text>
             <Box customClass="gr-resign-actions">
                 <Button customClass="gr-link" onClick={onKeepPlaying}>
@@ -34,6 +34,6 @@ export default function ResignModal({
                     {playResignDialogResignButton}
                 </Button>
             </Box>
-        </Modal>
+        </CustomModal>
     );
 }

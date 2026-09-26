@@ -9,7 +9,7 @@ interface ITextProps extends TypographyProps {
     truncate?: boolean;
 }
 
-export default function Text({
+export function Text({
     customClass,
     uppercase,
     truncate,
@@ -27,3 +27,5 @@ export default function Text({
         </Typography>
     );
 }
+
+export default Text;

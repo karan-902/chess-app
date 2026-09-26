@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Box from "@/components/base/Box/Box";
 import Button from "@/components/base/Button/Button";
-import Drawer from "@/components/base/Drawer/Drawer";
+import CustomDrawer from "@/components/base/Drawer/Drawer";
 import ChipSelect from "@/components/common/ChipSelect";
 import { TIME_SECONDS } from "@/constants";
 import { CATEGORY_META } from "@/constants/config";
@@ -33,7 +33,7 @@ export default function PracticeSheet({
  const [timeControl, setTimeControl] = useState<GameCategory>("RAPID");
 
  return (
-  <Drawer
+  <CustomDrawer
    anchor="bottom"
    open={open}
    onClose={onClose}
@@ -76,6 +76,6 @@ export default function PracticeSheet({
      </Button>
     </Box>
    </Box>
-  </Drawer>
+  </CustomDrawer>
  );
 }

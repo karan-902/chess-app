@@ -17,10 +17,3 @@ export function formatText(text: string): string {
     return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
 }
 
-export function formatTimeControl(time: string): string {
-    const [minStr, incStr] = time.split("+");
-    const min = parseInt(minStr, 10);
-    const inc = parseInt(incStr ?? "0", 10);
-    const base = min >= 60 ? `${min / 60}h` : `${min} min`;
-    return inc > 0 ? `${base}  +${inc} sec/move` : base;
-}
