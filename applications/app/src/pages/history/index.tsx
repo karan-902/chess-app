@@ -21,7 +21,10 @@ import {
 import { formatMatchDate } from "@gopvp/app/src/utils";
 import { MATCH_RESULT_OUTCOMES } from "@gopvp/common/src/constants/config";
 import type { IMatchHistoryItem } from "@gopvp/common/src/types/response";
-import type { IMatchListProps, MatchesSubtab } from "@gopvp/common/src/types/component";
+import type {
+ IMatchListProps,
+ MatchesSubtab,
+} from "@gopvp/common/src/types/component";
 import type { IMatchRowProps } from "@gopvp/app/src/types/component";
 import {
  myResultsText,

@@ -43,10 +43,7 @@ export function requestGameState<TGameState extends { match_id: string }>(
   if (!socket) return resolve(null);
   socket.emit(
    "game:state",
-   (
-    err: ISocketAckError | null,
-    data: TGameState | IGameNotFoundResponse,
-   ) =>
+   (err: ISocketAckError | null, data: TGameState | IGameNotFoundResponse) =>
     resolve(err || "error" in data || data.match_id !== matchId ? null : data),
   );
  });

@@ -72,40 +72,37 @@ export function useWallet() {
  const isFetchingRef = useRef(false);
  const latestRequestIdRef = useRef(0);
 
- const loadTransactions = useCallback(
-  async (isFirstLoad: boolean) => {
-   if (!isFirstLoad && (isFetchingRef.current || !hasMoreRef.current)) return;
+ const loadTransactions = useCallback(async (isFirstLoad: boolean) => {
+  if (!isFirstLoad && (isFetchingRef.current || !hasMoreRef.current)) return;
 
-   const requestId = ++latestRequestIdRef.current;
-   isFetchingRef.current = true;
-   isFirstLoad ? setTransactionsLoading(true) : setLoadingMore(true);
+  const requestId = ++latestRequestIdRef.current;
+  isFetchingRef.current = true;
+  isFirstLoad ? setTransactionsLoading(true) : setLoadingMore(true);
 
-   const cursor =
-    !isFirstLoad && pageIdRef.current
-     ? `&ending_before=${encodeURIComponent(pageIdRef.current)}`
-     : "";
+  const cursor =
+   !isFirstLoad && pageIdRef.current
+    ? `&ending_before=${encodeURIComponent(pageIdRef.current)}`
+    : "";
 
-   try {
-    const res = await callAPIInterface<IListResponse<ITransactionResponse> | null, undefined>(
-     "GET",
-     `/wallet/transactions?limit=${PAGE_SIZE}${cursor}`,
-    );
-    if (latestRequestIdRef.current !== requestId) return;
-    const data = res?.data ?? [];
-    setTransactions((prev) => (isFirstLoad ? data : [...prev, ...data]));
-    hasMoreRef.current = res?.has_more ?? false;
-    pageIdRef.current = res?.page_id ?? null;
-   } catch (err) {
-    showApiErrorToast(err);
-   } finally {
-    isFetchingRef.current = false;
-    if (latestRequestIdRef.current === requestId) {
-     isFirstLoad ? setTransactionsLoading(false) : setLoadingMore(false);
-    }
+  try {
+   const res = await callAPIInterface<
+    IListResponse<ITransactionResponse> | null,
+    undefined
+   >("GET", `/wallet/transactions?limit=${PAGE_SIZE}${cursor}`);
+   if (latestRequestIdRef.current !== requestId) return;
+   const data = res?.data ?? [];
+   setTransactions((prev) => (isFirstLoad ? data : [...prev, ...data]));
+   hasMoreRef.current = res?.has_more ?? false;
+   pageIdRef.current = res?.page_id ?? null;
+  } catch (err) {
+   showApiErrorToast(err);
+  } finally {
+   isFetchingRef.current = false;
+   if (latestRequestIdRef.current === requestId) {
+    isFirstLoad ? setTransactionsLoading(false) : setLoadingMore(false);
    }
-  },
-  [],
- );
+  }
+ }, []);
 
  useEffect(() => {
   loadTransactions(true);

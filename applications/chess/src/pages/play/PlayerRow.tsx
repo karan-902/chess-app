@@ -6,7 +6,10 @@ import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
 import PieceIcon from "@gopvp/chess/src/components/board/PieceIcon";
 import type { IPlayerRowProps } from "@gopvp/chess/src/types/component";
 import { youText } from "@gopvp/common/src/constants/messages";
-import { reconnectingText, firstMoveText } from "@gopvp/chess/src/constants/messages";
+import {
+ reconnectingText,
+ firstMoveText,
+} from "@gopvp/chess/src/constants/messages";
 
 function capturedCode(type: string, color: "w" | "b") {
  return `${color}${type.toUpperCase()}`;
@@ -44,7 +47,9 @@ export default function PlayerRow({
    <Box customClass="gr-meta">
     <Box sx={{ gap: 1 }} customClass="flex">
      <Text customClass="gr-name">{name}</Text>
-     {variant === "self" && <CustomChip label={youText} customClass="gr-score" />}
+     {variant === "self" && (
+      <CustomChip label={youText} customClass="gr-score" />
+     )}
      {scoreLabel && <CustomChip label={scoreLabel} customClass="gr-score" />}
     </Box>
     {isReconnecting && (

@@ -4,7 +4,10 @@ import {
  showApiErrorToast,
 } from "@gopvp/common/src/util/api";
 import { throwThunkError } from "@gopvp/app/src/redux/createAppThunk";
-import { setWalletBalance, setWalletLoading } from "@gopvp/app/src/redux/wallet/slice";
+import {
+ setWalletBalance,
+ setWalletLoading,
+} from "@gopvp/app/src/redux/wallet/slice";
 import type { IBalanceResponse } from "@gopvp/common/src/types/response";
 
 export const fetchWalletBalance = createAsyncThunk(

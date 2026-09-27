@@ -1,5 +1,8 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { IGameStatePlayer, IGameStateResponse } from "@gopvp/chess/src/types/response";
+import type {
+ IGameStatePlayer,
+ IGameStateResponse,
+} from "@gopvp/chess/src/types/response";
 import type { IGameRoomPlayer } from "@gopvp/chess/src/types/index";
 
 export interface IMatchState {

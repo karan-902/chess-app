@@ -5,14 +5,14 @@ import "../src/styles/default.scss";
 const darkTheme = createTheme({ palette: { mode: "dark" } });
 
 const preview: Preview = {
-    decorators: [
-        (Story) => (
-            <ThemeProvider theme={darkTheme}>
-                <CssBaseline />
-                <Story />
-            </ThemeProvider>
-        ),
-    ],
+ decorators: [
+  (Story) => (
+   <ThemeProvider theme={darkTheme}>
+    <CssBaseline />
+    <Story />
+   </ThemeProvider>
+  ),
+ ],
 };
 
 export default preview;

@@ -1,5 +1,9 @@
 import type { IMatchResultResponse } from "@gopvp/common/src/types/response";
-import type { GameCategory, MoveRecord, PieceColor } from "@gopvp/chess/src/types/index";
+import type {
+ GameCategory,
+ MoveRecord,
+ PieceColor,
+} from "@gopvp/chess/src/types/index";
 
 export type GameMode = "pvp" | "pvc";
 export type Difficulty = "easy" | "medium" | "hard";

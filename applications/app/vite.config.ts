@@ -5,21 +5,21 @@ import react from "@vitejs/plugin-react";
 const common = path.resolve(__dirname, "../common/src");
 
 export default defineConfig({
-    plugins: [react()],
+ plugins: [react()],
 
-    css: {
-        preprocessorOptions: {
-            scss: { loadPaths: [path.join(common, "styles")] },
-        },
-    },
+ css: {
+  preprocessorOptions: {
+   scss: { loadPaths: [path.join(common, "styles")] },
+  },
+ },
 
-    assetsInclude: ["**/*.svg", "**/*.csv"],
+ assetsInclude: ["**/*.svg", "**/*.csv"],
 
-    server: {
-        host: true,
-        allowedHosts: true,
-        port: 5173,
-        strictPort: true,
-        open: "/chess",
-    },
+ server: {
+  host: true,
+  allowedHosts: true,
+  port: 5173,
+  strictPort: true,
+  open: "/chess",
+ },
 });

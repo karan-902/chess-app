@@ -4,11 +4,16 @@ import classNames from "classnames";
 import "./popover.scss";
 
 interface IPopoverProps extends PopoverProps {
-    customClass?: string;
+ customClass?: string;
 }
 
 export function CustomPopover({ customClass, ...props }: IPopoverProps) {
-    return <MuiPopover {...props} className={classNames("common-popover", customClass)} />;
+ return (
+  <MuiPopover
+   {...props}
+   className={classNames("common-popover", customClass)}
+  />
+ );
 }
 
 export default CustomPopover;

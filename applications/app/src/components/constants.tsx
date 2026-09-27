@@ -2,32 +2,32 @@ import classNames from "classnames";
 import Text from "@gopvp/common/src/components/Text/Text";
 
 export function ChessLogo({
-    size = 42,
-    muted = false,
+ size = 42,
+ muted = false,
 }: {
-    size: number;
-    showText: boolean;
-    withCursor?: boolean;
-    muted?: boolean;
+ size: number;
+ showText: boolean;
+ withCursor?: boolean;
+ muted?: boolean;
 }) {
-    return (
-        <Text
-            customClass={classNames("shatranj-logo", muted && "muted")}
-            sx={{ gap: size * 0.38 }}
-            component="span"
-        >
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 1254 1254"
-                width={size}
-                height={size}
-                role="img"
-                aria-label="chessLogo"
-            >
-                <g transform="translate(0,1254) scale(0.1,-0.1)">
-                    <path
-                        fill="currentColor"
-                        d="M4005 11923 c4 -10 13 -36 21 -58 7 -22 33 -98 59 -170 96 -272 316
+ return (
+  <Text
+   customClass={classNames("shatranj-logo", muted && "muted")}
+   sx={{ gap: size * 0.38 }}
+   component="span"
+  >
+   <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 1254 1254"
+    width={size}
+    height={size}
+    role="img"
+    aria-label="chessLogo"
+   >
+    <g transform="translate(0,1254) scale(0.1,-0.1)">
+     <path
+      fill="currentColor"
+      d="M4005 11923 c4 -10 13 -36 21 -58 7 -22 33 -98 59 -170 96 -272 316
 -939 380 -1155 37 -124 84 -279 105 -345 l38 -120 -127 -61 c-149 -72 -351
 -194 -488 -295 -443 -328 -819 -797 -880 -1096 -14 -70 -14 -85 1 -177 20
 -126 20 -158 0 -227 -48 -165 -255 -559 -547 -1044 -110 -183 -194 -309 -347
@@ -77,9 +77,9 @@ m-2036 -2579 c-24 -207 -50 -269 -160 -378 l-54 -54 -26 82 c-32 100 -34 177
 -112 -4 -20 -4 -67 -2 -106 6 -74 21 -104 72 -142 l27 -21 3238 -3 3238 -2 33
 22 c59 40 75 80 75 185 0 99 -10 123 -69 167 l-27 21 -3232 2 c-2672 2 -3237
 0 -3262 -11z"
-                    />
-                </g>
-            </svg>
-        </Text>
-    );
+     />
+    </g>
+   </svg>
+  </Text>
+ );
 }

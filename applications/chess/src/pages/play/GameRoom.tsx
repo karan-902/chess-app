@@ -17,7 +17,10 @@ import { useGameRoomSetup } from "@gopvp/chess/src/hooks/useGameRoomSetup";
 import { useGameSocket } from "@gopvp/chess/src/hooks/useGameSocket";
 import { usePvcGameEnd } from "@gopvp/chess/src/hooks/usePvcGameEnd";
 import { oppositeSide } from "@gopvp/chess/src/utils";
-import { markGameFinished, clearPvcSnapshot } from "@gopvp/chess/src/utils/storage";
+import {
+ markGameFinished,
+ clearPvcSnapshot,
+} from "@gopvp/chess/src/utils/storage";
 import { DIFFICULTY_CONFIG } from "@gopvp/chess/src/constants/index";
 import { GAME_END_REASON_LABELS } from "@gopvp/chess/src/constants/config";
 import { MATCH_RESULT_OUTCOMES } from "@gopvp/common/src/constants/config";
@@ -101,9 +104,7 @@ export default function GameRoom({ mode }: IGameRoomProps) {
   from: string;
   to: string;
  } | null>(null);
- const [gameEnded, setGameEnded] = useState<IMatchResultResponse | null>(
-  null,
- );
+ const [gameEnded, setGameEnded] = useState<IMatchResultResponse | null>(null);
  const [resignOpen, setResignOpen] = useState(false);
 
  const bypassBlockRef = useRef(false);

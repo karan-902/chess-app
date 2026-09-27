@@ -3,7 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useReduxDispatch } from "@gopvp/app/src/redux/hooks";
 import { googleLogin as googleLoginThunk } from "@gopvp/app/src/redux/auth/thunk";
-import { showLoader, hideLoader, showToast } from "@gopvp/app/src/redux/common/slice";
+import {
+ showLoader,
+ hideLoader,
+ showToast,
+} from "@gopvp/app/src/redux/common/slice";
 
 // const CONFIRM_SWITCH_KEY = "ks_sso_confirm_device_switch";
 

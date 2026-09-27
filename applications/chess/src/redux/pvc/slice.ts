@@ -1,6 +1,9 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { TIME_SECONDS } from "@gopvp/chess/src/constants";
-import { computerText, difficultyText } from "@gopvp/chess/src/constants/messages";
+import {
+ computerText,
+ difficultyText,
+} from "@gopvp/chess/src/constants/messages";
 import type { Difficulty } from "@gopvp/chess/src/types/component";
 import type {
  GameCategory,

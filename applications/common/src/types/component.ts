@@ -1,7 +1,11 @@
 import type { ComponentType } from "react";
 import type { FormikProps } from "formik";
 import type { Socket } from "socket.io-client";
-import type { ILoginResponse, IMatchHistoryItem, IPoolResponse } from "@gopvp/common/src/types/response";
+import type {
+ ILoginResponse,
+ IMatchHistoryItem,
+ IPoolResponse,
+} from "@gopvp/common/src/types/response";
 
 export type LoginStep = "email" | "password" | "country"; // | "waiting-approval"
 export type ApproveDeviceStatus = "confirm" | "approved" | "invalid";

@@ -26,9 +26,7 @@ export default function LeaderboardPlayerModal({
  onClose,
 }: ILeaderboardPlayerModalProps) {
  const { game } = useGame();
- const [stats, setStats] = useState<ILeaderboardPlayerResponse | null>(
-  null,
- );
+ const [stats, setStats] = useState<ILeaderboardPlayerResponse | null>(null);
 
  useEffect(() => {
   if (!playerId) return;
@@ -36,10 +34,10 @@ export default function LeaderboardPlayerModal({
   const loadStats = async () => {
    setStats(null);
    try {
-    const res = await callAPIInterface<
-     ILeaderboardPlayerResponse,
-     undefined
-    >("GET", `/leaderboard/${playerId}?game=${game}`);
+    const res = await callAPIInterface<ILeaderboardPlayerResponse, undefined>(
+     "GET",
+     `/leaderboard/${playerId}?game=${game}`,
+    );
     if (!isCancelled) setStats(res);
    } catch (err) {
     showApiErrorToast(err);

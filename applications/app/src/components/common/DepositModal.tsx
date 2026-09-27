@@ -213,7 +213,9 @@ export default function DepositModal() {
        <Text component="span">{buyCryptoInstantlyText}</Text>
        <img src={speedLogo} alt="Speed" className="deposit-speed-logo" />
       </Box>
-      <Text customClass="deposit-tagline meta-text">{fastSecuredTransparentText}</Text>
+      <Text customClass="deposit-tagline meta-text">
+       {fastSecuredTransparentText}
+      </Text>
      </Box>
 
      <Button
@@ -246,9 +248,7 @@ export default function DepositModal() {
 
      <Box customClass="modal-info-box">
       <Info size={16} strokeWidth={2} />
-      <Text customClass="modal-info-text caption">
-       {btcOnlyWarningText}
-      </Text>
+      <Text customClass="modal-info-text caption">{btcOnlyWarningText}</Text>
      </Box>
 
      <Text customClass="deposit-scan-hint caption">{scanToDepositText}</Text>
@@ -270,9 +270,7 @@ export default function DepositModal() {
      </Box>
 
      <Box customClass="deposit-address-row">
-      <Text customClass="deposit-address">
-       {address}
-      </Text>
+      <Text customClass="deposit-address">{address}</Text>
       <Button
        customClass="deposit-copy-btn"
        startIcon={copied ? "check" : "copy"}
@@ -285,9 +283,7 @@ export default function DepositModal() {
      <Text
       customClass={classNames("deposit-timer", "caption", expired && "expired")}
      >
-      {expired
-       ? qrExpiredText
-       : expiresInText(formatCountdown(remainingMs))}
+      {expired ? qrExpiredText : expiresInText(formatCountdown(remainingMs))}
      </Text>
     </Box>
    )}

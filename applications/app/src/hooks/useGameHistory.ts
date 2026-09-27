@@ -36,9 +36,7 @@ export function useGameHistory(
  const [loadedType, setLoadedType] = useState<"own" | "worldwide" | null>(null);
  const session = useReduxSelector((state) => state.auth.session);
  const { game } = useGame();
- const [stats, setStats] = useState<ILeaderboardPlayerResponse | null>(
-  null,
- );
+ const [stats, setStats] = useState<ILeaderboardPlayerResponse | null>(null);
  const [statsLoading, setStatsLoading] = useState(true);
  const [statsError, setStatsError] = useState(false);
 

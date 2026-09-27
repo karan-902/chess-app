@@ -4,21 +4,17 @@ import classNames from "classnames";
 import "./text.scss";
 
 interface ITextProps extends TypographyProps {
-    customClass?: string;
-    uppercase?: boolean;
+ customClass?: string;
+ uppercase?: boolean;
 }
 
-export function Text({
-    customClass,
-    uppercase,
-    ...props
-}: ITextProps) {
-    return (
-        <Typography
-            {...props}
-            className={classNames("common-text", uppercase && "uppercase", customClass)}
-        />
-    );
+export function Text({ customClass, uppercase, ...props }: ITextProps) {
+ return (
+  <Typography
+   {...props}
+   className={classNames("common-text", uppercase && "uppercase", customClass)}
+  />
+ );
 }
 
 export default Text;

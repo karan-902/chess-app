@@ -4,11 +4,13 @@ import classNames from "classnames";
 import "./menu.scss";
 
 interface IMenuProps extends MenuProps {
-    customClass?: string;
+ customClass?: string;
 }
 
 export function CustomMenu({ customClass, ...props }: IMenuProps) {
-    return <MuiMenu {...props} className={classNames("common-menu", customClass)} />;
+ return (
+  <MuiMenu {...props} className={classNames("common-menu", customClass)} />
+ );
 }
 
 export default CustomMenu;

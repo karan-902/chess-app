@@ -1,16 +1,16 @@
 @use "default.scss" as *;
 
 .common-accordion {
-    background: $appSurface;
-    border: 1px solid $appCardBorder;
-    border-radius: 10px;
-    color: $appText;
+ background: $appSurface;
+ border: 1px solid $appCardBorder;
+ border-radius: 10px;
+ color: $appText;
 
-    &::before {
-        display: none;
-    }
+ &::before {
+  display: none;
+ }
 
-    .MuiAccordionSummary-expandIconWrapper {
-        color: $appTextMuted;
-    }
+ .MuiAccordionSummary-expandIconWrapper {
+  color: $appTextMuted;
+ }
 }

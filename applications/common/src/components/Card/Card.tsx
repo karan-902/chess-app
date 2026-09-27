@@ -5,18 +5,18 @@ import classNames from "classnames";
 import "./card.scss";
 
 interface ICardProps extends CardProps {
-    customClass?: string;
+ customClass?: string;
 }
 
 export const Card = forwardRef<HTMLDivElement, ICardProps>(
-    ({ customClass, onClick, ...props }, ref) => (
-        <MuiCard
-            ref={ref}
-            {...props}
-            className={classNames("common-card", onClick && "clickable", customClass)}
-            onClick={onClick}
-        />
-    ),
+ ({ customClass, onClick, ...props }, ref) => (
+  <MuiCard
+   ref={ref}
+   {...props}
+   className={classNames("common-card", onClick && "clickable", customClass)}
+   onClick={onClick}
+  />
+ ),
 );
 
 Card.displayName = "Card";

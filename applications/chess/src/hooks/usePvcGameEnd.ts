@@ -2,7 +2,10 @@ import { useEffect } from "react";
 import type { MatchOutcome, MatchResult } from "@gopvp/common/src/types/index";
 import type { IMatchResultResponse } from "@gopvp/common/src/types/response";
 import type { IPvcSnapshot } from "@gopvp/chess/src/types/component";
-import { loadPvcSnapshot, savePvcSnapshot } from "@gopvp/chess/src/utils/storage";
+import {
+ loadPvcSnapshot,
+ savePvcSnapshot,
+} from "@gopvp/chess/src/utils/storage";
 
 const PVC_RESULTS: Record<MatchOutcome, MatchResult> = {
  win: "WIN",

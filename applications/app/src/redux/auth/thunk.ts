@@ -1,9 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
-    callAPIInterface,
-    getDeviceFingerprint,
+ callAPIInterface,
+ getDeviceFingerprint,
 } from "@gopvp/common/src/util/api";
-import type { ILoginBody, IGoogleLoginBody } from "@gopvp/common/src/types/payload";
+import type {
+ ILoginBody,
+ IGoogleLoginBody,
+} from "@gopvp/common/src/types/payload";
 import type { ILoginResponse } from "@gopvp/common/src/types/response";
 import { throwThunkError } from "@gopvp/app/src/redux/createAppThunk";
 import sessionService from "@gopvp/common/src/util/sessionService";

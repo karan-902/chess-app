@@ -22,9 +22,7 @@ import socketModalsReducer from "@gopvp/app/src/redux/socketModals/slice";
 import speedReducer, {
  type ISpeedState,
 } from "@gopvp/app/src/redux/speed/slice";
-import gameReducer, {
- type IGameState,
-} from "@gopvp/app/src/redux/game/slice";
+import gameReducer, { type IGameState } from "@gopvp/app/src/redux/game/slice";
 import matchReducer from "@gopvp/chess/src/redux/match/slice";
 import pvcReducer, { type IPvcState } from "@gopvp/chess/src/redux/pvc/slice";
 

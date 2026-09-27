@@ -7,20 +7,22 @@ import { useReduxSelector } from "@gopvp/app/src/redux/hooks";
 import { getGameRoutes, isGameSlug } from "@gopvp/app/src/utils";
 
 export default function GameRoute() {
-    const { game } = useParams();
-    const { socket } = useSocket();
-    const userId = useReduxSelector((state) => state.auth.session?.id);
-    const username = useReduxSelector((state) => state.auth.session?.username ?? "");
-    const playPath = isGameSlug(game) ? getGameRoutes(game).PLAY : "";
-    const gameContext = useMemo(
-        () => ({ playPath, userId, username, socket }),
-        [playPath, userId, username, socket],
-    );
+ const { game } = useParams();
+ const { socket } = useSocket();
+ const userId = useReduxSelector((state) => state.auth.session?.id);
+ const username = useReduxSelector(
+  (state) => state.auth.session?.username ?? "",
+ );
+ const playPath = isGameSlug(game) ? getGameRoutes(game).PLAY : "";
+ const gameContext = useMemo(
+  () => ({ playPath, userId, username, socket }),
+  [playPath, userId, username, socket],
+ );
 
-    if (!isGameSlug(game)) return <EnteredGameRedirect />;
-    return (
-        <GameContext.Provider value={gameContext}>
-            <Outlet />
-        </GameContext.Provider>
-    );
+ if (!isGameSlug(game)) return <EnteredGameRedirect />;
+ return (
+  <GameContext.Provider value={gameContext}>
+   <Outlet />
+  </GameContext.Provider>
+ );
 }

@@ -88,9 +88,9 @@ export const GAME_PAGE_TITLES: Record<string, string> = {
  [GAME_PAGES.RULES]: "Rules",
 };
 
-export const NAV_ITEMS = (["PLAY", "MATCHES", "LEADERBOARD", "RULES"] as const).map(
- (page) => ({ page, label: GAME_PAGE_TITLES[GAME_PAGES[page]] }),
-);
+export const NAV_ITEMS = (
+ ["PLAY", "MATCHES", "LEADERBOARD", "RULES"] as const
+).map((page) => ({ page, label: GAME_PAGE_TITLES[GAME_PAGES[page]] }));
 
 const COUNTRIES = [
  "Afghanistan",

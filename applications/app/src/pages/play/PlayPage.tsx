@@ -13,7 +13,10 @@ import { useRoomMatch } from "@gopvp/app/src/hooks/useRoomMatch";
 import { useWalletBalance } from "@gopvp/app/src/hooks/useWallet";
 import { useGame } from "@gopvp/app/src/hooks/useGame";
 import type { IPoolResponse } from "@gopvp/common/src/types/response";
-import { tapPlayNowHintText, playNowText } from "@gopvp/app/src/constants/messages";
+import {
+ tapPlayNowHintText,
+ playNowText,
+} from "@gopvp/app/src/constants/messages";
 
 export default function PlayPage() {
  const [sheetOpen, setSheetOpen] = useState(false);
@@ -25,14 +28,8 @@ export default function PlayPage() {
  } = useGame();
  const { pools, loading: poolsLoading } = usePools();
  const { usdValue } = useWalletBalance();
- const {
-  status,
-  queuedPool,
-  secondsLeft,
-  joinQueue,
-  leaveQueue,
-  resetStatus,
- } = useMatchmaking();
+ const { status, queuedPool, secondsLeft, joinQueue, leaveQueue, resetStatus } =
+  useMatchmaking();
  const gameId = searchParams.get("game_id");
  const matchId = searchParams.get("match");
  const [confirmOpen, setConfirmOpen] = useState(false);

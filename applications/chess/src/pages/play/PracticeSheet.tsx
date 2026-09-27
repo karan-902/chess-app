@@ -9,7 +9,10 @@ import type { Difficulty } from "@gopvp/chess/src/types/component";
 import type { GameCategory } from "@gopvp/chess/src/types/index";
 import type { IPracticeSheetProps } from "@gopvp/chess/src/types/component";
 import { playText, cancelText } from "@gopvp/common/src/constants/messages";
-import { difficultyText, minutesText } from "@gopvp/chess/src/constants/messages";
+import {
+ difficultyText,
+ minutesText,
+} from "@gopvp/chess/src/constants/messages";
 
 const PRACTICE_DIFFICULTIES: Difficulty[] = ["easy", "medium", "hard"];
 const CATEGORY_ORDER: GameCategory[] = [

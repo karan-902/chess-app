@@ -16,13 +16,7 @@ import type {
 } from "@gopvp/common/src/types/response";
 
 export type RoomStatus =
- | "idle"
- | "creating"
- | "waiting"
- | "joining"
- | "ready"
- | "starting"
- | "found";
+ "idle" | "creating" | "waiting" | "joining" | "ready" | "starting" | "found";
 
 type TRoomInfo = { code: string; bet: number; time: number };
 

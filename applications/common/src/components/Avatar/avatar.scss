@@ -1,29 +1,29 @@
 @use "default.scss" as *;
 
 .common-avatar {
-    font-weight: 700;
-    font-family: $fontOutfitRegular;
+ font-weight: 700;
+ font-family: $fontOutfitRegular;
 
-    &.primary {
-        border: 1px solid alpha($gold, 0.3);
-        color: $cyan;
-    }
+ &.primary {
+  border: 1px solid alpha($gold, 0.3);
+  color: $cyan;
+ }
 
-    &.neutral {
-        background: alpha($appText, 0.05);
-        border: 1px solid alpha($appText, 0.1);
-        color: alpha($appText, 0.5);
-    }
+ &.neutral {
+  background: alpha($appText, 0.05);
+  border: 1px solid alpha($appText, 0.1);
+  color: alpha($appText, 0.5);
+ }
 
-    &.sm {
-        width: 1.75rem;
-        height: 1.75rem;
-        font-size: $font12;
-    }
+ &.sm {
+  width: 1.75rem;
+  height: 1.75rem;
+  font-size: $font12;
+ }
 
-    &.md {
-        width: 2.25rem;
-        height: 2.25rem;
-        font-size: $font14;
-    }
+ &.md {
+  width: 2.25rem;
+  height: 2.25rem;
+  font-size: $font14;
+ }
 }

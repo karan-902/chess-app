@@ -20,7 +20,12 @@ import { showLoader, hideLoader } from "@gopvp/app/src/redux/common/slice";
 import type { IVerifyUserBody } from "@gopvp/common/src/types/payload";
 import type { IVerifyUserResponse } from "@gopvp/common/src/types/response";
 // import type { ILoginResponse } from "@gopvp/common/src/types/response";
-import type { IEmailScreenProps, IPasswordValues, IPasswordScreenProps, LoginStep } from "@gopvp/common/src/types/component";
+import type {
+ IEmailScreenProps,
+ IPasswordValues,
+ IPasswordScreenProps,
+ LoginStep,
+} from "@gopvp/common/src/types/component";
 import {
  emailText,
  enterEmailText,

@@ -2,10 +2,10 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import CustomCheckbox from "@gopvp/common/src/components/Checkbox/Checkbox";
 
 const meta: Meta<typeof CustomCheckbox> = {
-    title: "Components/CustomCheckbox",
-    component: CustomCheckbox,
-    argTypes: { customClass: { table: { type: { summary: "string" } } } },
-    args: { defaultChecked: false },
+ title: "Components/CustomCheckbox",
+ component: CustomCheckbox,
+ argTypes: { customClass: { table: { type: { summary: "string" } } } },
+ args: { defaultChecked: false },
 };
 export default meta;
 type Story = StoryObj<typeof CustomCheckbox>;

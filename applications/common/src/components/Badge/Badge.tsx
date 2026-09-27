@@ -4,11 +4,13 @@ import classNames from "classnames";
 import "./badge.scss";
 
 interface IBadgeProps extends BadgeProps {
-    customClass?: string;
+ customClass?: string;
 }
 
 export function CustomBadge({ customClass, ...props }: IBadgeProps) {
-    return <MuiBadge {...props} className={classNames("common-badge", customClass)} />;
+ return (
+  <MuiBadge {...props} className={classNames("common-badge", customClass)} />
+ );
 }
 
 export default CustomBadge;

@@ -1,18 +1,18 @@
 @use "default.scss" as *;
 
 .common-tooltip {
-    .tooltip-content {
-        background: $backdropCenter !important;
-        color: #f5f5f5 !important;
-        font-family: $fontOutfitRegular;
-        font-size: $font12;
-        font-weight: 500;
-        line-height: 1.4;
-        padding: 6px 10px;
-        border-radius: 5px;
-    }
+ .tooltip-content {
+  background: $backdropCenter !important;
+  color: #f5f5f5 !important;
+  font-family: $fontOutfitRegular;
+  font-size: $font12;
+  font-weight: 500;
+  line-height: 1.4;
+  padding: 6px 10px;
+  border-radius: 5px;
+ }
 
-    .MuiTooltip-arrow {
-        color: $backdropCenter;
-    }
+ .MuiTooltip-arrow {
+  color: $backdropCenter;
+ }
 }

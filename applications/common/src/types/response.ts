@@ -227,7 +227,8 @@ export type IWorldMatchHistoryResponse = {
  created: number;
 };
 
-export type IMatchHistoryItem = IMatchHistoryResponse | IWorldMatchHistoryResponse;
+export type IMatchHistoryItem =
+ IMatchHistoryResponse | IWorldMatchHistoryResponse;
 
 /** game session */
 export type IGameNotFoundResponse = {
@@ -308,7 +309,8 @@ export type ILeaderboardWinsResponse = {
  wins: number;
 };
 
-export type ILeaderboardRowResponse = ILeaderboardEarningsResponse | ILeaderboardWinsResponse;
+export type ILeaderboardRowResponse =
+ ILeaderboardEarningsResponse | ILeaderboardWinsResponse;
 
 export type ILeaderboardPlayerResponse = {
  username: string;

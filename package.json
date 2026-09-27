@@ -1,14 +1,24 @@
 {
-    "name": "gopvp",
-    "private": true,
-    "version": "0.0.1",
-    "workspaces": [
-        "applications/*"
-    ],
-    "scripts": {
-        "app": "npm run dev -w @gopvp/app",
-        "app:build": "npm run build -w @gopvp/app",
-        "build": "npm run build --workspaces --if-present",
-        "storybook": "npm run storybook -w @gopvp/common"
-    }
+ "name": "gopvp",
+ "private": true,
+ "version": "0.0.1",
+ "workspaces": [
+  "applications/*"
+ ],
+ "scripts": {
+  "app": "npm run dev -w @gopvp/app",
+  "app:build": "npm run build -w @gopvp/app",
+  "build": "npm run build --workspaces --if-present",
+  "storybook": "npm run storybook -w @gopvp/common",
+  "format": "prettier --write .",
+  "lint": "eslint applications"
+ },
+ "devDependencies": {
+  "@eslint/js": "^10.0.1",
+  "eslint": "^10.11.0",
+  "eslint-plugin-react-hooks": "^7.1.1",
+  "globals": "^17.12.0",
+  "prettier": "^3.9.9",
+  "typescript-eslint": "^8.70.1"
+ }
 }

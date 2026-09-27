@@ -4,16 +4,20 @@ import classNames from "classnames";
 import "./avatar.scss";
 
 interface IAvatarProps extends AvatarProps {
-    letter: string;
-    customClass?: string;
+ letter: string;
+ customClass?: string;
 }
 
 export function CustomAvatar({ letter, customClass, ...props }: IAvatarProps) {
-    return (
-        <MuiAvatar {...props} className={classNames("common-avatar", customClass)} alt={letter}>
-            {letter}
-        </MuiAvatar>
-    );
+ return (
+  <MuiAvatar
+   {...props}
+   className={classNames("common-avatar", customClass)}
+   alt={letter}
+  >
+   {letter}
+  </MuiAvatar>
+ );
 }
 
 export default CustomAvatar;

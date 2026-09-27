@@ -14,15 +14,18 @@ import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
 import CustomMenu from "@gopvp/common/src/components/Menu/Menu";
 import CustomMenuItem from "@gopvp/common/src/components/MenuItem/MenuItem";
 import {
-    callAPIInterface,
-    showApiErrorToast,
+ callAPIInterface,
+ showApiErrorToast,
 } from "@gopvp/common/src/util/api";
 import { useReduxDispatch } from "@gopvp/app/src/redux/hooks";
 import { login } from "@gopvp/app/src/redux/auth/thunk";
 import { showLoader, hideLoader } from "@gopvp/app/src/redux/common/slice";
 import { COUNTRY_OPTIONS } from "@gopvp/app/src/constants/config";
 import type { IRegisterBody } from "@gopvp/common/src/types/payload";
-import type { IRegisterResponse, IRandomNameResponse } from "@gopvp/common/src/types/response";
+import type {
+ IRegisterResponse,
+ IRandomNameResponse,
+} from "@gopvp/common/src/types/response";
 import {
  emailText,
  enterEmailText,

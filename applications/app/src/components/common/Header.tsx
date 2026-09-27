@@ -17,7 +17,11 @@ import { useReduxSelector } from "@gopvp/app/src/redux/hooks";
 import { formatAmount, shortenUsername } from "@gopvp/common/src/util/format";
 import { getGameFromPath, getGameRoutes } from "@gopvp/app/src/utils";
 import { NAV_ITEMS } from "@gopvp/app/src/constants/config";
-import { profileText, logOutText, walletText } from "@gopvp/app/src/constants/messages";
+import {
+ profileText,
+ logOutText,
+ walletText,
+} from "@gopvp/app/src/constants/messages";
 import { backText } from "@gopvp/common/src/constants/messages";
 import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
 import { ChessLogo } from "@gopvp/app/src/components/constants";
@@ -58,7 +62,11 @@ export default function Header() {
       onChange={(_, value) => navigate(value)}
      >
       {NAV_ITEMS.map((item) => (
-       <CustomTab key={item.page} value={routes[item.page]} label={item.label} />
+       <CustomTab
+        key={item.page}
+        value={routes[item.page]}
+        label={item.label}
+       />
       ))}
      </CustomTabs>
     ) : (
