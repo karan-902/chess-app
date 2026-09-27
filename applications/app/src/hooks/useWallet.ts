@@ -37,7 +37,6 @@ export const withdrawRequest = (amountUsd: number, destination: string) =>
  );
 
 export function useWalletBalance() {
- const { socket } = useSocket();
  const dispatch = useReduxDispatch();
  const { balanceUsd, withdrawableUsd, loading } = useReduxSelector(
   (state) => state.wallet,
@@ -46,18 +45,6 @@ export function useWalletBalance() {
  const refetch = useCallback(() => {
   dispatch(fetchWalletBalance());
  }, [dispatch]);
-
- useEffect(() => {
-  refetch();
- }, [refetch]);
-
- useEffect(() => {
-  if (!socket) return;
-  socket.on("wallet:updated", refetch);
-  return () => {
-   socket.off("wallet:updated", refetch);
-  };
- }, [socket, refetch]);
 
  return {
   usdValue: balanceUsd,
