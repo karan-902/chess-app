@@ -1,4 +1,6 @@
+import type { ComponentType } from "react";
 import type { FormikProps } from "formik";
+import type { Socket } from "socket.io-client";
 import type { ILoginResponse, IMatchHistoryItem, IPoolResponse } from "@gopvp/common/src/types/response";
 
 export type LoginStep = "email" | "password" | "country"; // | "waiting-approval"
@@ -11,6 +13,34 @@ export type ThemeMode = "dark" | "light";
 export interface IToast {
  toastMessage: string;
  toastVariant: ToastSeverity;
+}
+
+export interface IGameContext {
+ playPath: string;
+ userId?: string;
+ username: string;
+ socket: Socket | null;
+}
+
+export interface IPoolLabelProps {
+ pool: IPoolResponse;
+}
+
+export interface IGamePracticeProps {
+ open: boolean;
+ onClose: () => void;
+ onCancel: () => void;
+}
+
+export interface IGameModule {
+ Preview: ComponentType;
+ PoolLabel: ComponentType<IPoolLabelProps>;
+ GameRoom: ComponentType;
+ Practice?: ComponentType<IGamePracticeProps>;
+}
+
+export interface IPlayPageProps {
+ gameModule: IGameModule;
 }
 
 export interface IEmailValues {
@@ -94,8 +124,9 @@ export interface IBetSheetProps {
  pools: IPoolResponse[];
  poolsLoading: boolean;
  usdValue: number;
+ PoolLabel: ComponentType<IPoolLabelProps>;
  onPoolPlay: (pool: IPoolResponse) => void;
- onPracticeOpen: () => void;
+ onPracticeOpen?: () => void;
  onRoomOpen: () => void;
  onInsufficientBalance: () => void;
 }

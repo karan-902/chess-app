@@ -85,7 +85,10 @@ export function SocketProvider({ children }: { children: ReactNode }) {
    if (isGamePlayPath(pathname) && viewingMatchId === data.match_id) return;
 
    if (store.getState().socketModals.deviceHandoff !== null) return;
-   if (await dispatch(loadMatchState(data.match_id)).unwrap()) {
+   const userId = store.getState().auth.session?.id;
+   if (
+    await dispatch(loadMatchState({ matchId: data.match_id, userId })).unwrap()
+   ) {
     dispatch(setActiveGame(data));
    }
   };

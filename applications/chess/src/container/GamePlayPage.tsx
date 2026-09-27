@@ -1,14 +1,14 @@
-import type { ComponentType } from "react";
-import ChessPlayPage from "@gopvp/chess/src/pages/play/PlayPage";
+import PlayPage from "@gopvp/chess/src/pages/play/PlayPage";
+import { chessGame } from "@gopvp/chess/src/game";
 import { useGame } from "@gopvp/chess/src/hooks/useGame";
 import type { GameSlug } from "@gopvp/chess/src/constants/config";
+import type { IGameModule } from "@gopvp/common/src/types/component";
 
-const GAME_PLAY_PAGES: Record<GameSlug, ComponentType> = {
-    chess: ChessPlayPage,
+const GAME_MODULES: Record<GameSlug, IGameModule> = {
+    chess: chessGame,
 };
 
 export default function GamePlayPage() {
     const { game } = useGame();
-    const PlayPage = GAME_PLAY_PAGES[game];
-    return <PlayPage />;
+    return <PlayPage gameModule={GAME_MODULES[game]} />;
 }

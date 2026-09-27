@@ -5,9 +5,6 @@ import Button from "@gopvp/common/src/components/Button/Button";
 import Card from "@gopvp/common/src/components/Card/Card";
 import CustomModal from "@gopvp/common/src/components/Modal/Modal";
 import PoolCardSkeleton from "@gopvp/chess/src/components/common/PoolCardSkeleton";
-import { formatText } from "@gopvp/common/src/util/format";
-import { deriveCategory, msToSeconds } from "@gopvp/chess/src/utils";
-import { CATEGORY_META } from "@gopvp/chess/src/constants/config";
 import type { IBetSheetProps } from "@gopvp/common/src/types/component";
 import {
  playText,
@@ -21,7 +18,6 @@ import {
  winText,
  entryFeeAmountText,
  addFundsText,
- minutesText,
 } from "@gopvp/chess/src/constants/messages";
 
 export default function BetSheet({
@@ -30,6 +26,7 @@ export default function BetSheet({
  pools,
  poolsLoading,
  usdValue,
+ PoolLabel,
  onPoolPlay,
  onPracticeOpen,
  onRoomOpen,
@@ -43,25 +40,13 @@ export default function BetSheet({
     ) : (
      <>
       {pools.map((pool) => {
-       const poolSeconds = msToSeconds(pool.time);
-       const category = CATEGORY_META[deriveCategory(poolSeconds)];
-       const CategoryIcon = category?.icon;
-       const timeLabel = minutesText(poolSeconds / 60);
        const canAfford = usdValue >= pool.bet;
        return (
         <Card
          key={pool.id}
          customClass={classNames("bet-card", !canAfford && "insufficient")}
         >
-         <Box customClass="pool-meta">
-          <CategoryIcon className="bet-card-icon" size="1em" strokeWidth={2} />
-          <Text customClass="description" component="span">
-           {formatText(category?.label ?? "")}
-          </Text>
-          <Text component="span" customClass="description">
-           {timeLabel}
-          </Text>
-         </Box>
+         <PoolLabel pool={pool} />
          <Text customClass="bet-card-tc">{winText}</Text>
          <Text customClass="pool-win-amt">${pool.prize}</Text>
          <Text customClass="pool-entry-fee">
@@ -84,20 +69,22 @@ export default function BetSheet({
       })}
      </>
     )}
-    <Card customClass={classNames("bet-card", "practice")}>
-     <Text customClass="bet-card-tc">{forFunText}</Text>
-     <Text customClass="bet-card-practice-title">{practiceText}</Text>
-     <Text customClass="caption">{freeToPlayText}</Text>
-     <Button
-      type="button"
-      variant="contained"
-      fullWidth
-      customClass="common-play"
-      onClick={onPracticeOpen}
-     >
-      {playText}
-     </Button>
-    </Card>
+    {onPracticeOpen && (
+     <Card customClass={classNames("bet-card", "practice")}>
+      <Text customClass="bet-card-tc">{forFunText}</Text>
+      <Text customClass="bet-card-practice-title">{practiceText}</Text>
+      <Text customClass="caption">{freeToPlayText}</Text>
+      <Button
+       type="button"
+       variant="contained"
+       fullWidth
+       customClass="common-play"
+       onClick={onPracticeOpen}
+      >
+       {playText}
+      </Button>
+     </Card>
+    )}
     <Card customClass={classNames("bet-card", "friend")}>
      <Text customClass="bet-card-tc">{friendlyText}</Text>
      <Text customClass="bet-card-practice-title">{roomText}</Text>

@@ -23,7 +23,7 @@ import {
  GAME_END_REASON_LABELS,
  MATCH_RESULT_OUTCOMES,
 } from "@gopvp/chess/src/constants/config";
-import { useGame } from "@gopvp/chess/src/hooks/useGame";
+import { useGameContext } from "@gopvp/common/src/contexts/GameContext";
 import type { IMatchResultResponse } from "@gopvp/common/src/types/response";
 import type { IGameRoomProps } from "@gopvp/chess/src/types/component";
 import {
@@ -46,7 +46,7 @@ function pickBySide<T>(side: "w" | "b", whiteVal: T, blackVal: T): T {
 
 export default function GameRoom({ mode }: IGameRoomProps) {
  const navigate = useNavigate();
- const { routes } = useGame();
+ const { playPath } = useGameContext();
 
  const {
   isPvc,
@@ -64,7 +64,7 @@ export default function GameRoom({ mode }: IGameRoomProps) {
  } = useGameRoomSetup(mode);
 
  if (wasAlreadyFinished) {
-  return <Navigate to={routes.PLAY} replace />;
+  return <Navigate to={playPath} replace />;
  }
 
  const {
@@ -435,7 +435,7 @@ export default function GameRoom({ mode }: IGameRoomProps) {
      resultHeader={resultHeader}
      isWinner={isWinner}
      isDrawResult={isDrawResult}
-     onNewGame={() => navigate(routes.PLAY, { replace: true })}
+     onNewGame={() => navigate(playPath, { replace: true })}
     />
    )}
   </Box>

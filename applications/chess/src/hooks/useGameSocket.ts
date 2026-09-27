@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
-import { useSocket } from "@gopvp/chess/src/context/SocketContext";
+import { useGameContext } from "@gopvp/common/src/contexts/GameContext";
+import { showToastMessage } from "@gopvp/common/src/util/injectStore";
 import { useCountdown } from "@gopvp/chess/src/hooks/useCountdown";
-import { useReduxDispatch, useReduxSelector } from "@gopvp/chess/src/redux/hooks";
-import { showToast } from "@gopvp/chess/src/redux/common/slice";
+import {
+    useChessDispatch,
+    useChessSelector,
+} from "@gopvp/chess/src/redux/chessHooks";
 import { loadMatchState } from "@gopvp/chess/src/redux/match/thunk";
 import {
     callAPIInterface,
@@ -46,10 +49,9 @@ export function useGameSocket({
     syncClock,
     setGameEnded,
 }: IProps) {
-    const { socket } = useSocket();
-    const dispatch = useReduxDispatch();
-    const userId = useReduxSelector((state) => state.auth.session?.id);
-    const matchState = useReduxSelector((state) => state.match.state);
+    const { socket, userId } = useGameContext();
+    const dispatch = useChessDispatch();
+    const matchState = useChessSelector((state) => state.match.state);
     const matchId = matchState?.match_id;
     const [clockReady, setClockReady] = useState(isPvc);
     const [drawOffer, setDrawOffer] = useState<IDrawOfferEvent | null>(null);
@@ -75,8 +77,9 @@ export function useGameSocket({
 
     const resync = useCallback(async () => {
         if (!matchId) return;
-        if (!(await dispatch(loadMatchState(matchId)).unwrap())) endMatch();
-    }, [matchId, dispatch, endMatch]);
+        if (!(await dispatch(loadMatchState({ matchId, userId })).unwrap()))
+            endMatch();
+    }, [matchId, userId, dispatch, endMatch]);
 
     useEffect(() => {
         if (isPvc || !matchState) return;
@@ -112,13 +115,10 @@ export function useGameSocket({
                 endMatch();
         };
         const onDrawDecline = () =>
-            dispatch(
-                showToast({
-                    isToastOpen: true,
-                    toastMessage: drawOfferDeclinedText,
-                    toastVariant: "info",
-                }),
-            );
+            showToastMessage({
+                toastMessage: drawOfferDeclinedText,
+                toastVariant: "info",
+            });
         const onOpponentOffline = () => setIsOpponentOffline(true);
         const onOpponentOnline = () => setIsOpponentOffline(false);
 
