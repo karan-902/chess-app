@@ -1,13 +1,10 @@
 import { useMemo } from "react";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ThemeProvider as MuiThemeProvider, CssBaseline } from "@mui/material";
-import {
-    store,
-    hydrateSession,
-    hydratePersistedState,
-} from "@gopvp/chess/src/redux/index.ts";
+import { store, persistor } from "@gopvp/chess/src/redux/index.ts";
 import { SocketProvider } from "@gopvp/chess/src/context/SocketContext";
 import { WalletActionModalProvider } from "@gopvp/chess/src/context/WalletActionModalContext";
 import { AppThemeProvider, useAppTheme } from "@gopvp/chess/src/context/ThemeContext";
@@ -26,24 +23,21 @@ function Root() {
             <CssBaseline />
             <GoogleOAuthProvider clientId={googleClientId}>
                 <Provider store={store}>
-                    <SocketProvider>
-                        <WalletActionModalProvider>
-                            <App />
-                        </WalletActionModalProvider>
-                    </SocketProvider>
+                    <PersistGate persistor={persistor}>
+                        <SocketProvider>
+                            <WalletActionModalProvider>
+                                <App />
+                            </WalletActionModalProvider>
+                        </SocketProvider>
+                    </PersistGate>
                 </Provider>
             </GoogleOAuthProvider>
         </MuiThemeProvider>
     );
 }
 
-const renderApp = async () => {
-    await Promise.all([hydrateSession(), hydratePersistedState()]);
-    createRoot(document.getElementById("root")!).render(
-        <AppThemeProvider>
-            <Root />
-        </AppThemeProvider>,
-    );
-};
-
-renderApp();
+createRoot(document.getElementById("root")!).render(
+    <AppThemeProvider>
+        <Root />
+    </AppThemeProvider>,
+);

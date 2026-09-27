@@ -2,7 +2,7 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { IGameResponse } from "@gopvp/common/src/types/response";
 import type { GameSlug } from "@gopvp/chess/src/constants/config";
 
-interface IGameState {
+export interface IGameState {
     enteredGame: GameSlug | null;
     requestedSlug: string | null;
     details: IGameResponse | null;

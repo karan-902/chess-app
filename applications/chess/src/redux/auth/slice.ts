@@ -22,8 +22,16 @@ export const authSlice = createSlice({
                 Boolean(state.session.refresh_token);
         },
         clearSession: () => initialState,
+        updateSession: (
+            state,
+            action: PayloadAction<Partial<ILoginResponse>>,
+        ) => {
+            if (state.session) {
+                state.session = { ...state.session, ...action.payload };
+            }
+        },
     },
 });
 
-export const { setSession, clearSession } = authSlice.actions;
+export const { setSession, clearSession, updateSession } = authSlice.actions;
 export default authSlice.reducer;

@@ -1,8 +1,5 @@
 import { readStorage, writeStorage } from "@gopvp/common/src/util/storage";
 import type { IPvcSnapshot } from "@gopvp/chess/src/types/component";
-import type { IPvcState } from "@gopvp/chess/src/redux/pvc/slice";
-
-const PVC_STATE_KEY = "pvc_state";
 
 function readSessionJson<T>(key: string): T | null {
  const raw = readStorage(sessionStorage, key);
@@ -17,10 +14,6 @@ export const markGameFinished = (id: string) =>
  writeStorage(sessionStorage, `gr_finished:${id}`, "1");
 export const isGameFinished = (id: string) =>
  readStorage(sessionStorage, `gr_finished:${id}`) === "1";
-
-export const savePvcState = (state: IPvcState) =>
- writeStorage(sessionStorage, PVC_STATE_KEY, JSON.stringify(state));
-export const loadPvcState = () => readSessionJson<IPvcState>(PVC_STATE_KEY);
 
 export const savePvcSnapshot = (id: string, snapshot: IPvcSnapshot) =>
  writeStorage(sessionStorage, `pvc_snapshot:${id}`, JSON.stringify(snapshot));

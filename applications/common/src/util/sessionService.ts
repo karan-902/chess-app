@@ -1,45 +1,31 @@
-import localforage from "localforage";
+import {
+ getInjectedPersistor,
+ getInjectedStore,
+} from "@gopvp/common/src/util/injectStore";
 
-type TSessionListener = (session: unknown) => void;
+const SET_SESSION_ACTION = "auth/setSession";
+const UPDATE_SESSION_ACTION = "auth/updateSession";
+const CLEAR_SESSION_ACTION = "auth/clearSession";
 
-const SESSION_KEY = "session";
-const sessionStore = localforage.createInstance({
- name: "gopvp",
- storeName: "session",
-});
-
-let cachedSession: unknown = null;
-const listeners = new Set<TSessionListener>();
-
-const setCachedSession = (session: unknown) => {
- cachedSession = session;
- listeners.forEach((listener) => listener(session));
-};
+const store = () => getInjectedStore()!;
 
 const sessionService = {
- init: async <TSession>() => {
-  setCachedSession(await sessionStore.getItem<TSession>(SESSION_KEY));
-  return cachedSession as TSession | null;
- },
- loadSession: async <TSession>() => cachedSession as TSession | null,
+ loadSession: async <TSession>() =>
+  (store().getState().auth.session ?? null) as TSession | null,
  saveSession: async <TSession>(session: TSession) => {
-  setCachedSession(session);
-  await sessionStore.setItem(SESSION_KEY, session);
+  store().dispatch({ type: SET_SESSION_ACTION, payload: session });
+  await getInjectedPersistor()?.flush();
  },
  updateSession: async <TSession>(changes: Partial<TSession>) => {
-  if (!cachedSession) return;
-  await sessionService.saveSession({
-   ...(cachedSession as TSession),
-   ...changes,
+  store().dispatch({
+   type: UPDATE_SESSION_ACTION,
+   payload: changes,
   });
+  await getInjectedPersistor()?.flush();
  },
  deleteSession: async () => {
-  setCachedSession(null);
-  await sessionStore.removeItem(SESSION_KEY);
- },
- subscribe: <TSession>(listener: (session: TSession | null) => void) => {
-  listeners.add(listener as TSessionListener);
-  return () => listeners.delete(listener as TSessionListener);
+  store().dispatch({ type: CLEAR_SESSION_ACTION });
+  await getInjectedPersistor()?.flush();
  },
 };
 

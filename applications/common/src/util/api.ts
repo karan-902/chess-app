@@ -167,12 +167,12 @@ export const callAPIInterface = async <
 
    if (errorType === "token_expired") {
     try {
-     const access_token = await generateToken();
+     const accessToken = await generateToken();
      const retryConfig: AxiosRequestConfig = {
       ...config,
       headers: {
        ...(config.headers as Record<string, string>),
-       Authorization: access_token,
+       Authorization: accessToken,
       },
      };
      const retryRes = await axios(retryConfig);

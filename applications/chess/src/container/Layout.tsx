@@ -11,8 +11,11 @@ import { setNavigator } from "@gopvp/common/src/util/navigationService";
 import Box from "@gopvp/common/src/components/Box/Box";
 import BackdropLoader from "@gopvp/chess/src/components/common/BackdropLoader/BackdropLoader";
 import Notification from "@gopvp/chess/src/components/common/Notification/Notification";
-import { useReduxDispatch, useReduxSelector } from "@gopvp/chess/src/redux/hooks";
-import { setLaunchParams } from "@gopvp/chess/src/redux/launch/slice";
+import {
+ useReduxDispatch,
+ useReduxSelector,
+} from "@gopvp/chess/src/redux/hooks";
+import { setLaunchParams } from "@gopvp/chess/src/redux/speed/slice";
 import { setEnteredGame } from "@gopvp/chess/src/redux/game/slice";
 import { fetchGameDetails } from "@gopvp/chess/src/redux/game/thunk";
 import { GAMES, GAME_PAGE_TITLES } from "@gopvp/chess/src/constants/config";

@@ -1,7 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { TIME_SECONDS } from "@gopvp/chess/src/constants";
 import { computerText, difficultyText } from "@gopvp/chess/src/constants/messages";
-import { loadPvcState } from "@gopvp/chess/src/utils/storage";
 import type { Difficulty } from "@gopvp/chess/src/types/component";
 import type {
  GameCategory,
@@ -35,7 +34,7 @@ const initialState: IPvcState = {
 
 const pvcSlice = createSlice({
  name: "pvc",
- initialState: () => loadPvcState() ?? initialState,
+ initialState,
  reducers: {
   startPvcGame: (_state, action: PayloadAction<IStartPvcGamePayload>) => {
    const { gameId, difficulty, category, color, username } = action.payload;
