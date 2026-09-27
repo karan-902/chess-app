@@ -5,13 +5,13 @@ import DepositModal from "@gopvp/app/src/components/common/DepositModal";
 import WithdrawModal from "@gopvp/app/src/components/common/WithdrawModal";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useReduxSelector } from "@gopvp/app/src/redux/hooks";
-import { useWalletActionModal } from "@gopvp/app/src/context/WalletActionModalContext";
+import { useWalletModal } from "@gopvp/app/src/context/WalletModalContext";
 
 function PrivateRoute() {
     const isLoggedIn = useReduxSelector((state) => state.auth.isLoggedIn);
     const country = useReduxSelector((state) => state.auth.session?.country);
     const location = useLocation();
-    const { close } = useWalletActionModal();
+    const { close } = useWalletModal();
 
     useEffect(() => {
         close();

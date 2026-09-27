@@ -9,7 +9,7 @@ import { InfoIcon } from "@gopvp/common/src/components/images";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
 import Input from "@gopvp/common/src/components/Input/Input";
-import { useWalletActionModal } from "@gopvp/app/src/context/WalletActionModalContext";
+import { useWalletModal } from "@gopvp/app/src/context/WalletModalContext";
 import { useWalletBalance } from "@gopvp/app/src/hooks/useWallet";
 import { withdrawRequest } from "@gopvp/app/src/hooks/useWallet";
 import { useModalReady } from "@gopvp/app/src/hooks/useModalReady";
@@ -36,7 +36,7 @@ const MAX_AMOUNT_DIGITS = 2;
 
 export default function WithdrawModal() {
  const dispatch = useReduxDispatch();
- const { openModal, close } = useWalletActionModal();
+ const { openModal, close } = useWalletModal();
  const { withdrawableUsd, refetch } = useWalletBalance();
  const open = openModal === "withdraw";
  const ready = useModalReady(open);

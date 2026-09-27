@@ -9,7 +9,7 @@ import VirtualList from "@gopvp/common/src/components/VirtualList/VirtualList";
 import EmptyState from "@gopvp/app/src/components/common/EmptyState";
 import TxItemSkeleton from "@gopvp/app/src/components/common/TxItemSkeleton";
 import { useWallet } from "@gopvp/app/src/hooks/useWallet";
-import { useWalletActionModal } from "@gopvp/app/src/context/WalletActionModalContext";
+import { useWalletModal } from "@gopvp/app/src/context/WalletModalContext";
 import { speedLogo } from "@gopvp/common/src/components/images";
 import { formatAmount, formatTime } from "@gopvp/common/src/util/format";
 import {
@@ -112,7 +112,7 @@ export default function Wallet() {
   loadingMore,
   loadMoreTransactions,
  } = useWallet();
- const { openDeposit, openWithdraw } = useWalletActionModal();
+ const { openDeposit, openWithdraw } = useWalletModal();
  const timelineEntries = useMemo(
   () => buildTimelineEntries(transactions),
   [transactions],

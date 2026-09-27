@@ -6,8 +6,11 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ThemeProvider as MuiThemeProvider, CssBaseline } from "@mui/material";
 import { store, persistor } from "@gopvp/app/src/redux/index.ts";
 import { SocketProvider } from "@gopvp/app/src/context/SocketContext";
-import { WalletActionModalProvider } from "@gopvp/app/src/context/WalletActionModalContext";
-import { AppThemeProvider, useAppTheme } from "@gopvp/app/src/context/ThemeContext";
+import { WalletModalProvider } from "@gopvp/app/src/context/WalletModalContext";
+import {
+ AppThemeProvider,
+ useAppTheme,
+} from "@gopvp/app/src/context/ThemeContext";
 import { getMuiTheme } from "@gopvp/common/src/theme";
 import { googleClientId } from "@gopvp/common/src/constants/env";
 
@@ -15,29 +18,29 @@ import "./styles/main.scss";
 import App from "@gopvp/app/src/App.tsx";
 
 function Root() {
-    const { mode } = useAppTheme();
-    const muiTheme = useMemo(() => getMuiTheme(mode), [mode]);
+ const { mode } = useAppTheme();
+ const muiTheme = useMemo(() => getMuiTheme(mode), [mode]);
 
-    return (
-        <MuiThemeProvider theme={muiTheme}>
-            <CssBaseline />
-            <GoogleOAuthProvider clientId={googleClientId}>
-                <Provider store={store}>
-                    <PersistGate persistor={persistor}>
-                        <SocketProvider>
-                            <WalletActionModalProvider>
-                                <App />
-                            </WalletActionModalProvider>
-                        </SocketProvider>
-                    </PersistGate>
-                </Provider>
-            </GoogleOAuthProvider>
-        </MuiThemeProvider>
-    );
+ return (
+  <MuiThemeProvider theme={muiTheme}>
+   <CssBaseline />
+   <GoogleOAuthProvider clientId={googleClientId}>
+    <Provider store={store}>
+     <PersistGate persistor={persistor}>
+      <SocketProvider>
+       <WalletModalProvider>
+        <App />
+       </WalletModalProvider>
+      </SocketProvider>
+     </PersistGate>
+    </Provider>
+   </GoogleOAuthProvider>
+  </MuiThemeProvider>
+ );
 }
 
 createRoot(document.getElementById("root")!).render(
-    <AppThemeProvider>
-        <Root />
-    </AppThemeProvider>,
+ <AppThemeProvider>
+  <Root />
+ </AppThemeProvider>,
 );

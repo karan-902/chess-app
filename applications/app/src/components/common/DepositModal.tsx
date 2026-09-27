@@ -9,7 +9,7 @@ import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
 import Input from "@gopvp/common/src/components/Input/Input";
 import { Info, speedLogo, qrLogo } from "@gopvp/common/src/components/images";
-import { useWalletActionModal } from "@gopvp/app/src/context/WalletActionModalContext";
+import { useWalletModal } from "@gopvp/app/src/context/WalletModalContext";
 import { useSocket } from "@gopvp/app/src/context/SocketContext";
 import { paymentRequest } from "@gopvp/app/src/hooks/useWallet";
 import { useModalReady } from "@gopvp/app/src/hooks/useModalReady";
@@ -53,7 +53,7 @@ function formatCountdown(ms: number) {
 }
 
 export default function DepositModal() {
- const { openModal, close } = useWalletActionModal();
+ const { openModal, close } = useWalletModal();
  const { socket } = useSocket();
  const open = openModal === "deposit";
  const ready = useModalReady(open);
