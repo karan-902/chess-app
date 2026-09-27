@@ -7,9 +7,9 @@ import {
  resignTheGameText,
  loseTheGameText,
  loseAndForfeitText,
- keepPlayingText,
  resignText,
 } from "@gopvp/chess/src/constants/messages";
+import { keepPlayingText } from "@gopvp/common/src/constants/messages";
 
 export default function ResignModal({
  open,

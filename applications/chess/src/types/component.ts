@@ -1,15 +1,5 @@
-import type {
- IMatchResultResponse,
- IPoolResponse,
-} from "@gopvp/common/src/types/response";
-import type {
- GameCategory,
- MatchOutcome,
- MoveRecord,
- PieceColor,
-} from "@gopvp/chess/src/types/index";
-import type { MatchmakingStatus } from "@gopvp/chess/src/hooks/useMatchmaking";
-import type { RoomStatus } from "@gopvp/chess/src/hooks/useRoomMatch";
+import type { IMatchResultResponse } from "@gopvp/common/src/types/response";
+import type { GameCategory, MoveRecord, PieceColor } from "@gopvp/chess/src/types/index";
 
 export type GameMode = "pvp" | "pvc";
 export type Difficulty = "easy" | "medium" | "hard";
@@ -80,46 +70,9 @@ export interface IResignModalProps {
  onResign: () => void;
 }
 
-export interface IMatchRowProps {
- outcome: MatchOutcome;
- opponentName: string;
- category?: GameCategory;
- endReason?: string | null;
- amount: number;
- betAmount?: number;
- dateLabel: string;
- selfName?: string;
-}
-
 export interface IPracticeSheetProps {
  open: boolean;
  onClose: () => void;
  onCancel: () => void;
  onPlay: (difficulty: Difficulty, timeControl: GameCategory) => void;
-}
-
-export interface IRoomSheetProps {
- open: boolean;
- onClose: () => void;
- onCancel: () => void;
- usdValue: number;
- roomStatus: RoomStatus;
- isOwner: boolean;
- roomCode: string | null;
- expiresInSeconds: number;
- onCreateRoom: (betUsd: number, durationSeconds: number) => void;
- onJoinRoom: (code: string) => void;
- onStartRoom: () => void;
-}
-
-export interface IPoolConfirmSheetProps {
- open: boolean;
- onClose: () => void;
- status: MatchmakingStatus;
- queuedPool: IPoolResponse | null;
- confirmPool: IPoolResponse | null;
- secondsLeft: number;
- onLeaveQueue: () => void;
- onConfirmJoin: () => void;
- onConfirmCancel: () => void;
 }

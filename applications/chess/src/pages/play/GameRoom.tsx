@@ -19,10 +19,8 @@ import { usePvcGameEnd } from "@gopvp/chess/src/hooks/usePvcGameEnd";
 import { oppositeSide } from "@gopvp/chess/src/utils";
 import { markGameFinished, clearPvcSnapshot } from "@gopvp/chess/src/utils/storage";
 import { DIFFICULTY_CONFIG } from "@gopvp/chess/src/constants/index";
-import {
- GAME_END_REASON_LABELS,
- MATCH_RESULT_OUTCOMES,
-} from "@gopvp/chess/src/constants/config";
+import { GAME_END_REASON_LABELS } from "@gopvp/chess/src/constants/config";
+import { MATCH_RESULT_OUTCOMES } from "@gopvp/common/src/constants/config";
 import { useGameContext } from "@gopvp/common/src/contexts/GameContext";
 import type { IMatchResultResponse } from "@gopvp/common/src/types/response";
 import type { IGameRoomProps } from "@gopvp/chess/src/types/component";

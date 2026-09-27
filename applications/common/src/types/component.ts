@@ -32,15 +32,18 @@ export interface IGamePracticeProps {
  onCancel: () => void;
 }
 
+export interface IMatchIconProps {
+ time: number;
+}
+
 export interface IGameModule {
  Preview: ComponentType;
  PoolLabel: ComponentType<IPoolLabelProps>;
  GameRoom: ComponentType;
  Practice?: ComponentType<IGamePracticeProps>;
-}
-
-export interface IPlayPageProps {
- gameModule: IGameModule;
+ Rules: ComponentType;
+ MatchIcon: ComponentType<IMatchIconProps>;
+ endReasonLabels: Record<string, string>;
 }
 
 export interface IEmailValues {

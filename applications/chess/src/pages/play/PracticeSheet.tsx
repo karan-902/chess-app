@@ -2,18 +2,14 @@ import { useState } from "react";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Button from "@gopvp/common/src/components/Button/Button";
 import CustomDrawer from "@gopvp/common/src/components/Drawer/Drawer";
-import ChipSelect from "@gopvp/chess/src/components/common/ChipSelect";
+import ChipSelect from "@gopvp/common/src/components/ChipSelect/ChipSelect";
 import { TIME_SECONDS } from "@gopvp/chess/src/constants";
 import { CATEGORY_META } from "@gopvp/chess/src/constants/config";
 import type { Difficulty } from "@gopvp/chess/src/types/component";
 import type { GameCategory } from "@gopvp/chess/src/types/index";
 import type { IPracticeSheetProps } from "@gopvp/chess/src/types/component";
-import {
- playText,
- cancelText,
- difficultyText,
- minutesText,
-} from "@gopvp/chess/src/constants/messages";
+import { playText, cancelText } from "@gopvp/common/src/constants/messages";
+import { difficultyText, minutesText } from "@gopvp/chess/src/constants/messages";
 
 const PRACTICE_DIFFICULTIES: Difficulty[] = ["easy", "medium", "hard"];
 const CATEGORY_ORDER: GameCategory[] = [

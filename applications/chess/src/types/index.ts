@@ -1,6 +1,5 @@
 export type GameCategory = "BULLET" | "BLITZ" | "RAPID" | "CLASSICAL";
 export type PieceColor = "w" | "b";
-export type MatchOutcome = "win" | "loss" | "draw";
 
 export type IGameRoomPlayer = {
  name: string;

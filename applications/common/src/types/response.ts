@@ -239,6 +239,19 @@ export type IActiveGameEvent = {
  game_slug: string;
 };
 
+export type IGameStateBasePlayer = {
+ user_id: string;
+ username: string;
+ score: number;
+};
+
+export type IGameStateBaseResponse = {
+ match_id: string;
+ game_slug: string;
+ bet: number;
+ players: IGameStateBasePlayer[];
+};
+
 export type IDrawOfferEvent = {
  offererId: string;
 };

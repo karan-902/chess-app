@@ -14,8 +14,7 @@
         "strict": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
-        "noFallthroughCasesInSwitch": true,
-        "types": ["node"]
+        "noFallthroughCasesInSwitch": true
     },
-    "include": ["src", "../common/src", "vite.config.ts"]
+    "include": ["src", "../common/src"]
 }

@@ -5,11 +5,8 @@ import CustomChip from "@gopvp/common/src/components/Chip/Chip";
 import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
 import PieceIcon from "@gopvp/chess/src/components/board/PieceIcon";
 import type { IPlayerRowProps } from "@gopvp/chess/src/types/component";
-import {
- youText,
- reconnectingText,
- firstMoveText,
-} from "@gopvp/chess/src/constants/messages";
+import { youText } from "@gopvp/common/src/constants/messages";
+import { reconnectingText, firstMoveText } from "@gopvp/chess/src/constants/messages";
 
 function capturedCode(type: string, color: "w" | "b") {
  return `${color}${type.toUpperCase()}`;

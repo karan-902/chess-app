@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useGameContext } from "@gopvp/common/src/contexts/GameContext";
 import { showToastMessage } from "@gopvp/common/src/util/injectStore";
-import { useCountdown } from "@gopvp/chess/src/hooks/useCountdown";
+import { useCountdown } from "@gopvp/common/src/hooks/useCountdown";
 import {
     useChessDispatch,
     useChessSelector,

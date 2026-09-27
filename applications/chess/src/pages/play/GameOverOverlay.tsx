@@ -4,7 +4,8 @@ import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
 import { formatAmount } from "@gopvp/common/src/util/format";
 import type { IGameOverOverlayProps } from "@gopvp/chess/src/types/component";
-import { settlementText, backText, scoreText } from "@gopvp/chess/src/constants/messages";
+import { settlementText } from "@gopvp/chess/src/constants/messages";
+import { backText, scoreText } from "@gopvp/common/src/constants/messages";
 
 export default function GameOverOverlay({
  gameEnded,
