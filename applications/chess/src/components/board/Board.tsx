@@ -4,8 +4,6 @@ import {
  DragOverlay,
  PointerSensor,
  TouchSensor,
- useDraggable,
- useDroppable,
  useSensor,
  useSensors,
  type DragStartEvent,
@@ -40,6 +38,8 @@ import {
  BOARD_ENTRANCE_WAVE_COUNT,
  BOARD_ENTRANCE_LANDING_MS,
 } from "@gopvp/chess/src/constants/limit";
+import DroppableSquare from "@gopvp/chess/src/components/board/DroppableSquare";
+import DraggablePiece from "@gopvp/chess/src/components/board/DraggablePiece";
 
 interface IChessBoardProps {
  fen: string;
@@ -92,83 +92,6 @@ function boardFromFen(fen: string): Record<string, string> {
   }
  });
  return board;
-}
-
-function DroppableSquare({
- square,
- className,
- style,
- onClick,
- onContextMenu,
- premoveMode,
- children,
-}: {
- square: string;
- className: string;
- style: React.CSSProperties;
- onClick: () => void;
- onContextMenu: (e: React.MouseEvent) => void;
- premoveMode?: boolean;
- children: React.ReactNode;
-}) {
- const { setNodeRef, isOver } = useDroppable({ id: square });
- return (
-  <Box
-   ref={setNodeRef}
-   customClass={classNames(
-    className,
-    isOver && (premoveMode ? "square-drag-hover-premove" : "square-drag-hover"),
-   )}
-   style={style}
-   onClick={onClick}
-   onContextMenu={onContextMenu}
-  >
-   {children}
-  </Box>
- );
-}
-
-function DraggablePiece({
- square,
- code,
- col,
- row,
- className,
- onClick,
- draggable,
- hidden,
-}: {
- square: string;
- code: string;
- col: number;
- row: number;
- className: string;
- onClick: () => void;
- draggable: boolean;
- hidden?: boolean;
-}) {
- const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
-  id: square,
-  data: { code },
-  disabled: !draggable,
- });
-
- return (
-  <div
-   ref={setNodeRef}
-   {...listeners}
-   {...attributes}
-   onClick={onClick}
-   className="chess-piece-slot"
-   style={{
-    transform: `translate(${col * 100}%, ${row * 100}%)`,
-    cursor: draggable ? "grab" : "pointer",
-    opacity: isDragging || hidden ? 0 : 1,
-   }}
-  >
-   <PieceIcon code={code} className={className} />
-  </div>
- );
 }
 
 export default function Board({

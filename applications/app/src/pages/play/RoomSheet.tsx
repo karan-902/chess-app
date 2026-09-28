@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
@@ -9,10 +9,7 @@ import CustomLabel from "@gopvp/common/src/components/Label/Label";
 import OTPInput from "@gopvp/common/src/components/OtpInput/OtpInput";
 import ChipSelect from "@gopvp/common/src/components/ChipSelect/ChipSelect";
 import { formatMMSS } from "@gopvp/common/src/util/format";
-import type {
- IDurationWheelProps,
- RoomTab,
-} from "@gopvp/common/src/types/component";
+import type { RoomTab } from "@gopvp/common/src/types/component";
 import type { IRoomSheetProps } from "@gopvp/app/src/types/component";
 import {
  createRoomText,
@@ -21,7 +18,6 @@ import {
  feeAmountRequiredText,
  insufficientBalanceText,
  durationText,
- minText,
  createText,
  roomCodeText,
  pasteText,
@@ -37,10 +33,7 @@ import {
  copiedExclaimText,
  roomText,
 } from "@gopvp/app/src/constants/message";
-import {
- MAX_AMOUNT_DIGITS,
- DURATION_WHEEL_ITEM_HEIGHT,
-} from "@gopvp/app/src/constants/limit";
+import { MAX_AMOUNT_DIGITS } from "@gopvp/app/src/constants/limit";
 import { cancelText } from "@gopvp/common/src/constants/message";
 import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
 import {
@@ -49,64 +42,7 @@ import {
  DURATION_MINUTES,
 } from "@gopvp/app/src/constants/option";
 import SheetActions from "@gopvp/common/src/components/SheetActions/SheetActions";
-
-function DurationWheel({ value, onChange }: IDurationWheelProps) {
- const listRef = useRef<HTMLDivElement>(null);
- const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
- const initialValueRef = useRef(value);
-
- useEffect(() => {
-  listRef.current?.scrollTo({
-   top:
-    (initialValueRef.current - DURATION_MINUTES[0]) *
-    DURATION_WHEEL_ITEM_HEIGHT,
-  });
- }, []);
-
- const scrollToValue = (minutes: number) => {
-  listRef.current?.scrollTo({
-   top: (minutes - DURATION_MINUTES[0]) * DURATION_WHEEL_ITEM_HEIGHT,
-   behavior: "smooth",
-  });
- };
-
- const handleScroll = () => {
-  clearTimeout(scrollTimeoutRef.current);
-  scrollTimeoutRef.current = setTimeout(() => {
-   const el = listRef.current;
-   if (!el) return;
-   const index = Math.round(el.scrollTop / DURATION_WHEEL_ITEM_HEIGHT);
-   const picked =
-    DURATION_MINUTES[Math.min(Math.max(index, 0), DURATION_MINUTES.length - 1)];
-   if (picked !== value) onChange(picked);
-  }, 120);
- };
-
- return (
-  <Box customClass="duration-wheel">
-   <Box customClass="duration-wheel-highlight" />
-   <Box customClass="duration-wheel-list" ref={listRef} onScroll={handleScroll}>
-    <Box customClass="duration-wheel-pad" />
-    {DURATION_MINUTES.map((minutes) => (
-     <Text
-      key={minutes}
-      customClass={classNames(
-       "duration-wheel-item",
-       minutes === value && "active",
-      )}
-      onClick={() => {
-       onChange(minutes);
-       scrollToValue(minutes);
-      }}
-     >
-      {minutes} {minText}
-     </Text>
-    ))}
-    <Box customClass="duration-wheel-pad" />
-   </Box>
-  </Box>
- );
-}
+import DurationWheel from "@gopvp/app/src/pages/play/DurationWheel";
 
 export default function RoomSheet({
  open,

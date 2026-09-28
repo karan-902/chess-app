@@ -80,3 +80,24 @@ export interface IPracticeSheetProps {
  onCancel: () => void;
  onPlay: (difficulty: Difficulty, timeControl: GameCategory) => void;
 }
+
+export interface IDroppableSquareProps {
+ square: string;
+ className: string;
+ style: React.CSSProperties;
+ onClick: () => void;
+ onContextMenu: (e: React.MouseEvent) => void;
+ premoveMode?: boolean;
+ children: React.ReactNode;
+}
+
+export interface IDraggablePieceProps {
+ square: string;
+ code: string;
+ col: number;
+ row: number;
+ className: string;
+ onClick: () => void;
+ draggable: boolean;
+ hidden?: boolean;
+}

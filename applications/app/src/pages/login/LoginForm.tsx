@@ -4,11 +4,6 @@ import { NavLink, useSearchParams } from "react-router-dom";
 // import { useNavigate } from "react-router-dom";
 // import { ArrowLeft } from "lucide-react";
 import { useFormik } from "formik";
-import Box from "@gopvp/common/src/components/Box/Box";
-import Text from "@gopvp/common/src/components/Text/Text";
-import Input from "@gopvp/common/src/components/Input/Input";
-import Button from "@gopvp/common/src/components/Button/Button";
-import CustomAvatar from "@gopvp/common/src/components/Avatar/Avatar";
 import AuthLayout from "@gopvp/app/src/container/AuthLayout";
 import { useGoogleAuth } from "@gopvp/app/src/hooks/useGoogleAuth";
 // import { useDeviceApprovalPoll } from "@gopvp/app/src/hooks/useDeviceApprovalPoll";
@@ -25,23 +20,12 @@ import type { IVerifyUserBody } from "@gopvp/common/src/types/payload";
 import type { IVerifyUserResponse } from "@gopvp/common/src/types/response";
 // import type { ILoginResponse } from "@gopvp/common/src/types/response";
 import type {
- IEmailScreenProps,
  IPasswordValues,
- IPasswordScreenProps,
  LoginStep,
 } from "@gopvp/common/src/types/component";
 import {
- emailText,
- enterEmailText,
- passwordText,
- enterPasswordText,
- orText,
- continueWithGoogleText,
- changeText,
  // forgotYourPasswordText,
  // resetNowText,
- nextText,
- loginText,
  verifyEmailToContinueText,
  // newDeviceDetectedText,
  // approveSignInEmailedText,
@@ -57,156 +41,13 @@ import {
 } from "@gopvp/app/src/constants/message";
 import { ROUTES } from "@gopvp/app/src/constants/route";
 import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
-import { formSubmitHandler } from "@gopvp/common/src/util/form";
 import { emailRule, passwordRule } from "@gopvp/app/src/utils/validation";
+import EmailScreen from "@gopvp/app/src/pages/login/EmailScreen";
+import PasswordScreen from "@gopvp/app/src/pages/login/PasswordScreen";
 
 const emailSchema = yup.object({ email: emailRule });
 
 const passwordSchema = yup.object({ password: passwordRule });
-
-function EmailScreen({
- formik,
- error,
- isGoogleProcessing,
- onGoogleLogin,
-}: IEmailScreenProps) {
- return (
-  <Box
-   customClass="gopvp-email-form"
-   component="form"
-   onSubmit={formSubmitHandler(formik.handleSubmit)}
-  >
-   <Input
-    id="email"
-    name="email"
-    type="email"
-    label={emailText}
-    placeholder={enterEmailText}
-    value={formik.values.email}
-    onChange={formik.handleChange}
-    onBlur={formik.handleBlur}
-    disabled={formik.isSubmitting}
-    isError={(formik.touched.email && !!formik.errors.email) || !!error}
-    helperText={
-     (formik.touched.email && formik.errors.email) || error || undefined
-    }
-    customClass="form-input"
-    fullWidth
-   />
-
-   <Button
-    type="submit"
-    variant="contained"
-    fullWidth
-    endIcon="arrowForward"
-    customClass="auth-submit-btn auth-submit-btn-arrow"
-    disabled={!formik.dirty || formik.isSubmitting}
-    isLoading={formik.isSubmitting}
-   >
-    {nextText}
-   </Button>
-
-   <Box customClass="auth-divider">
-    <Text component="span">{orText}</Text>
-   </Box>
-
-   <Box customClass="social-stack">
-    <Button
-     type="button"
-     startIcon="google"
-     variant="outlined"
-     fullWidth
-     customClass="auth-google-btn"
-     onClick={onGoogleLogin}
-     disabled={isGoogleProcessing}
-    >
-     {continueWithGoogleText}
-    </Button>
-   </Box>
-  </Box>
- );
-}
-
-function PasswordScreen({
- verifiedEmail,
- verifiedUsername,
- formik,
- error,
- onChangeEmail,
-}: IPasswordScreenProps) {
- const initials = verifiedUsername
-  .trim()
-  .split(/\s+/)
-  .map((part) => part.charAt(0))
-  .join("")
-  .slice(0, 2)
-  .toUpperCase();
-
- return (
-  <Box
-   customClass="gopvp-login-form auth-password-stage"
-   component="form"
-   onSubmit={formSubmitHandler(formik.handleSubmit)}
-  >
-   <Box customClass="auth-account-card">
-    <CustomAvatar letter={initials} customClass="md neutral" />
-    <Box customClass="auth-account-info">
-     <Text customClass="auth-account-name">{verifiedUsername}</Text>
-     <Text customClass="auth-account-email">{verifiedEmail}</Text>
-    </Box>
-    <Button
-     type="button"
-     size="small"
-     variant="outlined"
-     startIcon="edit"
-     customClass="auth-change-btn"
-     onClick={onChangeEmail}
-    >
-     {changeText}
-    </Button>
-   </Box>
-
-   <Input
-    id="password"
-    name="password"
-    type="password"
-    label={passwordText}
-    placeholder={enterPasswordText}
-    value={formik.values.password}
-    onChange={formik.handleChange}
-    onBlur={formik.handleBlur}
-    disabled={formik.isSubmitting}
-    isError={(formik.touched.password && !!formik.errors.password) || !!error}
-    helperText={
-     (formik.touched.password && formik.errors.password) || error || undefined
-    }
-    customClass="form-input"
-    fullWidth
-   />
-
-   <Box customClass="auth-actions">
-    <Button
-     type="submit"
-     variant="contained"
-     fullWidth
-     endIcon="arrowForward"
-     customClass="auth-submit-btn auth-submit-btn-arrow"
-     disabled={!formik.dirty || formik.isSubmitting}
-     isLoading={formik.isSubmitting}
-    >
-     {loginText}
-    </Button>
-   </Box>
-
-   {/* <Text customClass="auth-forgot-row">
-    {forgotYourPasswordText}{" "}
-    <NavLink to="/forgot-password" className="auth-forgot-link">
-     {resetNowText}
-    </NavLink>
-   </Text> */}
-  </Box>
- );
-}
 
 // function WaitingApprovalScreen({ onBack }: IWaitingApprovalScreenProps) {
 //  return (
