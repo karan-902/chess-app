@@ -14,14 +14,14 @@ import {
  bestStreakText,
 } from "@gopvp/app/src/constants/message";
 import type { ILeaderboardPlayerResponse } from "@gopvp/common/src/types/response";
-import type { ILeaderboardPlayerModalProps } from "@gopvp/common/src/types/component";
+import type { IPlayerRowModalProps } from "@gopvp/common/src/types/component";
 import { PLAYER_STATS_SKELETON_ROWS } from "@gopvp/app/src/constants/limit";
 import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
 
-export default function LeaderboardPlayerModal({
+export default function PlayerRowModal({
  playerId,
  onClose,
-}: ILeaderboardPlayerModalProps) {
+}: IPlayerRowModalProps) {
  const { game } = useGame();
  const [stats, setStats] = useState<ILeaderboardPlayerResponse | null>(null);
 

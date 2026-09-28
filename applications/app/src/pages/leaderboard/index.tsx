@@ -8,7 +8,7 @@ import FilterDropdown from "@gopvp/app/src/components/common/FilterDropdown";
 import EmptyState from "@gopvp/app/src/components/common/EmptyState";
 import LbRowSkeleton from "@gopvp/app/src/components/common/LbRowSkeleton";
 import VirtualList from "@gopvp/common/src/components/VirtualList/VirtualList";
-import LeaderboardPlayerModal from "@gopvp/app/src/pages/leaderboard/PlayerRowModal";
+import PlayerRowModal from "@gopvp/app/src/pages/leaderboard/PlayerRowModal";
 import { useLeaderboard } from "@gopvp/app/src/hooks/useLeaderboard";
 import { useReduxSelector } from "@gopvp/app/src/redux/hooks";
 import { formatAmount, shortenUsername } from "@gopvp/common/src/util/format";
@@ -140,10 +140,7 @@ export default function Leaderboard() {
      />
     </Box>
    )}
-   <LeaderboardPlayerModal
-    playerId={selectedPlayerId}
-    onClose={closePlayerModal}
-   />
+   <PlayerRowModal playerId={selectedPlayerId} onClose={closePlayerModal} />
   </Box>
  );
 }

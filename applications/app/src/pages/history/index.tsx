@@ -33,7 +33,6 @@ import {
  noGamesYetText,
  globalActivityEmptyText,
  vsText,
- chessText,
  bestStreakText,
  winsText,
  grossIncomeText,
@@ -161,6 +160,7 @@ function MatchList({
 }
 
 export default function MyMatches() {
+ const { gameLabel } = useGame();
  const [searchParams, setSearchParams] = useSearchParams();
  const tabParam = searchParams.get("tab");
  const [subtab, setSubtabState] = useState<MatchesSubtab>(
@@ -243,7 +243,7 @@ export default function MyMatches() {
     <Box customClass="matches-stats">
      <Box customClass="matches-stats-head">
       <Text component="h3" customClass="matches-stats-title">
-       {chessText}
+       {gameLabel}
       </Text>
      </Box>
      <StatList

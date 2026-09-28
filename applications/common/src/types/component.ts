@@ -92,7 +92,7 @@ export interface IEditProfileDrawerProps {
  session: ILoginResponse;
 }
 
-export interface ILeaderboardPlayerModalProps {
+export interface IPlayerRowModalProps {
  playerId: string | null;
  onClose: () => void;
 }

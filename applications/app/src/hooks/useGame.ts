@@ -4,5 +4,10 @@ import { GAMES, type GameSlug } from "@gopvp/app/src/config/game";
 
 export function useGame() {
  const game = useParams().game as GameSlug;
- return { game, routes: getGameRoutes(game), gameModule: GAMES[game].module };
+ return {
+  game,
+  routes: getGameRoutes(game),
+  gameLabel: GAMES[game].label,
+  gameModule: GAMES[game].module,
+ };
 }
