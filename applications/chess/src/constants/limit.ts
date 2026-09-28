@@ -1,0 +1,4 @@
+export const COMPUTER_MOVE_DELAY_MS = 2500;
+export const BOARD_ENTRANCE_WAVE_MS = 160;
+export const BOARD_ENTRANCE_WAVE_COUNT = 4;
+export const BOARD_ENTRANCE_LANDING_MS = 600;

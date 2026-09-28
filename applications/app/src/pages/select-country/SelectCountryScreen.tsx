@@ -10,7 +10,7 @@ import {
  showApiErrorToast,
 } from "@gopvp/common/src/util/api";
 import sessionService from "@gopvp/common/src/util/sessionService";
-import { COUNTRY_OPTIONS } from "@gopvp/app/src/constants/config";
+import { COUNTRY_OPTIONS } from "@gopvp/app/src/constants/option";
 import type { IUpdateProfileBody } from "@gopvp/common/src/types/payload";
 import type {
  ILoginResponse,
@@ -24,7 +24,8 @@ import {
  countryText,
  selectCountryText,
  searchCountryText,
-} from "@gopvp/app/src/constants/messages";
+} from "@gopvp/app/src/constants/message";
+import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
 
 const schema = yup.object({
  country: yup.string().required(countryRequiredText),
@@ -42,7 +43,7 @@ export default function SelectCountryScreen({
     const updated = await callAPIInterface<
      IProfileResponse,
      IUpdateProfileBody
-    >("PATCH", "/profile", { country: values.country });
+    >("PATCH", ENDPOINTS.PROFILE, { country: values.country });
     await sessionService.updateSession<ILoginResponse>(updated);
     onSelected?.();
    } catch (err) {

@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { IGameResponse } from "@gopvp/common/src/types/response";
-import type { GameSlug } from "@gopvp/app/src/constants/config";
+import type { GameSlug } from "@gopvp/app/src/config/game";
 
 export interface IGameState {
  enteredGame: GameSlug | null;

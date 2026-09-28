@@ -27,12 +27,14 @@ import {
  enterDestinationText,
  withdrawalCompletedText,
  enterAmountText,
+} from "@gopvp/app/src/constants/message";
+import {
  MIN_TRANSACTION_USD,
-} from "@gopvp/app/src/constants/messages";
+ MAX_AMOUNT_DIGITS,
+} from "@gopvp/app/src/constants/limit";
 import CustomModal from "@gopvp/common/src/components/Modal/Modal";
 
 type Stage = "amount" | "success";
-const MAX_AMOUNT_DIGITS = 2;
 
 export default function WithdrawModal() {
  const dispatch = useReduxDispatch();

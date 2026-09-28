@@ -19,7 +19,7 @@ import {
  formatAmount,
 } from "@gopvp/common/src/util/format";
 import { formatMatchDate } from "@gopvp/app/src/utils";
-import { MATCH_RESULT_OUTCOMES } from "@gopvp/common/src/constants/config";
+import { MATCH_RESULT_OUTCOMES } from "@gopvp/common/src/constants/mapper";
 import type { IMatchHistoryItem } from "@gopvp/common/src/types/response";
 import type {
  IMatchListProps,
@@ -27,9 +27,6 @@ import type {
 } from "@gopvp/common/src/types/component";
 import type { IMatchRowProps } from "@gopvp/app/src/types/component";
 import {
- myResultsText,
- worldwideText,
- myStatsText,
  welcomeText,
  makeFirstMoveText,
  noDataFoundText,
@@ -40,17 +37,16 @@ import {
  bestStreakText,
  winsText,
  grossIncomeText,
- matchesStatsFallback,
  currentStreakText,
-} from "@gopvp/app/src/constants/messages";
-import { youText, scoreText } from "@gopvp/common/src/constants/messages";
-const HISTORY_SKELETON_ROWS = 15;
-const MATCHES_SUBTAB_OPTIONS: MatchesSubtab[] = ["history", "stats", "global"];
-const MATCHES_SUBTAB_LABELS: Record<MatchesSubtab, string> = {
- history: myResultsText,
- stats: myStatsText,
- global: worldwideText,
-};
+} from "@gopvp/app/src/constants/message";
+import {
+ MATCHES_STATS_FALLBACK,
+ HISTORY_SKELETON_ROWS,
+ MATCH_STATS_SKELETON_ROWS,
+} from "@gopvp/app/src/constants/limit";
+import { youText, scoreText } from "@gopvp/common/src/constants/message";
+import { MATCHES_SUBTAB_OPTIONS } from "@gopvp/app/src/constants/option";
+import { MATCHES_SUBTAB_LABELS } from "@gopvp/app/src/constants/label";
 
 function MatchRow({
  outcome,
@@ -121,10 +117,8 @@ function historySkeletonRows() {
  ));
 }
 
-const STATS_SKELETON_ROWS = 5;
-
 function statsSkeletonRows() {
- return Array.from({ length: STATS_SKELETON_ROWS }, (_, index) => (
+ return Array.from({ length: MATCH_STATS_SKELETON_ROWS }, (_, index) => (
   <StatRowSkeleton key={index} />
  ));
 }
@@ -265,23 +259,23 @@ export default function MyMatches() {
        : [
           {
            label: scoreText,
-           value: Math.round(stats?.score ?? matchesStatsFallback),
+           value: Math.round(stats?.score ?? MATCHES_STATS_FALLBACK),
           },
           {
            label: currentStreakText,
-           value: stats?.current_streak ?? matchesStatsFallback,
+           value: stats?.current_streak ?? MATCHES_STATS_FALLBACK,
           },
           {
            label: bestStreakText,
-           value: stats?.best_streak ?? matchesStatsFallback,
+           value: stats?.best_streak ?? MATCHES_STATS_FALLBACK,
           },
           {
            label: winsText,
-           value: stats?.wins ?? matchesStatsFallback,
+           value: stats?.wins ?? MATCHES_STATS_FALLBACK,
           },
           {
            label: grossIncomeText,
-           value: formatAmount(stats?.gross_income ?? matchesStatsFallback),
+           value: formatAmount(stats?.gross_income ?? MATCHES_STATS_FALLBACK),
           },
          ].map(({ label, value }) => (
           <Box key={label} customClass="stat-row">

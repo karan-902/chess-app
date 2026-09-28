@@ -13,7 +13,7 @@ import Profile from "@gopvp/app/src/pages/profile";
 import GameRoute from "@gopvp/app/src/container/GameRoute";
 import PlayPage from "@gopvp/app/src/pages/play/PlayPage";
 import EnteredGameRedirect from "@gopvp/app/src/container/EnteredGameRedirect";
-import { GAME_PAGES } from "@gopvp/app/src/constants/config";
+import { GAME_PAGES, ROUTES } from "@gopvp/app/src/constants/route";
 
 export const router = createBrowserRouter([
  {
@@ -22,11 +22,11 @@ export const router = createBrowserRouter([
    {
     element: <PublicRoute />,
     children: [
-     { path: "/login", element: <Login /> },
-     { path: "/register", element: <Register /> },
+     { path: ROUTES.LOGIN, element: <Login /> },
+     { path: ROUTES.REGISTER, element: <Register /> },
     ],
    },
-   // { path: "/approve-device", element: <ApproveDevice /> },
+   // { path: ROUTES.APPROVE_DEVICE, element: <ApproveDevice /> },
    {
     element: <PrivateRoute />,
     children: [
@@ -41,8 +41,8 @@ export const router = createBrowserRouter([
        { path: GAME_PAGES.RULES, element: <Rules /> },
       ],
      },
-     { path: "/wallet", element: <Wallet /> },
-     { path: "/profile", element: <Profile /> },
+     { path: ROUTES.WALLET, element: <Wallet /> },
+     { path: ROUTES.PROFILE, element: <Profile /> },
      { index: true, element: <EnteredGameRedirect /> },
      { path: "*", element: <EnteredGameRedirect /> },
     ],

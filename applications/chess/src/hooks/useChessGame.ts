@@ -3,16 +3,12 @@ import { Chess } from "chess.js";
 import type { Square } from "chess.js";
 import type { MoveRecord } from "@gopvp/chess/src/types/index";
 import { playSound, getMoveSound } from "@gopvp/chess/src/lib/sounds";
+import {
+ CAPTURE_ORDER,
+ STARTING_COUNTS,
+ PIECE_VALUES,
+} from "@gopvp/chess/src/constants/board";
 
-export const CAPTURE_ORDER = ["p", "n", "b", "r", "q"] as const;
-const STARTING_COUNTS: Record<string, number> = {
- p: 8,
- n: 2,
- b: 2,
- r: 2,
- q: 1,
-};
-const PIECE_VALUES: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9 };
 const positionKey = (fen: string) => fen.split(" ").slice(0, 4).join(" ");
 
 export interface ICapturedPieces {

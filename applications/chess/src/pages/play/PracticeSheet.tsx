@@ -3,24 +3,22 @@ import Box from "@gopvp/common/src/components/Box/Box";
 import Button from "@gopvp/common/src/components/Button/Button";
 import CustomDrawer from "@gopvp/common/src/components/Drawer/Drawer";
 import ChipSelect from "@gopvp/common/src/components/ChipSelect/ChipSelect";
-import { TIME_SECONDS } from "@gopvp/chess/src/constants";
-import { CATEGORY_META } from "@gopvp/chess/src/constants/config";
-import type { Difficulty } from "@gopvp/chess/src/types/component";
-import type { GameCategory } from "@gopvp/chess/src/types/index";
-import type { IPracticeSheetProps } from "@gopvp/chess/src/types/component";
-import { playText, cancelText } from "@gopvp/common/src/constants/messages";
+import { TIME_SECONDS } from "@gopvp/chess/src/config/timeControl";
 import {
- difficultyText,
- minutesText,
-} from "@gopvp/chess/src/constants/messages";
-
-const PRACTICE_DIFFICULTIES: Difficulty[] = ["easy", "medium", "hard"];
-const CATEGORY_ORDER: GameCategory[] = [
- "BULLET",
- "BLITZ",
- "RAPID",
- "CLASSICAL",
-];
+ CATEGORY_LABELS,
+ DIFFICULTY_LABELS,
+} from "@gopvp/chess/src/constants/label";
+import type {
+ Difficulty,
+ IPracticeSheetProps,
+} from "@gopvp/chess/src/types/component";
+import type { GameCategory } from "@gopvp/chess/src/types/index";
+import { playText, cancelText } from "@gopvp/common/src/constants/message";
+import { minutesText } from "@gopvp/chess/src/constants/message";
+import {
+ PRACTICE_DIFFICULTIES,
+ CATEGORY_ORDER,
+} from "@gopvp/chess/src/constants/option";
 
 export default function PracticeSheet({
  open,
@@ -43,14 +41,14 @@ export default function PracticeSheet({
      options={PRACTICE_DIFFICULTIES}
      value={difficulty}
      onChange={setDifficulty}
-     label={(d) => difficultyText[d]}
+     label={(d) => DIFFICULTY_LABELS[d]}
      customClass="segment compact"
     />
     <ChipSelect
      options={CATEGORY_ORDER}
      value={timeControl}
      onChange={setTimeControl}
-     label={(c) => CATEGORY_META[c]?.label}
+     label={(c) => CATEGORY_LABELS[c]}
      subLabel={(c) => minutesText(TIME_SECONDS[c] / 60)}
      customClass="segment category-select"
     />

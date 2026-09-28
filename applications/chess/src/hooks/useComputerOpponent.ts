@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import type { GameMode } from "@gopvp/chess/src/types/component";
-
-const COMPUTER_MOVE_DELAY_MS = 2500;
+import { COMPUTER_MOVE_DELAY_MS } from "@gopvp/chess/src/constants/limit";
 
 interface IProps {
  mode: GameMode;

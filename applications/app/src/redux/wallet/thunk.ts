@@ -9,6 +9,7 @@ import {
  setWalletLoading,
 } from "@gopvp/app/src/redux/wallet/slice";
 import type { IBalanceResponse } from "@gopvp/common/src/types/response";
+import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
 
 export const fetchWalletBalance = createAsyncThunk(
  "wallet/fetchWalletBalance",
@@ -16,7 +17,7 @@ export const fetchWalletBalance = createAsyncThunk(
   try {
    const res = await callAPIInterface<IBalanceResponse | null, undefined>(
     "GET",
-    "/wallet/balance",
+    ENDPOINTS.WALLET_BALANCE,
    );
    if (res) dispatch(setWalletBalance(res));
    else dispatch(setWalletLoading(false));

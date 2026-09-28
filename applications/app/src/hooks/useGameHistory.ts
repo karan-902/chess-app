@@ -10,17 +10,19 @@ import type {
 } from "@gopvp/common/src/types/response";
 import { useReduxSelector } from "@gopvp/app/src/redux/hooks";
 import { useGame } from "@gopvp/app/src/hooks/useGame";
-
-const RETRY_ATTEMPTS = 2;
-const RETRY_DELAY_MS = 1000;
+import {
+ MATCH_HISTORY_RETRY_ATTEMPTS,
+ MATCH_HISTORY_RETRY_DELAY_MS,
+} from "@gopvp/app/src/constants/limit";
+import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
 
 async function withRetry<T>(fn: () => Promise<T>): Promise<T> {
  for (let attempt = 0; ; attempt++) {
   try {
    return await fn();
   } catch (err) {
-   if (attempt >= RETRY_ATTEMPTS) throw err;
-   await new Promise((r) => setTimeout(r, RETRY_DELAY_MS));
+   if (attempt >= MATCH_HISTORY_RETRY_ATTEMPTS) throw err;
+   await new Promise((r) => setTimeout(r, MATCH_HISTORY_RETRY_DELAY_MS));
   }
  }
 }
@@ -64,7 +66,7 @@ export function useGameHistory(
     const res = await withRetry(() =>
      callAPIInterface<IListResponse<IMatchHistoryItem> | null, undefined>(
       "GET",
-      `/matches?game=${game}${type === "worldwide" ? "&scope=worldwide" : ""}${cursor}`,
+      `${ENDPOINTS.MATCHES}?game=${game}${type === "worldwide" ? "&scope=worldwide" : ""}${cursor}`,
      ),
     );
     if (activeTypeRef.current !== requestType) return;
@@ -103,7 +105,7 @@ export function useGameHistory(
      await withRetry(() =>
       callAPIInterface<ILeaderboardPlayerResponse, undefined>(
        "GET",
-       `/leaderboard/${session?.id}?game=${game}`,
+       `${ENDPOINTS.LEADERBOARD}/${session?.id}?game=${game}`,
       ),
      ),
     );

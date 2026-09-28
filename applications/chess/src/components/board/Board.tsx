@@ -21,6 +21,25 @@ import Box from "@gopvp/common/src/components/Box/Box";
 import PieceIcon from "@gopvp/chess/src/components/board/PieceIcon";
 import { playSound } from "@gopvp/chess/src/lib/sounds";
 import "./board.scss";
+import {
+ FILES,
+ RANKS,
+ FILES_FLIP,
+ RANKS_FLIP,
+ PIECE_LETTER,
+} from "@gopvp/chess/src/constants/board";
+import {
+ LIGHT_SQUARE_COLOR,
+ DARK_SQUARE_COLOR,
+ CHECK_SQUARE_GRADIENT,
+ STALEMATE_SQUARE_GRADIENT,
+ ANNOTATION_COLORS,
+} from "@gopvp/chess/src/constants/color";
+import {
+ BOARD_ENTRANCE_WAVE_MS,
+ BOARD_ENTRANCE_WAVE_COUNT,
+ BOARD_ENTRANCE_LANDING_MS,
+} from "@gopvp/chess/src/constants/limit";
 
 interface IChessBoardProps {
  fen: string;
@@ -40,13 +59,6 @@ interface IChessBoardProps {
  draggableColor?: "w" | "b";
 }
 
-const ANNOTATION_COLORS: Record<string, string> = {
- plain: "#15c60c",
- shift: "#e0341f",
- alt: "#1a5fd6",
- ctrl: "#e8a33d",
-};
-
 function colorKeyFromEvent(e: {
  shiftKey: boolean;
  altKey: boolean;
@@ -61,23 +73,6 @@ function colorKeyFromEvent(e: {
 
 type Arrow = { from: string; to: string; colorKey: string };
 type Highlight = { square: string; colorKey: string };
-
-const LIGHT_SQ = "#c9b48a";
-const DARK_SQ = "#7a6440";
-
-const RANKS = ["8", "7", "6", "5", "4", "3", "2", "1"];
-const FILES = ["a", "b", "c", "d", "e", "f", "g", "h"];
-const RANKS_FLIP = ["1", "2", "3", "4", "5", "6", "7", "8"];
-const FILES_FLIP = ["h", "g", "f", "e", "d", "c", "b", "a"];
-
-const PIECE_LETTER: Record<string, string> = {
- p: "P",
- n: "N",
- b: "B",
- r: "R",
- q: "Q",
- k: "K",
-};
 
 function boardFromFen(fen: string): Record<string, string> {
  const placement = fen.split(" ")[0] ?? "";
@@ -176,10 +171,6 @@ function DraggablePiece({
  );
 }
 
-const ENTRANCE_WAVE_MS = 160;
-const ENTRANCE_WAVE_COUNT = 4;
-const ENTRANCE_LANDING_MS = 600;
-
 export default function Board({
  fen,
  selectedSquare,
@@ -277,17 +268,23 @@ export default function Board({
  useEffect(() => {
   if (!entranceGhosts) return;
   const timers: ReturnType<typeof setTimeout>[] = [];
-  for (let w = 0; w < ENTRANCE_WAVE_COUNT; w++) {
-   const launchAt = 150 + w * ENTRANCE_WAVE_MS;
+  for (let w = 0; w < BOARD_ENTRANCE_WAVE_COUNT; w++) {
+   const launchAt = 150 + w * BOARD_ENTRANCE_WAVE_MS;
    timers.push(setTimeout(() => setLandedWaves(w + 1), launchAt));
    timers.push(
-    setTimeout(() => playSound("move", 0.4), launchAt + ENTRANCE_LANDING_MS),
+    setTimeout(
+     () => playSound("move", 0.4),
+     launchAt + BOARD_ENTRANCE_LANDING_MS,
+    ),
    );
   }
   timers.push(
    setTimeout(
     () => setEntranceGhosts(null),
-    150 + ENTRANCE_WAVE_COUNT * ENTRANCE_WAVE_MS + ENTRANCE_LANDING_MS + 100,
+    150 +
+     BOARD_ENTRANCE_WAVE_COUNT * BOARD_ENTRANCE_WAVE_MS +
+     BOARD_ENTRANCE_LANDING_MS +
+     100,
    ),
   );
   return () => timers.forEach(clearTimeout);
@@ -552,11 +549,11 @@ export default function Board({
        const isFlash = flashSquare === square;
        const isPremoveQueued = premoveSquares.includes(square);
 
-       const bg = isLight ? LIGHT_SQ : DARK_SQ;
+       const bg = isLight ? LIGHT_SQUARE_COLOR : DARK_SQUARE_COLOR;
        const squareBg = isCheck
-        ? "radial-gradient(circle, #ff0000 0%, #a00000 100%)"
+        ? CHECK_SQUARE_GRADIENT
         : isStalemate
-          ? "radial-gradient(circle, #f7931a 0%, #b3650f 100%)"
+          ? STALEMATE_SQUARE_GRADIENT
           : bg;
 
        return (
@@ -727,7 +724,7 @@ export default function Board({
          y: `${(landed ? targetRow : offRow) * 100}%`,
         }}
         transition={{
-         duration: ENTRANCE_LANDING_MS / 1000,
+         duration: BOARD_ENTRANCE_LANDING_MS / 1000,
          ease: [0.4, 0, 0.2, 1],
         }}
        >

@@ -26,6 +26,8 @@ import type {
  IActiveGameEvent,
  IGameStateBaseResponse,
 } from "@gopvp/common/src/types/response";
+import { ROUTES } from "@gopvp/app/src/constants/route";
+import { SOCKET_EVENTS } from "@gopvp/common/src/constants/event";
 
 interface ISocketContext {
  socket: Socket | null;
@@ -82,7 +84,7 @@ export function SocketProvider({ children }: { children: ReactNode }) {
   const onSessionTerminated = async () => {
    disconnectSocket();
    await sessionService.deleteSession();
-   navigateTo("/login", { replace: true });
+   navigateTo(ROUTES.LOGIN, { replace: true });
   };
 
   const onActiveGame = async (data: IActiveGameEvent) => {
@@ -103,16 +105,16 @@ export function SocketProvider({ children }: { children: ReactNode }) {
    }
   };
 
-  sock.on("connect", onConnect);
-  sock.on("game:active", onActiveGame);
-  sock.on("connect_error", onConnectError);
-  sock.on("session:replaced", onSessionTerminated);
+  sock.on(SOCKET_EVENTS.CONNECT, onConnect);
+  sock.on(SOCKET_EVENTS.GAME_ACTIVE, onActiveGame);
+  sock.on(SOCKET_EVENTS.CONNECT_ERROR, onConnectError);
+  sock.on(SOCKET_EVENTS.SESSION_REPLACED, onSessionTerminated);
 
   return () => {
-   sock.off("connect", onConnect);
-   sock.off("game:active", onActiveGame);
-   sock.off("connect_error", onConnectError);
-   sock.off("session:replaced", onSessionTerminated);
+   sock.off(SOCKET_EVENTS.CONNECT, onConnect);
+   sock.off(SOCKET_EVENTS.GAME_ACTIVE, onActiveGame);
+   sock.off(SOCKET_EVENTS.CONNECT_ERROR, onConnectError);
+   sock.off(SOCKET_EVENTS.SESSION_REPLACED, onSessionTerminated);
   };
  }, [isLoggedIn, session?.access_token, isGameReady]);
 

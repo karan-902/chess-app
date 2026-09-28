@@ -8,14 +8,15 @@ import { showAckErrorToast } from "@gopvp/common/src/util/api";
 import { buildMatchUrl } from "@gopvp/app/src/utils";
 import { useGame } from "@gopvp/app/src/hooks/useGame";
 import { useCountdown } from "@gopvp/common/src/hooks/useCountdown";
-import { POOL_TIMEOUT_SECONDS } from "@gopvp/app/src/constants/config";
-import { noOpponentFoundText } from "@gopvp/app/src/constants/messages";
+import { POOL_TIMEOUT_SECONDS } from "@gopvp/app/src/constants/limit";
+import { noOpponentFoundText } from "@gopvp/app/src/constants/message";
 import type {
  IPoolResponse,
  IMatchmakingResponse,
  IPoolMatchedEvent,
  ISocketAckError,
 } from "@gopvp/common/src/types/response";
+import { SOCKET_EVENTS } from "@gopvp/common/src/constants/event";
 
 export type MatchmakingStatus = "idle" | "joining" | "queued" | "found";
 
@@ -38,7 +39,7 @@ export function useMatchmaking() {
  }, []);
 
  const leaveQueue = useCallback(() => {
-  if (poolRef.current) getSocket()?.emit("pool:leave", () => {});
+  if (poolRef.current) getSocket()?.emit(SOCKET_EVENTS.POOL_LEAVE, () => {});
   resetStatus();
  }, [resetStatus]);
 
@@ -55,7 +56,7 @@ export function useMatchmaking() {
  const emitPoolJoin = useCallback(
   (pool: IPoolResponse) => {
    getSocket()?.emit(
-    "pool:join",
+    SOCKET_EVENTS.POOL_JOIN,
     { game, bet: pool.bet, time: pool.time },
     (err: ISocketAckError | null, data: IMatchmakingResponse) => {
      if (err) {
@@ -107,9 +108,9 @@ export function useMatchmaking() {
    if (poolRef.current) emitPoolJoin(poolRef.current);
   };
 
-  socket.on("matched", onMatched);
-  socket.on("pool:timeout", onPoolTimeout);
-  socket.on("connect", onReconnect);
+  socket.on(SOCKET_EVENTS.MATCHED, onMatched);
+  socket.on(SOCKET_EVENTS.POOL_TIMEOUT, onPoolTimeout);
+  socket.on(SOCKET_EVENTS.CONNECT, onReconnect);
   // socket.on("queue_joined", onQueueJoined);
   // socket.on("match_found", onMatchFound);
   // socket.on("queue_left", onQueueLeft);
@@ -117,15 +118,15 @@ export function useMatchmaking() {
   // socket.on("queue_timeout", onQueueTimeout);
 
   return () => {
-   socket.off("matched", onMatched);
-   socket.off("pool:timeout", onPoolTimeout);
-   socket.off("connect", onReconnect);
+   socket.off(SOCKET_EVENTS.MATCHED, onMatched);
+   socket.off(SOCKET_EVENTS.POOL_TIMEOUT, onPoolTimeout);
+   socket.off(SOCKET_EVENTS.CONNECT, onReconnect);
   };
  }, [ctxSocket, dispatch, openMatch, resetStatus, emitPoolJoin]);
 
  useEffect(
   () => () => {
-   if (poolRef.current) getSocket()?.emit("pool:leave", () => {});
+   if (poolRef.current) getSocket()?.emit(SOCKET_EVENTS.POOL_LEAVE, () => {});
   },
   [],
  );

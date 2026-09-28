@@ -18,11 +18,6 @@ export const loseAndForfeitText = (betAmount: number) =>
 export const loseTheGameText = "You'll lose the game.";
 export const previousMoveText = "Previous move";
 export const nextMoveText = "Next move";
-export const difficultyText = {
- easy: "Easy",
- medium: "Medium",
- hard: "Hard",
-};
 export const victoryText = "VICTORY";
 export const drawUpperText = "DRAW";
 export const defeatText = "DEFEAT";

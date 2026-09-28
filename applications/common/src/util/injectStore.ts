@@ -1,4 +1,5 @@
 import type { IToast } from "@gopvp/common/src/types/component";
+import { SHOW_TOAST_ACTION } from "@gopvp/common/src/constants/action";
 
 type TInjectedStore = {
  dispatch: (action: { type: string; payload?: unknown }) => unknown;
@@ -8,8 +9,6 @@ type TInjectedStore = {
 type TInjectedPersistor = {
  flush: () => Promise<unknown>;
 };
-
-const SHOW_TOAST_ACTION = "common/showToast";
 
 let injectedStore: TInjectedStore | null = null;
 let injectedPersistor: TInjectedPersistor | null = null;

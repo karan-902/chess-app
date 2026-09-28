@@ -2,7 +2,7 @@ import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
 import CustomModal from "@gopvp/common/src/components/Modal/Modal";
-import { ChessLogo } from "@gopvp/app/src/components/constants";
+import { ChessLogo } from "@gopvp/app/src/constants/icon";
 import type { IPoolConfirmSheetProps } from "@gopvp/app/src/types/component";
 import {
  secondsLeftText,
@@ -14,8 +14,8 @@ import {
  confirmYourMatchText,
  matchedOnConfirmText,
  findOpponentText,
-} from "@gopvp/app/src/constants/messages";
-import { cancelText } from "@gopvp/common/src/constants/messages";
+} from "@gopvp/app/src/constants/message";
+import { cancelText } from "@gopvp/common/src/constants/message";
 
 export default function PoolConfirmSheet({
  open,

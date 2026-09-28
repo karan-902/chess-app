@@ -1,5 +1,9 @@
 import { readStorage, writeStorage } from "@gopvp/common/src/util/storage";
 import type { IPvcSnapshot } from "@gopvp/chess/src/types/component";
+import {
+ GAME_FINISHED_KEY_PREFIX,
+ PVC_SNAPSHOT_KEY_PREFIX,
+} from "@gopvp/chess/src/constants/storageKey";
 
 function readSessionJson<T>(key: string): T | null {
  const raw = readStorage(sessionStorage, key);
@@ -11,13 +15,17 @@ function readSessionJson<T>(key: string): T | null {
 }
 
 export const markGameFinished = (id: string) =>
- writeStorage(sessionStorage, `gr_finished:${id}`, "1");
+ writeStorage(sessionStorage, `${GAME_FINISHED_KEY_PREFIX}${id}`, "1");
 export const isGameFinished = (id: string) =>
- readStorage(sessionStorage, `gr_finished:${id}`) === "1";
+ readStorage(sessionStorage, `${GAME_FINISHED_KEY_PREFIX}${id}`) === "1";
 
 export const savePvcSnapshot = (id: string, snapshot: IPvcSnapshot) =>
- writeStorage(sessionStorage, `pvc_snapshot:${id}`, JSON.stringify(snapshot));
+ writeStorage(
+  sessionStorage,
+  `${PVC_SNAPSHOT_KEY_PREFIX}${id}`,
+  JSON.stringify(snapshot),
+ );
 export const clearPvcSnapshot = (id: string) =>
- writeStorage(sessionStorage, `pvc_snapshot:${id}`, null);
+ writeStorage(sessionStorage, `${PVC_SNAPSHOT_KEY_PREFIX}${id}`, null);
 export const loadPvcSnapshot = (id: string) =>
- readSessionJson<IPvcSnapshot>(`pvc_snapshot:${id}`);
+ readSessionJson<IPvcSnapshot>(`${PVC_SNAPSHOT_KEY_PREFIX}${id}`);

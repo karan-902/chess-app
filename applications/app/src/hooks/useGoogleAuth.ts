@@ -8,6 +8,7 @@ import {
  hideLoader,
  showToast,
 } from "@gopvp/app/src/redux/common/slice";
+import { ROUTES } from "@gopvp/app/src/constants/route";
 
 // const CONFIRM_SWITCH_KEY = "ks_sso_confirm_device_switch";
 
@@ -37,7 +38,7 @@ export function useGoogleAuth(hint?: string) {
     //     setPendingApprovalToken(res.approval_token);
     //     return;
     // }
-    navigate("/");
+    navigate(ROUTES.HOME);
    } catch (err: any) {
     if (!err?.isNetworkError && err?.status !== 429 && err?.message) {
      dispatch(

@@ -1,12 +1,4 @@
-const SOUND_FILES = {
- move: "/sounds/move.wav",
- capture: "/sounds/capture.wav",
- castle: "/sounds/castle.mp3",
- check: "/sounds/check.mp3",
- promote: "/sounds/promote.mp3",
- "game-end": "/sounds/game-end.mp3",
-} as const;
-
+import { SOUND_FILES } from "@gopvp/chess/src/constants/asset";
 export type SoundName = keyof typeof SOUND_FILES;
 
 export async function playSound(name: SoundName, volume = 0.5): Promise<void> {

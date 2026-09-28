@@ -29,13 +29,14 @@ import {
  usernameRequiredText,
  usernameMinLengthText,
  usernameMaxLengthText,
- USERNAME_MAX_LENGTH,
  usernameText,
  saveChangesText,
  appearanceText,
  darkModeText,
-} from "@gopvp/app/src/constants/messages";
+} from "@gopvp/app/src/constants/message";
+import { USERNAME_MAX_LENGTH } from "@gopvp/app/src/constants/limit";
 import CustomModal from "@gopvp/common/src/components/Modal/Modal";
+import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
 
 const profileEditSchema = Yup.object({
  username: Yup.string()
@@ -68,7 +69,7 @@ function EditProfileDrawer({
     const updated = await callAPIInterface<
      IProfileResponse,
      IUpdateProfileBody
-    >("PATCH", "/profile", values);
+    >("PATCH", ENDPOINTS.PROFILE, values);
     await sessionService.updateSession<ILoginResponse>(updated);
     onClose();
    } catch (err) {
@@ -132,7 +133,7 @@ export default function Profile() {
     await sessionService.updateSession<ILoginResponse>(
      await callAPIInterface<Partial<ILoginResponse>, undefined>(
       "GET",
-      "/profile",
+      ENDPOINTS.PROFILE,
      ),
     );
    } catch (err) {

@@ -12,11 +12,9 @@ import { useWallet } from "@gopvp/app/src/hooks/useWallet";
 import { useWalletModal } from "@gopvp/app/src/context/WalletModalContext";
 import { speedLogo } from "@gopvp/common/src/components/images";
 import { formatAmount, formatTime } from "@gopvp/common/src/util/format";
-import {
- TRANSACTION_TYPE_ICONS,
- TRANSACTION_TYPE_DESCRIPTIONS,
- DEBIT_TRANSACTION_TYPES,
-} from "@gopvp/app/src/constants/config";
+import { TRANSACTION_TYPE_ICONS } from "@gopvp/app/src/constants/icon";
+import { TRANSACTION_TYPE_DESCRIPTIONS } from "@gopvp/app/src/constants/label";
+import { DEBIT_TRANSACTION_TYPES } from "@gopvp/app/src/constants/mapper";
 import type { ITransactionResponse } from "@gopvp/common/src/types/response";
 import {
  totalBalanceText,
@@ -29,7 +27,8 @@ import {
  poweredByText,
  todayText,
  yesterdayText,
-} from "@gopvp/app/src/constants/messages";
+} from "@gopvp/app/src/constants/message";
+import { TRANSACTIONS_SKELETON_ROWS } from "@gopvp/app/src/constants/limit";
 
 function dayLabel(ms: number): string {
  const date = dayjs(ms);
@@ -39,8 +38,6 @@ function dayLabel(ms: number): string {
  if (date.isSame(today.subtract(1, "day"), "day")) return yesterdayText;
  return date.format("D MMM YYYY").toUpperCase();
 }
-
-const TX_SKELETON_ITEMS = 12;
 
 type TWalletTimelineEntry =
  | { kind: "header"; id: string; label: string }
@@ -190,7 +187,7 @@ export default function Wallet() {
 
    {transactionsLoading ? (
     <Box customClass="wallet-timeline">
-     {Array.from({ length: TX_SKELETON_ITEMS }, (_, i) => (
+     {Array.from({ length: TRANSACTIONS_SKELETON_ROWS }, (_, i) => (
       <TxItemSkeleton key={i} />
      ))}
     </Box>

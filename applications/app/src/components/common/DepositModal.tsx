@@ -36,12 +36,19 @@ import {
  qrExpiredText,
  paymentReceivedText,
  depositsNotWithdrawableText,
+} from "@gopvp/app/src/constants/message";
+import {
  MAX_AMOUNT_DIGITS,
  MIN_TRANSACTION_USD,
  MAX_DEPOSIT_USD,
-} from "@gopvp/app/src/constants/messages";
-import { backText } from "@gopvp/common/src/constants/messages";
+} from "@gopvp/app/src/constants/limit";
+import { backText } from "@gopvp/common/src/constants/message";
 import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
+import {
+ QR_BACKGROUND_COLOR,
+ QR_FOREGROUND_COLOR,
+} from "@gopvp/app/src/constants/color";
+import { SOCKET_EVENTS } from "@gopvp/common/src/constants/event";
 
 type Stage = "amount" | "qr" | "success";
 
@@ -98,9 +105,9 @@ export default function DepositModal() {
   const onCompleted = (data: ITransactionCompletedEvent) => {
    if (data.type === "DEPOSIT") setStage("success");
   };
-  socket.on("transaction:completed", onCompleted);
+  socket.on(SOCKET_EVENTS.TRANSACTION_COMPLETED, onCompleted);
   return () => {
-   socket.off("transaction:completed", onCompleted);
+   socket.off(SOCKET_EVENTS.TRANSACTION_COMPLETED, onCompleted);
   };
  }, [stage, socket]);
 
@@ -257,8 +264,8 @@ export default function DepositModal() {
       <QRCodeSVG
        value={address ?? ""}
        size={300}
-       bgColor="#ffff"
-       fgColor="#000"
+       bgColor={QR_BACKGROUND_COLOR}
+       fgColor={QR_FOREGROUND_COLOR}
        marginSize={2}
        imageSettings={{
         src: qrLogo,

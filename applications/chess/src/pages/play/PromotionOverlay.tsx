@@ -3,21 +3,9 @@ import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
 import PieceIcon from "@gopvp/chess/src/components/board/PieceIcon";
 import type { IPromotionOverlayProps } from "@gopvp/chess/src/types/component";
-import {
- promotePawnText,
- queenText,
- rookText,
- bishopText,
- knightText,
-} from "@gopvp/chess/src/constants/messages";
-
-const PROMOTION_PIECES = ["q", "r", "b", "n"] as const;
-const PROMOTION_LABEL: Record<(typeof PROMOTION_PIECES)[number], string> = {
- q: queenText,
- r: rookText,
- b: bishopText,
- n: knightText,
-};
+import { promotePawnText } from "@gopvp/chess/src/constants/message";
+import { PROMOTION_PIECES } from "@gopvp/chess/src/constants/board";
+import { PROMOTION_LABELS } from "@gopvp/chess/src/constants/label";
 
 export default function PromotionOverlay({
  playerSide,
@@ -35,7 +23,7 @@ export default function PromotionOverlay({
        type="button"
        customClass="gr-promotion-btn"
        onClick={() => onSelect(piece)}
-       aria-label={PROMOTION_LABEL[piece]}
+       aria-label={PROMOTION_LABELS[piece]}
       >
        <PieceIcon
         code={`${playerSide}${piece.toUpperCase()}`}

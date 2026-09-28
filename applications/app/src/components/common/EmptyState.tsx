@@ -1,6 +1,6 @@
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
-import { ChessLogo } from "@gopvp/app/src/components/constants";
+import { ChessLogo } from "@gopvp/app/src/constants/icon";
 
 interface IEmptyStateProps {
  title?: string;

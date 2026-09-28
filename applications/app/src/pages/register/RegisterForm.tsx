@@ -20,7 +20,7 @@ import {
 import { useReduxDispatch } from "@gopvp/app/src/redux/hooks";
 import { login } from "@gopvp/app/src/redux/auth/thunk";
 import { showLoader, hideLoader } from "@gopvp/app/src/redux/common/slice";
-import { COUNTRY_OPTIONS } from "@gopvp/app/src/constants/config";
+import { COUNTRY_OPTIONS } from "@gopvp/app/src/constants/option";
 import type { IRegisterBody } from "@gopvp/common/src/types/payload";
 import type {
  IRegisterResponse,
@@ -46,11 +46,14 @@ import {
  countryText,
  registerText,
  selectCountryText,
+} from "@gopvp/app/src/constants/message";
+import {
  USERNAME_MAX_LENGTH,
-} from "@gopvp/app/src/constants/messages";
+ USERNAME_CHECK_DEBOUNCE_MS,
+} from "@gopvp/app/src/constants/limit";
 import type { IEmailFormScreenProps } from "@gopvp/common/src/types/component";
-
-const USERNAME_CHECK_DEBOUNCE_MS = 700;
+import { ROUTES } from "@gopvp/app/src/constants/route";
+import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
 
 const registerSchema = yup.object({
  username: yup
@@ -80,7 +83,7 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
    try {
     await callAPIInterface<IRegisterResponse, IRegisterBody>(
      "POST",
-     "/auth/register",
+     ENDPOINTS.REGISTER,
      {
       username: values.username,
       email: values.email,
@@ -115,7 +118,7 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
    try {
     const res = await callAPIInterface<IRandomNameResponse, undefined>(
      "GET",
-     "/auth/random-name",
+     ENDPOINTS.RANDOM_NAME,
     );
     setQuickNameSuggestions(res.usernames);
    } catch (err) {
@@ -148,7 +151,7 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
    try {
     const res = await callAPIInterface<IRandomNameResponse, undefined>(
      "GET",
-     `/auth/random-name?username=${encodeURIComponent(trimmed)}`,
+     `${ENDPOINTS.RANDOM_NAME}?username=${encodeURIComponent(trimmed)}`,
     );
     setUsernameSuggestions(res.usernames);
    } catch (err) {
@@ -377,7 +380,7 @@ export default function RegisterForm() {
   try {
    await dispatch(login({ email, password })).unwrap();
   } catch {
-   navigate("/login", { replace: true });
+   navigate(ROUTES.LOGIN, { replace: true });
   } finally {
    dispatch(hideLoader());
   }

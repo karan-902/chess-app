@@ -20,8 +20,9 @@ import {
  forfeitGameText,
  leavingForfeitsText,
  forfeitAndExitText,
-} from "@gopvp/app/src/constants/messages";
-import { keepPlayingText } from "@gopvp/common/src/constants/messages";
+} from "@gopvp/app/src/constants/message";
+import { keepPlayingText } from "@gopvp/common/src/constants/message";
+import { SOCKET_EVENTS } from "@gopvp/common/src/constants/event";
 
 export default function RejoinGameModal() {
  const dispatch = useReduxDispatch();
@@ -41,7 +42,7 @@ export default function RejoinGameModal() {
  const betAmount = formatAmount(activeGame.bet);
 
  const handleForfeit = () => {
-  socket?.emit("game:rejoin:declined", showAckErrorToast);
+  socket?.emit(SOCKET_EVENTS.GAME_REJOIN_DECLINED, showAckErrorToast);
   setConfirmingExit(false);
   dispatch(setActiveGame(null));
  };

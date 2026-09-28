@@ -1,10 +1,7 @@
 import dayjs from "dayjs";
-import { yesterdayText, justNowText } from "@gopvp/app/src/constants/messages";
-import {
- GAMES,
- GAME_PAGES,
- type GameSlug,
-} from "@gopvp/app/src/constants/config";
+import { yesterdayText, justNowText } from "@gopvp/app/src/constants/message";
+import { GAMES, type GameSlug } from "@gopvp/app/src/config/game";
+import { GAME_PAGES } from "@gopvp/app/src/constants/route";
 
 export function isGameSlug(value: string | undefined): value is GameSlug {
  return !!value && Object.prototype.hasOwnProperty.call(GAMES, value);

@@ -1,32 +1,32 @@
 import { createTheme, alpha } from "@mui/material";
 import {
- colorBg,
- colorSurface,
- colorSurfaceRaised,
- colorBorder,
- colorText,
- colorMuted,
- colorPrimary,
- colorPrimaryDark,
- colorPrimaryContrast,
- colorSecondary,
- colorError,
- colorSuccess,
- colorWarning,
- colorBgLight,
- colorSurfaceLight,
- colorSurfaceRaisedLight,
- colorBorderLight,
- colorTextLight,
- colorMutedLight,
- colorPrimaryLight,
- colorPrimaryDarkLight,
- colorPrimaryContrastLight,
- colorSecondaryLight,
- colorErrorLight,
- colorSuccessLight,
- colorWarningLight,
-} from "@gopvp/common/src/constants/colors";
+ COLOR_BG,
+ COLOR_SURFACE,
+ COLOR_SURFACE_RAISED,
+ COLOR_BORDER,
+ COLOR_TEXT,
+ COLOR_MUTED,
+ COLOR_PRIMARY,
+ COLOR_PRIMARY_DARK,
+ COLOR_PRIMARY_CONTRAST,
+ COLOR_SECONDARY,
+ COLOR_ERROR,
+ COLOR_SUCCESS,
+ COLOR_WARNING,
+ COLOR_BG_LIGHT,
+ COLOR_SURFACE_LIGHT,
+ COLOR_SURFACE_RAISED_LIGHT,
+ COLOR_BORDER_LIGHT,
+ COLOR_TEXT_LIGHT,
+ COLOR_MUTED_LIGHT,
+ COLOR_PRIMARY_LIGHT,
+ COLOR_PRIMARY_DARK_LIGHT,
+ COLOR_PRIMARY_CONTRAST_LIGHT,
+ COLOR_SECONDARY_LIGHT,
+ COLOR_ERROR_LIGHT,
+ COLOR_SUCCESS_LIGHT,
+ COLOR_WARNING_LIGHT,
+} from "@gopvp/common/src/constants/color";
 import type { ThemeMode } from "@gopvp/common/src/types/component";
 
 const fontFamily = '"Outfit-Regular", system-ui, sans-serif';
@@ -34,13 +34,15 @@ const fontFamily = '"Outfit-Regular", system-ui, sans-serif';
 export function getMuiTheme(mode: ThemeMode) {
  const isDark = mode === "dark";
 
- const primary = isDark ? colorPrimary : colorPrimaryLight;
- const primaryDark = isDark ? colorPrimaryDark : colorPrimaryDarkLight;
+ const primary = isDark ? COLOR_PRIMARY : COLOR_PRIMARY_LIGHT;
+ const primaryDark = isDark ? COLOR_PRIMARY_DARK : COLOR_PRIMARY_DARK_LIGHT;
  const primaryContrast = isDark
-  ? colorPrimaryContrast
-  : colorPrimaryContrastLight;
- const surfaceRaised = isDark ? colorSurfaceRaised : colorSurfaceRaisedLight;
- const border = isDark ? colorBorder : colorBorderLight;
+  ? COLOR_PRIMARY_CONTRAST
+  : COLOR_PRIMARY_CONTRAST_LIGHT;
+ const surfaceRaised = isDark
+  ? COLOR_SURFACE_RAISED
+  : COLOR_SURFACE_RAISED_LIGHT;
+ const border = isDark ? COLOR_BORDER : COLOR_BORDER_LIGHT;
 
  return createTheme({
   palette: {
@@ -51,19 +53,19 @@ export function getMuiTheme(mode: ThemeMode) {
     contrastText: primaryContrast,
    },
    secondary: {
-    main: isDark ? colorSecondary : colorSecondaryLight,
-    contrastText: isDark ? colorBg : "#ffffff",
+    main: isDark ? COLOR_SECONDARY : COLOR_SECONDARY_LIGHT,
+    contrastText: isDark ? COLOR_BG : "#ffffff",
    },
-   error: { main: isDark ? colorError : colorErrorLight },
-   success: { main: isDark ? colorSuccess : colorSuccessLight },
-   warning: { main: isDark ? colorWarning : colorWarningLight },
+   error: { main: isDark ? COLOR_ERROR : COLOR_ERROR_LIGHT },
+   success: { main: isDark ? COLOR_SUCCESS : COLOR_SUCCESS_LIGHT },
+   warning: { main: isDark ? COLOR_WARNING : COLOR_WARNING_LIGHT },
    background: {
-    default: isDark ? colorBg : colorBgLight,
-    paper: isDark ? colorSurface : colorSurfaceLight,
+    default: isDark ? COLOR_BG : COLOR_BG_LIGHT,
+    paper: isDark ? COLOR_SURFACE : COLOR_SURFACE_LIGHT,
    },
    text: {
-    primary: isDark ? colorText : colorTextLight,
-    secondary: isDark ? colorMuted : colorMutedLight,
+    primary: isDark ? COLOR_TEXT : COLOR_TEXT_LIGHT,
+    secondary: isDark ? COLOR_MUTED : COLOR_MUTED_LIGHT,
    },
    divider: border,
   },
@@ -117,7 +119,7 @@ export function getMuiTheme(mode: ThemeMode) {
    MuiMenu: {
     styleOverrides: {
      paper: {
-      backgroundColor: isDark ? colorSurface : colorSurfaceLight,
+      backgroundColor: isDark ? COLOR_SURFACE : COLOR_SURFACE_LIGHT,
       border: `1px solid ${border}`,
       borderRadius: 8,
      },
@@ -137,7 +139,7 @@ export function getMuiTheme(mode: ThemeMode) {
    MuiSwitch: {
     styleOverrides: {
      track: {
-      backgroundColor: alpha(isDark ? colorText : colorTextLight, 0.3),
+      backgroundColor: alpha(isDark ? COLOR_TEXT : COLOR_TEXT_LIGHT, 0.3),
      },
     },
    },

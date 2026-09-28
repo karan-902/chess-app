@@ -14,10 +14,14 @@ import { useReduxSelector } from "@gopvp/app/src/redux/hooks";
 import { formatAmount, shortenUsername } from "@gopvp/common/src/util/format";
 import {
  LEADERBOARD_SCOPES,
- LEADERBOARD_SCOPE_LABELS,
  LEADERBOARD_SORTS,
+ DEFAULT_LEADERBOARD_SCOPE,
+ DEFAULT_LEADERBOARD_SORT,
+} from "@gopvp/app/src/constants/option";
+import {
+ LEADERBOARD_SCOPE_LABELS,
  LEADERBOARD_SORT_LABELS,
-} from "@gopvp/app/src/constants/config";
+} from "@gopvp/app/src/constants/label";
 import type {
  LeaderboardScope,
  LeaderboardSort,
@@ -27,15 +31,12 @@ import {
  noDataFoundText,
  noRankedPlayersText,
  dashText,
-} from "@gopvp/app/src/constants/messages";
-import { youText } from "@gopvp/common/src/constants/messages";
-
-const LB_SKELETON_ROWS = 20;
-const DEFAULT_SCOPE: LeaderboardScope = "all";
-const DEFAULT_SORT: LeaderboardSort = "earnings";
+} from "@gopvp/app/src/constants/message";
+import { youText } from "@gopvp/common/src/constants/message";
+import { LEADERBOARD_SKELETON_ROWS } from "@gopvp/app/src/constants/limit";
 
 function lbSkeletonRows() {
- return Array.from({ length: LB_SKELETON_ROWS }, (_, index) => (
+ return Array.from({ length: LEADERBOARD_SKELETON_ROWS }, (_, index) => (
   <LbRowSkeleton key={index} />
  ));
 }
@@ -46,8 +47,10 @@ export default function Leaderboard() {
  const sortParam = searchParams.get("sort") as LeaderboardSort;
  const scope = LEADERBOARD_SCOPES.includes(scopeParam)
   ? scopeParam
-  : DEFAULT_SCOPE;
- const sort = LEADERBOARD_SORTS.includes(sortParam) ? sortParam : DEFAULT_SORT;
+  : DEFAULT_LEADERBOARD_SCOPE;
+ const sort = LEADERBOARD_SORTS.includes(sortParam)
+  ? sortParam
+  : DEFAULT_LEADERBOARD_SORT;
 
  const { players, loading, loadingMore, error, loadMore } = useLeaderboard(
   scope,

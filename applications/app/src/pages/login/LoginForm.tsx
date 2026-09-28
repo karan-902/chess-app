@@ -52,7 +52,9 @@ import {
  noAccountPromptText,
  signUpText,
  selectYourCountryText,
-} from "@gopvp/app/src/constants/messages";
+} from "@gopvp/app/src/constants/message";
+import { ROUTES } from "@gopvp/app/src/constants/route";
+import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
 
 const emailSchema = yup.object({
  email: yup.string().email(enterValidEmailText).required(emailRequiredText),
@@ -258,7 +260,7 @@ export default function LoginForm() {
    try {
     const res = await callAPIInterface<IVerifyUserResponse, IVerifyUserBody>(
      "POST",
-     "/auth/verify-user",
+     ENDPOINTS.VERIFY_USER,
      { email: values.email },
     );
 
@@ -368,7 +370,7 @@ export default function LoginForm() {
 
  const loginFooter = (
   <>
-   {noAccountPromptText} <NavLink to="/register">{signUpText}</NavLink>
+   {noAccountPromptText} <NavLink to={ROUTES.REGISTER}>{signUpText}</NavLink>
   </>
  );
 

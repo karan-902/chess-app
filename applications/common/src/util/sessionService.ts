@@ -2,10 +2,11 @@ import {
  getInjectedPersistor,
  getInjectedStore,
 } from "@gopvp/common/src/util/injectStore";
-
-const SET_SESSION_ACTION = "auth/setSession";
-const UPDATE_SESSION_ACTION = "auth/updateSession";
-const CLEAR_SESSION_ACTION = "auth/clearSession";
+import {
+ SET_SESSION_ACTION,
+ UPDATE_SESSION_ACTION,
+ CLEAR_SESSION_ACTION,
+} from "@gopvp/common/src/constants/action";
 
 const store = () => getInjectedStore()!;
 

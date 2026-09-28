@@ -36,15 +36,18 @@ import {
  copyCodeText,
  copiedExclaimText,
  roomText,
+} from "@gopvp/app/src/constants/message";
+import {
  MAX_AMOUNT_DIGITS,
-} from "@gopvp/app/src/constants/messages";
-import { cancelText } from "@gopvp/common/src/constants/messages";
+ DURATION_WHEEL_ITEM_HEIGHT,
+} from "@gopvp/app/src/constants/limit";
+import { cancelText } from "@gopvp/common/src/constants/message";
 import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
-
-const ROOM_TABS: RoomTab[] = ["create", "join"];
-const BET_CHIP_AMOUNTS = [10, 25, 50];
-const DURATION_MINUTES = Array.from({ length: 30 }, (_, i) => i + 1);
-const DURATION_WHEEL_ITEM_HEIGHT = 44.8;
+import {
+ ROOM_TABS,
+ BET_CHIP_AMOUNTS,
+ DURATION_MINUTES,
+} from "@gopvp/app/src/constants/option";
 
 function DurationWheel({ value, onChange }: IDurationWheelProps) {
  const listRef = useRef<HTMLDivElement>(null);

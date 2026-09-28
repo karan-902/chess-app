@@ -7,30 +7,23 @@ import sessionService from "@gopvp/common/src/util/sessionService";
 import { showToastMessage } from "@gopvp/common/src/util/injectStore";
 import { readStorage, writeStorage } from "@gopvp/common/src/util/storage";
 import { apiUrl } from "@gopvp/common/src/constants/env";
-import { somethingWentWrongText } from "@gopvp/common/src/constants/messages";
+import { somethingWentWrongText } from "@gopvp/common/src/constants/message";
 import type { IGenerateTokenBody } from "@gopvp/common/src/types/payload";
 import type {
  IGenerateTokenResponse,
  ILoginResponse,
  ISocketAckError,
 } from "@gopvp/common/src/types/response";
-
-const OPEN_API_ENDPOINTS = [
- "/auth/register",
- "/auth/login",
- "/auth/sso-login",
- "/auth/generate-token",
- "/auth/verify-user",
- // "/auth/sso-register",
- // "/device/approval-status",
-];
-const FINGERPRINT_KEY = "gopvp_fingerprint";
-export const LOGOUT_PATH = "/auth/logout";
+import {
+ ENDPOINTS,
+ OPEN_ENDPOINTS,
+} from "@gopvp/common/src/constants/endpoint";
+import { FINGERPRINT_STORAGE_KEY } from "@gopvp/common/src/constants/storageKey";
 
 let fingerprintPromise: Promise<string> | null = null;
 
 export function getDeviceFingerprint(): Promise<string> {
- const stored = readStorage(localStorage, FINGERPRINT_KEY);
+ const stored = readStorage(localStorage, FINGERPRINT_STORAGE_KEY);
  if (stored) return Promise.resolve(stored);
 
  if (!fingerprintPromise) {
@@ -39,7 +32,8 @@ export function getDeviceFingerprint(): Promise<string> {
     const FingerprintJS = await import("@fingerprintjs/fingerprintjs");
     const agent = await FingerprintJS.load();
     const { visitorId } = await agent.get();
-    if (visitorId) writeStorage(localStorage, FINGERPRINT_KEY, visitorId);
+    if (visitorId)
+     writeStorage(localStorage, FINGERPRINT_STORAGE_KEY, visitorId);
     return visitorId;
    } catch {
     return "";
@@ -60,7 +54,7 @@ export async function generateToken(): Promise<string> {
    const { access_token, refresh_token } = await callAPIInterface<
     IGenerateTokenResponse,
     IGenerateTokenBody
-   >("POST", "/auth/generate-token", {
+   >("POST", ENDPOINTS.GENERATE_TOKEN, {
     refresh_token: session?.refresh_token ?? "",
    });
    if (session) {
@@ -101,7 +95,7 @@ async function getHeaders<TPayload = undefined>(
  path: string,
  data?: TPayload,
 ): Promise<AxiosRequestConfig> {
- const isOpen = OPEN_API_ENDPOINTS.includes(path);
+ const isOpen = OPEN_ENDPOINTS.includes(path);
  const headers = new AxiosHeaders();
 
  const session = await sessionService.loadSession<ILoginResponse>();
@@ -151,7 +145,7 @@ export const callAPIInterface = async <
    console.error(err);
    console.error("API Error:", err.response || err);
 
-   if (path === LOGOUT_PATH) {
+   if (path === ENDPOINTS.LOGOUT) {
     reject(err);
     return;
    }

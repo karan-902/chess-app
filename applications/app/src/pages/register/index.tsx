@@ -4,8 +4,9 @@ import {
  createAccountText,
  haveAccountPromptText,
  loginText,
-} from "@gopvp/app/src/constants/messages";
+} from "@gopvp/app/src/constants/message";
 import { NavLink } from "react-router-dom";
+import { ROUTES } from "@gopvp/app/src/constants/route";
 
 export default function Register() {
  return (
@@ -15,7 +16,7 @@ export default function Register() {
     <>
      {haveAccountPromptText}
 
-     <NavLink to="/login">{loginText}</NavLink>
+     <NavLink to={ROUTES.LOGIN}>{loginText}</NavLink>
     </>
    }
   >

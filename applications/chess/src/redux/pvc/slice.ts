@@ -1,9 +1,7 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { TIME_SECONDS } from "@gopvp/chess/src/constants";
-import {
- computerText,
- difficultyText,
-} from "@gopvp/chess/src/constants/messages";
+import { TIME_SECONDS } from "@gopvp/chess/src/config/timeControl";
+import { computerText } from "@gopvp/chess/src/constants/message";
+import { DIFFICULTY_LABELS } from "@gopvp/chess/src/constants/label";
 import type { Difficulty } from "@gopvp/chess/src/types/component";
 import type {
  GameCategory,
@@ -48,7 +46,7 @@ const pvcSlice = createSlice({
     self: { name: username, scoreLabel: "", color },
     opponent: {
      name: computerText,
-     scoreLabel: difficultyText[difficulty],
+     scoreLabel: DIFFICULTY_LABELS[difficulty],
      color: color === "w" ? "b" : "w",
     },
    };

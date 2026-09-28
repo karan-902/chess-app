@@ -10,6 +10,7 @@ import type {
 import type { ILoginResponse } from "@gopvp/common/src/types/response";
 import { throwThunkError } from "@gopvp/app/src/redux/createAppThunk";
 import sessionService from "@gopvp/common/src/util/sessionService";
+import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
 
 export const login = createAsyncThunk(
  "auth/login",
@@ -18,7 +19,7 @@ export const login = createAsyncThunk(
    const fingerprint = await getDeviceFingerprint();
    const res = await callAPIInterface<ILoginResponse, ILoginBody>(
     "POST",
-    "/auth/login",
+    ENDPOINTS.LOGIN,
     { ...body, fingerprint },
    );
    // if ("status" in res) return res;
@@ -40,7 +41,7 @@ export const googleLogin = createAsyncThunk(
    const fingerprint = await getDeviceFingerprint();
    const res = await callAPIInterface<ILoginResponse, IGoogleLoginBody>(
     "POST",
-    "/auth/sso-login",
+    ENDPOINTS.SSO_LOGIN,
     { ...body, fingerprint },
    );
    // if ("status" in res) return res

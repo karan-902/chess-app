@@ -1,5 +1,23 @@
 import classNames from "classnames";
 import Text from "@gopvp/common/src/components/Text/Text";
+import {
+ CallReceivedIcon,
+ CallMadeIcon,
+ HandshakeIcon,
+} from "@gopvp/common/src/components/images";
+import type { SvgIconComponent } from "@gopvp/common/src/components/images";
+import type { TransactionType } from "@gopvp/common/src/types/index";
+
+export const TRANSACTION_TYPE_ICONS: Record<TransactionType, SvgIconComponent> =
+ {
+  DEPOSIT: CallReceivedIcon,
+  WITHDRAW: CallMadeIcon,
+  WITHDRAW_REFUND: CallReceivedIcon,
+  BET: CallMadeIcon,
+  WIN: CallReceivedIcon,
+  DRAW: HandshakeIcon,
+  MATCH_CANCELLED: CallReceivedIcon,
+ };
 
 export function ChessLogo({
  size = 42,

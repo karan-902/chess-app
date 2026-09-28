@@ -7,8 +7,8 @@ import {
 import sessionService from "@gopvp/common/src/util/sessionService";
 import { socketUrl } from "@gopvp/common/src/constants/env";
 import type { ILoginResponse } from "@gopvp/common/src/types/response";
-
-const FALLBACK_POLL_MS = 45000;
+import { DEVICE_APPROVAL_POLL_MS } from "@gopvp/app/src/constants/limit";
+import { SOCKET_EVENTS } from "@gopvp/common/src/constants/event";
 
 export function useDeviceApprovalPoll() {
  const socketRef = useRef<Socket | null>(null);
@@ -49,9 +49,9 @@ export function useDeviceApprovalPoll() {
    auth: { token: approvalToken },
    transports: ["websocket", "polling"],
   });
-  socketRef.current.on("device_approved", checkStatus);
+  socketRef.current.on(SOCKET_EVENTS.DEVICE_APPROVED, checkStatus);
 
-  fallbackTimerRef.current = setInterval(checkStatus, FALLBACK_POLL_MS);
+  fallbackTimerRef.current = setInterval(checkStatus, DEVICE_APPROVAL_POLL_MS);
  };
 
  useEffect(() => stop, []);

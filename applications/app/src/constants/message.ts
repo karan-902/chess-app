@@ -164,7 +164,6 @@ export const vsText = "VS";
 export const chessText = "Chess";
 export const bestStreakText = "Best streak";
 export const currentStreakText = "Current streak";
-export const matchesStatsFallback = 0;
 
 export const poweredByText = "POWERED BY";
 export const totalBalanceText = "Total Balance";
@@ -186,7 +185,4 @@ export const selectCountryText = "Select country";
 export const walletText = "Wallet";
 export const logOutText = "Log Out";
 export const noDataFoundText = "No Data Found";
-export const MIN_TRANSACTION_USD = 1;
-export const MAX_DEPOSIT_USD = 99;
-export const USERNAME_MAX_LENGTH = 8;
-export const MAX_AMOUNT_DIGITS = 2;
+export const appNameText = "GoPVP";

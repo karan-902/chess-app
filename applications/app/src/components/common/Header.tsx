@@ -16,15 +16,16 @@ import { useLogout } from "@gopvp/app/src/hooks/useLogout";
 import { useReduxSelector } from "@gopvp/app/src/redux/hooks";
 import { formatAmount, shortenUsername } from "@gopvp/common/src/util/format";
 import { getGameFromPath, getGameRoutes } from "@gopvp/app/src/utils";
-import { NAV_ITEMS } from "@gopvp/app/src/constants/config";
+import { NAV_ITEMS } from "@gopvp/app/src/constants/option";
 import {
  profileText,
  logOutText,
  walletText,
-} from "@gopvp/app/src/constants/messages";
-import { backText } from "@gopvp/common/src/constants/messages";
+} from "@gopvp/app/src/constants/message";
+import { backText } from "@gopvp/common/src/constants/message";
 import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
-import { ChessLogo } from "@gopvp/app/src/components/constants";
+import { ChessLogo } from "@gopvp/app/src/constants/icon";
+import { ROUTES } from "@gopvp/app/src/constants/route";
 
 export default function Header() {
  const { pathname } = useLocation();
@@ -82,7 +83,7 @@ export default function Header() {
    }
   >
    <Box customClass="appbar-right">
-    <NavLink to="/wallet" style={{ textDecoration: "none" }}>
+    <NavLink to={ROUTES.WALLET} style={{ textDecoration: "none" }}>
      {" "}
      {loading ? (
       <Skeleton customClass="text" width={44} height={13} />
@@ -99,7 +100,7 @@ export default function Header() {
      <CustomIconButton
       customClass={classNames(
        "appbar-menu-trigger",
-       pathname === "/profile" && "active",
+       pathname === ROUTES.PROFILE && "active",
       )}
       onClick={(e) => setAnchorEl(e.currentTarget)}
       icon="person"
@@ -128,7 +129,7 @@ export default function Header() {
       </Box>
      </Box>
      <NavLink
-      to="/profile"
+      to={ROUTES.PROFILE}
       className={({ isActive }) =>
        classNames("appbar-dropdown-item", isActive && "active")
       }
@@ -137,7 +138,7 @@ export default function Header() {
       {profileText}
      </NavLink>
      <NavLink
-      to="/wallet"
+      to={ROUTES.WALLET}
       className={({ isActive }) =>
        classNames("appbar-dropdown-item", isActive && "active")
       }

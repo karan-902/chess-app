@@ -5,7 +5,7 @@ import type { IReviewControlsProps } from "@gopvp/chess/src/types/component";
 import {
  previousMoveText,
  nextMoveText,
-} from "@gopvp/chess/src/constants/messages";
+} from "@gopvp/chess/src/constants/message";
 
 export default function ReviewControls({
  moveHistory,

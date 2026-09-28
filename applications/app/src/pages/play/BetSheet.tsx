@@ -6,7 +6,7 @@ import Card from "@gopvp/common/src/components/Card/Card";
 import CustomModal from "@gopvp/common/src/components/Modal/Modal";
 import PoolCardSkeleton from "@gopvp/app/src/components/common/PoolCardSkeleton";
 import type { IBetSheetProps } from "@gopvp/common/src/types/component";
-import { playText } from "@gopvp/common/src/constants/messages";
+import { playText } from "@gopvp/common/src/constants/message";
 import {
  largestPrizesTipText,
  forFunText,
@@ -18,7 +18,7 @@ import {
  winText,
  entryFeeAmountText,
  addFundsText,
-} from "@gopvp/app/src/constants/messages";
+} from "@gopvp/app/src/constants/message";
 
 export default function BetSheet({
  open,

@@ -14,6 +14,7 @@ import type {
  ISocketAckError,
  IStartMatchResponse,
 } from "@gopvp/common/src/types/response";
+import { SOCKET_EVENTS } from "@gopvp/common/src/constants/event";
 
 export type RoomStatus =
  "idle" | "creating" | "waiting" | "joining" | "ready" | "starting" | "found";
@@ -67,7 +68,7 @@ export function useRoomMatch(onRoomExpired?: () => void) {
   if (!socket) return;
   setStatus("creating");
   socket.emit(
-   "room:create",
+   SOCKET_EVENTS.ROOM_CREATE,
    { game, bet, time: timeSeconds * 1000 },
    (err: ISocketAckError | null, data: ICreateRoomResponse) => {
     if (err) {
@@ -90,7 +91,7 @@ export function useRoomMatch(onRoomExpired?: () => void) {
   if (!socket) return;
   setStatus("joining");
   socket.emit(
-   "room:join",
+   SOCKET_EVENTS.ROOM_JOIN,
    { room_code: code },
    (err: ISocketAckError | null, data: IMatchmakingResponse) => {
     if (err) {
@@ -115,7 +116,7 @@ export function useRoomMatch(onRoomExpired?: () => void) {
   if (!socket || !room) return;
   setStatus("starting");
   socket.emit(
-   "room:start",
+   SOCKET_EVENTS.ROOM_START,
    { room_code: room.code },
    (err: ISocketAckError | null, data: IStartMatchResponse) => {
     if (err) {
@@ -156,14 +157,14 @@ export function useRoomMatch(onRoomExpired?: () => void) {
    if (statusRef.current === "ready") setStatus("waiting");
   };
 
-  socket.on("matched", onMatched);
-  socket.on("match:started", onMatchStarted);
-  socket.on("room:left", onRoomLeft);
+  socket.on(SOCKET_EVENTS.MATCHED, onMatched);
+  socket.on(SOCKET_EVENTS.MATCH_STARTED, onMatchStarted);
+  socket.on(SOCKET_EVENTS.ROOM_LEFT, onRoomLeft);
 
   return () => {
-   socket.off("matched", onMatched);
-   socket.off("match:started", onMatchStarted);
-   socket.off("room:left", onRoomLeft);
+   socket.off(SOCKET_EVENTS.MATCHED, onMatched);
+   socket.off(SOCKET_EVENTS.MATCH_STARTED, onMatchStarted);
+   socket.off(SOCKET_EVENTS.ROOM_LEFT, onRoomLeft);
   };
  }, [ctxSocket, openMatch]);
 

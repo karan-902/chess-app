@@ -6,8 +6,7 @@ import {
  type ReactNode,
 } from "react";
 import type { ThemeMode } from "@gopvp/common/src/types/component";
-
-const STORAGE_KEY = "sj_theme";
+import { THEME_STORAGE_KEY } from "@gopvp/app/src/constants/storageKey";
 
 interface IThemeContext {
  mode: ThemeMode;
@@ -21,7 +20,7 @@ const ThemeContext = createContext<IThemeContext>({
 
 function loadInitialMode(): ThemeMode {
  try {
-  return localStorage.getItem(STORAGE_KEY) === "light" ? "light" : "dark";
+  return localStorage.getItem(THEME_STORAGE_KEY) === "light" ? "light" : "dark";
  } catch {
   return "dark";
  }
@@ -33,7 +32,7 @@ export function AppThemeProvider({ children }: { children: ReactNode }) {
  useEffect(() => {
   document.documentElement.setAttribute("data-theme", mode);
   try {
-   localStorage.setItem(STORAGE_KEY, mode);
+   localStorage.setItem(THEME_STORAGE_KEY, mode);
   } catch {}
  }, [mode]);
 

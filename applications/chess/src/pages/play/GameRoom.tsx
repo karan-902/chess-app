@@ -21,9 +21,9 @@ import {
  markGameFinished,
  clearPvcSnapshot,
 } from "@gopvp/chess/src/utils/storage";
-import { DIFFICULTY_CONFIG } from "@gopvp/chess/src/constants/index";
-import { GAME_END_REASON_LABELS } from "@gopvp/chess/src/constants/config";
-import { MATCH_RESULT_OUTCOMES } from "@gopvp/common/src/constants/config";
+import { DIFFICULTY_CONFIG } from "@gopvp/chess/src/config/engine";
+import { GAME_END_REASON_LABELS } from "@gopvp/chess/src/constants/label";
+import { MATCH_RESULT_OUTCOMES } from "@gopvp/common/src/constants/mapper";
 import { useGameContext } from "@gopvp/common/src/contexts/GameContext";
 import type { IMatchResultResponse } from "@gopvp/common/src/types/response";
 import type { IGameRoomProps } from "@gopvp/chess/src/types/component";
@@ -37,7 +37,7 @@ import {
  drawUpperText,
  defeatText,
  gameOverText,
-} from "@gopvp/chess/src/constants/messages";
+} from "@gopvp/chess/src/constants/message";
 import Button from "@gopvp/common/src/components/Button/Button";
 import ResignModal from "@gopvp/chess/src/components/common/ResignModal";
 
@@ -154,7 +154,7 @@ export default function GameRoom({ mode }: IGameRoomProps) {
   fen,
   DIFFICULTY_CONFIG[difficulty].depth,
   isPvc && turn === computerSide && !isGameOver,
-  DIFFICULTY_CONFIG[difficulty].elo,
+  DIFFICULTY_CONFIG[difficulty].strength,
  );
  useComputerOpponent({
   mode,

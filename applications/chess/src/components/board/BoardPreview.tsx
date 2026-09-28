@@ -3,10 +3,15 @@ import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
 import PieceIcon from "@gopvp/chess/src/components/board/PieceIcon";
 import "./board.scss";
-
-const FILES = ["a", "b", "c", "d", "e", "f", "g", "h"];
-const RANKS = ["8", "7", "6", "5", "4", "3", "2", "1"];
-const BACK = ["R", "N", "B", "Q", "K", "B", "N", "R"];
+import {
+ FILES,
+ RANKS,
+ BACK_RANK_PIECES,
+} from "@gopvp/chess/src/constants/board";
+import {
+ LIGHT_SQUARE_COLOR,
+ DARK_SQUARE_COLOR,
+} from "@gopvp/chess/src/constants/color";
 
 interface PieceData {
  code: string;
@@ -39,10 +44,18 @@ function squareToRC(square: string) {
 function startPosition() {
  const list: { id: string; code: string; square: string }[] = [];
  FILES.forEach((f, i) => {
-  list.push({ id: `b${BACK[i]}-${f}8`, code: `b${BACK[i]}`, square: `${f}8` });
+  list.push({
+   id: `b${BACK_RANK_PIECES[i]}-${f}8`,
+   code: `b${BACK_RANK_PIECES[i]}`,
+   square: `${f}8`,
+  });
   list.push({ id: `bP-${f}7`, code: "bP", square: `${f}7` });
   list.push({ id: `wP-${f}2`, code: "wP", square: `${f}2` });
-  list.push({ id: `w${BACK[i]}-${f}1`, code: `w${BACK[i]}`, square: `${f}1` });
+  list.push({
+   id: `w${BACK_RANK_PIECES[i]}-${f}1`,
+   code: `w${BACK_RANK_PIECES[i]}`,
+   square: `${f}1`,
+  });
  });
  return list;
 }
@@ -312,7 +325,7 @@ export default function BoardPreview() {
         key={`${r}-${c}`}
         customClass="chess-board-square"
         style={{
-         backgroundColor: isLight ? "#c9b48a" : "#7a6440",
+         backgroundColor: isLight ? LIGHT_SQUARE_COLOR : DARK_SQUARE_COLOR,
         }}
        >
         {c === 0 && (

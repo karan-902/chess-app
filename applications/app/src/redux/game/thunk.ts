@@ -10,6 +10,7 @@ import {
  startGameLoad,
 } from "@gopvp/app/src/redux/game/slice";
 import type { IGameResponse } from "@gopvp/common/src/types/response";
+import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
 
 export const fetchGameDetails = createAsyncThunk(
  "game/fetchGameDetails",
@@ -18,7 +19,7 @@ export const fetchGameDetails = createAsyncThunk(
   try {
    const res = await callAPIInterface<IGameResponse, undefined>(
     "GET",
-    `/games/${slug}`,
+    `${ENDPOINTS.GAMES}/${slug}`,
    );
    dispatch(setGameDetails(res));
    return res;

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { STOCKFISH_WORKER_PATH } from "@gopvp/chess/src/constants/asset";
 
 export function useStockfish(
  fen: string,
@@ -11,7 +12,7 @@ export function useStockfish(
  const [bestMove, setBestMove] = useState<string | null>(null);
 
  useEffect(() => {
-  const engine = new Worker("/stockfish/stockfish-18-lite-single.js");
+  const engine = new Worker(STOCKFISH_WORKER_PATH);
   engineRef.current = engine;
   engine.postMessage("uci");
   engine.postMessage("isready");

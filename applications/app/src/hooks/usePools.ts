@@ -5,6 +5,7 @@ import {
 } from "@gopvp/common/src/util/api";
 import { useGame } from "@gopvp/app/src/hooks/useGame";
 import type { IPoolResponse } from "@gopvp/common/src/types/response";
+import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
 
 export function usePools() {
  const { game } = useGame();
@@ -18,7 +19,7 @@ export function usePools() {
     setPools(
      await callAPIInterface<IPoolResponse[], undefined>(
       "GET",
-      `/matchmaking/pools?game=${game}`,
+      `${ENDPOINTS.POOLS}?game=${game}`,
      ),
     );
    } catch (err) {

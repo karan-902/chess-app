@@ -1,4 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import {
+ TAB_LOCK_KEY_PREFIX,
+ TAB_LOCK_CHANNEL_PREFIX,
+} from "@gopvp/chess/src/constants/storageKey";
 
 export type TabLockStatus = "primary" | "secondary" | "superseded";
 
@@ -13,8 +17,8 @@ export function useTabLock(gameId: string | undefined, mode: string) {
 
  useEffect(() => {
   if (mode !== "pvp" || !gameId) return;
-  const storageKey = `sj_primary:${gameId}`;
-  const channelName = `sj_game:${gameId}`;
+  const storageKey = `${TAB_LOCK_KEY_PREFIX}${gameId}`;
+  const channelName = `${TAB_LOCK_CHANNEL_PREFIX}${gameId}`;
   const existing = localStorage.getItem(storageKey);
   const isSecondary =
    !!existing &&
@@ -75,11 +79,11 @@ export function useTabLock(gameId: string | undefined, mode: string) {
 
  const takeOver = useCallback(() => {
   if (!gameId) return;
-  const storageKey = `sj_primary:${gameId}`;
+  const storageKey = `${TAB_LOCK_KEY_PREFIX}${gameId}`;
   localStorage.setItem(storageKey, `${myId}:${Date.now()}`);
 
   try {
-   const bc = new BroadcastChannel(`sj_game:${gameId}`);
+   const bc = new BroadcastChannel(`${TAB_LOCK_CHANNEL_PREFIX}${gameId}`);
    bc.postMessage({ type: "takeover", tabId: myId });
    bc.close();
   } catch {}

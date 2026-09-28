@@ -10,16 +10,16 @@ import {
  showApiErrorToast,
 } from "@gopvp/common/src/util/api";
 import { shortenUsername, formatAmount } from "@gopvp/common/src/util/format";
-import { scoreText } from "@gopvp/common/src/constants/messages";
+import { scoreText } from "@gopvp/common/src/constants/message";
 import {
  grossIncomeText,
  winsText,
  bestStreakText,
-} from "@gopvp/app/src/constants/messages";
+} from "@gopvp/app/src/constants/message";
 import type { ILeaderboardPlayerResponse } from "@gopvp/common/src/types/response";
 import type { ILeaderboardPlayerModalProps } from "@gopvp/common/src/types/component";
-
-const STAT_SKELETON_ROWS = 4;
+import { PLAYER_STATS_SKELETON_ROWS } from "@gopvp/app/src/constants/limit";
+import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
 
 export default function LeaderboardPlayerModal({
  playerId,
@@ -36,7 +36,7 @@ export default function LeaderboardPlayerModal({
    try {
     const res = await callAPIInterface<ILeaderboardPlayerResponse, undefined>(
      "GET",
-     `/leaderboard/${playerId}?game=${game}`,
+     `${ENDPOINTS.LEADERBOARD}/${playerId}?game=${game}`,
     );
     if (!isCancelled) setStats(res);
    } catch (err) {
@@ -75,7 +75,7 @@ export default function LeaderboardPlayerModal({
          </Text>
         </Box>
        ))
-     : Array.from({ length: STAT_SKELETON_ROWS }, (_, index) => (
+     : Array.from({ length: PLAYER_STATS_SKELETON_ROWS }, (_, index) => (
         <StatRowSkeleton key={index} />
        ))}
    </Card>

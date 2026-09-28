@@ -25,30 +25,38 @@ import speedReducer, {
 import gameReducer, { type IGameState } from "@gopvp/app/src/redux/game/slice";
 import matchReducer from "@gopvp/chess/src/redux/match/slice";
 import pvcReducer, { type IPvcState } from "@gopvp/chess/src/redux/pvc/slice";
+import {
+ APP_STORAGE_NAME,
+ APP_STORAGE_STORE_NAME,
+ SESSION_PERSIST_KEY,
+ SPEED_PERSIST_KEY,
+ GAME_PERSIST_KEY,
+ PVC_PERSIST_KEY,
+} from "@gopvp/app/src/constants/storageKey";
 
 const appStorage = localforage.createInstance({
- name: "gopvp",
- storeName: "app",
+ name: APP_STORAGE_NAME,
+ storeName: APP_STORAGE_STORE_NAME,
 });
 
 const authPersistConfig = buildPersistConfig<TAuthSessionState>({
- key: "GOPVP-SESSION",
+ key: SESSION_PERSIST_KEY,
  storage: appStorage,
 });
 
 const speedPersistConfig = buildPersistConfig<ISpeedState>({
- key: "speed",
+ key: SPEED_PERSIST_KEY,
  storage: appStorage,
 });
 
 const gamePersistConfig = buildPersistConfig<IGameState>({
- key: "game",
+ key: GAME_PERSIST_KEY,
  storage: appStorage,
  whitelist: ["enteredGame"],
 });
 
 const pvcPersistConfig = buildPersistConfig<IPvcState>({
- key: "pvc",
+ key: PVC_PERSIST_KEY,
  storage: sessionStorage,
 });
 

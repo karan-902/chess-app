@@ -12,7 +12,7 @@ import {
  showAckErrorToast,
  showApiErrorToast,
 } from "@gopvp/common/src/util/api";
-import { drawOfferDeclinedText } from "@gopvp/chess/src/constants/messages";
+import { drawOfferDeclinedText } from "@gopvp/chess/src/constants/message";
 import type {
  IDrawOfferEvent,
  IMatchResultResponse,
@@ -24,13 +24,12 @@ import type {
 } from "@gopvp/chess/src/types/response";
 import type { IMoveBody } from "@gopvp/chess/src/types/payload";
 import type { PieceColor } from "@gopvp/chess/src/types/index";
-
-const MATCH_END_EVENTS = [
- "game:resign",
- "game:rejoin:declined",
- "game:disconnect",
- "game:abort",
-];
+import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
+import { SOCKET_EVENTS } from "@gopvp/common/src/constants/event";
+import {
+ GAME_EVENTS,
+ MATCH_END_EVENTS,
+} from "@gopvp/chess/src/constants/event";
 
 const toDeadlineAt = (deadlineMs?: number) =>
  deadlineMs === undefined ? null : Date.now() + deadlineMs;
@@ -70,7 +69,7 @@ export function useGameSocket({
    setGameEnded(
     await callAPIInterface<IMatchResultResponse>(
      "GET",
-     `/matches/match-result/${matchId}`,
+     `${ENDPOINTS.MATCH_RESULT}/${matchId}`,
     ),
    );
   } catch (err) {
@@ -115,21 +114,21 @@ export function useGameSocket({
   const onOpponentOffline = () => setIsOpponentOffline(true);
   const onOpponentOnline = () => setIsOpponentOffline(false);
 
-  socket.on("connect", resync);
-  socket.on("game:move", onMove);
-  socket.on("game:draw:offer", setDrawOffer);
-  socket.on("game:draw:decline", onDrawDecline);
-  socket.on("game:opponent:offline", onOpponentOffline);
-  socket.on("game:opponent:online", onOpponentOnline);
+  socket.on(SOCKET_EVENTS.CONNECT, resync);
+  socket.on(GAME_EVENTS.MOVE, onMove);
+  socket.on(GAME_EVENTS.DRAW_OFFER, setDrawOffer);
+  socket.on(GAME_EVENTS.DRAW_DECLINE, onDrawDecline);
+  socket.on(GAME_EVENTS.OPPONENT_OFFLINE, onOpponentOffline);
+  socket.on(GAME_EVENTS.OPPONENT_ONLINE, onOpponentOnline);
   MATCH_END_EVENTS.forEach((event) => socket.on(event, endMatch));
 
   return () => {
-   socket.off("connect", resync);
-   socket.off("game:move", onMove);
-   socket.off("game:draw:offer", setDrawOffer);
-   socket.off("game:draw:decline", onDrawDecline);
-   socket.off("game:opponent:offline", onOpponentOffline);
-   socket.off("game:opponent:online", onOpponentOnline);
+   socket.off(SOCKET_EVENTS.CONNECT, resync);
+   socket.off(GAME_EVENTS.MOVE, onMove);
+   socket.off(GAME_EVENTS.DRAW_OFFER, setDrawOffer);
+   socket.off(GAME_EVENTS.DRAW_DECLINE, onDrawDecline);
+   socket.off(GAME_EVENTS.OPPONENT_OFFLINE, onOpponentOffline);
+   socket.off(GAME_EVENTS.OPPONENT_ONLINE, onOpponentOnline);
    MATCH_END_EVENTS.forEach((event) => socket.off(event, endMatch));
   };
  }, [socket, isPvc, applyServerFen, syncClock, resync, endMatch, dispatch]);
@@ -154,24 +153,25 @@ export function useGameSocket({
   const body: IMoveBody = { from, to, promotion };
   setDrawOffer(null);
   setFirstMoveDeadlineAt(null);
-  socket?.emit("game:move", body, handleMoveAck);
+  socket?.emit(GAME_EVENTS.MOVE, body, handleMoveAck);
  };
 
  const resign = () =>
-  socket?.emit("game:resign", (err: ISocketAckError | null) =>
+  socket?.emit(GAME_EVENTS.RESIGN, (err: ISocketAckError | null) =>
    err ? showAckErrorToast(err) : endMatch(),
   );
 
- const offerDraw = () => socket?.emit("game:draw:offer", showAckErrorToast);
+ const offerDraw = () =>
+  socket?.emit(GAME_EVENTS.DRAW_OFFER, showAckErrorToast);
 
  const acceptDraw = () => {
   setDrawOffer(null);
-  socket?.emit("game:draw:accept", handleMoveAck);
+  socket?.emit(GAME_EVENTS.DRAW_ACCEPT, handleMoveAck);
  };
 
  const declineDraw = () => {
   setDrawOffer(null);
-  socket?.emit("game:draw:decline", showAckErrorToast);
+  socket?.emit(GAME_EVENTS.DRAW_DECLINE, showAckErrorToast);
  };
 
  return {

@@ -5,6 +5,7 @@ import type {
  IGameNotFoundResponse,
  ISocketAckError,
 } from "@gopvp/common/src/types/response";
+import { SOCKET_EVENTS } from "@gopvp/common/src/constants/event";
 
 const g = globalThis as typeof globalThis & { socket?: Socket | null };
 
@@ -42,7 +43,7 @@ export function requestGameState<TGameState extends { match_id: string }>(
   const socket = getSocket();
   if (!socket) return resolve(null);
   socket.emit(
-   "game:state",
+   SOCKET_EVENTS.GAME_STATE,
    (err: ISocketAckError | null, data: TGameState | IGameNotFoundResponse) =>
     resolve(err || "error" in data || data.match_id !== matchId ? null : data),
   );

@@ -16,20 +16,21 @@ import type {
  ITransactionResponse,
  IWithdrawResponse,
 } from "@gopvp/common/src/types/response";
-
-const PAGE_SIZE = 20;
+import { TRANSACTIONS_PAGE_SIZE } from "@gopvp/app/src/constants/limit";
+import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
+import { SOCKET_EVENTS } from "@gopvp/common/src/constants/event";
 
 export const paymentRequest = (amountUsd: number) =>
  callAPIInterface<IPaymentRequestResponse, IInitiateDepositBody>(
   "POST",
-  "/wallet/payment-request",
+  ENDPOINTS.PAYMENT_REQUEST,
   { amount: amountUsd },
  );
 
 export const withdrawRequest = (amountUsd: number, destination: string) =>
  callAPIInterface<IWithdrawResponse, IWithdrawRequestBody>(
   "POST",
-  "/wallet/withdraw",
+  ENDPOINTS.WITHDRAW,
   {
    amount: amountUsd,
    destination,
@@ -88,7 +89,10 @@ export function useWallet() {
    const res = await callAPIInterface<
     IListResponse<ITransactionResponse> | null,
     undefined
-   >("GET", `/wallet/transactions?limit=${PAGE_SIZE}${cursor}`);
+   >(
+    "GET",
+    `${ENDPOINTS.TRANSACTIONS}?limit=${TRANSACTIONS_PAGE_SIZE}${cursor}`,
+   );
    if (latestRequestIdRef.current !== requestId) return;
    const data = res?.data ?? [];
    setTransactions((prev) => (isFirstLoad ? data : [...prev, ...data]));
@@ -111,9 +115,9 @@ export function useWallet() {
  useEffect(() => {
   if (!socket) return;
   const refreshTransactions = () => loadTransactions(true);
-  socket.on("wallet:updated", refreshTransactions);
+  socket.on(SOCKET_EVENTS.WALLET_UPDATED, refreshTransactions);
   return () => {
-   socket.off("wallet:updated", refreshTransactions);
+   socket.off(SOCKET_EVENTS.WALLET_UPDATED, refreshTransactions);
   };
  }, [socket, loadTransactions]);
 

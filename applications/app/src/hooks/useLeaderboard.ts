@@ -13,6 +13,7 @@ import type {
  IListResponse,
  ILeaderboardRowResponse,
 } from "@gopvp/common/src/types/response";
+import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
 
 export function useLeaderboard(scope: LeaderboardScope, sort: LeaderboardSort) {
  const { game } = useGame();
@@ -43,7 +44,7 @@ export function useLeaderboard(scope: LeaderboardScope, sort: LeaderboardSort) {
     const res = await callAPIInterface<
      IListResponse<ILeaderboardRowResponse>,
      ILeaderboardBody
-    >("POST", "/leaderboard", {
+    >("POST", ENDPOINTS.LEADERBOARD, {
      game,
      scope,
      sort,

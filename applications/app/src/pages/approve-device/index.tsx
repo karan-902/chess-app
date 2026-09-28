@@ -16,7 +16,8 @@ import {
  returnToOtherDeviceText,
  linkExpiredText,
  approvalLinkInvalidText,
-} from "@gopvp/app/src/constants/messages";
+} from "@gopvp/app/src/constants/message";
+import { ROUTES } from "@gopvp/app/src/constants/route";
 
 export default function ApproveDevice() {
  const [searchParams] = useSearchParams();
@@ -54,7 +55,7 @@ export default function ApproveDevice() {
     title={deviceApprovedText}
     subtitle={returnToOtherDeviceText}
     footer={
-     <a href="/login" onClick={handleBackToSignIn}>
+     <a href={ROUTES.LOGIN} onClick={handleBackToSignIn}>
       {backToSignInText}
      </a>
     }
@@ -72,7 +73,7 @@ export default function ApproveDevice() {
     title={linkExpiredText}
     subtitle={approvalLinkInvalidText}
     footer={
-     <a href="/login" onClick={handleBackToSignIn}>
+     <a href={ROUTES.LOGIN} onClick={handleBackToSignIn}>
       {backToSignInText}
      </a>
     }

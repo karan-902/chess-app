@@ -16,7 +16,8 @@ import type { IPoolResponse } from "@gopvp/common/src/types/response";
 import {
  tapPlayNowHintText,
  playNowText,
-} from "@gopvp/app/src/constants/messages";
+} from "@gopvp/app/src/constants/message";
+import { ROUTES } from "@gopvp/app/src/constants/route";
 
 export default function PlayPage() {
  const [sheetOpen, setSheetOpen] = useState(false);
@@ -168,7 +169,7 @@ export default function PlayPage() {
     onPoolPlay={handlePoolPlay}
     onPracticeOpen={Practice && handlePracticeOpen}
     onRoomOpen={handleRoomOpen}
-    onInsufficientBalance={() => navigate("/wallet")}
+    onInsufficientBalance={() => navigate(ROUTES.WALLET)}
    />
 
    {Practice && (
