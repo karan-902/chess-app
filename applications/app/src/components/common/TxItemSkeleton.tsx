@@ -1,4 +1,5 @@
 import Box from "@gopvp/common/src/components/Box/Box";
+import Text from "@gopvp/common/src/components/Text/Text";
 import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
 
 export default function TxItemSkeleton() {
@@ -6,18 +7,21 @@ export default function TxItemSkeleton() {
   <Box customClass="wallet-tx-item loading">
    <Box customClass="wallet-tx-row">
     <Box customClass="wallet-tx-info">
-     <Skeleton variant="circular" width={32} height={32} />
+     <Box customClass="wallet-tx-icon">
+      <Skeleton variant="circular" width={24} height={24} />
+     </Box>
      <Box customClass="wallet-tx-text">
-      <Skeleton
-       customClass="text"
-       width={110}
-       height={14}
-       style={{ marginBottom: "0.2rem" }}
-      />
-      <Skeleton customClass="text" width={60} height={11} />
+      <Text customClass="row-title">
+       <Skeleton customClass="text" width={110} />
+      </Text>
+      <Text customClass="meta-text">
+       <Skeleton customClass="text" width={60} />
+      </Text>
      </Box>
     </Box>
-    <Skeleton customClass="text" width={48} height={16} />
+    <Text component="span" customClass="amount-value">
+     <Skeleton customClass="text" width={56} />
+    </Text>
    </Box>
   </Box>
  );

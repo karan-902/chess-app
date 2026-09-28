@@ -1,6 +1,5 @@
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { CircularProgress } from "@mui/material";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
@@ -28,7 +27,7 @@ export default function PlayPage() {
   gameModule: { Preview, PoolLabel, GameRoom, Practice },
  } = useGame();
  const { pools, loading: poolsLoading } = usePools();
- const { usdValue } = useWalletBalance();
+ const { usdValue, loading: balanceLoading } = useWalletBalance();
  const { status, queuedPool, secondsLeft, joinQueue, leaveQueue, resetStatus } =
   useMatchmaking();
  const gameId = searchParams.get("game_id");
@@ -77,7 +76,7 @@ export default function PlayPage() {
    <Suspense
     fallback={
      <Box customClass="modal-loader">
-      <CircularProgress size={28} />
+      <Box customClass="logo-loader" role="progressbar" />
      </Box>
     }
    >
@@ -91,11 +90,6 @@ export default function PlayPage() {
   setPracticeOpen(true);
  };
 
- const handlePracticeCancel = () => {
-  setPracticeOpen(false);
-  setSheetOpen(true);
- };
-
  const handleRoomOpen = () => {
   setSheetOpen(false);
   resetRoomStatus();
@@ -103,7 +97,7 @@ export default function PlayPage() {
  };
 
  const handleRoomClose = () => {
-  if (roomStatus === "waiting" || roomStatus === "ready") cancelRoom();
+  if (roomStatus !== "starting") cancelRoom();
   setRoomOpen(false);
  };
 
@@ -163,7 +157,7 @@ export default function PlayPage() {
     open={sheetOpen}
     onClose={() => setSheetOpen(false)}
     pools={pools}
-    poolsLoading={poolsLoading}
+    poolsLoading={poolsLoading || balanceLoading}
     usdValue={usdValue}
     PoolLabel={PoolLabel}
     onPoolPlay={handlePoolPlay}
@@ -177,7 +171,6 @@ export default function PlayPage() {
      <Practice
       open={practiceOpen}
       onClose={() => setPracticeOpen(false)}
-      onCancel={handlePracticeCancel}
      />
     </Suspense>
    )}

@@ -13,13 +13,13 @@ body {
  margin: 0 !important;
  height: 100% !important;
  overflow: hidden !important;
- background-color: #000 !important;
+ background-color: $black !important;
  color: $appText !important;
  font-family: $fontOutfitRegular !important;
  font-size: $font16 !important;
  line-height: 1.5 !important;
 
- @media (min-width: 1024px) {
+ @include from(laptop) {
   display: flex;
   justify-content: center;
   height: 100vh;
@@ -32,12 +32,12 @@ body {
  margin: 0 auto;
  padding: 0;
  width: 100%;
- max-width: 600px;
+ max-width: 479px;
  height: 100%;
  background: $appBg;
 
- @media (max-width: 1024px) {
-  max-width: 479px;
+ @include from(laptop) {
+  max-width: 600px;
  }
 }
 
@@ -52,10 +52,6 @@ body {
  width: 100%;
  height: 100dvh;
  background: $appBg;
- .MuiCircularProgress-root {
-  width: 50px !important;
-  height: 50px !important;
- }
 }
 
 .app-shell {
@@ -71,7 +67,7 @@ body {
  position: relative;
  transform: translateZ(0);
 
- @media (min-width: 1024px) {
+ @include from(laptop) {
   max-width: 100%;
   box-shadow: 0 0 80px -20px rgba(0, 0, 0, 0.85);
  }
@@ -79,8 +75,16 @@ body {
 
 :root[data-theme="light"] .app-shell {
  background:
-  radial-gradient(48% 32% at 0% 0%, #{alpha(#f7931a, 0.12)}, transparent 70%),
-  radial-gradient(48% 32% at 100% 0%, #{alpha(#f7931a, 0.09)}, transparent 70%),
+  radial-gradient(
+   48% 32% at 0% 0%,
+   #{alpha($bitcoinOrange, 0.12)},
+   transparent 70%
+  ),
+  radial-gradient(
+   48% 32% at 100% 0%,
+   #{alpha($bitcoinOrange, 0.09)},
+   transparent 70%
+  ),
   $appBg;
  background-attachment: fixed;
 }

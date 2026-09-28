@@ -61,11 +61,13 @@ function buildTimelineEntries(
  return entries;
 }
 
-function txRow(tx: ITransactionResponse) {
+function txRow(tx: ITransactionResponse, groupEdgeClass: string) {
  const TxIcon = TRANSACTION_TYPE_ICONS[tx.transaction_type];
  const isDebit = DEBIT_TRANSACTION_TYPES.has(tx.transaction_type);
  return (
-  <Box customClass={classNames("wallet-tx-item", isDebit && "neg")}>
+  <Box
+   customClass={classNames("wallet-tx-item", isDebit && "neg", groupEdgeClass)}
+  >
    <Box customClass="wallet-tx-row">
     <Box customClass="wallet-tx-info">
      <Box customClass="wallet-tx-icon">
@@ -90,7 +92,7 @@ function txRow(tx: ITransactionResponse) {
  );
 }
 
-function timelineRow(entry: TWalletTimelineEntry) {
+function timelineRow(entry: TWalletTimelineEntry, groupEdgeClass: string) {
  if (entry.kind === "header") {
   return (
    <Text component="h4" customClass="wallet-tx-group-label">
@@ -98,7 +100,7 @@ function timelineRow(entry: TWalletTimelineEntry) {
    </Text>
   );
  }
- return txRow(entry.tx);
+ return txRow(entry.tx, groupEdgeClass);
 }
 
 export default function Wallet() {
@@ -122,21 +124,23 @@ export default function Wallet() {
    <Box customClass="wallet-split">
     <Box customClass="wallet-split-block accent">
      <Text customClass="wallet-split-lbl">{totalBalanceText}</Text>
-     {balanceLoading ? (
-      <Skeleton customClass="text" width={80} height={24} />
-     ) : (
-      <Text customClass="wallet-split-val">{formatAmount(usdValue)}</Text>
-     )}
+     <Text customClass="wallet-split-val">
+      {balanceLoading ? (
+       <Skeleton customClass="text" width={80} />
+      ) : (
+       formatAmount(usdValue)
+      )}
+     </Text>
     </Box>
     <Box customClass="wallet-split-block">
      <Text customClass="wallet-split-lbl">{withdrawBalanceText}</Text>
-     {balanceLoading ? (
-      <Skeleton customClass="text" width={80} height={24} />
-     ) : (
-      <Text customClass="wallet-split-val">
-       {formatAmount(withdrawableUsd)}
-      </Text>
-     )}
+     <Text customClass="wallet-split-val">
+      {balanceLoading ? (
+       <Skeleton customClass="text" width={80} />
+      ) : (
+       formatAmount(withdrawableUsd)
+      )}
+     </Text>
     </Box>
    </Box>
 
@@ -201,7 +205,15 @@ export default function Wallet() {
      <VirtualList<TWalletTimelineEntry>
       data={timelineEntries}
       computeItemKey={(_, entry) => entry.id}
-      itemContent={(_, entry) => timelineRow(entry)}
+      itemContent={(index, entry) =>
+       timelineRow(
+        entry,
+        classNames(
+         timelineEntries[index - 1]?.kind !== "tx" && "group-start",
+         timelineEntries[index + 1]?.kind !== "tx" && "group-end",
+        ),
+       )
+      }
       endReached={loadMoreTransactions}
       components={{
        Footer: () => (loadingMore ? <TxItemSkeleton /> : null),

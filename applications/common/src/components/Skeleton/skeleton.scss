@@ -12,7 +12,7 @@
  animation: skeleton-shimmer 1.4s ease-in-out infinite;
 
  &.text {
-  border-radius: 3px;
+  border-radius: 0.25rem / 0.42rem;
  }
  &.wallet-btn-skeleton {
   flex: 1;
@@ -29,6 +29,23 @@
   width: 4.5rem;
   height: 1.5rem;
   border-radius: 6px;
+ }
+
+ &.appbar-balance-skeleton {
+  width: 7rem;
+  height: 2rem;
+  border-radius: 4px;
+ }
+
+ &.pool-play-skeleton {
+  align-self: center;
+  width: min(150px, 100%);
+  height: $font24;
+  border-radius: 8px;
+
+  @include from(tablet) {
+   height: 26px;
+  }
  }
 }
 

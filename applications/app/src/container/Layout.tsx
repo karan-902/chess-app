@@ -6,7 +6,6 @@ import {
  useNavigate,
  useSearchParams,
 } from "react-router-dom";
-import { CircularProgress } from "@mui/material";
 import { setNavigator } from "@gopvp/common/src/util/navigationService";
 import Box from "@gopvp/common/src/components/Box/Box";
 import BackdropLoader from "@gopvp/app/src/components/common/BackdropLoader/BackdropLoader";
@@ -81,7 +80,7 @@ export default function Layout() {
   return (
    <>
     <Box customClass="gopvp-circular-loader">
-     <CircularProgress />
+     <Box customClass="logo-loader" role="progressbar" />
     </Box>
     <Notification />
    </>

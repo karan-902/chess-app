@@ -5,6 +5,7 @@ import classNames from "classnames";
 import { useReduxDispatch, useReduxSelector } from "@gopvp/app/src/redux/hooks";
 import { hideToast } from "@gopvp/app/src/redux/common/slice";
 import AlertMessage from "@gopvp/common/src/components/AlertMessage/AlertMessage";
+import type { INotificationProps } from "@gopvp/app/src/types/component";
 
 const SlideLeft = forwardRef<
  unknown,
@@ -17,10 +18,6 @@ const SlideLeft = forwardRef<
   container={document.getElementById("root")}
  />
 ));
-
-interface INotificationProps {
- customClass?: string;
-}
 
 export default function Notification({ customClass }: INotificationProps) {
  const dispatch = useReduxDispatch();

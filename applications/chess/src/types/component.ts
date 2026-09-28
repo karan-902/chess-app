@@ -1,4 +1,5 @@
 import type { IMatchResultResponse } from "@gopvp/common/src/types/response";
+import type { MatchOutcome } from "@gopvp/common/src/types/index";
 import type {
  GameCategory,
  MoveRecord,
@@ -59,14 +60,14 @@ export interface IReviewControlsProps extends IMoveListProps {
 
 export interface IGameOverOverlayProps {
  gameEnded: IMatchResultResponse;
+ outcome: MatchOutcome;
+ isPvc: boolean;
  reasonLabel: string;
- resultHeader: string;
- isWinner: boolean;
- isDrawResult: boolean;
+ opponentName: string;
  onNewGame: () => void;
 }
 
-export interface IResignModalProps {
+export interface IResignSheetProps {
  open: boolean;
  isPvc: boolean;
  betAmount: number;
@@ -77,7 +78,6 @@ export interface IResignModalProps {
 export interface IPracticeSheetProps {
  open: boolean;
  onClose: () => void;
- onCancel: () => void;
  onPlay: (difficulty: Difficulty, timeControl: GameCategory) => void;
 }
 
@@ -100,4 +100,33 @@ export interface IDraggablePieceProps {
  onClick: () => void;
  draggable: boolean;
  hidden?: boolean;
+}
+
+export interface IMatchLoaderProps {
+ matchId: string;
+}
+
+export interface IPieceIconProps {
+ code: string;
+ className?: string;
+ style?: React.CSSProperties;
+ onPointerDown?: (e: React.PointerEvent<SVGSVGElement>) => void;
+}
+
+export interface IChessBoardProps {
+ fen: string;
+ selectedSquare?: string | null;
+ legalMoves?: string[];
+ attackedSquares?: string[];
+ checkSquare?: string | null;
+ stalemateSquare?: string | null;
+ flashSquare?: string | null;
+ onSquareClick?: (square: string, viaDrag?: boolean) => void;
+ onSquareRightClick?: (square: string) => void;
+ lastMove?: { from: string; to: string } | null;
+ flipped?: boolean;
+ premoveMode?: boolean;
+ premoveSquares?: string[];
+ premoveMoves?: { from: string; to: string }[];
+ draggableColor?: "w" | "b";
 }

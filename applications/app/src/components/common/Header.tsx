@@ -25,7 +25,6 @@ import {
 } from "@gopvp/app/src/constants/message";
 import { backText } from "@gopvp/common/src/constants/message";
 import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
-import { ChessLogo } from "@gopvp/app/src/constants/icon";
 import { ROUTES } from "@gopvp/app/src/constants/route";
 
 export default function Header() {
@@ -53,7 +52,7 @@ export default function Header() {
      className="appbar-brand"
      title={goToPlayText}
     >
-     <ChessLogo muted={false} showText size={30} />
+     <img src="/gopvp-logo.png" width="auto" height={54} alt="gopvp-logo" />
     </Link>
    }
    bottomSlot={
@@ -87,7 +86,7 @@ export default function Header() {
     <NavLink to={ROUTES.WALLET} style={{ textDecoration: "none" }}>
      {" "}
      {loading ? (
-      <Skeleton customClass="text" width={44} height={13} />
+      <Skeleton variant="rounded" customClass="appbar-balance-skeleton" />
      ) : (
       <CustomChip
        icon={<AccountBalanceWalletIcon />}
@@ -107,7 +106,7 @@ export default function Header() {
       icon="person"
      />
     ) : (
-     <Skeleton variant="circular" width={28} height={28} />
+     <Skeleton variant="circular" width={24} height={24} />
     )}
 
     <CustomPopover

@@ -4,6 +4,7 @@ interface ImportMetaEnv {
  readonly VITE_APP_IMAGE_ICON_S3_URL: string;
  readonly VITE_APP_LOTTIE_BASE_URL: string;
  readonly VITE_SOCKET_URL: string;
+ readonly VITE_FLAG_API: string;
 }
 
 interface ImportMeta {

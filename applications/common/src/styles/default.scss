@@ -1,3 +1,5 @@
+@use "sass:map";
+
 :root {
  --color-red-100: oklch(93.6% 0.032 17.717);
  --color-red-400: oklch(70.4% 0.191 22.216);
@@ -25,8 +27,8 @@
  --color-gray-900: oklch(21% 0.034 264.665);
  --color-black: #000;
  --color-white: #fff;
- --color-primary: #ff9800;
- --color-primary-dark: #ff9800;
+ --color-primary: #fdca0f;
+ --color-primary-dark: #fdca0f;
  --color-primary-text: #2d2b36;
  --color-bg-primary: #212223;
  --color-bg-border: #343434;
@@ -139,18 +141,24 @@ $primaryDark: var(--primary-dark);
 $primaryContrast: var(--primary-contrast);
 $secondary: var(--secondary);
 $secondaryContrast: var(--secondary-contrast);
-$greenishTeal: var(--greenish-teal);
 $greenishTealLight: var(--color-green);
 $warning: var(--warning);
 $error: var(--error);
 $appFrame: var(--app-frame);
 $black: #000000;
 $goldenRod: #f1c40f;
+$bitcoinOrange: #f7931a;
+$tooltipText: #f5f5f5;
+$menuShadow: #0b254b1f;
+$menuBorder: #e4e9ee;
 
 $medalGold: #c9a227;
 $medalSilver: #9aa0a6;
 $medalBronze: #b5651d;
 
+$font7: 7px;
+$font8: 8px;
+$font11: 11px;
 $font12: 12px;
 $font13: 13px;
 $font14: 14px;
@@ -162,6 +170,7 @@ $font22: 22px;
 $font24: 24px;
 $font30: 30px;
 $font40: 40px;
+$font48: 48px;
 
 $fontOutfitThin: "Outfit-Thin";
 $fontOutfitExtraLight: "Outfit-ExtraLight";
@@ -187,6 +196,36 @@ $backdropEdge: var(--backdrop-edge);
 $gold: var(--gold);
 $cyan: var(--cyan);
 
+$space-4: 0.25rem;
+$space-8: 0.5rem;
+$space-12: 0.75rem;
+$space-16: 1rem;
+$space-20: 1.25rem;
+$space-24: 1.5rem;
+
+$z-base: 0;
+$z-raised: 1;
+$z-overlay: 2;
+$z-top: 3;
+$z-float: 5;
+$z-alert: 99;
+$z-loader: 1300;
+
+$breakpoints: (
+ phone: 400px,
+ tablet: 768px,
+ laptop: 1024px,
+);
+
+@mixin from($name) {
+ @if not map.has-key($breakpoints, $name) {
+  @error "Unknown breakpoint `#{$name}`. Available: #{map.keys($breakpoints)}";
+ }
+ @media (min-width: map.get($breakpoints, $name)) {
+  @content;
+ }
+}
+
 $outfitFaces:
  "Outfit-Thin", "Outfit-ExtraLight", "Outfit-Light", "Outfit-Regular",
  "Outfit-Medium", "Outfit-SemiBold", "Outfit-Bold", "Outfit-ExtraBold",
@@ -199,3 +238,5 @@ $outfitFaces:
   font-display: swap;
  }
 }
+
+// Claude don't delete it => --color-primary: #fdca0f;

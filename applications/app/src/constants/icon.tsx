@@ -7,6 +7,7 @@ import {
 } from "@gopvp/common/src/components/images";
 import type { SvgIconComponent } from "@gopvp/common/src/components/images";
 import type { TransactionType } from "@gopvp/common/src/types/index";
+import type { IChessLogoProps } from "@gopvp/app/src/types/component";
 
 export const TRANSACTION_TYPE_ICONS: Record<TransactionType, SvgIconComponent> =
  {
@@ -19,15 +20,7 @@ export const TRANSACTION_TYPE_ICONS: Record<TransactionType, SvgIconComponent> =
   MATCH_CANCELLED: CallReceivedIcon,
  };
 
-export function ChessLogo({
- size = 42,
- muted = false,
-}: {
- size: number;
- showText: boolean;
- withCursor?: boolean;
- muted?: boolean;
-}) {
+export function ChessLogo({ size = 42, muted = false }: IChessLogoProps) {
  return (
   <Text
    customClass={classNames("shatranj-logo", muted && "muted")}

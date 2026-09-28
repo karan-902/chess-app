@@ -10,7 +10,6 @@ import type { GameCategory } from "@gopvp/chess/src/types/index";
 export default function ChessPractice({
  open,
  onClose,
- onCancel,
 }: IGamePracticeProps) {
  const navigate = useNavigate();
  const dispatch = useChessDispatch();
@@ -35,7 +34,6 @@ export default function ChessPractice({
   <PracticeSheet
    open={open}
    onClose={onClose}
-   onCancel={onCancel}
    onPlay={handlePlay}
   />
  );

@@ -2,7 +2,7 @@
 
 .common-menu {
  .MuiMenu-list {
-  padding: 0px;
+  padding: 0;
  }
  .MuiButtonBase-root {
   &.Mui-focusVisible {
@@ -11,10 +11,10 @@
   }
  }
  .MuiPaper-root {
-  box-shadow: 0 4px 7px 3px #0b254b1f;
-  border: 1px solid #e4e9ee;
+  box-shadow: 0 4px 7px 3px $menuShadow;
+  border: 1px solid $menuBorder;
   border-radius: 4px;
-  margin-top: 4px;
+  margin-top: $space-4;
  }
  &.filter-dropdown-menu {
   .MuiPaper-root {

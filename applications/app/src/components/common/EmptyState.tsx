@@ -1,11 +1,7 @@
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import { ChessLogo } from "@gopvp/app/src/constants/icon";
-
-interface IEmptyStateProps {
- title?: string;
- description?: string;
-}
+import type { IEmptyStateProps } from "@gopvp/app/src/types/component";
 
 export default function EmptyState({ title, description }: IEmptyStateProps) {
  return (

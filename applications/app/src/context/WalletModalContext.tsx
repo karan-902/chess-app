@@ -3,7 +3,7 @@ import {
  useContext,
  useMemo,
  useState,
- type ReactNode,
+ type PropsWithChildren,
 } from "react";
 
 type WalletModal = "deposit" | "withdraw" | null;
@@ -17,7 +17,7 @@ interface IWalletModalContextValue {
 
 const WalletModalContext = createContext<IWalletModalContextValue | null>(null);
 
-export function WalletModalProvider({ children }: { children: ReactNode }) {
+export function WalletModalProvider({ children }: PropsWithChildren) {
  const [openModal, setOpenModal] = useState<WalletModal>(null);
  const actions = useMemo(
   () => ({

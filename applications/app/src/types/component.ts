@@ -71,3 +71,26 @@ export interface IPoolConfirmSheetProps {
  onConfirmJoin: () => void;
  onConfirmCancel: () => void;
 }
+
+export interface IChessLogoProps {
+ size: number;
+ showText: boolean;
+ withCursor?: boolean;
+ muted?: boolean;
+}
+
+export interface IAuthLayoutProps {
+ title: ReactNode;
+ subtitle?: ReactNode;
+ footer?: ReactNode;
+ children: ReactNode;
+}
+
+export interface IEmptyStateProps {
+ title?: string;
+ description?: string;
+}
+
+export interface INotificationProps {
+ customClass?: string;
+}

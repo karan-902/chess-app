@@ -161,7 +161,7 @@ export default function RoomSheet({
       type="button"
       variant="outlined"
       fullWidth
-      customClass="pool-confirm-cancel-btn"
+      customClass="common-play cancel-btn"
       startIcon={codeCopied ? "check" : "copy"}
       onClick={handleCopyCode}
      >

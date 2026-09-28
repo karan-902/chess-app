@@ -13,7 +13,7 @@ import type {
  IPracticeSheetProps,
 } from "@gopvp/chess/src/types/component";
 import type { GameCategory } from "@gopvp/chess/src/types/index";
-import { playText, cancelText } from "@gopvp/common/src/constants/message";
+import { playText } from "@gopvp/common/src/constants/message";
 import { minutesText } from "@gopvp/chess/src/constants/message";
 import {
  PRACTICE_DIFFICULTIES,
@@ -24,7 +24,6 @@ import SheetActions from "@gopvp/common/src/components/SheetActions/SheetActions
 export default function PracticeSheet({
  open,
  onClose,
- onCancel,
  onPlay,
 }: IPracticeSheetProps) {
  const [difficulty, setDifficulty] = useState<Difficulty>("easy");
@@ -53,7 +52,7 @@ export default function PracticeSheet({
      subLabel={(c) => minutesText(TIME_SECONDS[c] / 60)}
      customClass="segment category-select"
     />
-    <SheetActions cancelLabel={cancelText} onCancel={onCancel}>
+    <SheetActions>
      <Button
       type="button"
       variant="contained"

@@ -40,24 +40,7 @@ import {
 } from "@gopvp/chess/src/constants/limit";
 import DroppableSquare from "@gopvp/chess/src/components/board/DroppableSquare";
 import DraggablePiece from "@gopvp/chess/src/components/board/DraggablePiece";
-
-interface IChessBoardProps {
- fen: string;
- selectedSquare?: string | null;
- legalMoves?: string[];
- attackedSquares?: string[];
- checkSquare?: string | null;
- stalemateSquare?: string | null;
- flashSquare?: string | null;
- onSquareClick?: (square: string, viaDrag?: boolean) => void;
- onSquareRightClick?: (square: string) => void;
- lastMove?: { from: string; to: string } | null;
- flipped?: boolean;
- premoveMode?: boolean;
- premoveSquares?: string[];
- premoveMoves?: { from: string; to: string }[];
- draggableColor?: "w" | "b";
-}
+import type { IChessBoardProps } from "@gopvp/chess/src/types/component";
 
 function colorKeyFromEvent(e: {
  shiftKey: boolean;

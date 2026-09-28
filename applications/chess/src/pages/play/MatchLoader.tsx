@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { CircularProgress } from "@mui/material";
 import Box from "@gopvp/common/src/components/Box/Box";
 import { useGameContext } from "@gopvp/common/src/contexts/GameContext";
 import GameRoomGuard from "@gopvp/chess/src/pages/play/GameRoomGuard";
@@ -10,8 +9,9 @@ import {
 } from "@gopvp/chess/src/redux/chessHooks";
 import { clearMatchState } from "@gopvp/chess/src/redux/match/slice";
 import { loadMatchState } from "@gopvp/chess/src/redux/match/thunk";
+import type { IMatchLoaderProps } from "@gopvp/chess/src/types/component";
 
-export default function MatchLoader({ matchId }: { matchId: string }) {
+export default function MatchLoader({ matchId }: IMatchLoaderProps) {
  const { socket, playPath, userId } = useGameContext();
  const dispatch = useChessDispatch();
  const loadedMatchId = useChessSelector((state) => state.match.state?.match_id);
@@ -36,7 +36,7 @@ export default function MatchLoader({ matchId }: { matchId: string }) {
  if (loadedMatchId !== matchId) {
   return (
    <Box customClass="modal-loader">
-    <CircularProgress size={28} />
+    <Box customClass="logo-loader" role="progressbar" />
    </Box>
   );
  }

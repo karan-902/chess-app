@@ -59,6 +59,7 @@ export function useMatchmaking() {
     SOCKET_EVENTS.POOL_JOIN,
     { game, bet: pool.bet, time: pool.time },
     (err: ISocketAckError | null, data: IMatchmakingResponse) => {
+     if (!poolRef.current) return;
      if (err) {
       showAckErrorToast(err);
       resetStatus();

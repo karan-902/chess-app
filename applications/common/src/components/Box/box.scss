@@ -99,27 +99,6 @@
   margin-top: 0.25rem;
  }
 
- &.live-ring-wrap {
-  position: relative;
-  width: 0.5rem;
-  height: 0.5rem;
-  flex-shrink: 0;
-
-  &.searching-ring {
-   width: 4.25rem;
-   height: 4.25rem;
-   margin-bottom: 0.4rem;
-  }
- }
-
- &.searching-logo {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
- }
-
  &.otp-heading {
   display: flex;
   flex-direction: column;
@@ -128,7 +107,7 @@
  &.social-stack {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: $space-16;
   width: 100%;
  }
  &.auth-divider {
@@ -139,7 +118,7 @@
   font-family: $fontOutfitSemiBold;
   font-size: $font12;
   text-transform: uppercase;
-  margin: 20px 0px;
+  margin: $space-20 0;
 
   &::before,
   &::after {
@@ -212,7 +191,7 @@
 
  &.pool-confirm-actions {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
   width: 100%;
   margin-top: 0.6rem;
@@ -252,7 +231,7 @@
    gap: 0.25rem;
    padding: 0.25rem;
 
-   @media (min-width: 768px) {
+   @include from(tablet) {
     gap: 0.35rem;
     padding: 0.3rem;
    }
@@ -269,7 +248,7 @@
   transition:
    transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
    width 0.28s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 0;
+  z-index: $z-base;
  }
 
  &.matches-empty {
@@ -351,12 +330,12 @@
   border-radius: 0.6rem;
   background: $appSecondary;
   pointer-events: none;
-  z-index: 0;
+  z-index: $z-base;
  }
 
  &.duration-wheel-list {
   position: relative;
-  z-index: 1;
+  z-index: $z-raised;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -400,27 +379,25 @@
   padding: 1.1rem;
  }
 
- &.profile-id-row {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
- }
-
- &.profile-id-text {
+ &.profile-hero {
   display: flex;
   flex-direction: column;
-  min-width: 0;
+  align-items: center;
+  gap: $space-8;
  }
 
- &.profile-meta-row {
+ &.profile-name-row {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: $space-8;
   min-width: 0;
 
-  svg {
+  img {
+   width: 1.25rem;
+   height: 0.9375rem;
    flex-shrink: 0;
-   color: $appTextMuted;
+   border-radius: 2px;
+   object-fit: cover;
   }
  }
 
@@ -475,11 +452,23 @@
  }
 
  &.wallet-tx-item {
-  padding: 0.7rem 0.1rem;
-  border-bottom: 1px solid $appLine;
+  padding: $space-8 $space-12;
+  border-left: 1px solid $appCardBorder;
+  border-right: 1px solid $appCardBorder;
+  border-bottom: 1px solid alpha($appText, 0.06);
 
-  &:last-child {
-   border-bottom: none;
+  &.group-start,
+  &.loading:first-of-type {
+   border-top: 1px solid $appCardBorder;
+   border-top-left-radius: 14px;
+   border-top-right-radius: 14px;
+  }
+
+  &.group-end,
+  &.loading:last-of-type {
+   border-bottom-color: $appCardBorder;
+   border-bottom-left-radius: 14px;
+   border-bottom-right-radius: 14px;
   }
  }
 
@@ -559,12 +548,6 @@
   min-width: 0;
  }
 
- &.profile-info-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 0.32rem;
-  min-width: 0;
- }
  &.match-row-icon {
   display: flex;
   align-items: center;
@@ -579,7 +562,7 @@
   .match-row-svg {
    width: 14px !important;
    height: 14px !important;
-   @media screen and (min-width: 400px) {
+   @include from(phone) {
     width: 18px !important;
     height: 18px !important;
    }
@@ -624,13 +607,60 @@
   flex-direction: column;
  }
  &.wallet-modal-layout {
-  gap: 12px;
+  gap: $space-12;
  }
  &.modal-loader {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 21rem;
+ }
+
+ &.logo-loader {
+  position: relative;
+  width: 160px;
+  aspect-ratio: 1438 / 731;
+  isolation: isolate;
+
+  &::before,
+  &::after {
+   content: "";
+   position: absolute;
+   inset: 0;
+   background: url("/gopvp-logo.png") center / contain no-repeat;
+  }
+
+  &::before {
+   filter: grayscale(1) brightness(0.38);
+  }
+
+  &::after {
+   $shimmer-band: linear-gradient(
+     110deg,
+     transparent 37%,
+     $white 50%,
+     transparent 63%
+    )
+    0 center / 220% 100% no-repeat;
+
+   -webkit-mask: $shimmer-band;
+   mask: $shimmer-band;
+   animation: logo-loader-shimmer 1.8s linear infinite;
+  }
+
+  :root[data-theme="light"] &::before {
+   filter: grayscale(1) brightness(0.88);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+   &::before {
+    filter: none;
+   }
+
+   &::after {
+    display: none;
+   }
+  }
  }
 
  &.deposit-qr-stage {
@@ -723,7 +753,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 15px;
+  padding: $space-16;
   background: $appSurface;
   overflow-y: auto;
  }
@@ -732,7 +762,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px;
+  padding: $space-12;
   border: 1px solid transparent;
   border-radius: 0.85rem;
   flex-shrink: 0;
@@ -746,7 +776,7 @@
 
   &.me {
    margin-top: $font12;
-   padding: 8px;
+   padding: $space-8;
   }
 
   &.active {
@@ -768,12 +798,9 @@
   display: flex;
   justify-content: center;
   flex-shrink: 0;
-  width: min(100%, 48svh);
+  width: min(100%, 60svh);
 
-  @media screen and (max-width: 400px) {
-   width: min(100%, 60svh);
-  }
-  @media screen and (min-width: 400px) {
+  @include from(phone) {
    width: min(100%, 70svh);
   }
   margin: 0 auto;
@@ -787,7 +814,7 @@
   justify-content: center;
   background: rgba(16, 15, 12, 0.82);
   backdrop-filter: blur(4px);
-  z-index: 3;
+  z-index: $z-top;
  }
 
  &.gr-promotion-card {
@@ -864,43 +891,46 @@
   flex-shrink: 0;
  }
 
- &.gr-resign-actions {
-  display: flex;
-  gap: 1.5rem;
-  margin-top: 0.875rem;
- }
 
- &.gr-overlay {
-  position: absolute;
-  inset: 0;
+ &.gr-result-emblem {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.7rem;
-  text-align: center;
-  padding: 2rem;
-  background: alpha($appBg, 0.94);
-  backdrop-filter: blur(3px);
-  z-index: 5;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  color: $appTextMuted;
+  background: alpha($appText, 0.06);
+
+  svg {
+   width: 2rem;
+   height: 2rem;
+  }
+
+  &.win {
+   color: $greenishTeal;
+   background: alpha($greenishTeal, 0.12);
+  }
+
+  &.loss {
+   color: $paleRed;
+   background: alpha($paleRed, 0.12);
+  }
  }
 
  &.gr-settlement {
-  display: flex;
-  gap: 1.5rem;
-  margin: 0.3rem 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  width: 100%;
+  margin: $space-4 0 $space-8;
  }
 
  &.gr-settlement-item {
   text-align: center;
- }
-
- &.gr-overlay-actions {
-  display: flex;
-  gap: 0.6rem;
-  width: 100%;
-  max-width: 220px;
-  margin-top: 0.4rem;
+  padding: 0.9rem 0.85rem;
+  border: 1px solid $appCardBorder;
+  border-radius: 14px;
  }
 
  &.appbar-right {
@@ -929,6 +959,17 @@
   display: flex;
   gap: 0.75rem;
   margin-top: 1.25rem;
+ }
+}
+
+@keyframes logo-loader-shimmer {
+ from {
+  -webkit-mask-position: 125% center;
+  mask-position: 125% center;
+ }
+ to {
+  -webkit-mask-position: -25% center;
+  mask-position: -25% center;
  }
 }
 

@@ -2,7 +2,6 @@ import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
 import CustomDrawer from "@gopvp/common/src/components/Drawer/Drawer";
-import { ChessLogo } from "@gopvp/app/src/constants/icon";
 import type { IPoolConfirmSheetProps } from "@gopvp/app/src/types/component";
 import {
  secondsLeftText,
@@ -33,12 +32,7 @@ export default function PoolConfirmSheet({
   <CustomDrawer anchor="bottom" open={open} onClose={onClose}>
    {status === "queued" || status === "found" ? (
     <Box customClass="matchmaking-searching">
-     <Box customClass="live-ring-wrap searching-ring">
-      <Box customClass="searching-logo">
-       <ChessLogo size={44} showText={false} />
-      </Box>
-      <Text component="span" customClass="live-ring" />
-     </Box>
+     <Box customClass="logo-loader" role="progressbar" />
      <Text customClass="dialog-title" aria-live="polite">
       {status === "found" ? opponentFoundText : findingOpponentText}
      </Text>
@@ -61,7 +55,7 @@ export default function PoolConfirmSheet({
       type="button"
       variant="outlined"
       fullWidth
-      customClass="searching-cancel-btn"
+      customClass="common-play cancel-btn"
       disabled={status === "found"}
       onClick={onLeaveQueue}
      >

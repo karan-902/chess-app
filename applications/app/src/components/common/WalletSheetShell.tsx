@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import classNames from "classnames";
-import { CircularProgress } from "@mui/material";
 import CustomDrawer from "@gopvp/common/src/components/Drawer/Drawer";
 import Box from "@gopvp/common/src/components/Box/Box";
 import { useSheetReady } from "@gopvp/app/src/hooks/useSheetReady";
@@ -34,7 +33,7 @@ export default function WalletSheetShell({
     children
    ) : (
     <Box customClass="modal-loader">
-     <CircularProgress size={28} />
+     <Box customClass="logo-loader" role="progressbar" />
     </Box>
    )}
   </CustomDrawer>

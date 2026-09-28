@@ -154,7 +154,7 @@
 
  &.auth-change-btn {
   flex-shrink: 0;
-  gap: 0px;
+  gap: 0;
   height: auto;
   padding: 0.4rem 0.7rem;
   align-items: center;
@@ -174,7 +174,7 @@
  }
 
  &.auth-submit-btn {
-  margin-top: 20px;
+  margin-top: $space-20;
  }
 
  &.auth-submit-btn-arrow {
@@ -186,7 +186,7 @@
  }
 
  &.auth-google-btn {
-  gap: 0px;
+  gap: 0;
   background: transparent;
   border: 1px solid alpha($appText, 0.22);
   box-shadow: none;
@@ -195,10 +195,10 @@
   height: 2.85rem;
   border-color: $appCardBorder;
   .MuiButton-icon {
-   margin-right: 5px;
+   margin-right: $space-4;
   }
   .button-text {
-   margin: 7px 5px;
+   margin: $space-8 $space-4;
   }
   &:hover:not(.Mui-disabled) {
    background: transparent;
@@ -209,18 +209,22 @@
 
  &.game-cta,
  &.options-play {
-  background: $gold !important;
   border: 1px solid $appBtnBorder;
   box-shadow: none;
   border-radius: 0.6rem;
   color: $primaryContrast !important;
+
+  &:not(.Mui-disabled),
+  &.loading {
+   background: $gold !important;
+  }
 
   &:not(.Mui-disabled):hover {
    opacity: 0.7;
   }
  }
  &.options-play {
-  padding: 0px;
+  padding: 0;
   height: $font24 !important;
  }
 
@@ -235,7 +239,7 @@
  &.play-cta {
   width: 100% !important;
 
-  @media (min-width: 1024px) {
+  @include from(laptop) {
    width: 320px !important;
   }
  }
@@ -247,12 +251,12 @@
 
  &.common-play {
   width: min(150px, 100%) !important;
-  height: 26px !important;
+  height: $font24 !important;
   min-height: 0px;
-  padding: 0px !important;
+  padding: 0 !important;
   border-radius: 8px !important;
   .button-text {
-   font-size: $font14;
+   font-size: $font12;
   }
   color: $primaryContrast !important;
 
@@ -261,45 +265,19 @@
    border-color: $gold;
    color: $gold !important;
   }
-  @media screen and (max-width: 600px) {
-   height: $font24 !important;
+  @include from(tablet) {
+   height: 26px !important;
    .button-text {
-    font-size: $font12;
+    font-size: $font14;
    }
   }
  }
 
- &.searching-cancel-btn {
-  height: 2.1rem;
-  font-size: $font12;
-  border-color: alpha($paleRed, 0.35);
-  color: $paleRed;
-
-  &:hover:not(.Mui-disabled) {
-   background: $appBtnBg;
-   border-color: $paleRed;
-  }
+ &.cancel-btn {
+  background: $paleRed;
 
   &.Mui-disabled {
    opacity: 0.5;
-  }
- }
-
- &.pool-confirm-cancel-btn {
-  height: 2.1rem;
-  background: transparent;
-  border: none;
-  font-size: $font12;
-  color: $appTextMuted;
-
-  .MuiButton-startIcon svg {
-   width: 0.875rem;
-   height: 0.875rem;
-  }
-
-  &:hover:not(.Mui-disabled) {
-   background: transparent;
-   color: $appText;
   }
  }
 
@@ -349,7 +327,7 @@
 
  &.segment-btn {
   position: relative;
-  z-index: 1;
+  z-index: $z-raised;
   flex: 1 1 0;
   flex-direction: column;
   gap: 0.1rem;
@@ -368,7 +346,7 @@
    padding: 0.4rem 0.1rem;
    letter-spacing: normal;
 
-   @media (min-width: 768px) {
+   @include from(tablet) {
     padding: 0.4rem 0.3rem;
    }
   }
@@ -393,7 +371,7 @@
    border-color: alpha($appText, 0.4);
   }
   .MuiButton-startIcon {
-   margin: 0 5px 0 0;
+   margin: 0 $space-4 0 0;
 
    svg {
     width: 0.875rem;
@@ -410,14 +388,8 @@
   height: 40px;
   padding: 0;
   border-radius: 50%;
-  background: $appBtnBg;
   border: 1px solid $appBtnBorder;
   color: $appText;
-
-  &:hover:not(.Mui-disabled) {
-   border-color: $gold;
-   color: $gold;
-  }
  }
 
  &.profile-save-btn {
@@ -454,36 +426,10 @@
   }
  }
 
- &.gr-overlay-btn {
-  flex: 1;
-  font-family: $fontOutfitRegular;
-  font-size: $font12;
-  font-weight: 700;
-  padding: 0.65rem;
-  border-radius: 4px;
-
-  &.primary {
-   background: $gold;
-   border: none;
-   color: $primaryContrast;
-
-   &.Mui-disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-   }
-  }
-
-  &.secondary {
-   background: transparent;
-   border: 1px solid $appCardBorder;
-   color: $appText;
-  }
- }
-
  &.gr-action-btn {
   flex: 1;
   max-width: 5rem;
-  padding: 8px;
+  padding: $space-8;
   border: 1px solid $appCardBorder;
   background: $paleRed;
   font-family: $fontOutfitExtraBold;

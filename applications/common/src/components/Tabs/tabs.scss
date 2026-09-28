@@ -13,7 +13,7 @@
   text-transform: none;
   min-height: 44px;
   min-width: 0 !important;
-  padding: 0.75rem 0.6rem;
+  padding: 0.75rem 0.4rem;
   color: $appTextMuted;
   font-family: $fontOutfitRegular;
   font-size: $font14;
@@ -24,19 +24,18 @@
    font-weight: 600;
   }
 
-  @media screen and (max-width: 360px) {
-   padding: 0.75rem 0.4rem;
-   font-size: $font13;
+  @include from(phone) {
+   padding: 0.75rem 0.6rem;
   }
  }
 
  &.appbar-nav-tabs {
-  padding: 0 1rem;
+  padding: 0 0.5rem;
   border-bottom: 1px solid $appLine;
   flex-shrink: 0;
 
-  @media screen and (max-width: 600px) {
-   padding: 0 0.5rem;
+  @include from(tablet) {
+   padding: 0 1rem;
   }
  }
 }

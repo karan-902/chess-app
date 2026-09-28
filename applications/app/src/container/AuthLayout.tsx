@@ -1,14 +1,7 @@
-import type { ReactNode } from "react";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import { ChessLogo } from "@gopvp/app/src/constants/icon";
-
-interface IAuthLayoutProps {
- title: ReactNode;
- subtitle?: ReactNode;
- footer?: ReactNode;
- children: ReactNode;
-}
+import type { IAuthLayoutProps } from "@gopvp/app/src/types/component";
 
 export default function AuthLayout({
  title,

@@ -3,12 +3,12 @@
 .common-tooltip {
  .tooltip-content {
   background: $backdropCenter !important;
-  color: #f5f5f5 !important;
+  color: $tooltipText !important;
   font-family: $fontOutfitRegular;
   font-size: $font12;
   font-weight: 500;
   line-height: 1.4;
-  padding: 6px 10px;
+  padding: $space-8 $space-12;
   border-radius: 5px;
  }
 

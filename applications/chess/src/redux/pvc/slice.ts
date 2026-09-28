@@ -51,8 +51,9 @@ const pvcSlice = createSlice({
     },
    };
   },
+  clearPvcGame: () => initialState,
  },
 });
 
-export const { startPvcGame } = pvcSlice.actions;
+export const { startPvcGame, clearPvcGame } = pvcSlice.actions;
 export default pvcSlice.reducer;

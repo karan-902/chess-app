@@ -11,6 +11,8 @@ import {
 } from "@gopvp/app/src/redux/game/slice";
 import type { IGameResponse } from "@gopvp/common/src/types/response";
 import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
+import { showToastMessage } from "@gopvp/common/src/util/injectStore";
+import { gameUnavailableText } from "@gopvp/app/src/constants/message";
 
 export const fetchGameDetails = createAsyncThunk(
  "game/fetchGameDetails",
@@ -21,7 +23,12 @@ export const fetchGameDetails = createAsyncThunk(
     "GET",
     `${ENDPOINTS.GAMES}/${slug}`,
    );
-   dispatch(setGameDetails(res));
+   if (res.is_active) dispatch(setGameDetails(res));
+   else
+    showToastMessage({
+     toastMessage: gameUnavailableText,
+     toastVariant: "error",
+    });
    return res;
   } catch (err) {
    showApiErrorToast(err);

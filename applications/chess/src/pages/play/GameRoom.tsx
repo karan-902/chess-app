@@ -21,6 +21,8 @@ import {
  markGameFinished,
  clearPvcSnapshot,
 } from "@gopvp/chess/src/utils/storage";
+import { useChessDispatch } from "@gopvp/chess/src/redux/chessHooks";
+import { clearPvcGame } from "@gopvp/chess/src/redux/pvc/slice";
 import { DIFFICULTY_CONFIG } from "@gopvp/chess/src/config/engine";
 import { GAME_END_REASON_LABELS } from "@gopvp/chess/src/constants/label";
 import { MATCH_RESULT_OUTCOMES } from "@gopvp/common/src/constants/mapper";
@@ -33,13 +35,10 @@ import {
  opponentOfferedDrawText,
  acceptText,
  declineText,
- victoryText,
- drawUpperText,
- defeatText,
  gameOverText,
 } from "@gopvp/chess/src/constants/message";
 import Button from "@gopvp/common/src/components/Button/Button";
-import ResignModal from "@gopvp/chess/src/components/common/ResignModal";
+import ResignSheet from "@gopvp/chess/src/components/common/ResignSheet";
 
 function pickBySide<T>(side: "w" | "b", whiteVal: T, blackVal: T): T {
  return side === "w" ? whiteVal : blackVal;
@@ -47,6 +46,7 @@ function pickBySide<T>(side: "w" | "b", whiteVal: T, blackVal: T): T {
 
 export default function GameRoom({ mode }: IGameRoomProps) {
  const navigate = useNavigate();
+ const dispatch = useChessDispatch();
  const { playPath } = useGameContext();
 
  const {
@@ -103,8 +103,16 @@ export default function GameRoom({ mode }: IGameRoomProps) {
  const [resignOpen, setResignOpen] = useState(false);
 
  const bypassBlockRef = useRef(false);
+ const isMountedRef = useRef(true);
+ useEffect(() => {
+  isMountedRef.current = true;
+  return () => {
+   isMountedRef.current = false;
+  };
+ }, []);
  const blocker = useBlocker(
   useCallback(() => {
+   if (!isMountedRef.current) return false;
    if (bypassBlockRef.current) {
     bypassBlockRef.current = false;
     return false;
@@ -126,8 +134,12 @@ export default function GameRoom({ mode }: IGameRoomProps) {
  useEffect(() => {
   if (!gameEnded || !gameId) return;
   markGameFinished(gameId);
-  if (isPvc) clearPvcSnapshot(gameId);
- }, [gameEnded, gameId, isPvc]);
+  if (!isPvc) return;
+  clearPvcSnapshot(gameId);
+  return () => {
+   dispatch(clearPvcGame());
+  };
+ }, [gameEnded, gameId, isPvc, dispatch]);
 
  useEffect(() => {
   setPremoveQueue([]);
@@ -315,16 +327,6 @@ export default function GameRoom({ mode }: IGameRoomProps) {
  const oppClock = pickBySide(oppColor, whiteTimer, blackTimer);
  const myTurnActive = turn === playerSide;
 
- const outcome = gameEnded ? MATCH_RESULT_OUTCOMES[gameEnded.result] : null;
- const isDrawResult = outcome === "draw";
- const isWinner = outcome === "win";
- const resultHeader = !gameEnded
-  ? ""
-  : isDrawResult
-    ? drawUpperText
-    : isWinner
-      ? victoryText
-      : defeatText;
  const reasonLabel = gameEnded?.end_reason
   ? (GAME_END_REASON_LABELS[gameEnded.end_reason] ?? gameOverText)
   : "";
@@ -406,7 +408,7 @@ export default function GameRoom({ mode }: IGameRoomProps) {
 
    <Box customClass="gr-foot">
     <Button
-     customClass="gr-action-btn danger"
+     customClass="gr-resign-btn cancel-btn common-play"
      onClick={() => setResignOpen(true)}
     >
      {resignText}
@@ -418,7 +420,7 @@ export default function GameRoom({ mode }: IGameRoomProps) {
     )}
    </Box>
 
-   <ResignModal
+   <ResignSheet
     open={resignOpen || (blocker.state === "blocked" && !gameEnded)}
     isPvc={isPvc}
     betAmount={betAmount}
@@ -429,10 +431,10 @@ export default function GameRoom({ mode }: IGameRoomProps) {
    {gameEnded && (
     <GameOverOverlay
      gameEnded={gameEnded}
+     outcome={MATCH_RESULT_OUTCOMES[gameEnded.result]}
+     isPvc={isPvc}
      reasonLabel={reasonLabel}
-     resultHeader={resultHeader}
-     isWinner={isWinner}
-     isDrawResult={isDrawResult}
+     opponentName={opponentName}
      onNewGame={() => navigate(playPath, { replace: true })}
     />
    )}

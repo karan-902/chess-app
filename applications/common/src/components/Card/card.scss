@@ -110,13 +110,9 @@
   justify-content: center;
   width: 200px;
   height: 150px;
-  border-radius: 5px;
-  border-color: alpha($gold, 0.25);
-
-  .backdrop-loader-anim {
-   width: 84px;
-   height: 84px;
-   margin: 0 25px 10px;
-  }
+  background: transparent;
+  gap: $space-12;
+  border: none;
+  box-shadow: none;
  }
 }

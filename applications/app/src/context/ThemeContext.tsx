@@ -3,7 +3,7 @@ import {
  useContext,
  useEffect,
  useState,
- type ReactNode,
+ type PropsWithChildren,
 } from "react";
 import type { ThemeMode } from "@gopvp/common/src/types/component";
 import { readStorage, writeStorage } from "@gopvp/common/src/util/storage";
@@ -25,7 +25,7 @@ function loadInitialMode(): ThemeMode {
   : "dark";
 }
 
-export function AppThemeProvider({ children }: { children: ReactNode }) {
+export function AppThemeProvider({ children }: PropsWithChildren) {
  const [mode, setMode] = useState<ThemeMode>(loadInitialMode);
 
  useEffect(() => {

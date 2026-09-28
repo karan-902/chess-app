@@ -87,7 +87,7 @@ export default function PlayerRow({
     {clockReady ? (
      clock
     ) : (
-     <Skeleton variant="rounded" width="2.5rem" height="1.5rem" />
+     <Skeleton customClass="text" width="4rem" />
     )}
    </Text>
   </Box>

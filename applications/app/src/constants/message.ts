@@ -162,6 +162,7 @@ export const globalActivityEmptyText =
  "Global activity will show up here once matches start rolling in.";
 export const vsText = "VS";
 export const chessText = "Chess";
+export const gameUnavailableText = "This game is currently unavailable.";
 export const bestStreakText = "Best streak";
 export const currentStreakText = "Current streak";
 
@@ -184,6 +185,9 @@ export const searchCountryText = "Search country…";
 export const selectCountryText = "Select country";
 export const walletText = "Wallet";
 export const logOutText = "Log Out";
+export const accountText = "Account";
+export const verifiedText = "Verified";
+export const noText = "No";
 export const noDataFoundText = "No Data Found";
 export const appNameText = "GoPVP";
 export const speedText = "Speed";

@@ -4,7 +4,7 @@ import {
  useEffect,
  useState,
  useRef,
- type ReactNode,
+ type PropsWithChildren,
 } from "react";
 
 import type { Socket } from "socket.io-client";
@@ -37,7 +37,7 @@ const SocketContext = createContext<ISocketContext>({
  socket: null,
 });
 
-export function SocketProvider({ children }: { children: ReactNode }) {
+export function SocketProvider({ children }: PropsWithChildren) {
  const session = useReduxSelector((state) => state.auth.session);
  const isLoggedIn = useReduxSelector((state) => state.auth.isLoggedIn);
  const isGameReady = useReduxSelector((state) => !!state.game.details);

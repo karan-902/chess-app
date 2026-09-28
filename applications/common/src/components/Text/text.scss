@@ -73,13 +73,16 @@
   font-size: $font12;
   color: $appTextMuted;
  }
-
+ &.loader-text {
+  font-family: $fontOutfitExtraBold;
+  color: $white !important;
+ }
  &.meta-text {
   font-family: $fontOutfitSemiBold;
   font-size: $font12;
   color: $appTextMuted;
 
-  @media (min-width: 768px) {
+  @include from(tablet) {
    font-size: $font13;
   }
  }
@@ -130,7 +133,7 @@
   font-family: $fontOutfitBold;
   font-size: $font14;
   color: $appText;
-  @media (min-width: 1024px) {
+  @include from(laptop) {
    font-size: $font15;
   }
  }
@@ -140,7 +143,7 @@
   font-size: $font15;
   flex-shrink: 0;
 
-  @media (min-width: 480px) {
+  @include from(phone) {
    font-size: $font16;
   }
 
@@ -180,7 +183,7 @@
   .auth-forgot-link {
    font-size: $font14;
    display: block;
-   margin-left: 10px;
+   margin-left: $space-12;
    text-decoration: underline;
   }
  }
@@ -218,15 +221,6 @@
   font-size: $font12;
   color: alpha($appText, 0.45);
   text-align: center;
- }
-
- &.live-ring {
-  position: absolute;
-  inset: -0.3rem;
-  border-radius: 50%;
-  border: 1px solid $greenishTeal;
-  opacity: 0;
-  animation: live-pulse 2s ease-out infinite;
  }
 
  &.play-hint {
@@ -312,12 +306,12 @@
 
  &.bet-card-practice-title {
   font-family: $fontOutfitExtraBold;
-  font-size: $font15;
+  font-size: $font14;
   font-weight: 700;
   color: $gold;
 
-  @media screen and (max-width: 568px) {
-   font-size: $font14;
+  @include from(tablet) {
+   font-size: $font15;
   }
  }
 
@@ -335,7 +329,7 @@
    font-size: $font12;
    overflow-wrap: anywhere;
 
-   @media (min-width: 768px) {
+   @include from(tablet) {
     font-size: $font14;
    }
   }
@@ -359,7 +353,7 @@
    color: $gold;
    text-decoration: underline;
    font-family: $fontOutfitExtraBold;
-   margin-left: 5px;
+   margin-left: $space-4;
   }
  }
 
@@ -390,6 +384,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+
+  svg {
+   vertical-align: top;
+  }
  }
  &.stat-title {
   font-family: $fontOutfitMedium;
@@ -403,9 +401,9 @@
   flex-shrink: 0;
   text-align: center;
   font-family: $fontOutfitExtraBold;
-  font-size: $font16;
-  @media screen and (max-width: 400px) {
-   font-size: $font15;
+  font-size: $font15;
+  @include from(phone) {
+   font-size: $font16;
   }
   color: $appTextMuted;
 
@@ -444,10 +442,10 @@
  &.wallet-split-val {
   display: block;
   font-family: $fontOutfitExtraBold;
-  font-size: $font24;
+  font-size: $font18;
   color: $appText;
-  @media screen and (max-width: 600px) {
-   font-size: $font18;
+  @include from(tablet) {
+   font-size: $font24;
   }
   .wallet-split-block.accent & {
    color: $appText;
@@ -463,15 +461,11 @@
  &.profile-id-name {
   display: block;
   font-family: $fontOutfitExtraBold;
-  font-size: $font18;
-  @media screen and (max-width: 400px) {
-   font-size: $font15;
+  font-size: $font15;
+  @include from(phone) {
+   font-size: $font18;
   }
   color: $appText;
- }
-
- &.profile-id-handle {
-  display: block;
  }
 
  &.sheet-title {
@@ -495,7 +489,8 @@
   color: $appTextMuted;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  margin: 0px;
+  margin: 0;
+  padding: $space-12 0 $space-4;
  }
 
  &.rules-text {
@@ -610,35 +605,29 @@
   margin-right: 0.3rem;
  }
 
- &.gr-heading {
-  display: block;
-  margin-bottom: 0.3rem;
- }
-
- &.gr-overlay-badge {
-  font-family: $fontOutfitRegular;
-  font-size: $font12;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: $gold;
- }
-
  &.gr-promotion-label {
   letter-spacing: 0.08em;
   text-transform: uppercase;
  }
 
  &.gr-overlay-title {
-  font-size: $font20;
-  font-weight: 800;
+  font-family: $fontOutfitExtraBold;
+  font-size: $font24;
   color: $appText;
+
+  &.win {
+   color: $greenishTeal;
+  }
+
+  &.loss {
+   color: $paleRed;
+  }
  }
 
  &.gr-settlement-val {
   display: block;
-  font-family: $fontOutfitRegular;
-  font-size: $font16;
-  font-weight: 700;
+  font-family: $fontOutfitExtraBold;
+  font-size: $font20;
   color: $gold;
 
   &.win {
@@ -673,16 +662,5 @@
   color: alpha($appText, 0.5);
   margin-bottom: 1.25rem;
   line-height: 1.5;
- }
-}
-
-@keyframes live-pulse {
- 0% {
-  transform: scale(0.5);
-  opacity: 0.7;
- }
- 100% {
-  transform: scale(1.6);
-  opacity: 0;
  }
 }

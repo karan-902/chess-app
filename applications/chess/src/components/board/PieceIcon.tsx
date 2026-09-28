@@ -1,11 +1,5 @@
 import { PIECE_PATHS } from "@gopvp/chess/src/constants/asset";
-
-interface IPieceIconProps {
- code: string;
- className?: string;
- style?: React.CSSProperties;
- onPointerDown?: (e: React.PointerEvent<SVGSVGElement>) => void;
-}
+import type { IPieceIconProps } from "@gopvp/chess/src/types/component";
 
 export default function PieceIcon({
  code,

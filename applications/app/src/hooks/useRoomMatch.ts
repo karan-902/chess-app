@@ -28,6 +28,7 @@ export function useRoomMatch(onRoomExpired?: () => void) {
  const [expiryAt, setExpiryAt] = useState<number | null>(null);
  const expiresInSeconds = useCountdown(status === "waiting" ? expiryAt : null);
  const roomRef = useRef<TRoomInfo | null>(null);
+ const requestIdRef = useRef(0);
  const statusRef = useRef<RoomStatus>("idle");
  statusRef.current = status;
  const onRoomExpiredRef = useRef(onRoomExpired);
@@ -37,6 +38,7 @@ export function useRoomMatch(onRoomExpired?: () => void) {
  const { socket: ctxSocket } = useSocket();
 
  const resetStatus = useCallback(() => {
+  requestIdRef.current++;
   setStatus("idle");
   setIsOwner(false);
   setRoomCode(null);
@@ -66,11 +68,21 @@ export function useRoomMatch(onRoomExpired?: () => void) {
  const createRoom = (bet: number, timeSeconds: number) => {
   const socket = getSocket();
   if (!socket) return;
+  const requestId = requestIdRef.current;
   setStatus("creating");
   socket.emit(
    SOCKET_EVENTS.ROOM_CREATE,
    { game, bet, time: timeSeconds * 1000 },
    (err: ISocketAckError | null, data: ICreateRoomResponse) => {
+    if (requestId !== requestIdRef.current) {
+     if (!err)
+      socket.emit(
+       SOCKET_EVENTS.ROOM_CANCEL,
+       { room_code: data.room_code },
+       () => {},
+      );
+     return;
+    }
     if (err) {
      showAckErrorToast(err);
      resetStatus();
@@ -89,11 +101,17 @@ export function useRoomMatch(onRoomExpired?: () => void) {
  const joinRoom = (code: string) => {
   const socket = getSocket();
   if (!socket) return;
+  const requestId = requestIdRef.current;
   setStatus("joining");
   socket.emit(
    SOCKET_EVENTS.ROOM_JOIN,
    { room_code: code },
    (err: ISocketAckError | null, data: IMatchmakingResponse) => {
+    if (requestId !== requestIdRef.current) {
+     if (!err)
+      socket.emit(SOCKET_EVENTS.ROOM_LEAVE, { room_code: code }, () => {});
+     return;
+    }
     if (err) {
      showAckErrorToast(err);
      resetStatus();

@@ -7,3 +7,4 @@ export const socketUrl = (
 export const googleClientId = env.VITE_GOOGLE_CLIENT_ID;
 export const imageIconS3Url = env.VITE_APP_IMAGE_ICON_S3_URL;
 export const lottieBaseUrl = env.VITE_APP_LOTTIE_BASE_URL;
+export const flagCdnUrl = env.VITE_FLAG_API;

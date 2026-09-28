@@ -8,11 +8,18 @@ import {
  stalemateText,
  timeoutText,
  inactivityText,
+ rejoinDeclinedText,
+ abortedText,
+ victoryText,
+ drawUpperText,
+ defeatText,
+ cancelledUpperText,
  queenText,
  rookText,
  bishopText,
  knightText,
 } from "@gopvp/chess/src/constants/message";
+import type { MatchOutcome } from "@gopvp/common/src/types/index";
 
 export const CATEGORY_LABELS: Record<GameCategory, string> = {
  BULLET: "BULLET",
@@ -28,6 +35,15 @@ export const GAME_END_REASON_LABELS: Record<string, string> = {
  STALEMATE: stalemateText,
  TIMEOUT: timeoutText,
  DISCONNECT: inactivityText,
+ DECLINED: rejoinDeclinedText,
+ ABORT: abortedText,
+};
+
+export const RESULT_HEADERS: Record<MatchOutcome, string> = {
+ win: victoryText,
+ draw: drawUpperText,
+ loss: defeatText,
+ match_cancelled: cancelledUpperText,
 };
 
 export const DIFFICULTY_LABELS: Record<Difficulty, string> = {

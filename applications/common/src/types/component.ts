@@ -33,7 +33,6 @@ export interface IPoolLabelProps {
 export interface IGamePracticeProps {
  open: boolean;
  onClose: () => void;
- onCancel: () => void;
 }
 
 export interface IMatchIconProps {

@@ -1,7 +1,7 @@
 @use "default.scss" as *;
 
 .common-avatar {
- font-weight: 700;
+ background-color: transparent !important;
  font-family: $fontOutfitRegular;
 
  &.primary {
@@ -26,5 +26,12 @@
   width: 2.25rem;
   height: 2.25rem;
   font-size: $font14;
+ }
+
+ &.lg {
+  width: 4.5rem;
+  height: 4.5rem;
+  font-size: $font30;
+  font-family: $fontOutfitExtraBold;
  }
 }
