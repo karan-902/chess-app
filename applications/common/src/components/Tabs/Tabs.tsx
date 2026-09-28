@@ -17,5 +17,11 @@ export function CustomTabs({ customClass, ...props }: ITabsProps) {
 }
 
 export function CustomTab({ customClass, ...props }: ITabProps) {
- return <MuiTab {...props} className={classNames("common-tab", customClass)} />;
+ return (
+  <MuiTab
+   disableRipple
+   {...props}
+   className={classNames("common-tab", customClass)}
+  />
+ );
 }
