@@ -1,9 +1,7 @@
-import { useState, useEffect, useCallback, useRef } from "react";
-import {
- callAPIInterface,
- showApiErrorToast,
-} from "@gopvp/common/src/util/api";
+import { useCallback } from "react";
+import { callAPIInterface } from "@gopvp/common/src/util/api";
 import { useGame } from "@gopvp/app/src/hooks/useGame";
+import { usePaginatedList } from "@gopvp/app/src/hooks/usePaginatedList";
 import type {
  LeaderboardScope,
  LeaderboardSort,
@@ -17,62 +15,17 @@ import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
 
 export function useLeaderboard(scope: LeaderboardScope, sort: LeaderboardSort) {
  const { game } = useGame();
- const [players, setPlayers] = useState<ILeaderboardRowResponse[]>([]);
- const [loading, setLoading] = useState(true);
- const [loadingMore, setLoadingMore] = useState(false);
- const [error, setError] = useState(false);
 
- const hasMoreRef = useRef(false);
- const pageIdRef = useRef<string | null>(null);
- const isFetchingRef = useRef(false);
- const activeQueryRef = useRef("");
-
- const load = useCallback(
-  async (isFirstLoad: boolean) => {
-   if (!isFirstLoad && (isFetchingRef.current || !hasMoreRef.current)) return;
-
-   const query = `game=${game}&scope=${scope}&sort=${sort}`;
-   activeQueryRef.current = query;
-   isFetchingRef.current = true;
-   (isFirstLoad ? setLoading : setLoadingMore)(true);
-   setError(false);
-
-   const endingBefore =
-    !isFirstLoad && pageIdRef.current ? pageIdRef.current : undefined;
-
-   try {
-    const res = await callAPIInterface<
-     IListResponse<ILeaderboardRowResponse>,
-     ILeaderboardBody
-    >("POST", ENDPOINTS.LEADERBOARD, {
-     game,
-     scope,
-     sort,
-     ending_before: endingBefore,
-    });
-    if (activeQueryRef.current !== query) return;
-    const data = res.data ?? [];
-    setPlayers((prev) => (isFirstLoad ? data : [...prev, ...data]));
-    hasMoreRef.current = res.has_more;
-    pageIdRef.current = res.page_id;
-   } catch (err) {
-    if (activeQueryRef.current === query) setError(true);
-    showApiErrorToast(err);
-   } finally {
-    isFetchingRef.current = false;
-    if (activeQueryRef.current === query) {
-     (isFirstLoad ? setLoading : setLoadingMore)(false);
-    }
-   }
-  },
+ const fetchPage = useCallback(
+  (cursor: string | null) =>
+   callAPIInterface<IListResponse<ILeaderboardRowResponse>, ILeaderboardBody>(
+    "POST",
+    ENDPOINTS.LEADERBOARD,
+    { game, scope, sort, ending_before: cursor ?? undefined },
+   ),
   [game, scope, sort],
  );
 
- useEffect(() => {
-  load(true);
- }, [load]);
-
- const loadMore = useCallback(() => load(false), [load]);
-
- return { players, loading, loadingMore, error, loadMore };
+ const { items, ...list } = usePaginatedList(fetchPage);
+ return { players: items, ...list };
 }

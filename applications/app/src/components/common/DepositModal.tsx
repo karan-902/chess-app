@@ -1,19 +1,17 @@
 import { useEffect, useState } from "react";
 import classNames from "classnames";
-import { CircularProgress } from "@mui/material";
 import { QRCodeSVG } from "qrcode.react";
-import CustomModal from "@gopvp/common/src/components/Modal/Modal";
-import SuccessCheckmark from "@gopvp/common/src/components/SuccessCheckmark/SuccessCheckmark";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
 import Input from "@gopvp/common/src/components/Input/Input";
-import { Info, speedLogo, qrLogo } from "@gopvp/common/src/components/images";
+import { speedLogo, qrLogo } from "@gopvp/common/src/components/images";
+import WalletModalShell from "@gopvp/app/src/components/common/WalletModalShell";
+import WalletSuccessStage from "@gopvp/app/src/components/common/WalletSuccessStage";
+import WalletInfoNote from "@gopvp/app/src/components/common/WalletInfoNote";
 import { useWalletModal } from "@gopvp/app/src/context/WalletModalContext";
 import { useSocket } from "@gopvp/app/src/context/SocketContext";
 import { paymentRequest } from "@gopvp/app/src/hooks/useWallet";
-import { useModalReady } from "@gopvp/app/src/hooks/useModalReady";
-import { formatAmount } from "@gopvp/common/src/util/format";
 import { getApiErrorResponse } from "@gopvp/common/src/util/api";
 import type {
  IPaymentRequestResponse,
@@ -65,7 +63,6 @@ export default function DepositModal() {
  const { openModal, close } = useWalletModal();
  const { socket } = useSocket();
  const open = openModal === "deposit";
- const ready = useModalReady(open);
 
  const [stage, setStage] = useState<Stage>("amount");
  const [amount, setAmount] = useState("");
@@ -113,12 +110,6 @@ export default function DepositModal() {
   };
  }, [stage, socket]);
 
- useEffect(() => {
-  if (stage !== "success") return;
-  const timer = setTimeout(close, 2800);
-  return () => clearTimeout(timer);
- }, [stage, close]);
-
  const amountUsd = Number(amount);
  const isAmountInvalid =
   !amount ||
@@ -164,31 +155,11 @@ export default function DepositModal() {
  };
 
  return (
-  <CustomModal
-   open={open}
-   onClose={close}
-   hideCloseIcon={stage === "success"}
-   disableRestoreFocus
-   customClass={classNames(
-    "wallet-modal",
-    stage === "success" && "wallet-modal-success",
-   )}
-  >
-   {!ready && (
-    <Box customClass="modal-loader">
-     <CircularProgress size={28} />
-    </Box>
-   )}
-
-   {ready && stage === "amount" && (
+  <WalletModalShell open={open} isSuccess={stage === "success"} onClose={close}>
+   {stage === "amount" && (
     <Box customClass="wallet-modal-layout">
      <Text customClass="modal-heading value-heading">{depositText}</Text>
-     <Box customClass="modal-info-box">
-      <Info size={16} strokeWidth={2} />
-      <Text customClass="modal-info-text caption">
-       {depositsNotWithdrawableText}
-      </Text>
-     </Box>
+     <WalletInfoNote text={depositsNotWithdrawableText} />
 
      <Box customClass="hero-input-wrapper">
       <Input
@@ -241,7 +212,7 @@ export default function DepositModal() {
     </Box>
    )}
 
-   {ready && stage === "qr" && payment && (
+   {stage === "qr" && payment && (
     <Box customClass="deposit-qr-stage">
      <Box customClass="deposit-qr-header">
       <CustomIconButton
@@ -255,10 +226,7 @@ export default function DepositModal() {
       </Text>
      </Box>
 
-     <Box customClass="modal-info-box">
-      <Info size={16} strokeWidth={2} />
-      <Text customClass="modal-info-text caption">{btcOnlyWarningText}</Text>
-     </Box>
+     <WalletInfoNote text={btcOnlyWarningText} />
 
      <Text customClass="deposit-scan-hint caption">{scanToDepositText}</Text>
 
@@ -297,20 +265,9 @@ export default function DepositModal() {
     </Box>
    )}
 
-   {ready && stage === "success" && (
-    <Box customClass="modal-success-stage">
-     <Box customClass="modal-success-icon">
-      <SuccessCheckmark />
-     </Box>
-     <Box customClass="deposit-success-amountWrapper">
-      {" "}
-      <Text customClass="modal-success-amount">{formatAmount(amountUsd)}</Text>
-      <Text customClass="modal-heading value-heading">
-       {paymentReceivedText}
-      </Text>
-     </Box>
-    </Box>
+   {stage === "success" && (
+    <WalletSuccessStage amountUsd={amountUsd} title={paymentReceivedText} />
    )}
-  </CustomModal>
+  </WalletModalShell>
  );
 }

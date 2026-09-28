@@ -1,8 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import {
- callAPIInterface,
- showApiErrorToast,
-} from "@gopvp/common/src/util/api";
+import { useCallback, useEffect } from "react";
+import { callAPIInterface } from "@gopvp/common/src/util/api";
+import { usePaginatedList } from "@gopvp/app/src/hooks/usePaginatedList";
+import { endingBeforeQuery } from "@gopvp/app/src/utils";
 import { useSocket } from "@gopvp/app/src/context/SocketContext";
 import { useReduxDispatch, useReduxSelector } from "@gopvp/app/src/redux/hooks";
 import { fetchWalletBalance } from "@gopvp/app/src/redux/wallet/thunk";
@@ -61,70 +60,32 @@ export function useWallet() {
   usdValue,
   withdrawableUsd,
   loading: balanceLoading,
-  refetch: loadBalance,
  } = useWalletBalance();
 
- const [transactions, setTransactions] = useState<ITransactionResponse[]>([]);
- const [transactionsLoading, setTransactionsLoading] = useState(true);
- const [loadingMore, setLoadingMore] = useState(false);
-
- const hasMoreRef = useRef(true);
- const pageIdRef = useRef<string | null>(null);
- const isFetchingRef = useRef(false);
- const latestRequestIdRef = useRef(0);
-
- const loadTransactions = useCallback(async (isFirstLoad: boolean) => {
-  if (!isFirstLoad && (isFetchingRef.current || !hasMoreRef.current)) return;
-
-  const requestId = ++latestRequestIdRef.current;
-  isFetchingRef.current = true;
-  (isFirstLoad ? setTransactionsLoading : setLoadingMore)(true);
-
-  const cursor =
-   !isFirstLoad && pageIdRef.current
-    ? `&ending_before=${encodeURIComponent(pageIdRef.current)}`
-    : "";
-
-  try {
-   const res = await callAPIInterface<
-    IListResponse<ITransactionResponse> | null,
-    undefined
-   >(
+ const fetchPage = useCallback(
+  (cursor: string | null) =>
+   callAPIInterface<IListResponse<ITransactionResponse> | null, undefined>(
     "GET",
-    `${ENDPOINTS.TRANSACTIONS}?limit=${TRANSACTIONS_PAGE_SIZE}${cursor}`,
-   );
-   if (latestRequestIdRef.current !== requestId) return;
-   const data = res?.data ?? [];
-   setTransactions((prev) => (isFirstLoad ? data : [...prev, ...data]));
-   hasMoreRef.current = res?.has_more ?? false;
-   pageIdRef.current = res?.page_id ?? null;
-  } catch (err) {
-   showApiErrorToast(err);
-  } finally {
-   isFetchingRef.current = false;
-   if (latestRequestIdRef.current === requestId) {
-    (isFirstLoad ? setTransactionsLoading : setLoadingMore)(false);
-   }
-  }
- }, []);
+    `${ENDPOINTS.TRANSACTIONS}?limit=${TRANSACTIONS_PAGE_SIZE}${endingBeforeQuery(cursor)}`,
+   ),
+  [],
+ );
 
- useEffect(() => {
-  loadTransactions(true);
- }, [loadTransactions]);
+ const {
+  items: transactions,
+  loading: transactionsLoading,
+  loadingMore,
+  loadMore: loadMoreTransactions,
+  refresh,
+ } = usePaginatedList(fetchPage);
 
  useEffect(() => {
   if (!socket) return;
-  const refreshTransactions = () => loadTransactions(true);
-  socket.on(SOCKET_EVENTS.WALLET_UPDATED, refreshTransactions);
+  socket.on(SOCKET_EVENTS.WALLET_UPDATED, refresh);
   return () => {
-   socket.off(SOCKET_EVENTS.WALLET_UPDATED, refreshTransactions);
+   socket.off(SOCKET_EVENTS.WALLET_UPDATED, refresh);
   };
- }, [socket, loadTransactions]);
-
- const loadMoreTransactions = useCallback(
-  () => loadTransactions(false),
-  [loadTransactions],
- );
+ }, [socket, refresh]);
 
  return {
   usdValue,
@@ -133,8 +94,6 @@ export function useWallet() {
   transactions,
   transactionsLoading,
   loadingMore,
-  hasMore: hasMoreRef.current,
   loadMoreTransactions,
-  refetchBalance: loadBalance,
  };
 }

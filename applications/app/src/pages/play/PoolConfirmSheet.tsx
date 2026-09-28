@@ -16,6 +16,7 @@ import {
  findOpponentText,
 } from "@gopvp/app/src/constants/message";
 import { cancelText } from "@gopvp/common/src/constants/message";
+import SheetActions from "@gopvp/common/src/components/SheetActions/SheetActions";
 
 export default function PoolConfirmSheet({
  open,
@@ -88,7 +89,11 @@ export default function PoolConfirmSheet({
         </Text>
        </Box>
       </Box>
-      <Box customClass="pool-confirm-actions">
+      <SheetActions
+       cancelLabel={cancelText}
+       onCancel={onConfirmCancel}
+       isCancelDisabled={status === "joining"}
+      >
        <Button
         type="button"
         variant="contained"
@@ -100,17 +105,7 @@ export default function PoolConfirmSheet({
        >
         {findOpponentText}
        </Button>
-       <Button
-        type="button"
-        variant="outlined"
-        fullWidth
-        customClass="pool-confirm-cancel-btn"
-        disabled={status === "joining"}
-        onClick={onConfirmCancel}
-       >
-        {cancelText}
-       </Button>
-      </Box>
+      </SheetActions>
      </Box>
     )
    )}

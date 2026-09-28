@@ -2,6 +2,11 @@ import Box from "@gopvp/common/src/components/Box/Box";
 import Card from "@gopvp/common/src/components/Card/Card";
 import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
 import StatRowSkeleton from "@gopvp/app/src/components/common/StatRowSkeleton";
+import { renderSkeletons } from "@gopvp/app/src/utils/skeleton";
+import {
+ PROFILE_SECTION_SKELETON_ROWS,
+ PROFILE_STATS_SKELETON_ROWS,
+} from "@gopvp/app/src/constants/limit";
 
 export default function ProfileSkeleton() {
  return (
@@ -22,9 +27,7 @@ export default function ProfileSkeleton() {
    </Card>
 
    <Card customClass="stat-list">
-    {Array.from({ length: 6 }, (_, i) => (
-     <StatRowSkeleton key={i} />
-    ))}
+    {renderSkeletons(PROFILE_STATS_SKELETON_ROWS, StatRowSkeleton)}
    </Card>
 
    <Skeleton
@@ -34,9 +37,7 @@ export default function ProfileSkeleton() {
     style={{ margin: "0.9rem 0 0.6rem" }}
    />
    <Card customClass="stat-list">
-    {Array.from({ length: 4 }, (_, i) => (
-     <StatRowSkeleton key={i} />
-    ))}
+    {renderSkeletons(PROFILE_SECTION_SKELETON_ROWS, StatRowSkeleton)}
    </Card>
 
    <Skeleton
@@ -46,10 +47,7 @@ export default function ProfileSkeleton() {
     style={{ margin: "0.9rem 0 0.6rem" }}
    />
    <Card customClass="stat-list">
-    <StatRowSkeleton />
-    <StatRowSkeleton />
-    <StatRowSkeleton />
-    <StatRowSkeleton />
+    {renderSkeletons(PROFILE_SECTION_SKELETON_ROWS, StatRowSkeleton)}
    </Card>
   </Box>
  );

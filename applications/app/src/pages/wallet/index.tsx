@@ -30,6 +30,7 @@ import {
  speedText,
 } from "@gopvp/app/src/constants/message";
 import { TRANSACTIONS_SKELETON_ROWS } from "@gopvp/app/src/constants/limit";
+import { renderSkeletons } from "@gopvp/app/src/utils/skeleton";
 
 function dayLabel(ms: number): string {
  const date = dayjs(ms);
@@ -188,9 +189,7 @@ export default function Wallet() {
 
    {transactionsLoading ? (
     <Box customClass="wallet-timeline">
-     {Array.from({ length: TRANSACTIONS_SKELETON_ROWS }, (_, i) => (
-      <TxItemSkeleton key={i} />
-     ))}
+     {renderSkeletons(TRANSACTIONS_SKELETON_ROWS, TxItemSkeleton)}
     </Box>
    ) : transactions.length === 0 ? (
     <EmptyState

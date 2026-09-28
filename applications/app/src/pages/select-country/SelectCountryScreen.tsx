@@ -2,15 +2,12 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
-import CustomLabel from "@gopvp/common/src/components/Label/Label";
-import CustomSelect from "@gopvp/common/src/components/Select/Select";
 import Button from "@gopvp/common/src/components/Button/Button";
 import {
  callAPIInterface,
  showApiErrorToast,
 } from "@gopvp/common/src/util/api";
 import sessionService from "@gopvp/common/src/util/sessionService";
-import { COUNTRY_OPTIONS } from "@gopvp/app/src/constants/option";
 import type { IUpdateProfileBody } from "@gopvp/common/src/types/payload";
 import type {
  ILoginResponse,
@@ -20,17 +17,13 @@ import type { ISelectCountryScreenProps } from "@gopvp/common/src/types/componen
 import {
  selectYourCountryText,
  continueText,
- countryRequiredText,
- countryText,
- selectCountryText,
- searchCountryText,
 } from "@gopvp/app/src/constants/message";
 import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
 import { formSubmitHandler } from "@gopvp/common/src/util/form";
+import { countryRule } from "@gopvp/app/src/utils/validation";
+import CountrySelect from "@gopvp/app/src/components/common/CountrySelect";
 
-const schema = yup.object({
- country: yup.string().required(countryRequiredText),
-});
+const schema = yup.object({ country: countryRule });
 
 export default function SelectCountryScreen({
  showHeading = true,
@@ -69,24 +62,7 @@ export default function SelectCountryScreen({
     </Box>
    )}
 
-   <Box customClass="form-field">
-    <CustomLabel htmlFor="country">{countryText}</CustomLabel>
-    <CustomSelect
-     value={formik.values.country}
-     onChange={(v) => {
-      formik.setFieldValue("country", v);
-      formik.setFieldTouched("country", true, false);
-     }}
-     onBlur={() => formik.setFieldTouched("country", true)}
-     options={COUNTRY_OPTIONS}
-     searchable
-     disabled={formik.isSubmitting}
-     placeholder={selectCountryText}
-     searchPlaceholder={searchCountryText}
-     isError={formik.touched.country && !!formik.errors.country}
-     helperText={formik.errors.country}
-    />
-   </Box>
+   <CountrySelect formik={formik} />
 
    <Button
     type="submit"

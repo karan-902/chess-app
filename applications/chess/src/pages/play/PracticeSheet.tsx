@@ -19,6 +19,7 @@ import {
  PRACTICE_DIFFICULTIES,
  CATEGORY_ORDER,
 } from "@gopvp/chess/src/constants/option";
+import SheetActions from "@gopvp/common/src/components/SheetActions/SheetActions";
 
 export default function PracticeSheet({
  open,
@@ -52,7 +53,7 @@ export default function PracticeSheet({
      subLabel={(c) => minutesText(TIME_SECONDS[c] / 60)}
      customClass="segment category-select"
     />
-    <Box customClass="pool-confirm-actions">
+    <SheetActions cancelLabel={cancelText} onCancel={onCancel}>
      <Button
       type="button"
       variant="contained"
@@ -62,16 +63,7 @@ export default function PracticeSheet({
      >
       {playText}
      </Button>
-     <Button
-      type="button"
-      variant="outlined"
-      fullWidth
-      customClass="pool-confirm-cancel-btn"
-      onClick={onCancel}
-     >
-      {cancelText}
-     </Button>
-    </Box>
+    </SheetActions>
    </Box>
   </CustomDrawer>
  );

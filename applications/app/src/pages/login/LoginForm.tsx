@@ -37,9 +37,6 @@ import {
  enterPasswordText,
  orText,
  continueWithGoogleText,
- emailRequiredText,
- enterValidEmailText,
- passwordRequiredText,
  changeText,
  // forgotYourPasswordText,
  // resetNowText,
@@ -61,14 +58,11 @@ import {
 import { ROUTES } from "@gopvp/app/src/constants/route";
 import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
 import { formSubmitHandler } from "@gopvp/common/src/util/form";
+import { emailRule, passwordRule } from "@gopvp/app/src/utils/validation";
 
-const emailSchema = yup.object({
- email: yup.string().email(enterValidEmailText).required(emailRequiredText),
-});
+const emailSchema = yup.object({ email: emailRule });
 
-const passwordSchema = yup.object({
- password: yup.string().required(passwordRequiredText),
-});
+const passwordSchema = yup.object({ password: passwordRule });
 
 function EmailScreen({
  formik,

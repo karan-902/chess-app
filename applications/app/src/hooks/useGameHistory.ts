@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
  callAPIInterface,
  showApiErrorToast,
@@ -10,6 +10,8 @@ import type {
 } from "@gopvp/common/src/types/response";
 import { useReduxSelector } from "@gopvp/app/src/redux/hooks";
 import { useGame } from "@gopvp/app/src/hooks/useGame";
+import { usePaginatedList } from "@gopvp/app/src/hooks/usePaginatedList";
+import { endingBeforeQuery } from "@gopvp/app/src/utils";
 import {
  MATCH_HISTORY_RETRY_ATTEMPTS,
  MATCH_HISTORY_RETRY_DELAY_MS,
@@ -31,75 +33,28 @@ export function useGameHistory(
  type: "own" | "worldwide" = "own",
  fetchStats = false,
 ) {
- const [items, setItems] = useState<IMatchHistoryItem[]>([]);
- const [loading, setLoading] = useState(true);
- const [loadingMore, setLoadingMore] = useState(false);
- const [error, setError] = useState(false);
- const [loadedType, setLoadedType] = useState<"own" | "worldwide" | null>(null);
  const session = useReduxSelector((state) => state.auth.session);
  const { game } = useGame();
  const [stats, setStats] = useState<ILeaderboardPlayerResponse | null>(null);
  const [statsLoading, setStatsLoading] = useState(true);
- const [statsError, setStatsError] = useState(false);
 
- const hasMoreRef = useRef(true);
- const pageIdRef = useRef<string | null>(null);
- const isFetchingRef = useRef(false);
- const activeTypeRef = useRef(type);
-
- const load = useCallback(
-  async (isFirstLoad: boolean) => {
-   if (!isFirstLoad && (isFetchingRef.current || !hasMoreRef.current)) return;
-
-   const requestType = type;
-   activeTypeRef.current = type;
-   isFetchingRef.current = true;
-   (isFirstLoad ? setLoading : setLoadingMore)(true);
-   setError(false);
-
-   const cursor =
-    !isFirstLoad && pageIdRef.current
-     ? `&ending_before=${encodeURIComponent(pageIdRef.current)}`
-     : "";
-
-   try {
-    const res = await withRetry(() =>
-     callAPIInterface<IListResponse<IMatchHistoryItem> | null, undefined>(
-      "GET",
-      `${ENDPOINTS.MATCHES}?game=${game}${type === "worldwide" ? "&scope=worldwide" : ""}${cursor}`,
-     ),
-    );
-    if (activeTypeRef.current !== requestType) return;
-    const data = res?.data ?? [];
-    setItems((prev) => (isFirstLoad ? data : [...prev, ...data]));
-    setLoadedType(requestType);
-    hasMoreRef.current = res?.has_more ?? false;
-    pageIdRef.current = res?.page_id ?? null;
-   } catch (err) {
-    if (activeTypeRef.current === requestType) setError(true);
-    showApiErrorToast(err);
-   } finally {
-    isFetchingRef.current = false;
-    if (activeTypeRef.current === requestType) {
-     (isFirstLoad ? setLoading : setLoadingMore)(false);
-    }
-   }
-  },
+ const fetchPage = useCallback(
+  (cursor: string | null) =>
+   withRetry(() =>
+    callAPIInterface<IListResponse<IMatchHistoryItem> | null, undefined>(
+     "GET",
+     `${ENDPOINTS.MATCHES}?game=${game}${type === "worldwide" ? "&scope=worldwide" : ""}${endingBeforeQuery(cursor)}`,
+    ),
+   ),
   [type, game],
  );
 
- useEffect(() => {
-  if (fetchStats) return;
-  load(true);
- }, [load, fetchStats]);
-
- const loadMore = useCallback(() => load(false), [load]);
+ const list = usePaginatedList(fetchPage, !fetchStats);
 
  useEffect(() => {
   if (!fetchStats) return;
   const loadStats = async () => {
    setStatsLoading(true);
-   setStatsError(false);
    try {
     setStats(
      await withRetry(() =>
@@ -110,7 +65,6 @@ export function useGameHistory(
      ),
     );
    } catch (err) {
-    setStatsError(true);
     showApiErrorToast(err);
    } finally {
     setStatsLoading(false);
@@ -119,15 +73,5 @@ export function useGameHistory(
   loadStats();
  }, [fetchStats, game, session?.id]);
 
- return {
-  items,
-  loading: loading || loadedType !== type,
-  loadingMore,
-  error,
-  hasMoreRef,
-  loadMore,
-  stats,
-  statsLoading,
-  statsError,
- };
+ return { ...list, stats, statsLoading };
 }

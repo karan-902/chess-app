@@ -34,12 +34,7 @@ import {
 } from "@gopvp/app/src/constants/message";
 import { youText } from "@gopvp/common/src/constants/message";
 import { LEADERBOARD_SKELETON_ROWS } from "@gopvp/app/src/constants/limit";
-
-function lbSkeletonRows() {
- return Array.from({ length: LEADERBOARD_SKELETON_ROWS }, (_, index) => (
-  <LbRowSkeleton key={index} />
- ));
-}
+import { renderSkeletons } from "@gopvp/app/src/utils/skeleton";
 
 export default function Leaderboard() {
  const [searchParams, setSearchParams] = useSearchParams();
@@ -90,7 +85,7 @@ export default function Leaderboard() {
     />
    </Box>
    {loading ? (
-    <Box>{lbSkeletonRows()}</Box>
+    <Box>{renderSkeletons(LEADERBOARD_SKELETON_ROWS, LbRowSkeleton)}</Box>
    ) : players.length === 0 ? (
     <EmptyState description={error ? noDataFoundText : noRankedPlayersText} />
    ) : (

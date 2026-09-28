@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import CustomModal from "@gopvp/common/src/components/Modal/Modal";
-import Box from "@gopvp/common/src/components/Box/Box";
-import Text from "@gopvp/common/src/components/Text/Text";
-import Card from "@gopvp/common/src/components/Card/Card";
-import StatRowSkeleton from "@gopvp/app/src/components/common/StatRowSkeleton";
+import StatList from "@gopvp/app/src/components/common/StatList";
 import { useGame } from "@gopvp/app/src/hooks/useGame";
 import {
  callAPIInterface,
@@ -63,22 +60,7 @@ export default function LeaderboardPlayerModal({
    onClose={onClose}
    title={stats ? shortenUsername(stats.username) : undefined}
   >
-   <Card customClass="stat-list">
-    {statRows
-     ? statRows.map(({ label, value }) => (
-        <Box key={label} customClass="stat-row">
-         <Text component="span" customClass="stat-title">
-          {label}
-         </Text>
-         <Text component="span" customClass="stat-val">
-          {value}
-         </Text>
-        </Box>
-       ))
-     : Array.from({ length: PLAYER_STATS_SKELETON_ROWS }, (_, index) => (
-        <StatRowSkeleton key={index} />
-       ))}
-   </Card>
+   <StatList rows={statRows} skeletonRows={PLAYER_STATS_SKELETON_ROWS} />
   </CustomModal>
  );
 }

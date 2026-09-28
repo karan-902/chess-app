@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { Pencil, Mail, MapPin } from "@gopvp/common/src/components/images";
+import { EditIcon, Mail, MapPin } from "@gopvp/common/src/components/images";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Card from "@gopvp/common/src/components/Card/Card";
@@ -26,26 +26,17 @@ import type { IEditProfileDrawerProps } from "@gopvp/common/src/types/component"
 import {
  editProfileText,
  ratingsText,
- usernameRequiredText,
- usernameMinLengthText,
- usernameMaxLengthText,
  usernameText,
  saveChangesText,
  appearanceText,
  darkModeText,
 } from "@gopvp/app/src/constants/message";
-import { USERNAME_MAX_LENGTH } from "@gopvp/app/src/constants/limit";
 import CustomModal from "@gopvp/common/src/components/Modal/Modal";
 import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
 import { formSubmitHandler } from "@gopvp/common/src/util/form";
+import { usernameRule } from "@gopvp/app/src/utils/validation";
 
-const profileEditSchema = Yup.object({
- username: Yup.string()
-  .trim()
-  .min(3, usernameMinLengthText)
-  .max(USERNAME_MAX_LENGTH, usernameMaxLengthText)
-  .required(usernameRequiredText),
-});
+const profileEditSchema = Yup.object({ username: usernameRule });
 
 function EditProfileDrawer({
  open,
@@ -159,7 +150,7 @@ export default function Profile() {
      aria-label={editProfileText}
      onClick={() => setEditOpen(true)}
     >
-     <Pencil size={12} strokeWidth={2} />
+     <EditIcon fontSize="small" />
     </Button>
 
     <Box customClass="profile-id-row">

@@ -48,6 +48,7 @@ import {
  BET_CHIP_AMOUNTS,
  DURATION_MINUTES,
 } from "@gopvp/app/src/constants/option";
+import SheetActions from "@gopvp/common/src/components/SheetActions/SheetActions";
 
 function DurationWheel({ value, onChange }: IDurationWheelProps) {
  const listRef = useRef<HTMLDivElement>(null);
@@ -192,8 +193,8 @@ export default function RoomSheet({
       {isOwner ? opponentJoinedText : waitingForOwnerText}
      </Text>
      <Text customClass="searching-timer">{roomCode}</Text>
-     <Box customClass="pool-confirm-actions">
-      {isOwner ? (
+     {isOwner ? (
+      <SheetActions>
        <Button
         type="button"
         variant="contained"
@@ -205,18 +206,10 @@ export default function RoomSheet({
        >
         {startText}
        </Button>
-      ) : (
-       <Button
-        type="button"
-        variant="outlined"
-        fullWidth
-        customClass="pool-confirm-cancel-btn"
-        onClick={onCancel}
-       >
-        {leaveText}
-       </Button>
-      )}
-     </Box>
+      </SheetActions>
+     ) : (
+      <SheetActions cancelLabel={leaveText} onCancel={onCancel} />
+     )}
     </Box>
    ) : roomStatus === "waiting" ? (
     <Box customClass="matchmaking-searching">
@@ -238,17 +231,7 @@ export default function RoomSheet({
      >
       {codeCopied ? copiedExclaimText : copyCodeText}
      </Button>
-     <Box customClass="pool-confirm-actions">
-      <Button
-       type="button"
-       variant="outlined"
-       fullWidth
-       customClass="pool-confirm-cancel-btn"
-       onClick={onCancel}
-      >
-       {cancelText}
-      </Button>
-     </Box>
+     <SheetActions cancelLabel={cancelText} onCancel={onCancel} />
     </Box>
    ) : (
     <Box customClass="matchmaking-searching room-options">

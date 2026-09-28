@@ -1,7 +1,9 @@
 export const MIN_TRANSACTION_USD = 1;
 export const MAX_DEPOSIT_USD = 99;
 export const MAX_AMOUNT_DIGITS = 2;
+export const USERNAME_MIN_LENGTH = 3;
 export const USERNAME_MAX_LENGTH = 8;
+export const PASSWORD_MIN_LENGTH = 8;
 export const MATCHES_STATS_FALLBACK = 0;
 export const POOL_TIMEOUT_SECONDS = 60;
 export const TRANSACTIONS_PAGE_SIZE = 20;
@@ -16,3 +18,7 @@ export const MATCH_STATS_SKELETON_ROWS = 5;
 export const PLAYER_STATS_SKELETON_ROWS = 4;
 export const LEADERBOARD_SKELETON_ROWS = 20;
 export const TRANSACTIONS_SKELETON_ROWS = 12;
+export const POOL_SKELETON_ROWS = 4;
+export const WALLET_SUCCESS_CLOSE_MS = 2800;
+export const PROFILE_STATS_SKELETON_ROWS = 6;
+export const PROFILE_SECTION_SKELETON_ROWS = 4;

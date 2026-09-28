@@ -1,4 +1,4 @@
-import type { ComponentType } from "react";
+import type { ComponentType, ReactNode } from "react";
 import type { FormikProps } from "formik";
 import type { Socket } from "socket.io-client";
 import type {
@@ -118,6 +118,13 @@ export interface IChipSelectProps<T extends string> {
  label: (option: T) => string;
  subLabel?: (option: T) => string;
  customClass?: string;
+}
+
+export interface ISheetActionsProps {
+ children?: ReactNode;
+ cancelLabel?: string;
+ onCancel?: () => void;
+ isCancelDisabled?: boolean;
 }
 
 export interface IDurationWheelProps {

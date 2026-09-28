@@ -1,20 +1,19 @@
 import { useEffect, useState } from "react";
-import classNames from "classnames";
-import { CircularProgress } from "@mui/material";
 import { useReduxDispatch } from "@gopvp/app/src/redux/hooks";
 import { showToast } from "@gopvp/app/src/redux/common/slice";
 import Box from "@gopvp/common/src/components/Box/Box";
-import SuccessCheckmark from "@gopvp/common/src/components/SuccessCheckmark/SuccessCheckmark";
-import { InfoIcon } from "@gopvp/common/src/components/images";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
 import Input from "@gopvp/common/src/components/Input/Input";
+import WalletModalShell from "@gopvp/app/src/components/common/WalletModalShell";
+import WalletSuccessStage from "@gopvp/app/src/components/common/WalletSuccessStage";
+import WalletInfoNote from "@gopvp/app/src/components/common/WalletInfoNote";
 import { useWalletModal } from "@gopvp/app/src/context/WalletModalContext";
-import { useWalletBalance } from "@gopvp/app/src/hooks/useWallet";
-import { withdrawRequest } from "@gopvp/app/src/hooks/useWallet";
-import { useModalReady } from "@gopvp/app/src/hooks/useModalReady";
+import {
+ useWalletBalance,
+ withdrawRequest,
+} from "@gopvp/app/src/hooks/useWallet";
 import { showApiErrorToast } from "@gopvp/common/src/util/api";
-import { formatAmount } from "@gopvp/common/src/util/format";
 import {
  withdrawText,
  onlyWinningsWithdrawableText,
@@ -32,7 +31,6 @@ import {
  MIN_TRANSACTION_USD,
  MAX_AMOUNT_DIGITS,
 } from "@gopvp/app/src/constants/limit";
-import CustomModal from "@gopvp/common/src/components/Modal/Modal";
 
 type Stage = "amount" | "success";
 
@@ -41,7 +39,6 @@ export default function WithdrawModal() {
  const { openModal, close } = useWalletModal();
  const { withdrawableUsd, refetch } = useWalletBalance();
  const open = openModal === "withdraw";
- const ready = useModalReady(open);
 
  const [stage, setStage] = useState<Stage>("amount");
  const [amount, setAmount] = useState("");
@@ -62,12 +59,6 @@ export default function WithdrawModal() {
   if (!open) return;
   refetch();
  }, [open, refetch]);
-
- useEffect(() => {
-  if (stage !== "success") return;
-  const timer = setTimeout(close, 2800);
-  return () => clearTimeout(timer);
- }, [stage, close]);
 
  const hasWithdrawable = withdrawableUsd > 0;
  const amountUsd = parseFloat(amount) || 0;
@@ -121,31 +112,11 @@ export default function WithdrawModal() {
  };
 
  return (
-  <CustomModal
-   open={open}
-   onClose={close}
-   hideCloseIcon={stage === "success"}
-   disableRestoreFocus
-   customClass={classNames(
-    "wallet-modal",
-    stage === "success" && "wallet-modal-success",
-   )}
-  >
-   {!ready && (
-    <Box customClass="modal-loader">
-     <CircularProgress size={28} />
-    </Box>
-   )}
-
-   {ready && stage === "amount" && (
+  <WalletModalShell open={open} isSuccess={stage === "success"} onClose={close}>
+   {stage === "amount" && (
     <Box customClass="wallet-modal-layout">
      <Text customClass="modal-heading value-heading">{withdrawText}</Text>
-     <Box customClass="modal-info-box">
-      <InfoIcon sx={{ fontSize: 16 }} />
-      <Text customClass="modal-info-text caption">
-       {onlyWinningsWithdrawableText}
-      </Text>
-     </Box>
+     <WalletInfoNote text={onlyWinningsWithdrawableText} />
 
      <Box customClass="hero-input-wrapper">
       <Input
@@ -193,19 +164,9 @@ export default function WithdrawModal() {
     </Box>
    )}
 
-   {ready && stage === "success" && (
-    <Box customClass="modal-success-stage">
-     <Box customClass="modal-success-icon">
-      <SuccessCheckmark />
-     </Box>
-     <Box customClass="deposit-sucess-amountWrapper">
-      <Text customClass="modal-success-amount">{formatAmount(amountUsd)}</Text>
-      <Text customClass="modal-heading value-heading">
-       {withdrawalCompletedText}
-      </Text>
-     </Box>
-    </Box>
+   {stage === "success" && (
+    <WalletSuccessStage amountUsd={amountUsd} title={withdrawalCompletedText} />
    )}
-  </CustomModal>
+  </WalletModalShell>
  );
 }

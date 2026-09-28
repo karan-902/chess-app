@@ -1,7 +1,39 @@
+import type { ReactNode } from "react";
+import type { FormikProps } from "formik";
 import type { IPoolResponse } from "@gopvp/common/src/types/response";
 import type { MatchOutcome } from "@gopvp/common/src/types/index";
 import type { MatchmakingStatus } from "@gopvp/app/src/hooks/useMatchmaking";
 import type { RoomStatus } from "@gopvp/app/src/hooks/useRoomMatch";
+
+export interface IWalletModalShellProps {
+ open: boolean;
+ isSuccess: boolean;
+ onClose: () => void;
+ children: ReactNode;
+}
+
+export interface IWalletSuccessStageProps {
+ amountUsd: number;
+ title: string;
+}
+
+export interface IWalletInfoNoteProps {
+ text: string;
+}
+
+export interface ICountrySelectProps<TValues extends { country: string }> {
+ formik: FormikProps<TValues>;
+}
+
+export interface IStatRow {
+ label: string;
+ value: string | number;
+}
+
+export interface IStatListProps {
+ rows: IStatRow[] | null;
+ skeletonRows: number;
+}
 
 export interface IMatchRowProps {
  outcome: MatchOutcome;

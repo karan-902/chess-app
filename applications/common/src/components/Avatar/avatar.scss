@@ -6,7 +6,7 @@
 
  &.primary {
   border: 1px solid alpha($gold, 0.3);
-  color: $cyan;
+  color: $gold;
  }
 
  &.neutral {
@@ -18,7 +18,8 @@
  &.sm {
   width: 1.75rem;
   height: 1.75rem;
-  font-size: $font12;
+  font-size: $font15;
+  font-family: $fontOutfitExtraBold;
  }
 
  &.md {

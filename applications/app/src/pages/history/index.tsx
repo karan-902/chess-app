@@ -7,7 +7,7 @@ import CustomBadge from "@gopvp/common/src/components/Badge/Badge";
 import Card from "@gopvp/common/src/components/Card/Card";
 import VirtualList from "@gopvp/common/src/components/VirtualList/VirtualList";
 import EmptyState from "@gopvp/app/src/components/common/EmptyState";
-import StatRowSkeleton from "@gopvp/app/src/components/common/StatRowSkeleton";
+import StatList from "@gopvp/app/src/components/common/StatList";
 import MatchRowSkeleton from "@gopvp/app/src/components/common/MatchRowSkeleton";
 import Button from "@gopvp/common/src/components/Button/Button";
 import { useGameHistory } from "@gopvp/app/src/hooks/useGameHistory";
@@ -47,6 +47,7 @@ import {
 import { youText, scoreText } from "@gopvp/common/src/constants/message";
 import { MATCHES_SUBTAB_OPTIONS } from "@gopvp/app/src/constants/option";
 import { MATCHES_SUBTAB_LABELS } from "@gopvp/app/src/constants/label";
+import { renderSkeletons } from "@gopvp/app/src/utils/skeleton";
 
 function MatchRow({
  outcome,
@@ -109,18 +110,6 @@ function MatchRow({
    </Box>
   </Box>
  );
-}
-
-function historySkeletonRows() {
- return Array.from({ length: HISTORY_SKELETON_ROWS }, (_, index) => (
-  <MatchRowSkeleton key={index} />
- ));
-}
-
-function statsSkeletonRows() {
- return Array.from({ length: MATCH_STATS_SKELETON_ROWS }, (_, index) => (
-  <StatRowSkeleton key={index} />
- ));
 }
 
 function matchRow(item: IMatchHistoryItem, currentUsername?: string) {
@@ -214,7 +203,9 @@ export default function MyMatches() {
 
    {subtab === "history" &&
     (loading ? (
-     <Card customClass="stat-list match-row-list">{historySkeletonRows()}</Card>
+     <Card customClass="stat-list match-row-list">
+      {renderSkeletons(HISTORY_SKELETON_ROWS, MatchRowSkeleton)}
+     </Card>
     ) : items.length === 0 ? (
      <EmptyState
       title={error ? noDataFoundText : welcomeText}
@@ -231,7 +222,9 @@ export default function MyMatches() {
 
    {subtab === "global" &&
     (loading ? (
-     <Card customClass="stat-list match-row-list">{historySkeletonRows()}</Card>
+     <Card customClass="stat-list match-row-list">
+      {renderSkeletons(HISTORY_SKELETON_ROWS, MatchRowSkeleton)}
+     </Card>
     ) : items.length === 0 ? (
      <EmptyState
       title={error ? noDataFoundText : noGamesYetText}
@@ -253,41 +246,35 @@ export default function MyMatches() {
        {chessText}
       </Text>
      </Box>
-     <Card customClass="stat-list">
-      {statsLoading
-       ? statsSkeletonRows()
-       : [
-          {
-           label: scoreText,
-           value: Math.round(stats?.score ?? MATCHES_STATS_FALLBACK),
-          },
-          {
-           label: currentStreakText,
-           value: stats?.current_streak ?? MATCHES_STATS_FALLBACK,
-          },
-          {
-           label: bestStreakText,
-           value: stats?.best_streak ?? MATCHES_STATS_FALLBACK,
-          },
-          {
-           label: winsText,
-           value: stats?.wins ?? MATCHES_STATS_FALLBACK,
-          },
-          {
-           label: grossIncomeText,
-           value: formatAmount(stats?.gross_income ?? MATCHES_STATS_FALLBACK),
-          },
-         ].map(({ label, value }) => (
-          <Box key={label} customClass="stat-row">
-           <Text component="span" customClass="stat-title">
-            {label}
-           </Text>
-           <Text component="span" customClass="stat-val">
-            {value}
-           </Text>
-          </Box>
-         ))}
-     </Card>
+     <StatList
+      rows={
+       statsLoading
+        ? null
+        : [
+           {
+            label: scoreText,
+            value: Math.round(stats?.score ?? MATCHES_STATS_FALLBACK),
+           },
+           {
+            label: currentStreakText,
+            value: stats?.current_streak ?? MATCHES_STATS_FALLBACK,
+           },
+           {
+            label: bestStreakText,
+            value: stats?.best_streak ?? MATCHES_STATS_FALLBACK,
+           },
+           {
+            label: winsText,
+            value: stats?.wins ?? MATCHES_STATS_FALLBACK,
+           },
+           {
+            label: grossIncomeText,
+            value: formatAmount(stats?.gross_income ?? MATCHES_STATS_FALLBACK),
+           },
+          ]
+      }
+      skeletonRows={MATCH_STATS_SKELETON_ROWS}
+     />
     </Box>
    )}
   </Box>

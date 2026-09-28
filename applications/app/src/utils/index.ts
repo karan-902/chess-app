@@ -39,3 +39,6 @@ export function formatMatchDate(ms: number): string {
  if (minutes < 60) return `${minutes}m ago`;
  return `${now.diff(then, "hour")}h ago`;
 }
+
+export const endingBeforeQuery = (cursor: string | null) =>
+ cursor ? `&ending_before=${encodeURIComponent(cursor)}` : "";

@@ -20,6 +20,8 @@ import {
  addFundsText,
  tipText,
 } from "@gopvp/app/src/constants/message";
+import { renderSkeletons } from "@gopvp/app/src/utils/skeleton";
+import { POOL_SKELETON_ROWS } from "@gopvp/app/src/constants/limit";
 
 export default function BetSheet({
  open,
@@ -37,7 +39,7 @@ export default function BetSheet({
   <CustomModal open={open} onClose={onClose} customClass="bet-modal">
    <Box customClass="bet-grid">
     {poolsLoading ? (
-     Array.from({ length: 4 }, (_, i) => <PoolCardSkeleton key={i} />)
+     renderSkeletons(POOL_SKELETON_ROWS, PoolCardSkeleton)
     ) : (
      <>
       {pools.map((pool) => {

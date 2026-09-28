@@ -3,12 +3,10 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import Box from "@gopvp/common/src/components/Box/Box";
-import CustomLabel from "@gopvp/common/src/components/Label/Label";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Input from "@gopvp/common/src/components/Input/Input";
 import Button from "@gopvp/common/src/components/Button/Button";
 import CustomChip from "@gopvp/common/src/components/Chip/Chip";
-import CustomSelect from "@gopvp/common/src/components/Select/Select";
 import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
 import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
 import CustomMenu from "@gopvp/common/src/components/Menu/Menu";
@@ -20,7 +18,6 @@ import {
 import { useReduxDispatch } from "@gopvp/app/src/redux/hooks";
 import { login } from "@gopvp/app/src/redux/auth/thunk";
 import { showLoader, hideLoader } from "@gopvp/app/src/redux/common/slice";
-import { COUNTRY_OPTIONS } from "@gopvp/app/src/constants/option";
 import type { IRegisterBody } from "@gopvp/common/src/types/payload";
 import type {
  IRegisterResponse,
@@ -31,21 +28,11 @@ import {
  enterEmailText,
  passwordText,
  enterPasswordText,
- emailRequiredText,
- enterValidEmailText,
- passwordRequiredText,
- passwordMinLengthText,
- usernameRequiredText,
- usernameMinLengthText,
- usernameMaxLengthText,
- countryRequiredText,
  usernameText,
  enterUsernameText,
  clearUsernameText,
  suggestionsText,
- countryText,
  registerText,
- selectCountryText,
  settingUpAccountText,
 } from "@gopvp/app/src/constants/message";
 import {
@@ -56,20 +43,19 @@ import type { IEmailFormScreenProps } from "@gopvp/common/src/types/component";
 import { ROUTES } from "@gopvp/app/src/constants/route";
 import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
 import { formSubmitHandler } from "@gopvp/common/src/util/form";
+import {
+ countryRule,
+ emailRule,
+ newPasswordRule,
+ usernameRule,
+} from "@gopvp/app/src/utils/validation";
+import CountrySelect from "@gopvp/app/src/components/common/CountrySelect";
 
 const registerSchema = yup.object({
- username: yup
-  .string()
-  .trim()
-  .min(3, usernameMinLengthText)
-  .max(USERNAME_MAX_LENGTH, usernameMaxLengthText)
-  .required(usernameRequiredText),
- email: yup.string().email(enterValidEmailText).required(emailRequiredText),
- password: yup
-  .string()
-  .required(passwordRequiredText)
-  .min(8, passwordMinLengthText),
- country: yup.string().required(countryRequiredText),
+ username: usernameRule,
+ email: emailRule,
+ password: newPasswordRule,
+ country: countryRule,
 });
 
 function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
@@ -336,24 +322,7 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
     fullWidth
    />
 
-   <Box customClass="form-field">
-    <CustomLabel htmlFor="country">{countryText}</CustomLabel>
-    <CustomSelect
-     value={formik.values.country}
-     onChange={(v) => {
-      formik.setFieldValue("country", v);
-      formik.setFieldTouched("country", true, false);
-     }}
-     onBlur={() => formik.setFieldTouched("country", true)}
-     options={COUNTRY_OPTIONS}
-     searchable
-     disabled={formik.isSubmitting}
-     placeholder={selectCountryText}
-     searchPlaceholder={selectCountryText}
-     isError={formik.touched.country && !!formik.errors.country}
-     helperText={formik.errors.country}
-    />
-   </Box>
+   <CountrySelect formik={formik} />
 
    <Button
     type="submit"
