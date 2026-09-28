@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Header from "@gopvp/app/src/components/common/Header";
-import DepositModal from "@gopvp/app/src/components/common/DepositModal";
-import WithdrawModal from "@gopvp/app/src/components/common/WithdrawModal";
+import DepositSheet from "@gopvp/app/src/components/common/DepositSheet";
+import WithdrawSheet from "@gopvp/app/src/components/common/WithdrawSheet";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useReduxDispatch, useReduxSelector } from "@gopvp/app/src/redux/hooks";
 import { fetchWalletBalance } from "@gopvp/app/src/redux/wallet/thunk";
@@ -49,8 +49,8 @@ function PrivateRoute() {
       <Outlet />
      </Box>
     </Box>
-    <DepositModal />
-    <WithdrawModal />
+    <DepositSheet />
+    <WithdrawSheet />
    </Box>
   );
  };

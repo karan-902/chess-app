@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export function useModalReady(open: boolean) {
+export function useSheetReady(open: boolean) {
  const [ready, setReady] = useState(false);
 
  useEffect(() => {

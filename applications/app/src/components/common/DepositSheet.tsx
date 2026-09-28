@@ -6,7 +6,7 @@ import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
 import Input from "@gopvp/common/src/components/Input/Input";
 import { speedLogo, qrLogo } from "@gopvp/common/src/components/images";
-import WalletModalShell from "@gopvp/app/src/components/common/WalletModalShell";
+import WalletSheetShell from "@gopvp/app/src/components/common/WalletSheetShell";
 import WalletSuccessStage from "@gopvp/app/src/components/common/WalletSuccessStage";
 import WalletInfoNote from "@gopvp/app/src/components/common/WalletInfoNote";
 import { useWalletModal } from "@gopvp/app/src/context/WalletModalContext";
@@ -59,7 +59,7 @@ function formatCountdown(ms: number) {
  return `${minutes}:${seconds.toString().padStart(2, "0")}`;
 }
 
-export default function DepositModal() {
+export default function DepositSheet() {
  const { openModal, close } = useWalletModal();
  const { socket } = useSocket();
  const open = openModal === "deposit";
@@ -155,7 +155,7 @@ export default function DepositModal() {
  };
 
  return (
-  <WalletModalShell open={open} isSuccess={stage === "success"} onClose={close}>
+  <WalletSheetShell open={open} isSuccess={stage === "success"} onClose={close}>
    {stage === "amount" && (
     <Box customClass="wallet-modal-layout">
      <Text customClass="modal-heading value-heading">{depositText}</Text>
@@ -268,6 +268,6 @@ export default function DepositModal() {
    {stage === "success" && (
     <WalletSuccessStage amountUsd={amountUsd} title={paymentReceivedText} />
    )}
-  </WalletModalShell>
+  </WalletSheetShell>
  );
 }

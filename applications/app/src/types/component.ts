@@ -5,7 +5,7 @@ import type { MatchOutcome } from "@gopvp/common/src/types/index";
 import type { MatchmakingStatus } from "@gopvp/app/src/hooks/useMatchmaking";
 import type { RoomStatus } from "@gopvp/app/src/hooks/useRoomMatch";
 
-export interface IWalletModalShellProps {
+export interface IWalletSheetShellProps {
  open: boolean;
  isSuccess: boolean;
  onClose: () => void;

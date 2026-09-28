@@ -5,7 +5,7 @@ import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
 import Input from "@gopvp/common/src/components/Input/Input";
-import WalletModalShell from "@gopvp/app/src/components/common/WalletModalShell";
+import WalletSheetShell from "@gopvp/app/src/components/common/WalletSheetShell";
 import WalletSuccessStage from "@gopvp/app/src/components/common/WalletSuccessStage";
 import WalletInfoNote from "@gopvp/app/src/components/common/WalletInfoNote";
 import { useWalletModal } from "@gopvp/app/src/context/WalletModalContext";
@@ -34,7 +34,7 @@ import {
 
 type Stage = "amount" | "success";
 
-export default function WithdrawModal() {
+export default function WithdrawSheet() {
  const dispatch = useReduxDispatch();
  const { openModal, close } = useWalletModal();
  const { withdrawableUsd, refetch } = useWalletBalance();
@@ -112,7 +112,7 @@ export default function WithdrawModal() {
  };
 
  return (
-  <WalletModalShell open={open} isSuccess={stage === "success"} onClose={close}>
+  <WalletSheetShell open={open} isSuccess={stage === "success"} onClose={close}>
    {stage === "amount" && (
     <Box customClass="wallet-modal-layout">
      <Text customClass="modal-heading value-heading">{withdrawText}</Text>
@@ -167,6 +167,6 @@ export default function WithdrawModal() {
    {stage === "success" && (
     <WalletSuccessStage amountUsd={amountUsd} title={withdrawalCompletedText} />
    )}
-  </WalletModalShell>
+  </WalletSheetShell>
  );
 }

@@ -8,7 +8,7 @@ import FilterDropdown from "@gopvp/app/src/components/common/FilterDropdown";
 import EmptyState from "@gopvp/app/src/components/common/EmptyState";
 import LbRowSkeleton from "@gopvp/app/src/components/common/LbRowSkeleton";
 import VirtualList from "@gopvp/common/src/components/VirtualList/VirtualList";
-import PlayerRowModal from "@gopvp/app/src/pages/leaderboard/PlayerRowModal";
+import PlayerRowSheet from "@gopvp/app/src/pages/leaderboard/PlayerRowSheet";
 import { useLeaderboard } from "@gopvp/app/src/hooks/useLeaderboard";
 import { useReduxSelector } from "@gopvp/app/src/redux/hooks";
 import { formatAmount, shortenUsername } from "@gopvp/common/src/util/format";
@@ -52,7 +52,7 @@ export default function Leaderboard() {
   sort,
  );
  const [selectedPlayerId, setSelectedPlayerId] = useState<string | null>(null);
- const closePlayerModal = useCallback(() => setSelectedPlayerId(null), []);
+ const closePlayerSheet = useCallback(() => setSelectedPlayerId(null), []);
  const currentUserId = useReduxSelector((state) => state.auth.session?.id);
  const currentUsername = useReduxSelector(
   (state) => state.auth.session?.username,
@@ -140,7 +140,7 @@ export default function Leaderboard() {
      />
     </Box>
    )}
-   <PlayerRowModal playerId={selectedPlayerId} onClose={closePlayerModal} />
+   <PlayerRowSheet playerId={selectedPlayerId} onClose={closePlayerSheet} />
   </Box>
  );
 }

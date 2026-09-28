@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import CustomModal from "@gopvp/common/src/components/Modal/Modal";
+import CustomDrawer from "@gopvp/common/src/components/Drawer/Drawer";
+import Text from "@gopvp/common/src/components/Text/Text";
 import StatList from "@gopvp/app/src/components/common/StatList";
 import { useGame } from "@gopvp/app/src/hooks/useGame";
 import {
@@ -14,14 +15,14 @@ import {
  bestStreakText,
 } from "@gopvp/app/src/constants/message";
 import type { ILeaderboardPlayerResponse } from "@gopvp/common/src/types/response";
-import type { IPlayerRowModalProps } from "@gopvp/common/src/types/component";
+import type { IPlayerRowSheetProps } from "@gopvp/common/src/types/component";
 import { PLAYER_STATS_SKELETON_ROWS } from "@gopvp/app/src/constants/limit";
 import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
 
-export default function PlayerRowModal({
+export default function PlayerRowSheet({
  playerId,
  onClose,
-}: IPlayerRowModalProps) {
+}: IPlayerRowSheetProps) {
  const { game } = useGame();
  const [stats, setStats] = useState<ILeaderboardPlayerResponse | null>(null);
 
@@ -55,12 +56,13 @@ export default function PlayerRowModal({
  ];
 
  return (
-  <CustomModal
-   open={!!playerId}
-   onClose={onClose}
-   title={stats ? shortenUsername(stats.username) : undefined}
-  >
+  <CustomDrawer anchor="bottom" open={!!playerId} onClose={onClose}>
+   {stats && (
+    <Text customClass="sheet-title dialog-title">
+     {shortenUsername(stats.username)}
+    </Text>
+   )}
    <StatList rows={statRows} skeletonRows={PLAYER_STATS_SKELETON_ROWS} />
-  </CustomModal>
+  </CustomDrawer>
  );
 }

@@ -20,28 +20,9 @@
   margin-bottom: 0.4rem;
  }
 
- &.bet-modal,
- &.pool-confirm-sheet {
-  padding: clamp(1rem, 4vw, 1.5rem);
- }
-
- &.bet-modal {
-  padding-top: 3rem;
-  background: $appSurface;
- }
-
  &.rejoin-game-modal {
   .modal-title {
    padding: 0;
-  }
- }
-
- &.wallet-modal {
-  min-height: 24rem;
-  justify-content: center !important;
-
-  &.wallet-modal-success {
-   min-height: 0;
   }
  }
 }

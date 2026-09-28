@@ -10,6 +10,8 @@ interface IDrawerProps {
  onClose: () => void;
  anchor?: "left" | "right" | "bottom";
  customClass?: string;
+ hideCloseIcon?: boolean;
+ disableRestoreFocus?: boolean;
  children?: ReactNode;
 }
 
@@ -18,6 +20,8 @@ export function CustomDrawer({
  onClose,
  anchor = "right",
  customClass,
+ hideCloseIcon,
+ disableRestoreFocus,
  children,
 }: IDrawerProps) {
  return (
@@ -28,15 +32,18 @@ export function CustomDrawer({
    className={classNames("common-drawer", customClass)}
    disableScrollLock
    disableAutoFocus
+   disableRestoreFocus={disableRestoreFocus}
    container={() => document.querySelector(".app-shell") as HTMLElement}
   >
-   <CustomIconButton
-    type="button"
-    customClass="drawer-close-icon"
-    onClick={onClose}
-    aria-label={closeText}
-    icon="close"
-   />
+   {!hideCloseIcon && (
+    <CustomIconButton
+     type="button"
+     customClass="drawer-close-icon"
+     onClick={onClose}
+     aria-label={closeText}
+     icon="close"
+    />
+   )}
    {children}
   </MuiDrawer>
  );

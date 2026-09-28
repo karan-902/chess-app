@@ -3,7 +3,7 @@ import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
 import Card from "@gopvp/common/src/components/Card/Card";
-import CustomModal from "@gopvp/common/src/components/Modal/Modal";
+import CustomDrawer from "@gopvp/common/src/components/Drawer/Drawer";
 import PoolCardSkeleton from "@gopvp/app/src/components/common/PoolCardSkeleton";
 import type { IBetSheetProps } from "@gopvp/common/src/types/component";
 import { playText } from "@gopvp/common/src/constants/message";
@@ -36,7 +36,12 @@ export default function BetSheet({
  onInsufficientBalance,
 }: IBetSheetProps) {
  return (
-  <CustomModal open={open} onClose={onClose} customClass="bet-modal">
+  <CustomDrawer
+   anchor="bottom"
+   open={open}
+   onClose={onClose}
+   customClass="bet-sheet"
+  >
    <Box customClass="bet-grid">
     {poolsLoading ? (
      renderSkeletons(POOL_SKELETON_ROWS, PoolCardSkeleton)
@@ -106,6 +111,6 @@ export default function BetSheet({
    <Text customClass="sheet-tip meta-text">
     <b>{tipText}</b> {largestPrizesTipText}
    </Text>
-  </CustomModal>
+  </CustomDrawer>
  );
 }

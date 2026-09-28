@@ -1,7 +1,7 @@
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
-import CustomModal from "@gopvp/common/src/components/Modal/Modal";
+import CustomDrawer from "@gopvp/common/src/components/Drawer/Drawer";
 import { ChessLogo } from "@gopvp/app/src/constants/icon";
 import type { IPoolConfirmSheetProps } from "@gopvp/app/src/types/component";
 import {
@@ -30,7 +30,7 @@ export default function PoolConfirmSheet({
  onConfirmCancel,
 }: IPoolConfirmSheetProps) {
  return (
-  <CustomModal open={open} onClose={onClose} customClass="pool-confirm-sheet">
+  <CustomDrawer anchor="bottom" open={open} onClose={onClose}>
    {status === "queued" || status === "found" ? (
     <Box customClass="matchmaking-searching">
      <Box customClass="live-ring-wrap searching-ring">
@@ -109,6 +109,6 @@ export default function PoolConfirmSheet({
      </Box>
     )
    )}
-  </CustomModal>
+  </CustomDrawer>
  );
 }

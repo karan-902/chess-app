@@ -1,19 +1,19 @@
 import { useEffect } from "react";
 import classNames from "classnames";
 import { CircularProgress } from "@mui/material";
-import CustomModal from "@gopvp/common/src/components/Modal/Modal";
+import CustomDrawer from "@gopvp/common/src/components/Drawer/Drawer";
 import Box from "@gopvp/common/src/components/Box/Box";
-import { useModalReady } from "@gopvp/app/src/hooks/useModalReady";
+import { useSheetReady } from "@gopvp/app/src/hooks/useSheetReady";
 import { WALLET_SUCCESS_CLOSE_MS } from "@gopvp/app/src/constants/limit";
-import type { IWalletModalShellProps } from "@gopvp/app/src/types/component";
+import type { IWalletSheetShellProps } from "@gopvp/app/src/types/component";
 
-export default function WalletModalShell({
+export default function WalletSheetShell({
  open,
  isSuccess,
  onClose,
  children,
-}: IWalletModalShellProps) {
- const ready = useModalReady(open);
+}: IWalletSheetShellProps) {
+ const ready = useSheetReady(open);
 
  useEffect(() => {
   if (!isSuccess) return;
@@ -22,12 +22,13 @@ export default function WalletModalShell({
  }, [isSuccess, onClose]);
 
  return (
-  <CustomModal
+  <CustomDrawer
+   anchor="bottom"
    open={open}
    onClose={onClose}
    hideCloseIcon={isSuccess}
    disableRestoreFocus
-   customClass={classNames("wallet-modal", isSuccess && "wallet-modal-success")}
+   customClass={classNames("wallet-sheet", isSuccess && "wallet-sheet-success")}
   >
    {ready ? (
     children
@@ -36,6 +37,6 @@ export default function WalletModalShell({
      <CircularProgress size={28} />
     </Box>
    )}
-  </CustomModal>
+  </CustomDrawer>
  );
 }
