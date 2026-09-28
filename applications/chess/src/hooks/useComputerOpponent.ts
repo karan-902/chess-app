@@ -1,6 +1,9 @@
 import { useEffect } from "react";
 import type { GameMode } from "@gopvp/chess/src/types/component";
-import { COMPUTER_MOVE_DELAY_MS } from "@gopvp/chess/src/constants/limit";
+import {
+ COMPUTER_FALLBACK_MOVE_MS,
+ COMPUTER_MOVE_DELAY_MS,
+} from "@gopvp/chess/src/constants/limit";
 
 interface IProps {
  mode: GameMode;
@@ -33,14 +36,14 @@ export function useComputerOpponent({
    COMPUTER_MOVE_DELAY_MS,
   );
   return () => clearTimeout(t);
- }, [bestMove, turn, computerSide, mode, gameEnded]);
+ }, [bestMove, turn, computerSide, mode, gameEnded, makeMove]);
 
  useEffect(() => {
   if (mode !== "pvc" || turn !== computerSide || gameEnded) return;
   const fallback = setTimeout(() => {
    const move = getRandomMove();
    if (move) makeMove(move.from, move.to);
-  }, 6000);
+  }, COMPUTER_FALLBACK_MOVE_MS);
   return () => clearTimeout(fallback);
- }, [turn, computerSide, mode, gameEnded]);
+ }, [turn, computerSide, mode, gameEnded, getRandomMove, makeMove]);
 }

@@ -37,6 +37,11 @@ export const Input = forwardRef<HTMLInputElement, IInputProps>(
  ) => {
   const [showPassword, setShowPassword] = useState(false);
   const isPassword = type === "password";
+  const forwardBlurEvent =
+   onBlur &&
+   ((event?: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (event) onBlur(event);
+   });
 
   return (
    <Box customClass={classNames("common-input", customClass)}>
@@ -51,15 +56,7 @@ export const Input = forwardRef<HTMLInputElement, IInputProps>(
      fullWidth={fullWidth}
      type={isPassword && showPassword ? "text" : type}
      inputRef={ref}
-     onBlur={
-      // MUI calls onBlur() with no event when `disabled`
-      // flips true on a focused input to simulate the
-      // blur browsers won't fire themselves
-      onBlur &&
-      ((event?: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-       if (event) onBlur(event);
-      })
-     }
+     onBlur={forwardBlurEvent}
      startAdornment={
       startIcon && <InputAdornment position="start">{startIcon}</InputAdornment>
      }

@@ -34,7 +34,7 @@ export function useLeaderboard(scope: LeaderboardScope, sort: LeaderboardSort) {
    const query = `game=${game}&scope=${scope}&sort=${sort}`;
    activeQueryRef.current = query;
    isFetchingRef.current = true;
-   isFirstLoad ? setLoading(true) : setLoadingMore(true);
+   (isFirstLoad ? setLoading : setLoadingMore)(true);
    setError(false);
 
    const endingBefore =
@@ -61,7 +61,7 @@ export function useLeaderboard(scope: LeaderboardScope, sort: LeaderboardSort) {
    } finally {
     isFetchingRef.current = false;
     if (activeQueryRef.current === query) {
-     isFirstLoad ? setLoading(false) : setLoadingMore(false);
+     (isFirstLoad ? setLoading : setLoadingMore)(false);
     }
    }
   },

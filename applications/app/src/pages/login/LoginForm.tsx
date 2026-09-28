@@ -13,7 +13,11 @@ import AuthLayout from "@gopvp/app/src/container/AuthLayout";
 import { useGoogleAuth } from "@gopvp/app/src/hooks/useGoogleAuth";
 // import { useDeviceApprovalPoll } from "@gopvp/app/src/hooks/useDeviceApprovalPoll";
 import SelectCountryScreen from "@gopvp/app/src/pages/select-country/SelectCountryScreen";
-import { callAPIInterface } from "@gopvp/common/src/util/api";
+import {
+ callAPIInterface,
+ getApiErrorResponse,
+} from "@gopvp/common/src/util/api";
+import type { IApiErrorInfo } from "@gopvp/common/src/types/response";
 import { useReduxDispatch } from "@gopvp/app/src/redux/hooks";
 import { login } from "@gopvp/app/src/redux/auth/thunk";
 import { showLoader, hideLoader } from "@gopvp/app/src/redux/common/slice";
@@ -52,9 +56,11 @@ import {
  noAccountPromptText,
  signUpText,
  selectYourCountryText,
+ signingInText,
 } from "@gopvp/app/src/constants/message";
 import { ROUTES } from "@gopvp/app/src/constants/route";
 import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
+import { formSubmitHandler } from "@gopvp/common/src/util/form";
 
 const emailSchema = yup.object({
  email: yup.string().email(enterValidEmailText).required(emailRequiredText),
@@ -74,7 +80,7 @@ function EmailScreen({
   <Box
    customClass="gopvp-email-form"
    component="form"
-   onSubmit={formik.handleSubmit as any}
+   onSubmit={formSubmitHandler(formik.handleSubmit)}
   >
    <Input
     id="email"
@@ -146,7 +152,7 @@ function PasswordScreen({
   <Box
    customClass="gopvp-login-form auth-password-stage"
    component="form"
-   onSubmit={formik.handleSubmit as any}
+   onSubmit={formSubmitHandler(formik.handleSubmit)}
   >
    <Box customClass="auth-account-card">
     <CustomAvatar letter={initials} customClass="md neutral" />
@@ -285,10 +291,9 @@ export default function LoginForm() {
     setVerifiedEmail(values.email);
     setVerifiedUsername(res.username);
     setStep("password");
-   } catch (err: any) {
-    if (err?.response) {
-     setError(err.response.data?.message ?? "");
-    }
+   } catch (err) {
+    const response = getApiErrorResponse(err);
+    if (response) setError(response.data?.message ?? "");
    } finally {
     setSubmitting(false);
    }
@@ -316,7 +321,7 @@ export default function LoginForm() {
   validationSchema: passwordSchema,
   onSubmit: async (values, { setSubmitting }) => {
    setError(null);
-   dispatch(showLoader({ text: "Signing in..." }));
+   dispatch(showLoader({ text: signingInText }));
    try {
     const res = await dispatch(
      login({ email: verifiedEmail, password: values.password }),
@@ -328,7 +333,8 @@ export default function LoginForm() {
     // }
 
     if (!res.country) setStep("country");
-   } catch (err: any) {
+   } catch (err) {
+    const { isNetworkError, message } = err as IApiErrorInfo;
     // if (err?.type === "account_not_verified") {
     //  dispatch(
     //   showToast({
@@ -340,7 +346,7 @@ export default function LoginForm() {
     //  navigate(`/verify-email?email=${encodeURIComponent(verifiedEmail)}`);
     //  return;
     // }
-    if (!err?.isNetworkError) setError(err.message);
+    if (!isNetworkError) setError(message ?? null);
    } finally {
     setSubmitting(false);
     dispatch(hideLoader());

@@ -24,7 +24,7 @@ const meta: Meta<typeof CustomSelect> = {
   customClass: { table: { type: { summary: "string" } } },
  },
  args: { options, placeholder: "Select country" },
- render: (args) => {
+ render: function SelectStory(args) {
   const [value, setValue] = useState("");
   return <CustomSelect {...args} value={value} onChange={setValue} />;
  },

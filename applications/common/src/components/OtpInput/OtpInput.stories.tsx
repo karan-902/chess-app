@@ -14,7 +14,7 @@ const meta: Meta<typeof OTPInput> = {
   customClass: { table: { type: { summary: "string" } } },
  },
  args: { length: 6 },
- render: (args) => {
+ render: function OtpInputStory(args) {
   const [value, setValue] = useState("");
   return <OTPInput {...args} value={value} onChange={setValue} />;
  },

@@ -43,7 +43,9 @@ export function useTabLock(gameId: string | undefined, mode: string) {
      setStatus("superseded");
     }
    };
-  } catch {}
+  } catch (error) {
+   console.error(error);
+  }
 
   const interval = setInterval(() => {
    const current = localStorage.getItem(storageKey);
@@ -86,7 +88,9 @@ export function useTabLock(gameId: string | undefined, mode: string) {
    const bc = new BroadcastChannel(`${TAB_LOCK_CHANNEL_PREFIX}${gameId}`);
    bc.postMessage({ type: "takeover", tabId: myId });
    bc.close();
-  } catch {}
+  } catch (error) {
+   console.error(error);
+  }
 
   setStatus("primary");
  }, [gameId, myId]);

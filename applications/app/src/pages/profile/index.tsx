@@ -37,6 +37,7 @@ import {
 import { USERNAME_MAX_LENGTH } from "@gopvp/app/src/constants/limit";
 import CustomModal from "@gopvp/common/src/components/Modal/Modal";
 import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
+import { formSubmitHandler } from "@gopvp/common/src/util/form";
 
 const profileEditSchema = Yup.object({
  username: Yup.string()
@@ -92,7 +93,7 @@ function EditProfileDrawer({
    <Box
     component="form"
     customClass="edit-profile-form"
-    onSubmit={formik.handleSubmit as any}
+    onSubmit={formSubmitHandler(formik.handleSubmit)}
    >
     <Input
      id="username"

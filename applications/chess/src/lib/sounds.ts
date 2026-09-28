@@ -1,4 +1,5 @@
 import { SOUND_FILES } from "@gopvp/chess/src/constants/asset";
+
 export type SoundName = keyof typeof SOUND_FILES;
 
 export async function playSound(name: SoundName, volume = 0.5): Promise<void> {
@@ -6,7 +7,9 @@ export async function playSound(name: SoundName, volume = 0.5): Promise<void> {
  audio.volume = volume;
  try {
   await audio.play();
- } catch {}
+ } catch (error) {
+  console.error(error);
+ }
 }
 
 interface IMoveSoundInput {

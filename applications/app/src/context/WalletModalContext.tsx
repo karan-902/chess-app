@@ -1,4 +1,10 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import {
+ createContext,
+ useContext,
+ useMemo,
+ useState,
+ type ReactNode,
+} from "react";
 
 type WalletModal = "deposit" | "withdraw" | null;
 
@@ -13,16 +19,18 @@ const WalletModalContext = createContext<IWalletModalContextValue | null>(null);
 
 export function WalletModalProvider({ children }: { children: ReactNode }) {
  const [openModal, setOpenModal] = useState<WalletModal>(null);
+ const actions = useMemo(
+  () => ({
+   openDeposit: () => setOpenModal("deposit"),
+   openWithdraw: () => setOpenModal("withdraw"),
+   close: () => setOpenModal(null),
+  }),
+  [],
+ );
+ const value = useMemo(() => ({ openModal, ...actions }), [openModal, actions]);
 
  return (
-  <WalletModalContext.Provider
-   value={{
-    openModal,
-    openDeposit: () => setOpenModal("deposit"),
-    openWithdraw: () => setOpenModal("withdraw"),
-    close: () => setOpenModal(null),
-   }}
-  >
+  <WalletModalContext.Provider value={value}>
    {children}
   </WalletModalContext.Provider>
  );
@@ -31,9 +39,7 @@ export function WalletModalProvider({ children }: { children: ReactNode }) {
 export function useWalletModal() {
  const ctx = useContext(WalletModalContext);
  if (!ctx) {
-  throw new Error(
-   "useWalletActionModal must be used within a WalletActionModalProvider",
-  );
+  throw new Error("useWalletModal must be used within a WalletModalProvider");
  }
  return ctx;
 }

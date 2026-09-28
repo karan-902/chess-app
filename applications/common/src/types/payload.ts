@@ -3,7 +3,6 @@ import type {
  LeaderboardSort,
 } from "@gopvp/common/src/types/index";
 
-/** auth */
 export type IVerifyUserBody = {
  email: string;
 };
@@ -31,7 +30,6 @@ export type IGenerateTokenBody = {
  refresh_token: string;
 };
 
-/** wallet */
 export type IInitiateDepositBody = {
  amount: number;
 };
@@ -41,7 +39,6 @@ export type IWithdrawRequestBody = {
  destination: string;
 };
 
-/** matchmaking */
 export type ICreateRoomBody = {
  game: string;
  bet: number;
@@ -58,13 +55,11 @@ export type IJoinPoolBody = {
  time: number;
 };
 
-/** profile */
 export type IUpdateProfileBody = {
  username?: string;
  country?: string;
 };
 
-/** leaderboard */
 export type ILeaderboardBody = {
  game: string;
  scope?: LeaderboardScope;

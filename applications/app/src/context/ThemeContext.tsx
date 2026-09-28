@@ -6,6 +6,7 @@ import {
  type ReactNode,
 } from "react";
 import type { ThemeMode } from "@gopvp/common/src/types/component";
+import { readStorage, writeStorage } from "@gopvp/common/src/util/storage";
 import { THEME_STORAGE_KEY } from "@gopvp/app/src/constants/storageKey";
 
 interface IThemeContext {
@@ -19,11 +20,9 @@ const ThemeContext = createContext<IThemeContext>({
 });
 
 function loadInitialMode(): ThemeMode {
- try {
-  return localStorage.getItem(THEME_STORAGE_KEY) === "light" ? "light" : "dark";
- } catch {
-  return "dark";
- }
+ return readStorage(localStorage, THEME_STORAGE_KEY) === "light"
+  ? "light"
+  : "dark";
 }
 
 export function AppThemeProvider({ children }: { children: ReactNode }) {
@@ -31,9 +30,7 @@ export function AppThemeProvider({ children }: { children: ReactNode }) {
 
  useEffect(() => {
   document.documentElement.setAttribute("data-theme", mode);
-  try {
-   localStorage.setItem(THEME_STORAGE_KEY, mode);
-  } catch {}
+  writeStorage(localStorage, THEME_STORAGE_KEY, mode);
  }, [mode]);
 
  const toggleTheme = () => setMode((m) => (m === "dark" ? "light" : "dark"));

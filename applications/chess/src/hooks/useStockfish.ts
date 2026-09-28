@@ -22,7 +22,6 @@ export function useStockfish(
     const move = message.split(" ")[1];
     setBestMove(move);
    }
-   // console.log(message);
   };
   engine.onerror = (e) => console.error("[stockfish] worker error", e);
   return () => engine.terminate();

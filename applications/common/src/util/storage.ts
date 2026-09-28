@@ -14,5 +14,7 @@ export function writeStorage(
  try {
   if (value === null) storage.removeItem(key);
   else storage.setItem(key, value);
- } catch {}
+ } catch (error) {
+  console.error(error);
+ }
 }

@@ -3,6 +3,7 @@ import { Drawer as MuiDrawer } from "@mui/material";
 import classNames from "classnames";
 import "./drawer.scss";
 import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
+import { closeText } from "@gopvp/common/src/constants/message";
 
 interface IDrawerProps {
  open: boolean;
@@ -33,7 +34,7 @@ export function CustomDrawer({
     type="button"
     customClass="drawer-close-icon"
     onClick={onClose}
-    aria-label="Close"
+    aria-label={closeText}
     icon="close"
    />
    {children}

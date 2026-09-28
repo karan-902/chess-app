@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import Box from "@gopvp/common/src/components/Box/Box";
@@ -46,6 +46,7 @@ import {
  countryText,
  registerText,
  selectCountryText,
+ settingUpAccountText,
 } from "@gopvp/app/src/constants/message";
 import {
  USERNAME_MAX_LENGTH,
@@ -54,6 +55,7 @@ import {
 import type { IEmailFormScreenProps } from "@gopvp/common/src/types/component";
 import { ROUTES } from "@gopvp/app/src/constants/route";
 import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
+import { formSubmitHandler } from "@gopvp/common/src/util/form";
 
 const registerSchema = yup.object({
  username: yup
@@ -181,22 +183,19 @@ function EmailFormScreen({ onRegistered }: IEmailFormScreenProps) {
   return () => document.removeEventListener("mousedown", handleClickAway);
  }, [suggestionsMenuOpen]);
 
- const suggestionsMenuSlotProps = useMemo(
-  () => ({
-   paper: {
-    ref: suggestionsMenuPaperRef,
-    style: { width: usernameFieldRef.current?.offsetWidth },
-   },
-   backdrop: { style: { pointerEvents: "none" as const } },
-  }),
-  [suggestionsMenuOpen],
- );
+ const suggestionsMenuSlotProps = {
+  paper: {
+   ref: suggestionsMenuPaperRef,
+   style: { width: usernameFieldRef.current?.offsetWidth },
+  },
+  backdrop: { style: { pointerEvents: "none" as const } },
+ };
 
  return (
   <Box
    customClass="gopvp-signup-form"
    component="form"
-   onSubmit={formik.handleSubmit as any}
+   onSubmit={formSubmitHandler(formik.handleSubmit)}
   >
    <Box ref={usernameFieldRef}>
     <Input
@@ -376,7 +375,7 @@ export default function RegisterForm() {
  const navigate = useNavigate();
 
  const handleRegistered = async (email: string, password: string) => {
-  dispatch(showLoader({ text: "Setting up your account..." }));
+  dispatch(showLoader({ text: settingUpAccountText }));
   try {
    await dispatch(login({ email, password })).unwrap();
   } catch {

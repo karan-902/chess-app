@@ -6,7 +6,7 @@ const meta: Meta<typeof CustomTabs> = {
  title: "Components/CustomTabs",
  component: CustomTabs,
  argTypes: { customClass: { table: { type: { summary: "string" } } } },
- render: (args) => {
+ render: function TabsStory(args) {
   const [value, setValue] = useState("play");
   return (
    <CustomTabs {...args} value={value} onChange={(_, next) => setValue(next)}>

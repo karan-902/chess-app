@@ -1,6 +1,5 @@
 import type { PieceColor } from "@gopvp/chess/src/types/index";
 
-/** gameplay */
 export type IRemainingTime = {
  white: number;
  black: number;

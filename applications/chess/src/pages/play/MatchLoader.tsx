@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 import { CircularProgress } from "@mui/material";
 import Box from "@gopvp/common/src/components/Box/Box";
 import { useGameContext } from "@gopvp/common/src/contexts/GameContext";
-import GameRoom from "@gopvp/chess/src/pages/play/GameRoom";
+import GameRoomGuard from "@gopvp/chess/src/pages/play/GameRoomGuard";
 import {
  useChessDispatch,
  useChessSelector,
@@ -20,13 +20,15 @@ export default function MatchLoader({ matchId }: { matchId: string }) {
  useEffect(() => {
   if (!socket) return;
   setNotFound(false);
-  dispatch(loadMatchState({ matchId, userId }))
-   .unwrap()
-   .then((isLoaded) => {
-    if (isLoaded) return;
-    dispatch(clearMatchState());
-    setNotFound(true);
-   });
+  const loadMatch = async () => {
+   const isLoaded = await dispatch(
+    loadMatchState({ matchId, userId }),
+   ).unwrap();
+   if (isLoaded) return;
+   dispatch(clearMatchState());
+   setNotFound(true);
+  };
+  loadMatch();
  }, [socket, matchId, userId, dispatch]);
 
  if (notFound) return <Navigate to={playPath} replace />;
@@ -39,5 +41,5 @@ export default function MatchLoader({ matchId }: { matchId: string }) {
   );
  }
 
- return <GameRoom mode="pvp" />;
+ return <GameRoomGuard mode="pvp" />;
 }

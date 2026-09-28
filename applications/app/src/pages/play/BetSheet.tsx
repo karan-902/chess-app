@@ -18,6 +18,7 @@ import {
  winText,
  entryFeeAmountText,
  addFundsText,
+ tipText,
 } from "@gopvp/app/src/constants/message";
 
 export default function BetSheet({
@@ -101,7 +102,7 @@ export default function BetSheet({
     </Card>
    </Box>
    <Text customClass="sheet-tip meta-text">
-    <b>Tip:</b> {largestPrizesTipText}
+    <b>{tipText}</b> {largestPrizesTipText}
    </Text>
   </CustomModal>
  );

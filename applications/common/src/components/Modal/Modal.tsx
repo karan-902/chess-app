@@ -3,6 +3,7 @@ import type { DialogProps } from "@mui/material";
 import classNames from "classnames";
 import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
 import "./modal.scss";
+import { closeText } from "@gopvp/common/src/constants/message";
 
 interface IModalProps extends Omit<DialogProps, "title" | "onClose"> {
  open: boolean;
@@ -39,7 +40,7 @@ export function CustomModal({
     <CustomIconButton
      customClass="modal-close-icon"
      onClick={onClose}
-     aria-label="Close"
+     aria-label={closeText}
      icon="x"
     />
    )}

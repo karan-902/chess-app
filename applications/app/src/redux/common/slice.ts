@@ -1,5 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { ToastSeverity } from "@gopvp/common/src/types/component";
+import { loadingText } from "@gopvp/app/src/constants/message";
 
 interface ILoaderState {
  open: boolean;
@@ -21,7 +22,7 @@ interface ICommonState {
 const initialState: ICommonState = {
  loader: {
   open: false,
-  text: "Loading...",
+  text: loadingText,
  },
  toast: {
   isToastOpen: false,

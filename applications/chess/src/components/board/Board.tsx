@@ -288,8 +288,7 @@ export default function Board({
    ),
   );
   return () => timers.forEach(clearTimeout);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
- }, []);
+ }, [entranceGhosts]);
 
  useEffect(() => {
   const raf = requestAnimationFrame(() => {
@@ -300,7 +299,6 @@ export default function Board({
    cancelAnimationFrame(raf);
    clearTimeout(timer);
   };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
  }, []);
 
  const ranks = flipped ? RANKS_FLIP : RANKS;

@@ -9,6 +9,8 @@ import {
  showToast,
 } from "@gopvp/app/src/redux/common/slice";
 import { ROUTES } from "@gopvp/app/src/constants/route";
+import type { IApiErrorInfo } from "@gopvp/common/src/types/response";
+import { signingInText } from "@gopvp/app/src/constants/message";
 
 // const CONFIRM_SWITCH_KEY = "ks_sso_confirm_device_switch";
 
@@ -25,7 +27,7 @@ export function useGoogleAuth(hint?: string) {
  const processCode = useCallback(
   async (code: string) => {
    setIsProcessing(true);
-   dispatch(showLoader({ text: "Signing in..." }));
+   dispatch(showLoader({ text: signingInText }));
 
    try {
     await dispatch(
@@ -39,12 +41,13 @@ export function useGoogleAuth(hint?: string) {
     //     return;
     // }
     navigate(ROUTES.HOME);
-   } catch (err: any) {
-    if (!err?.isNetworkError && err?.status !== 429 && err?.message) {
+   } catch (err) {
+    const { isNetworkError, status, message } = err as IApiErrorInfo;
+    if (!isNetworkError && status !== 429 && message) {
      dispatch(
       showToast({
        isToastOpen: true,
-       toastMessage: err.message,
+       toastMessage: message,
        toastVariant: "error",
       }),
      );

@@ -52,10 +52,13 @@ import {
 function DurationWheel({ value, onChange }: IDurationWheelProps) {
  const listRef = useRef<HTMLDivElement>(null);
  const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
+ const initialValueRef = useRef(value);
 
  useEffect(() => {
   listRef.current?.scrollTo({
-   top: (value - DURATION_MINUTES[0]) * DURATION_WHEEL_ITEM_HEIGHT,
+   top:
+    (initialValueRef.current - DURATION_MINUTES[0]) *
+    DURATION_WHEEL_ITEM_HEIGHT,
   });
  }, []);
 
@@ -171,7 +174,9 @@ export default function RoomSheet({
      .replace(/[^A-Z0-9]/g, "")
      .slice(0, 6),
    );
-  } catch {}
+  } catch (error) {
+   console.error(error);
+  }
  };
 
  return (

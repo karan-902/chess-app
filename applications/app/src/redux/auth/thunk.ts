@@ -25,11 +25,8 @@ export const login = createAsyncThunk(
    // if ("status" in res) return res;
    await sessionService.saveSession(res);
    return res;
-  } catch (err: any) {
-   return rejectWithValue({
-    ...err?.response?.data,
-    ...throwThunkError(err),
-   });
+  } catch (err) {
+   return rejectWithValue(throwThunkError(err));
   }
  },
 );
@@ -47,11 +44,8 @@ export const googleLogin = createAsyncThunk(
    // if ("status" in res) return res
    await sessionService.saveSession(res);
    return res;
-  } catch (err: any) {
-   return rejectWithValue({
-    ...err?.response?.data,
-    ...throwThunkError(err),
-   });
+  } catch (err) {
+   return rejectWithValue(throwThunkError(err));
   }
  },
 );

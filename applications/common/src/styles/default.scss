@@ -1,4 +1,3 @@
-/* Minibet palette — verbatim color tokens from minibet.games (@layer theme). */
 :root {
  --color-red-100: oklch(93.6% 0.032 17.717);
  --color-red-400: oklch(70.4% 0.191 22.216);
@@ -73,7 +72,6 @@
  --color-text-color: #1e1e1e;
 }
 
-/*  Dark is the default (applies with no data-theme). */
 :root {
  color-scheme: dark;
  --app-bg: var(--color-bg-secondary);
@@ -102,7 +100,6 @@
  --backdrop-edge: var(--color-black);
 }
 
-/* Light mode — derived (Minibet ships dark only); gold + accents unchanged. */
 :root[data-theme="light"] {
  color-scheme: light;
  --app-bg: #f7fafc;

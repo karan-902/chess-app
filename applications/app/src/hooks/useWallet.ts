@@ -78,7 +78,7 @@ export function useWallet() {
 
   const requestId = ++latestRequestIdRef.current;
   isFetchingRef.current = true;
-  isFirstLoad ? setTransactionsLoading(true) : setLoadingMore(true);
+  (isFirstLoad ? setTransactionsLoading : setLoadingMore)(true);
 
   const cursor =
    !isFirstLoad && pageIdRef.current
@@ -103,7 +103,7 @@ export function useWallet() {
   } finally {
    isFetchingRef.current = false;
    if (latestRequestIdRef.current === requestId) {
-    isFirstLoad ? setTransactionsLoading(false) : setLoadingMore(false);
+    (isFirstLoad ? setTransactionsLoading : setLoadingMore)(false);
    }
   }
  }, []);

@@ -75,198 +75,198 @@ export default function BoardPreview() {
   "idle" | "mounted" | "running"
  >("idle");
 
- const render = () => {
-  setPieces(
-   Object.entries(pieceDataRef.current).map(([id, d]) => ({
-    id,
-    ...d,
-   })),
-  );
- };
+ useEffect(() => {
+  cancelledRef.current = false;
 
- const addOverlay = (item: Omit<OverlayItem, "id" | "phase">, ttl: number) => {
-  const id = ++overlayIdRef.current;
-  setOverlays((prev) => [...prev, { id, phase: "in", ...item }]);
-  requestAnimationFrame(() => {
+  const render = () => {
+   setPieces(
+    Object.entries(pieceDataRef.current).map(([id, d]) => ({
+     id,
+     ...d,
+    })),
+   );
+  };
+
+  const addOverlay = (item: Omit<OverlayItem, "id" | "phase">, ttl: number) => {
+   const id = ++overlayIdRef.current;
+   setOverlays((prev) => [...prev, { id, phase: "in", ...item }]);
    requestAnimationFrame(() => {
-    if (cancelledRef.current) return;
-    setOverlays((prev) =>
-     prev.map((o) => (o.id === id ? { ...o, phase: "out" } : o)),
-    );
+    requestAnimationFrame(() => {
+     if (cancelledRef.current) return;
+     setOverlays((prev) =>
+      prev.map((o) => (o.id === id ? { ...o, phase: "out" } : o)),
+     );
+    });
    });
-  });
-  setTimeout(() => {
-   setOverlays((prev) => prev.filter((o) => o.id !== id));
-  }, ttl);
- };
+   setTimeout(() => {
+    setOverlays((prev) => prev.filter((o) => o.id !== id));
+   }, ttl);
+  };
 
- const cascadeEntrance = async () => {
-  pieceDataRef.current = {};
-  boardMapRef.current = {};
-  setOverlays([]);
+  const cascadeEntrance = async () => {
+   pieceDataRef.current = {};
+   boardMapRef.current = {};
+   setOverlays([]);
 
-  const list = startPosition();
-  list.forEach(({ id, code, square }) => {
-   const { col } = squareToRC(square);
-   const isWhite = code[0] === "w";
-   pieceDataRef.current[id] = {
-    code,
-    col,
-    row: isWhite ? 9 : -2,
-    noTransition: true,
-   };
-   boardMapRef.current[square] = id;
-  });
-  render();
-
-  await sleep(60);
-  if (cancelledRef.current) return;
-
-  list
-   .slice()
-   .sort(
-    (a, b) =>
-     Math.abs(squareToRC(a.square).col - 3.5) -
-     Math.abs(squareToRC(b.square).col - 3.5),
-   )
-   .forEach(({ id, square }, i) => {
-    setTimeout(() => {
-     if (cancelledRef.current || !pieceDataRef.current[id]) return;
-     const { col, row } = squareToRC(square);
-     pieceDataRef.current[id] = {
-      ...pieceDataRef.current[id],
-      col,
-      row,
-      noTransition: false,
-     };
-     render();
-    }, i * 24);
+   const list = startPosition();
+   list.forEach(({ id, code, square }) => {
+    const { col } = squareToRC(square);
+    const isWhite = code[0] === "w";
+    pieceDataRef.current[id] = {
+     code,
+     col,
+     row: isWhite ? 9 : -2,
+     noTransition: true,
+    };
+    boardMapRef.current[square] = id;
    });
+   render();
 
-  await sleep(list.length * 24 + 900);
- };
+   await sleep(60);
+   if (cancelledRef.current) return;
 
- const idleShimmer = async () => {
-  setShimmerPhase("mounted");
-  requestAnimationFrame(() => {
-   requestAnimationFrame(() => {
-    if (!cancelledRef.current) setShimmerPhase("running");
-   });
-  });
-
-  Object.keys(pieceDataRef.current).forEach((id, i) => {
-   setTimeout(
-    () => {
-     if (cancelledRef.current || !pieceDataRef.current[id]) return;
-     pieceDataRef.current[id] = {
-      ...pieceDataRef.current[id],
-      breathing: true,
-     };
-     render();
+   list
+    .slice()
+    .sort(
+     (a, b) =>
+      Math.abs(squareToRC(a.square).col - 3.5) -
+      Math.abs(squareToRC(b.square).col - 3.5),
+    )
+    .forEach(({ id, square }, i) => {
      setTimeout(() => {
+      if (cancelledRef.current || !pieceDataRef.current[id]) return;
+      const { col, row } = squareToRC(square);
+      pieceDataRef.current[id] = {
+       ...pieceDataRef.current[id],
+       col,
+       row,
+       noTransition: false,
+      };
+      render();
+     }, i * 24);
+    });
+
+   await sleep(list.length * 24 + 900);
+  };
+
+  const idleShimmer = async () => {
+   setShimmerPhase("mounted");
+   requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+     if (!cancelledRef.current) setShimmerPhase("running");
+    });
+   });
+
+   Object.keys(pieceDataRef.current).forEach((id, i) => {
+    setTimeout(
+     () => {
       if (cancelledRef.current || !pieceDataRef.current[id]) return;
       pieceDataRef.current[id] = {
        ...pieceDataRef.current[id],
-       breathing: false,
+       breathing: true,
       };
       render();
-     }, 900);
-    },
-    (i % 8) * 40,
-   );
-  });
+      setTimeout(() => {
+       if (cancelledRef.current || !pieceDataRef.current[id]) return;
+       pieceDataRef.current[id] = {
+        ...pieceDataRef.current[id],
+        breathing: false,
+       };
+       render();
+      }, 900);
+     },
+     (i % 8) * 40,
+    );
+   });
 
-  await sleep(1400);
-  if (!cancelledRef.current) setShimmerPhase("idle");
- };
-
- const animateCapture = async (
-  capturedId: string,
-  rc: { col: number; row: number },
- ) => {
-  if (!pieceDataRef.current[capturedId]) return;
-  pieceDataRef.current[capturedId] = {
-   ...pieceDataRef.current[capturedId],
-   captured: true,
+   await sleep(1400);
+   if (!cancelledRef.current) setShimmerPhase("idle");
   };
-  render();
 
-  addOverlay({ kind: "flash", col: rc.col, row: rc.row }, 450);
-
-  await sleep(350);
-  delete pieceDataRef.current[capturedId];
-  render();
- };
-
- const animateCheck = async (kingSquare: string) => {
-  const rc = squareToRC(kingSquare);
-  const kingId = boardMapRef.current[kingSquare];
-
-  addOverlay({ kind: "check-ring", col: rc.col, row: rc.row }, 1500);
-
-  if (kingId && pieceDataRef.current[kingId]) {
-   pieceDataRef.current[kingId] = {
-    ...pieceDataRef.current[kingId],
-    inCheck: true,
+  const animateCapture = async (
+   capturedId: string,
+   rc: { col: number; row: number },
+  ) => {
+   if (!pieceDataRef.current[capturedId]) return;
+   pieceDataRef.current[capturedId] = {
+    ...pieceDataRef.current[capturedId],
+    captured: true,
    };
    render();
-  }
 
-  await sleep(1500);
-  if (cancelledRef.current) return;
+   addOverlay({ kind: "flash", col: rc.col, row: rc.row }, 450);
 
-  if (kingId && pieceDataRef.current[kingId]) {
-   pieceDataRef.current[kingId] = {
-    ...pieceDataRef.current[kingId],
-    inCheck: false,
-   };
+   await sleep(350);
+   delete pieceDataRef.current[capturedId];
    render();
-  }
- };
+  };
 
- const playMove = async (
-  from: string,
-  to: string,
-  opts?: { capture?: boolean; check?: string },
- ) => {
-  const fromRC = squareToRC(from);
-  const toRC = squareToRC(to);
-  const movingId = boardMapRef.current[from];
-  if (!movingId) return;
-  const movingData = pieceDataRef.current[movingId];
+  const animateCheck = async (kingSquare: string) => {
+   const rc = squareToRC(kingSquare);
+   const kingId = boardMapRef.current[kingSquare];
 
-  addOverlay(
-   { kind: "ghost", col: fromRC.col, row: fromRC.row, code: movingData.code },
-   620,
-  );
+   addOverlay({ kind: "check-ring", col: rc.col, row: rc.row }, 1500);
 
-  if (opts?.capture) {
-   const capturedId = boardMapRef.current[to];
-   if (capturedId) await animateCapture(capturedId, toRC);
+   if (kingId && pieceDataRef.current[kingId]) {
+    pieceDataRef.current[kingId] = {
+     ...pieceDataRef.current[kingId],
+     inCheck: true,
+    };
+    render();
+   }
+
+   await sleep(1500);
    if (cancelledRef.current) return;
-  }
 
-  pieceDataRef.current[movingId] = {
-   ...pieceDataRef.current[movingId],
-   col: toRC.col,
-   row: toRC.row,
+   if (kingId && pieceDataRef.current[kingId]) {
+    pieceDataRef.current[kingId] = {
+     ...pieceDataRef.current[kingId],
+     inCheck: false,
+    };
+    render();
+   }
   };
-  delete boardMapRef.current[from];
-  boardMapRef.current[to] = movingId;
-  render();
 
-  addOverlay(
-   { kind: "ring", col: toRC.col, row: toRC.row, danger: !!opts?.capture },
-   680,
-  );
-  await sleep(620);
-  if (cancelledRef.current) return;
+  const playMove = async (
+   from: string,
+   to: string,
+   opts?: { capture?: boolean; check?: string },
+  ) => {
+   const fromRC = squareToRC(from);
+   const toRC = squareToRC(to);
+   const movingId = boardMapRef.current[from];
+   if (!movingId) return;
+   const movingData = pieceDataRef.current[movingId];
 
-  if (opts?.check) await animateCheck(opts.check);
- };
+   addOverlay(
+    { kind: "ghost", col: fromRC.col, row: fromRC.row, code: movingData.code },
+    620,
+   );
 
- useEffect(() => {
-  cancelledRef.current = false;
+   if (opts?.capture) {
+    const capturedId = boardMapRef.current[to];
+    if (capturedId) await animateCapture(capturedId, toRC);
+    if (cancelledRef.current) return;
+   }
+
+   pieceDataRef.current[movingId] = {
+    ...pieceDataRef.current[movingId],
+    col: toRC.col,
+    row: toRC.row,
+   };
+   delete boardMapRef.current[from];
+   boardMapRef.current[to] = movingId;
+   render();
+
+   addOverlay(
+    { kind: "ring", col: toRC.col, row: toRC.row, danger: !!opts?.capture },
+    680,
+   );
+   await sleep(620);
+   if (cancelledRef.current) return;
+
+   if (opts?.check) await animateCheck(opts.check);
+  };
 
   const runLoop = async () => {
    while (!cancelledRef.current) {

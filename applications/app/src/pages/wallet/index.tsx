@@ -27,6 +27,7 @@ import {
  poweredByText,
  todayText,
  yesterdayText,
+ speedText,
 } from "@gopvp/app/src/constants/message";
 import { TRANSACTIONS_SKELETON_ROWS } from "@gopvp/app/src/constants/limit";
 
@@ -176,7 +177,7 @@ export default function Wallet() {
 
    <Box customClass="powered-by-badge">
     <Text component="span">{poweredByText}</Text>
-    <img src={speedLogo} alt="Speed" className="powered-by-logo" />
+    <img src={speedLogo} alt={speedText} className="powered-by-logo" />
    </Box>
 
    <Box customClass="wallet-tx-title-row">

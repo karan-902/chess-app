@@ -5,3 +5,4 @@ export const cancelText = "Cancel";
 export const playText = "Play";
 export const scoreText = "Score";
 export const youText = "You";
+export const closeText = "Close";

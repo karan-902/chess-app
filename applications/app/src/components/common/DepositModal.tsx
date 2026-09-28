@@ -14,6 +14,7 @@ import { useSocket } from "@gopvp/app/src/context/SocketContext";
 import { paymentRequest } from "@gopvp/app/src/hooks/useWallet";
 import { useModalReady } from "@gopvp/app/src/hooks/useModalReady";
 import { formatAmount } from "@gopvp/common/src/util/format";
+import { getApiErrorResponse } from "@gopvp/common/src/util/api";
 import type {
  IPaymentRequestResponse,
  ITransactionCompletedEvent,
@@ -36,6 +37,7 @@ import {
  qrExpiredText,
  paymentReceivedText,
  depositsNotWithdrawableText,
+ speedText,
 } from "@gopvp/app/src/constants/message";
 import {
  MAX_AMOUNT_DIGITS,
@@ -145,8 +147,8 @@ export default function DepositModal() {
    setPayment(res);
    setExpired(false);
    setStage("qr");
-  } catch (err: any) {
-   setAmountError(err?.response?.data?.message ?? "");
+  } catch (err) {
+   setAmountError(getApiErrorResponse(err)?.data?.message ?? "");
   } finally {
    setSubmitting(false);
   }
@@ -218,7 +220,7 @@ export default function DepositModal() {
      <Box customClass="deposit-speed-wrapper">
       <Box customClass="deposit-speed-badge">
        <Text component="span">{buyCryptoInstantlyText}</Text>
-       <img src={speedLogo} alt="Speed" className="deposit-speed-logo" />
+       <img src={speedLogo} alt={speedText} className="deposit-speed-logo" />
       </Box>
       <Text customClass="deposit-tagline meta-text">
        {fastSecuredTransparentText}

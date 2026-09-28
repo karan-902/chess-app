@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import type { MatchOutcome } from "@gopvp/common/src/types/index";
 import type { IMatchResultResponse } from "@gopvp/common/src/types/response";
 import type { IPvcSnapshot } from "@gopvp/chess/src/types/component";
@@ -45,15 +45,18 @@ export function usePvcGameEnd({
  syncClock,
  setGameEnded,
 }: IProps) {
- const endPvcGame = (outcome: MatchOutcome, endReason: string) => {
-  setGameEnded({
-   id: gameId ?? "pvc",
-   result: PVC_RESULTS[outcome],
-   amount: 0,
-   end_reason: endReason,
-   score_change: 0,
-  });
- };
+ const endPvcGame = useCallback(
+  (outcome: MatchOutcome, endReason: string) => {
+   setGameEnded({
+    id: gameId ?? "pvc",
+    result: PVC_RESULTS[outcome],
+    amount: 0,
+    end_reason: endReason,
+    score_change: 0,
+   });
+  },
+  [gameId, setGameEnded],
+ );
 
  useEffect(() => {
   if (!isPvc || !gameId) return;
@@ -61,8 +64,7 @@ export function usePvcGameEnd({
   if (!snapshot) return;
   restoreGame(snapshot.moves);
   syncClock(snapshot.whiteMs, snapshot.blackMs);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
- }, [isPvc, gameId]);
+ }, [isPvc, gameId, restoreGame, syncClock]);
 
  useEffect(() => {
   if (!isPvc || !gameId || moveLog.length === 0) return;
@@ -80,7 +82,6 @@ export function usePvcGameEnd({
    !isCheckmate ? "draw" : winnerIsMe ? "win" : "loss",
    isCheckmate ? "CHECKMATE" : isStalemate ? "STALEMATE" : "DRAW",
   );
-  // eslint-disable-next-line react-hooks/exhaustive-deps
  }, [
   isPvc,
   isGameOver,
@@ -89,14 +90,13 @@ export function usePvcGameEnd({
   gameEnded,
   turn,
   computerSide,
-  gameId,
+  endPvcGame,
  ]);
 
  useEffect(() => {
   if (!isPvc || !timedOut || gameEnded) return;
   endPvcGame(timedOut === playerSide ? "loss" : "win", "TIMEOUT");
-  // eslint-disable-next-line react-hooks/exhaustive-deps
- }, [isPvc, timedOut, gameEnded, gameId, playerSide]);
+ }, [isPvc, timedOut, gameEnded, playerSide, endPvcGame]);
 
  return { endPvcGame };
 }

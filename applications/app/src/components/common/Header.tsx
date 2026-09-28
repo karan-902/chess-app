@@ -21,6 +21,7 @@ import {
  profileText,
  logOutText,
  walletText,
+ goToPlayText,
 } from "@gopvp/app/src/constants/message";
 import { backText } from "@gopvp/common/src/constants/message";
 import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
@@ -50,7 +51,7 @@ export default function Header() {
     <Link
      to={routes ? routes.PLAY : "/"}
      className="appbar-brand"
-     title="Go to Play"
+     title={goToPlayText}
     >
      <ChessLogo muted={false} showText size={30} />
     </Link>

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useNavigate, useBlocker, Navigate } from "react-router-dom";
+import { useNavigate, useBlocker } from "react-router-dom";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import ChessBoard from "@gopvp/chess/src/components/board/Board";
@@ -61,12 +61,7 @@ export default function GameRoom({ mode }: IGameRoomProps) {
   opponentName,
   opponentScoreLabel,
   betAmount,
-  wasAlreadyFinished,
  } = useGameRoomSetup(mode);
-
- if (wasAlreadyFinished) {
-  return <Navigate to={playPath} replace />;
- }
 
  const {
   fen,
@@ -213,13 +208,18 @@ export default function GameRoom({ mode }: IGameRoomProps) {
   if (result && !isPvc) sendMove(from, to, result.promotion);
   return result;
  };
+ const commitMoveRef = useRef(commitMove);
+
+ useEffect(() => {
+  commitMoveRef.current = commitMove;
+ });
 
  useEffect(() => {
   if (turn !== playerSide || gameEnded || premoveQueue.length === 0) return;
   const timer = setTimeout(() => {
    const [next, ...rest] = premoveQueue;
    setPremoveQueue(rest);
-   const result = commitMove(next.from, next.to);
+   const result = commitMoveRef.current(next.from, next.to);
    if (!result) {
     setPremoveQueue([]);
     setFlashSquare(next.from);
@@ -227,7 +227,6 @@ export default function GameRoom({ mode }: IGameRoomProps) {
    }
   }, 280);
   return () => clearTimeout(timer);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
  }, [turn, gameEnded, playerSide, premoveQueue]);
 
  const handleSquareClick = (square: string, viaDrag?: boolean) => {

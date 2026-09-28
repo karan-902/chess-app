@@ -14,6 +14,17 @@ export type ISocketAckError = {
  errors: { message: string; type: string }[];
 };
 
+export type IApiErrorResponse = {
+ message?: string;
+ type?: string;
+ errors?: { message: string; type: string }[];
+};
+
+export type IApiErrorInfo = IApiErrorResponse & {
+ status: number;
+ isNetworkError: boolean;
+};
+
 export type IListResponse<T> = {
  has_more: boolean;
  object: "list";
@@ -21,7 +32,6 @@ export type IListResponse<T> = {
  page_id: string | null;
 };
 
-/** auth */
 export type IVerifyUserResponse = {
  email: string;
  username: string;
@@ -60,7 +70,6 @@ export type IRandomNameResponse = {
  usernames: string[];
 };
 
-/** games */
 export type IGameResponse = {
  id: string;
  slug: string;
@@ -70,7 +79,6 @@ export type IGameResponse = {
  is_active: boolean;
 };
 
-/** wallet */
 export type IBalanceResponse = {
  total_balance: number;
  withdraw_balance: number;
@@ -106,7 +114,6 @@ export type ITransactionCompletedEvent = {
  amount: number;
 };
 
-/** matchmaking */
 export type IPoolResponse = {
  id: string;
  bet: number;
@@ -177,7 +184,6 @@ export type IRoomLeftEvent = {
  status: "WAITING";
 };
 
-/** matches */
 export type IMatchGame = {
  name: string;
  slug: string;
@@ -230,7 +236,6 @@ export type IWorldMatchHistoryResponse = {
 export type IMatchHistoryItem =
  IMatchHistoryResponse | IWorldMatchHistoryResponse;
 
-/** game session */
 export type IGameNotFoundResponse = {
  error: "not_found";
 };
@@ -285,7 +290,6 @@ export type IEndUpdateEvent = {
  score: number;
 };
 
-/** profile */
 export type IProfileResponse = {
  id: string;
  username: string;
@@ -296,7 +300,6 @@ export type IProfileResponse = {
  created: number;
 };
 
-/** leaderboard */
 export type ILeaderboardEarningsResponse = {
  id: string;
  username: string;

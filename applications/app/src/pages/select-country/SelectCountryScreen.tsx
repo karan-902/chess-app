@@ -26,6 +26,7 @@ import {
  searchCountryText,
 } from "@gopvp/app/src/constants/message";
 import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
+import { formSubmitHandler } from "@gopvp/common/src/util/form";
 
 const schema = yup.object({
  country: yup.string().required(countryRequiredText),
@@ -58,7 +59,7 @@ export default function SelectCountryScreen({
   <Box
    customClass="auth-form"
    component="form"
-   onSubmit={formik.handleSubmit as any}
+   onSubmit={formSubmitHandler(formik.handleSubmit)}
   >
    {showHeading && (
     <Box customClass="auth-heading">

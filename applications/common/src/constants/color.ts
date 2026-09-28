@@ -1,4 +1,3 @@
-/* Dark — Minibet (gold on neutral charcoal). Default. */
 export const COLOR_BG = "#111111";
 export const COLOR_SURFACE = "#1c1c1d";
 export const COLOR_SURFACE_RAISED = "#2a2b2c";
@@ -13,7 +12,6 @@ export const COLOR_ERROR = "#e94235";
 export const COLOR_SUCCESS = "#1cd437";
 export const COLOR_WARNING = "#eab308";
 
-/* Light — derived (Minibet ships dark only); gold + accents unchanged. */
 export const COLOR_BG_LIGHT = "#f7fafc";
 export const COLOR_SURFACE_LIGHT = "#ffffff";
 export const COLOR_SURFACE_RAISED_LIGHT = "#e4e7ec";
@@ -27,5 +25,3 @@ export const COLOR_SECONDARY_LIGHT = "#2158fe";
 export const COLOR_ERROR_LIGHT = "#e94235";
 export const COLOR_SUCCESS_LIGHT = "#159a2e";
 export const COLOR_WARNING_LIGHT = "#eab308";
-
-/* Chess board squares (gameplay surface, theme-independent) */

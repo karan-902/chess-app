@@ -54,7 +54,7 @@ export function useGameHistory(
    const requestType = type;
    activeTypeRef.current = type;
    isFetchingRef.current = true;
-   isFirstLoad ? setLoading(true) : setLoadingMore(true);
+   (isFirstLoad ? setLoading : setLoadingMore)(true);
    setError(false);
 
    const cursor =
@@ -81,7 +81,7 @@ export function useGameHistory(
    } finally {
     isFetchingRef.current = false;
     if (activeTypeRef.current === requestType) {
-     isFirstLoad ? setLoading(false) : setLoadingMore(false);
+     (isFirstLoad ? setLoading : setLoadingMore)(false);
     }
    }
   },

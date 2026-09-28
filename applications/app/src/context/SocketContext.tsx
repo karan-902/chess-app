@@ -74,10 +74,10 @@ export function SocketProvider({ children }: { children: ReactNode }) {
 
     sock.io.reconnection(true);
     sock.connect();
-   } catch {
+   } catch (error) {
     reconnectingRef.current = false;
     sock.io.reconnection(true);
-    console.warn("[Socket] token refresh failed — session expired");
+    console.error(error);
    }
   };
 
@@ -116,7 +116,7 @@ export function SocketProvider({ children }: { children: ReactNode }) {
    sock.off(SOCKET_EVENTS.CONNECT_ERROR, onConnectError);
    sock.off(SOCKET_EVENTS.SESSION_REPLACED, onSessionTerminated);
   };
- }, [isLoggedIn, session?.access_token, isGameReady]);
+ }, [isLoggedIn, session?.access_token, isGameReady, dispatch]);
 
  return (
   <SocketContext.Provider value={{ socket }}>
