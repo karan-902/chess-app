@@ -23,6 +23,7 @@ export function useGameRoomSetup(mode: GameMode) {
   gameId,
   startingMs: isPvc ? pvc.time : (match.state?.time ?? 0),
   betAmount: isPvc ? 0 : (match.state?.bet ?? 0),
+  isStarted: isPvc || !!match.state?.is_started,
   playerSide,
   computerSide: oppositeSide(playerSide),
   myName: shortenUsername(self?.name ?? ""),

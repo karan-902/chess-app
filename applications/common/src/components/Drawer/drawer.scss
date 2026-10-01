@@ -28,8 +28,27 @@
   padding: 3.25rem 1rem 1.25rem;
  }
 
+ &.game-over-sheet .MuiBackdrop-root {
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+ }
+
  &.bet-sheet .MuiDrawer-paper {
   background: $appSurface;
+ }
+
+ @each $tone,
+  $color in ("win": $greenishTeal, "loss": $paleRed, "gold": $gold)
+ {
+  &.result-sheet.#{$tone} .MuiDrawer-paper {
+   background:
+    radial-gradient(
+     120% 55% at 50% 0%,
+     #{alpha($color, 0.25)},
+     transparent 70%
+    ),
+    $appBg;
+  }
  }
 
  &.wallet-sheet .MuiDrawer-paper {

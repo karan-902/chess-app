@@ -5,6 +5,7 @@ import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
 import CustomDrawer from "@gopvp/common/src/components/Drawer/Drawer";
 import Input from "@gopvp/common/src/components/Input/Input";
+import CopyButton from "@gopvp/app/src/components/common/CopyButton";
 import CustomLabel from "@gopvp/common/src/components/Label/Label";
 import OTPInput from "@gopvp/common/src/components/OtpInput/OtpInput";
 import ChipSelect from "@gopvp/common/src/components/ChipSelect/ChipSelect";
@@ -29,12 +30,13 @@ import {
  startText,
  leaveText,
  expiresInText,
- copyCodeText,
- copiedExclaimText,
  roomText,
+ vsText,
 } from "@gopvp/app/src/constants/message";
+import CustomBadge from "@gopvp/common/src/components/Badge/Badge";
 import { MAX_AMOUNT_DIGITS } from "@gopvp/app/src/constants/limit";
-import { cancelText } from "@gopvp/common/src/constants/message";
+import { cancelText, youText } from "@gopvp/common/src/constants/message";
+import { icons } from "@gopvp/common/src/components/images";
 import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
 import {
  ROOM_TABS,
@@ -44,6 +46,17 @@ import {
 import SheetActions from "@gopvp/common/src/components/SheetActions/SheetActions";
 import DurationWheel from "@gopvp/app/src/pages/play/DurationWheel";
 
+function roomPlayer(name: string) {
+ return (
+  <Box customClass="result-tile room-player">
+   <icons.person />
+   <Text component="span" customClass="result-tile-lbl">
+    {name}
+   </Text>
+  </Box>
+ );
+}
+
 export default function RoomSheet({
  open,
  onClose,
@@ -52,6 +65,7 @@ export default function RoomSheet({
  roomStatus,
  isOwner,
  roomCode,
+ opponentName,
  expiresInSeconds,
  onCreateRoom,
  onJoinRoom,
@@ -62,7 +76,6 @@ export default function RoomSheet({
  const [roomBetError, setRoomBetError] = useState("");
  const [roomMinutes, setRoomMinutes] = useState(String(DURATION_MINUTES[4]));
  const [joinCode, setJoinCode] = useState("");
- const [codeCopied, setCodeCopied] = useState(false);
 
  useEffect(() => {
   if (!open) return;
@@ -95,13 +108,6 @@ export default function RoomSheet({
   onJoinRoom(code);
  };
 
- const handleCopyCode = () => {
-  if (!roomCode) return;
-  navigator.clipboard.writeText(roomCode);
-  setCodeCopied(true);
-  setTimeout(() => setCodeCopied(false), 1500);
- };
-
  const handlePasteCode = async () => {
   try {
    const text = await navigator.clipboard.readText();
@@ -128,7 +134,17 @@ export default function RoomSheet({
      <Text customClass="dialog-title">
       {isOwner ? opponentJoinedText : waitingForOwnerText}
      </Text>
+     <Box customClass="room-players">
+      {roomPlayer(youText)}
+      <CustomBadge customClass="room-vs" badgeContent={vsText} />
+      {roomPlayer(opponentName)}
+     </Box>
      <Text customClass="searching-timer">{roomCode}</Text>
+     {isOwner && (
+      <Text customClass="empty-state-desc description">
+       {expiresInText(formatMMSS(expiresInSeconds))}
+      </Text>
+     )}
      {isOwner ? (
       <SheetActions>
        <Button
@@ -153,20 +169,17 @@ export default function RoomSheet({
      <Text customClass="empty-state-desc description">
       {shareCodeWithFriendText}
      </Text>
-     <Text customClass="searching-timer">{roomCode}</Text>
+     <Input
+      value={roomCode ?? ""}
+      disabled
+      fullWidth
+      customClass="room-code-input"
+      slotProps={{ input: { "aria-label": roomCodeText } }}
+      endIcon={<CopyButton text={roomCode ?? ""} />}
+     />
      <Text customClass="empty-state-desc description">
       {expiresInText(formatMMSS(expiresInSeconds))}
      </Text>
-     <Button
-      type="button"
-      variant="outlined"
-      fullWidth
-      customClass="common-play cancel-btn"
-      startIcon={codeCopied ? "check" : "copy"}
-      onClick={handleCopyCode}
-     >
-      {codeCopied ? copiedExclaimText : copyCodeText}
-     </Button>
      <SheetActions cancelLabel={cancelText} onCancel={onCancel} />
     </Box>
    ) : (

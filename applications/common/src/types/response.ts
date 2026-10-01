@@ -70,6 +70,10 @@ export type IRandomNameResponse = {
  usernames: string[];
 };
 
+export type ICountriesResponse = {
+ countries: { code: string; name: string }[];
+};
+
 export type IGameResponse = {
  id: string;
  slug: string;
@@ -119,6 +123,9 @@ export type IPoolResponse = {
  bet: number;
  prize: number;
  time: number;
+ players: number;
+ active: number;
+ hot: boolean;
 };
 
 export type IMatchPlayer = {
@@ -208,6 +215,15 @@ export type IMatchInfoResponse = IMatchOutcome & {
  created: number;
 };
 
+export type IWorldMatchInfoResponse = {
+ id: string;
+ game: IMatchGame;
+ amount: number;
+ winner: IMatchPlayerResponse;
+ loser: IMatchPlayerResponse;
+ created: number;
+};
+
 export type IMatchResultResponse = IMatchOutcome & {
  id: string;
  end_reason: string | null;
@@ -243,6 +259,12 @@ export type IGameNotFoundResponse = {
 export type IActiveGameEvent = {
  match_id: string;
  game_slug: string;
+};
+
+export type IPoolUpdatedEvent = {
+ game: string;
+ stats: { games: number; players: number };
+ pools: IPoolResponse[];
 };
 
 export type IGameStateBasePlayer = {

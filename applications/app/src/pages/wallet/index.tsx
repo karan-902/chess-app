@@ -10,9 +10,12 @@ import EmptyState from "@gopvp/app/src/components/common/EmptyState";
 import TxItemSkeleton from "@gopvp/app/src/components/common/TxItemSkeleton";
 import { useWallet } from "@gopvp/app/src/hooks/useWallet";
 import { useWalletModal } from "@gopvp/app/src/context/WalletModalContext";
-import { speedLogo } from "@gopvp/common/src/components/images";
+import {
+ speedLogo,
+ CallMadeIcon,
+ CallReceivedIcon,
+} from "@gopvp/common/src/components/images";
 import { formatAmount, formatTime } from "@gopvp/common/src/util/format";
-import { TRANSACTION_TYPE_ICONS } from "@gopvp/app/src/constants/icon";
 import { TRANSACTION_TYPE_DESCRIPTIONS } from "@gopvp/app/src/constants/label";
 import { DEBIT_TRANSACTION_TYPES } from "@gopvp/app/src/constants/mapper";
 import type { ITransactionResponse } from "@gopvp/common/src/types/response";
@@ -62,8 +65,8 @@ function buildTimelineEntries(
 }
 
 function txRow(tx: ITransactionResponse, groupEdgeClass: string) {
- const TxIcon = TRANSACTION_TYPE_ICONS[tx.transaction_type];
  const isDebit = DEBIT_TRANSACTION_TYPES.has(tx.transaction_type);
+ const TxIcon = isDebit ? CallMadeIcon : CallReceivedIcon;
  return (
   <Box
    customClass={classNames("wallet-tx-item", isDebit && "neg", groupEdgeClass)}
@@ -208,10 +211,7 @@ export default function Wallet() {
       itemContent={(index, entry) =>
        timelineRow(
         entry,
-        classNames(
-         timelineEntries[index - 1]?.kind !== "tx" && "group-start",
-         timelineEntries[index + 1]?.kind !== "tx" && "group-end",
-        ),
+        classNames(timelineEntries[index + 1]?.kind !== "tx" && "group-end"),
        )
       }
       endReached={loadMoreTransactions}

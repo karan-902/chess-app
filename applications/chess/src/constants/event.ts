@@ -1,20 +1,13 @@
-import { SOCKET_EVENTS } from "@gopvp/common/src/constants/event";
-
 export const GAME_EVENTS = {
- MOVE: "game:move",
- DRAW_OFFER: "game:draw:offer",
- DRAW_ACCEPT: "game:draw:accept",
- DRAW_DECLINE: "game:draw:decline",
- RESIGN: "game:resign",
- ABORT: "game:abort",
- DISCONNECT: "game:disconnect",
- OPPONENT_OFFLINE: "game:opponent:offline",
- OPPONENT_ONLINE: "game:opponent:online",
+ READY: "game_ready",
+ START: "game_start",
+ END: "game_end",
+ MOVE: "game_move",
+ DRAW_OFFER: "game_draw_offer",
+ DRAW_ACCEPT: "game_draw_accept",
+ DRAW_DECLINE: "game_draw_decline",
+ RESIGN: "game_resign",
+ DISCONNECT: "game_disconnect",
+ OPPONENT_OFFLINE: "game_opponent_offline",
+ OPPONENT_ONLINE: "game_opponent_online",
 } as const;
-
-export const MATCH_END_EVENTS = [
- GAME_EVENTS.RESIGN,
- SOCKET_EVENTS.GAME_REJOIN_DECLINED,
- GAME_EVENTS.DISCONNECT,
- GAME_EVENTS.ABORT,
-];

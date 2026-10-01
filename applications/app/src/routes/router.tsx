@@ -13,6 +13,7 @@ import Profile from "@gopvp/app/src/pages/profile";
 import GameRoute from "@gopvp/app/src/container/GameRoute";
 import PlayPage from "@gopvp/app/src/pages/play/PlayPage";
 import EnteredGameRedirect from "@gopvp/app/src/container/EnteredGameRedirect";
+import GamePicker from "@gopvp/app/src/pages/games";
 import { GAME_PAGES, ROUTES } from "@gopvp/app/src/constants/route";
 
 export const router = createBrowserRouter([
@@ -43,6 +44,7 @@ export const router = createBrowserRouter([
      },
      { path: ROUTES.WALLET, element: <Wallet /> },
      { path: ROUTES.PROFILE, element: <Profile /> },
+     { path: ROUTES.PICK_GAME, element: <GamePicker /> },
      { index: true, element: <EnteredGameRedirect /> },
      { path: "*", element: <EnteredGameRedirect /> },
     ],

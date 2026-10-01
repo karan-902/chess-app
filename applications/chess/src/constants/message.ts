@@ -1,20 +1,16 @@
-export const inactivityText = "Inactivity";
 export const resignText = "Resign";
-export const timeoutText = "Timeout";
-export const checkmateText = "Checkmate";
-export const stalemateText = "Stalemate";
 export const drawText = "Draw";
-export const gameOverText = "Game over";
 export const computerText = "Computer";
 export const reconnectingText = "Reconnecting…";
-export const firstMoveText = (seconds: number) => `First move: ${seconds}s`;
+export const firstMoveText = (seconds: number) => `First move in ${seconds}s`;
 export const drawOfferDeclinedText = "Draw offer declined";
 export const opponentOfferedDrawText = "Opponent offered a draw";
+export const waitingForOpponentText = "Waiting for opponent…";
 export const acceptText = "Accept";
 export const declineText = "Decline";
-export const resignTheGameText = "Resign the game?";
-export const loseAndForfeitText = (betAmount: number) =>
- `You'll lose the game and forfeit $${betAmount.toFixed(2)} to your opponent.`;
+export const resignQuestionText = "Resign ?";
+export const loseAndForfeitText = (amount: string) =>
+ `You'll lose the game and forfeit ${amount} to your opponent.`;
 export const loseTheGameText = "You'll lose the game.";
 export const previousMoveText = "Previous move";
 export const nextMoveText = "Next move";
@@ -22,10 +18,6 @@ export const victoryText = "VICTORY";
 export const drawUpperText = "DRAW";
 export const defeatText = "DEFEAT";
 export const cancelledUpperText = "CANCELLED";
-export const rejoinDeclinedText = "Rejoin declined";
-export const abortedText = "Aborted";
-export const settlementText = "SETTLEMENT";
-export const vsOpponentText = (name: string) => `vs ${name}`;
 export const promotePawnText = "Promote pawn";
 export const queenText = "Queen";
 export const rookText = "Rook";

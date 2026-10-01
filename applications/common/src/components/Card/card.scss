@@ -69,6 +69,10 @@
   min-height: 0;
   border-radius: 0.85rem;
 
+  &.player-stats {
+   border-radius: 1rem;
+  }
+
   &.match-row-list {
    background: transparent;
    border: none;

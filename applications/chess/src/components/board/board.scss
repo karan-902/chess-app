@@ -9,6 +9,13 @@
  @include from(laptop) {
   max-width: 520px;
  }
+
+ &.fit-board {
+  width: auto;
+  height: 100%;
+  max-width: none;
+  aspect-ratio: 1 / 1;
+ }
 }
 
 .lib-board-host {

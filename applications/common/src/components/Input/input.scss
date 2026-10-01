@@ -92,8 +92,38 @@
 
  &.wallet-input .MuiInputBase-root.Mui-focused {
   outline: none !important;
-  border-color: $appCardBorder;
-  border-radius: 4px;
+  border: 1px solid $gold !important;
+  border-radius: 4px !important;
+ }
+
+ &.match-id-input,
+ &.room-code-input {
+  .MuiInputBase-root {
+   padding: 0 $space-4 0 $space-12;
+   background: $appSecondary;
+   color: $appTextMuted;
+
+   &.Mui-disabled {
+    opacity: 1;
+   }
+
+   input {
+    -webkit-text-fill-color: $appTextMuted;
+   }
+  }
+ }
+
+ &.room-code-input .MuiInputBase-root {
+  height: 3.5rem;
+  padding-left: calc(2rem + #{$space-4});
+
+  input {
+   text-align: center;
+   font-family: $fontOutfitExtraBold;
+   font-size: $font24;
+   letter-spacing: 0.2em;
+   -webkit-text-fill-color: $gold;
+  }
  }
 
  &.form-input .MuiInputBase-root {

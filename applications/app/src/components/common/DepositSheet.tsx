@@ -5,6 +5,7 @@ import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
 import Input from "@gopvp/common/src/components/Input/Input";
+import CopyButton from "@gopvp/app/src/components/common/CopyButton";
 import { speedLogo, qrLogo } from "@gopvp/common/src/components/images";
 import WalletSheetShell from "@gopvp/app/src/components/common/WalletSheetShell";
 import WalletSuccessStage from "@gopvp/app/src/components/common/WalletSuccessStage";
@@ -29,8 +30,6 @@ import {
  maxDepositAmountText,
  btcOnlyWarningText,
  scanToDepositText,
- copyText,
- copiedText,
  expiresInText,
  qrExpiredText,
  paymentReceivedText,
@@ -69,7 +68,6 @@ export default function DepositSheet() {
  const [amountError, setAmountError] = useState("");
  const [submitting, setSubmitting] = useState(false);
  const [payment, setPayment] = useState<IPaymentRequestResponse | null>(null);
- const [copied, setCopied] = useState(false);
  const [remainingMs, setRemainingMs] = useState(0);
  const [expired, setExpired] = useState(false);
 
@@ -80,7 +78,6 @@ export default function DepositSheet() {
   setAmountError("");
   setSubmitting(false);
   setPayment(null);
-  setCopied(false);
   setExpired(false);
  }, [open]);
 
@@ -147,13 +144,6 @@ export default function DepositSheet() {
 
  const address = payment?.payment_request;
 
- const handleCopy = () => {
-  if (!address) return;
-  navigator.clipboard.writeText(address);
-  setCopied(true);
-  setTimeout(() => setCopied(false), 1500);
- };
-
  return (
   <WalletSheetShell open={open} isSuccess={stage === "success"} onClose={close}>
    {stage === "amount" && (
@@ -167,7 +157,7 @@ export default function DepositSheet() {
        type="text"
        inputMode="numeric"
        label={enterAmountText}
-       labelClassName="deposit-label"
+       labelClassName="wallet-label"
        slotProps={{
         input: { maxLength: MAX_AMOUNT_DIGITS },
        }}
@@ -248,13 +238,7 @@ export default function DepositSheet() {
 
      <Box customClass="deposit-address-row">
       <Text customClass="deposit-address">{address}</Text>
-      <Button
-       customClass="deposit-copy-btn"
-       startIcon={copied ? "check" : "copy"}
-       onClick={handleCopy}
-      >
-       {copied ? copiedText : copyText}
-      </Button>
+      <CopyButton text={payment.payment_request} />
      </Box>
 
      <Text

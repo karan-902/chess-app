@@ -45,13 +45,59 @@
   }
  }
 
- .MuiSelect-icon,
- .MuiAutocomplete-popupIndicator {
-  color: alpha($appText, 0.4);
- }
-
  input::placeholder {
   color: alpha($appText, 0.35);
   opacity: 1;
+ }
+
+ .select-arrow {
+  color: alpha($appText, 0.4);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+
+  &.open {
+   transform: rotate(180deg);
+  }
+ }
+}
+
+.common-select-popper {
+ z-index: $z-dropdown;
+}
+
+.common-select-menu.MuiPaper-root {
+ max-height: 250px;
+ overflow-y: auto;
+ border-radius: 4px;
+ scrollbar-width: thin;
+ scrollbar-color: alpha($appTextMuted, 0.3) transparent;
+
+ .MuiList-root {
+  padding-block: $space-4;
+ }
+
+ .MuiMenuItem-root {
+  min-height: 2.25rem;
+  padding-block: $space-4;
+  font-family: $fontOutfitRegular;
+  font-size: $font14;
+  color: $appText;
+
+  &:hover,
+  &.active {
+   background: alpha($appText, 0.06);
+  }
+
+  &.Mui-selected,
+  &.Mui-selected:hover,
+  &.Mui-selected.active {
+   background: alpha($gold, 0.12);
+   color: $gold;
+  }
+
+  &.Mui-disabled {
+   opacity: 1;
+   color: $appTextMuted;
+  }
  }
 }

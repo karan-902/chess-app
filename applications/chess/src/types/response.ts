@@ -5,9 +5,15 @@ export type IRemainingTime = {
  black: number;
 };
 
+export type IMovePlayed = {
+ from?: string;
+ to?: string;
+ promotion?: string | null;
+};
+
 export type IMoveResponse =
- | { error: "not_found" | "not_your_turn" | "invalid_move" }
- | {
+ | { error: "invalid_move" }
+ | (IMovePlayed & {
     error?: undefined;
     fen: string;
     is_checkmate: boolean;
@@ -17,9 +23,9 @@ export type IMoveResponse =
     turn_user_id: string;
     remaining_time: IRemainingTime;
     first_move_deadline_ms?: number;
-   };
+   });
 
-export type IMoveEvent = {
+export type IMoveEvent = IMovePlayed & {
  fen: string;
  isCheckmate: boolean;
  isDraw: boolean;
@@ -39,14 +45,6 @@ export type IGameStatePlayer = {
  draw_offer: boolean;
 };
 
-export type IGameStateMove = {
- user_id: string;
- from: string;
- to: string;
- promotion: string | null;
- move_count: number;
-};
-
 export type IGameStateResponse = {
  match_id: string;
  fen: string;
@@ -56,6 +54,11 @@ export type IGameStateResponse = {
  prize: number;
  time: number;
  players: IGameStatePlayer[];
- move_history: IGameStateMove[];
+ is_started: boolean;
  first_move_deadline_ms?: number;
+};
+
+export type IGameStartEvent = {
+ matchId: string;
+ firstMoveDeadlineMs: number;
 };

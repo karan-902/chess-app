@@ -109,7 +109,9 @@ export default function BetSheet({
     </Card>
    </Box>
    <Text customClass="sheet-tip meta-text">
-    <b>{tipText}</b> {largestPrizesTipText}
+    <>
+     <b>{tipText}</b> {largestPrizesTipText}
+    </>
    </Text>
   </CustomDrawer>
  );

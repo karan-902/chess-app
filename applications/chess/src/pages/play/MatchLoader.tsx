@@ -35,7 +35,7 @@ export default function MatchLoader({ matchId }: IMatchLoaderProps) {
 
  if (loadedMatchId !== matchId) {
   return (
-   <Box customClass="modal-loader">
+   <Box customClass="modal-loader game-loader">
     <Box customClass="logo-loader" role="progressbar" />
    </Box>
   );

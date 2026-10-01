@@ -35,18 +35,14 @@ export interface IGamePracticeProps {
  onClose: () => void;
 }
 
-export interface IMatchIconProps {
- time: number;
-}
-
 export interface IGameModule {
  Preview: ComponentType;
  PoolLabel: ComponentType<IPoolLabelProps>;
  GameRoom: ComponentType;
+ preloadGameRoom: () => Promise<unknown>;
+ logoSrc: string;
  Practice?: ComponentType<IGamePracticeProps>;
  Rules: ComponentType;
- MatchIcon: ComponentType<IMatchIconProps>;
- endReasonLabels: Record<string, string>;
 }
 
 export interface IEmailValues {
@@ -101,6 +97,7 @@ export interface IMatchListProps {
  currentUsername: string | undefined;
  loadingMore: boolean;
  loadMore: () => void;
+ onMatchClick?: (match: IMatchHistoryItem) => void;
 }
 
 export interface IFilterDropdownProps<T extends string> {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useReduxDispatch } from "@gopvp/app/src/redux/hooks";
+import { useReduxDispatch, useReduxSelector } from "@gopvp/app/src/redux/hooks";
 import { showToast } from "@gopvp/app/src/redux/common/slice";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
@@ -38,6 +38,9 @@ export default function WithdrawSheet() {
  const dispatch = useReduxDispatch();
  const { openModal, close } = useWalletModal();
  const { withdrawableUsd, refetch } = useWalletBalance();
+ const speedLightningAddress = useReduxSelector(
+  (state) => state.speed.lightningAddress,
+ );
  const open = openModal === "withdraw";
 
  const [stage, setStage] = useState<Stage>("amount");
@@ -76,8 +79,9 @@ export default function WithdrawSheet() {
       : isBelowMin
         ? minWithdrawalAmountText(MIN_TRANSACTION_USD)
         : undefined;
+ const withdrawDestination = (speedLightningAddress || destination).trim();
  const canSubmit =
-  hasWithdrawable && amount !== "" && !amountError && destination.trim() !== "";
+  hasWithdrawable && amount !== "" && !amountError && withdrawDestination !== "";
 
  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   let val = e.target.value.replace(/[^0-9.]/g, "");
@@ -89,7 +93,7 @@ export default function WithdrawSheet() {
  };
 
  const handleWithdraw = async () => {
-  if (!destination.trim()) {
+  if (!withdrawDestination) {
    dispatch(
     showToast({
      isToastOpen: true,
@@ -101,7 +105,7 @@ export default function WithdrawSheet() {
   }
   setSubmitting(true);
   try {
-   await withdrawRequest(amountUsd, destination.trim());
+   await withdrawRequest(amountUsd, withdrawDestination);
    refetch();
    setStage("success");
   } catch (err) {
@@ -124,6 +128,7 @@ export default function WithdrawSheet() {
        type="text"
        inputMode="decimal"
        label={enterAmountText}
+       labelClassName="wallet-label"
        slotProps={{
         input: { maxLength: MAX_AMOUNT_DIGITS },
        }}
@@ -138,17 +143,19 @@ export default function WithdrawSheet() {
       />
      </Box>
 
-     <Input
-      id="withdraw-destination"
-      type="text"
-      label={destinationText}
-      fullWidth
-      customClass="wallet-input"
-      placeholder={btcAddressOrInvoiceText}
-      value={destination}
-      onChange={(e) => setDestination(e.target.value)}
-      disabled={submitting || !hasWithdrawable}
-     />
+     {!speedLightningAddress && (
+      <Input
+       id="withdraw-destination"
+       type="text"
+       label={destinationText}
+       fullWidth
+       customClass="wallet-input"
+       placeholder={btcAddressOrInvoiceText}
+       value={destination}
+       onChange={(e) => setDestination(e.target.value)}
+       disabled={submitting || !hasWithdrawable}
+      />
+     )}
 
      <Button
       type="submit"

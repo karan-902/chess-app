@@ -8,13 +8,15 @@ import {
  cancelSearchText,
  findingOpponentText,
  opponentFoundText,
- entryFeeText,
  prizeText,
  confirmYourMatchText,
  matchedOnConfirmText,
  findOpponentText,
 } from "@gopvp/app/src/constants/message";
-import { cancelText } from "@gopvp/common/src/constants/message";
+import {
+ cancelText,
+ entryFeeText,
+} from "@gopvp/common/src/constants/message";
 import SheetActions from "@gopvp/common/src/components/SheetActions/SheetActions";
 
 export default function PoolConfirmSheet({

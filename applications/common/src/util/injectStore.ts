@@ -1,5 +1,9 @@
 import type { IToast } from "@gopvp/common/src/types/component";
-import { SHOW_TOAST_ACTION } from "@gopvp/common/src/constants/action";
+import {
+ SHOW_TOAST_ACTION,
+ SHOW_LOADER_ACTION,
+ HIDE_LOADER_ACTION,
+} from "@gopvp/common/src/constants/action";
 
 type TInjectedStore = {
  dispatch: (action: { type: string; payload?: unknown }) => unknown;
@@ -30,3 +34,9 @@ export const showToastMessage = (toast: IToast) =>
   type: SHOW_TOAST_ACTION,
   payload: { isToastOpen: true, ...toast },
  });
+
+export const showBackdropLoader = () =>
+ injectedStore?.dispatch({ type: SHOW_LOADER_ACTION });
+
+export const hideBackdropLoader = () =>
+ injectedStore?.dispatch({ type: HIDE_LOADER_ACTION });

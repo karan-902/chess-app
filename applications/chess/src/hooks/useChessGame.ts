@@ -1,7 +1,8 @@
 import { useState, useCallback } from "react";
 import { Chess } from "chess.js";
-import type { Square } from "chess.js";
+import type { Move, Square } from "chess.js";
 import type { MoveRecord } from "@gopvp/chess/src/types/index";
+import type { IMovePlayed } from "@gopvp/chess/src/types/response";
 import { playSound, getMoveSound } from "@gopvp/chess/src/lib/sounds";
 import {
  CAPTURE_ORDER,
@@ -10,6 +11,22 @@ import {
 } from "@gopvp/chess/src/constants/board";
 
 const positionKey = (fen: string) => fen.split(" ").slice(0, 4).join(" ");
+
+const toMoveRecords = (moves: Move[]): MoveRecord[] => {
+ if (moves.length === 0) return [];
+ const [, turn, , , , fullMove] = moves[0].before.split(" ");
+ const sans = moves.map((move) => move.san);
+ const paired = turn === "b" ? ["", ...sans] : sans;
+ const records: MoveRecord[] = [];
+ for (let i = 0; i < paired.length; i += 2) {
+  records.push({
+   n: Number(fullMove) + i / 2,
+   w: paired[i],
+   b: paired[i + 1] ?? "",
+  });
+ }
+ return records;
+};
 
 export interface ICapturedPieces {
  byWhite: string[];
@@ -44,16 +61,7 @@ export function useChessGame() {
      const newFen = chess.fen();
      setFen(newFen);
      setFenHistory((prev) => [...prev, newFen]);
-     const history = chess.history();
-     const records: MoveRecord[] = [];
-     for (let i = 0; i < history.length; i += 2) {
-      records.push({
-       n: i / 2 + 1,
-       w: history[i],
-       b: history[i + 1] ?? "",
-      });
-     }
-     setMoveHistory(records);
+     setMoveHistory(toMoveRecords(chess.history({ verbose: true })));
      setMoveLog((prev) => [
       ...prev,
       { from, to, promotion: move.promotion ?? null },
@@ -80,24 +88,27 @@ export function useChessGame() {
     });
     fenHist.push(chess.fen());
    }
-   const restoredFen = chess.fen();
-   const history = chess.history();
-   const records: MoveRecord[] = [];
-   for (let i = 0; i < history.length; i += 2) {
-    records.push({
-     n: i / 2 + 1,
-     w: history[i],
-     b: history[i + 1] ?? "",
-    });
-   }
-   setFen(restoredFen);
+   setFen(chess.fen());
    setFenHistory(fenHist);
-   setMoveHistory(records);
+   setMoveHistory(toMoveRecords(chess.history({ verbose: true })));
    setMoveLog(moves);
    if (moves.length > 0) {
     const last = moves[moves.length - 1];
     setLastMove({ from: last.from, to: last.to });
    }
+  },
+  [chess],
+ );
+
+ const loadFen = useCallback(
+  (serverFen: string) => {
+   chess.load(serverFen);
+   const loadedFen = chess.fen();
+   setFen(loadedFen);
+   setFenHistory([loadedFen]);
+   setMoveHistory([]);
+   setMoveLog([]);
+   setLastMove(null);
   },
   [chess],
  );
@@ -252,9 +263,15 @@ export function useChessGame() {
  }, [chess]);
 
  const applyServerFen = useCallback(
-  (serverFen: string): boolean => {
+  (serverFen: string, played?: IMovePlayed): boolean => {
    const target = positionKey(serverFen);
    if (positionKey(chess.fen()) === target) return true;
+   if (played?.from && played.to) {
+    return (
+     !!makeMove(played.from, played.to, played.promotion ?? undefined) &&
+     positionKey(chess.fen()) === target
+    );
+   }
    const move = chess
     .moves({ verbose: true })
     .find((m) => positionKey(m.after) === target);
@@ -297,6 +314,7 @@ export function useChessGame() {
   fenHistory,
   makeMove,
   applyServerFen,
+  loadFen,
   resetGame,
   restoreGame,
   getLegalMoves,

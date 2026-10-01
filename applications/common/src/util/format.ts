@@ -16,6 +16,14 @@ export function formatTime(date: number | Date): string {
  return dayjs(date).format("h:mm A");
 }
 
+export function formatDateTime(date: number | Date): string {
+ return dayjs(date).format("D MMM YYYY, hh:mm A");
+}
+
+export function formatNumber(value: number): string {
+ return Math.round(value).toLocaleString("en-US");
+}
+
 export function formatText(text: string): string {
  return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
 }

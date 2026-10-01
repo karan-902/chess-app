@@ -68,11 +68,6 @@
   color: $appText;
  }
 
- &.random-name-chips-label {
-  display: block;
-  font-size: $font12;
-  color: $appTextMuted;
- }
  &.loader-text {
   font-family: $fontOutfitExtraBold;
   color: $white !important;
@@ -224,8 +219,24 @@
  }
 
  &.play-hint {
-  text-align: center;
-  margin-top: 0.25rem;
+  display: inline-flex;
+  align-items: center;
+  gap: $space-4;
+  font-family: $fontOutfitMedium;
+  font-size: $font13;
+  color: $appText;
+  animation: play-hint-blink 4s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  will-change: transform, opacity;
+
+  svg {
+   width: 1rem;
+   height: 1rem;
+   color: $gold;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+   animation: none;
+  }
  }
 
  &.searching-timer {
@@ -361,10 +372,6 @@
   line-height: 1.4;
  }
 
- &.match-row-time {
-  margin-top: 0.15rem;
- }
-
  &.empty-state-desc {
   line-height: 1.55;
   max-width: 24rem;
@@ -378,7 +385,7 @@
 
  &.stat-val {
   font-family: $fontOutfitExtraBold;
-  font-size: $font14;
+  font-size: $font14 !important;
   color: $appText;
   min-width: 0;
   overflow: hidden;
@@ -388,12 +395,21 @@
   svg {
    vertical-align: top;
   }
+
+  .player-stats & {
+   font-size: $font18;
+  }
  }
  &.stat-title {
-  font-family: $fontOutfitMedium;
-  font-size: $font15;
+  font-family: $fontOutfitMedium !important;
+  font-size: $font16;
   color: $appTextMuted;
   flex-shrink: 0;
+
+  .player-stats & {
+   font-size: $font16;
+   color: $appText;
+  }
  }
 
  &.lb-rank {
@@ -471,6 +487,54 @@
  &.sheet-title {
   display: block;
   margin: 0 0 1.1rem;
+ }
+
+ &.result-title {
+  font-family: $fontOutfitExtraBold;
+  font-size: $font24;
+  color: $appText;
+ }
+
+ &.result-subtitle {
+  font-family: $fontOutfitMedium;
+  font-size: $font16;
+  color: $appText;
+ }
+
+ &.result-amount {
+  font-family: $fontOutfitExtraBold;
+  font-size: $font30;
+  color: $appText;
+
+  .result-sheet.win &,
+  .result-sheet.gold &,
+  .result-sheet.neutral & {
+   color: $greenishTeal;
+  }
+
+  .result-sheet.loss & {
+   color: $paleRed;
+  }
+ }
+
+ &.result-tile-lbl {
+  font-family: $fontOutfitSemiBold;
+  font-size: $font14;
+  color: $appText;
+ }
+
+ &.result-tile-val {
+  font-family: $fontOutfitExtraBold;
+  font-size: $font22;
+  color: $appText;
+
+  &.pos {
+   color: $greenishTeal;
+  }
+
+  &.neg {
+   color: $paleRed;
+  }
  }
 
  &.subsection-heading {
@@ -556,6 +620,10 @@
 
  &.gr-name {
   display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-family: $fontOutfitSemiBold;
   font-size: $font16;
   font-weight: 400;
@@ -568,6 +636,16 @@
   }
  }
 
+ &.gr-score-label {
+  flex-shrink: 0;
+  padding: 0.1rem $space-8;
+  border-radius: 4px;
+  background: alpha($appText, 0.08);
+  font-family: $fontOutfitSemiBold;
+  font-size: $font12;
+  color: $appTextMuted;
+ }
+
  &.gr-advantage {
   font-weight: 600;
 
@@ -575,9 +653,26 @@
  }
 
  &.gr-grace {
-  display: block;
-  margin-top: 0.15rem;
+  flex-shrink: 0;
+  white-space: nowrap;
   color: $paleRed;
+ }
+
+ &.gr-first-move {
+  flex-shrink: 0;
+  white-space: nowrap;
+  padding: 0.1rem $space-8;
+  border-radius: 4px;
+  background: alpha($warning, 0.12);
+  font-family: $fontOutfitSemiBold;
+  font-size: $font12;
+  font-variant-numeric: tabular-nums;
+  color: $warning;
+
+  &.urgent {
+   background: alpha($paleRed, 0.12);
+   color: $paleRed;
+  }
  }
 
  &.gr-clock {
@@ -610,42 +705,6 @@
   text-transform: uppercase;
  }
 
- &.gr-overlay-title {
-  font-family: $fontOutfitExtraBold;
-  font-size: $font24;
-  color: $appText;
-
-  &.win {
-   color: $greenishTeal;
-  }
-
-  &.loss {
-   color: $paleRed;
-  }
- }
-
- &.gr-settlement-val {
-  display: block;
-  font-family: $fontOutfitExtraBold;
-  font-size: $font20;
-  color: $gold;
-
-  &.win {
-   color: $greenishTeal;
-  }
-
-  &.loss {
-   color: $paleRed;
-  }
- }
-
- &.gr-settlement-lbl {
-  display: block;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  margin-top: 0.15rem;
- }
-
  &.appbar-dropdown-name {
   font-family: $fontOutfitRegular;
   font-size: $font14;
@@ -662,5 +721,19 @@
   color: alpha($appText, 0.5);
   margin-bottom: 1.25rem;
   line-height: 1.5;
+ }
+}
+
+@keyframes play-hint-blink {
+ 0%,
+ 77.5%,
+ 100% {
+  opacity: 0;
+  transform: translate3d(0, 0.75rem, 0);
+ }
+ 20%,
+ 57.5% {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
  }
 }

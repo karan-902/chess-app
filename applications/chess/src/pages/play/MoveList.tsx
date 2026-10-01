@@ -22,26 +22,36 @@ export default function MoveList({
 
  if (moveHistory.length === 0) return null;
 
+ const indexOffset = moveHistory[0].w ? 0 : -1;
+
  return (
   <Box customClass="gr-move-strip" ref={movesRef}>
    {moveHistory.map((m, i) => {
-    const isWhiteActive = effectiveIndex === i * 2 + 1;
-    const isBlackActive = effectiveIndex === i * 2 + 2;
+    const whiteIndex = i * 2 + 1 + indexOffset;
+    const blackIndex = whiteIndex + 1;
     return (
      <Box key={m.n} customClass="gr-move-pair">
       <Text component="span" customClass="gr-move-n">
        {m.n}.
       </Text>
-      <CustomChip
-       label={m.w}
-       customClass={classNames("gr-move-chip", isWhiteActive && "active")}
-       onClick={() => onJump(i * 2 + 1)}
-      />
+      {m.w && (
+       <CustomChip
+        label={m.w}
+        customClass={classNames(
+         "gr-move-chip",
+         effectiveIndex === whiteIndex && "active",
+        )}
+        onClick={() => onJump(whiteIndex)}
+       />
+      )}
       {m.b && (
        <CustomChip
         label={m.b}
-        customClass={classNames("gr-move-chip", isBlackActive && "active")}
-        onClick={() => onJump(i * 2 + 2)}
+        customClass={classNames(
+         "gr-move-chip",
+         effectiveIndex === blackIndex && "active",
+        )}
+        onClick={() => onJump(blackIndex)}
        />
       )}
      </Box>

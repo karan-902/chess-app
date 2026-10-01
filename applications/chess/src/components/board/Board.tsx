@@ -93,6 +93,7 @@ export default function Board({
  premoveSquares = [],
  premoveMoves = [],
  draggableColor,
+ onEntranceEnd,
 }: IChessBoardProps) {
  const gridRef = useRef<HTMLDivElement>(null);
  const [boardWidth, setBoardWidth] = useState(400);
@@ -186,7 +187,10 @@ export default function Board({
   }
   timers.push(
    setTimeout(
-    () => setEntranceGhosts(null),
+    () => {
+     setEntranceGhosts(null);
+     onEntranceEnd?.();
+    },
     150 +
      BOARD_ENTRANCE_WAVE_COUNT * BOARD_ENTRANCE_WAVE_MS +
      BOARD_ENTRANCE_LANDING_MS +
@@ -194,7 +198,7 @@ export default function Board({
    ),
   );
   return () => timers.forEach(clearTimeout);
- }, [entranceGhosts]);
+ }, [entranceGhosts, onEntranceEnd]);
 
  useEffect(() => {
   const raf = requestAnimationFrame(() => {
@@ -425,8 +429,9 @@ export default function Board({
    onDragStart={handleDragStart}
    onDragEnd={handleDragEnd}
    autoScroll={false}
+   accessibility={{ restoreFocus: false }}
   >
-   <Box customClass="chess-board">
+   <Box customClass="chess-board fit-board">
     <Box
      customClass="chess-board-grid"
      ref={gridRef}

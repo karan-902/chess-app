@@ -1,6 +1,5 @@
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
-import { ChessLogo } from "@gopvp/app/src/constants/icon";
 import type { IAuthLayoutProps } from "@gopvp/app/src/types/component";
 
 export default function AuthLayout({
@@ -12,7 +11,7 @@ export default function AuthLayout({
  return (
   <Box customClass="public-page">
    <Box customClass="public-brand">
-    <ChessLogo size={22} showText={true} />
+    <img src="/gopvp-logo.png" width="auto" height={54} alt="gopvp-logo" />
    </Box>
    <Box customClass="public-heading">
     <Text component="h1" customClass="public-title">

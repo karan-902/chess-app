@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
@@ -13,6 +13,7 @@ import { useReduxSelector } from "@gopvp/app/src/redux/hooks";
 import { useGame } from "@gopvp/app/src/hooks/useGame";
 import { formatAmount } from "@gopvp/common/src/util/format";
 import type { MatchesSubtab } from "@gopvp/common/src/types/component";
+import type { IMatchHistoryItem } from "@gopvp/common/src/types/response";
 import {
  welcomeText,
  makeFirstMoveText,
@@ -33,7 +34,9 @@ import { scoreText } from "@gopvp/common/src/constants/message";
 import { MATCHES_SUBTAB_OPTIONS } from "@gopvp/app/src/constants/option";
 import { MATCHES_SUBTAB_LABELS } from "@gopvp/app/src/constants/label";
 import { renderSkeletons } from "@gopvp/app/src/utils/skeleton";
+import { STAT_ICONS } from "@gopvp/app/src/constants/icon";
 import MatchList from "@gopvp/app/src/pages/history/MatchList";
+import MatchInfoSheet from "@gopvp/app/src/pages/history/MatchInfoSheet";
 
 export default function MyMatches() {
  const { gameLabel } = useGame();
@@ -57,6 +60,9 @@ export default function MyMatches() {
  );
  const { items, loading, loadingMore, error, loadMore, stats, statsLoading } =
   useGameHistory(subtab === "global" ? "worldwide" : "own", subtab === "stats");
+ const [selectedMatch, setSelectedMatch] =
+  useState<IMatchHistoryItem | null>(null);
+ const closeMatchInfo = useCallback(() => setSelectedMatch(null), []);
 
  return (
   <Box customClass="matches-page">
@@ -93,8 +99,11 @@ export default function MyMatches() {
       currentUsername={currentUsername}
       loadingMore={loadingMore}
       loadMore={loadMore}
+      onMatchClick={setSelectedMatch}
      />
     ))}
+
+   <MatchInfoSheet match={selectedMatch} onClose={closeMatchInfo} />
 
    {subtab === "global" &&
     (loading ? (
@@ -112,6 +121,7 @@ export default function MyMatches() {
       currentUsername={currentUsername}
       loadingMore={loadingMore}
       loadMore={loadMore}
+      onMatchClick={setSelectedMatch}
      />
     ))}
 
@@ -130,26 +140,32 @@ export default function MyMatches() {
            {
             label: scoreText,
             value: Math.round(stats?.score ?? MATCHES_STATS_FALLBACK),
+            ...STAT_ICONS.score,
            },
            {
             label: currentStreakText,
             value: stats?.current_streak ?? MATCHES_STATS_FALLBACK,
+            ...STAT_ICONS.current_streak,
            },
            {
             label: bestStreakText,
             value: stats?.best_streak ?? MATCHES_STATS_FALLBACK,
+            ...STAT_ICONS.best_streak,
            },
            {
             label: winsText,
             value: stats?.wins ?? MATCHES_STATS_FALLBACK,
+            ...STAT_ICONS.wins,
            },
            {
             label: grossIncomeText,
             value: formatAmount(stats?.gross_income ?? MATCHES_STATS_FALLBACK),
+            ...STAT_ICONS.gross_income,
            },
           ]
       }
       skeletonRows={MATCH_STATS_SKELETON_ROWS}
+      customClass="player-stats"
      />
     </Box>
    )}

@@ -6,8 +6,11 @@ import { showAckErrorToast } from "@gopvp/common/src/util/api";
 import { buildMatchUrl } from "@gopvp/app/src/utils";
 import { useGame } from "@gopvp/app/src/hooks/useGame";
 import { useCountdown } from "@gopvp/common/src/hooks/useCountdown";
+import { useReduxSelector } from "@gopvp/app/src/redux/hooks";
+import { shortenUsername } from "@gopvp/common/src/util/format";
 import type {
  ICreateRoomResponse,
+ IMatchPlayer,
  IMatchmakingResponse,
  IMatchStartedEvent,
  IRoomMatchedEvent,
@@ -25,8 +28,14 @@ export function useRoomMatch(onRoomExpired?: () => void) {
  const [status, setStatus] = useState<RoomStatus>("idle");
  const [isOwner, setIsOwner] = useState(false);
  const [roomCode, setRoomCode] = useState<string | null>(null);
+ const [players, setPlayers] = useState<IMatchPlayer[]>([]);
+ const userId = useReduxSelector((state) => state.auth.session?.id);
  const [expiryAt, setExpiryAt] = useState<number | null>(null);
- const expiresInSeconds = useCountdown(status === "waiting" ? expiryAt : null);
+ const isRoomOpen =
+  status === "waiting" || status === "ready" || status === "starting";
+ const expiresInSeconds = useCountdown(
+  isOwner && isRoomOpen ? expiryAt : null,
+ );
  const roomRef = useRef<TRoomInfo | null>(null);
  const requestIdRef = useRef(0);
  const statusRef = useRef<RoomStatus>("idle");
@@ -118,6 +127,7 @@ export function useRoomMatch(onRoomExpired?: () => void) {
      return;
     }
     if (data.status === "MATCHED" && data.match_type === "ROOM") {
+     setPlayers(data.players);
      enterRoom(
       { code: data.room_code, bet: data.bet, time: data.time },
       false,
@@ -152,7 +162,7 @@ export function useRoomMatch(onRoomExpired?: () => void) {
   const room = roomRef.current;
   if (socket && room) {
    socket.emit(
-    isOwner ? "room:cancel" : "room:leave",
+    isOwner ? SOCKET_EVENTS.ROOM_CANCEL : SOCKET_EVENTS.ROOM_LEAVE,
     { room_code: room.code },
     () => {},
    );
@@ -166,6 +176,7 @@ export function useRoomMatch(onRoomExpired?: () => void) {
 
   const onMatched = (data: IRoomMatchedEvent) => {
    if (data.matchType !== "ROOM" || statusRef.current !== "waiting") return;
+   setPlayers(data.players);
    setStatus("ready");
   };
 
@@ -187,7 +198,8 @@ export function useRoomMatch(onRoomExpired?: () => void) {
  }, [ctxSocket, openMatch]);
 
  useEffect(() => {
-  if (status !== "waiting" || expiresInSeconds !== 0) return;
+  if ((status !== "waiting" && status !== "ready") || expiresInSeconds !== 0)
+   return;
   resetStatus();
   onRoomExpiredRef.current?.();
  }, [status, expiresInSeconds, resetStatus]);
@@ -196,6 +208,9 @@ export function useRoomMatch(onRoomExpired?: () => void) {
   status,
   isOwner,
   roomCode,
+  opponentName: shortenUsername(
+   players.find((player) => player.id !== userId)?.username ?? "",
+  ),
   expiresInSeconds: expiresInSeconds ?? 0,
   createRoom,
   joinRoom,

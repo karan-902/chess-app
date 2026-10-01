@@ -1,11 +1,10 @@
 import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
-import CustomChip from "@gopvp/common/src/components/Chip/Chip";
 import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
 import PieceIcon from "@gopvp/chess/src/components/board/PieceIcon";
 import type { IPlayerRowProps } from "@gopvp/chess/src/types/component";
-import { youText } from "@gopvp/common/src/constants/message";
+import { FIRST_MOVE_URGENT_SECONDS } from "@gopvp/chess/src/constants/limit";
 import {
  reconnectingText,
  firstMoveText,
@@ -45,21 +44,30 @@ export default function PlayerRow({
    )}
   >
    <Box customClass="gr-meta">
-    <Box sx={{ gap: 1 }} customClass="flex">
+    <Box customClass="gr-name-line">
      <Text customClass="gr-name">{name}</Text>
-     {variant === "self" && (
-      <CustomChip label={youText} customClass="gr-score" />
+     {scoreLabel && (
+      <Text component="span" customClass="gr-score-label">
+       {scoreLabel}
+      </Text>
      )}
-     {scoreLabel && <CustomChip label={scoreLabel} customClass="gr-score" />}
+     {isReconnecting && (
+      <Text component="span" customClass="gr-grace caption">
+       {reconnectingText}
+      </Text>
+     )}
+     {typeof firstMoveSeconds === "number" && (
+      <Text
+       component="span"
+       customClass={classNames(
+        "gr-first-move",
+        firstMoveSeconds <= FIRST_MOVE_URGENT_SECONDS && "urgent",
+       )}
+      >
+       {firstMoveText(firstMoveSeconds)}
+      </Text>
+     )}
     </Box>
-    {isReconnecting && (
-     <Text customClass="gr-grace caption">{reconnectingText}</Text>
-    )}
-    {typeof firstMoveSeconds === "number" && (
-     <Text customClass="gr-grace caption">
-      {firstMoveText(firstMoveSeconds)}
-     </Text>
-    )}
 
     <Box customClass="gr-captured">
      {pairCapturedPieces(capturedPieces).map(

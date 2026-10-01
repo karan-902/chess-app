@@ -3,6 +3,8 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
+import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
+import { icons } from "@gopvp/common/src/components/images";
 import BetSheet from "@gopvp/app/src/pages/play/BetSheet";
 import RoomSheet from "@gopvp/app/src/pages/play/RoomSheet";
 import PoolConfirmSheet from "@gopvp/app/src/pages/play/PoolConfirmSheet";
@@ -24,7 +26,7 @@ export default function PlayPage() {
  const navigate = useNavigate();
  const {
   routes,
-  gameModule: { Preview, PoolLabel, GameRoom, Practice },
+  gameModule: { Preview, PoolLabel, GameRoom, preloadGameRoom, Practice },
  } = useGame();
  const { pools, loading: poolsLoading } = usePools();
  const { usdValue, loading: balanceLoading } = useWalletBalance();
@@ -41,6 +43,7 @@ export default function PlayPage() {
   status: roomStatus,
   isOwner,
   roomCode,
+  opponentName,
   expiresInSeconds,
   createRoom,
   joinRoom,
@@ -71,11 +74,15 @@ export default function PlayPage() {
   setRoomOpen(false);
  }, [roomStatus]);
 
+ useEffect(() => {
+  if (status === "queued" || roomOpen) preloadGameRoom();
+ }, [status, roomOpen, preloadGameRoom]);
+
  if (matchId || gameId) {
   return (
    <Suspense
     fallback={
-     <Box customClass="modal-loader">
+     <Box customClass="modal-loader game-loader">
       <Box customClass="logo-loader" role="progressbar" />
      </Box>
     }
@@ -134,14 +141,19 @@ export default function PlayPage() {
   <Box customClass="play-page">
    <Box customClass="play-body">
     <Box customClass="board-wrap">
-     <Suspense fallback={null}>
+     <Suspense
+      fallback={<Skeleton variant="rounded" customClass="board-skeleton" />}
+     >
       <Preview />
      </Suspense>
     </Box>
-    <Text customClass="play-hint description">{tapPlayNowHintText}</Text>
    </Box>
 
    <Box customClass="cta-bottom">
+    <Text customClass="play-hint">
+     {tapPlayNowHintText}
+     <icons.chevronDown />
+    </Text>
     <Button
      type="button"
      variant="contained"
@@ -183,6 +195,7 @@ export default function PlayPage() {
     roomStatus={roomStatus}
     isOwner={isOwner}
     roomCode={roomCode}
+    opponentName={opponentName}
     expiresInSeconds={expiresInSeconds}
     onCreateRoom={createRoom}
     onJoinRoom={joinRoom}

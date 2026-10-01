@@ -4,8 +4,9 @@
  font-family: $fontOutfitSemiBold !important;
  color: $appText !important;
 
- &.deposit-label {
+ &.wallet-label {
   color: $appTextMuted !important;
+  text-align: center;
  }
  &.room-field-label {
   text-align: left !important;

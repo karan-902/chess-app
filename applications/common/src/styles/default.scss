@@ -27,8 +27,8 @@
  --color-gray-900: oklch(21% 0.034 264.665);
  --color-black: #000;
  --color-white: #fff;
- --color-primary: #fdca0f;
- --color-primary-dark: #fdca0f;
+ --color-primary: #ddaf04;
+ --color-primary-dark: #ddaf04;
  --color-primary-text: #2d2b36;
  --color-bg-primary: #212223;
  --color-bg-border: #343434;
@@ -67,7 +67,7 @@
  --color-border-tertiary: #d1d0d3;
  --color-border-social-pill: #7b7b7b5c;
  --color-text-green-color: #2ecc71;
- --color-error: #e94235;
+ --color-error: #e74c3c;
  --color-green: #2ecc71;
  --color-warning: #eab308;
  --color-accent: #2158fe;
@@ -86,7 +86,7 @@
  --app-text-muted: var(--color-text-subtle);
  --app-btn-bg: var(--color-bg-quaternary);
  --app-btn-border: var(--color-border-secondary);
- --primary: var(--color-primary);
+ --primary: var(--color-primary-dark);
  --primary-dark: var(--color-primary-dark);
  --primary-contrast: #ffffff;
  --secondary: var(--color-accent);
@@ -210,6 +210,7 @@ $z-top: 3;
 $z-float: 5;
 $z-alert: 99;
 $z-loader: 1300;
+$z-dropdown: 1400;
 
 $breakpoints: (
  phone: 400px,

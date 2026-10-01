@@ -251,7 +251,7 @@
 
  &.common-play {
   width: min(150px, 100%) !important;
-  height: $font24 !important;
+  height: $font30 !important;
   min-height: 0px;
   padding: 0 !important;
   border-radius: 8px !important;
@@ -266,7 +266,7 @@
    color: $gold !important;
   }
   @include from(tablet) {
-   height: 26px !important;
+   height: 30px !important;
    .button-text {
     font-size: $font14;
    }
@@ -357,29 +357,6 @@
   border-radius: 0.6rem;
  }
 
- &.deposit-copy-btn {
-  flex-shrink: 0;
-  background: $appBtnBg;
-  border: 1px solid $appBtnBorder;
-  color: $appText;
-  font-size: $font12;
-  padding: 0.35rem 0.6rem;
-  height: auto;
-
-  &:hover:not(.Mui-disabled) {
-   background: $appBtnBg;
-   border-color: alpha($appText, 0.4);
-  }
-  .MuiButton-startIcon {
-   margin: 0 $space-4 0 0;
-
-   svg {
-    width: 0.875rem;
-    height: 0.875rem;
-   }
-  }
- }
-
  &.profile-edit-icon-btn {
   position: absolute;
   top: 0.9rem;
@@ -396,58 +373,12 @@
   margin-top: 0.4rem;
  }
 
- &.gr-link {
-  font-size: $font12;
-  font-weight: 500;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  font-family: $fontOutfitExtraBold;
-  background: none;
-  border: none;
-  border-bottom: 1px solid transparent;
-  padding: 0;
-  transition: border-color 0.2s ease;
-
-  .button-text {
-   color: $appTextMuted;
-   transition: color 0.2s ease;
-  }
-
-  &:hover {
-   .button-text {
-    color: $appText;
-   }
-  }
-
-  &.danger:hover {
-   .button-text {
-    color: $paleRed;
-   }
-  }
+ &.result-back-btn {
+  margin-top: $space-20;
  }
 
- &.gr-action-btn {
-  flex: 1;
-  max-width: 5rem;
-  padding: $space-8;
-  border: 1px solid $appCardBorder;
-  background: $paleRed;
-  font-family: $fontOutfitExtraBold;
-  color: $white;
-  font-size: $font12;
-  font-weight: 700;
-  transition:
-   color 0.15s ease,
-   border-color 0.15s ease;
-
-  &.danger {
-   color: $white;
-
-   &:hover {
-    background: $paleRed !important;
-    opacity: 0.7;
-   }
-  }
+ &.gr-draw-btn {
+  color: $appText !important;
  }
 
  &.gr-promotion-btn {

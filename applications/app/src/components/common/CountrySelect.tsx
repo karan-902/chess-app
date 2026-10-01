@@ -1,10 +1,17 @@
+import { useEffect, useState } from "react";
 import Box from "@gopvp/common/src/components/Box/Box";
 import CustomLabel from "@gopvp/common/src/components/Label/Label";
-import CustomSelect from "@gopvp/common/src/components/Select/Select";
-import { COUNTRY_OPTIONS } from "@gopvp/app/src/constants/option";
+import CustomSelect, {
+ type ISelectOption,
+} from "@gopvp/common/src/components/Select/Select";
+import {
+ callAPIInterface,
+ showApiErrorToast,
+} from "@gopvp/common/src/util/api";
+import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
+import type { ICountriesResponse } from "@gopvp/common/src/types/response";
 import {
  countryText,
- searchCountryText,
  selectCountryText,
 } from "@gopvp/app/src/constants/message";
 import type { ICountrySelectProps } from "@gopvp/app/src/types/component";
@@ -13,6 +20,29 @@ export default function CountrySelect<TValues extends { country: string }>({
  formik,
 }: ICountrySelectProps<TValues>) {
  const { value, error, touched } = formik.getFieldMeta<string>("country");
+ const [countries, setCountries] = useState<ISelectOption[]>([]);
+
+ useEffect(() => {
+  let isCancelled = false;
+  const loadCountries = async () => {
+   try {
+    const res = await callAPIInterface<ICountriesResponse, undefined>(
+     "GET",
+     ENDPOINTS.COUNTRIES,
+    );
+    if (!isCancelled)
+     setCountries(
+      res.countries.map(({ code, name }) => ({ value: code, label: name })),
+     );
+   } catch (err) {
+    showApiErrorToast(err);
+   }
+  };
+  loadCountries();
+  return () => {
+   isCancelled = true;
+  };
+ }, []);
 
  return (
   <Box customClass="form-field">
@@ -24,11 +54,9 @@ export default function CountrySelect<TValues extends { country: string }>({
      formik.setFieldTouched("country", true, false);
     }}
     onBlur={() => formik.setFieldTouched("country", true)}
-    options={COUNTRY_OPTIONS}
-    searchable
-    disabled={formik.isSubmitting}
+    options={countries}
+    disabled={formik.isSubmitting || countries.length === 0}
     placeholder={selectCountryText}
-    searchPlaceholder={searchCountryText}
     isError={touched && !!error}
     helperText={error}
    />

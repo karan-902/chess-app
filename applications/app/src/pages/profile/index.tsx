@@ -6,10 +6,10 @@ import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Card from "@gopvp/common/src/components/Card/Card";
 import Button from "@gopvp/common/src/components/Button/Button";
-import Input from "@gopvp/common/src/components/Input/Input";
 import CustomSwitch from "@gopvp/common/src/components/Switch/Switch";
 import CustomAvatar from "@gopvp/common/src/components/Avatar/Avatar";
 import ProfileSkeleton from "@gopvp/app/src/components/common/ProfileSkeleton";
+import UsernameField from "@gopvp/app/src/components/common/UsernameField";
 import { useReduxSelector, useReduxDispatch } from "@gopvp/app/src/redux/hooks";
 import sessionService from "@gopvp/common/src/util/sessionService";
 import { useAppTheme } from "@gopvp/app/src/context/ThemeContext";
@@ -27,7 +27,6 @@ import type { IEditProfileDrawerProps } from "@gopvp/common/src/types/component"
 import {
  editProfileText,
  // ratingsText,
- usernameText,
  saveChangesText,
  appearanceText,
  darkModeText,
@@ -93,16 +92,7 @@ function EditProfileDrawer({
     customClass="edit-profile-form"
     onSubmit={formSubmitHandler(formik.handleSubmit)}
    >
-    <Input
-     id="username"
-     label={usernameText}
-     ref={usernameInputRef}
-     fullWidth
-     isError={!!(formik.touched.username && formik.errors.username)}
-     helperText={formik.errors.username}
-     disabled={formik.isSubmitting}
-     {...formik.getFieldProps("username")}
-    />
+    <UsernameField formik={formik} inputRef={usernameInputRef} />
 
     <Button
      type="submit"

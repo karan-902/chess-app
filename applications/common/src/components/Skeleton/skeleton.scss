@@ -14,6 +14,33 @@
  &.text {
   border-radius: 0.25rem / 0.42rem;
  }
+
+ .result-hero & {
+  margin-inline: auto;
+ }
+ &.board-skeleton {
+  width: auto;
+  height: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 6px;
+ }
+
+ &.result-logo-skeleton {
+  width: 6rem;
+  height: 6rem;
+  border-radius: 14px;
+ }
+
+ &.match-id-label-skeleton {
+  align-self: flex-start;
+ }
+
+ &.match-id-skeleton {
+  width: 100%;
+  height: 2.75rem;
+  border-radius: 4px;
+ }
+
  &.wallet-btn-skeleton {
   flex: 1;
   border-radius: 4px;
@@ -23,12 +50,6 @@
   width: 8rem;
   height: 1rem;
   border-radius: 3px;
- }
-
- &.random-name-chip-skeleton {
-  width: 4.5rem;
-  height: 1.5rem;
-  border-radius: 6px;
  }
 
  &.appbar-balance-skeleton {

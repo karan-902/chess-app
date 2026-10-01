@@ -1,6 +1,7 @@
 @use "default.scss" as *;
 
 .common-tooltip {
+ margin: 7px 8px;
  .tooltip-content {
   background: $backdropCenter !important;
   color: $tooltipText !important;

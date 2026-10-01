@@ -1,12 +1,17 @@
 import { useCallback, useEffect, useState } from "react";
 import { useGameContext } from "@gopvp/common/src/contexts/GameContext";
-import { showToastMessage } from "@gopvp/common/src/util/injectStore";
+import {
+ showToastMessage,
+ showBackdropLoader,
+ hideBackdropLoader,
+} from "@gopvp/common/src/util/injectStore";
 import { useCountdown } from "@gopvp/common/src/hooks/useCountdown";
 import {
  useChessDispatch,
  useChessSelector,
 } from "@gopvp/chess/src/redux/chessHooks";
 import { loadMatchState } from "@gopvp/chess/src/redux/match/thunk";
+import { startMatch } from "@gopvp/chess/src/redux/match/slice";
 import {
  callAPIInterface,
  showAckErrorToast,
@@ -19,34 +24,45 @@ import type {
  ISocketAckError,
 } from "@gopvp/common/src/types/response";
 import type {
+ IGameStartEvent,
  IMoveEvent,
+ IMovePlayed,
  IMoveResponse,
 } from "@gopvp/chess/src/types/response";
 import type { IMoveBody } from "@gopvp/chess/src/types/payload";
 import type { PieceColor } from "@gopvp/chess/src/types/index";
+import type { IPvcSnapshot } from "@gopvp/chess/src/types/component";
+import {
+ loadMatchMoves,
+ saveMatchMoves,
+} from "@gopvp/chess/src/utils/storage";
 import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
 import { SOCKET_EVENTS } from "@gopvp/common/src/constants/event";
-import {
- GAME_EVENTS,
- MATCH_END_EVENTS,
-} from "@gopvp/chess/src/constants/event";
+import { GAME_EVENTS } from "@gopvp/chess/src/constants/event";
+import { MATCH_END_FALLBACK_MS } from "@gopvp/chess/src/constants/limit";
 
 const toDeadlineAt = (deadlineMs?: number) =>
  deadlineMs === undefined ? null : Date.now() + deadlineMs;
 
 interface IProps {
  isPvc: boolean;
- applyServerFen: (fen: string) => boolean;
- restoreGame: (
-  moves: Array<{ from: string; to: string; promotion: string | null }>,
- ) => void;
+ isGameOver: boolean;
+ timedOut: PieceColor | null;
+ moveLog: IPvcSnapshot["moves"];
+ applyServerFen: (fen: string, played?: IMovePlayed) => boolean;
+ loadFen: (fen: string) => void;
+ restoreGame: (moves: IPvcSnapshot["moves"]) => void;
  syncClock: (whiteRemainingMs: number, blackRemainingMs: number) => void;
  setGameEnded: (ended: IMatchResultResponse) => void;
 }
 
 export function useGameSocket({
  isPvc,
+ isGameOver,
+ timedOut,
+ moveLog,
  applyServerFen,
+ loadFen,
  restoreGame,
  syncClock,
  setGameEnded,
@@ -65,6 +81,7 @@ export function useGameSocket({
 
  const endMatch = useCallback(async () => {
   setFirstMoveDeadlineAt(null);
+  showBackdropLoader();
   try {
    setGameEnded(
     await callAPIInterface<IMatchResultResponse>(
@@ -74,8 +91,24 @@ export function useGameSocket({
    );
   } catch (err) {
    showApiErrorToast(err);
+  } finally {
+   hideBackdropLoader();
   }
  }, [matchId, setGameEnded]);
+
+ const replaySavedMoves = useCallback(
+  (id: string, fen: string) => {
+   const savedMoves = loadMatchMoves(id);
+   if (!savedMoves) return false;
+   try {
+    restoreGame(savedMoves);
+   } catch {
+    return false;
+   }
+   return applyServerFen(fen);
+  },
+  [restoreGame, applyServerFen],
+ );
 
  const resync = useCallback(async () => {
   if (!matchId) return;
@@ -85,26 +118,80 @@ export function useGameSocket({
 
  useEffect(() => {
   if (isPvc || !matchState) return;
-  const { move_history, players } = matchState;
+  const { match_id, fen, players } = matchState;
   const remainingTime = (color: PieceColor) =>
    players.find((player) => player.color === color)?.remaining_time ?? 0;
   const opponent = players.find((player) => player.user_id !== userId);
-  restoreGame(move_history);
+  if (!applyServerFen(fen) && !replaySavedMoves(match_id, fen)) loadFen(fen);
   syncClock(remainingTime("w"), remainingTime("b"));
   setClockReady(true);
   setDrawOffer(opponent?.draw_offer ? { offererId: opponent.user_id } : null);
   setFirstMoveDeadlineAt(toDeadlineAt(matchState.first_move_deadline_ms));
- }, [isPvc, matchState, userId, restoreGame, syncClock]);
+ }, [
+  isPvc,
+  matchState,
+  userId,
+  applyServerFen,
+  replaySavedMoves,
+  loadFen,
+  syncClock,
+ ]);
+
+ useEffect(() => {
+  if (isPvc || !matchId || moveLog.length === 0) return;
+  saveMatchMoves(matchId, moveLog);
+ }, [isPvc, matchId, moveLog]);
+
+ useEffect(() => {
+  if (!isPvc && (isGameOver || timedOut)) showBackdropLoader();
+ }, [isPvc, isGameOver, timedOut]);
+
+ useEffect(
+  () => () => {
+   hideBackdropLoader();
+  },
+  [],
+ );
+
+ useEffect(() => {
+  if (!socket || isPvc || !matchId) return;
+  socket.emit(GAME_EVENTS.READY, showAckErrorToast);
+ }, [socket, isPvc, matchId]);
 
  useEffect(() => {
   if (!socket || isPvc) return;
+  let endFallbackTimer: ReturnType<typeof setTimeout> | undefined;
+
+  const onReconnect = () => {
+   socket.emit(GAME_EVENTS.READY, showAckErrorToast);
+   resync();
+  };
+
+  const onStart = (data: IGameStartEvent) => {
+   if (data.matchId === matchId)
+    dispatch(startMatch(data.firstMoveDeadlineMs));
+  };
+
+  const onOpponentForfeit = () => {
+   showBackdropLoader();
+   endFallbackTimer = setTimeout(endMatch, MATCH_END_FALLBACK_MS);
+  };
+
+  const onGameEnd = (data: IMatchResultResponse) => {
+   if (data.id !== matchId) return;
+   clearTimeout(endFallbackTimer);
+   hideBackdropLoader();
+   setFirstMoveDeadlineAt(null);
+   setGameEnded(data);
+  };
 
   const onMove = (data: IMoveEvent) => {
-   if (!applyServerFen(data.fen)) resync();
+   if (data.isCheckmate || data.isDraw || data.isStaleMate || data.isTimeout)
+    showBackdropLoader();
+   else hideBackdropLoader();
+   if (!applyServerFen(data.fen, data)) resync();
    syncClock(data.remainingTime.white, data.remainingTime.black);
    setFirstMoveDeadlineAt(toDeadlineAt(data.firstMoveDeadlineMs));
-   if (data.isCheckmate || data.isStaleMate || data.isDraw || data.isTimeout)
-    endMatch();
   };
   const onDrawDecline = () =>
    showToastMessage({
@@ -114,24 +201,43 @@ export function useGameSocket({
   const onOpponentOffline = () => setIsOpponentOffline(true);
   const onOpponentOnline = () => setIsOpponentOffline(false);
 
-  socket.on(SOCKET_EVENTS.CONNECT, resync);
+  socket.on(SOCKET_EVENTS.CONNECT, onReconnect);
+  socket.on(GAME_EVENTS.START, onStart);
+  socket.on(GAME_EVENTS.END, onGameEnd);
   socket.on(GAME_EVENTS.MOVE, onMove);
   socket.on(GAME_EVENTS.DRAW_OFFER, setDrawOffer);
   socket.on(GAME_EVENTS.DRAW_DECLINE, onDrawDecline);
   socket.on(GAME_EVENTS.OPPONENT_OFFLINE, onOpponentOffline);
   socket.on(GAME_EVENTS.OPPONENT_ONLINE, onOpponentOnline);
-  MATCH_END_EVENTS.forEach((event) => socket.on(event, endMatch));
+  socket.on(GAME_EVENTS.RESIGN, onOpponentForfeit);
+  socket.on(GAME_EVENTS.DISCONNECT, onOpponentForfeit);
+  socket.on(SOCKET_EVENTS.GAME_REJOIN_DECLINED, onOpponentForfeit);
 
   return () => {
-   socket.off(SOCKET_EVENTS.CONNECT, resync);
+   clearTimeout(endFallbackTimer);
+   socket.off(SOCKET_EVENTS.CONNECT, onReconnect);
+   socket.off(GAME_EVENTS.START, onStart);
+   socket.off(GAME_EVENTS.END, onGameEnd);
    socket.off(GAME_EVENTS.MOVE, onMove);
    socket.off(GAME_EVENTS.DRAW_OFFER, setDrawOffer);
    socket.off(GAME_EVENTS.DRAW_DECLINE, onDrawDecline);
    socket.off(GAME_EVENTS.OPPONENT_OFFLINE, onOpponentOffline);
    socket.off(GAME_EVENTS.OPPONENT_ONLINE, onOpponentOnline);
-   MATCH_END_EVENTS.forEach((event) => socket.off(event, endMatch));
+   socket.off(GAME_EVENTS.RESIGN, onOpponentForfeit);
+   socket.off(GAME_EVENTS.DISCONNECT, onOpponentForfeit);
+   socket.off(SOCKET_EVENTS.GAME_REJOIN_DECLINED, onOpponentForfeit);
   };
- }, [socket, isPvc, applyServerFen, syncClock, resync, endMatch, dispatch]);
+ }, [
+  socket,
+  isPvc,
+  matchId,
+  applyServerFen,
+  syncClock,
+  resync,
+  endMatch,
+  setGameEnded,
+  dispatch,
+ ]);
 
  const handleMoveAck = (err: ISocketAckError | null, data: IMoveResponse) => {
   if (err) {
@@ -145,8 +251,6 @@ export function useGameSocket({
   }
   syncClock(data.remaining_time.white, data.remaining_time.black);
   setFirstMoveDeadlineAt(toDeadlineAt(data.first_move_deadline_ms));
-  if (data.is_checkmate || data.is_stalemate || data.is_draw || data.is_timeout)
-   endMatch();
  };
 
  const sendMove = (from: string, to: string, promotion?: string) => {
@@ -156,17 +260,28 @@ export function useGameSocket({
   socket?.emit(GAME_EVENTS.MOVE, body, handleMoveAck);
  };
 
- const resign = () =>
-  socket?.emit(GAME_EVENTS.RESIGN, (err: ISocketAckError | null) =>
-   err ? showAckErrorToast(err) : endMatch(),
-  );
+ const resign = () => {
+  showBackdropLoader();
+  socket?.emit(GAME_EVENTS.RESIGN, (err: ISocketAckError | null) => {
+   if (!err) return;
+   hideBackdropLoader();
+   showAckErrorToast(err);
+  });
+ };
 
  const offerDraw = () =>
   socket?.emit(GAME_EVENTS.DRAW_OFFER, showAckErrorToast);
 
  const acceptDraw = () => {
   setDrawOffer(null);
-  socket?.emit(GAME_EVENTS.DRAW_ACCEPT, handleMoveAck);
+  showBackdropLoader();
+  socket?.emit(
+   GAME_EVENTS.DRAW_ACCEPT,
+   (err: ISocketAckError | null, data: IMoveResponse) => {
+    if (err || data.error) hideBackdropLoader();
+    handleMoveAck(err, data);
+   },
+  );
  };
 
  const declineDraw = () => {

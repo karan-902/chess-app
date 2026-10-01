@@ -25,7 +25,7 @@ export const enterValidEmailText = "Enter a valid email";
 export const passwordRequiredText = "Password is required";
 export const passwordMinLengthText = "Password must be at least 8 characters";
 export const usernameMaxLengthText =
- "Username can't be longer than 8 characters.";
+ "Username can't be longer than 10 characters.";
 export const countryRequiredText = "Country is required";
 export const welcomeBackText = "Welcome Back!";
 export const enterRegisteredEmailText =
@@ -46,7 +46,6 @@ export const createAccountText = "Create Account";
 export const haveAccountPromptText = "Already have an account?";
 export const enterUsernameText = "Enter username";
 export const clearUsernameText = "Clear username";
-export const suggestionsText = "Suggestions";
 export const countryText = "Country";
 export const registerText = "Register";
 export const newDeviceDetectedText = "New device detected";
@@ -71,7 +70,6 @@ export const findOpponentText = "Find Opponent";
 export const opponentFoundText = "Opponent found!";
 export const findingOpponentText = "Finding opponent…";
 export const secondsLeftText = (seconds: number) => `${seconds}s left`;
-export const entryFeeText = "Entry fee";
 export const prizeText = "Prize";
 export const cancelSearchText = "Cancel search";
 export const noOpponentFoundText = "No opponent found. Please try again.";
@@ -79,7 +77,7 @@ export const confirmYourMatchText = "Confirm your match";
 export const matchedOnConfirmText =
  "You'll be matched with an opponent as soon as you confirm.";
 export const playNowText = "Play now";
-export const tapPlayNowHintText = "Tap Play now to choose a pool.";
+export const tapPlayNowHintText = "Play now to choose a pool";
 export const largestPrizesTipText =
  "Rapid and Classical pools pay out the largest prizes.";
 export const forFunText = "For fun";
@@ -90,8 +88,8 @@ export const roomText = "Room";
 export const customFeeText = "Custom fee";
 export const createRoomText = "Create Room";
 export const joinRoomText = "Join Room";
-export const feeAmountText = "Fee amount";
-export const feeAmountRequiredText = "Fee amount is required";
+export const feeAmountText = "Entry fee";
+export const feeAmountRequiredText = "Entry fee is required";
 export const insufficientBalanceText = "Insufficient Balance";
 export const durationText = "Duration";
 export const minText = "min";
@@ -105,8 +103,6 @@ export const opponentJoinedText = "Friend joined!";
 export const waitingForOwnerText = "Waiting for host to start";
 export const startText = "Start Match";
 export const leaveText = "Leave Room";
-export const copyCodeText = "Copy code";
-export const copiedExclaimText = "Copied!";
 export const depositsNotWithdrawableText = "Deposits aren't withdrawable.";
 export const depositingAmountText = (amount: number) => `Depositing $${amount}`;
 export const fastSecuredTransparentText = "Fast, Secured & Transparent";
@@ -124,6 +120,10 @@ export const scanToDepositText =
  "Scan/copy with your crypto wallet to deposit instantly.";
 export const copyText = "Copy";
 export const copiedText = "Copied";
+export const matchIdText = "Match ID";
+export const beatsYouText = (name: string) => `${name} beats you`;
+export const beatsText = (winner: string, loser: string) =>
+ `${winner} beats ${loser}`;
 export const qrExpiredText =
  "This QR has expired — go back and generate a new one.";
 export const paymentReceivedText = "Payment received!";
@@ -154,17 +154,16 @@ export const myStatsText = "My Stats";
 export const welcomeText = "Welcome!";
 export const todayText = "Today";
 export const yesterdayText = "Yesterday";
-export const justNowText = "just now";
 export const makeFirstMoveText =
  "Make your first move — start a staked match from the Play tab and win real money from your opponent.";
 export const noGamesYetText = "No games yet";
 export const globalActivityEmptyText =
  "Global activity will show up here once matches start rolling in.";
 export const vsText = "VS";
-export const chessText = "Chess";
 export const gameUnavailableText = "This game is currently unavailable.";
+export const pickAGameText = "Pick a game";
 export const bestStreakText = "Best streak";
-export const currentStreakText = "Current streak";
+export const currentStreakText = "Streak";
 
 export const poweredByText = "POWERED BY";
 export const totalBalanceText = "Total Balance";
@@ -181,7 +180,6 @@ export const ratingsText = "Ratings";
 export const saveChangesText = "Save Changes";
 export const selectYourCountryText = "Select Your Country";
 export const continueText = "Continue";
-export const searchCountryText = "Search country…";
 export const selectCountryText = "Select country";
 export const walletText = "Wallet";
 export const logOutText = "Log Out";
@@ -195,4 +193,6 @@ export const goToPlayText = "Go to Play";
 export const signingInText = "Signing in...";
 export const settingUpAccountText = "Setting up your account...";
 export const tipText = "Tip:";
+export const opponentReadyText = "Opponent is ready.";
+export const claimTheMatchText = "Claim the match";
 export const loadingText = "Loading...";

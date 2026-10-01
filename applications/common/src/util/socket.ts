@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 import type { Socket } from "socket.io-client";
-import { socketUrl } from "@gopvp/common/src/constants/env";
+import { isDev, socketUrl } from "@gopvp/common/src/constants/env";
 import type {
  IGameNotFoundResponse,
  ISocketAckError,
@@ -9,10 +9,15 @@ import { SOCKET_EVENTS } from "@gopvp/common/src/constants/event";
 
 const g = globalThis as typeof globalThis & { socket?: Socket | null };
 
+function logSocket(...args: unknown[]) {
+ // eslint-disable-next-line no-console
+ console.log(...args);
+}
+
 export function connectSocket(accessToken: string): Socket {
  if (g.socket) return g.socket;
 
- g.socket = io(socketUrl, {
+ const socket = io(socketUrl, {
   auth: { token: accessToken },
   transports: ["websocket", "polling"],
   reconnection: true,
@@ -22,7 +27,30 @@ export function connectSocket(accessToken: string): Socket {
   reconnectionAttempts: Infinity,
  });
 
- return g.socket;
+ if (isDev) {
+  const emit = socket.emit.bind(socket);
+  socket.emit = ((event: string, ...args: unknown[]) => {
+   const ack = args[args.length - 1];
+   if (typeof ack === "function") {
+    args[args.length - 1] = (...response: unknown[]) => {
+     logSocket("[socket ack]", event, ...response);
+     ack(...response);
+    };
+   }
+   logSocket(
+    "[socket →]",
+    event,
+    ...args.filter((arg) => typeof arg !== "function"),
+   );
+   return emit(event, ...args);
+  }) as Socket["emit"];
+  socket.onAny((event: string, ...args: unknown[]) =>
+   logSocket("[socket ←]", event, ...args),
+  );
+ }
+
+ g.socket = socket;
+ return socket;
 }
 
 export function disconnectSocket() {

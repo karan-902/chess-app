@@ -315,7 +315,7 @@ export default function BoardPreview() {
  }, []);
 
  return (
-  <Box customClass="chess-board">
+  <Box customClass="chess-board fit-board">
    <Box customClass="chess-board-grid">
     {Array.from({ length: 8 }, (_, r) =>
      Array.from({ length: 8 }, (_, c) => {

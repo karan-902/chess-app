@@ -16,8 +16,6 @@ const meta: Meta<typeof CustomSelect> = {
   onChange: { table: { type: { summary: "(value: string) => void" } } },
   options: { table: { type: { summary: "ISelectOption[]" } } },
   placeholder: { table: { type: { summary: "string" } } },
-  searchable: { table: { type: { summary: "boolean" } } },
-  searchPlaceholder: { table: { type: { summary: "string" } } },
   isError: { table: { type: { summary: "boolean" } } },
   helperText: { table: { type: { summary: "string" } } },
   disabled: { table: { type: { summary: "boolean" } } },
@@ -33,9 +31,6 @@ export default meta;
 type Story = StoryObj<typeof CustomSelect>;
 
 export const Default: Story = {};
-export const Searchable: Story = {
- args: { searchable: true, searchPlaceholder: "Search" },
-};
 export const WithError: Story = {
  args: { isError: true, helperText: "Country is required" },
 };

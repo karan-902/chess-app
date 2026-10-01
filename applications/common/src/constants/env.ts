@@ -1,5 +1,6 @@
 export const env = import.meta.env;
 
+export const isDev = env.DEV;
 export const apiUrl = (env.VITE_API_URL ?? "http://localhost:6060").trim();
 export const socketUrl = (
  env.VITE_SOCKET_URL ?? "http://localhost:6060"

@@ -48,19 +48,6 @@
   gap: 1.25rem;
  }
 
- &.random-name-chips-block {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  margin-top: -0.75rem;
- }
-
- &.random-name-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
- }
-
  &.auth-password-stage {
   animation: auth-password-spin-in 0.3s ease;
  }
@@ -132,7 +119,7 @@
  &.play-page {
   display: flex;
   flex-direction: column;
-  min-height: 100%;
+  height: 100%;
   padding: 1.1rem;
  }
 
@@ -147,13 +134,17 @@
  &.board-wrap {
   display: flex;
   justify-content: center;
-  margin-bottom: 1.1rem;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  min-height: 0;
  }
 
  &.cta-bottom {
   padding-top: 1.1rem;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-8;
  }
 
  &.bet-grid {
@@ -182,6 +173,17 @@
   &.practice-options {
    padding: 0.25rem 0 0;
   }
+ }
+
+ &.bet-card-live-dot {
+  position: absolute;
+  top: $space-8;
+  right: $space-8;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: $greenishTeal;
+  box-shadow: 0 0 0 3px alpha($greenishTeal, 0.2);
  }
 
  &.searching-details {
@@ -274,6 +276,35 @@
 
   &:last-child {
    border-bottom: none;
+  }
+
+  .player-stats & {
+   padding: $space-16;
+  }
+ }
+
+ &.stat-label {
+  display: flex;
+  align-items: center;
+  gap: $space-8;
+  min-width: 0;
+
+  .stat-icon {
+   width: 1.25rem;
+   height: 1.25rem;
+   flex-shrink: 0;
+
+   &.gold {
+    color: $medalGold;
+   }
+
+   &.silver {
+    color: $medalSilver;
+   }
+
+   &.bronze {
+    color: $medalBronze;
+   }
   }
  }
 
@@ -452,23 +483,12 @@
  }
 
  &.wallet-tx-item {
-  padding: $space-8 $space-12;
-  border-left: 1px solid $appCardBorder;
-  border-right: 1px solid $appCardBorder;
-  border-bottom: 1px solid alpha($appText, 0.06);
-
-  &.group-start,
-  &.loading:first-of-type {
-   border-top: 1px solid $appCardBorder;
-   border-top-left-radius: 14px;
-   border-top-right-radius: 14px;
-  }
+  padding: $space-12 0;
+  border-bottom: 1px solid alpha($appText, 0.08);
 
   &.group-end,
   &.loading:last-of-type {
-   border-bottom-color: $appCardBorder;
-   border-bottom-left-radius: 14px;
-   border-bottom-right-radius: 14px;
+   border-bottom: none;
   }
  }
 
@@ -488,7 +508,7 @@
   color: alpha($appText, 0.5);
 
   .wallet-tx-item.neg & {
-   color: $brinkPink;
+   color: $paleRed;
   }
 
   .wallet-tx-item:not(.neg) & {
@@ -519,6 +539,10 @@
   border-left: 1px solid $appCardBorder;
   border-radius: 0.6rem;
 
+  &.clickable {
+   cursor: pointer;
+  }
+
   &.system {
    background: transparent;
   }
@@ -537,6 +561,58 @@
   }
  }
 
+ &.game-picker {
+  display: flex;
+  flex-direction: column;
+  gap: $space-16;
+  padding: $space-16;
+ }
+
+ &.game-picker-list {
+  display: flex;
+  flex-direction: column;
+  gap: $space-12;
+ }
+
+ &.game-picker-row {
+  display: flex;
+  align-items: center;
+  gap: $space-16;
+  padding-right: $space-16;
+  overflow: hidden;
+  background: $appSurface;
+  border: 1px solid $appCardBorder;
+  border-radius: 0.6rem;
+  transition: background-color 0.15s ease;
+
+  > svg {
+   margin-left: auto;
+   color: $appTextMuted;
+  }
+
+  @media (hover: hover) {
+   &:hover {
+    background: alpha($appText, 0.06);
+   }
+  }
+ }
+
+ &.game-picker-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  flex-shrink: 0;
+  background: $appSecondary;
+
+  img {
+   width: 80%;
+   height: 80%;
+   object-fit: contain;
+  }
+ }
+
  &.match-row-info {
   display: flex;
   align-items: center;
@@ -546,38 +622,6 @@
 
  &.match-row-text {
   min-width: 0;
- }
-
- &.match-row-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  flex-shrink: 0;
-  border-radius: 0.45rem;
-  background: alpha($appText, 0.05);
-  border: 1px solid alpha($appText, 0.1);
-  color: alpha($appText, 0.5);
-  .match-row-svg {
-   width: 14px !important;
-   height: 14px !important;
-   @include from(phone) {
-    width: 18px !important;
-    height: 18px !important;
-   }
-  }
-  .match-row.win & {
-   background: alpha($greenishTeal, 0.1);
-   border-color: alpha($greenishTeal, 0.25);
-   color: $greenishTeal;
-  }
-
-  .match-row.loss & {
-   background: alpha($paleRed, 0.1);
-   border-color: alpha($paleRed, 0.25);
-   color: $brinkPink;
-  }
  }
 
  &.match-row-amt-row {
@@ -614,6 +658,10 @@
   align-items: center;
   justify-content: center;
   min-height: 21rem;
+
+  &.game-loader {
+   height: 100%;
+  }
  }
 
  &.logo-loader {
@@ -772,6 +820,10 @@
 
   &.opp {
    margin-bottom: $font12;
+
+   @include from(tablet) {
+    margin-top: auto;
+   }
   }
 
   &.me {
@@ -793,17 +845,21 @@
   flex: 1 1 auto;
  }
 
+ &.gr-name-line {
+  display: flex;
+  align-items: center;
+  gap: $space-8;
+  max-width: 100%;
+  min-width: 0;
+ }
+
  &.gr-board-wrap {
   position: relative;
   display: flex;
   justify-content: center;
-  flex-shrink: 0;
-  width: min(100%, 60svh);
-
-  @include from(phone) {
-   width: min(100%, 70svh);
-  }
-  margin: 0 auto;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  min-height: 0;
  }
 
  &.gr-promotion-overlay {
@@ -836,10 +892,11 @@
 
  &.gr-captured {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   gap: 0.3rem;
+  height: 1.8rem;
   margin-top: 0.4rem;
+  overflow: hidden;
  }
 
  &.gr-draw-banner {
@@ -851,6 +908,39 @@
   background: $appSurface;
   border: 1px solid $appCardBorder;
   border-radius: 4px;
+
+  &.gr-draw-offer {
+   flex-direction: column;
+   gap: $space-12;
+   padding: $space-12;
+   background: alpha($gold, 0.06);
+   border-color: alpha($gold, 0.4);
+   border-radius: 0.85rem;
+   animation: draw-offer-in 0.3s ease-out;
+
+   @media (prefers-reduced-motion: reduce) {
+    animation: none;
+   }
+  }
+ }
+
+ &.gr-draw-offer-text {
+  display: flex;
+  align-items: center;
+  gap: $space-8;
+
+  svg {
+   width: 1.25rem;
+   height: 1.25rem;
+   color: $gold;
+  }
+ }
+
+ &.gr-draw-offer-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
  }
 
  &.gr-review-controls {
@@ -886,51 +976,96 @@
   display: flex;
   justify-content: center;
   gap: 0.75rem;
-  margin-top: auto;
   padding-top: 1.2rem;
   flex-shrink: 0;
+
+  @include from(tablet) {
+   margin-bottom: auto;
+  }
  }
 
-
- &.gr-result-emblem {
+ &.result-hero {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  width: 4rem;
-  height: 4rem;
-  border-radius: 50%;
-  color: $appTextMuted;
-  background: alpha($appText, 0.06);
+  gap: $space-8;
+  margin-bottom: $space-20;
+  text-align: center;
 
-  svg {
-   width: 2rem;
-   height: 2rem;
-  }
-
-  &.win {
-   color: $greenishTeal;
-   background: alpha($greenishTeal, 0.12);
-  }
-
-  &.loss {
-   color: $paleRed;
-   background: alpha($paleRed, 0.12);
+  img {
+   width: 6rem;
+   height: 6rem;
+   border-radius: 14px;
+   object-fit: cover;
   }
  }
 
- &.gr-settlement {
+ &.result-tiles {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.6rem;
-  width: 100%;
-  margin: $space-4 0 $space-8;
+  gap: $space-12;
  }
 
- &.gr-settlement-item {
-  text-align: center;
-  padding: 0.9rem 0.85rem;
-  border: 1px solid $appCardBorder;
+ &.room-players {
+  display: flex;
+  align-items: center;
+  gap: $space-12;
+  width: 100%;
+  margin: $space-8 0;
+ }
+
+ &.result-tile-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-8;
+  min-width: 0;
+ }
+
+ &.result-tile-label {
+  display: flex;
+  align-items: center;
+  gap: $space-4;
+  max-width: 100%;
+  min-width: 0;
+
+  svg {
+   width: 1.125rem;
+   height: 1.125rem;
+   flex-shrink: 0;
+   color: $appTextMuted;
+  }
+ }
+
+ &.result-tile {
+  width: 100%;
+  padding: $space-16;
   border-radius: 14px;
+  background: $appSecondary;
+  text-align: center;
+
+  &.room-player {
+   display: flex;
+   flex: 1;
+   flex-direction: column;
+   align-items: center;
+   gap: $space-8;
+   min-width: 0;
+
+   svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: $appTextMuted;
+   }
+  }
+ }
+
+ &.result-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-8;
+  margin-top: $space-20;
  }
 
  &.appbar-right {
@@ -970,6 +1105,17 @@
  to {
   -webkit-mask-position: -25% center;
   mask-position: -25% center;
+ }
+}
+
+@keyframes draw-offer-in {
+ from {
+  opacity: 0;
+  transform: translateY(0.5rem) scale(0.98);
+ }
+ to {
+  opacity: 1;
+  transform: none;
  }
 }
 

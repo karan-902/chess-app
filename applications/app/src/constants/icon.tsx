@@ -1,24 +1,22 @@
 import classNames from "classnames";
 import Text from "@gopvp/common/src/components/Text/Text";
-import {
- CallReceivedIcon,
- CallMadeIcon,
- HandshakeIcon,
-} from "@gopvp/common/src/components/images";
-import type { SvgIconComponent } from "@gopvp/common/src/components/images";
-import type { TransactionType } from "@gopvp/common/src/types/index";
-import type { IChessLogoProps } from "@gopvp/app/src/types/component";
+import { Crown, Medal } from "@gopvp/common/src/components/images";
+import type { ILeaderboardPlayerResponse } from "@gopvp/common/src/types/response";
+import type {
+ IChessLogoProps,
+ IStatRow,
+} from "@gopvp/app/src/types/component";
 
-export const TRANSACTION_TYPE_ICONS: Record<TransactionType, SvgIconComponent> =
- {
-  DEPOSIT: CallReceivedIcon,
-  WITHDRAW: CallMadeIcon,
-  WITHDRAW_REFUND: CallReceivedIcon,
-  BET: CallMadeIcon,
-  WIN: CallReceivedIcon,
-  DRAW: HandshakeIcon,
-  MATCH_CANCELLED: CallReceivedIcon,
- };
+export const STAT_ICONS: Record<
+ Exclude<keyof ILeaderboardPlayerResponse, "username">,
+ Pick<IStatRow, "icon" | "tone">
+> = {
+ score: { icon: Crown, tone: "gold" },
+ wins: { icon: Medal, tone: "gold" },
+ current_streak: { icon: Medal, tone: "silver" },
+ best_streak: { icon: Medal, tone: "silver" },
+ gross_income: { icon: Crown, tone: "bronze" },
+};
 
 export function ChessLogo({ size = 42, muted = false }: IChessLogoProps) {
  return (

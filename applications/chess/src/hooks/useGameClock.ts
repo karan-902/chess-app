@@ -43,6 +43,7 @@ export function useGameClock(
 
  useEffect(() => {
   if (paused) return;
+  anchorRef.current = { ...anchorRef.current, at: Date.now() };
   const id = setInterval(() => {
    if (timedOutRef.current) return;
    const { w, b } = snapshot();
@@ -56,7 +57,16 @@ export function useGameClock(
     setTimedOut("b");
    }
   }, 1000);
-  return () => clearInterval(id);
+  return () => {
+   clearInterval(id);
+   const { w, b } = snapshot();
+   anchorRef.current = {
+    ...anchorRef.current,
+    at: Date.now(),
+    whiteMs: w,
+    blackMs: b,
+   };
+  };
  }, [paused, snapshot]);
 
  const reset = useCallback(() => {

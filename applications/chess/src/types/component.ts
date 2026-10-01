@@ -62,7 +62,6 @@ export interface IGameOverOverlayProps {
  gameEnded: IMatchResultResponse;
  outcome: MatchOutcome;
  isPvc: boolean;
- reasonLabel: string;
  opponentName: string;
  onNewGame: () => void;
 }
@@ -129,4 +128,5 @@ export interface IChessBoardProps {
  premoveSquares?: string[];
  premoveMoves?: { from: string; to: string }[];
  draggableColor?: "w" | "b";
+ onEntranceEnd?: () => void;
 }

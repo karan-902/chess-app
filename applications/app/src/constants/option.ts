@@ -6,7 +6,6 @@ import type { MatchesSubtab, RoomTab } from "@gopvp/common/src/types/component";
 import { GAME_PAGES } from "@gopvp/app/src/constants/route";
 import { GAME_PAGE_TITLES } from "@gopvp/app/src/constants/label";
 import { MAX_ROOM_DURATION_MINUTES } from "@gopvp/app/src/constants/limit";
-import type { ISelectOption } from "@gopvp/common/src/components/Select/Select";
 
 export const LEADERBOARD_SCOPES: LeaderboardScope[] = [
  "daily",
@@ -111,5 +110,3 @@ export const DURATION_MINUTES = Array.from(
 //  value: country,
 //  label: country,
 // }));
-
-export const COUNTRY_OPTIONS: ISelectOption[] = [];

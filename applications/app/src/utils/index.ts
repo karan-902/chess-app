@@ -1,5 +1,6 @@
-import dayjs from "dayjs";
-import { yesterdayText, justNowText } from "@gopvp/app/src/constants/message";
+import { beatsYouText, beatsText } from "@gopvp/app/src/constants/message";
+import { youBeatText } from "@gopvp/common/src/constants/message";
+import { shortenUsername } from "@gopvp/common/src/util/format";
 import { GAMES, type GameSlug } from "@gopvp/app/src/config/game";
 import { GAME_PAGES } from "@gopvp/app/src/constants/route";
 
@@ -26,18 +27,15 @@ export function getGameRoutes(game: GameSlug) {
 export function buildMatchUrl(game: GameSlug, matchId: string): string {
  return `${getGameRoutes(game).PLAY}?match=${matchId}`;
 }
-export function formatMatchDate(ms: number): string {
- const now = dayjs();
- const then = dayjs(ms);
- if (!then.isSame(now, "day")) {
-  if (then.isSame(now.subtract(1, "day"), "day")) return yesterdayText;
-  return then.format("MMMM D, YYYY");
- }
- const diffSeconds = now.diff(then, "second");
- if (diffSeconds < 60) return justNowText;
- const minutes = now.diff(then, "minute");
- if (minutes < 60) return `${minutes}m ago`;
- return `${now.diff(then, "hour")}h ago`;
+
+export function getWorldMatchHeadline(
+ winner: string,
+ loser: string,
+ currentUsername?: string,
+): string {
+ if (winner === currentUsername) return youBeatText(shortenUsername(loser));
+ if (loser === currentUsername) return beatsYouText(shortenUsername(winner));
+ return beatsText(shortenUsername(winner), shortenUsername(loser));
 }
 
 export const endingBeforeQuery = (cursor: string | null) =>

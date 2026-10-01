@@ -19,6 +19,8 @@ function PrivateRoute() {
  const { socket } = useSocket();
  const { close } = useWalletModal();
  const isAppReady = isLoggedIn && !!country;
+ const searchParams = new URLSearchParams(location.search);
+ const isInGameRoom = searchParams.has("match") || searchParams.has("game_id");
 
  useEffect(() => {
   close();
@@ -43,7 +45,7 @@ function PrivateRoute() {
  const renderLayout = () => {
   return (
    <Box customClass="app-shell">
-    <Header />
+    {!isInGameRoom && <Header />}
     <Box customClass="app-body">
      <Box component="main" customClass="app-content">
       <Outlet />

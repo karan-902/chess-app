@@ -4,68 +4,72 @@ import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
 import CustomDrawer from "@gopvp/common/src/components/Drawer/Drawer";
 import { formatAmount } from "@gopvp/common/src/util/format";
-import { RESULT_ICONS } from "@gopvp/chess/src/constants/icon";
+import { GAME_LOGO_PATH } from "@gopvp/chess/src/constants/asset";
 import { RESULT_HEADERS } from "@gopvp/chess/src/constants/label";
+import { MATCH_OUTCOME_SUBTITLES } from "@gopvp/common/src/constants/mapper";
 import type { IGameOverOverlayProps } from "@gopvp/chess/src/types/component";
-import {
- settlementText,
- vsOpponentText,
-} from "@gopvp/chess/src/constants/message";
-import { backText, scoreText } from "@gopvp/common/src/constants/message";
+import { backText, chessText } from "@gopvp/common/src/constants/message";
 
 export default function GameOverOverlay({
  gameEnded,
  outcome,
  isPvc,
- reasonLabel,
  opponentName,
  onNewGame,
 }: IGameOverOverlayProps) {
+ const tone = outcome === "win" || outcome === "loss" ? outcome : "neutral";
  const scoreChange = Math.round(gameEnded.score_change);
- const ResultIcon = RESULT_ICONS[outcome];
- const subtitle = [reasonLabel, opponentName && vsOpponentText(opponentName)]
-  .filter(Boolean)
-  .join(" · ");
+ const tiles = [
+  {
+   value: `${gameEnded.amount > 0 ? "+" : ""}${formatAmount(gameEnded.amount)}`,
+   change: gameEnded.amount,
+  },
+  { value: `${scoreChange > 0 ? "+" : ""}${scoreChange}`, change: scoreChange },
+ ];
 
  return (
-  <CustomDrawer anchor="bottom" open onClose={onNewGame}>
-   <Box customClass="matchmaking-searching">
-    <Box customClass={classNames("gr-result-emblem", outcome)}>
-     <ResultIcon strokeWidth={2} />
-    </Box>
-    <Text customClass={classNames("gr-overlay-title", outcome)}>
-     {RESULT_HEADERS[outcome]}
+  <CustomDrawer
+   anchor="bottom"
+   open
+   onClose={onNewGame}
+   customClass={classNames("result-sheet game-over-sheet", tone)}
+  >
+   <Box customClass="result-hero">
+    <img src={GAME_LOGO_PATH} alt="" />
+    <Text customClass="result-title">{chessText}</Text>
+    <Text customClass="result-subtitle">
+     {isPvc
+      ? RESULT_HEADERS[outcome]
+      : MATCH_OUTCOME_SUBTITLES[outcome](opponentName)}
     </Text>
-    {!isPvc && subtitle && (
-     <Text customClass="description">{subtitle}</Text>
-    )}
-    {(gameEnded.amount !== 0 || scoreChange !== 0) && (
-     <Box customClass="gr-settlement">
-      <Box customClass="gr-settlement-item">
-       <Text customClass={classNames("gr-settlement-val", outcome)}>
-        {gameEnded.amount > 0 && "+"}
-        {formatAmount(gameEnded.amount)}
-       </Text>
-       <Text customClass="gr-settlement-lbl caption">{settlementText}</Text>
-      </Box>
-      <Box customClass="gr-settlement-item">
-       <Text customClass="gr-settlement-val">
-        {scoreChange >= 0 ? `+${scoreChange}` : scoreChange}
-       </Text>
-       <Text customClass="gr-settlement-lbl caption">{scoreText}</Text>
-      </Box>
-     </Box>
-    )}
-    <Button
-     type="button"
-     variant="contained"
-     fullWidth
-     customClass="game-cta"
-     onClick={onNewGame}
-    >
-     {backText}
-    </Button>
    </Box>
+
+   {!isPvc && (
+    <Box customClass="result-tiles">
+     {tiles.map(({ value, change }) => (
+      <Box key={value} customClass="result-tile">
+       <Text
+        customClass={classNames("result-tile-val", {
+         pos: change > 0,
+         neg: change < 0,
+        })}
+       >
+        {value}
+       </Text>
+      </Box>
+     ))}
+    </Box>
+   )}
+
+   <Button
+    type="button"
+    variant="contained"
+    fullWidth
+    customClass="game-cta result-back-btn"
+    onClick={onNewGame}
+   >
+    {backText}
+   </Button>
   </CustomDrawer>
  );
 }

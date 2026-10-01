@@ -71,14 +71,16 @@ export default function Header() {
       ))}
      </CustomTabs>
     ) : (
-     <Button
-      type="button"
-      customClass="appbar-back-btn"
-      startIcon="arrowBack"
-      onClick={() => navigate(routes ? routes.PLAY : "/")}
-     >
-      {backText}
-     </Button>
+     routes && (
+      <Button
+       type="button"
+       customClass="appbar-back-btn"
+       startIcon="arrowBack"
+       onClick={() => navigate(routes.PLAY)}
+      >
+       {backText}
+      </Button>
+     )
     )
    }
   >

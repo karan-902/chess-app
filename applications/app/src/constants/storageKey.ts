@@ -1,4 +1,4 @@
-export const THEME_STORAGE_KEY = "sj_theme";
+export const THEME_STORAGE_KEY = "gopvp_theme";
 export const APP_STORAGE_NAME = "gopvp";
 export const APP_STORAGE_STORE_NAME = "app";
 export const SESSION_PERSIST_KEY = "GOPVP-SESSION";
