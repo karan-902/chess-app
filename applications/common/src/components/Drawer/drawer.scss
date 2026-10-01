@@ -1,28 +1,62 @@
 @use "default.scss" as *;
 
-.drawer-panel {
-    background: $appBg;
-    padding: 0.6rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
-    overflow-y: auto;
+.common-drawer {
+ .MuiDrawer-paper {
+  background: $appBg;
+  padding: 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  overflow-y: auto;
+ }
 
-    &.drawer-panel--right {
-        width: min(78%, 300px);
-        border-left: 1px solid $appCardBorder;
-    }
+ &.MuiDrawer-anchorRight .MuiDrawer-paper {
+  width: min(78%, 300px);
+  border-left: 1px solid $appCardBorder;
+ }
 
-    &.drawer-panel--left {
-        width: min(78%, 300px);
-        border-right: 1px solid $appCardBorder;
-    }
+ &.MuiDrawer-anchorLeft .MuiDrawer-paper {
+  width: min(78%, 300px);
+  border-right: 1px solid $appCardBorder;
+ }
 
-    &.drawer-panel--bottom {
-        width: 100%;
-        max-height: 85%;
-        border-top: 1px solid $appLine;
-        border-radius: 0.875rem 0.875rem 0 0;
-        padding: 3.25rem 1rem 1.25rem;
-    }
+ &.MuiDrawer-anchorBottom .MuiDrawer-paper {
+  width: 100%;
+  max-height: 85%;
+  border-top: 1px solid $appLine;
+  border-radius: 0.875rem 0.875rem 0 0;
+  padding: 3.25rem 1rem 1.25rem;
+ }
+
+ &.game-over-sheet .MuiBackdrop-root {
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+ }
+
+ &.bet-sheet .MuiDrawer-paper {
+  background: $appSurface;
+ }
+
+ @each $tone,
+  $color in ("win": $greenishTeal, "loss": $paleRed, "gold": $gold)
+ {
+  &.result-sheet.#{$tone} .MuiDrawer-paper {
+   background:
+    radial-gradient(
+     120% 55% at 50% 0%,
+     #{alpha($color, 0.25)},
+     transparent 70%
+    ),
+    $appBg;
+  }
+ }
+
+ &.wallet-sheet .MuiDrawer-paper {
+  min-height: 24rem;
+  justify-content: center;
+ }
+
+ &.wallet-sheet-success .MuiDrawer-paper {
+  min-height: 0;
+ }
 }

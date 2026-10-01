@@ -5,15 +5,19 @@ import classNames from "classnames";
 import "./chip.scss";
 
 interface IChipProps extends ChipProps {
-    customClass?: string;
+ customClass?: string;
 }
 
-const Chip = forwardRef<HTMLDivElement, IChipProps>(function Chip(
-    { customClass, ...props },
-    ref,
-) {
-    const classes = classNames("chip", customClass);
-    return <MuiChip ref={ref} {...props} className={classes} />;
-});
+export const CustomChip = forwardRef<HTMLDivElement, IChipProps>(
+ function CustomChip({ customClass, ...props }, ref) {
+  return (
+   <MuiChip
+    ref={ref}
+    {...props}
+    className={classNames("common-chip", customClass)}
+   />
+  );
+ },
+);
 
-export default Chip;
+export default CustomChip;

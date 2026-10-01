@@ -1,56 +1,52 @@
-import { Dialog as MuiDialog, DialogTitle, IconButton } from "@mui/material";
+import { Dialog as MuiDialog, DialogTitle } from "@mui/material";
 import type { DialogProps } from "@mui/material";
 import classNames from "classnames";
-import { X } from "lucide-react";
+import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
 import "./modal.scss";
+import { closeText } from "@gopvp/common/src/constants/message";
 
 interface IModalProps extends Omit<DialogProps, "title" | "onClose"> {
-    open: boolean;
-    onClose?: () => void;
-    title?: string;
-    customClass?: string;
-    preventOutsideClose?: boolean;
-    hideCloseIcon?: boolean;
+ open: boolean;
+ onClose?: () => void;
+ title?: string;
+ customClass?: string;
+ preventOutsideClose?: boolean;
+ hideCloseIcon?: boolean;
 }
 
-export default function Modal({
-    open,
-    onClose,
-    title,
-    children,
-    customClass,
-    preventOutsideClose,
-    hideCloseIcon,
-    ...props
+export function CustomModal({
+ open,
+ onClose,
+ title,
+ children,
+ customClass,
+ preventOutsideClose,
+ hideCloseIcon,
+ ...props
 }: IModalProps) {
-    const paperClasses = classNames("modal", customClass);
-
-    return (
-        <MuiDialog
-            open={open}
-            onClose={preventOutsideClose ? undefined : onClose}
-            slotProps={{
-                paper: { className: paperClasses },
-            }}
-            disableScrollLock
-            container={() =>
-                document.querySelector(".app-shell") as HTMLElement
-            }
-            {...props}
-        >
-            {title && (
-                <DialogTitle className="modal-title">{title}</DialogTitle>
-            )}
-            {onClose && !preventOutsideClose && !hideCloseIcon && (
-                <IconButton
-                    className="modal-close-icon"
-                    onClick={onClose}
-                    aria-label="Close"
-                >
-                    <X size={22} strokeWidth={2} />
-                </IconButton>
-            )}
-            {children}
-        </MuiDialog>
-    );
+ return (
+  <MuiDialog
+   open={open}
+   onClose={preventOutsideClose ? undefined : onClose}
+   slotProps={{
+    paper: { className: classNames("common-modal", customClass) },
+   }}
+   disableScrollLock
+   container={() => document.querySelector(".app-shell") as HTMLElement}
+   {...props}
+  >
+   {title && <DialogTitle className="modal-title">{title}</DialogTitle>}
+   {onClose && !preventOutsideClose && !hideCloseIcon && (
+    <CustomIconButton
+     customClass="modal-close-icon"
+     onClick={onClose}
+     aria-label={closeText}
+     icon="x"
+    />
+   )}
+   {children}
+  </MuiDialog>
+ );
 }
+
+export default CustomModal;

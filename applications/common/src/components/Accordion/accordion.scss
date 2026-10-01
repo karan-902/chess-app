@@ -1,21 +1,16 @@
 @use "default.scss" as *;
 
-.accordion {
-    background: $appSurface;
-    border: 1px solid $appCardBorder;
-    border-radius: $appAccordionRadius;
-    color: $appText;
+.common-accordion {
+ background: $appSurface;
+ border: 1px solid $appCardBorder;
+ border-radius: 10px;
+ color: $appText;
 
-    &::before {
-        display: none;
-    }
+ &::before {
+  display: none;
+ }
 
-    .MuiAccordionSummary-expandIconWrapper {
-        color: $appTextMuted;
-        transition: transform 0.2s ease;
-
-        &.Mui-expanded {
-            transform: rotate(180deg);
-        }
-    }
+ .MuiAccordionSummary-expandIconWrapper {
+  color: $appTextMuted;
+ }
 }

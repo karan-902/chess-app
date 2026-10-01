@@ -4,21 +4,19 @@ import classNames from "classnames";
 import "./tooltip.scss";
 
 interface ITooltipProps extends TooltipProps {
-    customClass?: string;
+ customClass?: string;
 }
 
-export default function Tooltip({
-    customClass,
-
-    ...props
-}: ITooltipProps) {
-    return (
-        <MuiTooltip
-            {...props}
-            classes={{
-                popper: "popper",
-                tooltip: classNames("tooltip", customClass),
-            }}
-        />
-    );
+export function CustomTooltip({ customClass, ...props }: ITooltipProps) {
+ return (
+  <MuiTooltip
+   {...props}
+   classes={{
+    popper: "common-tooltip",
+    tooltip: classNames("tooltip-content", customClass),
+   }}
+  />
+ );
 }
+
+export default CustomTooltip;

@@ -1,22 +1,52 @@
 @use "default.scss" as *;
 
-.text {
- font-family: $fontOutfit;
+.common-text {
+ font-family: $fontOutfitRegular;
+ white-space: nowrap;
+ overflow: hidden;
+ text-overflow: ellipsis;
  &.uppercase {
   text-transform: uppercase;
  }
 
- &.truncate {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+ @each $size,
+  $value
+   in (
+    12: $font12,
+    13: $font13,
+    14: $font14,
+    15: $font15,
+    16: $font16,
+    18: $font18,
+    20: $font20,
+    22: $font22,
+    24: $font24,
+    40: $font40
+   )
+ {
+  &.font-#{$size} {
+   font-size: $value;
+  }
+ }
+
+ @each $weight,
+  $family
+   in (
+    regular: $fontOutfitRegular,
+    medium: $fontOutfitMedium,
+    semibold: $fontOutfitSemiBold,
+    extrabold: $fontOutfitExtraBold
+   )
+ {
+  &.font-#{$weight} {
+   font-family: $family;
+  }
  }
 
  &.color-white {
   color: $appText;
  }
  &.color-muted {
-  font-family: $fontOutfitExtraBold;
   color: $appTextMuted;
  }
  &.color-accent {
@@ -38,63 +68,79 @@
   color: $appText;
  }
 
+ &.loader-text {
+  font-family: $fontOutfitExtraBold;
+  color: $white !important;
+ }
  &.meta-text {
-  font-family: $metaTextFontFamily;
-  font-size: $metaTextFontSize;
-  color: $metaTextColor;
+  font-family: $fontOutfitSemiBold;
+  font-size: $font12;
+  color: $appTextMuted;
+
+  @include from(tablet) {
+   font-size: $font13;
+  }
  }
 
  &.description {
-  font-family: $mutedDescFontFamily;
-  font-size: $mutedDescFontSize;
-  color: $mutedDescColor;
+  font-family: $fontOutfitMedium;
+  font-size: $font13;
+  color: $appTextMuted;
  }
 
  &.section-heading {
-  font-family: $sectionHeadingFontFamily;
-  font-size: $sectionHeadingFontSize;
-  color: $sectionHeadingColor;
+  font-family: $fontOutfitSemiBold;
+  font-size: $font16;
+  color: $appText;
  }
 
  &.dialog-title {
-  font-family: $sheetTitleFontFamily;
-  font-size: $sheetTitleFontSize;
-  color: $sheetTitleColor;
+  font-family: $fontOutfitSemiBold;
+  font-size: $font18;
+  color: $appText;
  }
 
  &.value-heading {
-  font-family: $boldValueFontFamily;
-  font-size: $boldValueFontSize;
-  color: $boldValueColor;
+  font-family: $fontOutfitExtraBold;
+  font-size: $font16;
+  color: $appText;
  }
 
- &.deposit-success-amount {
+ &.modal-success-amount {
   display: block;
-  font-family: $boldValueFontFamily;
+  font-family: $fontOutfitExtraBold;
   font-size: $font24;
-  color: $boldValueColor;
- }
-
- &.warning-text {
-  font-size: $warningTextFontSize;
-  color: $warningTextColor;
+  color: $appText;
  }
 
  &.page-subtitle {
-  font-size: $pageSubtitleFontSize;
-  color: $pageSubtitleColor;
+  width: 100%;
+  font-size: $font16;
+  color: alpha($appText, 0.5);
+  white-space: normal;
+  line-height: 1.4 !important;
+
+  overflow: visible;
+  text-overflow: unset;
  }
 
  &.row-title {
-  font-family: $rowTitleFontFamily;
-  font-size: $rowTitleFontSize;
-  color: $rowTitleColor;
+  font-family: $fontOutfitBold;
+  font-size: $font14;
+  color: $appText;
+  @include from(laptop) {
+   font-size: $font15;
+  }
  }
 
  &.amount-value {
-  font-family: $amountFontFamily;
-  font-size: $amountFontSize;
+  font-family: $fontOutfitExtraBold;
+  font-size: $font15;
   flex-shrink: 0;
+
+  @include from(phone) {
+   font-size: $font16;
+  }
 
   &.pos {
    color: $greenishTeal;
@@ -109,15 +155,35 @@
   }
  }
 
- &.auth-brand-name {
-  font-family: $fontDisplay;
-  font-size: $font16;
-  font-weight: 700;
-  letter-spacing: 0.01em;
+ &.auth-account-name {
+  display: block;
+  font-family: $fontOutfitExtraBold;
+  font-size: $font14;
   color: $appText;
  }
 
- &.auth-title {
+ &.auth-account-email {
+  display: block;
+  font-size: $font12;
+  color: $appTextMuted;
+ }
+
+ &.auth-forgot-row {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  font-size: $font14;
+  color: $appTextMuted;
+  margin-top: $font16;
+  .auth-forgot-link {
+   font-size: $font14;
+   display: block;
+   margin-left: $space-12;
+   text-decoration: underline;
+  }
+ }
+
+ &.public-title {
   font-family: $fontOutfitExtraBold;
   font-size: $font24;
   font-weight: 700;
@@ -125,7 +191,7 @@
  }
 
  &.otp-title {
-  font-family: $fontDisplay;
+  font-family: $fontOutfitSemiBold;
   font-size: $font20;
   font-weight: 700;
   color: $appText;
@@ -152,36 +218,29 @@
   text-align: center;
  }
 
- &.appbar-online-label {
-  font-family: $fontMono;
-  font-size: $font12;
-  font-weight: 700;
-  color: $appText;
- }
-
- &.live-dot {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: $greenishTeal;
- }
-
- &.live-ring {
-  position: absolute;
-  inset: -0.3rem;
-  border-radius: 50%;
-  border: 1px solid $greenishTeal;
-  opacity: 0;
-  animation: live-pulse 2s ease-out infinite;
- }
-
  &.play-hint {
-  text-align: center;
-  margin-top: 0.25rem;
+  display: inline-flex;
+  align-items: center;
+  gap: $space-4;
+  font-family: $fontOutfitMedium;
+  font-size: $font13;
+  color: $appText;
+  animation: play-hint-blink 4s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  will-change: transform, opacity;
+
+  svg {
+   width: 1rem;
+   height: 1rem;
+   color: $gold;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+   animation: none;
+  }
  }
 
  &.searching-timer {
-  font-family: $fontMono;
+  font-family: $fontOutfitRegular;
   font-size: $font30;
   font-weight: 700;
   color: $gold;
@@ -189,7 +248,8 @@
 
  &.searching-detail-label {
   display: block;
-  text-transform: uppercase;
+  font-family: $fontOutfitSemiBold;
+  font-size: $font14;
   letter-spacing: 0.04em;
  }
  &.duration-wheel-item {
@@ -232,70 +292,37 @@
   font-family: $fontOutfitExtraBold;
   font-size: $font24;
   color: $gold;
-  margin-top: 0.1rem;
  }
 
  &.pool-entry-fee {
   display: block;
   font-size: $font12;
+  font-family: $fontOutfitBold;
   font-weight: 600;
   color: $appText;
-  margin-top: 0.25rem;
  }
 
- &.room-balance {
-  font-size: $font12;
-  color: alpha($appText, 0.6);
- }
-
- &.pool-opponent-ready,
  &.pool-insufficient-label {
   display: block;
   margin-top: 0.35rem;
  }
 
- &.stake-card-tc {
+ &.bet-card-tc {
   font-size: $font14;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  font-family: $fontOutfitExtraBold;
-  color: $appText;
-  margin-bottom: 0.35rem;
- }
-
- &.room-summary-text {
-  font-size: $font15;
   font-family: $fontOutfitSemiBold;
   color: $appText;
  }
 
- &.create-room-fee-chip {
-  position: absolute;
-  top: -0.6rem;
-  right: 0.6rem;
-  font-size: $font12;
-  font-family: $fontOutfitMedium;
-  color: $gold;
-  background: alpha($gold, 0.12);
-  border: 1px solid alpha($gold, 0.3);
-  border-radius: 999px;
-  padding: 0.15rem 0.55rem;
- }
-
- &.create-room-button-main {
-  display: block;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
- }
-
- &.stake-card-practice-title {
-  font-family: $fontMono;
-  font-size: $font20;
+ &.bet-card-practice-title {
+  font-family: $fontOutfitExtraBold;
+  font-size: $font14;
   font-weight: 700;
   color: $gold;
 
-  @media screen and (max-width: 568px) {
-   font-size: $font14;
+  @include from(tablet) {
+   font-size: $font15;
   }
  }
 
@@ -313,7 +340,7 @@
    font-size: $font12;
    overflow-wrap: anywhere;
 
-   @media (min-width: 768px) {
+   @include from(tablet) {
     font-size: $font14;
    }
   }
@@ -328,14 +355,16 @@
   }
  }
 
- &.auth-footer {
-  text-align: center;
+ &.public-footer {
   margin-top: auto;
+  text-align: center;
+  font-family: $fontOutfitRegular;
 
   a {
    color: $gold;
    text-decoration: underline;
-   font-weight: 600;
+   font-family: $fontOutfitExtraBold;
+   margin-left: $space-4;
   }
  }
 
@@ -343,11 +372,7 @@
   line-height: 1.4;
  }
 
- &.match-row-time {
-  margin-top: 0.15rem;
- }
-
- &.matches-empty-desc {
+ &.empty-state-desc {
   line-height: 1.55;
   max-width: 24rem;
  }
@@ -358,20 +383,33 @@
   margin-bottom: 0.35rem;
  }
 
- &.matches-stat-val {
+ &.stat-val {
   font-family: $fontOutfitExtraBold;
-  font-size: $font14;
+  font-size: $font14 !important;
   color: $appText;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+
+  svg {
+   vertical-align: top;
+  }
+
+  .player-stats & {
+   font-size: $font18;
+  }
  }
- &.matches-stat-title {
-  font-family: $fontOutfitMedium;
-  font-size: $font15;
+ &.stat-title {
+  font-family: $fontOutfitMedium !important;
+  font-size: $font16;
   color: $appTextMuted;
   flex-shrink: 0;
+
+  .player-stats & {
+   font-size: $font16;
+   color: $appText;
+  }
  }
 
  &.lb-rank {
@@ -379,9 +417,9 @@
   flex-shrink: 0;
   text-align: center;
   font-family: $fontOutfitExtraBold;
-  font-size: $font16;
-  @media screen and (max-width: 400px) {
-   font-size: $font15;
+  font-size: $font15;
+  @include from(phone) {
+   font-size: $font16;
   }
   color: $appTextMuted;
 
@@ -420,10 +458,10 @@
  &.wallet-split-val {
   display: block;
   font-family: $fontOutfitExtraBold;
-  font-size: $font24;
+  font-size: $font18;
   color: $appText;
-  @media screen and (max-width: 600px) {
-   font-size: $font18;
+  @include from(tablet) {
+   font-size: $font24;
   }
   .wallet-split-block.accent & {
    color: $appText;
@@ -439,15 +477,11 @@
  &.profile-id-name {
   display: block;
   font-family: $fontOutfitExtraBold;
-  font-size: $font18;
-  @media screen and (max-width: 400px) {
-   font-size: $font15;
+  font-size: $font15;
+  @include from(phone) {
+   font-size: $font18;
   }
   color: $appText;
- }
-
- &.profile-id-handle {
-  display: block;
  }
 
  &.sheet-title {
@@ -455,20 +489,72 @@
   margin: 0 0 1.1rem;
  }
 
- &.edit-profile-section-label {
-  display: block;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  margin: 0 0 0.6rem;
+ &.result-title {
+  font-family: $fontOutfitExtraBold;
+  font-size: $font24;
+  color: $appText;
  }
 
- &.rules-heading {
+ &.result-subtitle {
+  font-family: $fontOutfitMedium;
+  font-size: $font16;
+  color: $appText;
+ }
+
+ &.result-amount {
+  font-family: $fontOutfitExtraBold;
+  font-size: $font30;
+  color: $appText;
+
+  .result-sheet.win &,
+  .result-sheet.gold &,
+  .result-sheet.neutral & {
+   color: $greenishTeal;
+  }
+
+  .result-sheet.loss & {
+   color: $paleRed;
+  }
+ }
+
+ &.result-tile-lbl {
+  font-family: $fontOutfitSemiBold;
+  font-size: $font14;
+  color: $appText;
+ }
+
+ &.result-tile-val {
+  font-family: $fontOutfitExtraBold;
+  font-size: $font22;
+  color: $appText;
+
+  &.pos {
+   color: $greenishTeal;
+  }
+
+  &.neg {
+   color: $paleRed;
+  }
+ }
+
+ &.subsection-heading {
   display: block;
   margin: 1.25rem 0 0.5rem;
 
   &:first-child {
    margin-top: 0;
   }
+ }
+
+ &.wallet-tx-group-label {
+  display: block;
+  font-family: $fontOutfitExtraBold;
+  font-size: $font12;
+  color: $appTextMuted;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0;
+  padding: $space-12 0 $space-4;
  }
 
  &.rules-text {
@@ -496,7 +582,7 @@
   padding-top: 0.9rem;
  }
 
- &.deposit-heading {
+ &.modal-heading {
   display: block;
   margin-top: -0.4rem;
  }
@@ -505,46 +591,7 @@
   display: block;
  }
 
- &.withdraw-available-label {
-  display: block;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
- }
-
- &.withdraw-available-amt {
-  display: block;
-  font-family: $fontOutfitExtraBold;
-  font-size: $font20;
-  font-weight: 700;
-  color: $appText;
-  margin: 0.2rem 0;
- }
-
- &.withdraw-available-caveat {
-  display: block;
-  line-height: 1.4;
- }
-
- &.deposit-step-title {
-  display: block;
-  font-size: $font14;
-  font-weight: 700;
-  color: $appText;
-  margin-bottom: 0.2rem;
- }
-
- &.deposit-step-desc {
-  display: block;
-  line-height: 1.5;
- }
-
- &.deposit-step-note {
-  display: block;
-  margin-top: 0.25rem;
-  line-height: 1.5;
- }
-
- &.deposit-info-text {
+ &.modal-info-text {
   flex: 1;
   line-height: 1.4;
  }
@@ -557,7 +604,7 @@
  &.deposit-address {
   flex: 1;
   min-width: 0;
-  font-family: $fontMono;
+  font-family: $fontOutfitRegular;
   font-size: $font12;
   color: $appText;
  }
@@ -573,7 +620,11 @@
 
  &.gr-name {
   display: block;
-  font-family: $fontDisplay;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: $fontOutfitSemiBold;
   font-size: $font16;
   font-weight: 400;
   letter-spacing: 0.01em;
@@ -585,25 +636,43 @@
   }
  }
 
- &.gr-elo {
-  display: block;
-  margin-top: 0.2rem;
-  transition: color 0.25s ease;
-
-  .gr-row.active & {
-   color: $gold;
-  }
+ &.gr-score-label {
+  flex-shrink: 0;
+  padding: 0.1rem $space-8;
+  border-radius: 4px;
+  background: alpha($appText, 0.08);
+  font-family: $fontOutfitSemiBold;
+  font-size: $font12;
+  color: $appTextMuted;
  }
 
  &.gr-advantage {
   font-weight: 600;
+
   margin-left: 0.15rem;
  }
 
  &.gr-grace {
-  display: block;
-  margin-top: 0.15rem;
+  flex-shrink: 0;
+  white-space: nowrap;
   color: $paleRed;
+ }
+
+ &.gr-first-move {
+  flex-shrink: 0;
+  white-space: nowrap;
+  padding: 0.1rem $space-8;
+  border-radius: 4px;
+  background: alpha($warning, 0.12);
+  font-family: $fontOutfitSemiBold;
+  font-size: $font12;
+  font-variant-numeric: tabular-nums;
+  color: $warning;
+
+  &.urgent {
+   background: alpha($paleRed, 0.12);
+   color: $paleRed;
+  }
  }
 
  &.gr-clock {
@@ -625,23 +694,10 @@
  }
 
  &.gr-move-n {
-  font-family: $fontMono;
+  font-family: $fontOutfitRegular;
   font-size: $font14;
   opacity: 0.85;
   margin-right: 0.3rem;
- }
-
- &.gr-heading {
-  display: block;
-  margin-bottom: 0.3rem;
- }
-
- &.gr-overlay-badge {
-  font-family: $fontMono;
-  font-size: $font12;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: $gold;
  }
 
  &.gr-promotion-label {
@@ -649,43 +705,35 @@
   text-transform: uppercase;
  }
 
- &.gr-overlay-title {
-  font-size: $font20;
-  font-weight: 800;
-  color: $appText;
- }
-
- &.gr-settlement-val {
-  display: block;
-  font-family: $fontMono;
-  font-size: $font16;
+ &.appbar-dropdown-name {
+  font-family: $fontOutfitRegular;
+  font-size: $font14;
   font-weight: 700;
-  color: $gold;
-
-  &.win {
-   color: $greenishTeal;
-  }
-
-  &.loss {
-   color: $paleRed;
-  }
+  color: $appText;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
  }
 
- &.gr-settlement-lbl {
-  display: block;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  margin-top: 0.15rem;
+ &.modal-description {
+  font-family: $fontOutfitRegular;
+  font-size: $font14;
+  color: alpha($appText, 0.5);
+  margin-bottom: 1.25rem;
+  line-height: 1.5;
  }
 }
 
-@keyframes live-pulse {
- 0% {
-  transform: scale(0.5);
-  opacity: 0.7;
- }
+@keyframes play-hint-blink {
+ 0%,
+ 77.5%,
  100% {
-  transform: scale(1.6);
   opacity: 0;
+  transform: translate3d(0, 0.75rem, 0);
+ }
+ 20%,
+ 57.5% {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
  }
 }

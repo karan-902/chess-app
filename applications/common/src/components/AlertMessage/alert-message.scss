@@ -1,0 +1,37 @@
+@use "../../styles/default.scss" as *;
+
+.common-alert-message {
+ margin-top: 0.5rem;
+ font-size: $font14 !important;
+ font-family: $fontOutfitSemiBold !important;
+ padding: 0.125rem 0.625rem !important;
+ border-radius: 0.25rem;
+ z-index: $z-alert;
+
+ &.MuiAlert-standard.MuiAlert-colorError {
+  .MuiAlert-icon {
+   color: $paleRed !important;
+  }
+
+  //   :root[data-theme="light"] & {
+  //    background-color: #ffe8e6;
+  //    color: #5f2120;
+
+  //    .MuiAlert-message {
+  //     color: #5f2120;
+  //    }
+  //   }
+ }
+
+ &.MuiAlert-standard.MuiAlert-colorSuccess {
+  .MuiAlert-icon {
+   color: $greenishTeal !important;
+  }
+ }
+
+ &.MuiAlert-standard.MuiAlert-colorWarning {
+  .MuiAlert-icon {
+   color: $goldenRod !important;
+  }
+ }
+}

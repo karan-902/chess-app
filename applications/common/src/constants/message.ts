@@ -1,0 +1,15 @@
+export const somethingWentWrongText = "Something went wrong. Please try later.";
+export const keepPlayingText = "Keep Playing";
+export const backText = "Back";
+export const cancelText = "Cancel";
+export const playText = "Play";
+export const scoreText = "Score";
+export const entryFeeText = "Entry fee";
+export const youText = "You";
+export const closeText = "Close";
+export const noResultsText = "No results";
+export const chessText = "Chess";
+export const youBeatText = (name: string) => `You beat ${name}`;
+export const youLostToText = (name: string) => `You lost to ${name}`;
+export const drawWithText = (name: string) => `Draw with ${name}`;
+export const cancelledWithText = (name: string) => `Cancelled vs ${name}`;

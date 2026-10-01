@@ -1,0 +1,44 @@
+@use "default.scss" as *;
+
+.common-menu {
+ .MuiMenu-list {
+  padding: 0;
+ }
+ .MuiButtonBase-root {
+  &.Mui-focusVisible {
+   background: alpha($gold, 0.12);
+   color: $gold;
+  }
+ }
+ .MuiPaper-root {
+  box-shadow: 0 4px 7px 3px $menuShadow;
+  border: 1px solid $menuBorder;
+  border-radius: 4px;
+  margin-top: $space-4;
+ }
+ &.filter-dropdown-menu {
+  .MuiPaper-root {
+   min-width: 11rem;
+   border: 1px solid $appCardBorder;
+   border-radius: 5px;
+   background: $appBg;
+   box-shadow: 0 8px 24px rgba($black, 0.4);
+  }
+
+  .common-menu-item {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   gap: 1.5rem;
+   padding: $font12;
+   font-family: $fontOutfitSemiBold !important;
+   font-size: $font14;
+   color: $appText;
+
+   &.Mui-selected,
+   &.Mui-selected:hover {
+    background: transparent;
+   }
+  }
+ }
+}
