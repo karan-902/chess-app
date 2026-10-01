@@ -49,14 +49,15 @@
   }
  }
  &.Mui-disabled:not(.loading) {
-  background-color: $appSecondary;
+  background-color: $appCardBorder;
+  box-shadow: none;
   .button-text {
    font-family: $fontOutfitSemiBold !important;
    font-size: $font14 !important;
-   color: $white;
+   color: $appTextMuted;
   }
   .MuiButton-icon svg {
-   color: $white;
+   color: $appTextMuted;
   }
  }
 
@@ -70,8 +71,20 @@
  &.MuiButton-contained {
   background: $primary;
   color: $primaryContrast !important;
+  box-shadow: 0 6px 20px alpha($primary, 0.16);
   .MuiButton-icon svg {
    color: $primaryContrast;
+  }
+
+  @media (hover: hover) {
+   &:hover:not(.Mui-disabled) {
+    background: $primaryHover;
+    opacity: 1;
+   }
+  }
+
+  &:active:not(.Mui-disabled) {
+   background: $primaryDark;
   }
  }
 
@@ -181,7 +194,7 @@
   gap: 0.25rem;
   .MuiButton-endIcon svg {
    font-size: $font20;
-   color: $appText;
+   color: $primaryContrast;
   }
  }
 

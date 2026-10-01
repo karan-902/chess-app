@@ -10,10 +10,8 @@
   width: 100%;
   height: 2.75rem;
   border: 1px solid $appCardBorder;
+  background: $appSecondary;
   font-family: $fontOutfitRegular;
-  font-size: $font14;
-  padding: $space-12;
-  box-shadow: none !important;
   border-radius: 4px;
   color: $appText;
   transition:
@@ -21,8 +19,21 @@
    box-shadow 0.15s ease;
 
   input::placeholder {
-   color: alpha($appText, 0.18);
+   color: $appTextPlaceholder;
    opacity: 1;
+  }
+  .MuiInputBase-input {
+   padding: 12px !important;
+   box-shadow: none !important;
+   border: none !important;
+   border-radius: 4px !important;
+   background-color: transparent;
+  }
+
+  @media (hover: hover) {
+   &:hover:not(.Mui-focused):not(.Mui-error):not(.Mui-disabled) {
+    border-color: $appBorderHover;
+   }
   }
 
   input:-webkit-autofill,
@@ -35,9 +46,8 @@
   }
 
   &.Mui-focused {
-   outline: 2px solid $primary !important;
-   border: none !important;
-   border-radius: 0.375rem !important;
+   border-color: $primary;
+   box-shadow: 0 0 0 3px alpha($primary, 0.12);
   }
 
   &.Mui-error {
@@ -45,7 +55,7 @@
    border-radius: 0.375rem !important;
    &.Mui-focused {
     border-color: $paleRed;
-    box-shadow: 0 0 0 3px $paleRed;
+    box-shadow: 0 0 0 3px alpha($paleRed, 0.12);
    }
   }
 
@@ -57,11 +67,6 @@
  .input-password-toggle {
   padding: 0;
   color: alpha($appText, 0.4);
-  transition: color 0.15s ease;
-
-  &:hover {
-   color: alpha($appText, 0.85);
-  }
 
   svg {
    width: 1rem;
@@ -128,22 +133,6 @@
 
  &.form-input .MuiInputBase-root {
   height: 3rem;
-  background: transparent;
-  padding: 0 1rem;
   font-size: $font16;
-
-  input::placeholder {
-   color: alpha($appText, 0.35);
-  }
-
-  &.Mui-focused {
-   border-color: $gold;
-  }
-
-  input:-webkit-autofill,
-  input:-webkit-autofill:hover,
-  input:-webkit-autofill:focus {
-   -webkit-box-shadow: 0 0 0 1000px $appBg inset;
-  }
  }
 }
