@@ -8,3 +8,4 @@ dist/
 .claude/
 tsconfig.tsbuildinfo
 storybook-static/
+flow.md
