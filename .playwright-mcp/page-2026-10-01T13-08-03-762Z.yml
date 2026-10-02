@@ -1,0 +1,39 @@
+- generic [ref=f4e5]:
+  - banner [ref=f4e6]:
+    - generic [ref=f4e7]:
+      - link [ref=f4e8] [cursor=pointer]:
+        - /url: /chess/play
+        - img "gopvp-logo" [ref=f4e9]
+      - generic [ref=f4e10]:
+        - link "$1,007.21" [ref=f4e11] [cursor=pointer]:
+          - /url: /wallet
+        - button [ref=f4e16] [cursor=pointer]
+    - tablist [ref=f4e21]:
+      - tab "Play" [selected] [ref=f4e22] [cursor=pointer]
+      - tab "Matches" [ref=f4e23] [cursor=pointer]
+      - tab "Leaderboard" [ref=f4e24] [cursor=pointer]
+      - tab "Rules" [ref=f4e25] [cursor=pointer]
+  - main [ref=f4e28]:
+    - generic [ref=f4e29]:
+      - generic [ref=f4e33]:
+        - generic [ref=f4e34]: "8"
+        - generic [ref=f4e42]: "7"
+        - generic [ref=f4e50]: "6"
+        - generic [ref=f4e58]: "5"
+        - generic [ref=f4e66]: "4"
+        - generic [ref=f4e74]: "3"
+        - generic [ref=f4e82]: "2"
+        - generic [ref=f4e90]:
+          - generic: "1"
+          - generic: a
+        - generic [ref=f4e91]: b
+        - generic [ref=f4e92]: c
+        - generic [ref=f4e93]: d
+        - generic [ref=f4e94]: e
+        - generic [ref=f4e95]: f
+        - generic [ref=f4e96]: g
+        - generic [ref=f4e97]: h
+      - generic [ref=f4e98]:
+        - paragraph [ref=f4e99]: Play now to choose a pool
+        - button [ref=f4e102] [cursor=pointer]:
+          - paragraph [ref=f4e103]: Play now

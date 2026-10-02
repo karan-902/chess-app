@@ -15,7 +15,8 @@
   border-radius: 0.25rem / 0.42rem;
  }
 
- .result-hero & {
+ .result-hero &,
+ .result-tile & {
   margin-inline: auto;
  }
  &.board-skeleton {

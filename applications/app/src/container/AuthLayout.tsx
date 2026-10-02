@@ -10,16 +10,18 @@ export default function AuthLayout({
 }: IAuthLayoutProps) {
  return (
   <Box customClass="public-page">
-   <Box customClass="public-brand">
-    <img src="/gopvp-logo.png" width="auto" height={54} alt="gopvp-logo" />
-   </Box>
-   <Box customClass="public-heading">
-    <Text component="h1" customClass="public-title">
-     {title}
-    </Text>
-    <Text component="p" customClass="page-subtitle">
-     {subtitle}
-    </Text>
+   <Box customClass="public-page-wrapper">
+    <Box customClass="public-brand">
+     <img src="/gopvp-logo.png" width="auto" height={70} alt="gopvp-logo" />
+    </Box>
+    <Box customClass="public-heading">
+     <Text component="h1" customClass="public-title">
+      {title}
+     </Text>
+     <Text component="p" customClass="page-subtitle">
+      {subtitle}
+     </Text>
+    </Box>
    </Box>
    {children}
    {footer && <Text customClass="public-footer caption">{footer}</Text>}

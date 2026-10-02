@@ -8,6 +8,10 @@ import {
  CAPTURE_ORDER,
  STARTING_COUNTS,
  PIECE_VALUES,
+ FILES,
+ KNIGHT_STEPS,
+ DIAGONAL_STEPS,
+ ORTHOGONAL_STEPS,
 } from "@gopvp/chess/src/constants/board";
 
 const positionKey = (fen: string) => fen.split(" ").slice(0, 4).join(" ");
@@ -192,27 +196,34 @@ export function useChessGame() {
   [chess],
  );
 
- type PremoveEntry = { from: string; to: string; promotion?: string };
+ type PremoveEntry = { from: string; to: string };
+ type BoardPiece = { type: string; color: "w" | "b" };
 
- const buildPremoveClone = useCallback(
-  (priorMoves: PremoveEntry[], asColor: "w" | "b") => {
-   let fen = chess.fen();
-   for (const mv of priorMoves) {
-    const parts = fen.split(" ");
-    parts[1] = asColor;
-    const clone = new Chess(parts.join(" "));
-    clone.move({
-     from: mv.from as Square,
-     to: mv.to as Square,
-     promotion: mv.promotion ?? "q",
-    });
-    fen = clone.fen();
+ const simulatePremoves = useCallback(
+  (priorMoves: PremoveEntry[]) => {
+   const board = new Map<string, BoardPiece>();
+   for (const row of new Chess(fen).board()) {
+    for (const cell of row) {
+     if (cell) board.set(cell.square, { type: cell.type, color: cell.color });
+    }
    }
-   const parts = fen.split(" ");
-   parts[1] = asColor;
-   return new Chess(parts.join(" "));
+   for (const { from, to } of priorMoves) {
+    const piece = board.get(from);
+    if (!piece) continue;
+    board.delete(from);
+    const promotes = piece.type === "p" && (to[1] === "8" || to[1] === "1");
+    board.set(to, promotes ? { ...piece, type: "q" } : piece);
+    const fileShift = FILES.indexOf(to[0]) - FILES.indexOf(from[0]);
+    if (piece.type === "k" && Math.abs(fileShift) === 2) {
+     const rookFrom = `${fileShift > 0 ? "h" : "a"}${from[1]}`;
+     const rook = board.get(rookFrom);
+     board.delete(rookFrom);
+     if (rook) board.set(`${fileShift > 0 ? "f" : "d"}${from[1]}`, rook);
+    }
+   }
+   return board;
   },
-  [chess],
+  [fen],
  );
 
  const getPremoveMoves = useCallback(
@@ -221,35 +232,84 @@ export function useChessGame() {
    asColor: "w" | "b",
    priorMoves: PremoveEntry[] = [],
   ): string[] => {
-   try {
-    return buildPremoveClone(priorMoves, asColor)
-     .moves({ square: square as Square, verbose: true })
-     .map((m) => m.to);
-   } catch {
-    return [];
+   const board = simulatePremoves(priorMoves);
+   const piece = board.get(square);
+   if (!piece || piece.color !== asColor) return [];
+
+   const file = FILES.indexOf(square[0]);
+   const rank = Number(square[1]);
+   const targets: string[] = [];
+   const add = (fileStep: number, rankStep: number) => {
+    const nextFile = file + fileStep;
+    const nextRank = rank + rankStep;
+    if (nextFile >= 0 && nextFile < 8 && nextRank >= 1 && nextRank <= 8) {
+     targets.push(`${FILES[nextFile]}${nextRank}`);
+    }
+   };
+   const isOwnPiece = (target: string) => board.get(target)?.color === asColor;
+   const slide = (steps: number[][]) =>
+    steps.forEach(([fileStep, rankStep]) => {
+     for (let distance = 1; distance < 8; distance++) {
+      const nextFile = file + fileStep * distance;
+      const nextRank = rank + rankStep * distance;
+      const target = `${FILES[nextFile]}${nextRank}`;
+      if (nextFile < 0 || nextFile > 7 || nextRank < 1 || nextRank > 8) break;
+      if (isOwnPiece(target)) break;
+      targets.push(target);
+     }
+    });
+   const kingSteps = [...DIAGONAL_STEPS, ...ORTHOGONAL_STEPS];
+
+   switch (piece.type) {
+    case "p": {
+     const forward = asColor === "w" ? 1 : -1;
+     add(0, forward);
+     if (
+      rank === (asColor === "w" ? 2 : 7) &&
+      !isOwnPiece(`${square[0]}${rank + forward}`)
+     )
+      add(0, forward * 2);
+     add(-1, forward);
+     add(1, forward);
+     break;
+    }
+    case "n":
+     KNIGHT_STEPS.forEach(([fileStep, rankStep]) => add(fileStep, rankStep));
+     break;
+    case "b":
+     slide(DIAGONAL_STEPS);
+     break;
+    case "r":
+     slide(ORTHOGONAL_STEPS);
+     break;
+    case "q":
+     slide(kingSteps);
+     break;
+    case "k": {
+     kingSteps.forEach(([fileStep, rankStep]) => add(fileStep, rankStep));
+     const homeRank = asColor === "w" ? 1 : 8;
+     if (square !== `e${homeRank}`) break;
+     const hasRook = (rookSquare: string) =>
+      board.get(rookSquare)?.type === "r" &&
+      board.get(rookSquare)?.color === asColor;
+     const isPathClear = (files: string) =>
+      [...files].every((pathFile) => !isOwnPiece(`${pathFile}${homeRank}`));
+     if (hasRook(`h${homeRank}`) && isPathClear("fg"))
+      targets.push(`g${homeRank}`);
+     if (hasRook(`a${homeRank}`) && isPathClear("bcd"))
+      targets.push(`c${homeRank}`);
+     break;
+    }
    }
+   return targets.filter((target) => board.get(target)?.color !== asColor);
   },
-  [buildPremoveClone],
+  [simulatePremoves],
  );
 
  const getPremovePieceColor = useCallback(
-  (
-   square: string,
-   asColor: "w" | "b",
-   priorMoves: PremoveEntry[] = [],
-  ): "w" | "b" | null => {
-   const realColor = getPieceColor(square);
-   if (realColor && realColor !== asColor) return realColor;
-   if (priorMoves.length === 0) return realColor;
-   try {
-    return (
-     buildPremoveClone(priorMoves, asColor).get(square as Square)?.color ?? null
-    );
-   } catch {
-    return realColor;
-   }
-  },
-  [buildPremoveClone, getPieceColor],
+  (square: string, priorMoves: PremoveEntry[] = []): "w" | "b" | null =>
+   simulatePremoves(priorMoves).get(square)?.color ?? null,
+  [simulatePremoves],
  );
 
  const getRandomMove = useCallback((): {

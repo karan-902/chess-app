@@ -15,7 +15,7 @@ import type {
 } from "@gopvp/common/src/types/response";
 import type { ISelectCountryScreenProps } from "@gopvp/common/src/types/component";
 import {
- selectYourCountryText,
+ wherePlayingFromText,
  continueText,
 } from "@gopvp/app/src/constants/message";
 import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
@@ -57,7 +57,7 @@ export default function SelectCountryScreen({
    {showHeading && (
     <Box customClass="auth-heading">
      <Text component="h1" customClass="auth-title">
-      {selectYourCountryText}
+      {wherePlayingFromText}
      </Text>
     </Box>
    )}

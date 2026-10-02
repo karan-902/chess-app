@@ -289,6 +289,10 @@
  &.cancel-btn {
   background: $paleRed;
 
+  &:hover:not(.Mui-disabled) {
+   background: $paleRed;
+  }
+
   &.Mui-disabled {
    opacity: 0.5;
   }
@@ -296,18 +300,14 @@
 
  &.wallet-deposit-btn,
  &.wallet-withdraw-btn {
-  border: 1px solid $appBtnBorder;
   border-radius: 0.6rem;
   flex: 1;
   height: 2.6rem;
   font-size: $font14;
  }
 
- &.wallet-deposit-btn {
-  color: $appText;
- }
-
  &.wallet-withdraw-btn {
+  border: 1px solid $appBtnBorder;
   color: $appText;
 
   &:hover:not(.Mui-disabled) {
@@ -408,6 +408,36 @@
   &:hover:not(.Mui-disabled) {
    background: alpha($gold, 0.1);
    border-color: $gold;
+  }
+ }
+
+ &.gr-premove-cancel {
+  flex-shrink: 0;
+  gap: $space-4;
+  min-height: 0;
+  height: 1.5rem;
+  padding: 0 $space-8;
+  border-radius: 999px;
+  background: alpha($premoveRed, 0.15);
+  color: $premoveRed;
+
+  .button-text {
+   font-size: $font12;
+   letter-spacing: 0;
+  }
+
+  .MuiButton-startIcon {
+   margin: 0;
+
+   svg {
+    width: 0.875rem;
+    height: 0.875rem;
+   }
+  }
+
+  &:hover:not(.Mui-disabled) {
+   background: alpha($premoveRed, 0.25);
+   opacity: 1;
   }
  }
 }

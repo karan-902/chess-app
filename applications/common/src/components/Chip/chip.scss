@@ -18,6 +18,7 @@
  &.gr-move-chip {
   background: transparent;
   border: none;
+  transition: none;
   margin-right: 0.15rem;
   border-radius: 4px;
   cursor: pointer;
@@ -31,17 +32,31 @@
    text-overflow: unset;
   }
 
-  &:hover {
-   background: $appBtnBg;
+  .MuiTouchRipple-root {
+   display: none;
   }
 
-  &.active {
-   min-width: 45px;
-   background: alpha($gold, 0.12);
+  &.MuiChip-clickable:hover,
+  &.MuiChip-clickable:active,
+  &.Mui-focusVisible {
+   background: transparent;
+   box-shadow: none;
+  }
+
+  @media (hover: hover) {
+   &.MuiChip-clickable:hover {
+    background: $appBtnBg;
+   }
+  }
+
+  &.active,
+  &.active.MuiChip-clickable:hover,
+  &.active.MuiChip-clickable:active,
+  &.active.Mui-focusVisible {
+   background: $gold;
 
    .MuiChip-label {
-    color: $gold;
-    font-weight: 700;
+    color: $primaryContrast;
    }
   }
  }
@@ -59,9 +74,11 @@
    background 0.15s ease,
    border-color 0.15s ease;
 
-  &:hover {
-   background: alpha($gold, 0.18);
-   border-color: alpha($gold, 0.45);
+  @media (hover: hover) {
+   &:hover {
+    background: alpha($gold, 0.18);
+    border-color: alpha($gold, 0.45);
+   }
   }
 
   .MuiChip-icon {
@@ -79,6 +96,25 @@
    line-height: normal;
    text-align: center;
    color: $appText;
+  }
+ }
+
+ &.verified-chip {
+  padding: 0.15rem $space-4;
+  background: alpha($greenishTeal, 0.12);
+  color: $greenishTeal;
+  font-size: $font12;
+
+  .MuiChip-icon {
+   width: 1rem;
+   height: 1rem;
+   margin: 0 0 0 $space-4;
+   color: inherit;
+  }
+
+  &.pending {
+   background: alpha($appText, 0.06);
+   color: $appTextMuted;
   }
  }
 }

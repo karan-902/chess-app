@@ -13,9 +13,10 @@ import CustomChip from "@gopvp/common/src/components/Chip/Chip";
 import { CustomTabs, CustomTab } from "@gopvp/common/src/components/Tabs/Tabs";
 import { useWalletBalance } from "@gopvp/app/src/hooks/useWallet";
 import { useLogout } from "@gopvp/app/src/hooks/useLogout";
-import { useReduxSelector } from "@gopvp/app/src/redux/hooks";
+import { useReduxDispatch, useReduxSelector } from "@gopvp/app/src/redux/hooks";
+import { setActivePage } from "@gopvp/app/src/redux/game/slice";
 import { formatAmount, shortenUsername } from "@gopvp/common/src/util/format";
-import { getGameFromPath, getGameRoutes } from "@gopvp/app/src/utils";
+import { getGameFromPath, getGamePath } from "@gopvp/app/src/utils";
 import { NAV_ITEMS } from "@gopvp/app/src/constants/option";
 import {
  profileText,
@@ -30,13 +31,15 @@ import { ROUTES } from "@gopvp/app/src/constants/route";
 export default function Header() {
  const { pathname } = useLocation();
  const navigate = useNavigate();
- const enteredGame = useReduxSelector((state) => state.game.enteredGame);
- const routes = enteredGame && getGameRoutes(enteredGame);
+ const dispatch = useReduxDispatch();
+ const { enteredGame, activePage } = useReduxSelector((state) => state.game);
+ const gamePath = enteredGame && getGamePath(enteredGame);
  const isGamePage = !!getGameFromPath(pathname);
- const activeNavPath =
-  routes && NAV_ITEMS.some((item) => routes[item.page] === pathname)
-   ? pathname
-   : false;
+ const goToPlay = () => {
+  if (!gamePath) return;
+  dispatch(setActivePage("PLAY"));
+  navigate(gamePath);
+ };
  const { usdValue, loading } = useWalletBalance();
  const session = useReduxSelector((state) => state.auth.session);
  const logout = useLogout();
@@ -48,35 +51,32 @@ export default function Header() {
   <CustomAppBar
    brand={
     <Link
-     to={routes ? routes.PLAY : "/"}
+     to={gamePath || "/"}
      className="appbar-brand"
      title={goToPlayText}
+     onClick={() => dispatch(setActivePage("PLAY"))}
     >
      <img src="/gopvp-logo.png" width="auto" height={54} alt="gopvp-logo" />
     </Link>
    }
    bottomSlot={
-    isGamePage && routes ? (
+    isGamePage && gamePath ? (
      <CustomTabs
       customClass="appbar-nav-tabs"
-      value={activeNavPath}
-      onChange={(_, value) => navigate(value)}
+      value={activePage}
+      onChange={(_, value) => dispatch(setActivePage(value))}
      >
       {NAV_ITEMS.map((item) => (
-       <CustomTab
-        key={item.page}
-        value={routes[item.page]}
-        label={item.label}
-       />
+       <CustomTab key={item.page} value={item.page} label={item.label} />
       ))}
      </CustomTabs>
     ) : (
-     routes && (
+     gamePath && (
       <Button
        type="button"
        customClass="appbar-back-btn"
        startIcon="arrowBack"
-       onClick={() => navigate(routes.PLAY)}
+       onClick={goToPlay}
       >
        {backText}
       </Button>

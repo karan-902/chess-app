@@ -17,7 +17,7 @@ import { fetchGameDetails } from "@gopvp/app/src/redux/game/thunk";
 import { GAMES } from "@gopvp/app/src/config/game";
 import { GAME_PAGE_TITLES, PAGE_TITLES } from "@gopvp/app/src/constants/label";
 import { getGameFromPath, isGameSlug } from "@gopvp/app/src/utils";
-import { ROUTES } from "@gopvp/app/src/constants/route";
+import { GAME_PAGES, ROUTES } from "@gopvp/app/src/constants/route";
 import { appNameText } from "@gopvp/app/src/constants/message";
 
 export default function Layout() {
@@ -28,7 +28,7 @@ export default function Layout() {
  const code = params.get("code");
  const state = params.get("state");
  const acct = params.get("acct");
- const { enteredGame, requestedSlug, details } = useReduxSelector(
+ const { enteredGame, activePage, requestedSlug, details } = useReduxSelector(
   (state) => state.game,
  );
  const gameSlug = getGameFromPath(location.pathname) ?? enteredGame;
@@ -61,16 +61,16 @@ export default function Layout() {
  }, [acct, params, dispatch]);
 
  useEffect(() => {
-  const [, gameSegment, gamePage] = location.pathname.split("/");
+  const [, gameSegment] = location.pathname.split("/");
   if (isGameSlug(gameSegment)) dispatch(setEnteredGame(gameSegment));
   const titlePrefix = isGameSlug(gameSegment)
    ? GAMES[gameSegment].label
    : appNameText;
   const pageTitle = isGameSlug(gameSegment)
-   ? GAME_PAGE_TITLES[gamePage]
+   ? GAME_PAGE_TITLES[GAME_PAGES[activePage]]
    : PAGE_TITLES[location.pathname];
   document.title = pageTitle ? `${titlePrefix}: ${pageTitle}` : titlePrefix;
- }, [location.pathname, dispatch]);
+ }, [location.pathname, activePage, dispatch]);
 
  if (code && !isRegister && location.pathname !== ROUTES.LOGIN) {
   return <Navigate to={`${ROUTES.LOGIN}?code=${code}`} replace />;

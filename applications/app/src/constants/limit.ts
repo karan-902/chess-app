@@ -1,5 +1,6 @@
-export const MIN_TRANSACTION_USD = 1;
 export const MAX_DEPOSIT_USD = 99;
+export const MAX_WITHDRAW_USD = 50;
+export const MAX_AMOUNT_INPUT_USD = 99;
 export const MAX_AMOUNT_DIGITS = 2;
 export const USERNAME_MIN_LENGTH = 3;
 export const USERNAME_MAX_LENGTH = 10;

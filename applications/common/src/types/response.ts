@@ -2,6 +2,7 @@ import type {
  MatchResult,
  SessionState,
  SignupMethod,
+ TransactionCode,
  TransactionType,
 } from "@gopvp/common/src/types/index";
 
@@ -91,6 +92,7 @@ export type IBalanceResponse = {
 export type ITransactionResponse = {
  id: string;
  transaction_type: TransactionType;
+ transaction_code: TransactionCode;
  amount: number;
  created: number;
 };
@@ -156,6 +158,7 @@ export type IMatchmakingResponse =
     players: IMatchPlayer[];
     bet: number;
     time: number;
+    expiry: number;
    };
 
 export type IStartMatchResponse =

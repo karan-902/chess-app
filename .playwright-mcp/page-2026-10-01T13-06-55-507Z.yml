@@ -1,0 +1,16 @@
+- generic [ref=e54]:
+  - banner [ref=e55]:
+    - generic [ref=e56]:
+      - link [ref=e57] [cursor=pointer]:
+        - /url: /
+        - img "gopvp-logo" [ref=e58]
+      - generic [ref=e59]:
+        - link "$1,007.21" [ref=e60] [cursor=pointer]:
+          - /url: /wallet
+        - button [ref=e65] [cursor=pointer]
+  - main [ref=e69]:
+    - generic [ref=e70]:
+      - heading "Pick a game" [level=1] [ref=e71]
+      - link "Chess" [ref=e73] [cursor=pointer]:
+        - /url: /chess/play
+        - paragraph [ref=e76]: Chess

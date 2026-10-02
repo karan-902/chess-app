@@ -8,8 +8,8 @@ export default function ChessGameRoom() {
  const [searchParams] = useSearchParams();
  const { playPath } = useGameContext();
  const pvcGameId = useChessSelector((state) => state.pvc.gameId);
- const matchId = searchParams.get("match");
- const gameId = searchParams.get("game_id");
+ const matchId = searchParams.get("match_id");
+ const gameId = searchParams.get("practice_id");
 
  if (matchId) return <MatchLoader matchId={matchId} />;
 

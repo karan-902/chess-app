@@ -6,7 +6,9 @@ import type { IEmptyStateProps } from "@gopvp/app/src/types/component";
 export default function EmptyState({ title, description }: IEmptyStateProps) {
  return (
   <Box customClass="matches-empty">
-   <ChessLogo size={44} showText={false} muted />
+   <Box customClass="empty-state-icon">
+    <ChessLogo size={44} showText={false} muted />
+   </Box>
    {title && (
     <Text component="h3" customClass="section-heading">
      {title}
