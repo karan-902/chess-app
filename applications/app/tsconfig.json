@@ -15,6 +15,12 @@
   "noUnusedLocals": true,
   "noUnusedParameters": true,
   "noFallthroughCasesInSwitch": true,
+  "baseUrl": ".",
+  "paths": {
+   "@gopvp/app/*": ["../app/*"],
+   "@gopvp/chess/*": ["../chess/*"],
+   "@gopvp/common/*": ["../common/*"]
+  },
   "types": ["node"]
  },
  "include": ["src", "../common/src", "../chess/src", "vite.config.ts"]
