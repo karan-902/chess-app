@@ -3,7 +3,7 @@ import Box from "@gopvp/common/src/components/Box/Box";
 import Header from "@gopvp/app/src/components/common/Header";
 import DepositSheet from "@gopvp/app/src/components/common/DepositSheet";
 import WithdrawSheet from "@gopvp/app/src/components/common/WithdrawSheet";
-import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { Navigate, Outlet, useLocation, useMatch } from "react-router-dom";
 import { useReduxDispatch, useReduxSelector } from "@gopvp/app/src/redux/hooks";
 import { fetchWalletBalance } from "@gopvp/app/src/redux/wallet/thunk";
 import { useWalletModal } from "@gopvp/app/src/context/WalletModalContext";
@@ -22,6 +22,7 @@ function PrivateRoute() {
  const searchParams = new URLSearchParams(location.search);
  const isInGameRoom =
   searchParams.has("match_id") || searchParams.has("practice_id");
+ const isPickGamePage = !!useMatch(ROUTES.PICK_GAME);
 
  useEffect(() => {
   close();
@@ -46,7 +47,7 @@ function PrivateRoute() {
  const renderLayout = () => {
   return (
    <Box customClass="app-shell">
-    {!isInGameRoom && location.pathname !== ROUTES.PICK_GAME && <Header />}
+    {!isInGameRoom && !isPickGamePage && <Header />}
     <Box customClass="app-body">
      <Box component="main" customClass="app-content">
       <Outlet />
