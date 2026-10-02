@@ -9,22 +9,20 @@ import LbRowSkeleton from "@gopvp/app/src/components/common/LbRowSkeleton";
 import VirtualList from "@gopvp/common/src/components/VirtualList/VirtualList";
 import PlayerRowSheet from "@gopvp/app/src/pages/leaderboard/PlayerRowSheet";
 import { useLeaderboard } from "@gopvp/app/src/hooks/useLeaderboard";
-import { useReduxSelector } from "@gopvp/app/src/redux/hooks";
+import { useReduxDispatch, useReduxSelector } from "@gopvp/app/src/redux/hooks";
+import {
+ setLeaderboardScope,
+ setLeaderboardSort,
+} from "@gopvp/app/src/redux/game/slice";
 import { formatAmount, shortenUsername } from "@gopvp/common/src/util/format";
 import {
  LEADERBOARD_SCOPES,
  LEADERBOARD_SORTS,
- DEFAULT_LEADERBOARD_SCOPE,
- DEFAULT_LEADERBOARD_SORT,
 } from "@gopvp/app/src/constants/option";
 import {
  LEADERBOARD_SCOPE_LABELS,
  LEADERBOARD_SORT_LABELS,
 } from "@gopvp/app/src/constants/label";
-import type {
- LeaderboardScope,
- LeaderboardSort,
-} from "@gopvp/common/src/types/index";
 import type { ILeaderboardRowResponse } from "@gopvp/common/src/types/response";
 import {
  noDataFoundText,
@@ -37,10 +35,9 @@ import { LEADERBOARD_SKELETON_ROWS } from "@gopvp/app/src/constants/limit";
 import { renderSkeletons } from "@gopvp/app/src/utils/skeleton";
 
 export default function Leaderboard() {
- const [scope, setScope] = useState<LeaderboardScope>(
-  DEFAULT_LEADERBOARD_SCOPE,
- );
- const [sort, setSort] = useState<LeaderboardSort>(DEFAULT_LEADERBOARD_SORT);
+ const dispatch = useReduxDispatch();
+ const scope = useReduxSelector((state) => state.game.leaderboardScope);
+ const sort = useReduxSelector((state) => state.game.leaderboardSort);
 
  const { players, loading, loadingMore, error, loadMore } = useLeaderboard(
   scope,
@@ -65,13 +62,13 @@ export default function Leaderboard() {
     <FilterDropdown
      options={LEADERBOARD_SORTS}
      value={sort}
-     onChange={setSort}
+     onChange={(value) => dispatch(setLeaderboardSort(value))}
      label={(value) => LEADERBOARD_SORT_LABELS[value]}
     />
     <FilterDropdown
      options={LEADERBOARD_SCOPES}
      value={scope}
-     onChange={setScope}
+     onChange={(value) => dispatch(setLeaderboardScope(value))}
      label={(value) => LEADERBOARD_SCOPE_LABELS[value]}
     />
    </Box>

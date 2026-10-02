@@ -8,10 +8,10 @@ import StatList from "@gopvp/app/src/components/common/StatList";
 import MatchRowSkeleton from "@gopvp/app/src/components/common/MatchRowSkeleton";
 import Button from "@gopvp/common/src/components/Button/Button";
 import { useGameHistory } from "@gopvp/app/src/hooks/useGameHistory";
-import { useReduxSelector } from "@gopvp/app/src/redux/hooks";
+import { useReduxDispatch, useReduxSelector } from "@gopvp/app/src/redux/hooks";
+import { setMatchesSubtab } from "@gopvp/app/src/redux/game/slice";
 import { useGame } from "@gopvp/app/src/hooks/useGame";
 import { formatAmount } from "@gopvp/common/src/util/format";
-import type { MatchesSubtab } from "@gopvp/common/src/types/component";
 import type { IMatchHistoryItem } from "@gopvp/common/src/types/response";
 import {
  welcomeText,
@@ -39,7 +39,8 @@ import MatchInfoSheet from "@gopvp/app/src/pages/history/MatchInfoSheet";
 
 export default function MyMatches() {
  const { gameLabel } = useGame();
- const [subtab, setSubtab] = useState<MatchesSubtab>("history");
+ const dispatch = useReduxDispatch();
+ const subtab = useReduxSelector((state) => state.game.matchesSubtab);
  const currentUsername = useReduxSelector(
   (state) => state.auth.session?.username,
  );
@@ -61,7 +62,7 @@ export default function MyMatches() {
        subtab === tab && "active",
       )}
       aria-pressed={subtab === tab}
-      onClick={() => setSubtab(tab)}
+      onClick={() => dispatch(setMatchesSubtab(tab))}
      >
       {MATCHES_SUBTAB_LABELS[tab]}
      </Button>

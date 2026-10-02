@@ -52,7 +52,13 @@ const speedPersistConfig = buildPersistConfig<ISpeedState>({
 const gamePersistConfig = buildPersistConfig<IGameState>({
  key: GAME_PERSIST_KEY,
  storage: appStorage,
- whitelist: ["enteredGame", "activePage"],
+ whitelist: [
+  "enteredGame",
+  "activePage",
+  "matchesSubtab",
+  "leaderboardScope",
+  "leaderboardSort",
+ ],
 });
 
 const pvcPersistConfig = buildPersistConfig<IPvcState>({
