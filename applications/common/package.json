@@ -1,19 +1,36 @@
 {
-    "name": "@gopvp/common",
-    "private": true,
-    "version": "0.0.1",
-    "type": "module",
-    "dependencies": {
-        "@emotion/react": "^11.14.0",
-        "@lottiefiles/dotlottie-react": "^0.19.13",
-        "@emotion/styled": "^11.14.1",
-        "@mui/icons-material": "^7.3.11",
-        "@mui/material": "^7.3.11",
-        "classnames": "^2.5.1",
-        "lucide-react": "0.487.0",
-        "react": "18.3.1",
-        "react-dom": "18.3.1",
-        "react-router": "7.13.0",
-        "react-virtuoso": "^4.18.10"
-    }
+ "name": "@gopvp/common",
+ "private": true,
+ "version": "0.0.1",
+ "type": "module",
+ "scripts": {
+  "storybook": "storybook dev -p 6006",
+  "build-storybook": "storybook build"
+ },
+ "dependencies": {
+  "@emotion/react": "^11.14.0",
+  "@emotion/styled": "^11.14.1",
+  "@fingerprintjs/fingerprintjs": "^5.2.0",
+  "@lottiefiles/dotlottie-react": "^0.19.13",
+  "@mui/icons-material": "^9.4.0",
+  "@mui/material": "^9.4.0",
+  "axios": "^1.18.1",
+  "classnames": "^2.5.1",
+  "dayjs": "^1.11.21",
+  "formik": "^2.4.9",
+  "input-otp": "1.4.2",
+  "lucide-react": "0.487.0",
+  "react": "18.3.1",
+  "react-dom": "18.3.1",
+  "react-router-dom": "7.13.0",
+  "react-virtuoso": "^4.18.10",
+  "socket.io-client": "^4.8.3"
+ },
+ "devDependencies": {
+  "@storybook/react-vite": "^10.6.0",
+  "sass": "^1.105.0",
+  "storybook": "^10.6.0",
+  "typescript": "^5.9.3",
+  "vite": "^6.3.5"
+ }
 }

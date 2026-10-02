@@ -4,10 +4,16 @@ import classNames from "classnames";
 import "./skeleton.scss";
 
 interface ISkeletonProps extends SkeletonProps {
-    customClass?: string;
+ customClass?: string;
 }
 
-export default function Skeleton({ customClass, ...props }: ISkeletonProps) {
-    const classes = classNames("skeleton", customClass);
-    return <MuiSkeleton {...props} className={classes} />;
+export function Skeleton({ customClass, ...props }: ISkeletonProps) {
+ return (
+  <MuiSkeleton
+   {...props}
+   className={classNames("common-skeleton", customClass)}
+  />
+ );
 }
+
+export default Skeleton;

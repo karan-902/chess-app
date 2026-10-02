@@ -1,37 +1,80 @@
 @use "default.scss" as *;
 
 .common-skeleton {
-    display: block;
-    background: linear-gradient(
-        90deg,
-        alpha($appText, 0.05) 0%,
-        alpha($appText, 0.1) 50%,
-        alpha($appText, 0.05) 100%
-    );
-    background-size: 200% 100%;
-    animation: skeleton-shimmer 1.4s ease-in-out infinite;
+ display: block;
+ background: linear-gradient(
+  90deg,
+  alpha($appText, 0.05) 0%,
+  alpha($appText, 0.1) 50%,
+  alpha($appText, 0.05) 100%
+ );
+ background-size: 200% 100%;
+ animation: skeleton-shimmer 1.4s ease-in-out infinite;
 
-    &.text {
-        border-radius: $radiusSm;
-    }
-    &.circle {
-        border-radius: 50%;
-    }
-    &.rounded {
-        border-radius: $radiusMd;
-    }
+ &.text {
+  border-radius: 0.25rem / 0.42rem;
+ }
 
-    &.wallet-btn-skeleton {
-        flex: 1;
-        border-radius: $appBtnRadius;
-    }
+ .result-hero & {
+  margin-inline: auto;
+ }
+ &.board-skeleton {
+  width: auto;
+  height: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 6px;
+ }
+
+ &.result-logo-skeleton {
+  width: 6rem;
+  height: 6rem;
+  border-radius: 14px;
+ }
+
+ &.match-id-label-skeleton {
+  align-self: flex-start;
+ }
+
+ &.match-id-skeleton {
+  width: 100%;
+  height: 2.75rem;
+  border-radius: 4px;
+ }
+
+ &.wallet-btn-skeleton {
+  flex: 1;
+  border-radius: 4px;
+ }
+
+ &.username-suggestion-skeleton {
+  width: 8rem;
+  height: 1rem;
+  border-radius: 3px;
+ }
+
+ &.appbar-balance-skeleton {
+  width: 7rem;
+  height: 2rem;
+  border-radius: 4px;
+ }
+
+ &.pool-play-skeleton {
+  align-self: center;
+  width: min(150px, 100%);
+  height: $font24;
+  border-radius: 8px;
+
+  @include from(tablet) {
+   height: 26px;
+  }
+ }
 }
 
 @keyframes skeleton-shimmer {
-    0% {
-        background-position: 200% 0;
-    }
-    100% {
-        background-position: -200% 0;
-    }
+ 0% {
+  background-position: 200% 0;
+ }
+ 100% {
+  background-position: -200% 0;
+ }
 }

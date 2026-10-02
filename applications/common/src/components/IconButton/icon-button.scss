@@ -1,0 +1,116 @@
+@use "default.scss" as *;
+
+.common-icon-button {
+ &.room-paste-btn svg {
+  width: $font18;
+  height: $font18;
+ }
+ &.username-clear-btn svg {
+  width: 0.875rem;
+  height: 0.875rem;
+ }
+ &.deposit-qr-back-btn,
+ &.gr-review-btn {
+  svg {
+   width: 1rem;
+   height: 1rem;
+  }
+ }
+ &.deposit-qr-back-btn {
+  width: 1.875rem;
+  height: 1.875rem;
+  background: rgba(128, 128, 128, 0.18);
+  color: $appText;
+
+  position: absolute;
+  left: 0;
+  display: flex;
+
+  &:hover:not(.Mui-disabled) {
+   background: rgba(128, 128, 128, 0.3);
+  }
+ }
+ &.gr-review-btn {
+  display: flex;
+  width: 1.9rem;
+  height: 1.9rem;
+  border: 1px solid $appCardBorder;
+  background: $appSurface;
+  font-family: $fontOutfitExtraBold;
+  color: $appTextMuted;
+  transition:
+   color 0.15s ease,
+   border-color 0.15s ease;
+
+  &:hover:not(.Mui-disabled) {
+   color: $appText;
+   border-color: $appTextMuted;
+  }
+
+  &.Mui-disabled {
+   opacity: 0.35;
+   cursor: not-allowed;
+  }
+ }
+
+ &.drawer-close-icon {
+  position: absolute;
+  top: 0.875rem;
+  right: 0.875rem;
+  z-index: $z-raised;
+  width: 1.875rem;
+  height: 1.875rem;
+  min-width: 0;
+  padding: 0;
+  color: $appText;
+  &:hover:not(.Mui-disabled) {
+   background: rgba(128, 128, 128, 0.3);
+  }
+ }
+ &.modal-close-icon {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: $z-raised;
+  display: flex;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  color: alpha($appText, 0.55);
+  transition:
+   color 0.15s ease,
+   background-color 0.15s ease;
+
+  &:hover {
+   background: alpha($appText, 0.12);
+  }
+
+  svg {
+   width: 1.375rem;
+   height: 1.375rem;
+  }
+ }
+ &.result-copy-btn {
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  color: $appTextMuted;
+
+  svg {
+   width: 1rem;
+   height: 1rem;
+  }
+ }
+
+ &.appbar-menu-trigger {
+  display: flex;
+  width: $font24;
+  height: $font24;
+  padding: 0;
+  color: $appText;
+  svg {
+   width: 100%;
+   height: 100%;
+  }
+ }
+}

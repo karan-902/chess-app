@@ -1,0 +1,11 @@
+@use "default.scss" as *;
+
+.common-backdrop-loader {
+ z-index: $z-loader;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ gap: 0.9rem;
+
+ backdrop-filter: blur(4px);
+}

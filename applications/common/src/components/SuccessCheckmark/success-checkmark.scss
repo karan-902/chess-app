@@ -1,0 +1,29 @@
+@use "default.scss" as *;
+
+.common-success-checkmark {
+ position: relative;
+ width: 13rem;
+ height: 13rem;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ overflow: hidden;
+
+ .confetti-lottie {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transform: scale(1.6);
+  pointer-events: none;
+ }
+
+ .checkmark-lottie {
+  position: relative;
+  z-index: $z-raised;
+  width: 7.5rem;
+  height: 7.5rem;
+  transform: scale(1.3);
+ }
+}

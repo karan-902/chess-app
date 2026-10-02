@@ -1,0 +1,27 @@
+export const COLOR_BG = "#090b14";
+export const COLOR_SURFACE = "#111522";
+export const COLOR_SURFACE_RAISED = "#171c2b";
+export const COLOR_BORDER = "#2a3042";
+export const COLOR_TEXT = "#f7f8fc";
+export const COLOR_MUTED = "#a8afbf";
+export const COLOR_PRIMARY = "#ffc400";
+export const COLOR_PRIMARY_DARK = "#e5a900";
+export const COLOR_PRIMARY_CONTRAST = "#0b0d14";
+export const COLOR_SECONDARY = "#3478ff";
+export const COLOR_ERROR = "#ff4d5e";
+export const COLOR_SUCCESS = "#2ed47a";
+export const COLOR_WARNING = "#ff9f1c";
+
+export const COLOR_BG_LIGHT = "#f5f7fb";
+export const COLOR_SURFACE_LIGHT = "#ffffff";
+export const COLOR_SURFACE_RAISED_LIGHT = "#f8f9fc";
+export const COLOR_BORDER_LIGHT = "#dde2ec";
+export const COLOR_TEXT_LIGHT = "#101522";
+export const COLOR_MUTED_LIGHT = "#5e6678";
+export const COLOR_PRIMARY_LIGHT = "#f5b900";
+export const COLOR_PRIMARY_DARK_LIGHT = COLOR_PRIMARY_DARK;
+export const COLOR_PRIMARY_CONTRAST_LIGHT = COLOR_PRIMARY_CONTRAST;
+export const COLOR_SECONDARY_LIGHT = "#2868e8";
+export const COLOR_ERROR_LIGHT = "#e5394f";
+export const COLOR_SUCCESS_LIGHT = "#159957";
+export const COLOR_WARNING_LIGHT = COLOR_WARNING;

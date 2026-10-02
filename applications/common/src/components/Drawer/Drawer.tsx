@@ -1,54 +1,52 @@
 import type { ReactNode } from "react";
 import { Drawer as MuiDrawer } from "@mui/material";
 import classNames from "classnames";
-import { X } from "lucide-react";
 import "./drawer.scss";
-import IconButton from "../IconButton/IconButton";
+import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
+import { closeText } from "@gopvp/common/src/constants/message";
 
 interface IDrawerProps {
-    open: boolean;
-    onClose: () => void;
-    anchor?: "left" | "right" | "bottom";
-    customClass?: string;
-    children?: ReactNode;
+ open: boolean;
+ onClose: () => void;
+ anchor?: "left" | "right" | "bottom";
+ customClass?: string;
+ hideCloseIcon?: boolean;
+ disableRestoreFocus?: boolean;
+ children?: ReactNode;
 }
 
-export default function Drawer({
-    open,
-    onClose,
-    anchor = "right",
-    customClass,
-    children,
+export function CustomDrawer({
+ open,
+ onClose,
+ anchor = "right",
+ customClass,
+ hideCloseIcon,
+ disableRestoreFocus,
+ children,
 }: IDrawerProps) {
-    return (
-        <MuiDrawer
-            anchor={anchor}
-            open={open}
-            onClose={onClose}
-            className={classNames("drawer", customClass)}
-            slotProps={{
-                paper: {
-                    className: classNames(
-                        "drawer-panel",
-                        `drawer-panel--${anchor}`,
-                    ),
-                },
-            }}
-            disableScrollLock
-            disableAutoFocus
-            container={() =>
-                document.querySelector(".app-shell") as HTMLElement
-            }
-        >
-            <IconButton
-                type="button"
-                customClass="drawer-close-icon"
-                onClick={onClose}
-                aria-label="Close"
-            >
-                <X size={18} strokeWidth={2} />
-            </IconButton>
-            {children}
-        </MuiDrawer>
-    );
+ return (
+  <MuiDrawer
+   anchor={anchor}
+   open={open}
+   onClose={onClose}
+   className={classNames("common-drawer", customClass)}
+   disableScrollLock
+   disableAutoFocus
+   disableRestoreFocus={disableRestoreFocus}
+   container={() => document.querySelector(".app-shell") as HTMLElement}
+  >
+   {!hideCloseIcon && (
+    <CustomIconButton
+     type="button"
+     customClass="drawer-close-icon"
+     onClick={onClose}
+     aria-label={closeText}
+     icon="close"
+    />
+   )}
+   {children}
+  </MuiDrawer>
+ );
 }
+
+export default CustomDrawer;

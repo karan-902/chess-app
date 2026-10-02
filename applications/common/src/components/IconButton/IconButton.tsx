@@ -2,24 +2,29 @@ import { forwardRef } from "react";
 import { IconButton as MuiIconButton } from "@mui/material";
 import type { IconButtonProps } from "@mui/material";
 import classNames from "classnames";
-import "./iconbutton.scss";
+import { icons, type TIconName } from "@gopvp/common/src/components/images";
+import "./icon-button.scss";
 
-interface IIconButtonProps extends IconButtonProps {
-    customClass?: string;
+interface IIconButtonProps extends Omit<IconButtonProps, "children"> {
+ customClass?: string;
+ icon: TIconName;
 }
 
-const IconButton = forwardRef<HTMLButtonElement, IIconButtonProps>(
-    ({ customClass, children, ...props }, ref) => {
-        const classes = classNames("icon-button", customClass);
-
-        return (
-            <MuiIconButton ref={ref} {...props} className={classes}>
-                {children}
-            </MuiIconButton>
-        );
-    },
+export const CustomIconButton = forwardRef<HTMLButtonElement, IIconButtonProps>(
+ ({ customClass, icon, ...props }, ref) => {
+  const Icon = icons[icon];
+  return (
+   <MuiIconButton
+    ref={ref}
+    {...props}
+    className={classNames("common-icon-button", customClass)}
+   >
+    <Icon />
+   </MuiIconButton>
+  );
+ },
 );
 
-IconButton.displayName = "IconButton";
+CustomIconButton.displayName = "CustomIconButton";
 
-export default IconButton;
+export default CustomIconButton;

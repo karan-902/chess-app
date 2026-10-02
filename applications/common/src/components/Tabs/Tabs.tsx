@@ -4,18 +4,24 @@ import classNames from "classnames";
 import "./tabs.scss";
 
 interface ITabsProps extends TabsProps {
-    customClass?: string;
+ customClass?: string;
 }
 interface ITabProps extends TabProps {
-    customClass?: string;
+ customClass?: string;
 }
 
-export function Tabs({ customClass, ...props }: ITabsProps) {
-    const classes = classNames("tabs", customClass);
-    return <MuiTabs {...props} className={classes} />;
+export function CustomTabs({ customClass, ...props }: ITabsProps) {
+ return (
+  <MuiTabs {...props} className={classNames("common-tabs", customClass)} />
+ );
 }
 
-export function Tab({ customClass, ...props }: ITabProps) {
-    const classes = classNames("tab", customClass);
-    return <MuiTab {...props} className={classes} />;
+export function CustomTab({ customClass, ...props }: ITabProps) {
+ return (
+  <MuiTab
+   disableRipple
+   {...props}
+   className={classNames("common-tab", customClass)}
+  />
+ );
 }

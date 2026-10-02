@@ -1,4 +1,5 @@
-/* Minibet palette — verbatim color tokens from minibet.games (@layer theme). */
+@use "sass:map";
+
 :root {
  --color-red-100: oklch(93.6% 0.032 17.717);
  --color-red-400: oklch(70.4% 0.191 22.216);
@@ -26,8 +27,8 @@
  --color-gray-900: oklch(21% 0.034 264.665);
  --color-black: #000;
  --color-white: #fff;
- --color-primary: #f7931a;
- --color-primary-dark: #f0b90b;
+ --color-primary: #ddaf04;
+ --color-primary-dark: #ddaf04;
  --color-primary-text: #2d2b36;
  --color-bg-primary: #212223;
  --color-bg-border: #343434;
@@ -66,106 +67,118 @@
  --color-border-tertiary: #d1d0d3;
  --color-border-social-pill: #7b7b7b5c;
  --color-text-green-color: #2ecc71;
- --color-error: #e94235;
+ --color-error: #e74c3c;
  --color-green: #2ecc71;
  --color-warning: #eab308;
  --color-accent: #2158fe;
  --color-text-color: #1e1e1e;
 }
 
-/*  Dark is the default (applies with no data-theme). */
 :root {
  color-scheme: dark;
- --app-bg: var(--color-bg-secondary);
- --app-secondary: var(--color-bg-content);
- --app-surface: var(--color-bg-black);
- --app-card-border: var(--color-border-gray);
- --app-line: var(--color-bg-border);
+ --app-bg: #090b14;
+ --app-secondary: #171c2b;
+ --app-surface: #111522;
+ --app-card-border: #2a3042;
+ --app-line: #202638;
  --app-frame: var(--color-black);
- --app-text: var(--color-text-secondary);
- --app-text-muted: var(--color-text-subtle);
- --app-btn-bg: var(--color-bg-quaternary);
- --app-btn-border: var(--color-border-secondary);
- --primary: var(--color-primary);
- --primary-dark: var(--color-primary-dark);
- --primary-contrast: #ffffff;
- --secondary: var(--color-accent);
+ --app-text: #f7f8fc;
+ --app-text-muted: #a8afbf;
+ --app-btn-bg: #171c2b;
+ --app-btn-border: #3a435a;
+ --app-border-hover: #3a435a;
+ --app-text-placeholder: #6f778a;
+ --primary: #ffc400;
+ --primary-hover: #ffd633;
+ --primary-dark: #e5a900;
+ --primary-contrast: #0b0d14;
+ --secondary: #3478ff;
  --secondary-contrast: #ffffff;
- --warning: var(--color-warning);
- --error: var(--color-error);
+ --warning: #ff9f1c;
+ --error: #ff4d5e;
  --gold: var(--primary);
- --cyan: var(--color-text-link);
+ --cyan: #3478ff;
  --pale-red: var(--error);
  --brink-pink: #e06a5a;
- --greenish-teal: #2ecc71;
+ --greenish-teal: #2ed47a;
  --backdrop-center: var(--color-bg-content);
  --backdrop-edge: var(--color-black);
 }
 
-/* Light mode — derived (Minibet ships dark only); gold + accents unchanged. */
 :root[data-theme="light"] {
  color-scheme: light;
- --app-bg: #f4f5f7;
- --app-secondary: #eef0f3;
+ --app-bg: #f5f7fb;
+ --app-secondary: #f8f9fc;
  --app-surface: #ffffff;
- --app-card-border: #e3e5ea;
- --app-line: #eceef1;
- --app-frame: #e7e9ec;
- --app-text: #1e1e1e;
- --app-text-muted: #6b6a72;
- --app-btn-bg: #eef0f3;
- --app-btn-border: #d1d0d3;
- --primary: var(--color-primary);
- --primary-dark: var(--color-primary-dark);
- --primary-contrast: #ffffff;
- --secondary: var(--color-accent);
+ --app-card-border: #dde2ec;
+ --app-line: #dde2ec;
+ --app-frame: #dfe2e7;
+ --app-text: #101522;
+ --app-text-muted: #5e6678;
+ --app-btn-bg: #f8f9fc;
+ --app-btn-border: #c7cedc;
+ --app-border-hover: #c7cedc;
+ --app-text-placeholder: #9299a8;
+ --primary: #f5b900;
+ --primary-hover: #e5a900;
+ --primary-dark: #e5a900;
+ --primary-contrast: #0b0d14;
+ --secondary: #2868e8;
  --secondary-contrast: #ffffff;
- --warning: var(--color-warning);
- --error: var(--color-error);
+ --warning: #ff9f1c;
+ --error: #e5394f;
  --gold: var(--primary);
- --cyan: #2563d9;
+ --cyan: #2868e8;
  --pale-red: var(--error);
  --brink-pink: #e06a5a;
- --greenish-teal: #0cad62;
+ --greenish-teal: #159957;
  --backdrop-center: #1a1d22;
  --backdrop-edge: #000000;
 }
 @function alpha($color, $opacity) {
  @return color-mix(in srgb, #{$color} #{$opacity * 100%}, transparent);
 }
-
+$white: #fff;
 $paleRed: var(--pale-red);
 $brinkPink: var(--brink-pink);
 $greenishTeal: var(--greenish-teal);
 $primary: var(--primary);
+$primaryHover: var(--primary-hover);
 $primaryDark: var(--primary-dark);
 $primaryContrast: var(--primary-contrast);
 $secondary: var(--secondary);
 $secondaryContrast: var(--secondary-contrast);
-$greenishTeal: var(--greenish-teal);
 $greenishTealLight: var(--color-green);
 $warning: var(--warning);
 $error: var(--error);
 $appFrame: var(--app-frame);
 $black: #000000;
 $goldenRod: #f1c40f;
+$bitcoinOrange: #f7931a;
+$tooltipText: #f5f5f5;
+$menuShadow: #0b254b1f;
+$menuBorder: #e4e9ee;
 
 $medalGold: #c9a227;
 $medalSilver: #9aa0a6;
 $medalBronze: #b5651d;
 
-$font12: 0.75rem;
-$font13: 0.813rem;
-$font14: 0.875rem;
-$font15: 0.938rem;
-$font16: 1rem;
-$font18: 1.125rem;
-$font22: 1.375rem;
-$font20: 1.25rem;
-$font24: 1.5rem;
-$font30: 1.9rem;
+$font7: 7px;
+$font8: 8px;
+$font11: 11px;
+$font12: 12px;
+$font13: 13px;
+$font14: 14px;
+$font15: 15px;
+$font16: 16px;
+$font18: 18px;
+$font20: 20px;
+$font22: 22px;
+$font24: 24px;
+$font30: 30px;
+$font40: 40px;
+$font48: 48px;
 
-$fontOutfit: "Outfit-Regular";
 $fontOutfitThin: "Outfit-Thin";
 $fontOutfitExtraLight: "Outfit-ExtraLight";
 $fontOutfitLight: "Outfit-Light";
@@ -176,9 +189,6 @@ $fontOutfitBold: "Outfit-Bold";
 $fontOutfitExtraBold: "Outfit-ExtraBold";
 $fontOutfitBlack: "Outfit-Black";
 
-$fontMono: $fontOutfitRegular;
-$fontDisplay: $fontOutfitSemiBold;
-
 $appBg: var(--app-bg);
 $appSecondary: var(--app-secondary);
 $appSurface: var(--app-surface);
@@ -186,62 +196,45 @@ $appCardBorder: var(--app-card-border);
 $appLine: var(--app-line);
 $appText: var(--app-text);
 $appTextMuted: var(--app-text-muted);
+$appTextPlaceholder: var(--app-text-placeholder);
+$appBorderHover: var(--app-border-hover);
 $appBtnBg: var(--app-btn-bg);
 $appBtnBorder: var(--app-btn-border);
 $backdropCenter: var(--backdrop-center);
 $backdropEdge: var(--backdrop-edge);
-
 $gold: var(--gold);
-
 $cyan: var(--cyan);
 
-$radiusSm: 0.2rem;
-$radiusMd: 0.3rem;
-$radiusLg: 0.4rem;
+$space-4: 0.25rem;
+$space-8: 0.5rem;
+$space-12: 0.75rem;
+$space-16: 1rem;
+$space-20: 1.25rem;
+$space-24: 1.5rem;
 
-$appCardRadius: 0.875rem;
-$appModalRadius: 0.875rem;
-$appBtnRadius: 0.25rem;
-$appInputRadius: 0.25rem;
-$appAccordionRadius: 0.625rem;
-$appChipRadius: 0.375rem;
+$z-base: 0;
+$z-raised: 1;
+$z-overlay: 2;
+$z-top: 3;
+$z-float: 5;
+$z-alert: 99;
+$z-loader: 1300;
+$z-dropdown: 1400;
 
-$rowTitleFontFamily: $fontOutfitMedium;
-$rowTitleFontSize: clamp(#{$font14}, 0.1rem + 1.4vw, #{$font16});
-$rowTitleColor: $appText;
+$breakpoints: (
+ phone: 400px,
+ tablet: 768px,
+ laptop: 1024px,
+);
 
-$labelFontFamily: $fontOutfitExtraBold;
-$labelFontSize: $font12;
-$labelColor: $appTextMuted;
-
-$metaTextFontFamily: $fontOutfitMedium;
-$metaTextFontSize: clamp(#{$font12}, 0.5rem + 0.7vw, #{$font13});
-$metaTextColor: $appTextMuted;
-
-$mutedDescFontFamily: $fontOutfitMedium;
-$mutedDescFontSize: $font14;
-$mutedDescColor: $appTextMuted;
-
-$sectionHeadingFontFamily: $fontDisplay;
-$sectionHeadingFontSize: $font16;
-$sectionHeadingColor: $appText;
-
-$sheetTitleFontFamily: $fontDisplay;
-$sheetTitleFontSize: $font18;
-$sheetTitleColor: $appText;
-
-$boldValueFontFamily: $fontOutfitExtraBold;
-$boldValueFontSize: $font16;
-$boldValueColor: $appText;
-
-$warningTextFontSize: $font12;
-$warningTextColor: $paleRed;
-
-$pageSubtitleFontSize: $font14;
-$pageSubtitleColor: alpha($appText, 0.5);
-
-$amountFontFamily: $fontOutfitExtraBold;
-$amountFontSize: clamp(#{$font15}, 0.6rem + 1.4vw, #{$font16});
+@mixin from($name) {
+ @if not map.has-key($breakpoints, $name) {
+  @error "Unknown breakpoint `#{$name}`. Available: #{map.keys($breakpoints)}";
+ }
+ @media (min-width: map.get($breakpoints, $name)) {
+  @content;
+ }
+}
 
 $outfitFaces:
  "Outfit-Thin", "Outfit-ExtraLight", "Outfit-Light", "Outfit-Regular",
@@ -255,3 +248,5 @@ $outfitFaces:
   font-display: swap;
  }
 }
+
+// Claude don't delete it => --color-primary: #fdca0f;

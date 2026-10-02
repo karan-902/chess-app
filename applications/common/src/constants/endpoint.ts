@@ -1,0 +1,32 @@
+export const ENDPOINTS = {
+ LOGIN: "/auth/login",
+ REGISTER: "/auth/register",
+ SSO_LOGIN: "/auth/sso-login",
+ SSO_REGISTER: "/auth/sso-register",
+ VERIFY_USER: "/auth/verify-user",
+ GENERATE_TOKEN: "/auth/generate-token",
+ LOGOUT: "/auth/logout",
+ RANDOM_NAME: "/auth/random-name",
+ COUNTRIES: "/auth/countries",
+ PROFILE: "/profile",
+ GAMES: "/games",
+ POOLS: "/matchmaking/pools",
+ MATCHES: "/matches",
+ MATCH_RESULT: "/matches/match-result",
+ MATCH_INFO: "/matches/match-info",
+ LEADERBOARD: "/leaderboard",
+ WALLET_BALANCE: "/wallet/balance",
+ PAYMENT_REQUEST: "/wallet/payment-request",
+ WITHDRAW: "/wallet/withdraw",
+ TRANSACTIONS: "/wallet/transactions",
+} as const;
+
+export const OPEN_ENDPOINTS: string[] = [
+ ENDPOINTS.REGISTER,
+ ENDPOINTS.LOGIN,
+ ENDPOINTS.SSO_LOGIN,
+ ENDPOINTS.GENERATE_TOKEN,
+ ENDPOINTS.VERIFY_USER,
+ // ENDPOINTS.SSO_REGISTER,
+ // "/device/approval-status",
+];

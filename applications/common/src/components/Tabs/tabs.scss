@@ -1,24 +1,41 @@
 @use "default.scss" as *;
 
-.tabs {
-    min-height: 44px;
+.common-tabs {
+ min-height: 44px;
 
-    .MuiTabs-indicator {
-        height: 2px;
-        border-radius: 2px;
-        background: $gold;
-    }
-}
+ .MuiTabs-indicator {
+  height: 2px;
+  border-radius: 2px;
+  background: $gold;
+ }
 
-.tab {
-    text-transform: none;
-    min-height: 44px;
-    color: $appTextMuted;
-    font-family: $fontOutfit;
+ .common-tab {
+  text-transform: none;
+  min-height: 44px;
+  min-width: 0 !important;
+  padding: 0.75rem 0.4rem;
+  color: $appTextMuted;
+  font-family: $fontOutfitRegular;
+  font-size: $font14;
 
-    &.Mui-selected {
-        color: $gold;
-        font-family: $fontOutfitSemiBold;
-        font-weight: 600;
-    }
+  &.Mui-selected {
+   color: $gold;
+   font-family: $fontOutfitSemiBold;
+   font-weight: 600;
+  }
+
+  @include from(phone) {
+   padding: 0.75rem 0.6rem;
+  }
+ }
+
+ &.appbar-nav-tabs {
+  padding: 0 0.5rem;
+  border-bottom: 1px solid $appLine;
+  flex-shrink: 0;
+
+  @include from(tablet) {
+   padding: 0 1rem;
+  }
+ }
 }

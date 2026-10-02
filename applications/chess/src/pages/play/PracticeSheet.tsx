@@ -1,39 +1,36 @@
 import { useState } from "react";
-import Box from "@/components/base/Box/Box";
-import Button from "@/components/base/Button/Button";
-import Drawer from "@/components/base/Drawer/Drawer";
-import ChipSelect from "@/components/common/ChipSelect";
-import { TIME_SECONDS } from "@/constants";
-import { CATEGORY_META } from "@/constants/config";
-import type { Difficulty } from "@/types/components";
-import type { GameCategory } from "@/types/types";
-import type { IPracticeSheetProps } from "@/types/components";
+import Box from "@gopvp/common/src/components/Box/Box";
+import Button from "@gopvp/common/src/components/Button/Button";
+import CustomDrawer from "@gopvp/common/src/components/Drawer/Drawer";
+import ChipSelect from "@gopvp/common/src/components/ChipSelect/ChipSelect";
+import { TIME_SECONDS } from "@gopvp/chess/src/config/timeControl";
 import {
- playSheetCardPlayButton,
- matchmakingConfirmCancelButton,
- playWagerBadgeDifficultyLabels,
- historyTimeControlLabel,
-} from "@/constants/messages";
-
-const PRACTICE_DIFFICULTIES: Difficulty[] = ["easy", "medium", "hard"];
-const CATEGORY_ORDER: GameCategory[] = [
- "BULLET",
- "BLITZ",
- "RAPID",
- "CLASSICAL",
-];
+ CATEGORY_LABELS,
+ DIFFICULTY_LABELS,
+} from "@gopvp/chess/src/constants/label";
+import type {
+ Difficulty,
+ IPracticeSheetProps,
+} from "@gopvp/chess/src/types/component";
+import type { GameCategory } from "@gopvp/chess/src/types/index";
+import { playText } from "@gopvp/common/src/constants/message";
+import { minutesText } from "@gopvp/chess/src/constants/message";
+import {
+ PRACTICE_DIFFICULTIES,
+ CATEGORY_ORDER,
+} from "@gopvp/chess/src/constants/option";
+import SheetActions from "@gopvp/common/src/components/SheetActions/SheetActions";
 
 export default function PracticeSheet({
  open,
  onClose,
- onCancel,
  onPlay,
 }: IPracticeSheetProps) {
  const [difficulty, setDifficulty] = useState<Difficulty>("easy");
  const [timeControl, setTimeControl] = useState<GameCategory>("RAPID");
 
  return (
-  <Drawer
+  <CustomDrawer
    anchor="bottom"
    open={open}
    onClose={onClose}
@@ -44,18 +41,18 @@ export default function PracticeSheet({
      options={PRACTICE_DIFFICULTIES}
      value={difficulty}
      onChange={setDifficulty}
-     label={(d) => playWagerBadgeDifficultyLabels[d]}
+     label={(d) => DIFFICULTY_LABELS[d]}
      customClass="segment compact"
     />
     <ChipSelect
      options={CATEGORY_ORDER}
      value={timeControl}
      onChange={setTimeControl}
-     label={(c) => CATEGORY_META[c]?.label}
-     subLabel={(c) => historyTimeControlLabel(TIME_SECONDS[c] / 60)}
+     label={(c) => CATEGORY_LABELS[c]}
+     subLabel={(c) => minutesText(TIME_SECONDS[c] / 60)}
      customClass="segment category-select"
     />
-    <Box customClass="pool-confirm-actions">
+    <SheetActions>
      <Button
       type="button"
       variant="contained"
@@ -63,19 +60,10 @@ export default function PracticeSheet({
       customClass="options-play"
       onClick={() => onPlay(difficulty, timeControl)}
      >
-      {playSheetCardPlayButton}
+      {playText}
      </Button>
-     <Button
-      type="button"
-      variant="outlined"
-      fullWidth
-      customClass="pool-confirm-cancel-btn"
-      onClick={onCancel}
-     >
-      {matchmakingConfirmCancelButton}
-     </Button>
-    </Box>
+    </SheetActions>
    </Box>
-  </Drawer>
+  </CustomDrawer>
  );
 }

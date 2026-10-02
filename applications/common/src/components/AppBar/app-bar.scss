@@ -1,0 +1,24 @@
+@use "default.scss" as *;
+
+.common-app-bar {
+ background: $appBg !important;
+ backdrop-filter: blur(14px);
+ -webkit-backdrop-filter: blur(14px);
+ box-shadow: none !important;
+
+ .MuiToolbar-root {
+  width: 100%;
+  padding: 0.5rem 1.25rem 0.875rem;
+  min-height: unset;
+  justify-content: space-between;
+  gap: 1rem;
+  // border-bottom: 1px solid $appCardBorder;
+ }
+
+ .appbar-brand {
+  display: flex;
+  align-items: center;
+  color: $gold;
+  text-decoration: none;
+ }
+}

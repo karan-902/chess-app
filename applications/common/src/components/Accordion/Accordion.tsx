@@ -1,31 +1,35 @@
 import {
-    Accordion as MuiAccordion,
-    AccordionSummary,
-    AccordionDetails,
+ Accordion as MuiAccordion,
+ AccordionSummary,
+ AccordionDetails,
 } from "@mui/material";
 import type { AccordionProps } from "@mui/material";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown } from "@gopvp/common/src/components/images";
 import classNames from "classnames";
 import "./accordion.scss";
 
 interface IAccordionProps extends AccordionProps {
-    customClass?: string;
-    summary: React.ReactNode;
+ customClass?: string;
+ summary: React.ReactNode;
 }
 
-export default function Accordion({
-    customClass,
-    summary,
-    children,
-    ...props
+export function Accordion({
+ customClass,
+ summary,
+ children,
+ ...props
 }: IAccordionProps) {
-    const classes = classNames("accordion", customClass);
-    return (
-        <MuiAccordion {...props} className={classes}>
-            <AccordionSummary expandIcon={<ChevronDown size={16} />}>
-                {summary}
-            </AccordionSummary>
-            <AccordionDetails>{children}</AccordionDetails>
-        </MuiAccordion>
-    );
+ return (
+  <MuiAccordion
+   {...props}
+   className={classNames("common-accordion", customClass)}
+  >
+   <AccordionSummary expandIcon={<ChevronDown size={16} />}>
+    {summary}
+   </AccordionSummary>
+   <AccordionDetails>{children}</AccordionDetails>
+  </MuiAccordion>
+ );
 }
+
+export default Accordion;

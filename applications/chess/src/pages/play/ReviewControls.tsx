@@ -1,46 +1,43 @@
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import Box from "@/components/base/Box/Box";
-import IconButton from "@/components/base/IconButton/IconButton";
-import MoveList from "./MoveList";
-import type { IReviewControlsProps } from "@/types/components";
+import Box from "@gopvp/common/src/components/Box/Box";
+import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
+import MoveList from "@gopvp/chess/src/pages/play/MoveList";
+import type { IReviewControlsProps } from "@gopvp/chess/src/types/component";
 import {
-    playMoveHistoryPreviousMoveAriaLabel,
-    playMoveHistoryNextMoveAriaLabel,
-} from "@/constants/messages";
+ previousMoveText,
+ nextMoveText,
+} from "@gopvp/chess/src/constants/message";
 
 export default function ReviewControls({
-    moveHistory,
-    fenHistory,
-    viewIndex,
-    onJump,
-    isReviewing,
-    goBack,
-    goForward,
+ moveHistory,
+ fenHistory,
+ viewIndex,
+ onJump,
+ isReviewing,
+ goBack,
+ goForward,
 }: IReviewControlsProps) {
-    return (
-        <Box customClass="gr-review-controls">
-            <IconButton
-                customClass="gr-review-btn"
-                onClick={goBack}
-                disabled={fenHistory.length <= 1}
-                aria-label={playMoveHistoryPreviousMoveAriaLabel}
-            >
-                <ChevronLeft size={16} strokeWidth={2} />
-            </IconButton>
-            <MoveList
-                moveHistory={moveHistory}
-                fenHistory={fenHistory}
-                viewIndex={viewIndex}
-                onJump={onJump}
-            />
-            <IconButton
-                customClass="gr-review-btn"
-                onClick={goForward}
-                disabled={!isReviewing}
-                aria-label={playMoveHistoryNextMoveAriaLabel}
-            >
-                <ChevronRight size={16} strokeWidth={2} />
-            </IconButton>
-        </Box>
-    );
+ return (
+  <Box customClass="gr-review-controls">
+   <CustomIconButton
+    customClass="gr-review-btn"
+    onClick={goBack}
+    disabled={fenHistory.length <= 1}
+    aria-label={previousMoveText}
+    icon="chevronLeft"
+   />
+   <MoveList
+    moveHistory={moveHistory}
+    fenHistory={fenHistory}
+    viewIndex={viewIndex}
+    onJump={onJump}
+   />
+   <CustomIconButton
+    customClass="gr-review-btn"
+    onClick={goForward}
+    disabled={!isReviewing}
+    aria-label={nextMoveText}
+    icon="chevronRight"
+   />
+  </Box>
+ );
 }

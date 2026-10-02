@@ -3,10 +3,13 @@ import type { SwitchProps } from "@mui/material";
 import classNames from "classnames";
 
 interface ISwitchProps extends SwitchProps {
-    customClass?: string;
+ customClass?: string;
 }
 
-export default function Switch({ customClass, ...props }: ISwitchProps) {
-    const classes = classNames("switch", customClass);
-    return <MuiSwitch {...props} className={classes} />;
+export function CustomSwitch({ customClass, ...props }: ISwitchProps) {
+ return (
+  <MuiSwitch {...props} className={classNames("common-switch", customClass)} />
+ );
 }
+
+export default CustomSwitch;
