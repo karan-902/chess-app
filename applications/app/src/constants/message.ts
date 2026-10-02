@@ -129,7 +129,8 @@ export const qrExpiredText =
  "This QR has expired — go back and generate a new one.";
 export const paymentReceivedText = "Payment received!";
 export const withdrawText = "Withdraw";
-export const onlyWinningsWithdrawableText = "Only winnings are withdrawable.";
+export const onlyWinningsWithdrawableText =
+ "Only winnings and draw refunds are withdrawable.";
 export const destinationText = "Destination";
 export const btcAddressOrInvoiceText = "Bitcoin address or Lightning invoice";
 export const requestWithdrawalText = "Withdraw";
