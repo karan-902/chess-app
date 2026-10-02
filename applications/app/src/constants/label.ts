@@ -1,7 +1,7 @@
 import type {
  LeaderboardScope,
  LeaderboardSort,
- TransactionType,
+ TransactionCode,
 } from "@gopvp/common/src/types/index";
 import type { MatchesSubtab } from "@gopvp/common/src/types/component";
 import { GAME_PAGES, ROUTES } from "@gopvp/app/src/constants/route";
@@ -29,14 +29,13 @@ export const LEADERBOARD_SORT_LABELS: Record<LeaderboardSort, string> = {
  wins: mostWinsText,
 };
 
-export const TRANSACTION_TYPE_DESCRIPTIONS: Record<TransactionType, string> = {
+export const TRANSACTION_CODE_DESCRIPTIONS: Record<TransactionCode, string> = {
  DEPOSIT: "Received",
  WITHDRAW: "Sent",
- WITHDRAW_REFUND: "Refund",
  BET: "Bet",
- WIN: "Won",
- DRAW: "Refund",
- MATCH_CANCELLED: "Refund",
+ WON: "Won",
+ REFUND: "Refund",
+ WITHDRAW_REVERSAL: "Refund",
 };
 
 export const GAME_PAGE_TITLES: Record<string, string> = {

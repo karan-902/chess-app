@@ -3,10 +3,13 @@ import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import { icons } from "@gopvp/common/src/components/images";
 import { GAMES, type GameSlug } from "@gopvp/app/src/config/game";
-import { getGameRoutes } from "@gopvp/app/src/utils";
+import { getGamePath } from "@gopvp/app/src/utils";
+import { useReduxDispatch } from "@gopvp/app/src/redux/hooks";
+import { setActivePage } from "@gopvp/app/src/redux/game/slice";
 import { pickAGameText } from "@gopvp/app/src/constants/message";
 
 export default function GamePicker() {
+ const dispatch = useReduxDispatch();
  return (
   <Box customClass="game-picker">
    <Text component="h1" customClass="dialog-title">
@@ -16,7 +19,8 @@ export default function GamePicker() {
     {(Object.keys(GAMES) as GameSlug[]).map((slug) => (
      <Link
       key={slug}
-      to={getGameRoutes(slug).PLAY}
+      to={getGamePath(slug)}
+      onClick={() => dispatch(setActivePage("PLAY"))}
       style={{ textDecoration: "none" }}
      >
       <Box customClass="game-picker-row">

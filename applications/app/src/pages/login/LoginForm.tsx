@@ -31,12 +31,13 @@ import {
  // approveSignInEmailedText,
  // backToLoginText,
  welcomeBackText,
- enterRegisteredEmailText,
- accessYourAccountText,
- enterPasswordToAccessText,
+ jumpBackIntoGameText,
+ enterYourPasswordText,
+ nextMatchOneStepAwayText,
  noAccountPromptText,
  signUpText,
- selectYourCountryText,
+ wherePlayingFromText,
+ pickCountryToFinishText,
  signingInText,
 } from "@gopvp/app/src/constants/message";
 import { ROUTES } from "@gopvp/app/src/constants/route";
@@ -203,7 +204,7 @@ export default function LoginForm() {
 
  if (step === "country") {
   return (
-   <AuthLayout title={selectYourCountryText}>
+   <AuthLayout title={wherePlayingFromText} subtitle={pickCountryToFinishText}>
     <SelectCountryScreen showHeading={false} />
    </AuthLayout>
   );
@@ -219,7 +220,7 @@ export default function LoginForm() {
  //  return (
  //   <AuthLayout
  //    title={welcomeBackText}
- //    subtitle={enterRegisteredEmailText}
+ //    subtitle={jumpBackIntoGameText}
  //    footer={loginFooter}
  //   >
  //    <WaitingApprovalScreen onBack={handleBackFromApproval} />
@@ -230,8 +231,8 @@ export default function LoginForm() {
  if (step === "password") {
   return (
    <AuthLayout
-    title={accessYourAccountText}
-    subtitle={enterPasswordToAccessText}
+    title={enterYourPasswordText}
+    subtitle={nextMatchOneStepAwayText}
    >
     <PasswordScreen
      verifiedEmail={verifiedEmail}
@@ -247,7 +248,7 @@ export default function LoginForm() {
  return (
   <AuthLayout
    title={welcomeBackText}
-   subtitle={enterRegisteredEmailText}
+   subtitle={jumpBackIntoGameText}
    footer={loginFooter}
   >
    <EmailScreen

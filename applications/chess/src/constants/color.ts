@@ -1,5 +1,7 @@
 export const LIGHT_SQUARE_COLOR = "#c9b48a";
 export const DARK_SQUARE_COLOR = "#7a6440";
+export const LIGHT_SQUARE_LABEL_COLOR = "rgba(0, 0, 0, 0.65)";
+export const DARK_SQUARE_LABEL_COLOR = "rgba(255, 255, 255, 0.85)";
 
 export const CHECK_SQUARE_GRADIENT =
  "radial-gradient(circle, #ff0000 0%, #a00000 100%)";

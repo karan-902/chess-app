@@ -1,7 +1,6 @@
 export const GAME_EVENTS = {
  READY: "game_ready",
  START: "game_start",
- END: "game_end",
  MOVE: "game_move",
  DRAW_OFFER: "game_draw_offer",
  DRAW_ACCEPT: "game_draw_accept",

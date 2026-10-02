@@ -1,5 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useCallback, useState } from "react";
 import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
@@ -22,7 +21,7 @@ import {
  globalActivityEmptyText,
  bestStreakText,
  winsText,
- grossIncomeText,
+ totalEarningsText,
  currentStreakText,
 } from "@gopvp/app/src/constants/message";
 import {
@@ -40,21 +39,7 @@ import MatchInfoSheet from "@gopvp/app/src/pages/history/MatchInfoSheet";
 
 export default function MyMatches() {
  const { gameLabel } = useGame();
- const [searchParams, setSearchParams] = useSearchParams();
- const tabParam = searchParams.get("tab");
- const [subtab, setSubtabState] = useState<MatchesSubtab>(
-  MATCHES_SUBTAB_OPTIONS.includes(tabParam as MatchesSubtab)
-   ? (tabParam as MatchesSubtab)
-   : "history",
- );
- const setSubtab = (tab: MatchesSubtab) => {
-  setSubtabState(tab);
-  setSearchParams({ tab }, { replace: true });
- };
-
- useEffect(() => {
-  if (!tabParam) setSearchParams({ tab: subtab }, { replace: true });
- }, [tabParam, subtab, setSearchParams]);
+ const [subtab, setSubtab] = useState<MatchesSubtab>("history");
  const currentUsername = useReduxSelector(
   (state) => state.auth.session?.username,
  );
@@ -158,14 +143,13 @@ export default function MyMatches() {
             ...STAT_ICONS.wins,
            },
            {
-            label: grossIncomeText,
+            label: totalEarningsText,
             value: formatAmount(stats?.gross_income ?? MATCHES_STATS_FALLBACK),
             ...STAT_ICONS.gross_income,
            },
           ]
       }
       skeletonRows={MATCH_STATS_SKELETON_ROWS}
-      customClass="player-stats"
      />
     </Box>
    )}

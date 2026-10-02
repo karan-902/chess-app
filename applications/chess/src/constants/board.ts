@@ -33,3 +33,26 @@ export const PIECE_VALUES: Record<string, number> = {
 };
 
 export const PROMOTION_PIECES = ["q", "r", "b", "n"] as const;
+
+export const KNIGHT_STEPS = [
+ [1, 2],
+ [2, 1],
+ [2, -1],
+ [1, -2],
+ [-1, -2],
+ [-2, -1],
+ [-2, 1],
+ [-1, 2],
+];
+export const DIAGONAL_STEPS = [
+ [1, 1],
+ [1, -1],
+ [-1, 1],
+ [-1, -1],
+];
+export const ORTHOGONAL_STEPS = [
+ [1, 0],
+ [-1, 0],
+ [0, 1],
+ [0, -1],
+];

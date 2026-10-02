@@ -3,7 +3,6 @@ import {
  DndContext,
  DragOverlay,
  PointerSensor,
- TouchSensor,
  useSensor,
  useSensors,
  type DragStartEvent,
@@ -29,6 +28,8 @@ import {
 import {
  LIGHT_SQUARE_COLOR,
  DARK_SQUARE_COLOR,
+ LIGHT_SQUARE_LABEL_COLOR,
+ DARK_SQUARE_LABEL_COLOR,
  CHECK_SQUARE_GRADIENT,
  STALEMATE_SQUARE_GRADIENT,
  ANNOTATION_COLORS,
@@ -37,6 +38,7 @@ import {
  BOARD_ENTRANCE_WAVE_MS,
  BOARD_ENTRANCE_WAVE_COUNT,
  BOARD_ENTRANCE_LANDING_MS,
+ PIECE_FILL_RATIO,
 } from "@gopvp/chess/src/constants/limit";
 import DroppableSquare from "@gopvp/chess/src/components/board/DroppableSquare";
 import DraggablePiece from "@gopvp/chess/src/components/board/DraggablePiece";
@@ -90,7 +92,6 @@ export default function Board({
  lastMove,
  flipped,
  premoveMode,
- premoveSquares = [],
  premoveMoves = [],
  draggableColor,
  onEntranceEnd,
@@ -101,6 +102,7 @@ export default function Board({
   square: string;
   code: string;
  } | null>(null);
+ const [droppedSquare, setDroppedSquare] = useState<string | null>(null);
  const [arrows, setArrows] = useState<Arrow[]>([]);
  const [highlights, setHighlights] = useState<Highlight[]>([]);
  const annotateRef = useRef<{ square: string; colorKey: string } | null>(null);
@@ -147,6 +149,7 @@ export default function Board({
    setLandings((q) => [...q, { id, square: lastMove.to }]);
   }
   prevLastMoveRef.current = lastMove ?? null;
+  setDroppedSquare((dropped) => (lastMove?.to === dropped ? dropped : null));
  }, [lastMove]);
 
  useEffect(() => {
@@ -245,9 +248,11 @@ export default function Board({
   prevBoardRef.current = board;
  });
 
+ const premoveFromSquares = new Set(premoveMoves.map((m) => m.from));
+ const premoveToSquares = new Set(premoveMoves.map((m) => m.to));
  const epTarget = fen.split(" ")[3];
  const cellSize = boardWidth / 8;
- const pieceSize = cellSize * 0.96;
+ const pieceSize = cellSize * PIECE_FILL_RATIO;
 
  const expandedPremoveMoves = useMemo(() => {
   const expanded: { from: string; to: string }[] = [];
@@ -269,12 +274,11 @@ export default function Board({
   return expanded;
  }, [premoveMoves, board]);
 
- const resolveDisplaySquare = (square: string, code: string) => {
+ const resolveDisplaySquare = (square: string) => {
   let current = square;
   for (const m of expandedPremoveMoves) {
    if (m.from !== current) continue;
-   const occupant = board[m.to];
-   if (occupant && occupant[0] !== code[0]) break;
+   if (board[m.to]) break;
    current = m.to;
   }
   return current;
@@ -287,8 +291,8 @@ export default function Board({
    for (const m of expandedPremoveMoves) {
     if (m.from !== current) continue;
     const occupant = board[m.to];
-    if (occupant && occupant[0] !== code[0]) {
-     hidden.add(m.to);
+    if (occupant) {
+     if (occupant[0] !== code[0]) hidden.add(m.to);
      break;
     }
     current = m.to;
@@ -342,23 +346,22 @@ export default function Board({
   useSensor(PointerSensor, {
    activationConstraint: { distance: 6 },
   }),
-  useSensor(TouchSensor, {
-   activationConstraint: { delay: 120, tolerance: 8 },
-  }),
  );
 
  const handleDragStart = (e: DragStartEvent) => {
   const square = e.active.id as string;
   const code = board[square];
   if (code) setActiveDrag({ square, code });
-  onSquareClick?.(code ? resolveDisplaySquare(square, code) : square);
+  onSquareClick?.(resolveDisplaySquare(square));
  };
 
  const handleDragEnd = (e: DragEndEvent) => {
   setActiveDrag(null);
   const from = e.active.id as string;
   const to = e.over?.id as string | undefined;
-  if (to && to !== from) onSquareClick?.(to, true);
+  if (!to || to === from) return;
+  setDroppedSquare(to);
+  onSquareClick?.(to);
  };
 
  const squareFromPoint = (clientX: number, clientY: number) => {
@@ -456,9 +459,11 @@ export default function Board({
        const isCheck = checkSquare === square;
        const isStalemate = stalemateSquare === square;
        const isFlash = flashSquare === square;
-       const isPremoveQueued = premoveSquares.includes(square);
 
        const bg = isLight ? LIGHT_SQUARE_COLOR : DARK_SQUARE_COLOR;
+       const labelColor = isLight
+        ? LIGHT_SQUARE_LABEL_COLOR
+        : DARK_SQUARE_LABEL_COLOR;
        const squareBg = isCheck
         ? CHECK_SQUARE_GRADIENT
         : isStalemate
@@ -469,29 +474,33 @@ export default function Board({
         <DroppableSquare
          key={square}
          square={square}
-         className={`chess-board-square${isFlash ? " square-flash" : ""}${isSelected ? " square-selected" : ""}${isSelected && premoveMode ? " square-selected-premove" : ""}${isPremoveQueued ? " square-premove-queued" : ""}`}
+         className={classNames("chess-board-square", {
+          "square-flash": isFlash,
+          "square-selected": isSelected,
+          "square-premove-from": premoveFromSquares.has(square),
+          "square-premove-queued": premoveToSquares.has(square),
+          "square-selected-premove": isSelected && premoveMode,
+         })}
          style={{
           backgroundColor: bg,
           background: squareBg,
           cursor: "pointer",
          }}
          onClick={() => onSquareClick?.(square)}
-         onContextMenu={(e) => {
-          e.preventDefault();
-          onSquareRightClick?.(square);
-         }}
          premoveMode={premoveMode}
         >
          {c === 0 && (
           <span
-           className={`sq-corner-label sq-rank ${isLight ? "label-on-light" : "label-on-dark"}`}
+           className="sq-corner-label sq-rank"
+           style={{ color: labelColor, backgroundColor: bg }}
           >
            {ranks[r]}
           </span>
          )}
          {r === 7 && (
           <span
-           className={`sq-corner-label sq-file ${isLight ? "label-on-light" : "label-on-dark"}`}
+           className="sq-corner-label sq-file"
+           style={{ color: labelColor, backgroundColor: bg }}
           >
            {files[c]}
           </span>
@@ -514,7 +523,7 @@ export default function Board({
 
      {orderedPieceEntries.map(([square, code]) => {
       const isCaptureTarget = hiddenCaptureSquares.has(square);
-      const displaySquare = resolveDisplaySquare(square, code);
+      const displaySquare = resolveDisplaySquare(square);
       const col = files.indexOf(displaySquare[0]);
       const row = ranks.indexOf(displaySquare[1]);
       const isAttacked =
@@ -528,10 +537,18 @@ export default function Board({
         code={code}
         col={col}
         row={row}
-        className={`chess-piece-svg${code[0] === "b" ? " piece-black" : ""}${isAttacked ? " piece-danger" : ""}${isCheck ? " piece-in-check" : ""}${isStalemate ? " piece-in-stalemate" : ""}${isCaptureTarget ? " piece-capture-pending" : ""}`}
+        className={classNames("chess-piece-svg", {
+         "piece-black": code[0] === "b",
+         "piece-danger": isAttacked,
+         "piece-in-check": isCheck,
+         "piece-in-stalemate": isStalemate,
+         "piece-capture-pending": isCaptureTarget,
+         "piece-premove-ghost": displaySquare !== square,
+        })}
         onClick={() => onSquareClick?.(displaySquare)}
         draggable={!draggableColor || code[0] === draggableColor}
         hidden={!!entranceGhosts}
+        instant={displaySquare === droppedSquare}
        />
       );
      })}

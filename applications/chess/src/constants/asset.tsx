@@ -12,8 +12,8 @@ export const SOUND_FILES = {
  capture: "/sounds/capture.wav",
  castle: "/sounds/castle.mp3",
  check: "/sounds/check.mp3",
- promote: "/sounds/promote.mp3",
- "game-end": "/sounds/game-end.mp3",
+ promote: "/sounds/promote-pawn.mp3",
+ "game-end": "/sounds/game-over.mp3",
 } as const;
 
 export const PIECE_PATHS: Record<string, React.ReactNode> = {

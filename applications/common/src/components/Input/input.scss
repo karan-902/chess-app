@@ -65,7 +65,6 @@
  }
 
  .input-password-toggle {
-  padding: 0;
   color: alpha($appText, 0.4);
 
   svg {
@@ -104,7 +103,6 @@
  &.match-id-input,
  &.room-code-input {
   .MuiInputBase-root {
-   padding: 0 $space-4 0 $space-12;
    background: $appSecondary;
    color: $appTextMuted;
 

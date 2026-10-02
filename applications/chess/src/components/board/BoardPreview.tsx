@@ -11,6 +11,8 @@ import {
 import {
  LIGHT_SQUARE_COLOR,
  DARK_SQUARE_COLOR,
+ LIGHT_SQUARE_LABEL_COLOR,
+ DARK_SQUARE_LABEL_COLOR,
 } from "@gopvp/chess/src/constants/color";
 
 interface PieceData {
@@ -320,25 +322,24 @@ export default function BoardPreview() {
     {Array.from({ length: 8 }, (_, r) =>
      Array.from({ length: 8 }, (_, c) => {
       const isLight = (r + c) % 2 === 0;
+      const squareColor = isLight ? LIGHT_SQUARE_COLOR : DARK_SQUARE_COLOR;
+      const labelStyle = {
+       color: isLight ? LIGHT_SQUARE_LABEL_COLOR : DARK_SQUARE_LABEL_COLOR,
+       backgroundColor: squareColor,
+      };
       return (
        <Box
         key={`${r}-${c}`}
         customClass="chess-board-square"
-        style={{
-         backgroundColor: isLight ? LIGHT_SQUARE_COLOR : DARK_SQUARE_COLOR,
-        }}
+        style={{ backgroundColor: squareColor }}
        >
         {c === 0 && (
-         <span
-          className={`sq-corner-label sq-rank ${isLight ? "label-on-light" : "label-on-dark"}`}
-         >
+         <span className="sq-corner-label sq-rank" style={labelStyle}>
           {RANKS[r]}
          </span>
         )}
         {r === 7 && (
-         <span
-          className={`sq-corner-label sq-file ${isLight ? "label-on-light" : "label-on-dark"}`}
-         >
+         <span className="sq-corner-label sq-file" style={labelStyle}>
           {FILES[c]}
          </span>
         )}

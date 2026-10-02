@@ -45,7 +45,20 @@ export function getDeviceFingerprint(): Promise<string> {
  return fingerprintPromise;
 }
 
+export const LOGOUT_ERROR_TYPES = new Set([
+ "session_expired",
+ "unauthorized",
+ "account_restricted",
+ "account_not_verified",
+]);
+
 let refreshPromise: Promise<string> | null = null;
+
+export async function getNewestAccessToken(): Promise<string> {
+ if (refreshPromise) return refreshPromise;
+ const session = await sessionService.loadSession<ILoginResponse>();
+ return session?.access_token ?? "";
+}
 
 export async function generateToken(): Promise<string> {
  if (refreshPromise) return refreshPromise;
@@ -84,7 +97,7 @@ export function showApiErrorToast(err: unknown) {
  const isAlreadyToasted =
   !response ||
   response.status === 429 ||
-  response.data?.type === "session_expired";
+  LOGOUT_ERROR_TYPES.has(response.data?.type ?? "");
  const toastMessage = response?.data?.message;
  if (isAlreadyToasted || !toastMessage) return;
  showToastMessage({ toastMessage, toastVariant: "error" });
@@ -152,9 +165,12 @@ export const callAPIInterface = async <
    throw err;
   }
 
-  if (errorType === "token_expired") {
+  if (errorType === "token_expired" || errorType === "invalid_token") {
    try {
-    const accessToken = await generateToken();
+    const accessToken =
+     errorType === "token_expired"
+      ? await generateToken()
+      : await getNewestAccessToken();
     const retryRes = await axios({
      ...config,
      headers: {
@@ -163,13 +179,18 @@ export const callAPIInterface = async <
      },
     });
     return retryRes.data;
-   } catch (tokenErr) {
-    await sessionService.deleteSession();
-    throw tokenErr;
+   } catch (retryErr) {
+    const retryStatus = getApiErrorResponse(retryErr)?.status;
+    if (!isAxiosError(retryErr) || retryStatus === 401)
+     await sessionService.deleteSession();
+    throw retryErr;
    }
   }
 
-  if (errorType === "session_expired") {
+  if (
+   LOGOUT_ERROR_TYPES.has(errorType ?? "") &&
+   (path === ENDPOINTS.GENERATE_TOKEN || !OPEN_ENDPOINTS.includes(path))
+  ) {
    if (errorData?.message) {
     showToastMessage({
      toastMessage: errorData.message,

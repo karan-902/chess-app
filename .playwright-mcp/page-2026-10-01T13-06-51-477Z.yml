@@ -1,0 +1,26 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - img "gopvp-logo" [ref=e6]
+      - generic [ref=e7]:
+        - heading "Enter Your Password" [level=1] [ref=e28]
+        - paragraph [ref=e9]: One step away from your next match.
+    - generic [ref=e29]:
+      - generic [ref=e30]:
+        - generic [ref=e31]: P
+        - generic [ref=e32]:
+          - paragraph [ref=e33]: Pot96269
+          - paragraph [ref=e34]: dhakad@tryspeed.com
+        - button [ref=e35] [cursor=pointer]:
+          - paragraph [ref=e39]: Change
+      - generic [ref=e40]:
+        - generic [ref=e41]: Password
+        - generic [ref=e42]:
+          - textbox "Password" [disabled] [ref=e43]:
+            - /placeholder: Enter password
+            - text: Dhakad@3ye
+          - button [ref=e45] [cursor=pointer]
+      - generic [ref=e49]:
+        - button [disabled]:
+          - progressbar
+  - paragraph [ref=e53]: Signing in...

@@ -13,6 +13,8 @@ export const usernameText = "Username";
 export const usernameRequiredText = "Username is required";
 export const usernameMinLengthText = "Username must be at least 3 characters";
 export const forfeitAndExitText = "Forfeit & Exit";
+export const matchOverText = "Match Over";
+export const amountText = "Amount";
 export const backToSignInText = "← Back to Sign In";
 export const emailText = "Email";
 export const enterEmailText = "Enter your email";
@@ -27,12 +29,11 @@ export const passwordMinLengthText = "Password must be at least 8 characters";
 export const usernameMaxLengthText =
  "Username can't be longer than 10 characters.";
 export const countryRequiredText = "Country is required";
-export const welcomeBackText = "Welcome Back!";
-export const enterRegisteredEmailText =
- "Ready up. Enter your registered email.";
-export const accessYourAccountText = "Access your account";
-export const enterPasswordToAccessText =
- "Enter your password to securely access your account";
+export const welcomeBackText = "Welcome Back";
+export const jumpBackIntoGameText =
+ "Enter your email to jump back into the game.";
+export const enterYourPasswordText = "Enter Your Password";
+export const nextMatchOneStepAwayText = "One step away from your next match.";
 export const changeText = "Change";
 export const forgotYourPasswordText = "Forgot your password?";
 export const resetNowText = "Reset now";
@@ -42,7 +43,9 @@ export const verifyEmailToContinueText =
  "Please verify your email to continue.";
 export const noAccountPromptText = "Don't have an account?";
 export const signUpText = "Sign up";
-export const createAccountText = "Create Account";
+export const joinGopvpText = "Join GoPVP";
+export const skillBasedGamesText =
+ "Skill-based 1v1 games against real players.";
 export const haveAccountPromptText = "Already have an account?";
 export const enterUsernameText = "Enter username";
 export const clearUsernameText = "Clear username";
@@ -110,8 +113,6 @@ export const buyCryptoInstantlyText = "Buy crypto instantly with";
 export const enterAmountText = "Enter Amount";
 export const generateQrCodeText = "Generate QR Code";
 export const amountRequiredText = "Amount is required";
-export const minDepositAmountText = (min: number) =>
- `Minimum deposit amount is $${min}.`;
 export const maxDepositAmountText = (max: number) =>
  `Maximum deposit amount is $${max}.`;
 export const btcOnlyWarningText =
@@ -132,13 +133,13 @@ export const onlyWinningsWithdrawableText = "Only winnings are withdrawable.";
 export const destinationText = "Destination";
 export const btcAddressOrInvoiceText = "Bitcoin address or Lightning invoice";
 export const requestWithdrawalText = "Withdraw";
-export const enterValidAmountText = "Enter a valid amount";
-export const minWithdrawalAmountText = (min: number) =>
- `Minimum withdrawal amount is $${min}.`;
+export const maxWithdrawalAmountText = (max: number) =>
+ `Maximum withdrawal amount is $${max}.`;
 export const insufficientWithdrawableText = "Insufficient withdrawable balance";
 export const enterDestinationText = "Enter a destination address";
 export const withdrawalCompletedText = "Withdrawal completed";
-export const noRankedPlayersText = "No ranked players yet.";
+export const noRankedPlayersText = "No Ranked Players Yet";
+export const winToRankText = "Win a match to get your name on the board.";
 export const dashText = "–";
 export const dailyText = "Daily";
 export const weeklyText = "Weekly";
@@ -146,7 +147,7 @@ export const monthlyText = "Monthly";
 export const allTimeText = "All Time";
 export const topEarnersText = "Top Earners";
 export const mostWinsText = "Most Wins";
-export const grossIncomeText = "Gross Income";
+export const totalEarningsText = "Total Earnings";
 export const winsText = "Wins";
 export const myResultsText = "My results";
 export const worldwideText = "Worldwide";
@@ -155,21 +156,21 @@ export const welcomeText = "Welcome!";
 export const todayText = "Today";
 export const yesterdayText = "Yesterday";
 export const makeFirstMoveText =
- "Make your first move — start a staked match from the Play tab and win real money from your opponent.";
-export const noGamesYetText = "No games yet";
+ "Make your first move — place a bet on a match from the Play tab and win real money from your opponent.";
+export const noGamesYetText = "No Games Yet";
 export const globalActivityEmptyText =
  "Global activity will show up here once matches start rolling in.";
 export const vsText = "VS";
 export const gameUnavailableText = "This game is currently unavailable.";
 export const pickAGameText = "Pick a game";
-export const bestStreakText = "Best streak";
+export const bestStreakText = "Best Streak";
 export const currentStreakText = "Streak";
 
 export const poweredByText = "POWERED BY";
 export const totalBalanceText = "Total Balance";
 export const withdrawBalanceText = "Withdraw Balance";
 export const transactionsText = "Transactions";
-export const noTransactionsYetText = "No transactions yet";
+export const noTransactionsYetText = "No Transactions Yet";
 export const transactionsEmptyText =
  "Your deposits, withdrawals, and match payouts will show up here.";
 export const profileText = "Profile";
@@ -178,14 +179,17 @@ export const appearanceText = "Appearance";
 export const darkModeText = "Dark Mode";
 export const ratingsText = "Ratings";
 export const saveChangesText = "Save Changes";
-export const selectYourCountryText = "Select Your Country";
+export const wherePlayingFromText = "Where Are You Playing From?";
+export const pickCountryToFinishText =
+ "Pick your country to finish setting up.";
 export const continueText = "Continue";
 export const selectCountryText = "Select country";
 export const walletText = "Wallet";
 export const logOutText = "Log Out";
 export const accountText = "Account";
+export const statusText = "Status";
 export const verifiedText = "Verified";
-export const noText = "No";
+export const notVerifiedText = "Not Verified";
 export const noDataFoundText = "No Data Found";
 export const appNameText = "GoPVP";
 export const speedText = "Speed";

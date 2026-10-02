@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CustomModal from "@gopvp/common/src/components/Modal/Modal";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
@@ -20,9 +20,19 @@ import {
  forfeitGameText,
  leavingForfeitsText,
  forfeitAndExitText,
+ matchOverText,
+ amountText,
 } from "@gopvp/app/src/constants/message";
-import { keepPlayingText } from "@gopvp/common/src/constants/message";
+import {
+ keepPlayingText,
+ closeText,
+} from "@gopvp/common/src/constants/message";
+import {
+ MATCH_RESULT_OUTCOMES,
+ MATCH_OUTCOME_SUBTITLES,
+} from "@gopvp/common/src/constants/mapper";
 import { SOCKET_EVENTS } from "@gopvp/common/src/constants/event";
+import type { IMatchResultResponse } from "@gopvp/common/src/types/response";
 
 export default function RejoinGameModal() {
  const dispatch = useReduxDispatch();
@@ -32,6 +42,21 @@ export default function RejoinGameModal() {
   (state) => state.socketModals.deviceHandoff,
  );
  const [confirmingExit, setConfirmingExit] = useState(false);
+ const [matchResult, setMatchResult] = useState<IMatchResultResponse | null>(
+  null,
+ );
+ const activeMatchId = activeGame?.match_id;
+
+ useEffect(() => {
+  if (!socket || !activeMatchId) return;
+  const onGameEnd = (data: IMatchResultResponse) => {
+   if (data.id === activeMatchId) setMatchResult(data);
+  };
+  socket.on(SOCKET_EVENTS.GAME_END, onGameEnd);
+  return () => {
+   socket.off(SOCKET_EVENTS.GAME_END, onGameEnd);
+  };
+ }, [socket, activeMatchId]);
 
  if (!activeGame || deviceHandoff !== null) {
   return null;
@@ -43,6 +68,12 @@ export default function RejoinGameModal() {
 
  const handleForfeit = () => {
   socket?.emit(SOCKET_EVENTS.GAME_REJOIN_DECLINED, showAckErrorToast);
+  setConfirmingExit(false);
+  dispatch(setActiveGame(null));
+ };
+
+ const handleCloseResult = () => {
+  setMatchResult(null);
   setConfirmingExit(false);
   dispatch(setActiveGame(null));
  };
@@ -59,7 +90,7 @@ export default function RejoinGameModal() {
  return (
   <>
    <CustomModal
-    open={!confirmingExit}
+    open={!confirmingExit && !matchResult}
     preventOutsideClose
     title={rejoinMatchText}
     customClass="rejoin-game-modal"
@@ -97,7 +128,7 @@ export default function RejoinGameModal() {
     </Box>
    </CustomModal>
    <CustomModal
-    open={confirmingExit}
+    open={confirmingExit && !matchResult}
     preventOutsideClose
     title={forfeitGameText}
     customClass="rejoin-game-modal"
@@ -115,6 +146,35 @@ export default function RejoinGameModal() {
      </Button>
      <Button variant="contained" fullWidth onClick={handleForfeit}>
       {forfeitAndExitText}
+     </Button>
+    </Box>
+   </CustomModal>
+   <CustomModal
+    open={!!matchResult}
+    preventOutsideClose
+    title={matchOverText}
+    customClass="rejoin-game-modal"
+   >
+    {matchResult && (
+     <>
+      <Text customClass="modal-description">
+       {MATCH_OUTCOME_SUBTITLES[MATCH_RESULT_OUTCOMES[matchResult.result]](
+        opponentName,
+       )}
+      </Text>
+      <Box customClass="stat-row">
+       <Text component="span" customClass="stat-title">
+        {amountText}
+       </Text>
+       <Text component="span" customClass="stat-val">
+        {`${matchResult.amount > 0 ? "+" : ""}${formatAmount(matchResult.amount)}`}
+       </Text>
+      </Box>
+     </>
+    )}
+    <Box customClass="modal-actions">
+     <Button variant="contained" fullWidth onClick={handleCloseResult}>
+      {closeText}
      </Button>
     </Box>
    </CustomModal>

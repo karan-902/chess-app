@@ -20,7 +20,8 @@ function PrivateRoute() {
  const { close } = useWalletModal();
  const isAppReady = isLoggedIn && !!country;
  const searchParams = new URLSearchParams(location.search);
- const isInGameRoom = searchParams.has("match") || searchParams.has("game_id");
+ const isInGameRoom =
+  searchParams.has("match_id") || searchParams.has("practice_id");
 
  useEffect(() => {
   close();
@@ -45,7 +46,7 @@ function PrivateRoute() {
  const renderLayout = () => {
   return (
    <Box customClass="app-shell">
-    {!isInGameRoom && <Header />}
+    {!isInGameRoom && location.pathname !== ROUTES.PICK_GAME && <Header />}
     <Box customClass="app-body">
      <Box component="main" customClass="app-content">
       <Outlet />

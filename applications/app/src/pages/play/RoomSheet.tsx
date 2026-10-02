@@ -140,11 +140,9 @@ export default function RoomSheet({
       {roomPlayer(opponentName)}
      </Box>
      <Text customClass="searching-timer">{roomCode}</Text>
-     {isOwner && (
-      <Text customClass="empty-state-desc description">
-       {expiresInText(formatMMSS(expiresInSeconds))}
-      </Text>
-     )}
+     <Text customClass="empty-state-desc description">
+      {expiresInText(formatMMSS(expiresInSeconds))}
+     </Text>
      {isOwner ? (
       <SheetActions>
        <Button

@@ -33,9 +33,7 @@ export function useRoomMatch(onRoomExpired?: () => void) {
  const [expiryAt, setExpiryAt] = useState<number | null>(null);
  const isRoomOpen =
   status === "waiting" || status === "ready" || status === "starting";
- const expiresInSeconds = useCountdown(
-  isOwner && isRoomOpen ? expiryAt : null,
- );
+ const expiresInSeconds = useCountdown(isRoomOpen ? expiryAt : null);
  const roomRef = useRef<TRoomInfo | null>(null);
  const requestIdRef = useRef(0);
  const statusRef = useRef<RoomStatus>("idle");
@@ -128,6 +126,7 @@ export function useRoomMatch(onRoomExpired?: () => void) {
     }
     if (data.status === "MATCHED" && data.match_type === "ROOM") {
      setPlayers(data.players);
+     setExpiryAt(data.expiry);
      enterRoom(
       { code: data.room_code, bet: data.bet, time: data.time },
       false,

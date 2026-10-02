@@ -1,7 +1,4 @@
-import type {
- MatchOutcome,
- TransactionType,
-} from "@gopvp/common/src/types/index";
+import type { MatchOutcome } from "@gopvp/common/src/types/index";
 import type { TResultTone } from "@gopvp/app/src/types/component";
 import {
  youBeatText,
@@ -26,8 +23,3 @@ export const MATCH_ROW_HEADLINES: Record<
  draw: drawWithText,
  match_cancelled: cancelledWithText,
 };
-
-export const DEBIT_TRANSACTION_TYPES = new Set<TransactionType>([
- "WITHDRAW",
- "BET",
-]);

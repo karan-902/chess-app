@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useBlocker } from "react-router-dom";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
@@ -17,6 +17,12 @@ import { useGameRoomSetup } from "@gopvp/chess/src/hooks/useGameRoomSetup";
 import { useGameSocket } from "@gopvp/chess/src/hooks/useGameSocket";
 import { usePvcGameEnd } from "@gopvp/chess/src/hooks/usePvcGameEnd";
 import { oppositeSide } from "@gopvp/chess/src/utils";
+import { playSound } from "@gopvp/chess/src/lib/sounds";
+import {
+ CLOCK_LOW_TIME_MS,
+ PREMOVE_QUEUE_SOUND_VOLUME,
+ PREMOVE_FIRE_VIBRATE_MS,
+} from "@gopvp/chess/src/constants/limit";
 import {
  markGameFinished,
  clearPvcSnapshot,
@@ -173,11 +179,12 @@ export default function GameRoom({ mode }: IGameRoomProps) {
 
  useTabLock(gameId, mode);
 
+ const { depth, strength, randomMoves } = DIFFICULTY_CONFIG[difficulty];
  const { bestMove } = useStockfish(
   fen,
-  DIFFICULTY_CONFIG[difficulty].depth,
-  isPvc && turn === computerSide && !isGameOver,
-  DIFFICULTY_CONFIG[difficulty].strength,
+  depth,
+  isPvc && !randomMoves && turn === computerSide && !isGameOver,
+  strength,
  );
  useComputerOpponent({
   mode,
@@ -185,6 +192,7 @@ export default function GameRoom({ mode }: IGameRoomProps) {
   computerSide,
   gameEnded: isGameOver,
   bestMove,
+  randomMoves,
   makeMove,
   getRandomMove,
  });
@@ -231,9 +239,11 @@ export default function GameRoom({ mode }: IGameRoomProps) {
  });
 
  const legalMoves = selectedSquare ? getLegalMoves(selectedSquare) : [];
- const premoveTargets = premoveFrom
-  ? getPremoveMoves(premoveFrom, playerSide, premoveQueue)
-  : [];
+ const premoveTargets = useMemo(
+  () =>
+   premoveFrom ? getPremoveMoves(premoveFrom, playerSide, premoveQueue) : [],
+  [premoveFrom, playerSide, premoveQueue, getPremoveMoves],
+ );
 
  const commitMove = (from: string, to: string, promotion?: string) => {
   const result = makeMove(from, to, promotion);
@@ -252,16 +262,18 @@ export default function GameRoom({ mode }: IGameRoomProps) {
    const [next, ...rest] = premoveQueue;
    setPremoveQueue(rest);
    const result = commitMoveRef.current(next.from, next.to);
-   if (!result) {
+   if (result) {
+    navigator.vibrate?.(PREMOVE_FIRE_VIBRATE_MS);
+   } else {
     setPremoveQueue([]);
     setFlashSquare(next.from);
     setTimeout(() => setFlashSquare(null), 500);
    }
-  }, 280);
+  });
   return () => clearTimeout(timer);
  }, [turn, gameEnded, playerSide, premoveQueue]);
 
- const handleSquareClick = (square: string, viaDrag?: boolean) => {
+ const handleSquareClick = (square: string) => {
   if (!isStarted || gameEnded || isReviewing || pendingPromotion) return;
 
   if (turn !== playerSide) {
@@ -269,25 +281,22 @@ export default function GameRoom({ mode }: IGameRoomProps) {
     if (premoveTargets.includes(square)) {
      setPremoveQueue((q) => [...q, { from: premoveFrom, to: square }]);
      setPremoveFrom(null);
+     playSound("move", PREMOVE_QUEUE_SOUND_VOLUME);
     } else {
      setPremoveFrom(
-      getPremovePieceColor(square, playerSide, premoveQueue) === playerSide
-       ? square
-       : null,
+      getPremovePieceColor(square, premoveQueue) === playerSide ? square : null,
      );
     }
     return;
    }
-   if (getPremovePieceColor(square, playerSide, premoveQueue) === playerSide) {
+   if (getPremovePieceColor(square, premoveQueue) === playerSide) {
     setPremoveFrom(square);
-   } else if (premoveQueue.length > 0) {
-    setPremoveQueue([]);
    }
    return;
   }
 
   if (selectedSquare && legalMoves.includes(square)) {
-   if (isPromotionMove(selectedSquare, square) && !viaDrag) {
+   if (isPromotionMove(selectedSquare, square)) {
     setTimeout(() => setPendingPromotion({ from: selectedSquare, to: square }));
    } else {
     commitMove(selectedSquare, square);
@@ -304,7 +313,7 @@ export default function GameRoom({ mode }: IGameRoomProps) {
   setSelectedSquare(hasOwnPiece ? square : null);
  };
 
- const handleSquareRightClick = () => {
+ const clearPremoves = () => {
   setPremoveQueue([]);
   setPremoveFrom(null);
  };
@@ -345,6 +354,8 @@ export default function GameRoom({ mode }: IGameRoomProps) {
 
  const myClock = pickBySide(playerSide, whiteTimer, blackTimer);
  const oppClock = pickBySide(oppColor, whiteTimer, blackTimer);
+ const myTimeMs = pickBySide(playerSide, whiteTimeMs, blackTimeMs);
+ const oppTimeMs = pickBySide(oppColor, whiteTimeMs, blackTimeMs);
  const myTurnActive = turn === playerSide;
 
  return (
@@ -359,6 +370,7 @@ export default function GameRoom({ mode }: IGameRoomProps) {
     advantage={myAdvantage < 0 ? -myAdvantage : null}
     clock={oppClock}
     clockReady={clockReady}
+    lowTime={clockReady && oppTimeMs < CLOCK_LOW_TIME_MS}
     isReconnecting={isOpponentOffline}
     firstMoveSeconds={myTurnActive ? null : firstMoveSeconds}
    />
@@ -368,7 +380,6 @@ export default function GameRoom({ mode }: IGameRoomProps) {
      fen={boardFen}
      selectedSquare={myTurnActive ? selectedSquare : premoveFrom}
      legalMoves={myTurnActive ? legalMoves : premoveTargets}
-     premoveSquares={premoveQueue.flatMap((m) => [m.from, m.to])}
      premoveMoves={isReviewing ? [] : premoveQueue}
      premoveMode={!myTurnActive}
      draggableColor={playerSide}
@@ -376,7 +387,7 @@ export default function GameRoom({ mode }: IGameRoomProps) {
      stalemateSquare={stalemateSquare}
      flashSquare={flashSquare}
      onSquareClick={handleSquareClick}
-     onSquareRightClick={handleSquareRightClick}
+     onSquareRightClick={clearPremoves}
      lastMove={isReviewing ? null : lastMove}
      flipped={playerSide === "b"}
      onEntranceEnd={markBoardReady}
@@ -408,6 +419,9 @@ export default function GameRoom({ mode }: IGameRoomProps) {
     advantage={myAdvantage > 0 ? myAdvantage : null}
     clock={myClock}
     clockReady={clockReady}
+    lowTime={clockReady && myTimeMs < CLOCK_LOW_TIME_MS}
+    hasPremoves={!isReviewing && premoveQueue.length > 0}
+    onCancelPremoves={clearPremoves}
     firstMoveSeconds={myTurnActive ? firstMoveSeconds : null}
    />
 

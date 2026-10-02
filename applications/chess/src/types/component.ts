@@ -35,8 +35,11 @@ export interface IPlayerRowProps {
  advantage: number | null;
  clock: string;
  clockReady: boolean;
+ lowTime: boolean;
  isReconnecting?: boolean;
  firstMoveSeconds?: number | null;
+ hasPremoves?: boolean;
+ onCancelPremoves?: () => void;
 }
 
 export interface IPromotionOverlayProps {
@@ -85,7 +88,6 @@ export interface IDroppableSquareProps {
  className: string;
  style: React.CSSProperties;
  onClick: () => void;
- onContextMenu: (e: React.MouseEvent) => void;
  premoveMode?: boolean;
  children: React.ReactNode;
 }
@@ -99,6 +101,7 @@ export interface IDraggablePieceProps {
  onClick: () => void;
  draggable: boolean;
  hidden?: boolean;
+ instant?: boolean;
 }
 
 export interface IMatchLoaderProps {
@@ -120,12 +123,11 @@ export interface IChessBoardProps {
  checkSquare?: string | null;
  stalemateSquare?: string | null;
  flashSquare?: string | null;
- onSquareClick?: (square: string, viaDrag?: boolean) => void;
+ onSquareClick?: (square: string) => void;
  onSquareRightClick?: (square: string) => void;
  lastMove?: { from: string; to: string } | null;
  flipped?: boolean;
  premoveMode?: boolean;
- premoveSquares?: string[];
  premoveMoves?: { from: string; to: string }[];
  draggableColor?: "w" | "b";
  onEntranceEnd?: () => void;

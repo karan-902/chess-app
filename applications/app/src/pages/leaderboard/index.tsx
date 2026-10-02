@@ -1,5 +1,4 @@
 import { useCallback, useState } from "react";
-import { useSearchParams } from "react-router-dom";
 import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
@@ -30,6 +29,7 @@ import type { ILeaderboardRowResponse } from "@gopvp/common/src/types/response";
 import {
  noDataFoundText,
  noRankedPlayersText,
+ winToRankText,
  dashText,
 } from "@gopvp/app/src/constants/message";
 import { youText } from "@gopvp/common/src/constants/message";
@@ -37,15 +37,10 @@ import { LEADERBOARD_SKELETON_ROWS } from "@gopvp/app/src/constants/limit";
 import { renderSkeletons } from "@gopvp/app/src/utils/skeleton";
 
 export default function Leaderboard() {
- const [searchParams, setSearchParams] = useSearchParams();
- const scopeParam = searchParams.get("scope") as LeaderboardScope;
- const sortParam = searchParams.get("sort") as LeaderboardSort;
- const scope = LEADERBOARD_SCOPES.includes(scopeParam)
-  ? scopeParam
-  : DEFAULT_LEADERBOARD_SCOPE;
- const sort = LEADERBOARD_SORTS.includes(sortParam)
-  ? sortParam
-  : DEFAULT_LEADERBOARD_SORT;
+ const [scope, setScope] = useState<LeaderboardScope>(
+  DEFAULT_LEADERBOARD_SCOPE,
+ );
+ const [sort, setSort] = useState<LeaderboardSort>(DEFAULT_LEADERBOARD_SORT);
 
  const { players, loading, loadingMore, error, loadMore } = useLeaderboard(
   scope,
@@ -60,13 +55,9 @@ export default function Leaderboard() {
 
  const isMe = (id: string) => id === currentUserId;
  const meInList = players.some((p) => isMe(p.id));
- const youLabel = (username: string) => `${username}(${youText})`;
+ const youLabel = (username: string) => `${username} (${youText})`;
  const playerValue = (player: ILeaderboardRowResponse) =>
   "wins" in player ? player.wins : formatAmount(player.win_amount);
-
- const setFilter = (key: "scope" | "sort", value: string) => {
-  setSearchParams({ scope, sort, [key]: value }, { replace: true });
- };
 
  return (
   <Box customClass="leaderboard-page">
@@ -74,20 +65,23 @@ export default function Leaderboard() {
     <FilterDropdown
      options={LEADERBOARD_SORTS}
      value={sort}
-     onChange={(value) => setFilter("sort", value)}
+     onChange={setSort}
      label={(value) => LEADERBOARD_SORT_LABELS[value]}
     />
     <FilterDropdown
      options={LEADERBOARD_SCOPES}
      value={scope}
-     onChange={(value) => setFilter("scope", value)}
+     onChange={setScope}
      label={(value) => LEADERBOARD_SCOPE_LABELS[value]}
     />
    </Box>
    {loading ? (
     <Box>{renderSkeletons(LEADERBOARD_SKELETON_ROWS, LbRowSkeleton)}</Box>
    ) : players.length === 0 ? (
-    <EmptyState description={error ? noDataFoundText : noRankedPlayersText} />
+    <EmptyState
+     title={error ? noDataFoundText : noRankedPlayersText}
+     description={!error ? winToRankText : undefined}
+    />
    ) : (
     <Box>
      {!meInList && currentUserId && (

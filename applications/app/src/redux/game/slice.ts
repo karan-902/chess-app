@@ -1,9 +1,11 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { IGameResponse } from "@gopvp/common/src/types/response";
+import type { GamePage } from "@gopvp/common/src/types/index";
 import type { GameSlug } from "@gopvp/app/src/config/game";
 
 export interface IGameState {
  enteredGame: GameSlug | null;
+ activePage: GamePage;
  requestedSlug: string | null;
  details: IGameResponse | null;
  isLoading: boolean;
@@ -11,6 +13,7 @@ export interface IGameState {
 
 const initialState: IGameState = {
  enteredGame: null,
+ activePage: "PLAY",
  requestedSlug: null,
  details: null,
  isLoading: false,
@@ -22,6 +25,9 @@ const gameSlice = createSlice({
  reducers: {
   setEnteredGame: (state, action: PayloadAction<GameSlug>) => {
    state.enteredGame = action.payload;
+  },
+  setActivePage: (state, action: PayloadAction<GamePage>) => {
+   state.activePage = action.payload;
   },
   startGameLoad: (state, action: PayloadAction<string>) => {
    state.requestedSlug = action.payload;
@@ -37,6 +43,11 @@ const gameSlice = createSlice({
  },
 });
 
-export const { setEnteredGame, startGameLoad, setGameDetails, finishGameLoad } =
- gameSlice.actions;
+export const {
+ setEnteredGame,
+ setActivePage,
+ startGameLoad,
+ setGameDetails,
+ finishGameLoad,
+} = gameSlice.actions;
 export default gameSlice.reducer;

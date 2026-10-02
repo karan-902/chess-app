@@ -2,7 +2,8 @@ import { useEffect } from "react";
 import type { GameMode } from "@gopvp/chess/src/types/component";
 import {
  COMPUTER_FALLBACK_MOVE_MS,
- COMPUTER_MOVE_DELAY_MS,
+ COMPUTER_MOVE_MIN_DELAY_MS,
+ COMPUTER_MOVE_MAX_DELAY_MS,
 } from "@gopvp/chess/src/constants/limit";
 
 interface IProps {
@@ -11,6 +12,7 @@ interface IProps {
  computerSide: "w" | "b";
  gameEnded: boolean;
  bestMove: string | null;
+ randomMoves: boolean;
  makeMove: (
   from: string,
   to: string,
@@ -24,19 +26,35 @@ export function useComputerOpponent({
  computerSide,
  gameEnded,
  bestMove,
+ randomMoves,
  makeMove,
  getRandomMove,
 }: IProps) {
  useEffect(() => {
-  if (mode !== "pvc" || turn !== computerSide || !bestMove || gameEnded) {
-   return;
-  }
+  if (mode !== "pvc" || turn !== computerSide || gameEnded) return;
+  if (!randomMoves && !bestMove) return;
   const t = setTimeout(
-   () => makeMove(bestMove.slice(0, 2), bestMove.slice(2, 4)),
-   COMPUTER_MOVE_DELAY_MS,
+   () => {
+    const move =
+     bestMove && !randomMoves
+      ? { from: bestMove.slice(0, 2), to: bestMove.slice(2, 4) }
+      : getRandomMove();
+    if (move) makeMove(move.from, move.to);
+   },
+   COMPUTER_MOVE_MIN_DELAY_MS +
+    Math.random() * (COMPUTER_MOVE_MAX_DELAY_MS - COMPUTER_MOVE_MIN_DELAY_MS),
   );
   return () => clearTimeout(t);
- }, [bestMove, turn, computerSide, mode, gameEnded, makeMove]);
+ }, [
+  bestMove,
+  randomMoves,
+  turn,
+  computerSide,
+  mode,
+  gameEnded,
+  makeMove,
+  getRandomMove,
+ ]);
 
  useEffect(() => {
   if (mode !== "pvc" || turn !== computerSide || gameEnded) return;

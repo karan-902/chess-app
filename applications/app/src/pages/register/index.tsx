@@ -1,7 +1,8 @@
 import AuthLayout from "@gopvp/app/src/container/AuthLayout";
 import RegisterForm from "@gopvp/app/src/pages/register/RegisterForm";
 import {
- createAccountText,
+ joinGopvpText,
+ skillBasedGamesText,
  haveAccountPromptText,
  loginText,
 } from "@gopvp/app/src/constants/message";
@@ -11,7 +12,8 @@ import { ROUTES } from "@gopvp/app/src/constants/route";
 export default function Register() {
  return (
   <AuthLayout
-   title={createAccountText}
+   title={joinGopvpText}
+   subtitle={skillBasedGamesText}
    footer={
     <>
      {haveAccountPromptText}

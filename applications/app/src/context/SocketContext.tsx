@@ -16,8 +16,13 @@ import {
 import { useReduxSelector, useReduxDispatch } from "@gopvp/app/src/redux/hooks";
 import { store } from "@gopvp/app/src/redux/store";
 import { setActiveGame } from "@gopvp/app/src/redux/socketModals/slice";
-import { generateToken } from "@gopvp/common/src/util/api";
-import { isGamePlayPath } from "@gopvp/app/src/utils";
+import {
+ generateToken,
+ getNewestAccessToken,
+ LOGOUT_ERROR_TYPES,
+} from "@gopvp/common/src/util/api";
+import { showToastMessage } from "@gopvp/common/src/util/injectStore";
+import { getGameFromPath } from "@gopvp/app/src/utils";
 import sessionService from "@gopvp/common/src/util/sessionService";
 import { router } from "@gopvp/app/src/routes/router";
 import { navigateTo } from "@gopvp/common/src/util/navigationService";
@@ -44,6 +49,7 @@ export function SocketProvider({ children }: PropsWithChildren) {
  const dispatch = useReduxDispatch();
  const [socket, setSocket] = useState<Socket | null>(null);
  const reconnectingRef = useRef(false);
+ const invalidTokenRetriedRef = useRef(false);
 
  useEffect(() => {
   if (!isLoggedIn || !session?.access_token || !isGameReady) {
@@ -58,20 +64,22 @@ export function SocketProvider({ children }: PropsWithChildren) {
 
   const onConnect = () => {
    reconnectingRef.current = false;
+   invalidTokenRetriedRef.current = false;
   };
 
-  const onConnectError = async () => {
-   if (sock.active) return;
+  const onSessionTerminated = async () => {
+   disconnectSocket();
+   await sessionService.deleteSession();
+   navigateTo(ROUTES.LOGIN, { replace: true });
+  };
 
+  const reconnectWithToken = async (getToken: () => Promise<string>) => {
    if (reconnectingRef.current) return;
    reconnectingRef.current = true;
-
    sock.io.reconnection(false);
 
    try {
-    const newToken = await generateToken();
-    sock.auth = { token: newToken };
-
+    sock.auth = { token: await getToken() };
     sock.io.reconnection(true);
     sock.connect();
    } catch (error) {
@@ -81,16 +89,32 @@ export function SocketProvider({ children }: PropsWithChildren) {
    }
   };
 
-  const onSessionTerminated = async () => {
-   disconnectSocket();
-   await sessionService.deleteSession();
-   navigateTo(ROUTES.LOGIN, { replace: true });
+  const onConnectError = (err: Error & { data?: { type?: string } }) => {
+   if (sock.active) return;
+   const errorType = err.data?.type ?? "";
+
+   if (errorType === "token_expired") {
+    reconnectWithToken(generateToken);
+    return;
+   }
+
+   if (errorType === "invalid_token" && !invalidTokenRetriedRef.current) {
+    invalidTokenRetriedRef.current = true;
+    reconnectWithToken(getNewestAccessToken);
+    return;
+   }
+
+   if (errorType === "invalid_token" || LOGOUT_ERROR_TYPES.has(errorType)) {
+    if (errorType.startsWith("account_"))
+     showToastMessage({ toastMessage: err.message, toastVariant: "error" });
+    onSessionTerminated();
+   }
   };
 
   const onActiveGame = async (data: IActiveGameEvent) => {
    const { pathname, search } = router.state.location;
-   const viewingMatchId = new URLSearchParams(search).get("match");
-   if (isGamePlayPath(pathname) && viewingMatchId === data.match_id) return;
+   const viewingMatchId = new URLSearchParams(search).get("match_id");
+   if (getGameFromPath(pathname) && viewingMatchId === data.match_id) return;
 
    if (store.getState().socketModals.deviceHandoff !== null) return;
    const gameState = await requestGameState<IGameStateBaseResponse>(

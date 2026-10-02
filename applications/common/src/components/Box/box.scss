@@ -10,15 +10,22 @@
   gap: 1.75rem;
   perspective: 800px;
  }
-
+ &.public-page-wrapper {
+  display: flex;
+  align-self: center;
+  flex-direction: column;
+  gap: 20px;
+ }
  &.public-brand {
   display: flex;
+  justify-content: center;
   align-items: center;
   gap: 0.5rem;
  }
 
  &.public-heading {
   display: flex;
+  align-items: center;
   flex-direction: column;
   gap: 0.35rem;
  }
@@ -212,7 +219,7 @@
   flex-direction: column;
   min-height: 100%;
   gap: 1rem;
-  padding: 1.1rem 0.7rem;
+  padding: 1.1rem;
  }
 
  &.segment {
@@ -258,8 +265,19 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 0.85rem;
-  padding: 2.25rem 1rem;
+  gap: $space-8;
+  padding: 3rem 1rem;
+ }
+
+ &.empty-state-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.5rem;
+  height: 4.5rem;
+  margin-bottom: $space-8;
+  border-radius: 50%;
+  background: alpha($appText, 0.06);
  }
 
  &.matches-stats-head {
@@ -272,14 +290,15 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
-  padding: 0.75rem 0.85rem;
+  padding: $space-12 $space-16;
+  border-bottom: 1px solid $appLine;
 
   &:last-child {
    border-bottom: none;
   }
 
-  .player-stats & {
-   padding: $space-16;
+  .rules-card & {
+   padding: $space-8 0;
   }
  }
 
@@ -758,6 +777,7 @@
 
  &.deposit-speed-wrapper {
   display: flex;
+  align-items: center;
   flex-direction: column;
  }
  &.deposit-speed-badge {
@@ -811,12 +831,11 @@
   align-items: center;
   justify-content: space-between;
   padding: $space-12;
-  border: 1px solid transparent;
-  border-radius: 0.85rem;
+  background: $appSurface;
+  border: 1px solid $appCardBorder;
+  border-radius: 0.6rem;
   flex-shrink: 0;
-  transition:
-   border-color 0.25s ease,
-   background-color 0.25s ease;
+  transition: border-color 0.25s ease;
 
   &.opp {
    margin-bottom: $font12;
@@ -828,12 +847,10 @@
 
   &.me {
    margin-top: $font12;
-   padding: $space-8;
   }
 
   &.active {
-   background: alpha($gold, 0.06);
-   border: 1px solid $gold;
+   border-color: $gold;
   }
  }
 
@@ -890,10 +907,11 @@
   gap: 0.55rem;
  }
 
- &.gr-captured {
+ &.gr-sub-line {
   display: flex;
   align-items: center;
   gap: 0.3rem;
+  max-width: 100%;
   height: 1.8rem;
   margin-top: 0.4rem;
   overflow: hidden;
@@ -1041,7 +1059,8 @@
   width: 100%;
   padding: $space-16;
   border-radius: 14px;
-  background: $appSecondary;
+  background: $appSurface;
+  border: 1px solid $appCardBorder;
   text-align: center;
 
   &.room-player {

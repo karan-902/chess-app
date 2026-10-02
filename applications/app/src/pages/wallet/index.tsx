@@ -16,8 +16,7 @@ import {
  CallReceivedIcon,
 } from "@gopvp/common/src/components/images";
 import { formatAmount, formatTime } from "@gopvp/common/src/util/format";
-import { TRANSACTION_TYPE_DESCRIPTIONS } from "@gopvp/app/src/constants/label";
-import { DEBIT_TRANSACTION_TYPES } from "@gopvp/app/src/constants/mapper";
+import { TRANSACTION_CODE_DESCRIPTIONS } from "@gopvp/app/src/constants/label";
 import type { ITransactionResponse } from "@gopvp/common/src/types/response";
 import {
  totalBalanceText,
@@ -41,7 +40,7 @@ function dayLabel(ms: number): string {
 
  if (date.isSame(today, "day")) return todayText;
  if (date.isSame(today.subtract(1, "day"), "day")) return yesterdayText;
- return date.format("D MMM YYYY").toUpperCase();
+ return date.format("D MMM YYYY");
 }
 
 type TWalletTimelineEntry =
@@ -65,7 +64,7 @@ function buildTimelineEntries(
 }
 
 function txRow(tx: ITransactionResponse, groupEdgeClass: string) {
- const isDebit = DEBIT_TRANSACTION_TYPES.has(tx.transaction_type);
+ const isDebit = tx.transaction_type === "DEBIT";
  const TxIcon = isDebit ? CallMadeIcon : CallReceivedIcon;
  return (
   <Box
@@ -78,7 +77,7 @@ function txRow(tx: ITransactionResponse, groupEdgeClass: string) {
      </Box>
      <Box customClass="wallet-tx-text">
       <Text customClass="row-title">
-       {TRANSACTION_TYPE_DESCRIPTIONS[tx.transaction_type]}
+       {TRANSACTION_CODE_DESCRIPTIONS[tx.transaction_code]}
       </Text>
       <Text customClass="meta-text">{formatTime(tx.created)}</Text>
      </Box>
@@ -165,7 +164,7 @@ export default function Wallet() {
      <>
       <Button
        type="button"
-       variant="outlined"
+       variant="contained"
        customClass="wallet-deposit-btn"
        onClick={openDeposit}
       >
