@@ -6,9 +6,9 @@ import SheetActions from "@gopvp/common/src/components/SheetActions/SheetActions
 import { formatAmount } from "@gopvp/common/src/util/format";
 import type { IResignSheetProps } from "@gopvp/chess/src/types/component";
 import {
- resignQuestionText,
- loseTheGameText,
- loseAndForfeitText,
+ resignThisGameText,
+ computerWinsPracticeText,
+ opponentWinsEntryLostText,
  resignText,
 } from "@gopvp/chess/src/constants/message";
 import { keepPlayingText } from "@gopvp/common/src/constants/message";
@@ -23,9 +23,11 @@ export default function ResignSheet({
  return (
   <CustomDrawer anchor="bottom" open={open} onClose={onKeepPlaying}>
    <Box customClass="matchmaking-searching">
-    <Text customClass="dialog-title">{resignQuestionText}</Text>
+    <Text customClass="dialog-title">{resignThisGameText}</Text>
     <Text customClass="empty-state-desc description">
-     {isPvc ? loseTheGameText : loseAndForfeitText(formatAmount(betAmount))}
+     {isPvc
+      ? computerWinsPracticeText
+      : opponentWinsEntryLostText(formatAmount(betAmount))}
     </Text>
     <SheetActions cancelLabel={resignText} onCancel={onResign}>
      <Button

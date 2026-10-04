@@ -7,7 +7,7 @@ import {
 } from "@gopvp/common/src/constants/message";
 
 export const MATCH_RESULT_OUTCOMES: Record<MatchResult, MatchOutcome> = {
- WIN: "win",
+ WON: "win",
  BET: "loss",
  DRAW: "draw",
  MATCH_CANCELLED: "match_cancelled",

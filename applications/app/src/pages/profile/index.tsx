@@ -1,12 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import classNames from "classnames";
 import { CheckCircleIcon, EditIcon } from "@gopvp/common/src/components/images";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Card from "@gopvp/common/src/components/Card/Card";
 import Button from "@gopvp/common/src/components/Button/Button";
 import CustomSwitch from "@gopvp/common/src/components/Switch/Switch";
+import CustomChip from "@gopvp/common/src/components/Chip/Chip";
 import CustomAvatar from "@gopvp/common/src/components/Avatar/Avatar";
 import ProfileSkeleton from "@gopvp/app/src/components/common/ProfileSkeleton";
 import UsernameField from "@gopvp/app/src/components/common/UsernameField";
@@ -33,8 +35,9 @@ import {
  accountText,
  emailText,
  countryText,
+ statusText,
  verifiedText,
- noText,
+ notVerifiedText,
 } from "@gopvp/app/src/constants/message";
 import CustomModal from "@gopvp/common/src/components/Modal/Modal";
 import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
@@ -137,13 +140,24 @@ export default function Profile() {
  const accountRows = session
   ? [
      { label: emailText, value: session.email },
-     { label: countryText, value: session.country },
      {
-      label: verifiedText,
-      value: session.is_verified ? (
-       <CheckCircleIcon color="success" fontSize="small" />
-      ) : (
-       noText
+      label: countryText,
+      value:
+       new Intl.DisplayNames(["en"], { type: "region" }).of(session.country) ??
+       session.country,
+     },
+     {
+      label: statusText,
+      value: (
+       <CustomChip
+        size="small"
+        icon={session.is_verified ? <CheckCircleIcon /> : undefined}
+        label={session.is_verified ? verifiedText : notVerifiedText}
+        customClass={classNames(
+         "verified-chip",
+         !session.is_verified && "pending",
+        )}
+       />
       ),
      },
     ].filter((row) => row.value)
@@ -193,7 +207,9 @@ export default function Profile() {
         <Text customClass="stat-title" component="span">
          {label}
         </Text>
-        <Text customClass="stat-val">{value}</Text>
+        <Text component="span" customClass="stat-val">
+         {value}
+        </Text>
        </Box>
       ))}
      </Card>

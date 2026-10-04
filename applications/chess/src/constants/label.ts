@@ -2,29 +2,17 @@ import type { GameCategory } from "@gopvp/chess/src/types/index";
 import type { Difficulty } from "@gopvp/chess/src/types/component";
 import { PROMOTION_PIECES } from "@gopvp/chess/src/constants/board";
 import {
- victoryText,
- drawUpperText,
- defeatText,
- cancelledUpperText,
  queenText,
  rookText,
  bishopText,
  knightText,
 } from "@gopvp/chess/src/constants/message";
-import type { MatchOutcome } from "@gopvp/common/src/types/index";
 
 export const CATEGORY_LABELS: Record<GameCategory, string> = {
  BULLET: "BULLET",
  BLITZ: "BLITZ",
  RAPID: "RAPID",
  CLASSICAL: "CLASSICAL",
-};
-
-export const RESULT_HEADERS: Record<MatchOutcome, string> = {
- win: victoryText,
- draw: drawUpperText,
- loss: defeatText,
- match_cancelled: cancelledUpperText,
 };
 
 export const DIFFICULTY_LABELS: Record<Difficulty, string> = {

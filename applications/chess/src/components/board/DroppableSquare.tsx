@@ -8,7 +8,6 @@ export default function DroppableSquare({
  className,
  style,
  onClick,
- onContextMenu,
  premoveMode,
  children,
 }: IDroppableSquareProps) {
@@ -22,7 +21,6 @@ export default function DroppableSquare({
    )}
    style={style}
    onClick={onClick}
-   onContextMenu={onContextMenu}
   >
    {children}
   </Box>

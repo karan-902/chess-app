@@ -1,11 +1,12 @@
+import { useState } from "react";
 import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
+import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
 import Button from "@gopvp/common/src/components/Button/Button";
 import CustomDrawer from "@gopvp/common/src/components/Drawer/Drawer";
 import { formatAmount } from "@gopvp/common/src/util/format";
 import { GAME_LOGO_PATH } from "@gopvp/chess/src/constants/asset";
-import { RESULT_HEADERS } from "@gopvp/chess/src/constants/label";
 import { MATCH_OUTCOME_SUBTITLES } from "@gopvp/common/src/constants/mapper";
 import type { IGameOverOverlayProps } from "@gopvp/chess/src/types/component";
 import { backText, chessText } from "@gopvp/common/src/constants/message";
@@ -17,6 +18,7 @@ export default function GameOverOverlay({
  opponentName,
  onNewGame,
 }: IGameOverOverlayProps) {
+ const [isLogoLoaded, setIsLogoLoaded] = useState(false);
  const tone = outcome === "win" || outcome === "loss" ? outcome : "neutral";
  const scoreChange = Math.round(gameEnded.score_change);
  const tiles = [
@@ -35,12 +37,24 @@ export default function GameOverOverlay({
    customClass={classNames("result-sheet game-over-sheet", tone)}
   >
    <Box customClass="result-hero">
-    <img src={GAME_LOGO_PATH} alt="" />
-    <Text customClass="result-title">{chessText}</Text>
+    {!isLogoLoaded && (
+     <Skeleton variant="rounded" customClass="result-logo-skeleton" />
+    )}
+    <img
+     src={GAME_LOGO_PATH}
+     alt=""
+     hidden={!isLogoLoaded}
+     onLoad={() => setIsLogoLoaded(true)}
+    />
+    <Text customClass="result-title">
+     {isLogoLoaded ? chessText : <Skeleton customClass="text" width={140} />}
+    </Text>
     <Text customClass="result-subtitle">
-     {isPvc
-      ? RESULT_HEADERS[outcome]
-      : MATCH_OUTCOME_SUBTITLES[outcome](opponentName)}
+     {isLogoLoaded ? (
+      MATCH_OUTCOME_SUBTITLES[outcome](opponentName)
+     ) : (
+      <Skeleton customClass="text" width={140} />
+     )}
     </Text>
    </Box>
 
@@ -54,7 +68,7 @@ export default function GameOverOverlay({
          neg: change < 0,
         })}
        >
-        {value}
+        {isLogoLoaded ? value : <Skeleton customClass="text" width={50} />}
        </Text>
       </Box>
      ))}

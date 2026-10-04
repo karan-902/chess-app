@@ -26,7 +26,6 @@ import {
  enterAmountText,
  generateQrCodeText,
  amountRequiredText,
- minDepositAmountText,
  maxDepositAmountText,
  btcOnlyWarningText,
  scanToDepositText,
@@ -36,11 +35,8 @@ import {
  depositsNotWithdrawableText,
  speedText,
 } from "@gopvp/app/src/constants/message";
-import {
- MAX_AMOUNT_DIGITS,
- MIN_TRANSACTION_USD,
- MAX_DEPOSIT_USD,
-} from "@gopvp/app/src/constants/limit";
+import { MAX_DEPOSIT_USD } from "@gopvp/app/src/constants/limit";
+import { sanitizeAmountInput } from "@gopvp/app/src/utils";
 import { backText } from "@gopvp/common/src/constants/message";
 import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
 import {
@@ -108,19 +104,11 @@ export default function DepositSheet() {
  }, [stage, socket]);
 
  const amountUsd = Number(amount);
- const isAmountInvalid =
-  !amount ||
-  amount.length > MAX_AMOUNT_DIGITS ||
-  Number.isNaN(amountUsd) ||
-  amountUsd < MIN_TRANSACTION_USD;
+ const isAmountInvalid = !amount || Number.isNaN(amountUsd);
 
  const handleGenerate = async () => {
   if (!amount) {
    setAmountError(amountRequiredText);
-   return;
-  }
-  if (amountUsd < MIN_TRANSACTION_USD) {
-   setAmountError(minDepositAmountText(MIN_TRANSACTION_USD));
    return;
   }
   if (amountUsd > MAX_DEPOSIT_USD) {
@@ -155,25 +143,18 @@ export default function DepositSheet() {
       <Input
        id="deposit-amount"
        type="text"
-       inputMode="numeric"
+       inputMode="decimal"
        label={enterAmountText}
        labelClassName="wallet-label"
-       slotProps={{
-        input: { maxLength: MAX_AMOUNT_DIGITS },
-       }}
        fullWidth
        disabled={submitting}
        placeholder="0.00"
        customClass="amount-input-hero"
        value={amount}
-       onChange={(e) =>
-        setAmount(
-         e.target.value
-          .replace(/\D/g, "")
-          .replace(/^0+/, "")
-          .slice(0, MAX_AMOUNT_DIGITS),
-        )
-       }
+       onChange={(e) => {
+        const nextAmount = sanitizeAmountInput(e.target.value, MAX_DEPOSIT_USD);
+        if (nextAmount !== null) setAmount(nextAmount);
+       }}
        isError={!!amountError}
        helperText={amountError}
       />

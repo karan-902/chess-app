@@ -197,13 +197,18 @@
   color: $appText;
  }
 
- &.shatranj-logo {
+ &.chess-logo {
   display: inline-flex;
   align-items: center;
   color: $gold !important;
 
   &.muted {
    color: $appTextMuted !important;
+
+   img {
+    filter: grayscale(1);
+    opacity: 0.5;
+   }
   }
  }
  &.otp-subtitle {
@@ -373,8 +378,10 @@
  }
 
  &.empty-state-desc {
+  font-size: $font14;
   line-height: 1.55;
   max-width: 24rem;
+  white-space: normal;
  }
  &.matches-stats-title {
   font-family: $fontOutfitSemiBold;
@@ -384,8 +391,8 @@
  }
 
  &.stat-val {
-  font-family: $fontOutfitExtraBold;
-  font-size: $font14 !important;
+  font-family: $fontOutfitMedium;
+  font-size: $font16 !important;
   color: $appText;
   min-width: 0;
   overflow: hidden;
@@ -395,21 +402,12 @@
   svg {
    vertical-align: top;
   }
-
-  .player-stats & {
-   font-size: $font18;
-  }
  }
  &.stat-title {
   font-family: $fontOutfitMedium !important;
   font-size: $font16;
   color: $appTextMuted;
   flex-shrink: 0;
-
-  .player-stats & {
-   font-size: $font16;
-   color: $appText;
-  }
  }
 
  &.lb-rank {
@@ -548,38 +546,31 @@
 
  &.wallet-tx-group-label {
   display: block;
-  font-family: $fontOutfitExtraBold;
-  font-size: $font12;
-  color: $appTextMuted;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin: 0;
-  padding: $space-12 0 $space-4;
+  font-family: $fontOutfitSemiBold;
+  font-size: $font14;
+  color: $appText;
+  margin: 0 -1.1rem;
+  padding: $space-12 1.1rem;
+  background: alpha($appText, 0.06);
  }
 
  &.rules-text {
   display: block;
-  font-size: $font15;
+  font-size: $font14;
   line-height: 1.6;
-  color: $appText;
-  margin-bottom: 0.6rem;
- }
-
- &.rules-list {
-  display: block;
-  margin: 0 0 0.6rem;
-  padding-left: 1.1rem;
-
-  .rules-text {
-   margin-bottom: 0.25rem;
-  }
+  color: $appTextMuted;
+  white-space: normal;
+  overflow: visible;
  }
 
  &.rules-about {
   display: block;
-  margin-top: 1.25rem;
-  border-top: 1px solid $appLine;
-  padding-top: 0.9rem;
+  margin-top: $space-20;
+  text-align: center;
+  font-size: $font12;
+  line-height: 1.6;
+  white-space: normal;
+  color: $appTextMuted;
  }
 
  &.modal-heading {
@@ -629,11 +620,6 @@
   font-weight: 400;
   letter-spacing: 0.01em;
   color: $appText;
-  transition: color 0.25s ease;
-
-  .gr-row.active & {
-   color: $gold;
-  }
  }
 
  &.gr-score-label {
@@ -652,20 +638,24 @@
   margin-left: 0.15rem;
  }
 
- &.gr-grace {
+ &.gr-grace,
+ &.gr-first-move {
   flex-shrink: 0;
   white-space: nowrap;
+  padding: 0 $space-8;
+  border-radius: 999px;
+  font-family: $fontOutfitSemiBold;
+  font-size: $font12;
+  line-height: 1.5rem;
+ }
+
+ &.gr-grace {
+  background: alpha($paleRed, 0.12);
   color: $paleRed;
  }
 
  &.gr-first-move {
-  flex-shrink: 0;
-  white-space: nowrap;
-  padding: 0.1rem $space-8;
-  border-radius: 4px;
   background: alpha($warning, 0.12);
-  font-family: $fontOutfitSemiBold;
-  font-size: $font12;
   font-variant-numeric: tabular-nums;
   color: $warning;
 
@@ -678,6 +668,11 @@
  &.gr-clock {
   display: block;
   flex-shrink: 0;
+  min-width: 5.5rem;
+  padding: $space-4 $space-12;
+  border-radius: 0.5rem;
+  background: alpha($appText, 0.06);
+  text-align: center;
   font-family: $fontOutfitExtraBold;
   font-size: $font24;
   font-weight: 300;
@@ -685,11 +680,22 @@
   letter-spacing: -0.01em;
   transition:
    color 0.25s ease,
+   background-color 0.25s ease,
    font-weight 0.25s ease;
 
   .gr-row.active & {
-   color: $gold;
+   background: $gold;
+   color: $primaryContrast;
    font-weight: 600;
+  }
+
+  &.low {
+   color: $paleRed;
+
+   .gr-row.active & {
+    background: $paleRed;
+    color: $primaryContrast;
+   }
   }
  }
 

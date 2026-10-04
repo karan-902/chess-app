@@ -2,7 +2,7 @@
 
 .common-drawer {
  .MuiDrawer-paper {
-  background: $appBg;
+  background: $appSheet;
   padding: 0.6rem;
   display: flex;
   flex-direction: column;
@@ -33,12 +33,7 @@
   backdrop-filter: blur(6px);
  }
 
- &.bet-sheet .MuiDrawer-paper {
-  background: $appSurface;
- }
-
- @each $tone,
-  $color in ("win": $greenishTeal, "loss": $paleRed, "gold": $gold)
+ @each $tone, $color in ("win": $greenishTeal, "loss": $paleRed, "gold": $gold)
  {
   &.result-sheet.#{$tone} .MuiDrawer-paper {
    background:
@@ -47,7 +42,7 @@
      #{alpha($color, 0.25)},
      transparent 70%
     ),
-    $appBg;
+    $appSheet;
   }
  }
 

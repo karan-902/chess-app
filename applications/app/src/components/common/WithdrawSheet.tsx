@@ -20,17 +20,17 @@ import {
  destinationText,
  btcAddressOrInvoiceText,
  requestWithdrawalText,
- enterValidAmountText,
- minWithdrawalAmountText,
+ maxWithdrawalAmountText,
  insufficientWithdrawableText,
  enterDestinationText,
  withdrawalCompletedText,
  enterAmountText,
 } from "@gopvp/app/src/constants/message";
 import {
- MIN_TRANSACTION_USD,
- MAX_AMOUNT_DIGITS,
+ MAX_WITHDRAW_USD,
+ MAX_AMOUNT_INPUT_USD,
 } from "@gopvp/app/src/constants/limit";
+import { sanitizeAmountInput } from "@gopvp/app/src/utils";
 
 type Stage = "amount" | "success";
 
@@ -67,29 +67,20 @@ export default function WithdrawSheet() {
  const amountUsd = parseFloat(amount) || 0;
  const exceedsBalance =
   Math.round(amountUsd * 100) > Math.round(withdrawableUsd * 100);
- const isZeroAmount = amount !== "" && amountUsd <= 0;
- const isBelowMin =
-  amount !== "" && amountUsd > 0 && amountUsd < MIN_TRANSACTION_USD;
  const amountError = submitting
   ? undefined
   : exceedsBalance
     ? insufficientWithdrawableText
-    : isZeroAmount
-      ? enterValidAmountText
-      : isBelowMin
-        ? minWithdrawalAmountText(MIN_TRANSACTION_USD)
-        : undefined;
+    : amountUsd > MAX_WITHDRAW_USD
+      ? maxWithdrawalAmountText(MAX_WITHDRAW_USD)
+      : undefined;
  const withdrawDestination = (speedLightningAddress || destination).trim();
  const canSubmit =
   hasWithdrawable && amount !== "" && !amountError && withdrawDestination !== "";
 
  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  let val = e.target.value.replace(/[^0-9.]/g, "");
-  if (val.startsWith(".")) val = val.slice(1);
-  val = val.replace(/^0+(?=\d)/, "");
-  const parts = val.split(".");
-  if (parts.length > 2) val = parts[0] + "." + parts.slice(1).join("");
-  setAmount(val);
+  const nextAmount = sanitizeAmountInput(e.target.value, MAX_AMOUNT_INPUT_USD);
+  if (nextAmount !== null) setAmount(nextAmount);
  };
 
  const handleWithdraw = async () => {
@@ -129,9 +120,6 @@ export default function WithdrawSheet() {
        inputMode="decimal"
        label={enterAmountText}
        labelClassName="wallet-label"
-       slotProps={{
-        input: { maxLength: MAX_AMOUNT_DIGITS },
-       }}
        fullWidth
        placeholder="0.00"
        customClass="amount-input-hero"

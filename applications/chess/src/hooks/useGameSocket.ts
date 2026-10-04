@@ -203,7 +203,7 @@ export function useGameSocket({
 
   socket.on(SOCKET_EVENTS.CONNECT, onReconnect);
   socket.on(GAME_EVENTS.START, onStart);
-  socket.on(GAME_EVENTS.END, onGameEnd);
+  socket.on(SOCKET_EVENTS.GAME_END, onGameEnd);
   socket.on(GAME_EVENTS.MOVE, onMove);
   socket.on(GAME_EVENTS.DRAW_OFFER, setDrawOffer);
   socket.on(GAME_EVENTS.DRAW_DECLINE, onDrawDecline);
@@ -217,7 +217,7 @@ export function useGameSocket({
    clearTimeout(endFallbackTimer);
    socket.off(SOCKET_EVENTS.CONNECT, onReconnect);
    socket.off(GAME_EVENTS.START, onStart);
-   socket.off(GAME_EVENTS.END, onGameEnd);
+   socket.off(SOCKET_EVENTS.GAME_END, onGameEnd);
    socket.off(GAME_EVENTS.MOVE, onMove);
    socket.off(GAME_EVENTS.DRAW_OFFER, setDrawOffer);
    socket.off(GAME_EVENTS.DRAW_DECLINE, onDrawDecline);

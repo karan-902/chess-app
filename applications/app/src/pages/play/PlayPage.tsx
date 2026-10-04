@@ -25,15 +25,15 @@ export default function PlayPage() {
  const [searchParams] = useSearchParams();
  const navigate = useNavigate();
  const {
-  routes,
+  gamePath,
   gameModule: { Preview, PoolLabel, GameRoom, preloadGameRoom, Practice },
  } = useGame();
  const { pools, loading: poolsLoading } = usePools();
  const { usdValue, loading: balanceLoading } = useWalletBalance();
  const { status, queuedPool, secondsLeft, joinQueue, leaveQueue, resetStatus } =
   useMatchmaking();
- const gameId = searchParams.get("game_id");
- const matchId = searchParams.get("match");
+ const gameId = searchParams.get("practice_id");
+ const matchId = searchParams.get("match_id");
  const [confirmOpen, setConfirmOpen] = useState(false);
  const [confirmPool, setConfirmPool] = useState<IPoolResponse | null>(null);
  const [practiceOpen, setPracticeOpen] = useState(false);
@@ -52,7 +52,7 @@ export default function PlayPage() {
   resetStatus: resetRoomStatus,
  } = useRoomMatch(() => {
   setRoomOpen(false);
-  navigate(routes.PLAY, { replace: true });
+  navigate(gamePath, { replace: true });
  });
 
  useEffect(() => {

@@ -27,7 +27,7 @@ export default function ChessPractice({
     username,
    }),
   );
-  navigate(`${playPath}?game_id=${gameId}`, { replace: true });
+  navigate(`${playPath}?practice_id=${gameId}`, { replace: true });
  };
 
  return (

@@ -65,7 +65,8 @@ export const Input = forwardRef<HTMLInputElement, IInputProps>(
        <InputAdornment position="end">
         <CustomIconButton
          type="button"
-         className="input-password-toggle"
+         disableRipple
+         customClass="input-password-toggle"
          onClick={() => setShowPassword((p) => !p)}
          tabIndex={-1}
          icon={showPassword ? "eyeOff" : "eye"}
