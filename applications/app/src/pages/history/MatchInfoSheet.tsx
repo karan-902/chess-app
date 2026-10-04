@@ -131,7 +131,7 @@ export default function MatchInfoSheet({
    tileIcon="person"
   >
    <Box customClass="result-meta">
-    {info ? (
+    {info && !isWorldwide ? (
      <Input
       id="match-id"
       label={matchIdText}
