@@ -6,6 +6,7 @@ import type { IPromotionOverlayProps } from "@gopvp/chess/src/types/component";
 import { promotePawnText } from "@gopvp/chess/src/constants/message";
 import { PROMOTION_PIECES } from "@gopvp/chess/src/constants/board";
 import { PROMOTION_LABELS } from "@gopvp/chess/src/constants/label";
+import { LIGHT_SQUARE_COLOR } from "@gopvp/chess/src/constants/color";
 
 export default function PromotionOverlay({
  playerSide,
@@ -22,6 +23,7 @@ export default function PromotionOverlay({
        key={piece}
        type="button"
        customClass="gr-promotion-btn"
+       style={{ backgroundColor: LIGHT_SQUARE_COLOR }}
        onClick={() => onSelect(piece)}
        aria-label={PROMOTION_LABELS[piece]}
       >
