@@ -362,6 +362,7 @@
 
  &.public-footer {
   margin-top: auto;
+  flex-shrink: 0;
   text-align: center;
   font-family: $fontOutfitRegular;
 
@@ -585,6 +586,8 @@
  &.modal-info-text {
   flex: 1;
   line-height: 1.4;
+  white-space: normal;
+  overflow: visible;
  }
 
  &.deposit-scan-hint {
