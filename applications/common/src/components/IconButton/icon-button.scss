@@ -21,7 +21,7 @@
   height: 1.875rem;
   background: rgba(128, 128, 128, 0.18);
   color: $appText;
-
+  display: none !important;
   position: absolute;
   left: 0;
   display: flex;
