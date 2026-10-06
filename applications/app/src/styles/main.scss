@@ -54,7 +54,7 @@ body {
  background: $appBg;
 }
 
-.app-shell {
+.app-root {
  display: flex;
  flex-direction: column;
  width: 100%;
@@ -73,7 +73,7 @@ body {
  }
 }
 
-:root[data-theme="light"] .app-shell {
+:root[data-theme="light"] .app-root {
  background:
   radial-gradient(
    48% 32% at 0% 0%,
@@ -89,7 +89,7 @@ body {
  background-attachment: fixed;
 }
 
-.app-body {
+.app-wrapper {
  display: flex;
  flex: 1;
  overflow: hidden;
