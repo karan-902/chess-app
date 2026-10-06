@@ -16,6 +16,8 @@ export const LEADERBOARD_SCOPES: LeaderboardScope[] = [
 
 export const LEADERBOARD_SORTS: LeaderboardSort[] = ["earnings", "wins"];
 
+export const LEADERBOARD_PODIUM_PLACES = ["first", "second", "third"];
+
 export const DEFAULT_LEADERBOARD_SCOPE: LeaderboardScope = "all";
 export const DEFAULT_LEADERBOARD_SORT: LeaderboardSort = "earnings";
 

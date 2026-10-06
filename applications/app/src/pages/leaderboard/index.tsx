@@ -18,6 +18,7 @@ import { formatAmount, shortenUsername } from "@gopvp/common/src/util/format";
 import {
  LEADERBOARD_SCOPES,
  LEADERBOARD_SORTS,
+ LEADERBOARD_PODIUM_PLACES,
 } from "@gopvp/app/src/constants/option";
 import {
  LEADERBOARD_SCOPE_LABELS,
@@ -31,7 +32,11 @@ import {
  dashText,
 } from "@gopvp/app/src/constants/message";
 import { youText } from "@gopvp/common/src/constants/message";
-import { LEADERBOARD_SKELETON_ROWS } from "@gopvp/app/src/constants/limit";
+import {
+ LEADERBOARD_SKELETON_ROWS,
+ LEADERBOARD_PODIUM_SIZE,
+} from "@gopvp/app/src/constants/limit";
+import { Crown, Medal } from "@gopvp/common/src/components/images";
 import { renderSkeletons } from "@gopvp/app/src/utils/skeleton";
 
 export default function Leaderboard() {
@@ -53,8 +58,14 @@ export default function Leaderboard() {
  const isMe = (id: string) => id === currentUserId;
  const meInList = players.some((p) => isMe(p.id));
  const youLabel = (username: string) => `${username} (${youText})`;
+ const playerName = (player: ILeaderboardRowResponse) =>
+  isMe(player.id)
+   ? youLabel(shortenUsername(player.username))
+   : shortenUsername(player.username);
  const playerValue = (player: ILeaderboardRowResponse) =>
   "wins" in player ? player.wins : formatAmount(player.win_amount);
+ const podiumSize =
+  players.length >= LEADERBOARD_PODIUM_SIZE ? LEADERBOARD_PODIUM_SIZE : 0;
 
  return (
   <Box customClass="leaderboard-page">
@@ -90,15 +101,50 @@ export default function Leaderboard() {
        <Text customClass="lb-earnings amount-value">{dashText}</Text>
       </Card>
      )}
+     {podiumSize > 0 && (
+      <Box customClass="lb-podium">
+       {players.slice(0, podiumSize).map((player, index) => {
+        const isFirst = index === 0;
+        const PodiumIcon = isFirst ? Crown : Medal;
+        return (
+         <Card
+          key={player.id}
+          customClass={classNames(
+           "lb-podium-card",
+           "clickable",
+           LEADERBOARD_PODIUM_PLACES[index],
+           isMe(player.id) && "me",
+          )}
+          onClick={() => setSelectedPlayerId(player.id)}
+         >
+          <Box
+           customClass={classNames(
+            "lb-podium-badge",
+            isFirst ? "gold" : "silver",
+           )}
+          >
+           <PodiumIcon />
+          </Box>
+          <Text customClass="lb-podium-name row-title">
+           {playerName(player)}
+          </Text>
+          <Text customClass="lb-podium-value lb-earnings amount-value">
+           {playerValue(player)}
+          </Text>
+         </Card>
+        );
+       })}
+      </Box>
+     )}
      <VirtualList<ILeaderboardRowResponse>
-      data={players}
+      data={players.slice(podiumSize)}
       computeItemKey={(_, player) => player.id}
       endReached={loadMore}
       components={{
        Footer: () => (loadingMore ? <LbRowSkeleton /> : null),
       }}
       itemContent={(index, player) => {
-       const rank = index + 1;
+       const rank = index + podiumSize + 1;
        return (
         <Card
          customClass={classNames(
@@ -117,11 +163,7 @@ export default function Leaderboard() {
          >
           {rank}
          </Text>
-         <Text customClass="lb-name row-title">
-          {isMe(player.id)
-           ? youLabel(shortenUsername(player.username))
-           : shortenUsername(player.username)}
-         </Text>
+         <Text customClass="lb-name row-title">{playerName(player)}</Text>
          <Text customClass="lb-earnings amount-value">
           {playerValue(player)}
          </Text>
