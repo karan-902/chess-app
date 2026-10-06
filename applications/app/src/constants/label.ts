@@ -55,6 +55,6 @@ export const PAGE_TITLES: Record<string, string> = {
 
 export const MATCHES_SUBTAB_LABELS: Record<MatchesSubtab, string> = {
  history: myResultsText,
- stats: myStatsText,
  global: worldwideText,
+ stats: myStatsText,
 };

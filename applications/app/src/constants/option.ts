@@ -25,8 +25,8 @@ export const NAV_ITEMS = (
 
 export const MATCHES_SUBTAB_OPTIONS: MatchesSubtab[] = [
  "history",
- "stats",
  "global",
+ "stats",
 ];
 
 export const ROOM_TABS: RoomTab[] = ["create", "join"];
