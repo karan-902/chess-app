@@ -444,6 +444,22 @@
   color: $greenishTeal;
  }
 
+ &.lb-podium-name {
+  max-width: 100%;
+  font-size: $font13;
+  @include from(phone) {
+   font-size: $font14;
+  }
+ }
+
+ &.lb-podium-value {
+  font-family: $fontOutfitExtraBold;
+  font-size: $font15;
+  @include from(phone) {
+   font-size: $font16;
+  }
+ }
+
  &.wallet-split-lbl {
   display: block;
   font-size: $font12;
