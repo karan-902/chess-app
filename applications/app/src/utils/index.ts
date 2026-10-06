@@ -1,5 +1,4 @@
-import { beatsYouText, beatsText } from "@gopvp/app/src/constants/message";
-import { youBeatText } from "@gopvp/common/src/constants/message";
+import { beatsText } from "@gopvp/app/src/constants/message";
 import { shortenUsername } from "@gopvp/common/src/util/format";
 import { GAMES, type GameSlug } from "@gopvp/app/src/config/game";
 
@@ -20,13 +19,7 @@ export function buildMatchUrl(game: GameSlug, matchId: string): string {
  return `${getGamePath(game)}?match_id=${matchId}`;
 }
 
-export function getWorldMatchHeadline(
- winner: string,
- loser: string,
- currentUsername?: string,
-): string {
- if (winner === currentUsername) return youBeatText(shortenUsername(loser));
- if (loser === currentUsername) return beatsYouText(shortenUsername(winner));
+export function getWorldMatchHeadline(winner: string, loser: string): string {
  return beatsText(shortenUsername(winner), shortenUsername(loser));
 }
 

@@ -41,9 +41,6 @@ export default function MyMatches() {
  const { gameLabel } = useGame();
  const dispatch = useReduxDispatch();
  const subtab = useReduxSelector((state) => state.game.matchesSubtab);
- const currentUsername = useReduxSelector(
-  (state) => state.auth.session?.username,
- );
  const { items, loading, loadingMore, error, loadMore, stats, statsLoading } =
   useGameHistory(subtab === "global" ? "worldwide" : "own", subtab === "stats");
  const [selectedMatch, setSelectedMatch] =
@@ -82,7 +79,6 @@ export default function MyMatches() {
     ) : (
      <MatchList
       items={items}
-      currentUsername={currentUsername}
       loadingMore={loadingMore}
       loadMore={loadMore}
       onMatchClick={setSelectedMatch}
@@ -104,7 +100,6 @@ export default function MyMatches() {
     ) : (
      <MatchList
       items={items}
-      currentUsername={currentUsername}
       loadingMore={loadingMore}
       loadMore={loadMore}
       onMatchClick={setSelectedMatch}

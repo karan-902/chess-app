@@ -19,12 +19,14 @@ import {
 import type { ILeaderboardPlayerResponse } from "@gopvp/common/src/types/response";
 import type { IPlayerRowSheetProps } from "@gopvp/common/src/types/component";
 import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
+import { useReduxSelector } from "@gopvp/app/src/redux/hooks";
 
 export default function PlayerRowSheet({
  playerId,
  onClose,
 }: IPlayerRowSheetProps) {
  const { game, gameLabel } = useGame();
+ const scope = useReduxSelector((state) => state.game.leaderboardScope);
  const [stats, setStats] = useState<ILeaderboardPlayerResponse | null>(null);
 
  useEffect(() => {
@@ -35,7 +37,7 @@ export default function PlayerRowSheet({
    try {
     const res = await callAPIInterface<ILeaderboardPlayerResponse, undefined>(
      "GET",
-     `${ENDPOINTS.LEADERBOARD}/${playerId}?game=${game}`,
+     `${ENDPOINTS.LEADERBOARD}/${playerId}?game=${game}&scope=${scope}`,
     );
     if (!isCancelled) setStats(res);
    } catch (err) {
@@ -47,7 +49,7 @@ export default function PlayerRowSheet({
   return () => {
    isCancelled = true;
   };
- }, [playerId, game, onClose]);
+ }, [playerId, game, scope, onClose]);
 
  return (
   <ResultSheet

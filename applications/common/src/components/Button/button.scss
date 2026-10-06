@@ -399,14 +399,10 @@
   height: 3.5rem;
   padding: 0;
   border-radius: 0.85rem;
-  background: $appBg;
   border: 1px solid $appCardBorder;
-  transition:
-   border-color 0.15s ease,
-   background-color 0.15s ease;
+  transition: border-color 0.15s ease;
 
   &:hover:not(.Mui-disabled) {
-   background: alpha($gold, 0.1);
    border-color: $gold;
   }
  }

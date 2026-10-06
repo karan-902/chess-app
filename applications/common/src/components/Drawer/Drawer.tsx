@@ -33,7 +33,7 @@ export function CustomDrawer({
    disableScrollLock
    disableAutoFocus
    disableRestoreFocus={disableRestoreFocus}
-   container={() => document.querySelector(".app-shell") as HTMLElement}
+   container={() => document.querySelector(".app-root") as HTMLElement}
   >
    {!hideCloseIcon && (
     <CustomIconButton

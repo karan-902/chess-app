@@ -24,7 +24,6 @@ import { MATCH_OUTCOME_TONES } from "@gopvp/app/src/constants/mapper";
 import { youText } from "@gopvp/common/src/constants/message";
 import { matchIdText } from "@gopvp/app/src/constants/message";
 import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
-import { useReduxSelector } from "@gopvp/app/src/redux/hooks";
 import { getWorldMatchHeadline } from "@gopvp/app/src/utils";
 import type {
  IMatchInfoResponse,
@@ -37,9 +36,6 @@ export default function MatchInfoSheet({
  onClose,
 }: IMatchInfoSheetProps) {
  const { gameLabel } = useGame();
- const currentUsername = useReduxSelector(
-  (state) => state.auth.session?.username,
- );
  const [info, setInfo] = useState<
   IMatchInfoResponse | IWorldMatchInfoResponse | null
  >(null);
@@ -77,8 +73,6 @@ export default function MatchInfoSheet({
  const result = ownInfo?.result ?? ownMatch?.result;
  const outcome = result && MATCH_RESULT_OUTCOMES[result];
  const opponentName = ownInfo ? shortenUsername(ownInfo.opponent.username) : "";
- const displayName = (username: string) =>
-  username === currentUsername ? youText : shortenUsername(username);
 
  return (
   <ResultSheet
@@ -97,7 +91,6 @@ export default function MatchInfoSheet({
      ? getWorldMatchHeadline(
         worldInfo.winner.username,
         worldInfo.loser.username,
-        currentUsername,
        )
      : outcome
        ? MATCH_OUTCOME_SUBTITLES[outcome](opponentName)
@@ -114,11 +107,11 @@ export default function MatchInfoSheet({
     worldInfo
      ? [
         {
-         label: displayName(worldInfo.winner.username),
+         label: shortenUsername(worldInfo.winner.username),
          value: formatNumber(worldInfo.winner.score),
         },
         {
-         label: displayName(worldInfo.loser.username),
+         label: shortenUsername(worldInfo.loser.username),
          value: formatNumber(worldInfo.loser.score),
         },
        ]
@@ -131,22 +124,23 @@ export default function MatchInfoSheet({
    tileIcon="person"
   >
    <Box customClass="result-meta">
-    {info && !isWorldwide ? (
-     <Input
-      id="match-id"
-      label={matchIdText}
-      value={info.id}
-      disabled
-      fullWidth
-      customClass="match-id-input"
-      endIcon={<CopyButton text={info.id} />}
-     />
-    ) : (
-     <>
-      <Skeleton customClass="text match-id-label-skeleton" width={60} />
-      <Skeleton variant="rounded" customClass="match-id-skeleton" />
-     </>
-    )}
+    {!isWorldwide &&
+     (info ? (
+      <Input
+       id="match-id"
+       label={matchIdText}
+       value={info.id}
+       disabled
+       fullWidth
+       customClass="match-id-input"
+       endIcon={<CopyButton text={info.id} />}
+      />
+     ) : (
+      <>
+       <Skeleton customClass="text match-id-label-skeleton" width={60} />
+       <Skeleton variant="rounded" customClass="match-id-skeleton" />
+      </>
+     ))}
     <Text customClass="meta-text">
      {info ? (
       formatDateTime(info.created)

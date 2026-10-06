@@ -46,9 +46,9 @@ function PrivateRoute() {
 
  const renderLayout = () => {
   return (
-   <Box customClass="app-shell">
+   <Box className="app-root container">
     {!isInGameRoom && !isPickGamePage && <Header />}
-    <Box customClass="app-body">
+    <Box customClass="app-wrapper">
      <Box component="main" customClass="app-content">
       <Outlet />
      </Box>

@@ -120,7 +120,7 @@ $pieceFill: 92%;
  font-size: $font10;
  line-height: 1;
  pointer-events: none;
- z-index: $z-float;
+ z-index: $z-top;
 
  @include from(laptop) {
   font-size: $font13;

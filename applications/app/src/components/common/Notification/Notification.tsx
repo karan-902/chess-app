@@ -7,16 +7,15 @@ import { hideToast } from "@gopvp/app/src/redux/common/slice";
 import AlertMessage from "@gopvp/common/src/components/AlertMessage/AlertMessage";
 import type { INotificationProps } from "@gopvp/app/src/types/component";
 
+const getToastContainer = () =>
+ (document.querySelector(".app-root") ??
+  document.getElementById("root")) as HTMLElement;
+
 const SlideLeft = forwardRef<
  unknown,
  TransitionProps & { children: ReactElement }
 >((props, ref) => (
- <Slide
-  ref={ref}
-  {...props}
-  direction="left"
-  container={document.getElementById("root")}
- />
+ <Slide ref={ref} {...props} direction="left" container={getToastContainer} />
 ));
 
 export default function Notification({ customClass }: INotificationProps) {
@@ -33,10 +32,8 @@ export default function Notification({ customClass }: INotificationProps) {
   dispatch(hideToast());
  };
 
- const rootEl = document.getElementById("root");
-
  return (
-  <Portal container={rootEl}>
+  <Portal container={getToastContainer()}>
    <Snackbar
     anchorOrigin={{ vertical: "top", horizontal: "right" }}
     open={isToastOpen}

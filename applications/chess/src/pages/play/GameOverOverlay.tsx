@@ -46,15 +46,9 @@ export default function GameOverOverlay({
      hidden={!isLogoLoaded}
      onLoad={() => setIsLogoLoaded(true)}
     />
-    <Text customClass="result-title">
-     {isLogoLoaded ? chessText : <Skeleton customClass="text" width={140} />}
-    </Text>
+    <Text customClass="result-title">{chessText}</Text>
     <Text customClass="result-subtitle">
-     {isLogoLoaded ? (
-      MATCH_OUTCOME_SUBTITLES[outcome](opponentName)
-     ) : (
-      <Skeleton customClass="text" width={140} />
-     )}
+     {MATCH_OUTCOME_SUBTITLES[outcome](opponentName)}
     </Text>
    </Box>
 
@@ -68,7 +62,7 @@ export default function GameOverOverlay({
          neg: change < 0,
         })}
        >
-        {isLogoLoaded ? value : <Skeleton customClass="text" width={50} />}
+        {value}
        </Text>
       </Box>
      ))}
