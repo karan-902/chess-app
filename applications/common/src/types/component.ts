@@ -94,7 +94,6 @@ export interface IPlayerRowSheetProps {
 
 export interface IMatchListProps {
  items: IMatchHistoryItem[];
- currentUsername: string | undefined;
  loadingMore: boolean;
  loadMore: () => void;
  onMatchClick?: (match: IMatchHistoryItem) => void;

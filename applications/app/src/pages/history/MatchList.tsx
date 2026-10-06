@@ -11,7 +11,6 @@ import MatchRow from "@gopvp/app/src/pages/history/MatchRow";
 
 function matchRow(
  item: IMatchHistoryItem,
- currentUsername?: string,
  onMatchClick?: (match: IMatchHistoryItem) => void,
 ) {
  const onClick = onMatchClick && (() => onMatchClick(item));
@@ -19,7 +18,7 @@ function matchRow(
   return (
    <MatchRow
     outcome="win"
-    headline={getWorldMatchHeadline(item.winner, item.loser, currentUsername)}
+    headline={getWorldMatchHeadline(item.winner, item.loser)}
     amount={Math.abs(item.amount)}
     onClick={onClick}
    />
@@ -38,7 +37,6 @@ function matchRow(
 
 export default function MatchList({
  items,
- currentUsername,
  loadingMore,
  loadMore,
  onMatchClick,
@@ -48,7 +46,7 @@ export default function MatchList({
    <VirtualList<IMatchHistoryItem>
     data={items}
     computeItemKey={(_, item) => item.id}
-    itemContent={(_, item) => matchRow(item, currentUsername, onMatchClick)}
+    itemContent={(_, item) => matchRow(item, onMatchClick)}
     endReached={loadMore}
     components={{
      Footer: () => (loadingMore ? <MatchRowSkeleton /> : null),
