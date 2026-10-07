@@ -16,7 +16,6 @@ import {
  payoutExampleText,
  fairMatchingText,
  fairMatchingExplainedText,
- appVersionText,
  pieceSetCreditText,
 } from "@gopvp/chess/src/constants/message";
 
@@ -71,11 +70,7 @@ export default function ChessRules() {
     </Card>
    ))}
 
-   <Text customClass="rules-about">
-    {appVersionText}
-    <br />
-    {pieceSetCreditText}
-   </Text>
+   <Text customClass="rules-about">{pieceSetCreditText}</Text>
   </Box>
  );
 }

@@ -36,6 +36,5 @@ export const payoutExampleText =
 export const fairMatchingText = "Fair Matching";
 export const fairMatchingExplainedText =
  "You're matched by rating and bet size, not queue order — so the board you get is close to even before the first move.";
-export const appVersionText = "Chess · v1.0.0";
 export const pieceSetCreditText =
- 'Piece set "cburnett" by Colin M.L. Burnett, CC BY-SA 3.0';
+ 'Chess - Piece set "cburnett" by Colin M.L. Burnett, CC BY-SA 3.0';
