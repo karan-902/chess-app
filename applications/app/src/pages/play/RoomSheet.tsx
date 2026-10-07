@@ -203,6 +203,7 @@ export default function RoomSheet({
          id="room-bet"
          type="text"
          inputMode="numeric"
+         autoComplete="off"
          slotProps={{
           input: {
            maxLength: MAX_AMOUNT_DIGITS,

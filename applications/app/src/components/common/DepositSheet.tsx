@@ -144,6 +144,7 @@ export default function DepositSheet() {
        id="deposit-amount"
        type="text"
        inputMode="decimal"
+       autoComplete="off"
        label={enterAmountText}
        labelClassName="wallet-label"
        fullWidth

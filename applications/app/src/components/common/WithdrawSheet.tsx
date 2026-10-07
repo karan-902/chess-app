@@ -118,6 +118,7 @@ export default function WithdrawSheet() {
        id="withdraw-amount"
        type="text"
        inputMode="decimal"
+       autoComplete="off"
        label={enterAmountText}
        labelClassName="wallet-label"
        fullWidth
