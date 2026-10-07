@@ -36,8 +36,10 @@ function PrivateRoute() {
   if (!socket) return;
   const refetchBalance = () => dispatch(fetchWalletBalance());
   socket.on(SOCKET_EVENTS.WALLET_UPDATED, refetchBalance);
+  socket.on(SOCKET_EVENTS.TRANSACTION_COMPLETED, refetchBalance);
   return () => {
    socket.off(SOCKET_EVENTS.WALLET_UPDATED, refetchBalance);
+   socket.off(SOCKET_EVENTS.TRANSACTION_COMPLETED, refetchBalance);
   };
  }, [socket, dispatch]);
 
@@ -48,7 +50,7 @@ function PrivateRoute() {
   return (
    <Box className="app-root container">
     {!isInGameRoom && !isPickGamePage && <Header />}
-    <Box customClass="app-wrapper">
+    <Box className="app-wrapper">
      <Box component="main" customClass="app-content">
       <Outlet />
      </Box>
