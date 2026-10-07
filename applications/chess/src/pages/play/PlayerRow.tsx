@@ -75,19 +75,6 @@ export default function PlayerRow({
        {firstMoveText(firstMoveSeconds)}
       </Text>
      )}
-     {hasPremoves && (
-      <Button
-       type="button"
-       variant="text"
-       size="small"
-       startIcon="x"
-       disableRipple
-       customClass="gr-premove-cancel"
-       onClick={onCancelPremoves}
-      >
-       {cancelPremovesText}
-      </Button>
-     )}
      {pairCapturedPieces(capturedPieces).map(
       ({ type, stacked, stackEnd }, i) => (
        <PieceIcon
@@ -109,6 +96,19 @@ export default function PlayerRow({
      )} */}
     </Box>
    </Box>
+   {hasPremoves && (
+    <Button
+     type="button"
+     variant="text"
+     size="small"
+     startIcon="x"
+     disableRipple
+     customClass="gr-premove-cancel"
+     onClick={onCancelPremoves}
+    >
+     {cancelPremovesText}
+    </Button>
+   )}
    <Text customClass={classNames("gr-clock", lowTime && "low")}>
     {clockReady ? (
      clock

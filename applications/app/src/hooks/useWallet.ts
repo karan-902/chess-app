@@ -82,8 +82,10 @@ export function useWallet() {
  useEffect(() => {
   if (!socket) return;
   socket.on(SOCKET_EVENTS.WALLET_UPDATED, refresh);
+  socket.on(SOCKET_EVENTS.TRANSACTION_COMPLETED, refresh);
   return () => {
    socket.off(SOCKET_EVENTS.WALLET_UPDATED, refresh);
+   socket.off(SOCKET_EVENTS.TRANSACTION_COMPLETED, refresh);
   };
  }, [socket, refresh]);
 

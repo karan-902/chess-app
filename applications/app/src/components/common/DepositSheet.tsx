@@ -36,6 +36,7 @@ import {
  speedText,
 } from "@gopvp/app/src/constants/message";
 import { MAX_DEPOSIT_USD } from "@gopvp/app/src/constants/limit";
+import { DEPOSIT_CHIP_AMOUNTS } from "@gopvp/app/src/constants/option";
 import { sanitizeAmountInput } from "@gopvp/app/src/utils";
 import { backText } from "@gopvp/common/src/constants/message";
 import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
@@ -144,6 +145,7 @@ export default function DepositSheet() {
        id="deposit-amount"
        type="text"
        inputMode="decimal"
+       autoComplete="off"
        label={enterAmountText}
        labelClassName="wallet-label"
        fullWidth
@@ -158,6 +160,25 @@ export default function DepositSheet() {
        isError={!!amountError}
        helperText={amountError}
       />
+     </Box>
+     <Box customClass="tx-filter-chip-grid deposit-amount-chips">
+      {DEPOSIT_CHIP_AMOUNTS.map((chipAmount) => (
+       <Button
+        key={chipAmount}
+        type="button"
+        disabled={submitting}
+        customClass={classNames(
+         "tx-filter-chip",
+         amount === String(chipAmount) && "active",
+        )}
+        onClick={() => {
+         setAmount(String(chipAmount));
+         setAmountError("");
+        }}
+       >
+        ${chipAmount}
+       </Button>
+      ))}
      </Box>
      <Box customClass="deposit-speed-wrapper">
       <Box customClass="deposit-speed-badge">
