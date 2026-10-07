@@ -533,7 +533,8 @@
   flex-wrap: wrap;
   gap: 0.5rem;
 
-  &.room-bet-chips {
+  &.room-bet-chips,
+  &.deposit-amount-chips {
    justify-content: center;
   }
  }
