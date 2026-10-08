@@ -113,6 +113,18 @@
   color: $appText;
  }
 
+ &.field-error {
+  font-family: $fontOutfitMedium;
+  font-size: $font14;
+  color: $paleRed;
+  white-space: normal;
+  overflow: visible;
+
+  :root[data-theme="light"] & {
+   display: none;
+  }
+ }
+
  &.page-subtitle {
   width: 100%;
   font-size: $font16;

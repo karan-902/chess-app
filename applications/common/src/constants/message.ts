@@ -8,6 +8,7 @@ export const entryFeeText = "Entry fee";
 export const youText = "You";
 export const closeText = "Close";
 export const noResultsText = "No results";
+export const selectText = "Select…";
 export const chessText = "Chess";
 export const youBeatText = (name: string) => `You beat ${name}`;
 export const youLostToText = (name: string) => `You lost to ${name}`;

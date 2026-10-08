@@ -5,6 +5,7 @@ import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
 import CustomLabel from "@gopvp/common/src/components/Label/Label";
 import AlertMessage from "@gopvp/common/src/components/AlertMessage/AlertMessage";
+import Text from "@gopvp/common/src/components/Text/Text";
 import "./input.scss";
 import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
 
@@ -78,7 +79,14 @@ export const Input = forwardRef<HTMLInputElement, IInputProps>(
      }
     />
     {isError && helperText && (
-     <AlertMessage severity="error" message={helperText} />
+     <>
+      <Text customClass="field-error">{helperText}</Text>
+      <AlertMessage
+       severity="error"
+       message={helperText}
+       customClass="field-error"
+      />
+     </>
     )}
    </Box>
   );

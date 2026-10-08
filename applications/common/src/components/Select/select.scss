@@ -7,12 +7,16 @@
   min-height: 2.75rem;
   background: $appSecondary;
   border-radius: 4px;
+  padding: 0;
   font-family: $fontOutfitRegular;
   font-size: $font15;
   color: $appText;
   transition:
    border-color 0.15s ease,
    box-shadow 0.15s ease;
+  .MuiInputAdornment-root {
+   padding: 8px;
+  }
 
   .MuiOutlinedInput-notchedOutline {
    border-color: $appCardBorder;
@@ -60,6 +64,8 @@
  }
 
  .select-arrow {
+  width: 1.25rem;
+  height: 1.25rem;
   color: alpha($appText, 0.4);
   cursor: pointer;
   transition: transform 0.2s ease;
@@ -133,6 +139,10 @@
 
   &.Mui-disabled {
    opacity: 1;
+   color: $appTextMuted;
+  }
+
+  &.placeholder-item:not(.Mui-selected) {
    color: $appTextMuted;
   }
  }

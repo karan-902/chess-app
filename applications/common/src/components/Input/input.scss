@@ -28,6 +28,10 @@
    border: none !important;
    border-radius: 4px !important;
    background-color: transparent;
+
+   .MuiInputAdornment-root {
+    padding: 8px;
+   }
   }
 
   @media (hover: hover) {
@@ -64,13 +68,13 @@
   }
  }
 
+ .MuiInputBase-root .MuiInputAdornment-root svg {
+  width: 1.25rem;
+  height: 1.25rem;
+ }
+
  .input-password-toggle {
   color: alpha($appText, 0.4);
-
-  svg {
-   width: 1rem;
-   height: 1rem;
-  }
  }
 
  &.amount-input-hero .MuiInputBase-root {

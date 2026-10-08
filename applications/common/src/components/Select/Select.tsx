@@ -17,7 +17,11 @@ import { KeyboardArrowDownIcon } from "@gopvp/common/src/components/images";
 import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
 import AlertMessage from "@gopvp/common/src/components/AlertMessage/AlertMessage";
-import { noResultsText } from "@gopvp/common/src/constants/message";
+import Text from "@gopvp/common/src/components/Text/Text";
+import {
+ noResultsText,
+ selectText,
+} from "@gopvp/common/src/constants/message";
 import "./select.scss";
 
 export interface ISelectOption {
@@ -42,7 +46,7 @@ export function CustomSelect({
  onChange,
  onBlur,
  options,
- placeholder = "Select…",
+ placeholder = selectText,
  isError,
  helperText,
  disabled,
@@ -59,9 +63,10 @@ export function CustomSelect({
  const selected = options.find((option) => option.value === value) ?? null;
  const search = (query ?? "").trim().toLowerCase();
  const isSearching = query !== null && query !== selected?.label;
+ const allOptions = [{ value: "", label: placeholder }, ...options];
  const visibleOptions = isSearching
   ? options.filter((option) => option.label.toLowerCase().includes(search))
-  : options;
+  : allOptions;
 
  useEffect(() => {
   if (open) optionRefs.current[activeIndex]?.scrollIntoView({ block: "nearest" });
@@ -69,7 +74,7 @@ export function CustomSelect({
 
  const openMenu = () => {
   if (open || disabled) return;
-  setActiveIndex(Math.max(0, options.findIndex((o) => o.value === value)));
+  setActiveIndex(Math.max(0, allOptions.findIndex((o) => o.value === value)));
   setOpen(true);
  };
 
@@ -177,7 +182,10 @@ export function CustomSelect({
          }}
          selected={option.value === value}
          aria-selected={option.value === value}
-         className={classNames(index === activeIndex && "active")}
+         className={classNames(
+          index === activeIndex && "active",
+          !option.value && "placeholder-item",
+         )}
          onMouseDown={(e) => e.preventDefault()}
          onMouseEnter={() => setActiveIndex(index)}
          onClick={() => selectOption(option)}
@@ -191,7 +199,14 @@ export function CustomSelect({
    </Popper>
 
    {isError && helperText && (
-    <AlertMessage severity="error" message={helperText} />
+    <>
+     <Text customClass="field-error">{helperText}</Text>
+     <AlertMessage
+      severity="error"
+      message={helperText}
+      customClass="field-error"
+     />
+    </>
    )}
   </Box>
  );

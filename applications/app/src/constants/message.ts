@@ -184,7 +184,7 @@ export const wherePlayingFromText = "Where Are You Playing From?";
 export const pickCountryToFinishText =
  "Pick your country to finish setting up.";
 export const continueText = "Continue";
-export const selectCountryText = "Select country";
+export const selectCountryText = "Select Country";
 export const walletText = "Wallet";
 export const logOutText = "Log Out";
 export const accountText = "Account";
