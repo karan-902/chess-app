@@ -92,6 +92,11 @@
   font-family: $fontOutfitSemiBold;
   font-size: $font16;
   color: $appText;
+
+  .rules-page.gold-foil & {
+   font-family: $fontOutfitExtraBold;
+   font-size: $font18;
+  }
  }
 
  &.dialog-title {
@@ -511,6 +516,11 @@
   .matches-page.gold-foil & {
    font-family: $fontOutfitBold;
   }
+
+  .rules-page.gold-foil & {
+   font-size: $font14 !important;
+   color: $appTextMuted;
+  }
  }
  &.stat-title {
   font-family: $fontOutfitMedium !important;
@@ -520,6 +530,12 @@
 
   .matches-page.gold-foil & {
    font-size: $font15;
+  }
+
+  .rules-page.gold-foil & {
+   font-family: $fontOutfitSemiBold !important;
+   font-size: $font14;
+   color: $appText;
   }
  }
 
@@ -712,6 +728,10 @@
   color: $appTextMuted;
   white-space: normal;
   overflow: visible;
+
+  .rules-page.gold-foil & {
+   line-height: 1.55;
+  }
  }
 
  &.rules-about {

@@ -348,6 +348,13 @@
    padding: $space-8 0;
   }
 
+  .rules-page.gold-foil .rules-card & {
+   padding: 0.625rem $space-12;
+   border-bottom: 0;
+   border-radius: 0.625rem;
+   background: $appBg;
+  }
+
   .matches-page.gold-foil & {
    padding: 0.8125rem $space-16;
   }

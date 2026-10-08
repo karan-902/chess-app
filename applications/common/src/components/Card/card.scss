@@ -106,6 +106,15 @@
   margin-bottom: $space-12;
   border-radius: 0.85rem;
   box-shadow: none;
+
+  .rules-page.gold-foil & {
+   gap: $space-12;
+   border-radius: 0.8125rem;
+
+   &:first-child {
+    @include gold-foil-border;
+   }
+  }
  }
 
  &.profile-id-card {
