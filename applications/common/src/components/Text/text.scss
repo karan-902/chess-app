@@ -516,6 +516,10 @@
   font-size: $font16;
   color: $appTextMuted;
   flex-shrink: 0;
+
+  .matches-page.gold-foil & {
+   font-size: $font15;
+  }
  }
 
  &.lb-rank {

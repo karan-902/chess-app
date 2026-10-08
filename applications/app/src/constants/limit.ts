@@ -25,4 +25,6 @@ export const POOL_SKELETON_ROWS = 4;
 export const WALLET_SUCCESS_CLOSE_MS = 2800;
 export const COPIED_FEEDBACK_MS = 1500;
 export const SCROLLBAR_HIDE_DELAY_MS = 800;
+export const MATCHES_STATS_LOGO_SIZE = 72;
+export const EMPTY_STATE_LOGO_SIZE = 64;
 export const PROFILE_ACCOUNT_SKELETON_ROWS = 3;
