@@ -98,6 +98,12 @@
   font-family: $fontOutfitSemiBold;
   font-size: $font18;
   color: $appText;
+
+  &.gold-foil {
+   font-family: $fontOutfitBlack;
+   font-size: $font22;
+   letter-spacing: -0.01em;
+  }
  }
 
  &.value-heading {
@@ -267,6 +273,14 @@
   font-size: $font30;
   font-weight: 700;
   color: $gold;
+
+  &.gold-foil {
+   padding: $space-4 $space-12;
+   border-radius: 99px;
+   background: alpha($gold, 0.1);
+   font-family: $fontOutfitExtraBold;
+   font-size: $font14;
+  }
  }
 
  &.searching-detail-label {
@@ -274,6 +288,13 @@
   font-family: $fontOutfitSemiBold;
   font-size: $font14;
   letter-spacing: 0.04em;
+
+  &.gold-foil {
+   font-family: $fontOutfitMedium;
+   font-size: $font12;
+   letter-spacing: 0;
+   color: $appTextMuted;
+  }
  }
  &.duration-wheel-item {
   height: 2.8rem;
@@ -298,6 +319,15 @@
  }
  &.searching-detail-value {
   display: block;
+
+  &.gold-foil {
+   font-family: $fontOutfitBlack;
+   font-size: $font24;
+  }
+
+  &.win-prize.gold-foil {
+   @include gold-foil-text;
+  }
  }
 
  &.sheet-tip {
@@ -710,7 +740,6 @@
 
  &.gr-first-move {
   background: alpha($warning, 0.12);
-  font-variant-numeric: tabular-nums;
   color: $warning;
 
   &.urgent {

@@ -31,24 +31,35 @@ export default function PoolConfirmSheet({
  onConfirmCancel,
 }: IPoolConfirmSheetProps) {
  return (
-  <CustomDrawer anchor="bottom" open={open} onClose={onClose}>
+  <CustomDrawer
+   anchor="bottom"
+   open={open}
+   onClose={onClose}
+   customClass="gold-foil"
+  >
    {status === "queued" || status === "found" ? (
     <Box customClass="matchmaking-searching">
      <Box customClass="logo-loader" role="progressbar" />
-     <Text customClass="dialog-title" aria-live="polite">
+     <Text customClass="dialog-title gold-foil" aria-live="polite">
       {status === "found" ? opponentFoundText : findingOpponentText}
      </Text>
-     <Text customClass="searching-timer">{secondsLeftText(secondsLeft)}</Text>
-     <Box customClass="searching-details">
-      <Box customClass="searching-detail-item">
-       <Text customClass="searching-detail-label caption">{entryFeeText}</Text>
-       <Text customClass="searching-detail-value value-heading">
+     <Text customClass="searching-timer gold-foil">
+      {secondsLeftText(secondsLeft)}
+     </Text>
+     <Box customClass="searching-details gold-foil">
+      <Box customClass="searching-detail-item gold-foil">
+       <Text customClass="searching-detail-label caption gold-foil">
+        {entryFeeText}
+       </Text>
+       <Text customClass="searching-detail-value value-heading gold-foil">
         ${queuedPool?.bet}
        </Text>
       </Box>
-      <Box customClass="searching-detail-item">
-       <Text customClass="searching-detail-label caption">{prizeText}</Text>
-       <Text customClass="searching-detail-value value-heading win-prize">
+      <Box customClass="searching-detail-item gold-foil prize-item">
+       <Text customClass="searching-detail-label caption gold-foil">
+        {prizeText}
+       </Text>
+       <Text customClass="searching-detail-value value-heading win-prize gold-foil">
         ${queuedPool?.prize}
        </Text>
       </Box>
@@ -67,20 +78,24 @@ export default function PoolConfirmSheet({
    ) : (
     confirmPool && (
      <Box customClass="matchmaking-searching">
-      <Text customClass="dialog-title">{confirmYourMatchText}</Text>
+      <Text customClass="dialog-title gold-foil">{confirmYourMatchText}</Text>
       <Text customClass="empty-state-desc description">
        {matchedOnConfirmText}
       </Text>
-      <Box customClass="searching-details">
-       <Box customClass="searching-detail-item">
-        <Text customClass="searching-detail-label caption">{entryFeeText}</Text>
-        <Text customClass="searching-detail-value value-heading">
+      <Box customClass="searching-details gold-foil">
+       <Box customClass="searching-detail-item gold-foil">
+        <Text customClass="searching-detail-label caption gold-foil">
+         {entryFeeText}
+        </Text>
+        <Text customClass="searching-detail-value value-heading gold-foil">
          ${confirmPool.bet}
         </Text>
        </Box>
-       <Box customClass="searching-detail-item">
-        <Text customClass="searching-detail-label caption">{prizeText}</Text>
-        <Text customClass="searching-detail-value value-heading win-prize">
+       <Box customClass="searching-detail-item gold-foil prize-item">
+        <Text customClass="searching-detail-label caption gold-foil">
+         {prizeText}
+        </Text>
+        <Text customClass="searching-detail-value value-heading win-prize gold-foil">
          ${confirmPool.prize}
         </Text>
        </Box>
@@ -94,7 +109,7 @@ export default function PoolConfirmSheet({
         type="button"
         variant="contained"
         fullWidth
-        customClass="common-play"
+        customClass="common-play gold-foil shine"
         isLoading={status === "joining"}
         loaderOnDark
         onClick={onConfirmJoin}

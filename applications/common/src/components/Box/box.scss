@@ -205,6 +205,13 @@
  &.searching-details {
   display: flex;
   gap: 1.5rem;
+
+  &.gold-foil {
+   display: grid;
+   grid-template-columns: 1fr 1fr;
+   gap: 0.625rem;
+   width: 100%;
+  }
  }
 
  &.pool-confirm-actions {
@@ -221,6 +228,26 @@
   flex-direction: column;
   align-items: center;
   gap: 0.15rem;
+
+  &.gold-foil {
+   padding: 0.875rem;
+   background: $appSurface;
+   border: 1px solid $appCardBorder;
+   border-radius: 0.8125rem;
+
+   &.prize-item {
+    border-color: transparent;
+    background:
+     linear-gradient($appSurface, $appSurface) padding-box,
+     linear-gradient(
+       160deg,
+       alpha($gold, 0.65),
+       $appCardBorder 45%,
+       $appCardBorder
+      )
+      border-box;
+   }
+  }
  }
 
  &.matches-page {
