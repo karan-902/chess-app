@@ -83,9 +83,9 @@ export const playNowText = "Play now";
 export const tapPlayNowHintText = "Play now to choose a pool";
 export const largestPrizesTipText =
  "Rapid and Classical pools pay out the largest prizes.";
-export const forFunText = "For fun";
+export const forFunText = "For Fun";
 export const freeToPlayText = "Free to play";
-export const friendlyText = "FRIENDLY";
+export const friendlyText = "Friendly";
 export const roomText = "Room";
 export const customFeeText = "Custom fee";
 export const createRoomText = "Create Room";
