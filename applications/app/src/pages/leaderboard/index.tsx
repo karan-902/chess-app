@@ -68,7 +68,7 @@ export default function Leaderboard() {
   players.length >= LEADERBOARD_PODIUM_SIZE ? LEADERBOARD_PODIUM_SIZE : 0;
 
  return (
-  <Box customClass="leaderboard-page">
+  <Box customClass="leaderboard-page gold-foil">
    <Box customClass="filter-pill-row">
     <FilterDropdown
      options={LEADERBOARD_SORTS}
@@ -118,10 +118,11 @@ export default function Leaderboard() {
           onClick={() => setSelectedPlayerId(player.id)}
          >
           <Box
-           customClass={classNames(
-            "lb-podium-badge",
-            isFirst ? "gold" : "silver",
-           )}
+           customClass={classNames("lb-podium-badge", {
+            gold: index === 0,
+            silver: index === 1,
+            bronze: index === 2,
+           })}
           >
            <PodiumIcon />
           </Box>

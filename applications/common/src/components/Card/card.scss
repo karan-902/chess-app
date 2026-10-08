@@ -132,6 +132,18 @@
     color: $gold;
    }
   }
+
+  .leaderboard-page.gold-foil & {
+   border-radius: 0.6875rem;
+
+   &.me {
+    @include gold-foil-border;
+
+    .lb-earnings {
+     @include gold-foil-text;
+    }
+   }
+  }
  }
 
  &.lb-podium-card {
@@ -168,6 +180,18 @@
 
    .lb-earnings {
     color: $gold;
+   }
+  }
+
+  .leaderboard-page.gold-foil & {
+   &.first,
+   &.me {
+    @include gold-foil-border;
+   }
+
+   &.first .lb-earnings,
+   &.me .lb-earnings {
+    @include gold-foil-text;
    }
   }
  }

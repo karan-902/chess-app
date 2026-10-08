@@ -506,6 +506,15 @@
   &.silver {
    color: $medalSilver;
   }
+
+  &.bronze {
+   color: $medalBronze;
+  }
+
+  .leaderboard-page.gold-foil &.gold {
+   color: $gold;
+   box-shadow: 0 0 16px alpha($gold, 0.45);
+  }
  }
 
  &.filter-pill-row {

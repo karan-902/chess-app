@@ -48,7 +48,8 @@
    border: 1.5px solid $gold;
   }
 
-  .matches-page.gold-foil & {
+  .matches-page.gold-foil &,
+  .leaderboard-page.gold-foil & {
    border-color: $appLine;
 
    &.active {

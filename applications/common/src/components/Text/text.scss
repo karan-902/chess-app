@@ -172,7 +172,8 @@
    color: $appTextMuted;
   }
 
-  .matches-page.gold-foil & {
+  .matches-page.gold-foil &,
+  .leaderboard-page.gold-foil & {
    font-family: $fontOutfitBlack;
   }
  }

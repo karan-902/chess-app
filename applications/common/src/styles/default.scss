@@ -246,6 +246,14 @@ $breakpoints: (
  }
 }
 
+@mixin gold-foil-border($fill: $appSurface) {
+ border-color: transparent;
+ background:
+  linear-gradient($fill, $fill) padding-box,
+  linear-gradient(160deg, alpha($gold, 0.65), $appCardBorder 45%, $appCardBorder)
+   border-box;
+}
+
 @mixin gold-foil-text {
  background: linear-gradient(180deg, $goldLight, $primary 45%, $primaryDark);
  -webkit-background-clip: text;
