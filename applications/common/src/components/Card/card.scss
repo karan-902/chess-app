@@ -92,6 +92,10 @@
    flex: initial;
    min-height: auto;
   }
+
+  .matches-page.gold-foil &:not(.match-row-list) {
+   border-radius: 0.8125rem;
+  }
  }
 
  &.rules-card {

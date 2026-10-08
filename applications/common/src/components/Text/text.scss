@@ -171,6 +171,10 @@
   &.neutral {
    color: $appTextMuted;
   }
+
+  .matches-page.gold-foil & {
+   font-family: $fontOutfitBlack;
+  }
  }
 
  &.auth-account-name {
@@ -484,6 +488,10 @@
   font-size: $font18;
   color: $appText;
   margin-bottom: 0.35rem;
+
+  .matches-page.gold-foil & {
+   font-family: $fontOutfitExtraBold;
+  }
  }
 
  &.stat-val {
@@ -497,6 +505,10 @@
 
   svg {
    vertical-align: top;
+  }
+
+  .matches-page.gold-foil & {
+   font-family: $fontOutfitBold;
   }
  }
  &.stat-title {

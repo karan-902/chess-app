@@ -47,6 +47,31 @@
   &.active {
    border: 1.5px solid $gold;
   }
+
+  .matches-page.gold-foil & {
+   border-color: $appLine;
+
+   &.active {
+    border: 1.5px solid transparent;
+    background:
+     linear-gradient($appBg, $appBg) padding-box,
+     linear-gradient(
+       110deg,
+       $primaryDark 0%,
+       $primary 35%,
+       $goldLight 50%,
+       $primary 65%,
+       $primaryDark 100%
+      )
+      border-box;
+    background-size: 260% 100%;
+    color: $gold;
+
+    @media (prefers-reduced-motion: no-preference) {
+     animation: gold-shine 3.2s linear infinite;
+    }
+   }
+  }
  }
  &.Mui-disabled:not(.loading) {
   background-color: $appCardBorder;

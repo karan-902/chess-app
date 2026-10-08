@@ -663,6 +663,17 @@
    cursor: pointer;
   }
 
+  .matches-page.gold-foil & {
+   border-radius: 0.6875rem;
+   transition: border-color 0.15s ease;
+
+   @media (hover: hover) {
+    &.clickable:hover {
+     border-color: alpha($gold, 0.35);
+    }
+   }
+  }
+
   &.system {
    background: transparent;
   }

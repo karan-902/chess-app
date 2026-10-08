@@ -48,7 +48,7 @@ export default function MyMatches() {
  const closeMatchInfo = useCallback(() => setSelectedMatch(null), []);
 
  return (
-  <Box customClass="matches-page">
+  <Box customClass="matches-page gold-foil">
    <Box customClass="filter-pill-row">
     {MATCHES_SUBTAB_OPTIONS.map((tab) => (
      <Button
