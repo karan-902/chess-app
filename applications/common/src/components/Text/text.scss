@@ -316,6 +316,10 @@
    color: $gold;
    font-family: $fontOutfitExtraBold;
   }
+
+  .room-duration-field.gold-foil &:not(.active) {
+   color: $appTextPlaceholder;
+  }
  }
  &.searching-detail-value {
   display: block;
@@ -370,7 +374,7 @@
  &.bet-card-tc {
   font-size: $font14;
   letter-spacing: 0.06em;
-  text-transform: uppercase;
+
   font-family: $fontOutfitSemiBold;
   color: $appText;
  }

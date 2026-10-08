@@ -15,5 +15,10 @@
    text-align: center !important;
    width: 100%;
   }
+
+  &.gold-foil {
+   font-size: $font16;
+   color: $appText !important;
+  }
  }
 }

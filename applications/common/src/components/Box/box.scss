@@ -394,6 +394,10 @@
 
   &.room-duration-field {
    gap: 0.5rem;
+
+   &.gold-foil {
+    border-radius: 0.8125rem;
+   }
   }
  }
 
@@ -428,6 +432,14 @@
   background: $appSecondary;
   pointer-events: none;
   z-index: $z-base;
+
+  .room-duration-field.gold-foil & {
+   left: $space-8;
+   right: $space-8;
+   border-color: alpha($gold, 0.35);
+   border-radius: 0.5625rem;
+   background: alpha($gold, 0.08);
+  }
  }
 
  &.duration-wheel-list {
