@@ -152,7 +152,7 @@ export default function WithdrawSheet() {
        type="text"
        label={destinationText}
        fullWidth
-       customClass="wallet-input"
+       customClass="wallet-input gold-foil"
        placeholder={btcAddressOrInvoiceText}
        value={destination}
        onChange={(e) => setDestination(e.target.value)}
@@ -164,7 +164,7 @@ export default function WithdrawSheet() {
       type="submit"
       fullWidth
       variant="contained"
-      customClass="modal-submit-btn"
+      customClass="modal-submit-btn gold-foil shine"
       onClick={handleWithdraw}
       isLoading={submitting}
       disabled={!canSubmit || submitting}

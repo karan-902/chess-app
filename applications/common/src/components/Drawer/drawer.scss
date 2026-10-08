@@ -72,4 +72,14 @@
  &.wallet-sheet-success .MuiDrawer-paper {
   min-height: 0;
  }
+
+ &.wallet-sheet-success.gold-foil .MuiDrawer-paper {
+  background:
+   radial-gradient(
+    120% 55% at 50% 0%,
+    #{alpha($greenishTeal, 0.24)},
+    transparent 70%
+   ),
+   $appSheet;
+ }
 }

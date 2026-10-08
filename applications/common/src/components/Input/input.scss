@@ -150,11 +150,19 @@
   }
 
   &.Mui-focused {
+   border-radius: 0.6875rem !important;
    box-shadow: 0 0 0 3px alpha($primary, 0.15);
   }
 
   &.Mui-error {
    border-radius: 0.6875rem !important;
+  }
+ }
+
+ &.amount-input-hero .MuiInputBase-root {
+  .wallet-sheet.gold-foil & {
+   font-family: $fontOutfitBlack;
+   letter-spacing: -0.02em;
   }
  }
 }

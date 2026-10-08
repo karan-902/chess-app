@@ -942,6 +942,18 @@
    flex-shrink: 0;
    margin-top: 0.1rem;
   }
+
+  .wallet-sheet.gold-foil & {
+   padding: 0.625rem $space-12;
+   border-color: alpha($cyan, 0.28);
+   border-radius: 0.625rem;
+   background: alpha($cyan, 0.1);
+   color: $appText;
+
+   svg {
+    color: $cyan;
+   }
+  }
  }
 
  &.deposit-speed-wrapper {
@@ -961,6 +973,11 @@
    color: inherit;
    font-size: inherit;
   }
+
+  .wallet-sheet.gold-foil & {
+   font-size: $font13;
+   color: $appTextMuted;
+  }
  }
 
  &.deposit-qr-wrap {
@@ -968,6 +985,12 @@
   padding: 0.75rem;
   border-radius: 0.625rem;
   margin: 0.9rem 0;
+
+  .wallet-sheet.gold-foil & {
+   padding: 0.625rem;
+   border-radius: 0.875rem;
+   background: $white;
+  }
  }
 
  &.deposit-address-row {
@@ -978,6 +1001,16 @@
   border-radius: 4px;
   padding: 0.5rem 0.6rem;
   margin-bottom: 0.7rem;
+
+  .wallet-sheet.gold-foil & {
+   padding: 0.625rem $space-12;
+   border-radius: 0.625rem;
+   background: $appSurface;
+
+   .result-copy-btn {
+    color: $gold;
+   }
+  }
  }
 
  &.flex {

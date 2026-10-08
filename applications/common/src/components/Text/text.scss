@@ -122,6 +122,12 @@
   font-family: $fontOutfitExtraBold;
   font-size: $font24;
   color: $appText;
+
+  .wallet-sheet.gold-foil & {
+   @include gold-foil-text;
+   font-family: $fontOutfitBlack;
+   font-size: $font30;
+  }
  }
 
  &.field-error {
@@ -770,6 +776,12 @@
  &.modal-heading {
   display: block;
   margin-top: -0.4rem;
+
+  .wallet-sheet.gold-foil & {
+   font-family: $fontOutfitBlack;
+   font-size: $font22;
+   letter-spacing: -0.01em;
+  }
  }
 
  &.deposit-tagline {
@@ -802,6 +814,22 @@
 
   &.expired {
    color: $paleRed;
+  }
+
+  .wallet-sheet.gold-foil & {
+   align-self: center;
+   padding: $space-4 $space-12;
+   border-radius: 99px;
+   background: alpha($gold, 0.1);
+   font-family: $fontOutfitExtraBold;
+   font-size: $font14;
+   color: $gold;
+
+   &.expired {
+    background: alpha($paleRed, 0.12);
+    color: $paleRed;
+    white-space: normal;
+   }
   }
  }
 
