@@ -193,7 +193,8 @@
  &.gold-foil {
   border-radius: 0.6875rem;
 
-  &.MuiButton-contained:not(.Mui-disabled) {
+  &.MuiButton-contained:not(.Mui-disabled),
+  &.MuiButton-contained.loading {
    &,
    &:hover,
    &:active {

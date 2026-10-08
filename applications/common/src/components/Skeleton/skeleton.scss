@@ -47,7 +47,8 @@
   border-radius: 4px;
  }
 
- &.username-suggestion-skeleton {
+ &.username-suggestion-skeleton,
+ &.select-option-skeleton {
   width: 8rem;
   height: 1rem;
   border-radius: 3px;

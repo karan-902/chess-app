@@ -18,10 +18,12 @@ import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
 import AlertMessage from "@gopvp/common/src/components/AlertMessage/AlertMessage";
 import Text from "@gopvp/common/src/components/Text/Text";
+import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
 import {
  noResultsText,
  selectText,
 } from "@gopvp/common/src/constants/message";
+import { SELECT_SKELETON_ROWS } from "@gopvp/common/src/constants/limit";
 import "./select.scss";
 
 export interface ISelectOption {
@@ -38,6 +40,7 @@ interface ISelectProps {
  isError?: boolean;
  helperText?: string;
  disabled?: boolean;
+ loading?: boolean;
  customClass?: string;
 }
 
@@ -50,6 +53,7 @@ export function CustomSelect({
  isError,
  helperText,
  disabled,
+ loading = false,
  customClass,
 }: ISelectProps) {
  const listId = useId();
@@ -169,7 +173,13 @@ export function CustomSelect({
    >
     <Paper className="common-select-menu">
      <MenuList id={listId} role="listbox" dense>
-      {visibleOptions.length === 0 ? (
+      {loading ? (
+       Array.from({ length: SELECT_SKELETON_ROWS }).map((_, index) => (
+        <MenuItem key={index} disabled>
+         <Skeleton variant="rounded" customClass="select-option-skeleton" />
+        </MenuItem>
+       ))
+      ) : visibleOptions.length === 0 ? (
        <MenuItem disabled>{noResultsText}</MenuItem>
       ) : (
        visibleOptions.map((option, index) => (

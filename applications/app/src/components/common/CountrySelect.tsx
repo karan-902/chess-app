@@ -22,6 +22,7 @@ export default function CountrySelect<TValues extends { country: string }>({
 }: ICountrySelectProps<TValues>) {
  const { value, error, touched } = formik.getFieldMeta<string>("country");
  const [countries, setCountries] = useState<ISelectOption[]>([]);
+ const [isLoading, setIsLoading] = useState(true);
 
  useEffect(() => {
   let isCancelled = false;
@@ -37,6 +38,8 @@ export default function CountrySelect<TValues extends { country: string }>({
      );
    } catch (err) {
     showApiErrorToast(err);
+   } finally {
+    if (!isCancelled) setIsLoading(false);
    }
   };
   loadCountries();
@@ -56,7 +59,8 @@ export default function CountrySelect<TValues extends { country: string }>({
     }}
     onBlur={() => formik.setFieldTouched("country", true)}
     options={countries}
-    disabled={formik.isSubmitting || countries.length === 0}
+    disabled={formik.isSubmitting}
+    loading={isLoading}
     placeholder={selectCountryText}
     isError={touched && !!error}
     helperText={error}
