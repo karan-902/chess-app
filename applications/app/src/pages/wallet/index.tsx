@@ -122,7 +122,7 @@ export default function Wallet() {
  );
 
  return (
-  <Box customClass="wallet-page">
+  <Box customClass="wallet-page gold-foil">
    <Box customClass="wallet-split">
     <Box customClass="wallet-split-block accent">
      <Text customClass="wallet-split-lbl">{totalBalanceText}</Text>
@@ -165,7 +165,7 @@ export default function Wallet() {
       <Button
        type="button"
        variant="contained"
-       customClass="wallet-deposit-btn"
+       customClass="wallet-deposit-btn gold-foil shine"
        onClick={openDeposit}
       >
        {depositText}
@@ -173,7 +173,7 @@ export default function Wallet() {
       <Button
        type="button"
        variant="outlined"
-       customClass="wallet-withdraw-btn"
+       customClass="wallet-withdraw-btn gold-foil"
        onClick={openWithdraw}
       >
        {withdrawText}
@@ -195,6 +195,9 @@ export default function Wallet() {
 
    {transactionsLoading ? (
     <Box customClass="wallet-timeline">
+     <Text component="h4" customClass="wallet-tx-group-label">
+      <Skeleton customClass="text" width={48} />
+     </Text>
      {renderSkeletons(TRANSACTIONS_SKELETON_ROWS, TxItemSkeleton)}
     </Box>
    ) : transactions.length === 0 ? (

@@ -178,7 +178,8 @@
   }
 
   .matches-page.gold-foil &,
-  .leaderboard-page.gold-foil & {
+  .leaderboard-page.gold-foil &,
+  .wallet-page.gold-foil & {
    font-family: $fontOutfitBlack;
   }
  }
@@ -417,7 +418,7 @@
 
   .segment.gold-foil & {
    font-family: $fontOutfitBold;
-   color: $appTextMuted;
+   color: $appText;
   }
 
   .segment.gold-foil .segment-btn.active & {
@@ -444,7 +445,7 @@
 
   .segment.gold-foil & {
    font-size: $font11;
-   color: $appTextMuted;
+   color: alpha($appText, 0.7);
   }
 
   .segment.gold-foil .segment-btn.active & {
@@ -609,6 +610,16 @@
   .wallet-split-block.accent & {
    color: $appText;
   }
+
+  .wallet-page.gold-foil & {
+   font-family: $fontOutfitBlack;
+   font-size: $font24;
+   letter-spacing: -0.02em;
+  }
+
+  .wallet-page.gold-foil .wallet-split-block.accent & {
+   @include gold-foil-text;
+  }
  }
 
  &.wallet-tx-title {
@@ -719,6 +730,17 @@
   margin: 0 -1.1rem;
   padding: $space-12 1.1rem;
   background: alpha($appText, 0.06);
+
+  .wallet-page.gold-foil & {
+   margin: 0;
+   padding: $space-8 0;
+   background: transparent;
+   font-family: $fontOutfitBold;
+   font-size: $font12;
+   letter-spacing: 0.1em;
+   text-transform: uppercase;
+   color: $appTextMuted;
+  }
  }
 
  &.rules-text {

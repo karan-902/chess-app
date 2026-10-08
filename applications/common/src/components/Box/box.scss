@@ -302,8 +302,8 @@
 
   .segment.gold-foil & {
    border-radius: 0.5625rem;
-   background: $appSheet;
-   box-shadow: inset 0 0 0 1px alpha($gold, 0.4);
+   background: alpha($gold, 0.14);
+   box-shadow: inset 0 0 0 1px alpha($gold, 0.6);
   }
  }
 
@@ -588,6 +588,16 @@
   border: 1px solid $appCardBorder;
   border-radius: 14px;
   padding: 0.9rem 0.85rem;
+
+  .wallet-page.gold-foil & {
+   padding: $space-16 0.875rem;
+   border-radius: 0.8125rem;
+   background: $appSurface;
+
+   &.accent {
+    @include gold-foil-border;
+   }
+  }
  }
  &.accent {
   background: alpha($gold, 0.12);
@@ -630,6 +640,14 @@
   &.loading:last-of-type {
    border-bottom: none;
   }
+
+  .wallet-page.gold-foil & {
+   margin-bottom: $space-8;
+   padding: 0.6875rem 0.8125rem;
+   border: 1px solid $appCardBorder;
+   border-radius: 0.6875rem;
+   background: $appSurface;
+  }
  }
 
  &.wallet-tx-info {
@@ -653,6 +671,25 @@
 
   .wallet-tx-item:not(.neg) & {
    color: $greenishTeal;
+  }
+
+  .wallet-page.gold-foil & {
+   width: 2.125rem;
+   height: 2.125rem;
+   border-radius: 0.625rem;
+   background: alpha($greenishTeal, 0.12);
+
+   svg {
+    font-size: $font18;
+   }
+  }
+
+  .wallet-page.gold-foil .wallet-tx-item.neg & {
+   background: alpha($paleRed, 0.12);
+  }
+
+  .wallet-page.gold-foil .wallet-tx-item.loading & {
+   background: transparent;
   }
  }
 
