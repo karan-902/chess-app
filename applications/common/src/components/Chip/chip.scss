@@ -66,18 +66,20 @@
   height: 32px;
   font-size: $font14;
 
-  background: transparent;
-  border: 1px solid alpha($gold, 0.3);
+  border: 1px solid transparent;
+  background:
+   linear-gradient($appBgTop, $appBgTop) padding-box,
+   linear-gradient(135deg, $primaryHover, $primaryDark 50%, $primary) border-box;
   padding: 0.3rem 0.75rem;
-  border-radius: 4px !important;
-  transition:
-   background 0.15s ease,
-   border-color 0.15s ease;
+  border-radius: 0.4375rem !important;
 
   @media (hover: hover) {
    &:hover {
-    background: alpha($gold, 0.18);
-    border-color: alpha($gold, 0.45);
+    background:
+     linear-gradient(alpha($gold, 0.12), alpha($gold, 0.12)) padding-box,
+     linear-gradient($appBgTop, $appBgTop) padding-box,
+     linear-gradient(135deg, $primaryHover, $primaryDark 50%, $primary)
+      border-box;
    }
   }
 

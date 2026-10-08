@@ -34,6 +34,11 @@
   border-bottom: 1px solid $appLine;
   flex-shrink: 0;
 
+  .MuiTabs-indicator {
+   background: linear-gradient(90deg, $primaryDark, $primaryHover, $primaryDark);
+   box-shadow: 0 0 10px alpha($primary, 0.5);
+  }
+
   @include from(tablet) {
    padding: 0 1rem;
   }
