@@ -34,16 +34,14 @@ import {
  vsText,
 } from "@gopvp/app/src/constants/message";
 import CustomBadge from "@gopvp/common/src/components/Badge/Badge";
-import {
- MAX_AMOUNT_DIGITS,
- DEFAULT_ROOM_DURATION_MINUTES,
-} from "@gopvp/app/src/constants/limit";
+import { MAX_AMOUNT_DIGITS } from "@gopvp/app/src/constants/limit";
 import { cancelText, youText } from "@gopvp/common/src/constants/message";
 import { icons } from "@gopvp/common/src/components/images";
 import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
 import {
  ROOM_TABS,
  BET_CHIP_AMOUNTS,
+ DURATION_MINUTES,
 } from "@gopvp/app/src/constants/option";
 import SheetActions from "@gopvp/common/src/components/SheetActions/SheetActions";
 import DurationWheel from "@gopvp/app/src/pages/play/DurationWheel";
@@ -76,9 +74,7 @@ export default function RoomSheet({
  const [roomTab, setRoomTab] = useState<RoomTab>("create");
  const [roomBet, setRoomBet] = useState("");
  const [roomBetError, setRoomBetError] = useState("");
- const [roomMinutes, setRoomMinutes] = useState(
-  String(DEFAULT_ROOM_DURATION_MINUTES),
- );
+ const [roomMinutes, setRoomMinutes] = useState(String(DURATION_MINUTES[4]));
  const [joinCode, setJoinCode] = useState("");
 
  useEffect(() => {
@@ -86,7 +82,7 @@ export default function RoomSheet({
   setRoomTab("create");
   setRoomBet("");
   setRoomBetError("");
-  setRoomMinutes(String(DEFAULT_ROOM_DURATION_MINUTES));
+  setRoomMinutes(String(DURATION_MINUTES[4]));
   setJoinCode("");
  }, [open]);
 
@@ -131,7 +127,7 @@ export default function RoomSheet({
    anchor="bottom"
    open={open}
    onClose={onClose}
-   customClass="room-sheet gold-foil"
+   customClass="room-sheet"
   >
    {roomStatus === "ready" || roomStatus === "starting" ? (
     <Box customClass="matchmaking-searching">
@@ -186,13 +182,13 @@ export default function RoomSheet({
     </Box>
    ) : (
     <Box customClass="matchmaking-searching room-options">
-     <Text customClass="sheet-title dialog-title gold-foil">{roomText}</Text>
+     <Text customClass="sheet-title dialog-title">{roomText}</Text>
      <ChipSelect
       options={ROOM_TABS}
       value={roomTab}
       onChange={setRoomTab}
       label={(t) => (t === "create" ? createRoomText : joinRoomText)}
-      customClass="segment compact gold-foil"
+      customClass="segment compact"
      />
      {roomTab === "create" ? (
       <>
@@ -249,8 +245,8 @@ export default function RoomSheet({
         </Box>
        </Box>
 
-       <Box customClass="room-field room-duration-field gold-foil">
-        <CustomLabel customClass="room-field-label room-bet-label gold-foil">
+       <Box customClass="room-field room-duration-field">
+        <CustomLabel customClass="room-field-label room-bet-label">
          {durationText}
         </CustomLabel>
         <DurationWheel
@@ -264,7 +260,7 @@ export default function RoomSheet({
          type="button"
          variant="contained"
          fullWidth
-         customClass="game-cta create-room-btn gold-foil shine"
+         customClass="game-cta create-room-btn"
          disabled={!(Number(roomBet) > 0) || !(Number(roomMinutes) > 0)}
          isLoading={roomStatus === "creating"}
          loaderOnDark

@@ -92,23 +92,12 @@
   font-family: $fontOutfitSemiBold;
   font-size: $font16;
   color: $appText;
-
-  .rules-page.gold-foil & {
-   font-family: $fontOutfitExtraBold;
-   font-size: $font18;
-  }
  }
 
  &.dialog-title {
   font-family: $fontOutfitSemiBold;
   font-size: $font18;
   color: $appText;
-
-  &.gold-foil {
-   font-family: $fontOutfitBlack;
-   font-size: $font22;
-   letter-spacing: -0.01em;
-  }
  }
 
  &.value-heading {
@@ -122,24 +111,6 @@
   font-family: $fontOutfitExtraBold;
   font-size: $font24;
   color: $appText;
-
-  .wallet-sheet.gold-foil & {
-   @include gold-foil-text;
-   font-family: $fontOutfitBlack;
-   font-size: $font30;
-  }
- }
-
- &.field-error {
-  font-family: $fontOutfitMedium;
-  font-size: $font14;
-  color: $paleRed;
-  white-space: normal;
-  overflow: visible;
-
-  :root[data-theme="light"] & {
-   display: none;
-  }
  }
 
  &.page-subtitle {
@@ -182,12 +153,6 @@
   &.neutral {
    color: $appTextMuted;
   }
-
-  .matches-page.gold-foil &,
-  .leaderboard-page.gold-foil &,
-  .wallet-page.gold-foil & {
-   font-family: $fontOutfitBlack;
-  }
  }
 
  &.auth-account-name {
@@ -223,12 +188,6 @@
   font-size: $font24;
   font-weight: 700;
   color: $appText;
-
-  &.gold-foil {
-   font-family: $fontOutfitBlack;
-   font-size: $font30;
-   letter-spacing: -0.01em;
-  }
  }
 
  &.otp-title {
@@ -290,14 +249,6 @@
   font-size: $font30;
   font-weight: 700;
   color: $gold;
-
-  &.gold-foil {
-   padding: $space-4 $space-12;
-   border-radius: 99px;
-   background: alpha($gold, 0.1);
-   font-family: $fontOutfitExtraBold;
-   font-size: $font14;
-  }
  }
 
  &.searching-detail-label {
@@ -305,13 +256,6 @@
   font-family: $fontOutfitSemiBold;
   font-size: $font14;
   letter-spacing: 0.04em;
-
-  &.gold-foil {
-   font-family: $fontOutfitMedium;
-   font-size: $font12;
-   letter-spacing: 0;
-   color: $appTextMuted;
-  }
  }
  &.duration-wheel-item {
   height: 2.8rem;
@@ -333,22 +277,9 @@
    color: $gold;
    font-family: $fontOutfitExtraBold;
   }
-
-  .room-duration-field.gold-foil &:not(.active) {
-   color: $appTextPlaceholder;
-  }
  }
  &.searching-detail-value {
   display: block;
-
-  &.gold-foil {
-   font-family: $fontOutfitBlack;
-   font-size: $font24;
-  }
-
-  &.win-prize.gold-foil {
-   @include gold-foil-text;
-  }
  }
 
  &.sheet-tip {
@@ -366,13 +297,6 @@
   font-family: $fontOutfitExtraBold;
   font-size: $font24;
   color: $gold;
-
-  &.gold-foil {
-   @include gold-foil-text;
-   font-family: $fontOutfitBlack;
-   font-size: $font30;
-   line-height: 1.15;
-  }
  }
 
  &.pool-entry-fee {
@@ -391,7 +315,7 @@
  &.bet-card-tc {
   font-size: $font14;
   letter-spacing: 0.06em;
-
+  text-transform: uppercase;
   font-family: $fontOutfitSemiBold;
   color: $appText;
  }
@@ -405,11 +329,6 @@
   @include from(tablet) {
    font-size: $font15;
   }
-
-  &.gold-foil {
-   @include gold-foil-text;
-   font-size: $font18;
-  }
  }
 
  &.segment-btn-label {
@@ -420,15 +339,6 @@
 
   .segment-btn.active & {
    color: $primaryContrast;
-  }
-
-  .segment.gold-foil & {
-   font-family: $fontOutfitBold;
-   color: $appText;
-  }
-
-  .segment.gold-foil .segment-btn.active & {
-   color: $gold;
   }
 
   .segment.category-select & {
@@ -448,24 +358,6 @@
   .segment-btn.active & {
    color: $primaryContrast;
   }
-
-  .segment.gold-foil & {
-   font-size: $font11;
-   color: alpha($appText, 0.7);
-  }
-
-  .segment.gold-foil .segment-btn.active & {
-   color: $gold;
-  }
- }
-
- &.sheet-caps-label {
-  align-self: flex-start;
-  font-family: $fontOutfitBold;
-  font-size: $font11;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: $appTextMuted;
  }
 
  &.public-footer {
@@ -479,10 +371,6 @@
    text-decoration: underline;
    font-family: $fontOutfitExtraBold;
    margin-left: $space-4;
-  }
-
-  &.gold-foil a {
-   text-decoration: none;
   }
  }
 
@@ -501,10 +389,6 @@
   font-size: $font18;
   color: $appText;
   margin-bottom: 0.35rem;
-
-  .matches-page.gold-foil & {
-   font-family: $fontOutfitExtraBold;
-  }
  }
 
  &.stat-val {
@@ -519,33 +403,12 @@
   svg {
    vertical-align: top;
   }
-
-  .matches-page.gold-foil &,
-  .profile-page.gold-foil & {
-   font-family: $fontOutfitBold;
-  }
-
-  .rules-page.gold-foil & {
-   font-size: $font14 !important;
-   color: $appTextMuted;
-  }
  }
  &.stat-title {
   font-family: $fontOutfitMedium !important;
   font-size: $font16;
   color: $appTextMuted;
   flex-shrink: 0;
-
-  .matches-page.gold-foil &,
-  .profile-page.gold-foil & {
-   font-size: $font15;
-  }
-
-  .rules-page.gold-foil & {
-   font-family: $fontOutfitSemiBold !important;
-   font-size: $font14;
-   color: $appText;
-  }
  }
 
  &.lb-rank {
@@ -618,16 +481,6 @@
   .wallet-split-block.accent & {
    color: $appText;
   }
-
-  .wallet-page.gold-foil & {
-   font-family: $fontOutfitBlack;
-   font-size: $font24;
-   letter-spacing: -0.02em;
-  }
-
-  .wallet-page.gold-foil .wallet-split-block.accent & {
-   @include gold-foil-text;
-  }
  }
 
  &.wallet-tx-title {
@@ -644,10 +497,6 @@
    font-size: $font18;
   }
   color: $appText;
-
-  .profile-page.gold-foil & {
-   font-size: $font20;
-  }
  }
 
  &.sheet-title {
@@ -659,10 +508,6 @@
   font-family: $fontOutfitExtraBold;
   font-size: $font24;
   color: $appText;
-
-  .result-sheet.gold-foil & {
-   font-family: $fontOutfitBlack;
-  }
  }
 
  &.result-subtitle {
@@ -685,36 +530,18 @@
   .result-sheet.loss & {
    color: $paleRed;
   }
-
-  .result-sheet.gold-foil & {
-   font-family: $fontOutfitBlack;
-   letter-spacing: -0.02em;
-  }
-
-  .result-sheet.gold.gold-foil & {
-   @include gold-foil-text;
-  }
  }
 
  &.result-tile-lbl {
   font-family: $fontOutfitSemiBold;
-  font-size: $font15;
+  font-size: $font14;
   color: $appText;
-
-  .result-sheet.gold-foil & {
-   font-family: $fontOutfitMedium;
-   color: $appTextMuted;
-  }
  }
 
  &.result-tile-val {
   font-family: $fontOutfitExtraBold;
   font-size: $font22;
   color: $appText;
-
-  .result-sheet.gold-foil & {
-   font-family: $fontOutfitBlack;
-  }
 
   &.pos {
    color: $greenishTeal;
@@ -732,10 +559,6 @@
   &:first-child {
    margin-top: 0;
   }
-
-  .profile-page.gold-foil & {
-   font-family: $fontOutfitBold;
-  }
  }
 
  &.wallet-tx-group-label {
@@ -746,17 +569,6 @@
   margin: 0 -1.1rem;
   padding: $space-12 1.1rem;
   background: alpha($appText, 0.06);
-
-  .wallet-page.gold-foil & {
-   margin: 0;
-   padding: $space-8 0;
-   background: transparent;
-   font-family: $fontOutfitBold;
-   font-size: $font12;
-   letter-spacing: 0.1em;
-   text-transform: uppercase;
-   color: $appTextMuted;
-  }
  }
 
  &.rules-text {
@@ -766,10 +578,6 @@
   color: $appTextMuted;
   white-space: normal;
   overflow: visible;
-
-  .rules-page.gold-foil & {
-   line-height: 1.55;
-  }
  }
 
  &.rules-about {
@@ -786,12 +594,6 @@
  &.modal-heading {
   display: block;
   margin-top: -0.4rem;
-
-  .wallet-sheet.gold-foil & {
-   font-family: $fontOutfitBlack;
-   font-size: $font22;
-   letter-spacing: -0.01em;
-  }
  }
 
  &.deposit-tagline {
@@ -824,22 +626,6 @@
 
   &.expired {
    color: $paleRed;
-  }
-
-  .wallet-sheet.gold-foil & {
-   align-self: center;
-   padding: $space-4 $space-12;
-   border-radius: 99px;
-   background: alpha($gold, 0.1);
-   font-family: $fontOutfitExtraBold;
-   font-size: $font14;
-   color: $gold;
-
-   &.expired {
-    background: alpha($paleRed, 0.12);
-    color: $paleRed;
-    white-space: normal;
-   }
   }
  }
 
@@ -890,6 +676,7 @@
 
  &.gr-first-move {
   background: alpha($warning, 0.12);
+  font-variant-numeric: tabular-nums;
   color: $warning;
 
   &.urgent {

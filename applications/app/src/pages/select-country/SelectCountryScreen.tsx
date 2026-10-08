@@ -62,13 +62,13 @@ export default function SelectCountryScreen({
     </Box>
    )}
 
-   <CountrySelect formik={formik} customClass="gold-foil" />
+   <CountrySelect formik={formik} />
 
    <Button
     type="submit"
     variant="contained"
     fullWidth
-    customClass="auth-submit-btn gold-foil shine"
+    customClass="auth-submit-btn"
     disabled={formik.isSubmitting}
     isLoading={formik.isSubmitting}
    >

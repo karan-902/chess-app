@@ -1,8 +1,6 @@
 export const resignText = "Resign";
 export const drawText = "Draw";
 export const computerText = "Computer";
-export const difficultyText = "Difficulty";
-export const timeText = "Time";
 export const reconnectingText = "Reconnecting…";
 export const firstMoveText = (seconds: number) => `First move in ${seconds}s`;
 export const cancelPremovesText = "Cancel premoves";

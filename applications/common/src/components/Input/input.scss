@@ -28,10 +28,6 @@
    border: none !important;
    border-radius: 4px !important;
    background-color: transparent;
-
-   .MuiInputAdornment-root {
-    padding: 8px;
-   }
   }
 
   @media (hover: hover) {
@@ -68,13 +64,13 @@
   }
  }
 
- .MuiInputBase-root .MuiInputAdornment-root svg {
-  width: 1.25rem;
-  height: 1.25rem;
- }
-
  .input-password-toggle {
   color: alpha($appText, 0.4);
+
+  svg {
+   width: 1rem;
+   height: 1rem;
+  }
  }
 
  &.amount-input-hero .MuiInputBase-root {
@@ -136,33 +132,5 @@
  &.form-input .MuiInputBase-root {
   height: 3rem;
   font-size: $font16;
- }
-
- &.gold-foil .MuiInputBase-root {
-  height: 2.875rem;
-  background: $appSurface;
-  border-radius: 0.6875rem;
-
-  input:-webkit-autofill,
-  input:-webkit-autofill:hover,
-  input:-webkit-autofill:focus {
-   -webkit-box-shadow: 0 0 0 1000px $appSurface inset;
-  }
-
-  &.Mui-focused {
-   border-radius: 0.6875rem !important;
-   box-shadow: 0 0 0 3px alpha($primary, 0.15);
-  }
-
-  &.Mui-error {
-   border-radius: 0.6875rem !important;
-  }
- }
-
- &.amount-input-hero .MuiInputBase-root {
-  .wallet-sheet.gold-foil & {
-   font-family: $fontOutfitBlack;
-   letter-spacing: -0.02em;
-  }
  }
 }

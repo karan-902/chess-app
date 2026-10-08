@@ -17,13 +17,7 @@ import { KeyboardArrowDownIcon } from "@gopvp/common/src/components/images";
 import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
 import AlertMessage from "@gopvp/common/src/components/AlertMessage/AlertMessage";
-import Text from "@gopvp/common/src/components/Text/Text";
-import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
-import {
- noResultsText,
- selectText,
-} from "@gopvp/common/src/constants/message";
-import { SELECT_SKELETON_ROWS } from "@gopvp/common/src/constants/limit";
+import { noResultsText } from "@gopvp/common/src/constants/message";
 import "./select.scss";
 
 export interface ISelectOption {
@@ -40,7 +34,6 @@ interface ISelectProps {
  isError?: boolean;
  helperText?: string;
  disabled?: boolean;
- loading?: boolean;
  customClass?: string;
 }
 
@@ -49,11 +42,10 @@ export function CustomSelect({
  onChange,
  onBlur,
  options,
- placeholder = selectText,
+ placeholder = "Select…",
  isError,
  helperText,
  disabled,
- loading = false,
  customClass,
 }: ISelectProps) {
  const listId = useId();
@@ -67,10 +59,9 @@ export function CustomSelect({
  const selected = options.find((option) => option.value === value) ?? null;
  const search = (query ?? "").trim().toLowerCase();
  const isSearching = query !== null && query !== selected?.label;
- const allOptions = [{ value: "", label: placeholder }, ...options];
  const visibleOptions = isSearching
   ? options.filter((option) => option.label.toLowerCase().includes(search))
-  : allOptions;
+  : options;
 
  useEffect(() => {
   if (open) optionRefs.current[activeIndex]?.scrollIntoView({ block: "nearest" });
@@ -78,7 +69,7 @@ export function CustomSelect({
 
  const openMenu = () => {
   if (open || disabled) return;
-  setActiveIndex(Math.max(0, allOptions.findIndex((o) => o.value === value)));
+  setActiveIndex(Math.max(0, options.findIndex((o) => o.value === value)));
   setOpen(true);
  };
 
@@ -167,19 +158,13 @@ export function CustomSelect({
     open={open}
     anchorEl={anchorRef.current}
     placement="bottom-start"
-    className={classNames("common-select-popper", customClass)}
+    className="common-select-popper"
     modifiers={[{ name: "offset", options: { offset: [0, 4] } }]}
     style={{ width: anchorRef.current?.offsetWidth }}
    >
     <Paper className="common-select-menu">
      <MenuList id={listId} role="listbox" dense>
-      {loading ? (
-       Array.from({ length: SELECT_SKELETON_ROWS }).map((_, index) => (
-        <MenuItem key={index} disabled>
-         <Skeleton variant="rounded" customClass="select-option-skeleton" />
-        </MenuItem>
-       ))
-      ) : visibleOptions.length === 0 ? (
+      {visibleOptions.length === 0 ? (
        <MenuItem disabled>{noResultsText}</MenuItem>
       ) : (
        visibleOptions.map((option, index) => (
@@ -192,10 +177,7 @@ export function CustomSelect({
          }}
          selected={option.value === value}
          aria-selected={option.value === value}
-         className={classNames(
-          index === activeIndex && "active",
-          !option.value && "placeholder-item",
-         )}
+         className={classNames(index === activeIndex && "active")}
          onMouseDown={(e) => e.preventDefault()}
          onMouseEnter={() => setActiveIndex(index)}
          onClick={() => selectOption(option)}
@@ -209,14 +191,7 @@ export function CustomSelect({
    </Popper>
 
    {isError && helperText && (
-    <>
-     <Text customClass="field-error">{helperText}</Text>
-     <AlertMessage
-      severity="error"
-      message={helperText}
-      customClass="field-error"
-     />
-    </>
+    <AlertMessage severity="error" message={helperText} />
    )}
   </Box>
  );

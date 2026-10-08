@@ -8,14 +8,6 @@
  border-radius: 0.25rem;
  z-index: $z-alert;
 
- &.field-error {
-  display: none;
-
-  :root[data-theme="light"] & {
-   display: flex;
-  }
- }
-
  &.MuiAlert-standard.MuiAlert-colorError {
   .MuiAlert-icon {
    color: $paleRed !important;

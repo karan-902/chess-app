@@ -9,10 +9,6 @@
   padding: 2.5rem 1.5rem;
   gap: 1.75rem;
   perspective: 800px;
-
-  &.gold-foil {
-   background: linear-gradient(180deg, $appBgTop, $appBg 34%);
-  }
  }
  &.public-page-wrapper {
   display: flex;
@@ -71,11 +67,6 @@
   background: $appSurface;
   border: 1px solid $appCardBorder;
   border-radius: 4px;
-
-  &.gold-foil {
-   padding: $space-12;
-   border-radius: 0.8125rem;
-  }
  }
 
  &.auth-account-info {
@@ -205,13 +196,6 @@
  &.searching-details {
   display: flex;
   gap: 1.5rem;
-
-  &.gold-foil {
-   display: grid;
-   grid-template-columns: 1fr 1fr;
-   gap: 0.625rem;
-   width: 100%;
-  }
  }
 
  &.pool-confirm-actions {
@@ -228,26 +212,6 @@
   flex-direction: column;
   align-items: center;
   gap: 0.15rem;
-
-  &.gold-foil {
-   padding: 0.875rem;
-   background: $appSurface;
-   border: 1px solid $appCardBorder;
-   border-radius: 0.8125rem;
-
-   &.prize-item {
-    border-color: transparent;
-    background:
-     linear-gradient($appSurface, $appSurface) padding-box,
-     linear-gradient(
-       160deg,
-       alpha($gold, 0.65),
-       $appCardBorder 45%,
-       $appCardBorder
-      )
-      border-box;
-   }
-  }
  }
 
  &.matches-page {
@@ -281,11 +245,6 @@
     padding: 0.3rem;
    }
   }
-
-  &.gold-foil {
-   background: $appBg;
-   border-radius: 0.75rem;
-  }
  }
 
  &.segment-thumb {
@@ -299,12 +258,6 @@
    transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
    width 0.28s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: $z-base;
-
-  .segment.gold-foil & {
-   border-radius: 0.5625rem;
-   background: alpha($gold, 0.14);
-   box-shadow: inset 0 0 0 1px alpha($gold, 0.6);
-  }
  }
 
  &.matches-empty {
@@ -320,8 +273,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 6rem;
-  height: 6rem;
+  width: 4.5rem;
+  height: 4.5rem;
   margin-bottom: $space-8;
   border-radius: 50%;
   background: alpha($appText, 0.06);
@@ -346,18 +299,6 @@
 
   .rules-card & {
    padding: $space-8 0;
-  }
-
-  .rules-page.gold-foil .rules-card & {
-   padding: 0.625rem $space-12;
-   border-bottom: 0;
-   border-radius: 0.625rem;
-   background: $appBg;
-  }
-
-  .matches-page.gold-foil &,
-  .profile-page.gold-foil & {
-   padding: 0.8125rem $space-16;
   }
  }
 
@@ -406,10 +347,6 @@
 
   &.room-duration-field {
    gap: 0.5rem;
-
-   &.gold-foil {
-    border-radius: 0.8125rem;
-   }
   }
  }
 
@@ -444,14 +381,6 @@
   background: $appSecondary;
   pointer-events: none;
   z-index: $z-base;
-
-  .room-duration-field.gold-foil & {
-   left: $space-8;
-   right: $space-8;
-   border-color: alpha($gold, 0.35);
-   border-radius: 0.5625rem;
-   background: alpha($gold, 0.08);
-  }
  }
 
  &.duration-wheel-list {
@@ -513,15 +442,6 @@
 
   &.silver {
    color: $medalSilver;
-  }
-
-  &.bronze {
-   color: $medalBronze;
-  }
-
-  .leaderboard-page.gold-foil &.gold {
-   color: $gold;
-   box-shadow: 0 0 16px alpha($gold, 0.45);
   }
  }
 
@@ -589,16 +509,6 @@
   border: 1px solid $appCardBorder;
   border-radius: 14px;
   padding: 0.9rem 0.85rem;
-
-  .wallet-page.gold-foil & {
-   padding: $space-16 0.875rem;
-   border-radius: 0.8125rem;
-   background: $appSurface;
-
-   &.accent {
-    @include gold-foil-border;
-   }
-  }
  }
  &.accent {
   background: alpha($gold, 0.12);
@@ -641,14 +551,6 @@
   &.loading:last-of-type {
    border-bottom: none;
   }
-
-  .wallet-page.gold-foil & {
-   margin-bottom: $space-8;
-   padding: 0.6875rem 0.8125rem;
-   border: 1px solid $appCardBorder;
-   border-radius: 0.6875rem;
-   background: $appSurface;
-  }
  }
 
  &.wallet-tx-info {
@@ -672,25 +574,6 @@
 
   .wallet-tx-item:not(.neg) & {
    color: $greenishTeal;
-  }
-
-  .wallet-page.gold-foil & {
-   width: 2.125rem;
-   height: 2.125rem;
-   border-radius: 0.625rem;
-   background: alpha($greenishTeal, 0.12);
-
-   svg {
-    font-size: $font18;
-   }
-  }
-
-  .wallet-page.gold-foil .wallet-tx-item.neg & {
-   background: alpha($paleRed, 0.12);
-  }
-
-  .wallet-page.gold-foil .wallet-tx-item.loading & {
-   background: transparent;
   }
  }
 
@@ -719,17 +602,6 @@
 
   &.clickable {
    cursor: pointer;
-  }
-
-  .matches-page.gold-foil & {
-   border-radius: 0.6875rem;
-   transition: border-color 0.15s ease;
-
-   @media (hover: hover) {
-    &.clickable:hover {
-     border-color: alpha($gold, 0.35);
-    }
-   }
   }
 
   &.system {
@@ -943,18 +815,6 @@
    flex-shrink: 0;
    margin-top: 0.1rem;
   }
-
-  .wallet-sheet.gold-foil & {
-   padding: 0.625rem $space-12;
-   border-color: alpha($cyan, 0.28);
-   border-radius: 0.625rem;
-   background: alpha($cyan, 0.1);
-   color: $appText;
-
-   svg {
-    color: $cyan;
-   }
-  }
  }
 
  &.deposit-speed-wrapper {
@@ -974,11 +834,6 @@
    color: inherit;
    font-size: inherit;
   }
-
-  .wallet-sheet.gold-foil & {
-   font-size: $font13;
-   color: $appTextMuted;
-  }
  }
 
  &.deposit-qr-wrap {
@@ -986,12 +841,6 @@
   padding: 0.75rem;
   border-radius: 0.625rem;
   margin: 0.9rem 0;
-
-  .wallet-sheet.gold-foil & {
-   padding: 0.625rem;
-   border-radius: 0.875rem;
-   background: $white;
-  }
  }
 
  &.deposit-address-row {
@@ -1002,16 +851,6 @@
   border-radius: 4px;
   padding: 0.5rem 0.6rem;
   margin-bottom: 0.7rem;
-
-  .wallet-sheet.gold-foil & {
-   padding: 0.625rem $space-12;
-   border-radius: 0.625rem;
-   background: $appSurface;
-
-   .result-copy-btn {
-    color: $gold;
-   }
-  }
  }
 
  &.flex {
@@ -1217,12 +1056,6 @@
    width: 6rem;
    height: 6rem;
    border-radius: 14px;
-
-   .result-sheet.gold-foil & {
-    width: 5.25rem;
-    height: 5.25rem;
-    border-radius: 1.125rem;
-   }
    object-fit: cover;
   }
  }
@@ -1247,14 +1080,6 @@
   align-items: center;
   gap: $space-8;
   min-width: 0;
-
-  .result-sheet.gold-foil & {
-   gap: $space-4;
-   padding: 0.875rem;
-   background: $appSurface;
-   border: 1px solid $appCardBorder;
-   border-radius: 0.8125rem;
-  }
  }
 
  &.result-tile-label {
@@ -1274,14 +1099,11 @@
 
  &.result-tile {
   width: 100%;
+  padding: $space-16;
+  border-radius: 14px;
   background: $appSurface;
+  border: 1px solid $appCardBorder;
   text-align: center;
-
-  .result-sheet.gold-foil & {
-   padding: 0;
-   background: transparent;
-   border: 0;
-  }
 
   &.room-player {
    display: flex;

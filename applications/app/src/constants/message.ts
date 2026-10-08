@@ -83,9 +83,10 @@ export const playNowText = "Play now";
 export const tapPlayNowHintText = "Play now to choose a pool";
 export const largestPrizesTipText =
  "Rapid and Classical pools pay out the largest prizes.";
-export const forFunText = "For Fun";
+export const forFunText = "For fun";
+export const practiceText = "Practice";
 export const freeToPlayText = "Free to play";
-export const friendlyText = "Friendly";
+export const friendlyText = "FRIENDLY";
 export const roomText = "Room";
 export const customFeeText = "Custom fee";
 export const createRoomText = "Create Room";
@@ -183,7 +184,7 @@ export const wherePlayingFromText = "Where Are You Playing From?";
 export const pickCountryToFinishText =
  "Pick your country to finish setting up.";
 export const continueText = "Continue";
-export const selectCountryText = "Select Country";
+export const selectCountryText = "Select country";
 export const walletText = "Wallet";
 export const logOutText = "Log Out";
 export const accountText = "Account";

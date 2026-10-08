@@ -194,7 +194,7 @@ export default function DepositSheet() {
       type="submit"
       fullWidth
       variant="contained"
-      customClass="modal-submit-btn gold-foil shine"
+      customClass="modal-submit-btn"
       onClick={handleGenerate}
       isLoading={submitting}
       disabled={isAmountInvalid}

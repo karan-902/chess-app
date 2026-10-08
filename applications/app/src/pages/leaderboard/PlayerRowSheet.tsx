@@ -68,7 +68,6 @@ export default function PlayerRowSheet({
     ]
    }
    skeletonTiles={4}
-   customClass="gold-foil"
   />
  );
 }

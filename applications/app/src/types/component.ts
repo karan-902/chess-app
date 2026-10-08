@@ -30,7 +30,6 @@ export interface IWalletInfoNoteProps {
 
 export interface ICountrySelectProps<TValues extends { country: string }> {
  formik: FormikProps<TValues>;
- customClass?: string;
 }
 
 export interface ICopyButtonProps {
@@ -81,7 +80,6 @@ export interface IResultSheetProps {
  skeletonTiles: number;
  tileIcon?: TIconName;
  children?: ReactNode;
- customClass?: string;
 }
 
 export interface IMatchInfoSheetProps {
@@ -128,7 +126,6 @@ export interface IAuthLayoutProps {
  subtitle?: ReactNode;
  footer?: ReactNode;
  children: ReactNode;
- customClass?: string;
 }
 
 export interface IEmptyStateProps {

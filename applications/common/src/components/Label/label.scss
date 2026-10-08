@@ -7,11 +7,6 @@
  &.wallet-label {
   color: $appText !important;
   text-align: center;
-
-  .wallet-sheet.gold-foil & {
-   font-size: $font13;
-   color: $appTextMuted !important;
-  }
  }
  &.room-field-label {
   text-align: left !important;
@@ -19,11 +14,6 @@
   &.room-bet-label {
    text-align: center !important;
    width: 100%;
-  }
-
-  &.gold-foil {
-   font-size: $font16;
-   color: $appText !important;
   }
  }
 }

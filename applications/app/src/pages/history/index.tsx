@@ -28,13 +28,12 @@ import {
  MATCHES_STATS_FALLBACK,
  HISTORY_SKELETON_ROWS,
  MATCH_STATS_SKELETON_ROWS,
- MATCHES_STATS_LOGO_SIZE,
 } from "@gopvp/app/src/constants/limit";
 import { scoreText } from "@gopvp/common/src/constants/message";
 import { MATCHES_SUBTAB_OPTIONS } from "@gopvp/app/src/constants/option";
 import { MATCHES_SUBTAB_LABELS } from "@gopvp/app/src/constants/label";
 import { renderSkeletons } from "@gopvp/app/src/utils/skeleton";
-import { STAT_ICONS, ChessLogo } from "@gopvp/app/src/constants/icon";
+import { STAT_ICONS } from "@gopvp/app/src/constants/icon";
 import MatchList from "@gopvp/app/src/pages/history/MatchList";
 import MatchInfoSheet from "@gopvp/app/src/pages/history/MatchInfoSheet";
 
@@ -49,7 +48,7 @@ export default function MyMatches() {
  const closeMatchInfo = useCallback(() => setSelectedMatch(null), []);
 
  return (
-  <Box customClass="matches-page gold-foil">
+  <Box customClass="matches-page">
    <Box customClass="filter-pill-row">
     {MATCHES_SUBTAB_OPTIONS.map((tab) => (
      <Button
@@ -110,12 +109,8 @@ export default function MyMatches() {
    {subtab === "stats" && (
     <Box customClass="matches-stats">
      <Box customClass="matches-stats-head">
-      <Text
-       component="h3"
-       customClass="matches-stats-title"
-       aria-label={gameLabel}
-      >
-       <ChessLogo size={MATCHES_STATS_LOGO_SIZE} showText={false} />
+      <Text component="h3" customClass="matches-stats-title">
+       {gameLabel}
       </Text>
      </Box>
      <StatList

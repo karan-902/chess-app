@@ -16,30 +16,11 @@
   border-radius: 4px;
   margin-top: $space-4;
  }
- &.gold-foil {
-  .MuiPaper-root {
-   background: $appSurface;
-   border: 1px solid $appCardBorder;
-   border-radius: 0.6875rem;
-   box-shadow: 0 16px 36px -16px alpha($black, 0.8);
-  }
-
-  .MuiMenuItem-root {
-   font-family: $fontOutfitSemiBold;
-   color: $appText;
-
-   &:hover {
-    background: alpha($gold, 0.08);
-    color: $gold;
-   }
-  }
- }
-
  &.filter-dropdown-menu {
   .MuiPaper-root {
    min-width: 11rem;
    border: 1px solid $appCardBorder;
-   border-radius: 0.625rem;
+   border-radius: 5px;
    background: $appBg;
    box-shadow: 0 8px 24px rgba($black, 0.4);
   }

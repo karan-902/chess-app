@@ -73,7 +73,7 @@ export default function EmailFormScreen({
    component="form"
    onSubmit={formSubmitHandler(formik.handleSubmit)}
   >
-   <UsernameField formik={formik} customClass="form-input gold-foil" />
+   <UsernameField formik={formik} customClass="form-input" />
 
    <Input
     id="email"
@@ -87,7 +87,7 @@ export default function EmailFormScreen({
     disabled={formik.isSubmitting}
     isError={formik.touched.email && !!formik.errors.email}
     helperText={formik.errors.email}
-    customClass="form-input gold-foil"
+    customClass="form-input"
     fullWidth
    />
 
@@ -103,18 +103,18 @@ export default function EmailFormScreen({
     disabled={formik.isSubmitting}
     isError={formik.touched.password && !!formik.errors.password}
     helperText={formik.errors.password}
-    customClass="form-input gold-foil"
+    customClass="form-input"
     fullWidth
    />
 
-   <CountrySelect formik={formik} customClass="gold-foil" />
+   <CountrySelect formik={formik} />
 
    <Button
     type="submit"
     variant="contained"
     fullWidth
     endIcon="arrowForward"
-    customClass="auth-submit-btn auth-submit-btn-arrow gold-foil shine"
+    customClass="auth-submit-btn auth-submit-btn-arrow"
     disabled={!formik.dirty || !formik.isValid || formik.isSubmitting}
     isLoading={formik.isSubmitting}
    >

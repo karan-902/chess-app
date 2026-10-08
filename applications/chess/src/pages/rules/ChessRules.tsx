@@ -47,7 +47,7 @@ const RULE_SECTIONS: {
 
 export default function ChessRules() {
  return (
-  <Box customClass="rules-page gold-foil">
+  <Box customClass="rules-page">
    {RULE_SECTIONS.map(({ title, body, rows }) => (
     <Card key={title} customClass="rules-card">
      <Text component="h3" customClass="section-heading">

@@ -66,41 +66,18 @@
   height: 32px;
   font-size: $font14;
 
-  border: 1px solid transparent;
-  background:
-   linear-gradient($appBgTop, $appBgTop) padding-box,
-   linear-gradient(135deg, $primaryHover, $primaryDark 50%, $primary) border-box;
+  background: transparent;
+  border: 1px solid alpha($gold, 0.3);
   padding: 0.3rem 0.75rem;
-  border-radius: 0.4375rem !important;
+  border-radius: 4px !important;
+  transition:
+   background 0.15s ease,
+   border-color 0.15s ease;
 
   @media (hover: hover) {
    &:hover {
-    background:
-     linear-gradient(alpha($gold, 0.12), alpha($gold, 0.12)) padding-box,
-     linear-gradient($appBgTop, $appBgTop) padding-box,
-     linear-gradient(135deg, $primaryHover, $primaryDark 50%, $primary)
-      border-box;
-   }
-  }
-
-  &.shine {
-   background:
-    linear-gradient($appBgTop, $appBgTop) padding-box,
-    linear-gradient(
-      110deg,
-      $primaryDark 0%,
-      $primary 35%,
-      $goldLight 50%,
-      $primary 65%,
-      $primaryDark 100%
-     )
-     border-box;
-   background-size:
-    100% 100%,
-    260% 100%;
-
-   @media (prefers-reduced-motion: no-preference) {
-    animation: balance-shine $goldShineDuration linear 2;
+    background: alpha($gold, 0.18);
+    border-color: alpha($gold, 0.45);
    }
   }
 
@@ -139,18 +116,5 @@
    background: alpha($appText, 0.06);
    color: $appTextMuted;
   }
- }
-}
-
-@keyframes balance-shine {
- from {
-  background-position:
-   0 0,
-   100% 0;
- }
- to {
-  background-position:
-   0 0,
-   -160% 0;
  }
 }

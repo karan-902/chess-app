@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import classNames from "classnames";
 import { AccountBalanceWalletIcon } from "@gopvp/common/src/components/images";
@@ -41,16 +41,6 @@ export default function Header() {
   navigate(gamePath);
  };
  const { usdValue, loading } = useWalletBalance();
- const previousBalanceRef = useRef<number | null>(null);
- const [isBalanceShining, setIsBalanceShining] = useState(false);
-
- useEffect(() => {
-  if (loading) return;
-  const previousBalance = previousBalanceRef.current;
-  previousBalanceRef.current = usdValue;
-  if (previousBalance !== null && usdValue > previousBalance)
-   setIsBalanceShining(true);
- }, [usdValue, loading]);
  const session = useReduxSelector((state) => state.auth.session);
  const logout = useLogout();
  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -103,8 +93,7 @@ export default function Header() {
       <CustomChip
        icon={<AccountBalanceWalletIcon />}
        label={formatAmount(usdValue)}
-       customClass={classNames("appbar-balance", isBalanceShining && "shine")}
-       onAnimationEnd={() => setIsBalanceShining(false)}
+       customClass="appbar-balance"
       />
      )}
     </NavLink>

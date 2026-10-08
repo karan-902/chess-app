@@ -27,10 +27,7 @@ export default function WalletSheetShell({
    onClose={onClose}
    hideCloseIcon={isSuccess}
    disableRestoreFocus
-   customClass={classNames(
-    "wallet-sheet gold-foil",
-    isSuccess && "wallet-sheet-success",
-   )}
+   customClass={classNames("wallet-sheet", isSuccess && "wallet-sheet-success")}
   >
    {ready ? (
     children

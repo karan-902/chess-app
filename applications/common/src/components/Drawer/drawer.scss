@@ -28,24 +28,6 @@
   padding: 3.25rem 1rem 1.25rem;
  }
 
- &.gold-foil .MuiDrawer-paper {
-  border-top: 0;
-  border-radius: 1.25rem 1.25rem 0 0;
-  background:
-   radial-gradient(120% 40% at 50% 0%, alpha($gold, 0.08), transparent 70%),
-   $appSheet;
-
-  &::before {
-   content: "";
-   position: absolute;
-   top: 0;
-   left: 0;
-   right: 0;
-   height: 1px;
-   background: linear-gradient(90deg, transparent, $gold, transparent);
-  }
- }
-
  &.game-over-sheet .MuiBackdrop-root {
   -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
@@ -71,15 +53,5 @@
 
  &.wallet-sheet-success .MuiDrawer-paper {
   min-height: 0;
- }
-
- &.wallet-sheet-success.gold-foil .MuiDrawer-paper {
-  background:
-   radial-gradient(
-    120% 55% at 50% 0%,
-    #{alpha($greenishTeal, 0.24)},
-    transparent 70%
-   ),
-   $appSheet;
  }
 }

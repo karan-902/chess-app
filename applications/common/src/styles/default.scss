@@ -104,8 +104,6 @@
  --greenish-teal: #2ed47a;
  --backdrop-center: var(--color-bg-content);
  --backdrop-edge: var(--color-black);
- --app-bg-top: #0e1222;
- --gold-light: #fff2b8;
 }
 
 :root[data-theme="light"] {
@@ -138,7 +136,6 @@
  --greenish-teal: #159957;
  --backdrop-center: #1a1d22;
  --backdrop-edge: #000000;
- --app-bg-top: #ffffff;
 }
 @function alpha($color, $opacity) {
  @return color-mix(in srgb, #{$color} #{$opacity * 100%}, transparent);
@@ -212,9 +209,6 @@ $backdropCenter: var(--backdrop-center);
 $backdropEdge: var(--backdrop-edge);
 $gold: var(--gold);
 $cyan: var(--cyan);
-$appBgTop: var(--app-bg-top);
-$goldLight: var(--gold-light);
-$goldShineDuration: 5s;
 
 $space-4: 0.25rem;
 $space-8: 0.5rem;
@@ -245,21 +239,6 @@ $breakpoints: (
  @media (min-width: map.get($breakpoints, $name)) {
   @content;
  }
-}
-
-@mixin gold-foil-border($fill: $appSurface) {
- border-color: transparent;
- background:
-  linear-gradient($fill, $fill) padding-box,
-  linear-gradient(160deg, alpha($gold, 0.65), $appCardBorder 45%, $appCardBorder)
-   border-box;
-}
-
-@mixin gold-foil-text {
- background: linear-gradient(180deg, $goldLight, $primary 45%, $primaryDark);
- -webkit-background-clip: text;
- background-clip: text;
- color: transparent;
 }
 
 $outfitFaces:

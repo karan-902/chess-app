@@ -5,7 +5,7 @@ import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
 
 export default function PoolCardSkeleton() {
  return (
-  <Card customClass="bet-card gold-foil">
+  <Card customClass="bet-card">
    <Box customClass="pool-meta">
     <Text component="span" customClass="description">
      <Skeleton customClass="text" width={90} />

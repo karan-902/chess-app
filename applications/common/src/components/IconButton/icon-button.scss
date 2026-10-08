@@ -5,6 +5,10 @@
   width: $font18;
   height: $font18;
  }
+ &.username-clear-btn svg {
+  width: 0.875rem;
+  height: 0.875rem;
+ }
  &.deposit-qr-back-btn,
  &.gr-review-btn {
   svg {

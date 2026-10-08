@@ -52,20 +52,6 @@
     opacity: 0.6;
    }
   }
-
-  &.gold-foil {
-   border-color: transparent;
-   border-radius: 0.75rem;
-   background:
-    linear-gradient($appSurface, $appSurface) padding-box,
-    linear-gradient(
-      160deg,
-      alpha($gold, 0.6),
-      $appCardBorder 45%,
-      $appCardBorder
-     )
-     border-box;
-  }
  }
 
  .bet-card-icon {
@@ -92,11 +78,6 @@
    flex: initial;
    min-height: auto;
   }
-
-  .matches-page.gold-foil &:not(.match-row-list),
-  .profile-page.gold-foil & {
-   border-radius: 0.8125rem;
-  }
  }
 
  &.rules-card {
@@ -107,27 +88,12 @@
   margin-bottom: $space-12;
   border-radius: 0.85rem;
   box-shadow: none;
-
-  .rules-page.gold-foil & {
-   gap: $space-12;
-   border-radius: 0.8125rem;
-
-   &:first-child {
-    @include gold-foil-border;
-   }
-  }
  }
 
  &.profile-id-card {
   padding: 1.1rem 1rem;
   margin-bottom: 1.1rem;
   border-radius: 0.85rem;
-
-  .profile-page.gold-foil & {
-   @include gold-foil-border;
-   padding: 1.375rem $space-16 1.125rem;
-   border-radius: 0.8125rem;
-  }
  }
 
  &.lb-row {
@@ -146,18 +112,6 @@
 
    .lb-earnings {
     color: $gold;
-   }
-  }
-
-  .leaderboard-page.gold-foil & {
-   border-radius: 0.6875rem;
-
-   &.me {
-    @include gold-foil-border;
-
-    .lb-earnings {
-     @include gold-foil-text;
-    }
    }
   }
  }
@@ -196,18 +150,6 @@
 
    .lb-earnings {
     color: $gold;
-   }
-  }
-
-  .leaderboard-page.gold-foil & {
-   &.first,
-   &.me {
-    @include gold-foil-border;
-   }
-
-   &.first .lb-earnings,
-   &.me .lb-earnings {
-    @include gold-foil-text;
    }
   }
  }

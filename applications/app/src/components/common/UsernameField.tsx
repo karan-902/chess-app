@@ -123,7 +123,6 @@ export default function UsernameField<TValues extends { username: string }>({
    </Box>
 
    <CustomMenu
-    customClass={customClass}
     anchorEl={fieldRef.current}
     open={menuOpen && (loadingSuggestions || suggestions.length > 0)}
     onClose={() => setMenuOpen(false)}

@@ -33,16 +33,5 @@
   height: 4.5rem;
   font-size: $font30;
   font-family: $fontOutfitExtraBold;
-
-  .profile-page.gold-foil & {
-   width: 4.75rem;
-   height: 4.75rem;
-   border: 2px solid transparent;
-   background:
-    linear-gradient($appBg, $appBg) padding-box,
-    linear-gradient(135deg, $primaryHover, $primaryDark 50%, $primary)
-     border-box;
-   font-family: $fontOutfitBlack;
-  }
  }
 }

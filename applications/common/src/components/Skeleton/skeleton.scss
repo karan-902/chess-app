@@ -26,22 +26,10 @@
   border-radius: 6px;
  }
 
- &.tx-icon-skeleton {
-  width: 100%;
-  height: 100%;
-  border-radius: 0.625rem;
- }
-
  &.result-logo-skeleton {
   width: 6rem;
   height: 6rem;
   border-radius: 14px;
-
-  .result-sheet.gold-foil & {
-   width: 5.25rem;
-   height: 5.25rem;
-   border-radius: 1.125rem;
-  }
  }
 
  &.match-id-label-skeleton {
@@ -59,8 +47,7 @@
   border-radius: 4px;
  }
 
- &.username-suggestion-skeleton,
- &.select-option-skeleton {
+ &.username-suggestion-skeleton {
   width: 8rem;
   height: 1rem;
   border-radius: 3px;
@@ -69,7 +56,7 @@
  &.appbar-balance-skeleton {
   width: 7rem;
   height: 2rem;
-  border-radius: 0.4375rem;
+  border-radius: 4px;
  }
 
  &.pool-play-skeleton {

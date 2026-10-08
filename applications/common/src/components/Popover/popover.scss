@@ -14,8 +14,6 @@
    display: flex;
    flex-direction: column;
    gap: 0.15rem;
-   border-radius: 0.75rem;
-   box-shadow: 0 20px 40px -16px alpha($black, 0.8);
   }
 
   .appbar-dropdown-item {
@@ -23,8 +21,8 @@
    align-items: center;
    gap: 0.6rem;
    width: 100%;
-   padding: 0.5rem 0.625rem;
-   border-radius: 0.5rem;
+   padding: 0.45rem 0.6rem;
+   border-radius: 0.3rem;
    border: none;
    background: transparent;
    cursor: pointer;
@@ -42,15 +40,7 @@
 
    &.active {
     color: $primaryContrast;
-    background: linear-gradient(180deg, $primaryHover, $primary);
-   }
-
-   &.danger {
-    color: $paleRed;
-
-    .button-text {
-     color: inherit;
-    }
+    background: $gold;
    }
   }
  }

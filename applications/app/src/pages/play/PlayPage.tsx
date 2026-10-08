@@ -140,7 +140,7 @@ export default function PlayPage() {
  return (
   <Box customClass="play-page">
    <Box customClass="play-body">
-    <Box customClass="board-wrap gold-foil">
+    <Box customClass="board-wrap">
      <Suspense
       fallback={<Skeleton variant="rounded" customClass="board-skeleton" />}
      >
@@ -158,7 +158,7 @@ export default function PlayPage() {
      type="button"
      variant="contained"
      fullWidth
-     customClass="game-cta play-cta gold-foil shine"
+     customClass="game-cta play-cta"
      onClick={() => setSheetOpen(true)}
     >
      {playNowText}

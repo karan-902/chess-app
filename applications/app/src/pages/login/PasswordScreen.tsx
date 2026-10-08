@@ -33,7 +33,7 @@ export default function PasswordScreen({
    component="form"
    onSubmit={formSubmitHandler(formik.handleSubmit)}
   >
-   <Box customClass="auth-account-card gold-foil">
+   <Box customClass="auth-account-card">
     <CustomAvatar letter={initials} customClass="md neutral" />
     <Box customClass="auth-account-info">
      <Text customClass="auth-account-name">{verifiedUsername}</Text>
@@ -44,7 +44,7 @@ export default function PasswordScreen({
      size="small"
      variant="outlined"
      startIcon="edit"
-     customClass="auth-change-btn gold-foil"
+     customClass="auth-change-btn"
      onClick={onChangeEmail}
     >
      {changeText}
@@ -65,7 +65,7 @@ export default function PasswordScreen({
     helperText={
      (formik.touched.password && formik.errors.password) || error || undefined
     }
-    customClass="form-input gold-foil"
+    customClass="form-input"
     fullWidth
    />
 
@@ -75,7 +75,7 @@ export default function PasswordScreen({
      variant="contained"
      fullWidth
      endIcon="arrowForward"
-     customClass="auth-submit-btn auth-submit-btn-arrow gold-foil shine"
+     customClass="auth-submit-btn auth-submit-btn-arrow"
      disabled={!formik.dirty || formik.isSubmitting}
      isLoading={formik.isSubmitting}
     >
