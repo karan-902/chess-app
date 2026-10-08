@@ -463,6 +463,13 @@
   border-radius: 50%;
   border: 1px solid $appBtnBorder;
   color: $appText;
+
+  .button-text {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   line-height: 0;
+  }
  }
 
  &.profile-save-btn {

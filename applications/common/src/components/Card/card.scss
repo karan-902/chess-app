@@ -93,7 +93,8 @@
    min-height: auto;
   }
 
-  .matches-page.gold-foil &:not(.match-row-list) {
+  .matches-page.gold-foil &:not(.match-row-list),
+  .profile-page.gold-foil & {
    border-radius: 0.8125rem;
   }
  }
@@ -121,6 +122,12 @@
   padding: 1.1rem 1rem;
   margin-bottom: 1.1rem;
   border-radius: 0.85rem;
+
+  .profile-page.gold-foil & {
+   @include gold-foil-border;
+   padding: 1.375rem $space-16 1.125rem;
+   border-radius: 0.8125rem;
+  }
  }
 
  &.lb-row {

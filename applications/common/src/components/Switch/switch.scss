@@ -1,0 +1,40 @@
+@use "default.scss" as *;
+
+.common-switch {
+ &.gold-foil {
+  width: 2.875rem;
+  height: 1.625rem;
+  padding: 0;
+
+  .MuiSwitch-switchBase {
+   padding: 0.1875rem;
+   color: $appTextMuted;
+
+   &:hover {
+    background: transparent;
+   }
+
+   &.Mui-checked {
+    transform: translateX(1.25rem);
+    color: $primaryContrast;
+
+    + .MuiSwitch-track {
+     opacity: 1;
+     background: linear-gradient(180deg, $primaryHover, $primaryDark);
+    }
+   }
+  }
+
+  .MuiSwitch-thumb {
+   width: 1.25rem;
+   height: 1.25rem;
+   box-shadow: none;
+  }
+
+  .MuiSwitch-track {
+   border-radius: 99px;
+   background: $appCardBorder;
+   opacity: 1;
+  }
+ }
+}

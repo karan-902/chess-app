@@ -520,7 +520,8 @@
    vertical-align: top;
   }
 
-  .matches-page.gold-foil & {
+  .matches-page.gold-foil &,
+  .profile-page.gold-foil & {
    font-family: $fontOutfitBold;
   }
 
@@ -535,7 +536,8 @@
   color: $appTextMuted;
   flex-shrink: 0;
 
-  .matches-page.gold-foil & {
+  .matches-page.gold-foil &,
+  .profile-page.gold-foil & {
    font-size: $font15;
   }
 
@@ -642,6 +644,10 @@
    font-size: $font18;
   }
   color: $appText;
+
+  .profile-page.gold-foil & {
+   font-size: $font20;
+  }
  }
 
  &.sheet-title {
@@ -725,6 +731,10 @@
 
   &:first-child {
    margin-top: 0;
+  }
+
+  .profile-page.gold-foil & {
+   font-family: $fontOutfitBold;
   }
  }
 

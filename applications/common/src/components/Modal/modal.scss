@@ -12,6 +12,13 @@
   outline: none;
  }
 
+ &.gold-foil {
+  border-color: transparent;
+  background:
+   linear-gradient($appSheet, $appSheet) padding-box,
+   linear-gradient(160deg, alpha($gold, 0.6), $appCardBorder 45%) border-box !important;
+ }
+
  .modal-title {
   font-family: $fontOutfitRegular;
   font-size: $font18;

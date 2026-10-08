@@ -355,7 +355,8 @@
    background: $appBg;
   }
 
-  .matches-page.gold-foil & {
+  .matches-page.gold-foil &,
+  .profile-page.gold-foil & {
    padding: 0.8125rem $space-16;
   }
  }
