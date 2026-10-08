@@ -13,6 +13,7 @@ interface IButtonProps extends Omit<ButtonProps, "startIcon" | "endIcon"> {
  loaderOnDark?: boolean;
  startIcon?: TIconName;
  endIcon?: TIconName;
+ elevated?: boolean;
 }
 
 export const Button = forwardRef<HTMLButtonElement, IButtonProps>(
@@ -26,6 +27,7 @@ export const Button = forwardRef<HTMLButtonElement, IButtonProps>(
    type,
    startIcon,
    endIcon,
+   elevated = false,
    ...props
   },
   ref,
@@ -68,7 +70,12 @@ export const Button = forwardRef<HTMLButtonElement, IButtonProps>(
     {...props}
     startIcon={renderIcon(startIcon)}
     endIcon={renderIcon(endIcon)}
-    className={classNames("common-button", customClass, isLoading && "loading")}
+    className={classNames(
+     "common-button",
+     customClass,
+     isLoading && "loading",
+     elevated && "elevated",
+    )}
     disabled={disabled || isLoading}
     aria-busy={isLoading || undefined}
    >

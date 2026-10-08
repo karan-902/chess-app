@@ -438,4 +438,70 @@
    opacity: 1;
   }
  }
+
+ &.elevated {
+  overflow: visible;
+  max-width: calc(100% - #{$edgeDepth});
+  margin: 0 $edgeDepth $edgeDepth 0;
+  border: 0;
+  border-radius: $radiusNone;
+  box-shadow: none;
+  transition: transform $pressDuration ease-in-out;
+
+  &::before,
+  &::after {
+   content: "";
+   position: absolute;
+   transform-origin: 0 0;
+   transition: transform $pressDuration ease-in-out;
+  }
+
+  &::before {
+   top: 0;
+   right: -$edgeDepth;
+   width: $edgeDepth;
+   height: 100%;
+   background: $edgeSurfaceRight;
+   transform: skewY($edgeAngle);
+  }
+
+  &::after {
+   left: 0;
+   bottom: -$edgeDepth;
+   width: 100%;
+   height: $edgeDepth;
+   background: $edgeSurfaceBottom;
+   transform: skewX($edgeAngle);
+  }
+
+  &.MuiButton-contained:not(.Mui-disabled) {
+   &::before {
+    background: $edgePrimaryRight;
+   }
+
+   &::after {
+    background: $edgePrimaryBottom;
+   }
+  }
+
+  .MuiTouchRipple-root {
+   display: none;
+  }
+
+  &:hover:not(.Mui-disabled) {
+   opacity: 1;
+  }
+
+  &:active:not(.Mui-disabled) {
+   transform: translate($edgeDepth, $edgeDepth);
+
+   &::before {
+    transform: skewY($edgeAngle) scaleX(0);
+   }
+
+   &::after {
+    transform: skewX($edgeAngle) scaleY(0);
+   }
+  }
+ }
 }
