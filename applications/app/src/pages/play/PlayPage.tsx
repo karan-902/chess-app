@@ -1,10 +1,10 @@
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import Box from "@gopvp/common/src/components/Box/Box";
-import Text from "@gopvp/common/src/components/Text/Text";
+// import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
 import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
-import { icons } from "@gopvp/common/src/components/images";
+// import { icons } from "@gopvp/common/src/components/images";
 import BetSheet from "@gopvp/app/src/pages/play/BetSheet";
 import RoomSheet from "@gopvp/app/src/pages/play/RoomSheet";
 import PoolConfirmSheet from "@gopvp/app/src/pages/play/PoolConfirmSheet";
@@ -15,7 +15,7 @@ import { useWalletBalance } from "@gopvp/app/src/hooks/useWallet";
 import { useGame } from "@gopvp/app/src/hooks/useGame";
 import type { IPoolResponse } from "@gopvp/common/src/types/response";
 import {
- tapPlayNowHintText,
+ // tapPlayNowHintText,
  playNowText,
 } from "@gopvp/app/src/constants/message";
 import { ROUTES } from "@gopvp/app/src/constants/route";
@@ -150,10 +150,10 @@ export default function PlayPage() {
    </Box>
 
    <Box customClass="cta-bottom">
-    <Text customClass="play-hint">
+    {/* <Text customClass="play-hint">
      {tapPlayNowHintText}
      <icons.chevronDown />
-    </Text>
+    </Text> */}
     <Button
      type="button"
      variant="contained"
