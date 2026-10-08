@@ -281,6 +281,11 @@
     padding: 0.3rem;
    }
   }
+
+  &.gold-foil {
+   background: $appBg;
+   border-radius: 0.75rem;
+  }
  }
 
  &.segment-thumb {
@@ -294,6 +299,12 @@
    transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
    width 0.28s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: $z-base;
+
+  .segment.gold-foil & {
+   border-radius: 0.5625rem;
+   background: $appSheet;
+   box-shadow: inset 0 0 0 1px alpha($gold, 0.4);
+  }
  }
 
  &.matches-empty {

@@ -401,6 +401,15 @@
    color: $primaryContrast;
   }
 
+  .segment.gold-foil & {
+   font-family: $fontOutfitBold;
+   color: $appTextMuted;
+  }
+
+  .segment.gold-foil .segment-btn.active & {
+   color: $gold;
+  }
+
   .segment.category-select & {
    font-size: $font12;
    overflow-wrap: anywhere;
@@ -418,6 +427,24 @@
   .segment-btn.active & {
    color: $primaryContrast;
   }
+
+  .segment.gold-foil & {
+   font-size: $font11;
+   color: $appTextMuted;
+  }
+
+  .segment.gold-foil .segment-btn.active & {
+   color: $gold;
+  }
+ }
+
+ &.sheet-caps-label {
+  align-self: flex-start;
+  font-family: $fontOutfitBold;
+  font-size: $font11;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: $appTextMuted;
  }
 
  &.public-footer {

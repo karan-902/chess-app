@@ -6,11 +6,10 @@ import Card from "@gopvp/common/src/components/Card/Card";
 import CustomDrawer from "@gopvp/common/src/components/Drawer/Drawer";
 import PoolCardSkeleton from "@gopvp/app/src/components/common/PoolCardSkeleton";
 import type { IBetSheetProps } from "@gopvp/common/src/types/component";
-import { playText } from "@gopvp/common/src/constants/message";
+import { playText, practiceText } from "@gopvp/common/src/constants/message";
 import {
  largestPrizesTipText,
  forFunText,
- practiceText,
  freeToPlayText,
  friendlyText,
  roomText,
