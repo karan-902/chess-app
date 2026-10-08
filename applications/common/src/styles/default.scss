@@ -246,6 +246,13 @@ $breakpoints: (
  }
 }
 
+@mixin gold-foil-text {
+ background: linear-gradient(180deg, $goldLight, $primary 45%, $primaryDark);
+ -webkit-background-clip: text;
+ background-clip: text;
+ color: transparent;
+}
+
 $outfitFaces:
  "Outfit-Thin", "Outfit-ExtraLight", "Outfit-Light", "Outfit-Regular",
  "Outfit-Medium", "Outfit-SemiBold", "Outfit-Bold", "Outfit-ExtraBold",

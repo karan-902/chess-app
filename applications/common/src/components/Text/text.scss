@@ -315,6 +315,13 @@
   font-family: $fontOutfitExtraBold;
   font-size: $font24;
   color: $gold;
+
+  &.gold-foil {
+   @include gold-foil-text;
+   font-family: $fontOutfitBlack;
+   font-size: $font30;
+   line-height: 1.15;
+  }
  }
 
  &.pool-entry-fee {
@@ -346,6 +353,11 @@
 
   @include from(tablet) {
    font-size: $font15;
+  }
+
+  &.gold-foil {
+   @include gold-foil-text;
+   font-size: $font18;
   }
  }
 

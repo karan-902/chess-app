@@ -45,6 +45,22 @@ $pieceFill: 92%;
  border: 1px solid $appCardBorder;
  background: $appCardBorder;
  touch-action: none;
+
+ .board-wrap.gold-foil & {
+  border: 2px solid transparent;
+  border-radius: 0.5625rem;
+  background:
+   linear-gradient($appCardBorder, $appCardBorder) padding-box,
+   linear-gradient(
+     135deg,
+     $primaryHover,
+     $primaryDark 45%,
+     $primary 70%,
+     $primaryDark
+    )
+    border-box;
+  box-shadow: 0 24px 50px -30px alpha($primary, 0.45);
+ }
 }
 
 .chess-board-square {

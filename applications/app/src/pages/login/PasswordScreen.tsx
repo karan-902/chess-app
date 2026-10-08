@@ -75,7 +75,7 @@ export default function PasswordScreen({
      variant="contained"
      fullWidth
      endIcon="arrowForward"
-     customClass="auth-submit-btn auth-submit-btn-arrow gold-foil"
+     customClass="auth-submit-btn auth-submit-btn-arrow gold-foil shine"
      disabled={!formik.dirty || formik.isSubmitting}
      isLoading={formik.isSubmitting}
     >

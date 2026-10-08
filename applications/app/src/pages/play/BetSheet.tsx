@@ -40,7 +40,7 @@ export default function BetSheet({
    anchor="bottom"
    open={open}
    onClose={onClose}
-   customClass="bet-sheet"
+   customClass="bet-sheet gold-foil"
   >
    <Box customClass="bet-grid">
     {poolsLoading ? (
@@ -52,11 +52,14 @@ export default function BetSheet({
        return (
         <Card
          key={pool.id}
-         customClass={classNames("bet-card", !canAfford && "insufficient")}
+         customClass={classNames(
+          "bet-card gold-foil",
+          !canAfford && "insufficient",
+         )}
         >
          <PoolLabel pool={pool} />
          <Text customClass="bet-card-tc">{winText}</Text>
-         <Text customClass="pool-win-amt">${pool.prize}</Text>
+         <Text customClass="pool-win-amt gold-foil">${pool.prize}</Text>
          <Text customClass="pool-entry-fee">
           {entryFeeAmountText(`$${pool.bet}`)}
          </Text>
@@ -65,7 +68,7 @@ export default function BetSheet({
           type="button"
           variant="contained"
           fullWidth
-          customClass="common-play"
+          customClass="common-play gold-foil"
           onClick={() =>
            canAfford ? onPoolPlay(pool) : onInsufficientBalance()
           }
@@ -78,30 +81,32 @@ export default function BetSheet({
      </>
     )}
     {onPracticeOpen && (
-     <Card customClass={classNames("bet-card", "practice")}>
+     <Card customClass="bet-card practice gold-foil">
       <Text customClass="bet-card-tc">{forFunText}</Text>
-      <Text customClass="bet-card-practice-title">{practiceText}</Text>
+      <Text customClass="bet-card-practice-title gold-foil">
+       {practiceText}
+      </Text>
       <Text customClass="caption">{freeToPlayText}</Text>
       <Button
        type="button"
        variant="contained"
        fullWidth
-       customClass="common-play"
+       customClass="common-play gold-foil"
        onClick={onPracticeOpen}
       >
        {playText}
       </Button>
      </Card>
     )}
-    <Card customClass={classNames("bet-card", "friend")}>
+    <Card customClass="bet-card friend gold-foil">
      <Text customClass="bet-card-tc">{friendlyText}</Text>
-     <Text customClass="bet-card-practice-title">{roomText}</Text>
+     <Text customClass="bet-card-practice-title gold-foil">{roomText}</Text>
      <Text customClass="caption">{customFeeText}</Text>
      <Button
       type="button"
       variant="contained"
       fullWidth
-      customClass="common-play"
+      customClass="common-play gold-foil"
       onClick={onRoomOpen}
      >
       {playText}

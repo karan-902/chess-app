@@ -52,6 +52,20 @@
     opacity: 0.6;
    }
   }
+
+  &.gold-foil {
+   border-color: transparent;
+   border-radius: 0.75rem;
+   background:
+    linear-gradient($appSurface, $appSurface) padding-box,
+    linear-gradient(
+      160deg,
+      alpha($gold, 0.6),
+      $appCardBorder 45%,
+      $appCardBorder
+     )
+     border-box;
+  }
  }
 
  .bet-card-icon {
