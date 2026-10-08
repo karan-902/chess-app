@@ -69,7 +69,7 @@
     color: $gold;
 
     @media (prefers-reduced-motion: no-preference) {
-     animation: gold-shine 3.2s linear infinite;
+     animation: gold-shine $goldShineDuration linear infinite;
     }
    }
   }
@@ -254,7 +254,7 @@
     }
 
     @media (prefers-reduced-motion: no-preference) {
-     animation: gold-shine 3.2s linear infinite;
+     animation: gold-shine $goldShineDuration linear infinite;
     }
    }
   }

@@ -100,7 +100,7 @@
     260% 100%;
 
    @media (prefers-reduced-motion: no-preference) {
-    animation: balance-shine 1.6s linear 2;
+    animation: balance-shine $goldShineDuration linear 2;
    }
   }
 
