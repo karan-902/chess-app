@@ -71,6 +71,11 @@
   background: $appSurface;
   border: 1px solid $appCardBorder;
   border-radius: 4px;
+
+  &.gold-foil {
+   padding: $space-12;
+   border-radius: 0.8125rem;
+  }
  }
 
  &.auth-account-info {

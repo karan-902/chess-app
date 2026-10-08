@@ -38,7 +38,7 @@ export default function EmailScreen({
     helperText={
      (formik.touched.email && formik.errors.email) || error || undefined
     }
-    customClass="form-input"
+    customClass="form-input gold-foil"
     fullWidth
    />
 
@@ -47,7 +47,7 @@ export default function EmailScreen({
     variant="contained"
     fullWidth
     endIcon="arrowForward"
-    customClass="auth-submit-btn auth-submit-btn-arrow"
+    customClass="auth-submit-btn auth-submit-btn-arrow gold-foil"
     disabled={!formik.dirty || formik.isSubmitting}
     isLoading={formik.isSubmitting}
    >
@@ -64,7 +64,7 @@ export default function EmailScreen({
      startIcon="google"
      variant="outlined"
      fullWidth
-     customClass="auth-google-btn"
+     customClass="auth-google-btn gold-foil"
      onClick={onGoogleLogin}
      disabled={isGoogleProcessing}
     >

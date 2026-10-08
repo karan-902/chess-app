@@ -204,7 +204,11 @@ export default function LoginForm() {
 
  if (step === "country") {
   return (
-   <AuthLayout title={wherePlayingFromText} subtitle={pickCountryToFinishText}>
+   <AuthLayout
+    customClass="gold-foil"
+    title={wherePlayingFromText}
+    subtitle={pickCountryToFinishText}
+   >
     <SelectCountryScreen showHeading={false} />
    </AuthLayout>
   );
@@ -231,6 +235,7 @@ export default function LoginForm() {
  if (step === "password") {
   return (
    <AuthLayout
+    customClass="gold-foil"
     title={enterYourPasswordText}
     subtitle={nextMatchOneStepAwayText}
    >
@@ -247,6 +252,7 @@ export default function LoginForm() {
 
  return (
   <AuthLayout
+   customClass="gold-foil"
    title={welcomeBackText}
    subtitle={jumpBackIntoGameText}
    footer={loginFooter}
