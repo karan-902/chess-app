@@ -18,6 +18,7 @@ export default function ResultSheet({
  skeletonTiles,
  tileIcon,
  children,
+ customClass,
 }: IResultSheetProps) {
  const {
   gameModule: { logoSrc },
@@ -30,7 +31,7 @@ export default function ResultSheet({
    anchor="bottom"
    open={open}
    onClose={onClose}
-   customClass={classNames("result-sheet", tone)}
+   customClass={classNames("result-sheet", tone, customClass)}
   >
    <Box customClass="result-hero">
     {isLoading ? (

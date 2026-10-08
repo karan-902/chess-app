@@ -122,6 +122,7 @@ export default function MatchInfoSheet({
    }
    skeletonTiles={2}
    tileIcon="person"
+   customClass="gold-foil"
   >
    <Box customClass="result-meta">
     {!isWorldwide &&
@@ -132,7 +133,7 @@ export default function MatchInfoSheet({
        value={info.id}
        disabled
        fullWidth
-       customClass="match-id-input"
+       customClass="match-id-input gold-foil"
        endIcon={<CopyButton text={info.id} />}
       />
      ) : (

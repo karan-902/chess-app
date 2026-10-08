@@ -1130,6 +1130,12 @@
    width: 6rem;
    height: 6rem;
    border-radius: 14px;
+
+   .result-sheet.gold-foil & {
+    width: 5.25rem;
+    height: 5.25rem;
+    border-radius: 1.125rem;
+   }
    object-fit: cover;
   }
  }
@@ -1154,6 +1160,14 @@
   align-items: center;
   gap: $space-8;
   min-width: 0;
+
+  .result-sheet.gold-foil & {
+   gap: $space-4;
+   padding: 0.875rem;
+   background: $appSurface;
+   border: 1px solid $appCardBorder;
+   border-radius: 0.8125rem;
+  }
  }
 
  &.result-tile-label {
@@ -1173,11 +1187,14 @@
 
  &.result-tile {
   width: 100%;
-  padding: $space-16;
-  border-radius: 14px;
   background: $appSurface;
-  border: 1px solid $appCardBorder;
   text-align: center;
+
+  .result-sheet.gold-foil & {
+   padding: 0;
+   background: transparent;
+   border: 0;
+  }
 
   &.room-player {
    display: flex;

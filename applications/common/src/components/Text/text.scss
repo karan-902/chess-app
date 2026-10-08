@@ -619,6 +619,10 @@
   font-family: $fontOutfitExtraBold;
   font-size: $font24;
   color: $appText;
+
+  .result-sheet.gold-foil & {
+   font-family: $fontOutfitBlack;
+  }
  }
 
  &.result-subtitle {
@@ -641,18 +645,36 @@
   .result-sheet.loss & {
    color: $paleRed;
   }
+
+  .result-sheet.gold-foil & {
+   font-family: $fontOutfitBlack;
+   letter-spacing: -0.02em;
+  }
+
+  .result-sheet.gold.gold-foil & {
+   @include gold-foil-text;
+  }
  }
 
  &.result-tile-lbl {
   font-family: $fontOutfitSemiBold;
-  font-size: $font14;
+  font-size: $font15;
   color: $appText;
+
+  .result-sheet.gold-foil & {
+   font-family: $fontOutfitMedium;
+   color: $appTextMuted;
+  }
  }
 
  &.result-tile-val {
   font-family: $fontOutfitExtraBold;
   font-size: $font22;
   color: $appText;
+
+  .result-sheet.gold-foil & {
+   font-family: $fontOutfitBlack;
+  }
 
   &.pos {
    color: $greenishTeal;

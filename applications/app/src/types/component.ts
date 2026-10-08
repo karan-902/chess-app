@@ -81,6 +81,7 @@ export interface IResultSheetProps {
  skeletonTiles: number;
  tileIcon?: TIconName;
  children?: ReactNode;
+ customClass?: string;
 }
 
 export interface IMatchInfoSheetProps {
