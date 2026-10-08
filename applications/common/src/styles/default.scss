@@ -104,6 +104,10 @@
  --greenish-teal: #2ed47a;
  --backdrop-center: var(--color-bg-content);
  --backdrop-edge: var(--color-black);
+ --edge-primary-right: #e0ad00;
+ --edge-primary-bottom: #8a6a00;
+ --edge-surface-right: var(--app-btn-border);
+ --edge-surface-bottom: var(--app-card-border);
 }
 
 :root[data-theme="light"] {
@@ -136,6 +140,10 @@
  --greenish-teal: #159957;
  --backdrop-center: #1a1d22;
  --backdrop-edge: #000000;
+ --edge-primary-right: #d8a300;
+ --edge-primary-bottom: #846400;
+ --edge-surface-right: #e0e0e0;
+ --edge-surface-bottom: #8a8a8a;
 }
 @function alpha($color, $opacity) {
  @return color-mix(in srgb, #{$color} #{$opacity * 100%}, transparent);
@@ -209,6 +217,23 @@ $backdropCenter: var(--backdrop-center);
 $backdropEdge: var(--backdrop-edge);
 $gold: var(--gold);
 $cyan: var(--cyan);
+
+$edgePrimaryRight: var(--edge-primary-right);
+$edgePrimaryBottom: var(--edge-primary-bottom);
+$edgeSurfaceRight: var(--edge-surface-right);
+$edgeSurfaceBottom: var(--edge-surface-bottom);
+$edgeDepth: 3px;
+$edgeAngle: 45deg;
+$pressDuration: 0.12s;
+
+$textHeadingOpacity: 0.9;
+$textSubheadingOpacity: 0.7;
+$textBodyOpacity: 0.5;
+$textHintOpacity: 0.3;
+
+$capsLetterSpacing: 0.125rem;
+$radiusNone: 0;
+$radiusToast: 0.25rem;
 
 $space-4: 0.25rem;
 $space-8: 0.5rem;
