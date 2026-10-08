@@ -83,6 +83,27 @@
    }
   }
 
+  &.shine {
+   background:
+    linear-gradient($appBgTop, $appBgTop) padding-box,
+    linear-gradient(
+      110deg,
+      $primaryDark 0%,
+      $primary 35%,
+      $goldLight 50%,
+      $primary 65%,
+      $primaryDark 100%
+     )
+     border-box;
+   background-size:
+    100% 100%,
+    260% 100%;
+
+   @media (prefers-reduced-motion: no-preference) {
+    animation: balance-shine 1.6s linear 2;
+   }
+  }
+
   .MuiChip-icon {
    margin: 0;
    width: 22px;
@@ -118,5 +139,18 @@
    background: alpha($appText, 0.06);
    color: $appTextMuted;
   }
+ }
+}
+
+@keyframes balance-shine {
+ from {
+  background-position:
+   0 0,
+   100% 0;
+ }
+ to {
+  background-position:
+   0 0,
+   -160% 0;
  }
 }
