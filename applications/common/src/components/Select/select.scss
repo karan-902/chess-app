@@ -68,10 +68,37 @@
    transform: rotate(180deg);
   }
  }
+
+ &.gold-foil .MuiInputBase-root {
+  min-height: 2.875rem;
+  background: $appSurface;
+  border-radius: 0.6875rem;
+
+  &.Mui-focused {
+   box-shadow: 0 0 0 3px alpha($primary, 0.15);
+  }
+
+  &.Mui-error {
+   border-radius: 0.6875rem !important;
+  }
+ }
 }
 
 .common-select-popper {
  z-index: $z-dropdown;
+
+ &.gold-foil .common-select-menu.MuiPaper-root {
+  background: $appSurface;
+  border: 1px solid $appCardBorder;
+  border-radius: 0.6875rem;
+  box-shadow: 0 16px 36px -16px alpha($black, 0.8);
+
+  .MuiMenuItem-root:hover,
+  .MuiMenuItem-root.active {
+   background: alpha($gold, 0.08);
+   color: $gold;
+  }
+ }
 }
 
 .common-select-menu.MuiPaper-root {

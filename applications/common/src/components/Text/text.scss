@@ -188,6 +188,12 @@
   font-size: $font24;
   font-weight: 700;
   color: $appText;
+
+  &.gold-foil {
+   font-family: $fontOutfitBlack;
+   font-size: $font30;
+   letter-spacing: -0.01em;
+  }
  }
 
  &.otp-title {
@@ -371,6 +377,10 @@
    text-decoration: underline;
    font-family: $fontOutfitExtraBold;
    margin-left: $space-4;
+  }
+
+  &.gold-foil a {
+   text-decoration: none;
   }
  }
 

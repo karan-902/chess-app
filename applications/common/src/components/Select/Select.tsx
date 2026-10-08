@@ -158,7 +158,7 @@ export function CustomSelect({
     open={open}
     anchorEl={anchorRef.current}
     placement="bottom-start"
-    className="common-select-popper"
+    className={classNames("common-select-popper", customClass)}
     modifiers={[{ name: "offset", options: { offset: [0, 4] } }]}
     style={{ width: anchorRef.current?.offsetWidth }}
    >

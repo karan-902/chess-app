@@ -133,4 +133,24 @@
   height: 3rem;
   font-size: $font16;
  }
+
+ &.gold-foil .MuiInputBase-root {
+  height: 2.875rem;
+  background: $appSurface;
+  border-radius: 0.6875rem;
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus {
+   -webkit-box-shadow: 0 0 0 1000px $appSurface inset;
+  }
+
+  &.Mui-focused {
+   box-shadow: 0 0 0 3px alpha($primary, 0.15);
+  }
+
+  &.Mui-error {
+   border-radius: 0.6875rem !important;
+  }
+ }
 }

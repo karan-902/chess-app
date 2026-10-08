@@ -9,6 +9,10 @@
   padding: 2.5rem 1.5rem;
   gap: 1.75rem;
   perspective: 800px;
+
+  &.gold-foil {
+   background: linear-gradient(180deg, $appBgTop, $appBg 34%);
+  }
  }
  &.public-page-wrapper {
   display: flex;

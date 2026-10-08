@@ -18,6 +18,7 @@ import type { ICountrySelectProps } from "@gopvp/app/src/types/component";
 
 export default function CountrySelect<TValues extends { country: string }>({
  formik,
+ customClass,
 }: ICountrySelectProps<TValues>) {
  const { value, error, touched } = formik.getFieldMeta<string>("country");
  const [countries, setCountries] = useState<ISelectOption[]>([]);
@@ -59,6 +60,7 @@ export default function CountrySelect<TValues extends { country: string }>({
     placeholder={selectCountryText}
     isError={touched && !!error}
     helperText={error}
+    customClass={customClass}
    />
   </Box>
  );

@@ -190,6 +190,34 @@
   margin-top: $space-20;
  }
 
+ &.gold-foil {
+  border-radius: 0.6875rem;
+
+  &.MuiButton-contained:not(.Mui-disabled) {
+   &,
+   &:hover,
+   &:active {
+    background: linear-gradient(
+     110deg,
+     $primaryDark 0%,
+     $primary 35%,
+     $goldLight 50%,
+     $primary 65%,
+     $primaryDark 100%
+    );
+    background-size: 260% 100%;
+    box-shadow:
+     inset 0 1px 0 alpha($white, 0.45),
+     0 10px 24px -14px alpha($primary, 0.7);
+    opacity: 1;
+   }
+
+   @media (prefers-reduced-motion: no-preference) {
+    animation: gold-shine 3.2s linear infinite;
+   }
+  }
+ }
+
  &.auth-submit-btn-arrow {
   gap: 0.25rem;
   .MuiButton-endIcon svg {
@@ -440,5 +468,14 @@
    background: alpha($premoveRed, 0.25);
    opacity: 1;
   }
+ }
+}
+
+@keyframes gold-shine {
+ from {
+  background-position: 100% 0;
+ }
+ to {
+  background-position: -160% 0;
  }
 }

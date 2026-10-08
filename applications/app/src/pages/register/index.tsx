@@ -12,6 +12,7 @@ import { ROUTES } from "@gopvp/app/src/constants/route";
 export default function Register() {
  return (
   <AuthLayout
+   customClass="gold-foil"
    title={joinGopvpText}
    subtitle={skillBasedGamesText}
    footer={
