@@ -158,7 +158,6 @@ export default function PlayPage() {
      type="button"
      variant="contained"
      fullWidth
-     elevated
      customClass="game-cta play-cta"
      onClick={() => setSheetOpen(true)}
     >
