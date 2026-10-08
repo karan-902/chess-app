@@ -101,25 +101,49 @@ body {
  overflow-y: auto;
  overscroll-behavior-y: none;
  -webkit-overflow-scrolling: touch;
- scrollbar-width: thin;
- scrollbar-color: alpha($appTextMuted, 0.3) transparent;
+ scrollbar-width: auto;
+ scrollbar-color: auto;
 
  &::-webkit-scrollbar {
-  width: 6px;
+  width: 3px;
  }
 
  &::-webkit-scrollbar-track {
   background: transparent;
  }
 
- &::-webkit-scrollbar-thumb {
-  background: alpha($appTextMuted, 0.3);
-  border-radius: 999px;
+ --scrollbar-alpha: 0;
+ transition:
+  --scrollbar-alpha 0.2s ease,
+  scrollbar-color 0.2s ease;
 
-  &:hover {
-   background: alpha($appTextMuted, 0.5);
+ &.is-scrolling {
+  --scrollbar-alpha: 1;
+ }
+
+ &::-webkit-scrollbar-thumb {
+  background: color-mix(
+   in srgb,
+   #{$gold} calc(var(--scrollbar-alpha) * 100%),
+   transparent
+  );
+  border-radius: 999px;
+ }
+
+ @supports not selector(::-webkit-scrollbar) {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+
+  &.is-scrolling {
+   scrollbar-color: $gold transparent;
   }
  }
+}
+
+@property --scrollbar-alpha {
+ syntax: "<number>";
+ inherits: true;
+ initial-value: 0;
 }
 
 .auth-forgot-link {

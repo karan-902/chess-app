@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Header from "@gopvp/app/src/components/common/Header";
 import DepositSheet from "@gopvp/app/src/components/common/DepositSheet";
@@ -10,6 +10,7 @@ import { useWalletModal } from "@gopvp/app/src/context/WalletModalContext";
 import { useSocket } from "@gopvp/app/src/context/SocketContext";
 import { ROUTES } from "@gopvp/app/src/constants/route";
 import { SOCKET_EVENTS } from "@gopvp/common/src/constants/event";
+import { SCROLLBAR_HIDE_DELAY_MS } from "@gopvp/app/src/constants/limit";
 
 function PrivateRoute() {
  const isLoggedIn = useReduxSelector((state) => state.auth.isLoggedIn);
@@ -23,6 +24,26 @@ function PrivateRoute() {
  const isInGameRoom =
   searchParams.has("match_id") || searchParams.has("practice_id");
  const isPickGamePage = !!useMatch(ROUTES.PICK_GAME);
+ const contentRef = useRef<HTMLDivElement>(null);
+
+ useEffect(() => {
+  const content = contentRef.current;
+  if (!content) return;
+  let hideTimer: ReturnType<typeof setTimeout>;
+  const showScrollbar = () => {
+   content.classList.add("is-scrolling");
+   clearTimeout(hideTimer);
+   hideTimer = setTimeout(
+    () => content.classList.remove("is-scrolling"),
+    SCROLLBAR_HIDE_DELAY_MS,
+   );
+  };
+  content.addEventListener("scroll", showScrollbar, { passive: true });
+  return () => {
+   clearTimeout(hideTimer);
+   content.removeEventListener("scroll", showScrollbar);
+  };
+ }, [isAppReady]);
 
  useEffect(() => {
   close();
@@ -51,7 +72,7 @@ function PrivateRoute() {
    <Box className="app-root container">
     {!isInGameRoom && !isPickGamePage && <Header />}
     <Box className="app-wrapper">
-     <Box component="main" customClass="app-content">
+     <Box component="main" customClass="app-content" ref={contentRef}>
       <Outlet />
      </Box>
     </Box>
