@@ -38,12 +38,7 @@ import {
  MAX_AMOUNT_DIGITS,
  DEFAULT_ROOM_DURATION_MINUTES,
 } from "@gopvp/app/src/constants/limit";
-import {
- cancelText,
- youText,
- dollarSignText,
- dollarAmountPlaceholderText,
-} from "@gopvp/common/src/constants/message";
+import { cancelText, youText } from "@gopvp/common/src/constants/message";
 import { icons } from "@gopvp/common/src/components/images";
 import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
 import {
@@ -215,13 +210,13 @@ export default function RoomSheet({
          autoComplete="off"
          slotProps={{
           input: {
-           maxLength: dollarSignText.length + MAX_AMOUNT_DIGITS,
+           maxLength: MAX_AMOUNT_DIGITS,
           },
          }}
          fullWidth
-         placeholder={dollarAmountPlaceholderText}
+         placeholder="0.00"
          customClass="amount-input-hero"
-         value={roomBet && `${dollarSignText}${roomBet}`}
+         value={roomBet}
          isError={!!roomBetError}
          helperText={roomBetError}
          onChange={(e) => {
