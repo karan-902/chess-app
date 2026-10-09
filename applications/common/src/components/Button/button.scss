@@ -271,7 +271,6 @@
   .button-text {
    font-size: $font12;
   }
-  color: $primaryContrast !important;
 
   .bet-card.insufficient & {
    background: transparent !important;
@@ -295,6 +294,9 @@
 
   &.Mui-disabled {
    opacity: 0.5;
+  }
+  .common-text {
+   color: $white !important;
   }
  }
 
