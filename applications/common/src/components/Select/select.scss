@@ -78,8 +78,6 @@
  max-height: 250px;
  overflow-y: auto;
  border-radius: 4px;
- scrollbar-width: thin;
- scrollbar-color: alpha($appTextMuted, 0.3) transparent;
 
  .MuiList-root {
   padding-block: $space-4;
