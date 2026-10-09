@@ -263,10 +263,6 @@ export type IGameNotFoundResponse = {
  error: "not_found";
 };
 
-export type IActiveGameEvent = {
- match_id: string;
- game_slug: string;
-};
 
 export type IPoolUpdatedEvent = {
  game: string;
@@ -278,6 +274,13 @@ export type IGameStateBasePlayer = {
  user_id: string;
  username: string;
  score: number;
+};
+
+export type IActiveGameResponse = {
+ match_id: string;
+ game_slug: string;
+ bet: number;
+ opponent: IGameStateBasePlayer;
 };
 
 export type IGameStateBaseResponse = {
