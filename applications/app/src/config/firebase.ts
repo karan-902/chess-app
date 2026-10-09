@@ -11,7 +11,7 @@ import {
  firebaseProjectId,
 } from "@gopvp/common/src/constants/env";
 
-const firebaseApp = initializeApp({
+export const firebaseApp = initializeApp({
  apiKey: firebaseApiKey,
  authDomain: firebaseAuthDomain,
  projectId: firebaseProjectId,

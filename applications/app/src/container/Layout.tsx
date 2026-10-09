@@ -19,6 +19,7 @@ import { GAME_PAGE_TITLES, PAGE_TITLES } from "@gopvp/app/src/constants/label";
 import { getGameFromPath, isGameSlug } from "@gopvp/app/src/utils";
 import { GAME_PAGES, ROUTES } from "@gopvp/app/src/constants/route";
 import { appNameText } from "@gopvp/app/src/constants/message";
+import { useFirebaseAuth } from "@gopvp/app/src/hooks/useFirebaseAuth";
 
 export default function Layout() {
  const location = useLocation();
@@ -35,6 +36,8 @@ export default function Layout() {
  const isGameLoading = !!gameSlug && details?.slug !== gameSlug;
 
  const isRegister = state?.startsWith("register") ?? false;
+
+ useFirebaseAuth();
 
  useEffect(() => {
   if (gameSlug && gameSlug !== requestedSlug)
