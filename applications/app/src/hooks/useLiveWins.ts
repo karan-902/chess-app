@@ -7,6 +7,8 @@ import type {
  IWorldMatchHistoryResponse,
 } from "@gopvp/common/src/types/response";
 import { FIRESTORE_COLLECTIONS } from "@gopvp/common/src/constants/endpoint";
+import { firebaseProjectId } from "@gopvp/common/src/constants/env";
+import { firebaseConfigMissingText } from "@gopvp/app/src/constants/message";
 
 export function useLiveWins() {
  const { game } = useGame();
@@ -15,6 +17,12 @@ export function useLiveWins() {
  const [error, setError] = useState(false);
 
  useEffect(() => {
+  if (!firebaseProjectId) {
+   console.error(firebaseConfigMissingText);
+   setError(true);
+   setLoading(false);
+   return;
+  }
   setLoading(true);
   setError(false);
   return onSnapshot(

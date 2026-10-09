@@ -82,6 +82,8 @@ export const matchedOnConfirmText =
 export const playNowText = "Play now";
 export const tapPlayNowHintText = "Play now to choose a pool";
 export const wonText = "won";
+export const firebaseConfigMissingText =
+ "Firebase config missing: set the VITE_FIREBASE_* env variables.";
 export const largestPrizesTipText =
  "Rapid and Classical pools pay out the largest prizes.";
 export const forFunText = "For fun";
