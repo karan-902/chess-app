@@ -5,6 +5,7 @@ export const ENDPOINTS = {
  SSO_REGISTER: "/auth/sso-register",
  VERIFY_USER: "/auth/verify-user",
  GENERATE_TOKEN: "/auth/generate-token",
+ FIREBASE_TOKEN: "/auth/firebase-token",
  LOGOUT: "/auth/logout",
  RANDOM_NAME: "/auth/random-name",
  COUNTRIES: "/auth/countries",

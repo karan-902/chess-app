@@ -6,5 +6,13 @@ service cloud.firestore {
       allow get: if true;
       allow list, write: if false;
     }
+    match /leaderboards/{board} {
+      allow get: if true;
+      allow list, write: if false;
+    }
+    match /match_results/{matchId}/players/{uid} {
+      allow get: if request.auth != null && request.auth.uid == uid;
+      allow list, write: if false;
+    }
   }
 }

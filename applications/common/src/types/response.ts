@@ -67,6 +67,10 @@ export type IGenerateTokenResponse = {
  refresh_token: string;
 };
 
+export type IFirebaseTokenResponse = {
+ token: string;
+};
+
 export type IRandomNameResponse = {
  usernames: string[];
 };
