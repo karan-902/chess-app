@@ -8,7 +8,6 @@ export const SOCKET_EVENTS = {
  POOL_JOIN: "pool_join",
  POOL_LEAVE: "pool_leave",
  POOL_TIMEOUT: "pool_timeout",
- POOL_UPDATED: "pool_updated",
  MATCHED: "matched",
  MATCH_STARTED: "match_started",
  ROOM_CREATE: "room_create",

@@ -264,10 +264,11 @@ export type IGameNotFoundResponse = {
 };
 
 
-export type IPoolUpdatedEvent = {
+export type IPoolsDocResponse = {
  game: string;
  stats: { games: number; players: number };
  pools: IPoolResponse[];
+ updated: number;
 };
 
 export type IGameStateBasePlayer = {
