@@ -81,6 +81,7 @@ export const matchedOnConfirmText =
  "You'll be matched with an opponent as soon as you confirm.";
 export const playNowText = "Play now";
 export const tapPlayNowHintText = "Play now to choose a pool";
+export const wonText = "won";
 export const largestPrizesTipText =
  "Rapid and Classical pools pay out the largest prizes.";
 export const forFunText = "For fun";
