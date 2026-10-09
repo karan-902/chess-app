@@ -10,10 +10,12 @@ import EmptyState from "@gopvp/app/src/components/common/EmptyState";
 import TxItemSkeleton from "@gopvp/app/src/components/common/TxItemSkeleton";
 import { useWallet } from "@gopvp/app/src/hooks/useWallet";
 import { useWalletModal } from "@gopvp/app/src/context/WalletModalContext";
+import CustomChip from "@gopvp/common/src/components/Chip/Chip";
 import {
  speedLogo,
  CallMadeIcon,
  CallReceivedIcon,
+ ScheduleIcon,
 } from "@gopvp/common/src/components/images";
 import { formatAmount, formatTime } from "@gopvp/common/src/util/format";
 import { TRANSACTION_CODE_DESCRIPTIONS } from "@gopvp/app/src/constants/label";
@@ -22,6 +24,7 @@ import {
  totalBalanceText,
  withdrawBalanceText,
  transactionsText,
+ pendingText,
  noTransactionsYetText,
  transactionsEmptyText,
  depositText,
@@ -65,10 +68,20 @@ function buildTimelineEntries(
 
 function txRow(tx: ITransactionResponse, groupEdgeClass: string) {
  const isDebit = tx.transaction_type === "DEBIT";
- const TxIcon = isDebit ? CallMadeIcon : CallReceivedIcon;
+ const isPending = tx.status === "PENDING";
+ const TxIcon = isPending
+  ? ScheduleIcon
+  : isDebit
+   ? CallMadeIcon
+   : CallReceivedIcon;
  return (
   <Box
-   customClass={classNames("wallet-tx-item", isDebit && "neg", groupEdgeClass)}
+   customClass={classNames(
+    "wallet-tx-item",
+    isDebit && "neg",
+    isPending && "pending",
+    groupEdgeClass,
+   )}
   >
    <Box customClass="wallet-tx-row">
     <Box customClass="wallet-tx-info">
@@ -76,15 +89,23 @@ function txRow(tx: ITransactionResponse, groupEdgeClass: string) {
       <TxIcon sx={{ fontSize: 24 }} />
      </Box>
      <Box customClass="wallet-tx-text">
-      <Text customClass="row-title">
-       {TRANSACTION_CODE_DESCRIPTIONS[tx.transaction_code]}
-      </Text>
+      <Box customClass="wallet-tx-title">
+       <Text customClass="row-title">
+        {TRANSACTION_CODE_DESCRIPTIONS[tx.transaction_code]}
+       </Text>
+       {isPending && (
+        <CustomChip label={pendingText} customClass="tx-pending-chip" />
+       )}
+      </Box>
       <Text customClass="meta-text">{formatTime(tx.created)}</Text>
      </Box>
     </Box>
     <Text
      component="span"
-     customClass={classNames("amount-value", isDebit ? "neg" : "pos")}
+     customClass={classNames(
+      "amount-value",
+      isPending ? "neutral" : isDebit ? "neg" : "pos",
+     )}
     >
      {isDebit ? "-" : "+"}
      {formatAmount(Math.abs(tx.amount))}
@@ -97,9 +118,11 @@ function txRow(tx: ITransactionResponse, groupEdgeClass: string) {
 function timelineRow(entry: TWalletTimelineEntry, groupEdgeClass: string) {
  if (entry.kind === "header") {
   return (
-   <Text component="h4" customClass="wallet-tx-group-label">
-    {entry.label}
-   </Text>
+   <Box customClass="wallet-tx-group">
+    <Text component="h4" customClass="wallet-tx-group-label">
+     {entry.label}
+    </Text>
+   </Box>
   );
  }
  return txRow(entry.tx, groupEdgeClass);

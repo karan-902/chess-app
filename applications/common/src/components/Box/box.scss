@@ -585,10 +585,20 @@
   .wallet-tx-item:not(.neg) & {
    color: $greenishTeal;
   }
+
+  .wallet-tx-item.pending & {
+   color: $warning;
+  }
  }
 
  &.wallet-tx-text {
   min-width: 0;
+ }
+
+ &.wallet-tx-title {
+  display: flex;
+  align-items: center;
+  gap: $space-8;
  }
 
  &.room-options {

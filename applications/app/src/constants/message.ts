@@ -174,6 +174,7 @@ export const poweredByText = "POWERED BY";
 export const totalBalanceText = "Total Balance";
 export const withdrawBalanceText = "Withdraw Balance";
 export const transactionsText = "Transactions";
+export const pendingText = "Pending";
 export const noTransactionsYetText = "No Transactions Yet";
 export const transactionsEmptyText =
  "Your deposits, withdrawals, and match payouts will show up here.";

@@ -37,6 +37,7 @@ import HandshakeIcon from "@mui/icons-material/Handshake";
 import InfoIcon from "@mui/icons-material/Info";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import PersonIcon from "@mui/icons-material/Person";
+import ScheduleIcon from "@mui/icons-material/Schedule";
 import WarningIcon from "@mui/icons-material/Warning";
 import { imageIconS3Url, lottieBaseUrl } from "@gopvp/common/src/constants/env";
 
@@ -146,6 +147,7 @@ export {
  Pencil,
  PersonIcon,
  Rocket,
+ ScheduleIcon,
  Timer,
  WarningIcon,
  X,
