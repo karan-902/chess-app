@@ -348,6 +348,12 @@ export type ILeaderboardWinsResponse = {
 export type ILeaderboardRowResponse =
  ILeaderboardEarningsResponse | ILeaderboardWinsResponse;
 
+export type ILeaderboardDocResponse = {
+ data: ILeaderboardRowResponse[];
+ period_start: number | null;
+ updated: number;
+};
+
 export type ILeaderboardPlayerResponse = {
  username: string;
  score: number;

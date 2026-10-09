@@ -26,6 +26,7 @@ export const FIRESTORE_COLLECTIONS = {
  LIVE_WINS: "live_wins",
  ACTIVE_GAMES: "active_games",
  POOLS: "pools",
+ LEADERBOARDS: "leaderboards",
  MATCH_RESULTS: "match_results",
  MATCH_RESULT_PLAYERS: "players",
 } as const;
