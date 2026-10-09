@@ -6,17 +6,17 @@ import WithdrawSheet from "@gopvp/app/src/components/common/WithdrawSheet";
 import { Navigate, Outlet, useLocation, useMatch } from "react-router-dom";
 import { useReduxDispatch, useReduxSelector } from "@gopvp/app/src/redux/hooks";
 import { fetchWalletBalance } from "@gopvp/app/src/redux/wallet/thunk";
+import { setWalletDoc } from "@gopvp/app/src/redux/wallet/slice";
 import { useWalletModal } from "@gopvp/app/src/context/WalletModalContext";
-import { useSocket } from "@gopvp/app/src/context/SocketContext";
+import { subscribeWallet } from "@gopvp/app/src/utils/matchResult";
 import { ROUTES } from "@gopvp/app/src/constants/route";
-import { SOCKET_EVENTS } from "@gopvp/common/src/constants/event";
 
 function PrivateRoute() {
  const isLoggedIn = useReduxSelector((state) => state.auth.isLoggedIn);
  const country = useReduxSelector((state) => state.auth.session?.country);
  const location = useLocation();
+ const userId = useReduxSelector((state) => state.auth.session?.id);
  const dispatch = useReduxDispatch();
- const { socket } = useSocket();
  const { close } = useWalletModal();
  const isAppReady = isLoggedIn && !!country;
  const searchParams = new URLSearchParams(location.search);
@@ -32,16 +32,11 @@ function PrivateRoute() {
   if (isAppReady) dispatch(fetchWalletBalance());
  }, [isAppReady, dispatch]);
 
- useEffect(() => {
-  if (!socket) return;
-  const refetchBalance = () => dispatch(fetchWalletBalance());
-  socket.on(SOCKET_EVENTS.WALLET_UPDATED, refetchBalance);
-  socket.on(SOCKET_EVENTS.TRANSACTION_COMPLETED, refetchBalance);
-  return () => {
-   socket.off(SOCKET_EVENTS.WALLET_UPDATED, refetchBalance);
-   socket.off(SOCKET_EVENTS.TRANSACTION_COMPLETED, refetchBalance);
-  };
- }, [socket, dispatch]);
+ useEffect(
+  () =>
+   subscribeWallet(userId, (walletDoc) => dispatch(setWalletDoc(walletDoc))),
+  [userId, dispatch],
+ );
 
  if (!isLoggedIn) return <Navigate to={ROUTES.LOGIN} replace />;
  if (!country) return <Navigate to={`${ROUTES.LOGIN}?step=country`} replace />;

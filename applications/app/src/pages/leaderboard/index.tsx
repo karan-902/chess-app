@@ -44,10 +44,7 @@ export default function Leaderboard() {
  const scope = useReduxSelector((state) => state.game.leaderboardScope);
  const sort = useReduxSelector((state) => state.game.leaderboardSort);
 
- const { players, loading, loadingMore, error, loadMore } = useLeaderboard(
-  scope,
-  sort,
- );
+ const { players, loading, error } = useLeaderboard(scope, sort);
  const [selectedPlayerId, setSelectedPlayerId] = useState<string | null>(null);
  const closePlayerSheet = useCallback(() => setSelectedPlayerId(null), []);
  const currentUserId = useReduxSelector((state) => state.auth.session?.id);
@@ -139,10 +136,6 @@ export default function Leaderboard() {
      <VirtualList<ILeaderboardRowResponse>
       data={players.slice(podiumSize)}
       computeItemKey={(_, player) => player.id}
-      endReached={loadMore}
-      components={{
-       Footer: () => (loadingMore ? <LbRowSkeleton /> : null),
-      }}
       itemContent={(index, player) => {
        const rank = index + podiumSize + 1;
        return (

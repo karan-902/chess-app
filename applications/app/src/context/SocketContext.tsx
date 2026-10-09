@@ -8,11 +8,7 @@ import {
 } from "react";
 
 import type { Socket } from "socket.io-client";
-import {
- connectSocket,
- disconnectSocket,
- requestGameState,
-} from "@gopvp/common/src/util/socket";
+import { connectSocket, disconnectSocket } from "@gopvp/common/src/util/socket";
 import { useReduxSelector, useReduxDispatch } from "@gopvp/app/src/redux/hooks";
 import { store } from "@gopvp/app/src/redux/store";
 import { setActiveGame } from "@gopvp/app/src/redux/socketModals/slice";
@@ -27,10 +23,7 @@ import sessionService from "@gopvp/common/src/util/sessionService";
 import { router } from "@gopvp/app/src/routes/router";
 import { navigateTo } from "@gopvp/common/src/util/navigationService";
 import RejoinGameModal from "@gopvp/app/src/components/common/RejoinGameModal";
-import type {
- IActiveGameEvent,
- IGameStateBaseResponse,
-} from "@gopvp/common/src/types/response";
+import { subscribeActiveGame } from "@gopvp/app/src/utils/matchResult";
 import { ROUTES } from "@gopvp/app/src/constants/route";
 import { SOCKET_EVENTS } from "@gopvp/common/src/constants/event";
 
@@ -111,36 +104,33 @@ export function SocketProvider({ children }: PropsWithChildren) {
    }
   };
 
-  const onActiveGame = async (data: IActiveGameEvent) => {
-   const { pathname, search } = router.state.location;
-   const viewingMatchId = new URLSearchParams(search).get("match_id");
-   if (getGameFromPath(pathname) && viewingMatchId === data.match_id) return;
-
-   if (store.getState().socketModals.deviceHandoff !== null) return;
-   const gameState = await requestGameState<IGameStateBaseResponse>(
-    data.match_id,
-   );
-   const userId = store.getState().auth.session?.id;
-   const opponent = gameState?.players.find(
-    (player) => player.user_id !== userId,
-   );
-   if (gameState && opponent) {
-    dispatch(setActiveGame({ ...data, bet: gameState.bet, opponent }));
-   }
-  };
-
   sock.on(SOCKET_EVENTS.CONNECT, onConnect);
-  sock.on(SOCKET_EVENTS.GAME_ACTIVE, onActiveGame);
   sock.on(SOCKET_EVENTS.CONNECT_ERROR, onConnectError);
   sock.on(SOCKET_EVENTS.SESSION_REPLACED, onSessionTerminated);
 
   return () => {
    sock.off(SOCKET_EVENTS.CONNECT, onConnect);
-   sock.off(SOCKET_EVENTS.GAME_ACTIVE, onActiveGame);
    sock.off(SOCKET_EVENTS.CONNECT_ERROR, onConnectError);
    sock.off(SOCKET_EVENTS.SESSION_REPLACED, onSessionTerminated);
   };
  }, [isLoggedIn, session?.access_token, isGameReady, dispatch]);
+
+ useEffect(
+  () =>
+   subscribeActiveGame(session?.id, (activeGame) => {
+    if (!activeGame) {
+     dispatch(setActiveGame(null));
+     return;
+    }
+    const { pathname, search } = router.state.location;
+    const viewingMatchId = new URLSearchParams(search).get("match_id");
+    if (getGameFromPath(pathname) && viewingMatchId === activeGame.match_id)
+     return;
+    if (store.getState().socketModals.deviceHandoff !== null) return;
+    dispatch(setActiveGame(activeGame));
+   }),
+  [session?.id, dispatch],
+ );
 
  return (
   <SocketContext.Provider value={{ socket }}>

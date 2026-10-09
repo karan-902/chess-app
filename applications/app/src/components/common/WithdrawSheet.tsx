@@ -9,9 +9,6 @@ import WalletSheetShell from "@gopvp/app/src/components/common/WalletSheetShell"
 import WalletSuccessStage from "@gopvp/app/src/components/common/WalletSuccessStage";
 import WalletInfoNote from "@gopvp/app/src/components/common/WalletInfoNote";
 import { useWalletModal } from "@gopvp/app/src/context/WalletModalContext";
-import { useSocket } from "@gopvp/app/src/context/SocketContext";
-import type { ITransactionCompletedEvent } from "@gopvp/common/src/types/response";
-import { SOCKET_EVENTS } from "@gopvp/common/src/constants/event";
 import {
  useWalletBalance,
  withdrawRequest,
@@ -40,7 +37,6 @@ type Stage = "amount" | "success";
 export default function WithdrawSheet() {
  const dispatch = useReduxDispatch();
  const { openModal, close } = useWalletModal();
- const { socket } = useSocket();
  const { withdrawableUsd, refetch } = useWalletBalance();
  const speedLightningAddress = useReduxSelector(
   (state) => state.speed.lightningAddress,
@@ -66,17 +62,6 @@ export default function WithdrawSheet() {
   if (!open) return;
   refetch();
  }, [open, refetch]);
-
- useEffect(() => {
-  if (!open || !socket) return;
-  const onCompleted = (data: ITransactionCompletedEvent) => {
-   if (data.type === "WITHDRAW") setStage("success");
-  };
-  socket.on(SOCKET_EVENTS.TRANSACTION_COMPLETED, onCompleted);
-  return () => {
-   socket.off(SOCKET_EVENTS.TRANSACTION_COMPLETED, onCompleted);
-  };
- }, [open, socket]);
 
  const hasWithdrawable = withdrawableUsd > 0;
  const amountUsd = parseFloat(amount) || 0;
@@ -113,6 +98,7 @@ export default function WithdrawSheet() {
   try {
    const { status } = await withdrawRequest(amountUsd, withdrawDestination);
    if (status === "PROCESSING") close();
+   else setStage("success");
   } catch (err) {
    showApiErrorToast(err);
   } finally {

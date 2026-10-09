@@ -1,8 +1,7 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { callAPIInterface } from "@gopvp/common/src/util/api";
 import { usePaginatedList } from "@gopvp/app/src/hooks/usePaginatedList";
 import { endingBeforeQuery } from "@gopvp/app/src/utils";
-import { useSocket } from "@gopvp/app/src/context/SocketContext";
 import { useReduxDispatch, useReduxSelector } from "@gopvp/app/src/redux/hooks";
 import { fetchWalletBalance } from "@gopvp/app/src/redux/wallet/thunk";
 import type {
@@ -17,7 +16,6 @@ import type {
 } from "@gopvp/common/src/types/response";
 import { TRANSACTIONS_PAGE_SIZE } from "@gopvp/app/src/constants/limit";
 import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
-import { SOCKET_EVENTS } from "@gopvp/common/src/constants/event";
 
 export const paymentRequest = (amountUsd: number) =>
  callAPIInterface<IPaymentRequestResponse, IInitiateDepositBody>(
@@ -55,7 +53,12 @@ export function useWalletBalance() {
 }
 
 export function useWallet() {
- const { socket } = useSocket();
+ const lastTransaction = useReduxSelector(
+  (state) => state.wallet.lastTransaction,
+ );
+ const lastTransactionKey =
+  lastTransaction && `${lastTransaction.id}:${lastTransaction.status}`;
+ const seenTransactionKeyRef = useRef(lastTransactionKey);
  const {
   usdValue,
   withdrawableUsd,
@@ -80,14 +83,10 @@ export function useWallet() {
  } = usePaginatedList(fetchPage);
 
  useEffect(() => {
-  if (!socket) return;
-  socket.on(SOCKET_EVENTS.WALLET_UPDATED, refresh);
-  socket.on(SOCKET_EVENTS.TRANSACTION_COMPLETED, refresh);
-  return () => {
-   socket.off(SOCKET_EVENTS.WALLET_UPDATED, refresh);
-   socket.off(SOCKET_EVENTS.TRANSACTION_COMPLETED, refresh);
-  };
- }, [socket, refresh]);
+  if (lastTransactionKey === seenTransactionKeyRef.current) return;
+  seenTransactionKeyRef.current = lastTransactionKey;
+  refresh();
+ }, [lastTransactionKey, refresh]);
 
  return {
   usdValue,

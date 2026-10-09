@@ -3,12 +3,16 @@ import { doc, onSnapshot } from "firebase/firestore";
 import { firebaseApp, firestore } from "@gopvp/app/src/config/firebase";
 import { firebaseProjectId } from "@gopvp/common/src/constants/env";
 import { FIRESTORE_COLLECTIONS } from "@gopvp/common/src/constants/endpoint";
-import type { IMatchResultResponse } from "@gopvp/common/src/types/response";
+import type {
+ IActiveGameResponse,
+ IMatchResultResponse,
+ IWalletDocResponse,
+} from "@gopvp/common/src/types/response";
 
-export function subscribeMatchResult(
- matchId: string,
+function subscribeUserDoc<TData>(
  userId: string | undefined,
- onResult: (result: IMatchResultResponse) => void,
+ pathSegments: string[],
+ onData: (data: TData | null) => void,
 ): () => void {
  if (!firebaseProjectId || !userId) return () => {};
  let unsubscribeDoc = () => {};
@@ -16,17 +20,10 @@ export function subscribeMatchResult(
   unsubscribeDoc();
   unsubscribeDoc = () => {};
   if (user?.uid !== userId) return;
+  const [collection, ...rest] = pathSegments;
   unsubscribeDoc = onSnapshot(
-   doc(
-    firestore,
-    FIRESTORE_COLLECTIONS.MATCH_RESULTS,
-    matchId,
-    FIRESTORE_COLLECTIONS.MATCH_RESULT_PLAYERS,
-    userId,
-   ),
-   (snapshot) => {
-    if (snapshot.exists()) onResult(snapshot.data() as IMatchResultResponse);
-   },
+   doc(firestore, collection, ...rest),
+   (snapshot) => onData(snapshot.exists() ? (snapshot.data() as TData) : null),
    (err) => console.error(err),
   );
  });
@@ -34,4 +31,47 @@ export function subscribeMatchResult(
   unsubscribeAuth();
   unsubscribeDoc();
  };
+}
+
+export function subscribeMatchResult(
+ matchId: string,
+ userId: string | undefined,
+ onResult: (result: IMatchResultResponse) => void,
+): () => void {
+ return subscribeUserDoc<IMatchResultResponse>(
+  userId,
+  [
+   FIRESTORE_COLLECTIONS.MATCH_RESULTS,
+   matchId,
+   FIRESTORE_COLLECTIONS.MATCH_RESULT_PLAYERS,
+   userId ?? "",
+  ],
+  (result) => {
+   if (result) onResult(result);
+  },
+ );
+}
+
+export function subscribeActiveGame(
+ userId: string | undefined,
+ onActiveGame: (activeGame: IActiveGameResponse | null) => void,
+): () => void {
+ return subscribeUserDoc<IActiveGameResponse>(
+  userId,
+  [FIRESTORE_COLLECTIONS.ACTIVE_GAMES, userId ?? ""],
+  onActiveGame,
+ );
+}
+
+export function subscribeWallet(
+ userId: string | undefined,
+ onWallet: (wallet: IWalletDocResponse) => void,
+): () => void {
+ return subscribeUserDoc<IWalletDocResponse>(
+  userId,
+  [FIRESTORE_COLLECTIONS.WALLETS, userId ?? ""],
+  (wallet) => {
+   if (wallet) onWallet(wallet);
+  },
+ );
 }

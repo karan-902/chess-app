@@ -1,21 +1,23 @@
 import { useState, useEffect } from "react";
+import { doc, onSnapshot } from "firebase/firestore";
+import { firestore } from "@gopvp/app/src/config/firebase";
 import {
  callAPIInterface,
  showApiErrorToast,
 } from "@gopvp/common/src/util/api";
-import { getSocket } from "@gopvp/common/src/util/socket";
-import { useSocket } from "@gopvp/app/src/context/SocketContext";
 import { useGame } from "@gopvp/app/src/hooks/useGame";
 import type {
  IPoolResponse,
- IPoolUpdatedEvent,
+ IPoolsDocResponse,
 } from "@gopvp/common/src/types/response";
-import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
-import { SOCKET_EVENTS } from "@gopvp/common/src/constants/event";
+import {
+ ENDPOINTS,
+ FIRESTORE_COLLECTIONS,
+} from "@gopvp/common/src/constants/endpoint";
+import { firebaseProjectId } from "@gopvp/common/src/constants/env";
 
 export function usePools() {
  const { game } = useGame();
- const { socket: ctxSocket } = useSocket();
  const [pools, setPools] = useState<IPoolResponse[]>([]);
  const [loading, setLoading] = useState(true);
  const [error, setError] = useState(false);
@@ -41,18 +43,16 @@ export function usePools() {
  }, [game]);
 
  useEffect(() => {
-  const socket = ctxSocket ?? getSocket();
-  if (!socket) return;
-
-  const onPoolUpdated = (data: IPoolUpdatedEvent) => {
-   if (data.game === game) setPools(data.pools);
-  };
-
-  socket.on(SOCKET_EVENTS.POOL_UPDATED, onPoolUpdated);
-  return () => {
-   socket.off(SOCKET_EVENTS.POOL_UPDATED, onPoolUpdated);
-  };
- }, [ctxSocket, game]);
+  if (!firebaseProjectId) return;
+  return onSnapshot(
+   doc(firestore, FIRESTORE_COLLECTIONS.POOLS, game),
+   (snapshot) => {
+    const poolsDoc = snapshot.data() as IPoolsDocResponse | undefined;
+    if (poolsDoc) setPools(poolsDoc.pools);
+   },
+   (err) => console.error(err),
+  );
+ }, [game]);
 
  return { pools, loading, error };
 }
