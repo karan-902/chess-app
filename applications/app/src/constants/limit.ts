@@ -27,4 +27,5 @@ export const PROFILE_ACCOUNT_SKELETON_ROWS = 3;
 export const LIVE_WIN_SHOW_MS = 3500;
 export const LIVE_WIN_EXIT_MS = 600;
 export const LIVE_WIN_MAX_AGE_MS = 86400000;
+export const SCROLLBAR_HIDE_DELAY_MS = 800;
 export const DAY_MS = 86400000;

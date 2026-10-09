@@ -553,6 +553,12 @@
   overflow: visible;
  }
 
+ &.wallet-tx-group {
+  margin: 0 -1.1rem;
+  padding: $space-12 1.1rem;
+  background: alpha($appText, 0.06);
+ }
+
  &.wallet-tx-item {
   padding: $space-12 0;
   border-bottom: 1px solid alpha($appText, 0.08);
@@ -585,10 +591,20 @@
   .wallet-tx-item:not(.neg) & {
    color: $greenishTeal;
   }
+
+  .wallet-tx-item.pending & {
+   color: $warning;
+  }
  }
 
  &.wallet-tx-text {
   min-width: 0;
+ }
+
+ &.wallet-tx-title {
+  display: flex;
+  align-items: center;
+  gap: $space-8;
  }
 
  &.room-options {

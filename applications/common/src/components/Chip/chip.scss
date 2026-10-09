@@ -117,4 +117,20 @@
    color: $appTextMuted;
   }
  }
+
+ &.tx-pending-chip {
+  height: auto;
+  padding: $space-4 $space-8;
+  border-radius: 4px;
+  background: $warning;
+  color: $white;
+
+  .MuiChip-label {
+   padding: 0;
+   color: $white;
+   font-family: $fontOutfitSemiBold;
+   font-size: $font11;
+   line-height: 1;
+  }
+ }
 }
