@@ -68,7 +68,7 @@ function buildTimelineEntries(
 
 function txRow(tx: ITransactionResponse, groupEdgeClass: string) {
  const isDebit = tx.transaction_type === "DEBIT";
- const isPending = tx.status === "PENDING";
+ const isPending = tx.status === "PENDING" || tx.status === "PROCESSING";
  const TxIcon = isPending
   ? ScheduleIcon
   : isDebit

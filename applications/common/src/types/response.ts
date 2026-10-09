@@ -99,7 +99,7 @@ export type ITransactionResponse = {
  transaction_code: TransactionCode;
  amount: number;
  created: number;
- status?: "PENDING" | "COMPLETED";
+ status?: "PENDING" | "PROCESSING" | "COMPLETED";
 };
 
 export type IPaymentRequestResponse = {
