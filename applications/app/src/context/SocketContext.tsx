@@ -118,7 +118,10 @@ export function SocketProvider({ children }: PropsWithChildren) {
  useEffect(
   () =>
    subscribeActiveGame(session?.id, (activeGame) => {
-    if (!activeGame) return;
+    if (!activeGame) {
+     dispatch(setActiveGame(null));
+     return;
+    }
     const { pathname, search } = router.state.location;
     const viewingMatchId = new URLSearchParams(search).get("match_id");
     if (getGameFromPath(pathname) && viewingMatchId === activeGame.match_id)

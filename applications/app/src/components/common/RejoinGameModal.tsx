@@ -47,37 +47,48 @@ export default function RejoinGameModal() {
  const [matchResult, setMatchResult] = useState<IMatchResultResponse | null>(
   null,
  );
- const activeMatchId = activeGame?.match_id;
+ const [lastActiveGame, setLastActiveGame] = useState(activeGame);
+ const lastMatchId = lastActiveGame?.match_id;
 
  useEffect(() => {
-  if (!activeMatchId) return;
-  return subscribeMatchResult(activeMatchId, userId, setMatchResult);
- }, [activeMatchId, userId]);
+  if (activeGame) setLastActiveGame(activeGame);
+ }, [activeGame]);
 
- if (!activeGame || deviceHandoff !== null) {
+ useEffect(() => {
+  if (!lastMatchId) return;
+  return subscribeMatchResult(lastMatchId, userId, setMatchResult);
+ }, [lastMatchId, userId]);
+
+ const shownGame = activeGame ?? (matchResult ? lastActiveGame : null);
+
+ if (!shownGame || deviceHandoff !== null) {
   return null;
  }
 
- const { opponent } = activeGame;
+ const { opponent } = shownGame;
  const opponentName = shortenUsername(opponent.username);
- const betAmount = formatAmount(activeGame.bet);
+ const betAmount = formatAmount(shownGame.bet);
+
+ const clearActiveGame = () => {
+  setConfirmingExit(false);
+  setLastActiveGame(null);
+  dispatch(setActiveGame(null));
+ };
 
  const handleForfeit = () => {
   socket?.emit(SOCKET_EVENTS.GAME_REJOIN_DECLINED, showAckErrorToast);
-  setConfirmingExit(false);
-  dispatch(setActiveGame(null));
+  clearActiveGame();
  };
 
  const handleCloseResult = () => {
   setMatchResult(null);
-  setConfirmingExit(false);
-  dispatch(setActiveGame(null));
+  clearActiveGame();
  };
 
  const handleRejoin = () => {
-  dispatch(setActiveGame(null));
-  if (isGameSlug(activeGame.game_slug)) {
-   navigateTo(buildMatchUrl(activeGame.game_slug, activeGame.match_id), {
+  clearActiveGame();
+  if (isGameSlug(shownGame.game_slug)) {
+   navigateTo(buildMatchUrl(shownGame.game_slug, shownGame.match_id), {
     replace: true,
    });
   }
