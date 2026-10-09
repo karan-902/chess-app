@@ -6,7 +6,6 @@ export const SOCKET_EVENTS = {
  GAME_ACTIVE: "game_active",
  GAME_STATE: "game_state",
  GAME_REJOIN_DECLINED: "game_rejoin_declined",
- GAME_END: "game_end",
  POOL_JOIN: "pool_join",
  POOL_LEAVE: "pool_leave",
  POOL_TIMEOUT: "pool_timeout",

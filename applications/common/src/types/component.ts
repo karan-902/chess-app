@@ -4,6 +4,7 @@ import type { Socket } from "socket.io-client";
 import type {
  ILoginResponse,
  IMatchHistoryItem,
+ IMatchResultResponse,
  IPoolResponse,
 } from "@gopvp/common/src/types/response";
 
@@ -24,6 +25,10 @@ export interface IGameContext {
  userId?: string;
  username: string;
  socket: Socket | null;
+ subscribeMatchResult?: (
+  matchId: string,
+  onResult: (result: IMatchResultResponse) => void,
+ ) => () => void;
 }
 
 export interface IPoolLabelProps {

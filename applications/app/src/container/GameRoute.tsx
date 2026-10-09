@@ -11,6 +11,8 @@ import { useSocket } from "@gopvp/app/src/context/SocketContext";
 import { useReduxDispatch, useReduxSelector } from "@gopvp/app/src/redux/hooks";
 import { setActivePage } from "@gopvp/app/src/redux/game/slice";
 import { getGamePath, isGameSlug } from "@gopvp/app/src/utils";
+import { subscribeMatchResult } from "@gopvp/app/src/utils/matchResult";
+import type { IMatchResultResponse } from "@gopvp/common/src/types/response";
 
 const GAME_PAGE_COMPONENTS: Record<GamePage, () => React.ReactNode> = {
  PLAY: PlayPage,
@@ -33,7 +35,16 @@ export default function GameRoute() {
   searchParams.has("match_id") || searchParams.has("practice_id");
  const playPath = isGameSlug(game) ? getGamePath(game) : "";
  const gameContext = useMemo(
-  () => ({ playPath, userId, username, socket }),
+  () => ({
+   playPath,
+   userId,
+   username,
+   socket,
+   subscribeMatchResult: (
+    matchId: string,
+    onResult: (result: IMatchResultResponse) => void,
+   ) => subscribeMatchResult(matchId, userId, onResult),
+  }),
   [playPath, userId, username, socket],
  );
 

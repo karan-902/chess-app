@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useGameContext } from "@gopvp/common/src/contexts/GameContext";
 import {
  showToastMessage,
@@ -67,10 +67,12 @@ export function useGameSocket({
  syncClock,
  setGameEnded,
 }: IProps) {
- const { socket, userId } = useGameContext();
+ const { socket, userId, subscribeMatchResult } = useGameContext();
  const dispatch = useChessDispatch();
  const matchState = useChessSelector((state) => state.match.state);
  const matchId = matchState?.match_id;
+ const resultReceivedRef = useRef(false);
+ const [isAwaitingResult, setIsAwaitingResult] = useState(false);
  const [clockReady, setClockReady] = useState(isPvc);
  const [drawOffer, setDrawOffer] = useState<IDrawOfferEvent | null>(null);
  const [isOpponentOffline, setIsOpponentOffline] = useState(false);
@@ -79,11 +81,23 @@ export function useGameSocket({
  );
  const firstMoveSeconds = useCountdown(firstMoveDeadlineAt);
 
+ const applyResult = useCallback(
+  (result: IMatchResultResponse) => {
+   if (result.id !== matchId || resultReceivedRef.current) return;
+   resultReceivedRef.current = true;
+   hideBackdropLoader();
+   setFirstMoveDeadlineAt(null);
+   setGameEnded(result);
+  },
+  [matchId, setGameEnded],
+ );
+
  const endMatch = useCallback(async () => {
+  if (resultReceivedRef.current) return;
   setFirstMoveDeadlineAt(null);
   showBackdropLoader();
   try {
-   setGameEnded(
+   applyResult(
     await callAPIInterface<IMatchResultResponse>(
      "GET",
      `${ENDPOINTS.MATCH_RESULT}/${matchId}`,
@@ -94,7 +108,23 @@ export function useGameSocket({
   } finally {
    hideBackdropLoader();
   }
- }, [matchId, setGameEnded]);
+ }, [matchId, applyResult]);
+
+ useEffect(() => {
+  resultReceivedRef.current = false;
+  setIsAwaitingResult(false);
+ }, [matchId]);
+
+ useEffect(() => {
+  if (isPvc || !matchId || !subscribeMatchResult) return;
+  return subscribeMatchResult(matchId, applyResult);
+ }, [isPvc, matchId, subscribeMatchResult, applyResult]);
+
+ useEffect(() => {
+  if (isPvc || !(isAwaitingResult || isGameOver || timedOut)) return;
+  const fallbackTimer = setTimeout(endMatch, MATCH_END_FALLBACK_MS);
+  return () => clearTimeout(fallbackTimer);
+ }, [isPvc, isAwaitingResult, isGameOver, timedOut, endMatch]);
 
  const replaySavedMoves = useCallback(
   (id: string, fen: string) => {
@@ -160,7 +190,6 @@ export function useGameSocket({
 
  useEffect(() => {
   if (!socket || isPvc) return;
-  let endFallbackTimer: ReturnType<typeof setTimeout> | undefined;
 
   const onReconnect = () => {
    socket.emit(GAME_EVENTS.READY, showAckErrorToast);
@@ -174,21 +203,14 @@ export function useGameSocket({
 
   const onOpponentForfeit = () => {
    showBackdropLoader();
-   endFallbackTimer = setTimeout(endMatch, MATCH_END_FALLBACK_MS);
-  };
-
-  const onGameEnd = (data: IMatchResultResponse) => {
-   if (data.id !== matchId) return;
-   clearTimeout(endFallbackTimer);
-   hideBackdropLoader();
-   setFirstMoveDeadlineAt(null);
-   setGameEnded(data);
+   setIsAwaitingResult(true);
   };
 
   const onMove = (data: IMoveEvent) => {
-   if (data.isCheckmate || data.isDraw || data.isStaleMate || data.isTimeout)
+   if (data.isCheckmate || data.isDraw || data.isStaleMate || data.isTimeout) {
     showBackdropLoader();
-   else hideBackdropLoader();
+    setIsAwaitingResult(true);
+   } else hideBackdropLoader();
    if (!applyServerFen(data.fen, data)) resync();
    syncClock(data.remainingTime.white, data.remainingTime.black);
    setFirstMoveDeadlineAt(toDeadlineAt(data.firstMoveDeadlineMs));
@@ -203,7 +225,6 @@ export function useGameSocket({
 
   socket.on(SOCKET_EVENTS.CONNECT, onReconnect);
   socket.on(GAME_EVENTS.START, onStart);
-  socket.on(SOCKET_EVENTS.GAME_END, onGameEnd);
   socket.on(GAME_EVENTS.MOVE, onMove);
   socket.on(GAME_EVENTS.DRAW_OFFER, setDrawOffer);
   socket.on(GAME_EVENTS.DRAW_DECLINE, onDrawDecline);
@@ -214,10 +235,8 @@ export function useGameSocket({
   socket.on(SOCKET_EVENTS.GAME_REJOIN_DECLINED, onOpponentForfeit);
 
   return () => {
-   clearTimeout(endFallbackTimer);
    socket.off(SOCKET_EVENTS.CONNECT, onReconnect);
    socket.off(GAME_EVENTS.START, onStart);
-   socket.off(SOCKET_EVENTS.GAME_END, onGameEnd);
    socket.off(GAME_EVENTS.MOVE, onMove);
    socket.off(GAME_EVENTS.DRAW_OFFER, setDrawOffer);
    socket.off(GAME_EVENTS.DRAW_DECLINE, onDrawDecline);
@@ -227,17 +246,7 @@ export function useGameSocket({
    socket.off(GAME_EVENTS.DISCONNECT, onOpponentForfeit);
    socket.off(SOCKET_EVENTS.GAME_REJOIN_DECLINED, onOpponentForfeit);
   };
- }, [
-  socket,
-  isPvc,
-  matchId,
-  applyServerFen,
-  syncClock,
-  resync,
-  endMatch,
-  setGameEnded,
-  dispatch,
- ]);
+ }, [socket, isPvc, matchId, applyServerFen, syncClock, resync, dispatch]);
 
  const handleMoveAck = (err: ISocketAckError | null, data: IMoveResponse) => {
   if (err) {
@@ -263,7 +272,10 @@ export function useGameSocket({
  const resign = () => {
   showBackdropLoader();
   socket?.emit(GAME_EVENTS.RESIGN, (err: ISocketAckError | null) => {
-   if (!err) return;
+   if (!err) {
+    setIsAwaitingResult(true);
+    return;
+   }
    hideBackdropLoader();
    showAckErrorToast(err);
   });
@@ -279,6 +291,7 @@ export function useGameSocket({
    GAME_EVENTS.DRAW_ACCEPT,
    (err: ISocketAckError | null, data: IMoveResponse) => {
     if (err || data.error) hideBackdropLoader();
+    else setIsAwaitingResult(true);
     handleMoveAck(err, data);
    },
   );

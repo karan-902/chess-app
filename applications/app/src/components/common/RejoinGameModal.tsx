@@ -9,6 +9,7 @@ import { setActiveGame } from "@gopvp/app/src/redux/socketModals/slice";
 import { showAckErrorToast } from "@gopvp/common/src/util/api";
 import { formatAmount, shortenUsername } from "@gopvp/common/src/util/format";
 import { buildMatchUrl, isGameSlug } from "@gopvp/app/src/utils";
+import { subscribeMatchResult } from "@gopvp/app/src/utils/matchResult";
 import { navigateTo } from "@gopvp/common/src/util/navigationService";
 import {
  rejoinMatchText,
@@ -38,6 +39,7 @@ export default function RejoinGameModal() {
  const dispatch = useReduxDispatch();
  const { socket } = useSocket();
  const activeGame = useReduxSelector((state) => state.socketModals.activeGame);
+ const userId = useReduxSelector((state) => state.auth.session?.id);
  const deviceHandoff = useReduxSelector(
   (state) => state.socketModals.deviceHandoff,
  );
@@ -48,15 +50,9 @@ export default function RejoinGameModal() {
  const activeMatchId = activeGame?.match_id;
 
  useEffect(() => {
-  if (!socket || !activeMatchId) return;
-  const onGameEnd = (data: IMatchResultResponse) => {
-   if (data.id === activeMatchId) setMatchResult(data);
-  };
-  socket.on(SOCKET_EVENTS.GAME_END, onGameEnd);
-  return () => {
-   socket.off(SOCKET_EVENTS.GAME_END, onGameEnd);
-  };
- }, [socket, activeMatchId]);
+  if (!activeMatchId) return;
+  return subscribeMatchResult(activeMatchId, userId, setMatchResult);
+ }, [activeMatchId, userId]);
 
  if (!activeGame || deviceHandoff !== null) {
   return null;
