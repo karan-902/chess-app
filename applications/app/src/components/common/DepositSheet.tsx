@@ -11,13 +11,10 @@ import WalletSheetShell from "@gopvp/app/src/components/common/WalletSheetShell"
 import WalletSuccessStage from "@gopvp/app/src/components/common/WalletSuccessStage";
 import WalletInfoNote from "@gopvp/app/src/components/common/WalletInfoNote";
 import { useWalletModal } from "@gopvp/app/src/context/WalletModalContext";
-import { useSocket } from "@gopvp/app/src/context/SocketContext";
+import { useReduxSelector } from "@gopvp/app/src/redux/hooks";
 import { paymentRequest } from "@gopvp/app/src/hooks/useWallet";
 import { getApiErrorResponse } from "@gopvp/common/src/util/api";
-import type {
- IPaymentRequestResponse,
- ITransactionCompletedEvent,
-} from "@gopvp/common/src/types/response";
+import type { IPaymentRequestResponse } from "@gopvp/common/src/types/response";
 import {
  depositText,
  depositingAmountText,
@@ -44,7 +41,6 @@ import {
  QR_BACKGROUND_COLOR,
  QR_FOREGROUND_COLOR,
 } from "@gopvp/app/src/constants/color";
-import { SOCKET_EVENTS } from "@gopvp/common/src/constants/event";
 
 type Stage = "amount" | "qr" | "success";
 
@@ -57,7 +53,9 @@ function formatCountdown(ms: number) {
 
 export default function DepositSheet() {
  const { openModal, close } = useWalletModal();
- const { socket } = useSocket();
+ const lastTransaction = useReduxSelector(
+  (state) => state.wallet.lastTransaction,
+ );
  const open = openModal === "deposit";
 
  const [stage, setStage] = useState<Stage>("amount");
@@ -94,15 +92,13 @@ export default function DepositSheet() {
  }, [stage, payment]);
 
  useEffect(() => {
-  if (stage !== "qr" || !socket) return;
-  const onCompleted = (data: ITransactionCompletedEvent) => {
-   if (data.type === "DEPOSIT") setStage("success");
-  };
-  socket.on(SOCKET_EVENTS.TRANSACTION_COMPLETED, onCompleted);
-  return () => {
-   socket.off(SOCKET_EVENTS.TRANSACTION_COMPLETED, onCompleted);
-  };
- }, [stage, socket]);
+  if (
+   stage === "qr" &&
+   lastTransaction?.id === payment?.deposit_id &&
+   lastTransaction?.status === "COMPLETED"
+  )
+   setStage("success");
+ }, [stage, payment, lastTransaction]);
 
  const amountUsd = Number(amount);
  const isAmountInvalid = !amount || Number.isNaN(amountUsd);

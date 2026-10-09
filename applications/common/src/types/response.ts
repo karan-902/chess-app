@@ -119,9 +119,17 @@ export type IWithdrawResponse = IBalanceResponse & {
  created: number;
 };
 
-export type ITransactionCompletedEvent = {
+export type IWalletLastTransaction = {
+ id: string;
  type: "DEPOSIT" | "WITHDRAW";
+ status: "PROCESSING" | "COMPLETED";
  amount: number;
+ created: number;
+};
+
+export type IWalletDocResponse = IBalanceResponse & {
+ last_transaction: IWalletLastTransaction | null;
+ updated: number;
 };
 
 export type IPoolResponse = {

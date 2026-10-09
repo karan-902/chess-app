@@ -6,6 +6,7 @@ import { FIRESTORE_COLLECTIONS } from "@gopvp/common/src/constants/endpoint";
 import type {
  IActiveGameResponse,
  IMatchResultResponse,
+ IWalletDocResponse,
 } from "@gopvp/common/src/types/response";
 
 function subscribeUserDoc<TData>(
@@ -22,8 +23,7 @@ function subscribeUserDoc<TData>(
   const [collection, ...rest] = pathSegments;
   unsubscribeDoc = onSnapshot(
    doc(firestore, collection, ...rest),
-   (snapshot) =>
-    onData(snapshot.exists() ? (snapshot.data() as TData) : null),
+   (snapshot) => onData(snapshot.exists() ? (snapshot.data() as TData) : null),
    (err) => console.error(err),
   );
  });
@@ -60,5 +60,18 @@ export function subscribeActiveGame(
   userId,
   [FIRESTORE_COLLECTIONS.ACTIVE_GAMES, userId ?? ""],
   onActiveGame,
+ );
+}
+
+export function subscribeWallet(
+ userId: string | undefined,
+ onWallet: (wallet: IWalletDocResponse) => void,
+): () => void {
+ return subscribeUserDoc<IWalletDocResponse>(
+  userId,
+  [FIRESTORE_COLLECTIONS.WALLETS, userId ?? ""],
+  (wallet) => {
+   if (wallet) onWallet(wallet);
+  },
  );
 }
