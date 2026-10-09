@@ -613,12 +613,9 @@
 
  &.wallet-tx-group-label {
   display: block;
-  font-family: $fontOutfitSemiBold;
+  font-family: $fontOutfitExtraBold;
   font-size: $font14;
   color: $appText;
-  margin: 0 -1.1rem;
-  padding: $space-12 1.1rem;
-  background: alpha($appText, 0.06);
  }
 
  &.rules-text {
