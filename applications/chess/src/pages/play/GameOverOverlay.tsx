@@ -26,7 +26,14 @@ export default function GameOverOverlay({
    value: `${gameEnded.amount > 0 ? "+" : ""}${formatAmount(gameEnded.amount)}`,
    change: gameEnded.amount,
   },
-  { value: `${scoreChange > 0 ? "+" : ""}${scoreChange}`, change: scoreChange },
+  ...(scoreChange === 0
+   ? []
+   : [
+      {
+       value: `${scoreChange > 0 ? "+" : ""}${scoreChange}`,
+       change: scoreChange,
+      },
+     ]),
  ];
 
  return (
