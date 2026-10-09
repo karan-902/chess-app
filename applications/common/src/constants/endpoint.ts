@@ -21,6 +21,10 @@ export const ENDPOINTS = {
  TRANSACTIONS: "/wallet/transactions",
 } as const;
 
+export const FIRESTORE_COLLECTIONS = {
+ LIVE_WINS: "live_wins",
+} as const;
+
 export const OPEN_ENDPOINTS: string[] = [
  ENDPOINTS.REGISTER,
  ENDPOINTS.LOGIN,

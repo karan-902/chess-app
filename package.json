@@ -27,6 +27,7 @@
   "chess.js": "^1.4.0",
   "classnames": "^2.5.1",
   "dayjs": "^1.11.21",
+  "firebase": "^13.0.0",
   "formik": "^2.4.9",
   "input-otp": "1.4.2",
   "localforage": "^1.10.0",
