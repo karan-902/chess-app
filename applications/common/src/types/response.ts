@@ -349,17 +349,7 @@ export type ILeaderboardPlayerResponse = {
  wins: number;
 };
 
-export type ILiveWinResponse = {
- match_id: string;
- winner_id: string;
- loser_id: string;
- winner_username: string;
- loser_username: string;
- pot: number;
- created: number;
-};
-
 export type ILiveWinsDocResponse = {
- matches: ILiveWinResponse[];
+ matches: IWorldMatchHistoryResponse[];
  updated: number;
 };

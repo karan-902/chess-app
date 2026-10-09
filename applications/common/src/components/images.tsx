@@ -18,6 +18,7 @@ import {
  Pencil,
  Rocket,
  Timer,
+ Trophy,
  X,
  Zap,
 } from "lucide-react";
@@ -105,6 +106,7 @@ export const icons = {
  person: PersonIcon,
  rocket: Rocket,
  timer: Timer,
+ trophy: Trophy,
  warning: WarningIcon,
  x: X,
  zap: Zap,

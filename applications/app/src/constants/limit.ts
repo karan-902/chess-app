@@ -24,3 +24,6 @@ export const POOL_SKELETON_ROWS = 4;
 export const WALLET_SUCCESS_CLOSE_MS = 2800;
 export const COPIED_FEEDBACK_MS = 1500;
 export const PROFILE_ACCOUNT_SKELETON_ROWS = 3;
+export const LIVE_WIN_SHOW_MS = 3500;
+export const LIVE_WIN_EXIT_MS = 600;
+export const LIVE_WIN_MAX_AGE_MS = 86400000;

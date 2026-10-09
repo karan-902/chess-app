@@ -8,6 +8,7 @@ import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
 import BetSheet from "@gopvp/app/src/pages/play/BetSheet";
 import RoomSheet from "@gopvp/app/src/pages/play/RoomSheet";
 import PoolConfirmSheet from "@gopvp/app/src/pages/play/PoolConfirmSheet";
+import LiveWinsTicker from "@gopvp/app/src/pages/play/LiveWinsTicker";
 import { usePools } from "@gopvp/app/src/hooks/usePools";
 import { useMatchmaking } from "@gopvp/app/src/hooks/useMatchmaking";
 import { useRoomMatch } from "@gopvp/app/src/hooks/useRoomMatch";
@@ -154,6 +155,7 @@ export default function PlayPage() {
      {tapPlayNowHintText}
      <icons.chevronDown />
     </Text> */}
+    <LiveWinsTicker />
     <Button
      type="button"
      variant="contained"

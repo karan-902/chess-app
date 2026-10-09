@@ -3,14 +3,14 @@ import { doc, onSnapshot } from "firebase/firestore";
 import { firestore } from "@gopvp/app/src/config/firebase";
 import { useGame } from "@gopvp/app/src/hooks/useGame";
 import type {
- ILiveWinResponse,
  ILiveWinsDocResponse,
+ IWorldMatchHistoryResponse,
 } from "@gopvp/common/src/types/response";
 import { FIRESTORE_COLLECTIONS } from "@gopvp/common/src/constants/endpoint";
 
 export function useLiveWins() {
  const { game } = useGame();
- const [liveWins, setLiveWins] = useState<ILiveWinResponse[]>([]);
+ const [liveWins, setLiveWins] = useState<IWorldMatchHistoryResponse[]>([]);
  const [loading, setLoading] = useState(true);
  const [error, setError] = useState(false);
 

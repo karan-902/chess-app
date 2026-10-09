@@ -244,6 +244,56 @@
   }
  }
 
+ &.live-win-line {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-4;
+  font-family: $fontOutfitMedium;
+  font-size: $font13;
+  color: $appText;
+  max-width: 100%;
+  min-width: 0;
+  animation: live-win-in 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+
+  > svg {
+   flex-shrink: 0;
+   width: 0.875rem;
+   height: 0.875rem;
+   color: $gold;
+  }
+
+  &.leaving {
+   animation: live-win-out 0.6s cubic-bezier(0.64, 0, 0.78, 0) forwards;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+   animation: none;
+
+   &.leaving {
+    animation: none;
+   }
+  }
+ }
+
+ &.live-win-name {
+  min-width: 0;
+  font-family: $fontOutfitSemiBold;
+  color: $appText;
+ }
+
+ &.live-win-amount {
+  flex-shrink: 0;
+  font-family: $fontOutfitExtraBold;
+  color: $greenishTeal;
+ }
+
+ &.live-win-time {
+  flex-shrink: 0;
+  font-family: $fontOutfitMedium;
+  font-size: $font13;
+  color: $appText;
+ }
+
  &.searching-timer {
   font-family: $fontOutfitRegular;
   font-size: $font30;
@@ -747,6 +797,28 @@
   color: alpha($appText, 0.5);
   margin-bottom: 1.25rem;
   line-height: 1.5;
+ }
+}
+
+@keyframes live-win-in {
+ from {
+  opacity: 0;
+  transform: translate3d(0, 100%, 0);
+ }
+ to {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+ }
+}
+
+@keyframes live-win-out {
+ from {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+ }
+ to {
+  opacity: 0;
+  transform: translate3d(0, -100%, 0);
  }
 }
 
