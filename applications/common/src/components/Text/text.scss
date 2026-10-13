@@ -346,7 +346,7 @@
   display: block;
   font-family: $fontOutfitExtraBold;
   font-size: $font24;
-  color: $gold;
+  color: $appPrize;
  }
 
  &.pool-entry-fee {
@@ -354,7 +354,7 @@
   font-size: $font12;
   font-family: $fontOutfitBold;
   font-weight: 600;
-  color: $appText;
+  color: $appEntryFee;
  }
 
  &.pool-insufficient-label {
