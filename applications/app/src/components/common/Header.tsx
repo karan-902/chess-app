@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import classNames from "classnames";
-import { AccountBalanceWalletIcon } from "@gopvp/common/src/components/images";
+import { Wallet } from "@gopvp/common/src/components/images";
 import CustomAppBar from "@gopvp/common/src/components/AppBar/AppBar";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
@@ -75,7 +75,7 @@ export default function Header() {
       <Button
        type="button"
        customClass="appbar-back-btn"
-       startIcon="arrowBack"
+       startIcon="moveLeft"
        onClick={goToPlay}
       >
        {backText}
@@ -91,7 +91,7 @@ export default function Header() {
       <Skeleton variant="rounded" customClass="appbar-balance-skeleton" />
      ) : (
       <CustomChip
-       icon={<AccountBalanceWalletIcon />}
+       icon={<Wallet strokeWidth={2.2} />}
        label={formatAmount(usdValue)}
        customClass="appbar-balance"
       />
