@@ -28,17 +28,25 @@
  }
 
  &.bet-card {
-  padding: 0.9rem 0.6rem;
-  text-align: center;
+  padding: 0.75rem;
+  text-align: left;
   width: 100%;
+  min-width: 0;
   overflow: visible;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: center;
-  gap: 0.15rem;
+  align-items: stretch;
+  gap: 0.625rem;
   background: $appSurface;
+  border-color: alpha($gold, 0.3);
   border-radius: $radius-card;
+  box-shadow: 0 6px 14px alpha($black, 0.35);
+
+  &.practice,
+  &.friend {
+   gap: $space-4;
+  }
 
   &.selected {
    border-color: $gold;
@@ -47,20 +55,15 @@
   }
 
   &.insufficient {
-   .pool-win-amt,
+   .stake-value,
    .pool-entry-fee {
     opacity: 0.6;
    }
   }
- }
 
- .bet-card-icon {
-  line-height: 1;
-  color: $gold;
- }
-
- .bet-card-practice-title {
-  margin-bottom: 0.15rem;
+  :root[data-theme="light"] & {
+   box-shadow: 0 6px 14px alpha($black, 0.06);
+  }
  }
 
  &.stat-list {

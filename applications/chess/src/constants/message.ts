@@ -23,6 +23,11 @@ export const rookText = "Rook";
 export const bishopText = "Bishop";
 export const knightText = "Knight";
 export const minutesText = (minutes: number) => `${minutes} min`;
+export const modeText = "Mode";
+export const pickLevelSetClockText = "Pick a level, set the clock,";
+export const playFreeText = "play free";
+export const difficultyText = "Difficulty";
+export const timeControlText = "Time control";
 export const howBettingWorksText = "How Betting Works";
 export const bettingExplainedText =
  "Every match is winner-take-most. Both players bet the same amount when the game starts; the winner takes the pot minus a 13% platform fee.";

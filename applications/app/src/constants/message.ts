@@ -67,7 +67,7 @@ export const approvalLinkInvalidText =
  "This approval link is no longer valid. Please try logging in again.";
 export const depositText = "Deposit";
 export const winText = "Win";
-export const entryFeeAmountText = (fee: string) => `Entry fee ${fee}`;
+export const entryText = "Entry";
 export const addFundsText = "Add funds";
 export const findOpponentText = "Find Opponent";
 export const opponentFoundText = "Opponent found!";
@@ -87,7 +87,6 @@ export const firebaseConfigMissingText =
 export const largestPrizesTipText =
  "Rapid and Classical pools pay out the largest prizes.";
 export const forFunText = "For Fun";
-export const practiceText = "Practice";
 export const freeToPlayText = "Free to play";
 export const friendlyText = "Friendly";
 export const roomText = "Room";

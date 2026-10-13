@@ -283,6 +283,10 @@
    font-size: $font16;
   }
 
+  .bet-card & {
+   width: 100% !important;
+  }
+
   .bet-card.insufficient & {
    background: alpha($gold, 0.12) !important;
    border: 1px solid $gold;
@@ -385,13 +389,13 @@
    min-height: 3rem;
   }
 
-  .segment.category-select & {
-   padding: 0.4rem 0.1rem;
-   letter-spacing: normal;
+  .practice-field & {
+   padding-block: 0.875rem;
+  }
 
-   @include from(tablet) {
-    padding: 0.4rem 0.3rem;
-   }
+  .segment.category-select & {
+   padding: 0.625rem 0.1rem;
+   letter-spacing: normal;
   }
  }
 

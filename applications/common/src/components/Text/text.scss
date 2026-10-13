@@ -100,6 +100,34 @@
   line-height: 1.15;
   letter-spacing: -0.01em;
   color: $appText;
+
+  b {
+   font-weight: inherit;
+   color: $appTabActive;
+  }
+ }
+
+ &.sheet-subtitle {
+  font-family: $fontOutfitMedium;
+  font-size: $font15;
+  line-height: 1.35;
+  color: $appText;
+  white-space: normal;
+
+  b {
+   font-family: $fontOutfitBold;
+   font-weight: inherit;
+   color: $appTabActive;
+  }
+ }
+
+ &.field-label {
+  align-self: flex-start;
+  font-family: $fontOutfitSemiBold;
+  font-size: $font13;
+  line-height: 1.25;
+  letter-spacing: 0.2px;
+  color: $appText;
  }
 
  &.value-heading {
@@ -426,18 +454,61 @@
   }
  }
 
- &.pool-win-amt {
-  display: block;
+ &.pool-mode-name {
+  font-family: $fontOutfitSemiBold;
+  font-size: $font13;
+  line-height: 1.25;
+  letter-spacing: 0.2px;
+  color: $appText;
+ }
+
+ &.pool-duration {
+  flex-shrink: 0;
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: alpha(var(--mode-color), 0.15);
+  font-family: $fontOutfitMedium;
+  font-size: $font12;
+  line-height: 1.35;
+  letter-spacing: 0.2px;
+  color: var(--mode-color);
+
+  :root[data-theme="light"] .pool-meta.classical & {
+   color: $btnEdgeGold;
+  }
+ }
+
+ &.stake-label {
   font-family: $fontOutfitExtraBold;
-  font-size: $font24;
-  color: $appPrize;
+  font-size: $font10;
+  line-height: 1.6;
+  letter-spacing: 1.2px;
+  color: $appEntryFee;
+
+  &.win {
+   color: $appPrize;
+  }
+ }
+
+ &.stake-value {
+  font-family: $fontOutfitExtraBold;
+  font-size: $font30;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  color: $appEntryFee;
+
+  &.win {
+   color: $appPrize;
+  }
  }
 
  &.pool-entry-fee {
-  display: block;
-  font-size: $font12;
+  display: flex;
+  align-items: center;
+  height: 2rem;
   font-family: $fontOutfitBold;
-  font-weight: 600;
+  font-size: $font16;
+  letter-spacing: 0.2px;
   color: $appEntryFee;
  }
 
@@ -447,22 +518,43 @@
  }
 
  &.bet-card-tc {
-  font-size: $font14;
-  letter-spacing: 0.06em;
+  --tag-color: #{$greenishTeal};
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px 3px 6px;
+  border-radius: 999px;
+  background: alpha(var(--tag-color), 0.15);
+  font-family: $fontOutfitMedium;
+  font-size: $font12;
+  line-height: 1.35;
+  letter-spacing: 0.2px;
+  color: var(--tag-color);
 
-  font-family: $fontOutfitSemiBold;
-  color: $appText;
+  svg {
+   width: 0.75rem;
+   height: 0.75rem;
+  }
+
+  .bet-card.friend & {
+   --tag-color: #{$cyan};
+  }
  }
 
  &.bet-card-practice-title {
-  font-family: $fontOutfitExtraBold;
-  font-size: $font14;
-  font-weight: 700;
-  color: $gold;
+  font-family: $fontOutfitBold;
+  font-size: $font20;
+  line-height: 1.3;
+  letter-spacing: -0.3px;
+  color: $appText;
+ }
 
-  @include from(tablet) {
-   font-size: $font15;
-  }
+ &.bet-card-sub {
+  font-family: $fontOutfitRegular;
+  font-size: $font14;
+  line-height: 1.45;
+  color: $appTextMuted;
  }
 
  &.segment-btn-label {
@@ -485,18 +577,22 @@
   }
 
   .segment.category-select & {
-   font-size: $font12;
-   overflow-wrap: anywhere;
-
-   @include from(tablet) {
-    font-size: $font14;
-   }
+   font-family: $fontOutfitSemiBold;
+   font-size: $font14;
+   line-height: 1.45;
   }
  }
 
  &.segment-btn-sub {
   display: block;
   transition: color 0.2s ease;
+
+  .segment.category-select & {
+   font-family: $fontOutfitRegular;
+   font-size: $font12;
+   line-height: 1.35;
+   color: $appTextMuted;
+  }
 
   .segment-btn.active & {
    color: $primaryContrast;

@@ -3,6 +3,7 @@ export const keepPlayingText = "Keep Playing";
 export const backText = "Back";
 export const cancelText = "Cancel";
 export const playText = "Play";
+export const practiceText = "Practice";
 export const scoreText = "Score";
 export const entryFeeText = "Entry fee";
 export const youText = "You";

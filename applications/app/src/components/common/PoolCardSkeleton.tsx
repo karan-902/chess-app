@@ -7,19 +7,23 @@ export default function PoolCardSkeleton() {
  return (
   <Card customClass="bet-card">
    <Box customClass="pool-meta">
-    <Text component="span" customClass="description">
-     <Skeleton customClass="text" width={90} />
-    </Text>
+    <Box customClass="pool-mode">
+     <Skeleton variant="rounded" customClass="pool-mode-icon" />
+     <Text component="span" customClass="pool-mode-name">
+      <Skeleton customClass="text" width={50} />
+     </Text>
+    </Box>
    </Box>
-   <Text customClass="bet-card-tc">
-    <Skeleton customClass="text" width={40} />
-   </Text>
-   <Text customClass="pool-win-amt">
-    <Skeleton customClass="text" width={60} />
-   </Text>
-   <Text customClass="pool-entry-fee">
-    <Skeleton customClass="text" width={70} />
-   </Text>
+   <Box customClass="pool-stats">
+    <Box customClass="pool-stat">
+     <Text customClass="stake-label">
+      <Skeleton customClass="text" width={24} />
+     </Text>
+     <Text customClass="stake-value">
+      <Skeleton customClass="text" width={60} />
+     </Text>
+    </Box>
+   </Box>
    <Skeleton variant="rounded" customClass="pool-play-skeleton" />
   </Card>
  );
