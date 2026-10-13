@@ -62,40 +62,26 @@
  }
 
  &.appbar-balance {
-  gap: 0.4rem;
-  height: 32px;
+  gap: 0.5rem;
+  height: 2.125rem;
   font-size: $font14;
-
   background: transparent;
-  border: 1px solid alpha($gold, 0.3);
-  padding: 0.3rem 0.75rem;
-  border-radius: 4px !important;
-  transition:
-   background 0.15s ease,
-   border-color 0.15s ease;
-
-  @media (hover: hover) {
-   &:hover {
-    background: alpha($gold, 0.18);
-    border-color: alpha($gold, 0.45);
-   }
-  }
+  border: none;
+  padding: 0 0.625rem 0 0.75rem;
+  border-radius: 0 !important;
 
   .MuiChip-icon {
    margin: 0;
-   width: 22px;
-   height: 22px;
+   width: 19px;
+   height: 19px;
    color: $gold;
   }
   .MuiChip-label {
    padding: 0;
-   font-family: $fontOutfitExtraBold;
+   font-family: $fontOutfitBold;
    font-size: $font16;
-   font-weight: 600;
-   letter-spacing: 0.02em;
    line-height: normal;
-   text-align: center;
-   color: $appText;
+   color: $white;
   }
  }
 

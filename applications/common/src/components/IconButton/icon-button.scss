@@ -55,14 +55,21 @@
 
  &.drawer-close-icon {
   position: absolute;
-  top: 0.875rem;
-  right: 0.875rem;
+  top: 0.75rem;
+  right: 1.25rem;
   z-index: $z-raised;
-  width: 1.875rem;
-  height: 1.875rem;
+  width: 2rem;
+  height: 2rem;
   min-width: 0;
   padding: 0;
+  border: 1px solid $appBtnBorder;
+  border-radius: 50%;
   color: $appText;
+
+  svg {
+   width: 0.875rem;
+   height: 0.875rem;
+  }
   &:hover:not(.Mui-disabled) {
    background: rgba(128, 128, 128, 0.3);
   }
@@ -99,6 +106,25 @@
   svg {
    width: 1rem;
    height: 1rem;
+  }
+ }
+
+ &.appbar-add-funds {
+  width: 2.25rem;
+  height: 100%;
+  padding: 0;
+  border-radius: 0;
+  background: linear-gradient(180deg, $primaryHover, $primary);
+  color: $primaryContrast;
+
+  svg {
+   width: 1rem;
+   height: 1rem;
+   stroke-width: 2.6;
+  }
+
+  &:hover {
+   background: $primaryHover;
   }
  }
 

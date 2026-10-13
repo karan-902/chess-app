@@ -28,6 +28,17 @@
   font-size: $font14;
  }
 
+ &.header {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 2px solid $gold;
+  background: linear-gradient(180deg, #2a2f8a, #141757) !important;
+  box-shadow: 0 0 10px alpha($gold, 0.4);
+  font-family: $fontOutfitBlack;
+  font-size: $font18;
+  color: $gold;
+ }
+
  &.lg {
   width: 4.5rem;
   height: 4.5rem;

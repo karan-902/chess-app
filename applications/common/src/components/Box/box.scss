@@ -1255,6 +1255,31 @@
   gap: 0.7rem;
  }
 
+ &.appbar-wallet {
+  display: flex;
+  align-items: stretch;
+  height: 2.25rem;
+  overflow: hidden;
+  border: 1.2px solid alpha($gold, 0.55);
+  border-radius: 999px;
+  background: #232878;
+  box-shadow: 0 0 12px alpha($gold, 0.25);
+ }
+
+ &.appbar-avatar-trigger {
+  display: flex;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+
+  &:focus-visible {
+   outline: 2px solid $gold;
+   outline-offset: 2px;
+  }
+ }
+
  &.appbar-dropdown-head {
   display: flex;
   align-items: center;

@@ -95,8 +95,10 @@
  }
 
  &.dialog-title {
-  font-family: $fontOutfitSemiBold;
-  font-size: $font18;
+  font-family: $fontOutfitBlack;
+  font-size: 1.625rem;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
   color: $appText;
  }
 
@@ -666,6 +668,12 @@
  &.modal-heading {
   display: block;
   margin-top: -0.4rem;
+
+  &.value-heading {
+   font-family: $fontOutfitBlack;
+   font-size: 1.625rem;
+   letter-spacing: -0.01em;
+  }
  }
 
  &.deposit-tagline {

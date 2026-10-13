@@ -23,7 +23,9 @@ import {
  logOutText,
  walletText,
  goToPlayText,
+ addFundsText,
 } from "@gopvp/app/src/constants/message";
+import { useWalletModal } from "@gopvp/app/src/context/WalletModalContext";
 import { backText } from "@gopvp/common/src/constants/message";
 import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
 import { ROUTES } from "@gopvp/app/src/constants/route";
@@ -44,6 +46,8 @@ export default function Header() {
  const session = useReduxSelector((state) => state.auth.session);
  const logout = useLogout();
  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+ const { openDeposit } = useWalletModal();
+ const initial = session?.username?.charAt(0).toUpperCase() ?? "";
 
  const closeMenu = () => setAnchorEl(null);
 
@@ -85,30 +89,41 @@ export default function Header() {
    }
   >
    <Box customClass="appbar-right">
-    <NavLink to={ROUTES.WALLET} style={{ textDecoration: "none" }}>
-     {" "}
-     {loading ? (
-      <Skeleton variant="rounded" customClass="appbar-balance-skeleton" />
-     ) : (
-      <CustomChip
-       icon={<Wallet strokeWidth={2.2} />}
-       label={formatAmount(usdValue)}
-       customClass="appbar-balance"
+    {loading ? (
+     <Skeleton variant="rounded" customClass="appbar-balance-skeleton" />
+    ) : (
+     <Box customClass="appbar-wallet">
+      <NavLink to={ROUTES.WALLET} style={{ textDecoration: "none" }}>
+       <CustomChip
+        icon={<Wallet strokeWidth={2.2} />}
+        label={formatAmount(usdValue)}
+        customClass="appbar-balance"
+       />
+      </NavLink>
+      <CustomIconButton
+       type="button"
+       customClass="appbar-add-funds"
+       onClick={openDeposit}
+       aria-label={addFundsText}
+       icon="plus"
       />
-     )}
-    </NavLink>
+     </Box>
+    )}
 
     {session ? (
-     <CustomIconButton
+     <Box
+      component="button"
       customClass={classNames(
-       "appbar-menu-trigger",
+       "appbar-avatar-trigger",
        pathname === ROUTES.PROFILE && "active",
       )}
+      aria-label={profileText}
       onClick={(e) => setAnchorEl(e.currentTarget)}
-      icon="person"
-     />
+     >
+      <CustomAvatar letter={initial} customClass="header" />
+     </Box>
     ) : (
-     <Skeleton variant="circular" width={24} height={24} />
+     <Skeleton variant="circular" width={40} height={40} />
     )}
 
     <CustomPopover
@@ -120,10 +135,7 @@ export default function Header() {
      customClass="appbar-account-popover"
     >
      <Box customClass="appbar-dropdown-head">
-      <CustomAvatar
-       letter={session?.username?.charAt(0).toUpperCase() ?? ""}
-       customClass="sm primary"
-      />
+      <CustomAvatar letter={initial} customClass="sm primary" />
       <Box customClass="appbar-dropdown-id">
        <Text customClass="appbar-dropdown-name">
         {session?.username && shortenUsername(session.username)}
