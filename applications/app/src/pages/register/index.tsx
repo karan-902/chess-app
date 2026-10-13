@@ -1,26 +1,29 @@
 import AuthLayout from "@gopvp/app/src/container/AuthLayout";
 import RegisterForm from "@gopvp/app/src/pages/register/RegisterForm";
 import {
- joinGopvpText,
- skillBasedGamesText,
- haveAccountPromptText,
- loginText,
+ joinTheText,
+ winnersText,
+ signUpFindRivalText,
+ winRealCashText,
+ beenHereBeforeText,
+ yourWinsAreWaitingText,
+ logInText,
 } from "@gopvp/app/src/constants/message";
-import { NavLink } from "react-router-dom";
 import { ROUTES } from "@gopvp/app/src/constants/route";
 
 export default function Register() {
  return (
   <AuthLayout
-   title={joinGopvpText}
-   subtitle={skillBasedGamesText}
-   footer={
-    <>
-     {haveAccountPromptText}
-
-     <NavLink to={ROUTES.LOGIN}>{loginText}</NavLink>
-    </>
-   }
+   title={joinTheText}
+   titleAccent={winnersText}
+   subtitle={signUpFindRivalText}
+   subtitleAccent={winRealCashText}
+   footerCard={{
+    title: beenHereBeforeText,
+    tagline: yourWinsAreWaitingText,
+    actionText: logInText,
+    to: ROUTES.LOGIN,
+   }}
   >
    <RegisterForm />
   </AuthLayout>

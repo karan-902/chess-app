@@ -1,6 +1,6 @@
 import * as yup from "yup";
 import { useState, useEffect, useRef } from "react";
-import { NavLink, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 // import { useNavigate } from "react-router-dom";
 // import { ArrowLeft } from "lucide-react";
 import { useFormik } from "formik";
@@ -32,10 +32,15 @@ import {
  // approveSignInEmailedText,
  // backToLoginText,
  welcomeBackText,
- jumpBackIntoGameText,
- enterYourPasswordText,
- nextMatchOneStepAwayText,
- noAccountPromptText,
+ championText,
+ logInFindRivalText,
+ takeThePrizeText,
+ oneStepToText,
+ gloryText,
+ unlockPlaySmartText,
+ winFastText,
+ joinTheArenaText,
+ gloryStartsHereText,
  signUpText,
  wherePlayingFromText,
  pickCountryToFinishText,
@@ -210,18 +215,21 @@ export default function LoginForm() {
   );
  }
 
- const loginFooter = (
-  <>
-   {noAccountPromptText} <NavLink to={ROUTES.REGISTER}>{signUpText}</NavLink>
-  </>
- );
+ const loginFooter = {
+  title: joinTheArenaText,
+  tagline: gloryStartsHereText,
+  actionText: signUpText,
+  to: ROUTES.REGISTER,
+ };
 
  // if (step === "waiting-approval") {
  //  return (
  //   <AuthLayout
  //    title={welcomeBackText}
- //    subtitle={jumpBackIntoGameText}
- //    footer={loginFooter}
+ //    titleAccent={championText}
+ //    subtitle={logInFindRivalText}
+ //    subtitleAccent={takeThePrizeText}
+ //    footerCard={loginFooter}
  //   >
  //    <WaitingApprovalScreen onBack={handleBackFromApproval} />
  //   </AuthLayout>
@@ -231,8 +239,10 @@ export default function LoginForm() {
  if (step === "password") {
   return (
    <AuthLayout
-    title={enterYourPasswordText}
-    subtitle={nextMatchOneStepAwayText}
+    title={oneStepToText}
+    titleAccent={gloryText}
+    subtitle={unlockPlaySmartText}
+    subtitleAccent={winFastText}
    >
     <PasswordScreen
      verifiedEmail={verifiedEmail}
@@ -247,8 +257,10 @@ export default function LoginForm() {
  return (
   <AuthLayout
    title={welcomeBackText}
-   subtitle={jumpBackIntoGameText}
-   footer={loginFooter}
+   titleAccent={championText}
+   subtitle={logInFindRivalText}
+   subtitleAccent={takeThePrizeText}
+   footerCard={loginFooter}
   >
    <EmailScreen
     formik={emailFormik}

@@ -138,10 +138,20 @@ export interface IChessLogoProps {
  muted?: boolean;
 }
 
+export interface IAuthFooter {
+ title: string;
+ tagline: string;
+ actionText: string;
+ to: string;
+}
+
 export interface IAuthLayoutProps {
- title: ReactNode;
- subtitle?: ReactNode;
+ title: string;
+ titleAccent?: string;
+ subtitle?: string;
+ subtitleAccent?: string;
  footer?: ReactNode;
+ footerCard?: IAuthFooter;
  children: ReactNode;
 }
 

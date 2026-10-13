@@ -178,4 +178,57 @@
    height: 100%;
   }
  }
+
+ &.game-picker-nav {
+  position: absolute;
+  top: 9.125rem;
+  z-index: $z-overlay;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid alpha($white, 0.28);
+  background: alpha($white, 0.1);
+  backdrop-filter: blur(12px);
+  color: $white;
+  transition: transform 0.12s cubic-bezier(0.22, 1, 0.36, 1);
+
+  &.prev {
+   left: 0;
+  }
+
+  &.next {
+   right: 0;
+  }
+
+  svg {
+   width: 1.25rem;
+   height: 1.25rem;
+   stroke-width: 2.8;
+  }
+
+  &:hover:not(.Mui-disabled) {
+   background: alpha($white, 0.16);
+  }
+
+  &:active:not(.Mui-disabled) {
+   transform: scale(0.94);
+  }
+
+  &.Mui-disabled {
+   color: alpha($white, 0.6);
+  }
+
+  :root[data-theme="light"] & {
+   border-color: $appCardBorder;
+   background: $appSecondary;
+   color: $appText;
+
+   &.Mui-disabled {
+    color: $appTextMuted;
+   }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+   transition: none;
+  }
+ }
 }

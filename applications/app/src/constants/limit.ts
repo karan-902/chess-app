@@ -1,4 +1,5 @@
 export const MAX_DEPOSIT_USD = 99;
+export const GAME_PICKER_SPARKLE_COUNT = 4;
 export const MAX_WITHDRAW_USD = 50;
 export const MAX_AMOUNT_INPUT_USD = 99;
 export const MAX_AMOUNT_DIGITS = 2;

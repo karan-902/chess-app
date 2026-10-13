@@ -29,11 +29,23 @@ export const passwordMinLengthText = "Password must be at least 8 characters";
 export const usernameMaxLengthText =
  "Username can't be longer than 10 characters.";
 export const countryRequiredText = "Country is required";
-export const welcomeBackText = "Welcome Back";
-export const jumpBackIntoGameText =
- "Enter your email to jump back into the game.";
-export const enterYourPasswordText = "Enter Your Password";
-export const nextMatchOneStepAwayText = "One step away from your next match.";
+export const welcomeBackText = "Welcome Back,";
+export const championText = "Champion";
+export const logInFindRivalText = "Log in, find a rival,";
+export const takeThePrizeText = "take the prize";
+export const oneStepToText = "One Step To";
+export const gloryText = "Glory";
+export const unlockPlaySmartText = "Unlock, play smart,";
+export const winFastText = "win fast";
+export const joinTheText = "Join the";
+export const winnersText = "Winners";
+export const signUpFindRivalText = "Sign up, find a rival,";
+export const winRealCashText = "win real cash";
+export const joinTheArenaText = "Join the Arena";
+export const gloryStartsHereText = "Glory starts here";
+export const beenHereBeforeText = "Been Here Before";
+export const yourWinsAreWaitingText = "Your wins are waiting";
+export const logInText = "Log in";
 export const changeText = "Change";
 export const forgotYourPasswordText = "Forgot your password?";
 export const resetNowText = "Reset now";
@@ -41,12 +53,7 @@ export const nextText = "Next";
 export const loginText = "Login";
 export const verifyEmailToContinueText =
  "Please verify your email to continue.";
-export const noAccountPromptText = "Don't have an account?";
 export const signUpText = "Sign up";
-export const joinGopvpText = "Join GoPVP";
-export const skillBasedGamesText =
- "Skill-based 1v1 games against real players.";
-export const haveAccountPromptText = "Already have an account?";
 export const enterUsernameText = "Enter username";
 export const clearUsernameText = "Clear username";
 export const countryText = "Country";
@@ -169,7 +176,13 @@ export const globalActivityEmptyText =
  "Global activity will show up here once matches start rolling in.";
 export const vsText = "VS";
 export const gameUnavailableText = "This game is currently unavailable.";
-export const pickAGameText = "Pick a game";
+export const pickYourText = "Pick Your";
+export const gameText = "Game";
+export const pickGameFaceRivalText = "Pick a game, face a rival,";
+export const cashOutText = "cash out";
+export const comingSoonText = "Coming soon";
+export const previousGameText = "Previous game";
+export const nextGameText = "Next game";
 export const bestStreakText = "Best Streak";
 export const currentStreakText = "Streak";
 

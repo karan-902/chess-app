@@ -43,8 +43,7 @@ export default function EmailScreen({
     type="submit"
     variant="contained"
     fullWidth
-    endIcon="arrowForward"
-    customClass="auth-submit-btn auth-submit-btn-arrow"
+    customClass="auth-submit-btn"
     disabled={!formik.dirty || formik.isSubmitting}
     isLoading={formik.isSubmitting}
    >

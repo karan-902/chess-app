@@ -1,5 +1,12 @@
 @use "default.scss" as *;
 
+%gold-gradient-text {
+ background: linear-gradient(180deg, #ffe27a, $gold 55%, $primaryDark);
+ -webkit-background-clip: text;
+ background-clip: text;
+ color: transparent;
+}
+
 .common-text {
  font-family: $fontOutfitRegular;
  white-space: nowrap;
@@ -195,15 +202,47 @@
 
  &.auth-account-name {
   display: block;
-  font-family: $fontOutfitExtraBold;
-  font-size: $font14;
+  font-family: $fontOutfitBold;
+  font-size: 1.0625rem;
   color: $appText;
  }
 
  &.auth-account-email {
   display: block;
+  font-family: $fontOutfitMedium;
+  font-size: $font14;
+  color: $appText;
+ }
+
+ &.auth-footer-title {
+  font-family: $fontOutfitBlack;
+  font-size: $font16;
+  line-height: 1.375rem;
+  letter-spacing: -0.4px;
+  color: $appText;
+ }
+
+ &.auth-footer-tagline {
+  display: flex;
+  align-items: center;
+  gap: 0.3125rem;
+  font-family: $fontOutfitSemiBold;
   font-size: $font12;
-  color: $appTextMuted;
+  line-height: 1rem;
+  letter-spacing: 0.3px;
+  color: $gold;
+
+  svg {
+   flex-shrink: 0;
+   width: 0.5625rem;
+   height: 0.5625rem;
+   fill: $gold;
+   stroke: $gold;
+  }
+
+  :root[data-theme="light"] & {
+   color: $appTextMuted;
+  }
  }
 
  &.auth-forgot-row {
@@ -221,11 +260,86 @@
   }
  }
 
- &.public-title {
-  font-family: $fontOutfitExtraBold;
-  font-size: $font24;
-  font-weight: 700;
+ &.public-title,
+ &.game-picker-title {
+  font-family: $fontOutfitBlack;
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+  letter-spacing: -1.2px;
+  white-space: normal;
   color: $appText;
+
+  .public-title-accent {
+   @extend %gold-gradient-text;
+   display: block;
+   font-family: inherit;
+   font-size: 2.625rem;
+   line-height: inherit;
+   letter-spacing: inherit;
+  }
+ }
+
+ &.game-picker-title {
+  font-size: 2.125rem;
+
+  .public-title-accent {
+   display: inline;
+   font-size: inherit;
+
+   :root[data-theme="light"] & {
+    background: none;
+    color: inherit;
+   }
+  }
+ }
+
+ &.game-picker-name {
+  @extend %gold-gradient-text;
+  flex-shrink: 0;
+  font-family: $fontOutfitBlack;
+  font-size: 2.375rem;
+  line-height: 3rem;
+  filter: drop-shadow(0 0 14px alpha($gold, 0.35));
+
+  :root[data-theme="light"] & {
+   background: none;
+   color: $appText;
+   filter: none;
+  }
+ }
+
+ &.game-picker-soon {
+  font-family: $fontOutfitBold;
+  font-size: $font15;
+  background: linear-gradient(90deg, transparent, alpha($appText, 0.45));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+
+  &.next {
+   background-image: linear-gradient(90deg, alpha($appText, 0.45), transparent);
+  }
+ }
+
+ &.public-subtitle {
+  font-family: $fontOutfitMedium;
+  line-height: 1.5rem !important;
+  text-align: center;
+  color: $appText;
+
+  .public-subtitle-accent {
+   font-family: $fontOutfitBold;
+   font-size: inherit;
+   color: $gold;
+  }
+
+  :root[data-theme="light"] & {
+   color: $appTextMuted;
+
+   .public-subtitle-accent {
+    color: inherit;
+   }
+  }
  }
 
  &.otp-title {

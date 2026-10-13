@@ -83,6 +83,22 @@
   color: $gold;
  }
 
+ &.account {
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 2px solid $gold;
+  background: linear-gradient(180deg, #2d3290, #14174a) !important;
+  box-shadow: 0 0 12px alpha($gold, 0.4);
+  font-family: $fontOutfitBlack;
+  font-size: $font20;
+  color: $gold;
+
+  :root[data-theme="light"] & {
+   background: $appSurface !important;
+  }
+ }
+
  &.lg {
   width: 4.5rem;
   height: 4.5rem;
