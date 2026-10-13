@@ -1,9 +1,7 @@
 @use "default.scss" as *;
 
 .common-app-bar {
- background: $appBg !important;
- backdrop-filter: blur(14px);
- -webkit-backdrop-filter: blur(14px);
+ background: transparent !important;
  box-shadow: none !important;
 
  .MuiToolbar-root {

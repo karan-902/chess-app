@@ -15,12 +15,9 @@
    padding-top: 1.5rem;
    gap: 1.25rem;
   }
-  background: radial-gradient(
-    60% 22% at 50% 0%,
-    #{alpha(#4b4fd8, 0.32)},
-    transparent
-   )
-   no-repeat;
+  background:
+   $appGlow no-repeat,
+   $appBg;
  }
  &.public-page-wrapper {
   display: flex;
@@ -68,7 +65,9 @@
   .hero-spark {
    opacity: 0.9;
 
-   @each $name, $x, $y, $size in (s1, 118, 8, 12), (s2, 246, 160, 10), (s3, 334, 54, 9), (s4, 12, 36, 10), (s5, 92, 156, 8), (s6, 262, 22, 8) {
+   @each $name, $x, $y, $size in (s1, 118, 8, 12), (s2, 246, 160, 10),
+    (s3, 334, 54, 9), (s4, 12, 36, 10), (s5, 92, 156, 8), (s6, 262, 22, 8)
+   {
     &.#{$name} {
      left: math.div($x, 350) * 100%;
      top: math.div($y, 184) * 100%;
@@ -80,7 +79,8 @@
   .hero-coin {
    position: absolute;
    aspect-ratio: 1;
-   animation: hero-coin-float var(--float-duration) var(--float-delay) ease-in-out infinite;
+   animation: hero-coin-float var(--float-duration) var(--float-delay)
+    ease-in-out infinite;
    will-change: transform;
 
    img {
@@ -90,7 +90,13 @@
     transform: rotate(var(--tilt));
    }
 
-   @each $name, $x, $y, $size, $tilt, $opacity, $lift, $duration, $delay in (c1, 52, 6, 30, -22deg, 0.75, 8px, 3.6s, -0.4s), (c2, 300, 8, 34, 20deg, 0.8, 7px, 4.2s, -1.6s), (c3, 26, 142, 22, -12deg, 0.7, 8px, 3.2s, -2.1s), (c4, 2, 62, 64, 16deg, 1, 5px, 4.8s, -0.9s), (c5, 282, 76, 56, -18deg, 1, 6px, 4.4s, -2.8s) {
+   @each $name, $x, $y, $size, $tilt, $opacity, $lift, $duration,
+    $delay in (c1, 52, 6, 30, -22deg, 0.75, 8px, 3.6s, -0.4s),
+    (c2, 300, 8, 34, 20deg, 0.8, 7px, 4.2s, -1.6s),
+    (c3, 26, 142, 22, -12deg, 0.7, 8px, 3.2s, -2.1s),
+    (c4, 2, 62, 64, 16deg, 1, 5px, 4.8s, -0.9s),
+    (c5, 282, 76, 56, -18deg, 1, 6px, 4.4s, -2.8s)
+   {
     &.#{$name} {
      left: math.div($x, 350) * 100%;
      top: math.div($y, 184) * 100%;
@@ -574,8 +580,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 200px;
-  height: 200px;
+  width: 150px;
+  height: 150px;
   flex-shrink: 0;
 
   &::before {
@@ -583,7 +589,12 @@
    position: absolute;
    inset: 0;
    border-radius: 50%;
-   background: radial-gradient(circle, alpha($gold, 0.22) 0%, alpha($gold, 0.06) 55%, transparent 72%);
+   background: radial-gradient(
+    circle,
+    alpha($gold, 0.22) 0%,
+    alpha($gold, 0.06) 55%,
+    transparent 72%
+   );
    animation: mm-radar-pulse 2.4s cubic-bezier(0.45, 0, 0.55, 1) infinite;
   }
 
@@ -627,8 +638,8 @@
 
   .mm-radar-logo {
    position: relative;
-   width: 132px;
-   height: 58px;
+   width: 100px;
+   height: 30px;
    object-fit: contain;
   }
 
@@ -2204,7 +2215,12 @@
    left: 0;
    width: 60px;
    height: 200%;
-   background: linear-gradient(90deg, transparent, alpha($gold, 0.22), transparent);
+   background: linear-gradient(
+    90deg,
+    transparent,
+    alpha($gold, 0.22),
+    transparent
+   );
    transform: translate3d(-90px, 0, 0) rotate(20deg);
    animation: result-refund-sheen 0.6s 0.55s cubic-bezier(0.22, 1, 0.36, 1);
   }

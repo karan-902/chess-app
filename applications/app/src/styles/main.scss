@@ -62,7 +62,7 @@ body {
  max-width: 600px;
  margin: 0 auto;
  overflow: hidden;
- background: $appBg;
+ background: $appGlow no-repeat, $appBg;
  color: $appText;
  position: relative;
  transform: translateZ(0);
@@ -73,27 +73,11 @@ body {
  }
 }
 
-:root[data-theme="light"] .app-root {
- background:
-  radial-gradient(
-   48% 32% at 0% 0%,
-   #{alpha($bitcoinOrange, 0.12)},
-   transparent 70%
-  ),
-  radial-gradient(
-   48% 32% at 100% 0%,
-   #{alpha($bitcoinOrange, 0.09)},
-   transparent 70%
-  ),
-  $appBg;
- background-attachment: fixed;
-}
-
 .app-wrapper {
  display: flex;
  flex: 1;
  overflow: hidden;
- background: var(--app-surface);
+ background: transparent;
 }
 
 .app-content {

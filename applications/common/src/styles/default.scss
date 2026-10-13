@@ -96,6 +96,11 @@
  --btn-ghost-bg: color-mix(in srgb, #ffffff 6%, transparent);
  --btn-ghost-edge: transparent;
  --app-tab-active: var(--gold);
+ --app-glow: radial-gradient(
+  20rem 15.625rem at 50% 0%,
+  color-mix(in srgb, #4b4fd8 32%, transparent),
+  transparent
+ );
  --app-balance: var(--gold);
  --primary: #ffc400;
  --primary-hover: #ffd633;
@@ -234,6 +239,7 @@ $btnEdgeRed: var(--btn-edge-red);
 $btnGhostBg: var(--btn-ghost-bg);
 $btnGhostEdge: var(--btn-ghost-edge);
 $appTabActive: var(--app-tab-active);
+$appGlow: var(--app-glow);
 $appBalance: var(--app-balance);
 $radius-card: 14px;
 
