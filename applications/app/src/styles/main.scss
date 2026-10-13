@@ -7,6 +7,15 @@
 html {
  height: 100%;
  overflow: hidden;
+ font-size: 87.5%;
+
+ @include from-height(medium) {
+  font-size: 93.75%;
+ }
+
+ @include from-height(tall) {
+  font-size: 100%;
+ }
 }
 
 body {

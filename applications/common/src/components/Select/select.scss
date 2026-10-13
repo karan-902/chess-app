@@ -8,7 +8,7 @@
   background: $appSecondary;
   border-radius: $radius-card;
   font-family: $fontOutfitMedium;
-  font-size: $font16;
+  font-size: max(#{$input-font-min}, #{$font16});
   color: $appText;
   transition:
    border-color 0.15s ease,

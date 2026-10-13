@@ -187,24 +187,25 @@ $medalGold: #c9a227;
 $medalSilver: #9aa0a6;
 $medalBronze: #b5651d;
 
-$font7: 7px;
-$font8: 8px;
-$font10: 10px;
-$font11: 11px;
-$font12: 12px;
-$font13: 13px;
-$font14: 14px;
-$font15: 15px;
-$font16: 16px;
-$font17: 17px;
-$font18: 18px;
-$font20: 20px;
-$font22: 22px;
-$font24: 24px;
-$font30: 30px;
-$font40: 40px;
-$font48: 48px;
-$font56: 56px;
+$font7: 0.4375rem;
+$font8: 0.5rem;
+$font10: 0.625rem;
+$font11: 0.6875rem;
+$font12: 0.75rem;
+$font13: 0.8125rem;
+$font14: 0.875rem;
+$font15: 0.9375rem;
+$font16: 1rem;
+$font17: 1.0625rem;
+$font18: 1.125rem;
+$font20: 1.25rem;
+$font22: 1.375rem;
+$font24: 1.5rem;
+$font30: 1.875rem;
+$font40: 2.5rem;
+$font48: 3rem;
+$font56: 3.5rem;
+$input-font-min: 16px;
 
 $fontOutfitThin: "Outfit-Thin";
 $fontOutfitExtraLight: "Outfit-ExtraLight";
@@ -275,6 +276,7 @@ $breakpoints: (
 }
 
 $height-breakpoints: (
+ medium: 640px,
  tall: 760px,
 );
 
