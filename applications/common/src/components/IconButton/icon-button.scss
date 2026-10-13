@@ -137,6 +137,15 @@
    width: 1rem;
    height: 1rem;
   }
+
+  .match-id-input & {
+   color: $appText;
+
+   svg {
+    width: 1.125rem;
+    height: 1.125rem;
+   }
+  }
  }
 
  &.appbar-add-funds {

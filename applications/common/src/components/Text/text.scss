@@ -660,6 +660,8 @@
 
  &.match-row-headline {
   line-height: 1.4;
+  font-family: $fontOutfitSemiBold;
+  font-size: $font15;
  }
 
  &.empty-state-desc {
@@ -792,11 +794,25 @@
   font-family: $fontOutfitExtraBold;
   font-size: $font24;
   color: $appText;
+
+  .result-sheet.versus & {
+   font-family: $fontOutfitBold;
+  }
  }
 
  &.result-subtitle {
   font-family: $fontOutfitMedium;
   font-size: $font16;
+  color: $appText;
+
+  .result-sheet.versus & {
+   font-family: $fontOutfitSemiBold;
+  }
+ }
+
+ &.result-time {
+  font-family: $fontOutfitSemiBold;
+  font-size: $font13;
   color: $appText;
  }
 
@@ -804,6 +820,11 @@
   font-family: $fontOutfitExtraBold;
   font-size: $font30;
   color: $appText;
+
+  .result-sheet.versus & {
+   font-size: $font40;
+   line-height: 1.1;
+  }
 
   .result-sheet.win &,
   .result-sheet.gold &,
@@ -820,6 +841,15 @@
   font-family: $fontOutfitSemiBold;
   font-size: $font14;
   color: $appText;
+
+  .result-tiles.versus & {
+   min-width: 0;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+   font-family: $fontOutfitBold;
+   font-size: $font12;
+  }
  }
 
  &.result-tile-caption {
@@ -849,6 +879,11 @@
 
   &.returned {
    color: $appTextMuted;
+  }
+
+  .result-tiles.versus & {
+   font-family: $fontOutfitExtraBold;
+   font-size: $font30;
   }
 
   &.shake {

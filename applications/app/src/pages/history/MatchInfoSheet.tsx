@@ -24,6 +24,8 @@ import { MATCH_OUTCOME_TONES } from "@gopvp/app/src/constants/mapper";
 import { youText } from "@gopvp/common/src/constants/message";
 import { matchIdText } from "@gopvp/app/src/constants/message";
 import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
+import { CalendarDays } from "@gopvp/common/src/components/images";
+import { useReduxSelector } from "@gopvp/app/src/redux/hooks";
 import { getWorldMatchHeadline } from "@gopvp/app/src/utils";
 import type {
  IMatchInfoResponse,
@@ -36,6 +38,9 @@ export default function MatchInfoSheet({
  onClose,
 }: IMatchInfoSheetProps) {
  const { gameLabel } = useGame();
+ const currentUsername = useReduxSelector(
+  (state) => state.auth.session?.username,
+ );
  const [info, setInfo] = useState<
   IMatchInfoResponse | IWorldMatchInfoResponse | null
  >(null);
@@ -109,19 +114,26 @@ export default function MatchInfoSheet({
         {
          label: shortenUsername(worldInfo.winner.username),
          value: formatNumber(worldInfo.winner.score),
+         highlight: worldInfo.winner.username === currentUsername,
         },
         {
          label: shortenUsername(worldInfo.loser.username),
          value: formatNumber(worldInfo.loser.score),
+         highlight: worldInfo.loser.username === currentUsername,
         },
        ]
      : ownInfo && [
-        { label: youText, value: formatNumber(ownInfo.you.score) },
+        {
+         label: youText,
+         value: formatNumber(ownInfo.you.score),
+         highlight: true,
+        },
         { label: opponentName, value: formatNumber(ownInfo.opponent.score) },
        ]
    }
    skeletonTiles={2}
-   tileIcon="person"
+   tileIcon="user"
+   versus
   >
    <Box customClass="result-meta">
     {!isWorldwide &&
@@ -129,6 +141,7 @@ export default function MatchInfoSheet({
       <Input
        id="match-id"
        label={matchIdText}
+       labelClassName="match-id-label"
        value={info.id}
        disabled
        fullWidth
@@ -141,13 +154,16 @@ export default function MatchInfoSheet({
        <Skeleton variant="rounded" customClass="match-id-skeleton" />
       </>
      ))}
-    <Text customClass="meta-text">
-     {info ? (
-      formatDateTime(info.created)
-     ) : (
-      <Skeleton customClass="text" width={120} />
-     )}
-    </Text>
+    <Box customClass="result-time-pill">
+     <CalendarDays />
+     <Text component="span" customClass="result-time">
+      {info ? (
+       formatDateTime(info.created)
+      ) : (
+       <Skeleton customClass="text" width={120} />
+      )}
+     </Text>
+    </Box>
    </Box>
   </ResultSheet>
  );

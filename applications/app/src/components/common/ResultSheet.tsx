@@ -1,10 +1,13 @@
+import { Fragment } from "react";
 import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
 import CustomDrawer from "@gopvp/common/src/components/Drawer/Drawer";
+import CustomBadge from "@gopvp/common/src/components/Badge/Badge";
 import { icons } from "@gopvp/common/src/components/images";
 import { useGame } from "@gopvp/app/src/hooks/useGame";
+import { vsText } from "@gopvp/app/src/constants/message";
 import type { IResultSheetProps } from "@gopvp/app/src/types/component";
 
 export default function ResultSheet({
@@ -17,6 +20,7 @@ export default function ResultSheet({
  tiles,
  skeletonTiles,
  tileIcon,
+ versus = false,
  children,
 }: IResultSheetProps) {
  const {
@@ -30,7 +34,7 @@ export default function ResultSheet({
    anchor="bottom"
    open={open}
    onClose={onClose}
-   customClass={classNames("result-sheet", tone)}
+   customClass={classNames("result-sheet", tone, versus && "versus")}
   >
    <Box customClass="result-hero">
     {isLoading ? (
@@ -49,22 +53,32 @@ export default function ResultSheet({
     </Text>
    </Box>
 
-   <Box customClass="result-tiles">
+   <Box customClass={classNames("result-tiles", versus && "versus")}>
     {(tiles ?? Array.from({ length: skeletonTiles }, () => null)).map(
      (tile, index) => (
-      <Box key={tile?.label ?? index} customClass="result-tile-wrap">
-       <Box customClass="result-tile-label">
-        <Text component="span" customClass="result-tile-lbl">
-         {tile ? tile.label : <Skeleton customClass="text" width={60} />}
-        </Text>
-        {tile && TileIcon && <TileIcon />}
+      <Fragment key={tile?.label ?? index}>
+       {versus && index > 0 && (
+        <CustomBadge customClass="result-vs" badgeContent={vsText} />
+       )}
+       <Box
+        customClass={classNames(
+         "result-tile-wrap",
+         tile?.highlight && "highlight",
+        )}
+       >
+        <Box customClass="result-tile-label">
+         <Text component="span" customClass="result-tile-lbl">
+          {tile ? tile.label : <Skeleton customClass="text" width={60} />}
+         </Text>
+         {tile && TileIcon && <TileIcon />}
+        </Box>
+        <Box customClass="result-tile">
+         <Text customClass="result-tile-val">
+          {tile ? tile.value : <Skeleton customClass="text" width={50} />}
+         </Text>
+        </Box>
        </Box>
-       <Box customClass="result-tile">
-        <Text customClass="result-tile-val">
-         {tile ? tile.value : <Skeleton customClass="text" width={50} />}
-        </Text>
-       </Box>
-      </Box>
+      </Fragment>
      ),
     )}
    </Box>

@@ -125,6 +125,20 @@
   }
  }
 
+ &.match-id-input {
+  .MuiInputBase-root {
+   height: 3.125rem;
+   border-color: alpha($gold, 0.85);
+   background: linear-gradient(180deg, $appSecondary, $appSurface);
+   color: $appText;
+   font-size: $font14;
+
+   input {
+    -webkit-text-fill-color: $appText;
+   }
+  }
+ }
+
  &.room-code-input .MuiInputBase-root {
   height: 3.5rem;
   padding-left: calc(2rem + #{$space-4});

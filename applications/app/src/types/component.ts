@@ -68,6 +68,7 @@ export type TResultTone = "win" | "loss" | "neutral" | "gold";
 export interface IResultTile {
  label: string;
  value: string | number;
+ highlight?: boolean;
 }
 
 export interface IResultSheetProps {
@@ -80,6 +81,7 @@ export interface IResultSheetProps {
  tiles: IResultTile[] | null;
  skeletonTiles: number;
  tileIcon?: TIconName;
+ versus?: boolean;
  children?: ReactNode;
 }
 

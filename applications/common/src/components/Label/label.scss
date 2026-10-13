@@ -8,6 +8,9 @@
   color: $appText !important;
   text-align: center;
  }
+ &.match-id-label {
+  font-size: $font14 !important;
+ }
  &.room-field-label {
   text-align: left !important;
   font-size: $font14;

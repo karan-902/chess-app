@@ -22,4 +22,21 @@
  &.room-vs {
   flex-shrink: 0;
  }
+
+ &.result-vs .MuiBadge-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border-radius: 50%;
+  border: 3px solid $appSheet;
+  background: linear-gradient(180deg, $primaryHover, $primary 50%, $btnEdgeGold);
+  box-shadow: 0 0 10px alpha($gold, 0.45);
+  font-family: $fontOutfitBlack;
+  font-size: $font12;
+  letter-spacing: 0;
+  color: $primaryContrast;
+ }
 }
