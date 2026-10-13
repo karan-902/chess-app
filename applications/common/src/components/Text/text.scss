@@ -588,9 +588,17 @@
   color: $appText;
  }
 
+ &.result-tile-caption {
+  font-family: $fontOutfitBold;
+  font-size: $font10;
+  letter-spacing: 0.14em;
+  color: $appTextMuted;
+ }
+
  &.result-tile-val {
-  font-family: $fontOutfitExtraBold;
-  font-size: $font22;
+  font-family: $fontOutfitBlack;
+  font-size: $font24;
+  line-height: 1.1;
   color: $appText;
 
   &.pos {
@@ -599,6 +607,23 @@
 
   &.neg {
    color: $paleRed;
+  }
+
+  &.refund {
+   color: $appText;
+  }
+
+  &.returned {
+   color: $appTextMuted;
+  }
+
+  &.shake {
+   display: inline-block;
+   animation: result-amount-shake 0.45s 1s linear;
+
+   @media (prefers-reduced-motion: reduce) {
+    animation: none;
+   }
   }
  }
 
@@ -830,5 +855,24 @@
  57.5% {
   opacity: 1;
   transform: translate3d(0, 0, 0);
+ }
+}
+
+@keyframes result-amount-shake {
+ 0%,
+ 100% {
+  transform: translate3d(0, 0, 0);
+ }
+ 20% {
+  transform: translate3d(-5px, 0, 0);
+ }
+ 40% {
+  transform: translate3d(3.5px, 0, 0);
+ }
+ 60% {
+  transform: translate3d(-2px, 0, 0);
+ }
+ 80% {
+  transform: translate3d(1px, 0, 0);
  }
 }

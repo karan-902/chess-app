@@ -33,17 +33,8 @@
   backdrop-filter: blur(6px);
  }
 
- @each $tone, $color in ("win": $greenishTeal, "loss": $paleRed, "gold": $gold)
- {
-  &.result-sheet.#{$tone} .MuiDrawer-paper {
-   background:
-    radial-gradient(
-     120% 55% at 50% 0%,
-     #{alpha($color, 0.25)},
-     transparent 70%
-    ),
-    $appSheet;
-  }
+ &.result-sheet .MuiDrawer-paper {
+  border-top-color: alpha($gold, 0.6);
  }
 
  &.wallet-sheet .MuiDrawer-paper {

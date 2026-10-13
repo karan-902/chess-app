@@ -69,6 +69,11 @@ export interface IGameOverOverlayProps {
  onNewGame: () => void;
 }
 
+export interface IWinBurstProps {
+ originRef: React.RefObject<HTMLElement | null>;
+ targetRef: React.RefObject<HTMLElement | null>;
+}
+
 export interface IResignSheetProps {
  open: boolean;
  isPvc: boolean;

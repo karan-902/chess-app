@@ -1090,6 +1090,64 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: $space-12;
+
+  &.single {
+   grid-template-columns: 1fr;
+  }
+ }
+
+ &.win-burst {
+  position: fixed;
+  inset: 0;
+  z-index: 1400;
+  overflow: hidden;
+  pointer-events: none;
+  contain: strict;
+
+  .win-burst-coin-wrap {
+   display: contents;
+  }
+
+  .win-burst-piece {
+   position: absolute;
+   top: 0;
+   left: 0;
+   opacity: 0;
+   will-change: transform, opacity;
+  }
+
+  .win-burst-streak,
+  .win-burst-trail {
+   width: 100px;
+   height: 2px;
+   border-radius: 2px;
+  }
+
+  .win-burst-streak {
+   background: linear-gradient(90deg, alpha(#ffd866, 0), #fff3cc);
+  }
+
+  .win-burst-trail {
+   background: linear-gradient(90deg, alpha($gold, 0), alpha(#ffe06e, 0.95));
+  }
+
+  .win-burst-coin {
+   background: url("/coin-star.svg") center / contain no-repeat;
+  }
+
+  .win-burst-spark {
+   background: url("/spark.svg") center / contain no-repeat;
+  }
+
+  .win-burst-confetti {
+   border-radius: 1px;
+  }
+
+  .win-burst-glow {
+   border: 2px solid $gold;
+   border-radius: 14px;
+   box-shadow: 0 0 18px alpha($gold, 0.6);
+  }
  }
 
  &.room-players {
@@ -1130,6 +1188,42 @@
   background: $appSurface;
   border: 1px solid $appCardBorder;
   text-align: center;
+
+  &.loss-edge,
+  &.refund-sheen {
+   position: relative;
+   overflow: hidden;
+
+   &::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+    opacity: 0;
+   }
+
+   @media (prefers-reduced-motion: reduce) {
+    &::after {
+     animation: none;
+    }
+   }
+  }
+
+  &.loss-edge::after {
+   inset: 0;
+   border: 1.5px solid $paleRed;
+   border-radius: inherit;
+   animation: result-loss-edge 0.95s 0.95s ease-out;
+  }
+
+  &.refund-sheen::after {
+   top: -50%;
+   left: 0;
+   width: 60px;
+   height: 200%;
+   background: linear-gradient(90deg, transparent, alpha($gold, 0.22), transparent);
+   transform: translate3d(-90px, 0, 0) rotate(20deg);
+   animation: result-refund-sheen 0.6s 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  }
 
   &.room-player {
    display: flex;
@@ -1212,5 +1306,34 @@
  }
  to {
   transform: rotateY(0deg);
+ }
+}
+
+@keyframes result-loss-edge {
+ 0% {
+  opacity: 0;
+ }
+ 20% {
+  opacity: 0.9;
+ }
+ 40% {
+  opacity: 0.9;
+ }
+ 100% {
+  opacity: 0;
+ }
+}
+
+@keyframes result-refund-sheen {
+ 0% {
+  opacity: 1;
+  transform: translate3d(-90px, 0, 0) rotate(20deg);
+ }
+ 85% {
+  opacity: 1;
+ }
+ 100% {
+  opacity: 0;
+  transform: translate3d(480px, 0, 0) rotate(20deg);
  }
 }
