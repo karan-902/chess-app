@@ -924,33 +924,59 @@
   }
  }
 
- &.wallet-split-lbl {
-  display: block;
-  font-size: $font12;
-  text-transform: capitalize;
-  letter-spacing: 0.05em;
-  font-family: $fontOutfitMedium;
+ &.wallet-hero-lbl {
+  font-family: $fontOutfitBold;
+  font-size: $font15;
   color: $appTextMuted;
-  margin-bottom: 0.35rem;
  }
 
- &.wallet-split-val {
-  display: block;
-  font-family: $fontOutfitExtraBold;
-  font-size: $font18;
-  color: $appText;
-  @include from(tablet) {
-   font-size: $font24;
-  }
-  .wallet-split-block.accent & {
-   color: $appText;
-  }
+ &.wallet-hero-amount {
+  max-width: 100%;
+  margin-top: 0.25rem;
+  font-family: $fontOutfitBlack;
+  font-size: 3.25rem;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: $appBalance;
+ }
+
+ &.wallet-withdrawable-lbl {
+  padding-right: 0.625rem;
+  border-right: 1px solid alpha($greenishTeal, 0.35);
+  font-family: $fontOutfitSemiBold;
+  font-size: $font14;
+  color: $appTextMuted;
+ }
+
+ &.wallet-withdrawable-val {
+  padding-left: 0.625rem;
+  font-family: $fontOutfitBlack;
+  font-size: $font16;
+  color: $greenishTeal;
  }
 
  &.wallet-tx-title {
   font-family: $fontOutfitExtraBold;
   font-size: $font15;
   color: $appText;
+
+  .wallet-tx-title-row & {
+   font-size: $font20;
+  }
+ }
+
+ .wallet-tx-row &.row-title {
+  font-family: $fontOutfitSemiBold;
+  font-size: $font15;
+ }
+
+ .wallet-tx-row &.meta-text {
+  font-family: $fontOutfitMedium;
+  font-size: $font12;
+ }
+
+ .wallet-tx-row &.amount-value {
+  font-size: $font15;
  }
 
  &.profile-id-name {
@@ -1085,9 +1111,11 @@
 
  &.wallet-tx-group-label {
   display: block;
-  font-family: $fontOutfitExtraBold;
-  font-size: $font14;
-  color: $appText;
+  font-family: $fontOutfitBold;
+  font-size: $font12;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $appTextMuted;
  }
 
  &.rules-title {

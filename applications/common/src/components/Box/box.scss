@@ -1055,34 +1055,57 @@
   gap: 1rem;
  }
 
- &.wallet-split {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.6rem;
-  margin-bottom: 0.8rem;
+ &.wallet-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: $space-8 0 $space-20;
  }
 
- &.wallet-split-block {
-  border: 1px solid $appCardBorder;
-  border-radius: 14px;
-  padding: 0.9rem 0.85rem;
+ &.wallet-hero-label {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  color: $gold;
  }
- &.accent {
-  background: alpha($gold, 0.12);
-  border: 1px solid $gold;
+
+ &.wallet-hero-underline {
+  width: 5rem;
+  height: 2px;
+  margin: $space-8 0 $space-16;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, $gold, transparent);
+ }
+
+ &.wallet-withdrawable-pill {
+  display: flex;
+  align-items: center;
+  padding: $space-8 0.875rem;
+  border: 1px solid alpha($greenishTeal, 0.35);
+  border-radius: 999px;
+  background: alpha($greenishTeal, 0.08);
  }
 
  &.wallet-btn-row {
   display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1.4rem;
+  gap: $space-12;
+  margin-bottom: 1.75rem;
  }
 
  &.wallet-tx-title-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.6rem;
+  gap: 0.625rem;
+  margin-bottom: $space-16;
+
+  &::before {
+   content: "";
+   width: 4px;
+   height: 1.25rem;
+   border-radius: 2px;
+   background: $gold;
+   box-shadow: 0 0 10px alpha($gold, 0.6);
+  }
  }
 
  &.tx-filter-chip-grid {
@@ -1101,25 +1124,21 @@
  }
 
  &.wallet-tx-group {
-  margin: 0 -1.1rem;
-  padding: $space-12 1.1rem;
-  background: alpha($appText, 0.06);
+  padding: $space-8 0 $space-12;
  }
 
  &.wallet-tx-item {
-  padding: $space-12 0;
-  border-bottom: 1px solid alpha($appText, 0.08);
+  padding-bottom: $space-8;
 
-  &.group-end,
-  &.loading:last-of-type {
-   border-bottom: none;
+  &.group-end {
+   padding-bottom: $space-12;
   }
  }
 
  &.wallet-tx-info {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
+  gap: $space-12;
   min-width: 0;
  }
 
@@ -1127,20 +1146,29 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 1.5rem;
+  width: 2.25rem;
+  height: 2.25rem;
   flex-shrink: 0;
-  color: alpha($appText, 0.5);
+  border-radius: 50%;
+  color: $greenishTeal;
+  border: 1px solid alpha($greenishTeal, 0.35);
+  background: alpha($greenishTeal, 0.12);
 
   .wallet-tx-item.neg & {
    color: $paleRed;
-  }
-
-  .wallet-tx-item:not(.neg) & {
-   color: $greenishTeal;
+   border-color: alpha($paleRed, 0.35);
+   background: alpha($paleRed, 0.12);
   }
 
   .wallet-tx-item.pending & {
    color: $warning;
+   border-color: alpha($warning, 0.35);
+   background: alpha($warning, 0.12);
+  }
+
+  .wallet-tx-item.loading & {
+   border: none;
+   background: none;
   }
  }
 
@@ -1425,7 +1453,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.6rem;
+  gap: $space-12;
+  min-height: 3.75rem;
+  padding: 0.875rem $space-16;
+  background: $appSurface;
+  border: 1px solid $appCardBorder;
+  border-radius: $radius-card;
  }
 
  &.wallet-modal-layout,

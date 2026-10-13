@@ -119,7 +119,7 @@ export const leaveText = "Leave";
 export const cancelRoomText = "Cancel Room";
 export const expiresText = "Expires in";
 export const codeText = "Code";
-export const depositsNotWithdrawableText = "Deposits aren't withdrawable.";
+export const depositsNotWithdrawableText = "Deposits aren't withdrawable";
 export const depositingAmountText = (amount: number) => `Depositing $${amount}`;
 export const fastSecuredTransparentText = "Fast, Secured & Transparent";
 export const buyCryptoInstantlyText = "Buy crypto instantly with";
@@ -143,7 +143,7 @@ export const qrExpiredText =
 export const paymentReceivedText = "Payment received!";
 export const withdrawText = "Withdraw";
 export const onlyWinningsWithdrawableText =
- "Only winnings and draw refunds are withdrawable.";
+ "Only winnings and draws are withdrawable";
 export const destinationText = "Destination";
 export const btcAddressOrInvoiceText = "Bitcoin address or Lightning invoice";
 export const requestWithdrawalText = "Withdraw";
@@ -188,7 +188,7 @@ export const currentStreakText = "Streak";
 
 export const poweredByText = "POWERED BY";
 export const totalBalanceText = "Total Balance";
-export const withdrawBalanceText = "Withdraw Balance";
+export const withdrawBalanceText = "Withdrawable";
 export const transactionsText = "Transactions";
 export const pendingText = "Pending";
 export const noTransactionsYetText = "No Transactions Yet";

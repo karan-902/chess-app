@@ -96,6 +96,7 @@
  --btn-ghost-bg: color-mix(in srgb, #ffffff 6%, transparent);
  --btn-ghost-edge: transparent;
  --app-tab-active: var(--gold);
+ --app-balance: var(--gold);
  --primary: #ffc400;
  --primary-hover: #ffd633;
  --primary-dark: #e5a900;
@@ -135,6 +136,7 @@
  --btn-ghost-bg: #ffffff;
  --btn-ghost-edge: #5b60a8;
  --app-tab-active: var(--app-text);
+ --app-balance: var(--app-text);
  --primary: #f2b200;
  --primary-hover: #e0a200;
  --primary-dark: #e0a200;
@@ -232,6 +234,7 @@ $btnEdgeRed: var(--btn-edge-red);
 $btnGhostBg: var(--btn-ghost-bg);
 $btnGhostEdge: var(--btn-ghost-edge);
 $appTabActive: var(--app-tab-active);
+$appBalance: var(--app-balance);
 $radius-card: 14px;
 
 $space-4: 0.25rem;
