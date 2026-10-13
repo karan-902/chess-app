@@ -86,10 +86,10 @@ export const firebaseConfigMissingText =
  "Firebase config missing: set the VITE_FIREBASE_* env variables.";
 export const largestPrizesTipText =
  "Rapid and Classical pools pay out the largest prizes.";
-export const forFunText = "For fun";
+export const forFunText = "For Fun";
 export const practiceText = "Practice";
 export const freeToPlayText = "Free to play";
-export const friendlyText = "FRIENDLY";
+export const friendlyText = "Friendly";
 export const roomText = "Room";
 export const customFeeText = "Custom fee";
 export const createRoomText = "Create Room";
