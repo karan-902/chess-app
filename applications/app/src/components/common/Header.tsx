@@ -60,7 +60,7 @@ export default function Header() {
      title={goToPlayText}
      onClick={() => dispatch(setActivePage("PLAY"))}
     >
-     <img src="/gopvp-logo.png" width="auto" height={54} alt="gopvp-logo" />
+     <img src="/gopvp-logo.png" alt="gopvp-logo" />
     </Link>
    }
    bottomSlot={

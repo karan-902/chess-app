@@ -2,10 +2,12 @@
 
 .common-chip {
  height: auto;
- border-radius: 6px !important;
  font-family: $fontOutfitSemiBold;
  letter-spacing: 0.01em;
-
+ border-radius: 0px !important;
+ &.minute-chip {
+  box-shadow: 1px 2px 0 $btnEdgeGold;
+ }
  &.MuiChip-outlined {
   border-color: $appCardBorder;
  }
@@ -72,8 +74,8 @@
 
   .MuiChip-icon {
    margin: 0;
-   width: 19px;
-   height: 19px;
+   width: 1.1875rem;
+   height: 1.1875rem;
    color: $gold;
   }
   .MuiChip-label {
