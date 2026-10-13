@@ -381,7 +381,7 @@
  &.wallet-withdraw-btn {
   background: $btnGhostBg;
   border: 1px solid $btnGhostBorder;
-  @include neo-edge($btnGhostEdge, 3px, 4px);
+  @include neo-edge($neoEdge, 3px, 4px);
   color: $appText;
 
   .button-text {
@@ -391,12 +391,12 @@
   &:hover:not(.Mui-disabled) {
    background: $btnGhostBg;
    border-color: $btnGhostBorder;
-   @include neo-edge($btnGhostEdge, 3px, 4px);
+   @include neo-edge($neoEdge, 3px, 4px);
   }
 
   &:active:not(.Mui-disabled) {
    transform: translate3d(2px, 3px, 0);
-   @include neo-edge($btnGhostEdge, 1px);
+   @include neo-edge($neoEdge, 1px);
   }
  }
 
@@ -485,6 +485,10 @@
 
  &.modal-submit-btn {
   margin-top: 0.5rem;
+
+  &.Mui-disabled:not(.loading) {
+   @include neo-edge(alpha($appText, 0.15), 3px, 4px, $important: true);
+  }
  }
 
  &.profile-edit-icon-btn {
