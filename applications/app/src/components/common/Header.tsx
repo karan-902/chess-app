@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import classNames from "classnames";
-import { Wallet } from "@gopvp/common/src/components/images";
+import { User, Wallet } from "@gopvp/common/src/components/images";
 import CustomAppBar from "@gopvp/common/src/components/AppBar/AppBar";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
@@ -135,11 +135,14 @@ export default function Header() {
      customClass="appbar-account-popover"
     >
      <Box customClass="appbar-dropdown-head">
-      <CustomAvatar letter={initial} customClass="sm primary" />
+      <CustomAvatar letter={initial} customClass="header md" />
       <Box customClass="appbar-dropdown-id">
        <Text customClass="appbar-dropdown-name">
         {session?.username && shortenUsername(session.username)}
        </Text>
+       {session?.email && (
+        <Text customClass="appbar-dropdown-email">{session.email}</Text>
+       )}
       </Box>
      </Box>
      <NavLink
@@ -149,6 +152,7 @@ export default function Header() {
       }
       onClick={closeMenu}
      >
+      <User size={18} strokeWidth={2} />
       {profileText}
      </NavLink>
      <NavLink
@@ -158,11 +162,13 @@ export default function Header() {
       }
       onClick={closeMenu}
      >
+      <Wallet size={18} strokeWidth={2} />
       {walletText}
      </NavLink>
      <Button
       type="button"
       sx={{ justifyContent: "flex-start" }}
+      startIcon="logOut"
       customClass="appbar-dropdown-item  danger"
       onClick={() => {
        closeMenu();

@@ -99,6 +99,14 @@
   }
  }
 
+ &.header.md {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-width: 1.5px;
+  box-shadow: none;
+  font-size: $font16;
+ }
+
  &.lg {
   width: 6rem;
   height: 6rem;

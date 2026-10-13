@@ -122,6 +122,7 @@ export const icons = {
  infoFilled: InfoIcon,
  keyboardArrowDown: KeyboardArrowDownIcon,
  lock: Lock,
+ logOut: LogOut,
  mail: Mail,
  mapPin: MapPin,
  moveLeft: MoveLeft,

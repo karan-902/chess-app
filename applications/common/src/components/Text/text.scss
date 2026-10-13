@@ -1410,13 +1410,15 @@
  }
 
  &.appbar-dropdown-name {
-  font-family: $fontOutfitRegular;
-  font-size: $font14;
-  font-weight: 700;
+  font-family: $fontOutfitBold;
+  font-size: $font15;
   color: $appText;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+ }
+
+ &.appbar-dropdown-email {
+  font-family: $fontOutfitSemiBold;
+  font-size: $font11;
+  color: $appTextMuted;
  }
 
  &.modal-description {

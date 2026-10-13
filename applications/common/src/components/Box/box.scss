@@ -2215,10 +2215,10 @@
  &.appbar-dropdown-head {
   display: flex;
   align-items: center;
-  gap: 0.55rem;
-  padding: 0.5rem 0.6rem;
-  border-bottom: 1px solid $appCardBorder;
-  margin-bottom: 0.1rem;
+  gap: 0.625rem;
+  padding: 0.625rem 0.625rem $space-12;
+  border-bottom: 1px solid $appLine;
+  margin-bottom: 0.25rem;
  }
 
  &.appbar-dropdown-id {
