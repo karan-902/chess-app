@@ -111,8 +111,6 @@ export const startText = "Start Match";
 export const leaveText = "Leave";
 export const cancelRoomText = "Cancel Room";
 export const expiresText = "Expires in";
-export const rivalText = "Rival";
-export const entryText = "Entry";
 export const codeText = "Code";
 export const depositsNotWithdrawableText = "Deposits aren't withdrawable.";
 export const depositingAmountText = (amount: number) => `Depositing $${amount}`;
