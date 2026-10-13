@@ -157,6 +157,10 @@
  }
 
  &.form-input .MuiInputBase-root {
-  height: 3.5rem;
+  height: 3.25rem;
+
+  @include from-height(tall) {
+   height: 3.5rem;
+  }
  }
 }

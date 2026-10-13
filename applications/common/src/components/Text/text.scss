@@ -279,8 +279,8 @@
  &.public-title,
  &.game-picker-title {
   font-family: $fontOutfitBlack;
-  font-size: 2.25rem;
-  line-height: 2.5rem;
+  font-size: 1.875rem;
+  line-height: 2.125rem;
   letter-spacing: -1.2px;
   white-space: normal;
   color: $appText;
@@ -289,9 +289,18 @@
    @extend %gold-gradient-text;
    display: block;
    font-family: inherit;
-   font-size: 2.625rem;
+   font-size: 2.25rem;
    line-height: inherit;
    letter-spacing: inherit;
+  }
+
+  @include from-height(tall) {
+   font-size: 2.25rem;
+   line-height: 2.5rem;
+
+   .public-title-accent {
+    font-size: 2.625rem;
+   }
   }
  }
 
