@@ -4,6 +4,10 @@
  font-family: $fontOutfitSemiBold !important;
  color: $appText !important;
 
+ &.wallet-label,
+ &.wallet-field-label {
+  font-size: $font14 !important;
+ }
  &.wallet-label {
   color: $appText !important;
   text-align: center;

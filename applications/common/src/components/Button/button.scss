@@ -401,6 +401,32 @@
    color: $appTabActive;
    background: alpha($gold, 0.12);
   }
+
+  .deposit-amount-chips & {
+   min-height: 2.5rem;
+   height: 2.5rem;
+  }
+ }
+
+ &.copy-label-btn {
+  .deposit-address-row & {
+   height: auto;
+   padding: 0 0 0 $space-12;
+   border: none;
+   border-left: 1px solid $appCardBorder;
+   border-radius: 0;
+   background: transparent;
+   color: $appBalance;
+
+   .button-text {
+    font-size: $font14;
+    color: inherit;
+   }
+
+   &:hover:not(.Mui-disabled) {
+    background: transparent;
+   }
+  }
  }
 
  &.segment-btn {

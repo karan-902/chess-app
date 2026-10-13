@@ -1164,6 +1164,43 @@
 
  &.deposit-tagline {
   display: block;
+  font-family: $fontOutfitRegular;
+ }
+
+ &.deposit-heading-amount,
+ &.deposit-lightning-name {
+  font: inherit;
+  color: $appBalance;
+ }
+
+ &.deposit-lightning-text {
+  font-family: $fontOutfitMedium;
+  font-size: $font14;
+  color: $appText;
+ }
+
+ &.deposit-lightning-name {
+  font-family: $fontOutfitSemiBold;
+ }
+
+ &.deposit-invoice-label {
+  display: block;
+  font-family: $fontOutfitSemiBold;
+  font-size: $font12;
+  color: $appTextMuted;
+ }
+
+ &.deposit-expiry-label {
+  flex: 1;
+  font-family: $fontOutfitMedium;
+  font-size: $font14;
+  color: $appText;
+ }
+
+ &.deposit-expiry-time {
+  font-family: $fontOutfitExtraBold;
+  font-size: $font16;
+  color: $appBalance;
  }
 
  &.modal-info-text {
@@ -1181,8 +1218,8 @@
  &.deposit-address {
   flex: 1;
   min-width: 0;
-  font-family: $fontOutfitRegular;
-  font-size: $font12;
+  font-family: $fontOutfitSemiBold;
+  font-size: $font14;
   color: $appText;
  }
 

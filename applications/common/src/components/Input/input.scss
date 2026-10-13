@@ -96,6 +96,10 @@
    color: $appText;
   }
 
+  &.Mui-error input {
+   color: $paleRed;
+  }
+
   &.Mui-focused {
    box-shadow: none;
    outline: none !important;

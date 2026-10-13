@@ -23,6 +23,30 @@
   //   }
  }
 
+ .amount-input-hero & {
+  justify-content: center;
+  align-items: center;
+  margin-top: 0;
+  padding: 0 !important;
+  background: transparent;
+  font-size: $font13 !important;
+  color: $paleRed;
+
+  .MuiAlert-icon,
+  .MuiAlert-message {
+   padding: 0;
+  }
+
+  .MuiAlert-icon {
+   margin-right: 0.375rem;
+
+   svg {
+    width: 0.875rem;
+    height: 0.875rem;
+   }
+  }
+ }
+
  &.MuiAlert-standard.MuiAlert-colorSuccess {
   .MuiAlert-icon {
    color: $greenishTeal !important;

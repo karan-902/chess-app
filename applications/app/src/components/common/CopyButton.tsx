@@ -13,6 +13,7 @@ export default function CopyButton({ text, showLabel = false }: ICopyButtonProps
    {showLabel ? (
     <Button
      type="button"
+     variant="text"
      startIcon="copy"
      customClass="copy-label-btn"
      onClick={() => copy(text)}
