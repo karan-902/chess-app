@@ -65,6 +65,19 @@
   border-radius: $radius-card;
  }
 
+ &.face-off-bar {
+  width: 3.25rem;
+  height: 0.75rem;
+  border-radius: 6px;
+
+  &.sub {
+   width: 4.5rem;
+   height: 0.5625rem;
+   margin-top: 7px;
+   border-radius: 4.5px;
+  }
+ }
+
  &.pool-mode-icon {
   width: 1.75rem;
   height: 1.75rem;

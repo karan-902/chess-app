@@ -287,6 +287,12 @@
    width: 100% !important;
   }
 
+  .pool-confirm & {
+   flex: 1 1 0;
+   width: 100% !important;
+   height: 3.25rem !important;
+  }
+
   .bet-card.insufficient & {
    background: alpha($gold, 0.12) !important;
    border: 1px solid $gold;

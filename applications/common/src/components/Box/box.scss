@@ -285,9 +285,12 @@
   box-shadow: 0 0 0 3px alpha($greenishTeal, 0.2);
  }
 
- &.searching-details {
-  display: flex;
-  gap: 1.5rem;
+ &.pool-confirm {
+  gap: $space-16;
+
+  .dialog-title + .sheet-subtitle {
+   margin-top: -0.25rem;
+  }
  }
 
  &.pool-confirm-actions {
@@ -297,13 +300,190 @@
   width: 100%;
   margin-top: 0.6rem;
   gap: 0.6rem;
+
+  .pool-confirm & {
+   margin-top: 0;
+   gap: $space-12;
+  }
  }
 
- &.searching-detail-item {
+ &.stake-ticket {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: $appSurface;
+  border: 1px solid alpha($gold, 0.3);
+  border-radius: $radius-card;
+  box-shadow: 0 6px 14px alpha($black, 0.35);
+
+  :root[data-theme="light"] & {
+   box-shadow: 0 6px 14px alpha($black, 0.06);
+  }
+ }
+
+ &.stake-ticket-col {
+  position: relative;
+  flex: 1 1 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.15rem;
+  gap: $space-4;
+  min-width: 0;
+  padding: 0.875rem 0;
+
+  & + &::before {
+   content: "";
+   position: absolute;
+   top: 50%;
+   left: 0;
+   width: 1px;
+   height: 3.5rem;
+   background: alpha($gold, 0.25);
+   transform: translateY(-50%);
+  }
+ }
+
+ &.face-off {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.625rem;
+  width: 100%;
+ }
+
+ &.face-off-card {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-width: 0;
+  height: 6rem;
+  padding: 0 1.875rem 0 $space-12;
+  border-radius: $radius-card;
+  border: 1.2px solid alpha($gold, 0.6);
+  background: linear-gradient(90deg, alpha($gold, 0.2), alpha($gold, 0.04));
+
+  &.rival {
+   padding: 0 $space-12 0 1.875rem;
+   border-color: alpha($appText, 0.12);
+   background: alpha($appText, 0.04);
+  }
+ }
+
+ &.face-off-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-width: 0;
+  text-align: left;
+ }
+
+ &.face-off-searching {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  background: alpha($appText, 0.08);
+  color: $appTextMuted;
+
+  svg {
+   width: 1.25rem;
+   height: 1.25rem;
+  }
+
+  &::after {
+   content: "";
+   position: absolute;
+   inset: -3px;
+   border-radius: 50%;
+   border: 2px solid transparent;
+   border-top-color: $gold;
+   animation: face-off-spin 1.1s linear infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+   &::after {
+    animation: none;
+   }
+  }
+ }
+
+ &.mm-radar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 200px;
+  flex-shrink: 0;
+
+  &::before {
+   content: "";
+   position: absolute;
+   inset: 0;
+   border-radius: 50%;
+   background: radial-gradient(circle, alpha($gold, 0.22) 0%, alpha($gold, 0.06) 55%, transparent 72%);
+   animation: mm-radar-pulse 2.4s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  }
+
+  .mm-radar-ring {
+   position: absolute;
+   inset: 0;
+   width: 100%;
+   height: 100%;
+   transform: rotate(-90deg);
+   fill: none;
+   stroke-width: 6;
+   stroke-linecap: round;
+  }
+
+  .mm-radar-track {
+   stroke: alpha($gold, 0.14);
+  }
+
+  .mm-radar-progress {
+   stroke: $gold;
+  }
+
+  .mm-radar-head {
+   position: absolute;
+   inset: 0;
+   transition: transform 1s linear;
+
+   &::before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    margin-left: -5px;
+    border-radius: 50%;
+    background: $primaryHover;
+    box-shadow: 0 0 8px $gold;
+   }
+  }
+
+  .mm-radar-logo {
+   position: relative;
+   width: 132px;
+   height: 58px;
+   object-fit: contain;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+   &::before {
+    animation: none;
+   }
+
+   .mm-radar-head {
+    transition: none;
+   }
+  }
  }
 
  &.matches-page {
@@ -1544,6 +1724,24 @@
  }
  to {
   transform: scaleX(0);
+ }
+}
+
+@keyframes mm-radar-pulse {
+ 0%,
+ 100% {
+  opacity: 0.7;
+  transform: scale(0.94);
+ }
+ 50% {
+  opacity: 1;
+  transform: scale(1.04);
+ }
+}
+
+@keyframes face-off-spin {
+ to {
+  transform: rotate(360deg);
  }
 }
 

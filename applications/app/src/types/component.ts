@@ -119,6 +119,15 @@ export interface IPoolConfirmSheetProps {
  onConfirmCancel: () => void;
 }
 
+export interface IStakeTicketProps {
+ entry: number;
+ prize: number;
+}
+
+export interface IFaceOffProps {
+ opponentName?: string | null;
+}
+
 export interface IChessLogoProps {
  size: number;
  showText: boolean;

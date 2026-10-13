@@ -71,6 +71,18 @@
   }
  }
 
+ &.face-off {
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 2px solid $primaryHover;
+  background: linear-gradient(180deg, #2d3290, #12153f) !important;
+  box-shadow: 0 0 12px alpha($gold, 0.45);
+  font-family: $fontOutfitBlack;
+  font-size: $font20;
+  color: $gold;
+ }
+
  &.lg {
   width: 4.5rem;
   height: 4.5rem;
