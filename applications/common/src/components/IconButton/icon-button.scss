@@ -1,10 +1,6 @@
 @use "default.scss" as *;
 
 .common-icon-button {
- &.room-paste-btn svg {
-  width: $font18;
-  height: $font18;
- }
  &.username-clear-btn svg {
   width: 0.875rem;
   height: 0.875rem;

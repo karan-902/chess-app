@@ -34,6 +34,7 @@ export interface ICountrySelectProps<TValues extends { country: string }> {
 
 export interface ICopyButtonProps {
  text: string;
+ showLabel?: boolean;
 }
 
 export interface IUsernameFieldProps<TValues extends { username: string }> {
@@ -96,7 +97,11 @@ export interface IRoomSheetProps {
  isOwner: boolean;
  roomCode: string | null;
  opponentName: string;
+ myName: string;
+ roomFee: number;
+ roomTimeMs: number;
  expiresInSeconds: number;
+ expiryWindowMs: number;
  onCreateRoom: (betUsd: number, durationSeconds: number) => void;
  onJoinRoom: (code: string) => void;
  onStartRoom: () => void;

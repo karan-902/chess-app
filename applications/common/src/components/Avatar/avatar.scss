@@ -55,6 +55,22 @@
   }
  }
 
+ &.room-face-avatar {
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 2px solid $appTextMuted;
+  background: $appSurface !important;
+  font-family: $fontOutfitBlack;
+  font-size: $font18;
+  color: $appText;
+
+  .room-face-card.me & {
+   border-color: $gold;
+   color: $gold;
+  }
+ }
+
  &.lg {
   width: 4.5rem;
   height: 4.5rem;

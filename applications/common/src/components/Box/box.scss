@@ -246,6 +246,19 @@
    margin-bottom: 0.5rem;
   }
 
+  &.room-segment {
+   padding: 0.3rem;
+   border-radius: 999px;
+
+   > .segment-thumb {
+    top: 0.3rem;
+    bottom: 0.3rem;
+    border: 1.5px solid $gold;
+    border-radius: 999px;
+    background: alpha($gold, 0.18);
+   }
+  }
+
   &.category-select {
    gap: 0.25rem;
    padding: 0.25rem;
@@ -346,18 +359,11 @@
   &.room-bet-field,
   &.room-duration-field {
    align-items: center;
-   padding: 1.1rem 1rem;
+   gap: $space-12;
+   padding: $space-16;
    border: 1px solid $appCardBorder;
    border-radius: $radius-card;
    background: $appSurface;
-  }
-
-  &.room-bet-field {
-   gap: 0.25rem;
-  }
-
-  &.room-duration-field {
-   gap: 0.5rem;
   }
  }
 
@@ -369,6 +375,105 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+ }
+
+ &.room-code-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-12;
+  padding: $space-8 $space-8 $space-8 1.125rem;
+  border: 1px solid $gold;
+  border-radius: $radius-card;
+  background: $appSurface;
+ }
+
+ &.room-expiry {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  color: $gold;
+
+  svg {
+   width: 1rem;
+   height: 1rem;
+  }
+ }
+
+ &.room-expiry-bar {
+  height: 3px;
+  border-radius: 2px;
+  background: alpha($appText, 0.08);
+  overflow: hidden;
+ }
+
+ &.room-expiry-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: $gold;
+  transform-origin: left center;
+  transition: transform 1s linear;
+
+  @media (prefers-reduced-motion: reduce) {
+   transition: none;
+  }
+ }
+
+ &.room-face-off {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $space-12;
+  margin-top: $space-8;
+ }
+
+ &.room-face-card {
+  display: flex;
+  align-items: center;
+  gap: $space-12;
+  min-width: 0;
+  padding: $space-16 $space-12;
+  border: 1.2px solid alpha($appTextMuted, 0.55);
+  border-radius: $radius-card;
+  background: $appSecondary;
+
+  &.me {
+   padding-right: 1.75rem;
+   border-color: $gold;
+   background: alpha($gold, 0.1);
+  }
+
+  &.rival {
+   padding-left: 1.75rem;
+  }
+ }
+
+ &.room-face-meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+ }
+
+ &.room-meta-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid $appCardBorder;
+  border-radius: $radius-card;
+  background: $appSurface;
+ }
+
+ &.room-meta-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.125rem;
+  min-width: 0;
+  padding: $space-12 $space-4;
+  text-align: center;
+
+  & + & {
+   border-left: 1px solid $appCardBorder;
+  }
  }
 
  &.duration-wheel {
@@ -385,11 +490,11 @@
   top: 50%;
   left: 0;
   right: 0;
-  height: 2.8rem;
+  height: 3rem;
   transform: translateY(-50%);
-  border: 1px solid $appCardBorder;
-  border-radius: $radius-card;
-  background: $appSecondary;
+  border: 1px solid $gold;
+  border-radius: 12px;
+  background: alpha($gold, 0.14);
   pointer-events: none;
   z-index: $z-base;
  }
@@ -610,6 +715,7 @@
 
  &.room-options {
   align-items: normal;
+  text-align: left;
  }
  &.match-row-item {
   padding-bottom: 0.5rem;

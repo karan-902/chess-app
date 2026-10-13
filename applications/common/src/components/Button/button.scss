@@ -381,6 +381,10 @@
    background: transparent;
   }
 
+  .segment.room-segment & {
+   min-height: 3rem;
+  }
+
   .segment.category-select & {
    padding: 0.4rem 0.1rem;
    letter-spacing: normal;
@@ -429,9 +433,48 @@
  }
 
  &.gr-draw-btn,
- &.gr-resign-btn {
+ &.gr-resign-btn,
+ &.room-action-btn {
   flex: 1 1 0;
   height: 3.25rem;
+ }
+
+ &.room-paste-btn,
+ &.copy-label-btn {
+  flex-shrink: 0;
+  gap: 0.375rem;
+  min-height: 0;
+
+  .button-text {
+   font-size: $font13;
+  }
+
+  .MuiButton-startIcon {
+   margin: 0;
+
+   svg {
+    width: 1rem;
+    height: 1rem;
+   }
+  }
+ }
+
+ &.room-paste-btn {
+  padding: $space-4 0;
+  color: $gold;
+
+  &:hover:not(.Mui-disabled) {
+   background: transparent;
+  }
+ }
+
+ &.copy-label-btn {
+  height: 2.5rem;
+  padding: 0 $space-12;
+  border: 1px solid $appCardBorder;
+  border-radius: 10px;
+  background: $appSecondary;
+  color: $appText;
  }
 
  &.gr-promotion-btn {

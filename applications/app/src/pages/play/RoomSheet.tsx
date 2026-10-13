@@ -9,7 +9,8 @@ import CopyButton from "@gopvp/app/src/components/common/CopyButton";
 import CustomLabel from "@gopvp/common/src/components/Label/Label";
 import OTPInput from "@gopvp/common/src/components/OtpInput/OtpInput";
 import ChipSelect from "@gopvp/common/src/components/ChipSelect/ChipSelect";
-import { formatMMSS } from "@gopvp/common/src/util/format";
+import CustomAvatar from "@gopvp/common/src/components/Avatar/Avatar";
+import { formatAmount, formatMMSS } from "@gopvp/common/src/util/format";
 import type { RoomTab } from "@gopvp/common/src/types/component";
 import type { IRoomSheetProps } from "@gopvp/app/src/types/component";
 import {
@@ -26,32 +27,55 @@ import {
  waitingForOpponentText,
  shareCodeWithFriendText,
  opponentJoinedText,
+ startWhenReadyText,
  waitingForOwnerText,
  startText,
  leaveText,
- expiresInText,
+ cancelRoomText,
+ expiresText,
+ rivalText,
+ entryText,
+ codeText,
+ minText,
  roomText,
  vsText,
 } from "@gopvp/app/src/constants/message";
-import CustomBadge from "@gopvp/common/src/components/Badge/Badge";
-import { MAX_AMOUNT_DIGITS } from "@gopvp/app/src/constants/limit";
-import { cancelText, youText } from "@gopvp/common/src/constants/message";
+import {
+ MAX_AMOUNT_DIGITS,
+ MS_PER_MINUTE,
+} from "@gopvp/app/src/constants/limit";
+import { youText } from "@gopvp/common/src/constants/message";
 import { icons } from "@gopvp/common/src/components/images";
-import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
 import {
  ROOM_TABS,
  BET_CHIP_AMOUNTS,
  DURATION_MINUTES,
 } from "@gopvp/app/src/constants/option";
-import SheetActions from "@gopvp/common/src/components/SheetActions/SheetActions";
 import DurationWheel from "@gopvp/app/src/pages/play/DurationWheel";
 
-function roomPlayer(name: string) {
+function roomPlayer(label: string, name: string, side: "me" | "rival") {
  return (
-  <Box customClass="result-tile room-player">
-   <icons.person />
-   <Text component="span" customClass="result-tile-lbl">
-    {name}
+  <Box customClass={classNames("room-face-card", side)}>
+   <CustomAvatar
+    letter={name.charAt(0).toUpperCase()}
+    customClass="room-face-avatar"
+   />
+   <Box customClass="room-face-meta">
+    <Text customClass="room-face-name">{label}</Text>
+    <Text customClass="room-face-username">{name}</Text>
+   </Box>
+  </Box>
+ );
+}
+
+function roomMeta(label: string, value: string) {
+ return (
+  <Box customClass="room-meta-item">
+   <Text component="span" customClass="room-meta-label">
+    {label}
+   </Text>
+   <Text component="span" customClass="room-meta-value">
+    {value}
    </Text>
   </Box>
  );
@@ -66,7 +90,11 @@ export default function RoomSheet({
  isOwner,
  roomCode,
  opponentName,
+ myName,
+ roomFee,
+ roomTimeMs,
  expiresInSeconds,
+ expiryWindowMs,
  onCreateRoom,
  onJoinRoom,
  onStartRoom,
@@ -130,55 +158,94 @@ export default function RoomSheet({
    customClass="room-sheet"
   >
    {roomStatus === "ready" || roomStatus === "starting" ? (
-    <Box customClass="matchmaking-searching">
+    <Box customClass="matchmaking-searching room-options">
      <Text customClass="dialog-title">
       {isOwner ? opponentJoinedText : waitingForOwnerText}
      </Text>
-     <Box customClass="room-players">
-      {roomPlayer(youText)}
-      <CustomBadge customClass="room-vs" badgeContent={vsText} />
-      {roomPlayer(opponentName)}
+     {isOwner && (
+      <Text customClass="description">{startWhenReadyText}</Text>
+     )}
+     <Box customClass="room-face-off">
+      {roomPlayer(youText, myName, "me")}
+      <Text component="span" customClass="room-face-vs">
+       {vsText}
+      </Text>
+      {roomPlayer(rivalText, opponentName, "rival")}
      </Box>
-     <Text customClass="searching-timer">{roomCode}</Text>
+     <Box customClass="room-meta-strip">
+      {roomMeta(entryText, formatAmount(roomFee))}
+      {roomMeta(
+       durationText,
+       `${Math.round(roomTimeMs / MS_PER_MINUTE)} ${minText}`,
+      )}
+      {roomMeta(codeText, roomCode ?? "")}
+     </Box>
+     {/* <Text customClass="searching-timer">{roomCode}</Text>
      <Text customClass="empty-state-desc description">
       {expiresInText(formatMMSS(expiresInSeconds))}
-     </Text>
-     {isOwner ? (
-      <SheetActions>
+     </Text> */}
+     <Box customClass="pool-confirm-actions">
+      <Button
+       type="button"
+       customClass="cancel-btn room-action-btn"
+       disabled={roomStatus === "starting"}
+       onClick={onCancel}
+      >
+       {leaveText}
+      </Button>
+      {isOwner && (
        <Button
         type="button"
         variant="contained"
-        fullWidth
-        customClass="game-cta"
+        customClass="room-action-btn"
         isLoading={roomStatus === "starting"}
         loaderOnDark
         onClick={onStartRoom}
        >
         {startText}
        </Button>
-      </SheetActions>
-     ) : (
-      <SheetActions cancelLabel={leaveText} onCancel={onCancel} />
-     )}
+      )}
+     </Box>
     </Box>
    ) : roomStatus === "waiting" ? (
-    <Box customClass="matchmaking-searching">
+    <Box customClass="matchmaking-searching room-options">
      <Text customClass="dialog-title">{waitingForOpponentText}</Text>
-     <Text customClass="empty-state-desc description">
-      {shareCodeWithFriendText}
-     </Text>
-     <Input
-      value={roomCode ?? ""}
-      disabled
+     <Text customClass="description">{shareCodeWithFriendText}</Text>
+     <Box customClass="room-code-card">
+      <Text component="span" customClass="room-code">
+       {roomCode}
+      </Text>
+      <CopyButton text={roomCode ?? ""} showLabel />
+     </Box>
+     <Box customClass="room-expiry">
+      <icons.timer />
+      <Text component="span" customClass="room-expiry-label">
+       {expiresText}
+      </Text>
+      <Text component="span" customClass="room-expiry-time">
+       {formatMMSS(expiresInSeconds)}
+      </Text>
+     </Box>
+     <Box customClass="room-expiry-bar">
+      <Box
+       customClass="room-expiry-fill"
+       style={{
+        transform: `scaleX(${
+         expiryWindowMs > 0
+          ? Math.min(1, (expiresInSeconds * 1000) / expiryWindowMs)
+          : 0
+        })`,
+       }}
+      />
+     </Box>
+     <Button
+      type="button"
       fullWidth
-      customClass="room-code-input"
-      slotProps={{ input: { "aria-label": roomCodeText } }}
-      endIcon={<CopyButton text={roomCode ?? ""} />}
-     />
-     <Text customClass="empty-state-desc description">
-      {expiresInText(formatMMSS(expiresInSeconds))}
-     </Text>
-     <SheetActions cancelLabel={cancelText} onCancel={onCancel} />
+      customClass="cancel-btn room-action-btn"
+      onClick={onCancel}
+     >
+      {cancelRoomText}
+     </Button>
     </Box>
    ) : (
     <Box customClass="matchmaking-searching room-options">
@@ -188,7 +255,7 @@ export default function RoomSheet({
       value={roomTab}
       onChange={setRoomTab}
       label={(t) => (t === "create" ? createRoomText : joinRoomText)}
-      customClass="segment compact"
+      customClass="segment compact room-segment"
      />
      {roomTab === "create" ? (
       <>
@@ -277,12 +344,15 @@ export default function RoomSheet({
          <CustomLabel customClass="room-field-label">
           {roomCodeText}
          </CustomLabel>
-         <CustomIconButton
+         <Button
+          type="button"
+          variant="text"
+          startIcon="clipboard"
           customClass="room-paste-btn"
           onClick={handlePasteCode}
-          aria-label={pasteText}
-          icon="contentPaste"
-         />
+         >
+          {pasteText}
+         </Button>
         </Box>
         <OTPInput
          length={6}

@@ -45,7 +45,11 @@ export default function PlayPage() {
   isOwner,
   roomCode,
   opponentName,
+  myName,
+  roomFee,
+  roomTimeMs,
   expiresInSeconds,
+  expiryWindowMs,
   createRoom,
   joinRoom,
   startRoom,
@@ -198,7 +202,11 @@ export default function PlayPage() {
     isOwner={isOwner}
     roomCode={roomCode}
     opponentName={opponentName}
+    myName={myName}
+    roomFee={roomFee}
+    roomTimeMs={roomTimeMs}
     expiresInSeconds={expiresInSeconds}
+    expiryWindowMs={expiryWindowMs}
     onCreateRoom={createRoom}
     onJoinRoom={joinRoom}
     onStartRoom={startRoom}
