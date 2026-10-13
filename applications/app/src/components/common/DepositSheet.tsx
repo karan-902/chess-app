@@ -13,7 +13,7 @@ import WalletInfoNote from "@gopvp/app/src/components/common/WalletInfoNote";
 import { useWalletModal } from "@gopvp/app/src/context/WalletModalContext";
 import { useReduxSelector } from "@gopvp/app/src/redux/hooks";
 import { paymentRequest } from "@gopvp/app/src/hooks/useWallet";
-import { getApiErrorResponse } from "@gopvp/common/src/util/api";
+import { showApiErrorToast } from "@gopvp/common/src/util/api";
 import type { IPaymentRequestResponse } from "@gopvp/common/src/types/response";
 import {
  depositText,
@@ -121,7 +121,7 @@ export default function DepositSheet() {
    setExpired(false);
    setStage("qr");
   } catch (err) {
-   setAmountError(getApiErrorResponse(err)?.data?.message ?? "");
+   showApiErrorToast(err);
   } finally {
    setSubmitting(false);
   }
