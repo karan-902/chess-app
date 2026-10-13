@@ -57,9 +57,13 @@ export default function ResultSheet({
     {(tiles ?? Array.from({ length: skeletonTiles }, () => null)).map(
      (tile, index) => (
       <Fragment key={tile?.label ?? index}>
-       {versus && index > 0 && (
-        <CustomBadge customClass="result-vs" badgeContent={vsText} />
-       )}
+       {versus &&
+        index > 0 &&
+        (isLoading ? (
+         <Skeleton variant="circular" customClass="result-vs-skeleton" />
+        ) : (
+         <CustomBadge customClass="result-vs" badgeContent={vsText} />
+        ))}
        <Box
         customClass={classNames(
          "result-tile-wrap",

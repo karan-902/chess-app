@@ -31,7 +31,7 @@ export const usernameMaxLengthText =
 export const countryRequiredText = "Country is required";
 export const welcomeBackText = "Welcome Back,";
 export const championText = "Champion";
-export const logInFindRivalText = "Log in, find a rival,";
+export const logInFindRivalText = "Login, find a rival,";
 export const takeThePrizeText = "take the prize";
 export const oneStepToText = "One Step To";
 export const gloryText = "Glory";
@@ -45,7 +45,7 @@ export const joinTheArenaText = "Join the Arena";
 export const gloryStartsHereText = "Glory starts here";
 export const beenHereBeforeText = "Been Here Before";
 export const yourWinsAreWaitingText = "Your wins are waiting";
-export const logInText = "Log in";
+export const logInText = "Login";
 export const usernameHintText = (min: number, max: number) =>
  `${min} to ${max} characters, letters and numbers`;
 export const earningsText = "Earnings";
@@ -165,7 +165,7 @@ export const dashText = "–";
 export const dailyText = "Daily";
 export const weeklyText = "Weekly";
 export const monthlyText = "Monthly";
-export const allTimeText = "All Time";
+export const allTimeText = "All";
 export const topEarnersText = "Top Earners";
 export const mostWinsText = "Most Wins";
 export const totalEarningsText = "Total Earnings";

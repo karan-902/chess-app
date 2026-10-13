@@ -117,10 +117,14 @@ export default function MyMatches() {
      </Box> */}
      <Card customClass="score-hero">
       <Box customClass="score-hero-icon">
-       <Crown strokeWidth={2} />
+       {statsLoading ? (
+        <Skeleton variant="rectangular" customClass="icon" />
+       ) : (
+        <Crown strokeWidth={2} />
+       )}
       </Box>
       <Text component="span" customClass="score-hero-label">
-       {scoreText}
+       {statsLoading ? <Skeleton customClass="text" width={60} /> : scoreText}
       </Text>
       <Text component="span" customClass="score-hero-val">
        {statsLoading ? (

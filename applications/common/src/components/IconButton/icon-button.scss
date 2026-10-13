@@ -71,7 +71,7 @@
    border-color: $gold;
    background: $gold;
    color: $primaryContrast;
-   box-shadow: 0 0 14px alpha($gold, 0.45);
+   @include neo-edge($btnEdgeGold, 2px);
 
    svg {
     stroke-width: 3;
@@ -92,13 +92,14 @@
   height: 2rem;
   min-width: 0;
   padding: 0;
-  border: 1px solid $appBtnBorder;
-  border-radius: 50%;
+  border-radius: 0%;
+  border: 1px solid alpha($appText, 0.18);
+  background: $btnGhostBg;
   color: $appText;
 
   svg {
-   width: 0.875rem;
-   height: 0.875rem;
+   width: 1rem;
+   height: 1rem;
   }
   &:hover:not(.Mui-disabled) {
    background: rgba(128, 128, 128, 0.3);
@@ -163,12 +164,39 @@
   }
  }
 
+ &.gr-premove-cancel {
+  position: relative;
+  flex-shrink: 0;
+  width: 1.125rem;
+  height: 1.125rem;
+  padding: 0;
+  border-radius: 0;
+  background: alpha($appText, 0.12);
+  color: $appText;
+
+  svg {
+   width: 0.5625rem;
+   height: 0.5625rem;
+   stroke-width: 3;
+  }
+
+  &::after {
+   content: "";
+   position: absolute;
+   inset: -0.4375rem;
+  }
+
+  &:hover {
+   background: alpha($appText, 0.2);
+  }
+ }
+
  &.appbar-add-funds {
   width: 2.25rem;
   height: 100%;
   padding: 0;
   border-radius: 0;
-  background: linear-gradient(180deg, $primaryHover, $primary);
+  background: linear-gradient(180deg, #ffe27a, #e5a900);
   color: $primaryContrast;
 
   svg {

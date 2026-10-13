@@ -7,8 +7,8 @@
   flex-direction: column;
   height: 100dvh;
   overflow-y: auto;
-  padding: 1rem 1.25rem 0;
-  gap: 0.875rem;
+  padding: 0.625rem 1.25rem 0;
+  gap: 0.625rem;
   perspective: 800px;
 
   @include from-height(tall) {
@@ -23,22 +23,33 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-  gap: 0.625rem;
+  min-height: 0;
+  gap: 0.25rem;
+
+  @include from-height(tall) {
+   gap: 0.625rem;
+  }
  }
  &.public-brand {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
+  min-height: 0;
  }
 
  &.hero-stage {
+  --hero-scene-height: 100%;
   position: relative;
-  width: min(15.5rem, 100%);
-  aspect-ratio: 350 / 184;
+  flex-shrink: 1;
+  width: calc(100% + 2.5rem);
+  height: min(66.667vw, 20rem);
+  min-height: 8.5rem;
+  margin: -0.625rem -1.25rem 0;
   pointer-events: none;
 
   @include from-height(tall) {
-   width: min(21.875rem, 100%);
+   margin-top: -1.5rem;
   }
 
   img {
@@ -47,19 +58,89 @@
    height: auto;
   }
 
+  .hero-floor-layer {
+   position: absolute;
+   left: 0;
+   right: 0;
+   bottom: 0;
+   height: var(--hero-scene-height);
+   -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 22%,
+    #000 89%,
+    transparent
+   );
+   mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 22%,
+    #000 89%,
+    transparent
+   );
+  }
+
+  .hero-frame {
+   position: absolute;
+   left: 50%;
+   bottom: 0;
+   height: var(--hero-scene-height);
+   aspect-ratio: 390 / 260;
+   transform: translateX(-50%);
+  }
+
+  .hero-floor-layer .hero-frame {
+   overflow: visible;
+  }
+
   .hero-glow {
    position: absolute;
-   left: 17.143%;
-   top: 17.391%;
-   width: 65.714%;
-   height: 65.217%;
-   background: radial-gradient(closest-side, alpha($gold, 0.35), transparent);
+   left: 20.5%;
+   top: 25.4%;
+   width: 59%;
+   height: 46.2%;
+   border-radius: 50%;
+   background: $gold;
+   opacity: 0.6;
+   filter: blur(2.125rem);
+
+   @include from-height(tall) {
+    filter: blur(3rem);
+   }
+
+   :root[data-theme="light"] & {
+    opacity: 0.45;
+   }
+  }
+
+  .hero-floor {
+   display: block;
+   width: 100%;
+   height: 100%;
+   overflow: visible;
+
+   path {
+    fill: $appSurface;
+    stroke: $appCardBorder;
+    stroke-width: 0.6;
+    vector-effect: non-scaling-stroke;
+
+    &.alt {
+     fill: $appBtnBorder;
+    }
+
+    &.lit {
+     fill: $gold;
+     stroke: $primaryHover;
+     stroke-width: 1;
+    }
+   }
   }
 
   .hero-logo {
-   left: 21.429%;
-   top: 26.087%;
-   width: 57.143%;
+   left: 24.4%;
+   top: 31.5%;
+   width: 51.3%;
   }
 
   .hero-spark {
@@ -117,10 +198,15 @@
 
  &.public-heading {
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   flex-direction: column;
-  gap: 0.625rem;
+  gap: 0.25rem;
   text-align: center;
+
+  @include from-height(tall) {
+   gap: 0.625rem;
+  }
  }
 
  &.auth-footer-bar {
@@ -132,7 +218,6 @@
   padding: 0.75rem 1rem calc(0.875rem + env(safe-area-inset-bottom));
   background: $appSurface;
   border-top: 1px solid $appBtnBorder;
-  border-radius: 1.25rem 1.25rem 0 0;
  }
 
  &.auth-footer-trophy {
@@ -147,7 +232,6 @@
   background:
    linear-gradient(180deg, #2d3290, #14174a) padding-box,
    linear-gradient(180deg, #ffe27a, $gold 55%, $primaryDark) border-box;
-  box-shadow: 0 0 14px alpha($gold, 0.5);
 
   img {
    width: 1.5rem;
@@ -194,7 +278,12 @@
  }
 
  &.gopvp-signup-form {
-  gap: 0.875rem;
+  gap: 0.5rem;
+
+  .common-input,
+  .form-field {
+   gap: 0.375rem;
+  }
  }
 
  &.gopvp-login-form {
@@ -214,10 +303,10 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.875rem;
-  background: $appSheet;
+  background: $appInputFill;
   border: 1.2px solid alpha($gold, 0.85);
   border-radius: $radius-card;
-  box-shadow: inset 0 1px 0 alpha($white, 0.1);
+  @include neo-edge;
  }
 
  &.auth-account-info {
@@ -347,9 +436,51 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 1.25rem;
+  height: 2.625rem;
   overflow: hidden;
   contain: layout paint;
+ }
+
+ &.live-win-card {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-8;
+  max-width: calc(100% - 3px);
+  min-width: 0;
+  height: 2.25rem;
+  padding: 0.25rem $space-12 0.25rem 0.25rem;
+  margin-bottom: 3px;
+  background: $appTicker;
+  @include neo-plunk;
+  animation: live-win-in 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+
+  &.leaving {
+   animation: live-win-out 0.6s cubic-bezier(0.64, 0, 0.78, 0) forwards;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+   animation: none;
+
+   &.leaving {
+    animation: none;
+   }
+  }
+ }
+
+ &.live-win-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.625rem;
+  height: 1.625rem;
+  background: $gold;
+  color: $primaryContrast;
+
+  svg {
+   width: 0.9375rem;
+   height: 0.9375rem;
+  }
  }
 
  &.bet-grid {
@@ -361,6 +492,8 @@
 
  &.pool-meta {
   --mode-color: #{$gold};
+  --mode-tint: #{$modeTintClassical};
+  --mode-chip-bg: #{$modeChipClassical};
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -368,14 +501,20 @@
 
   &.bullet {
    --mode-color: #{$cyan};
+   --mode-tint: #{$modeTintBullet};
+   --mode-chip-bg: #{$modeChipBullet};
   }
 
   &.blitz {
    --mode-color: #{$warning};
+   --mode-tint: #{$modeTintBlitz};
+   --mode-chip-bg: #{$modeChipBlitz};
   }
 
   &.rapid {
    --mode-color: #{$greenishTeal};
+   --mode-tint: #{$modeTintRapid};
+   --mode-chip-bg: #{$modeChipRapid};
   }
  }
 
@@ -393,9 +532,8 @@
   justify-content: center;
   width: 1.75rem;
   height: 1.75rem;
-  border-radius: 8px;
-  background: alpha(var(--mode-color), 0.18);
-  color: var(--mode-color);
+  background: var(--mode-chip-bg);
+  color: $white;
   font-size: $font16;
  }
 
@@ -478,11 +616,7 @@
   background: $appSurface;
   border: 1px solid alpha($gold, 0.3);
   border-radius: $radius-card;
-  box-shadow: 0 6px 14px alpha($black, 0.35);
-
-  :root[data-theme="light"] & {
-   box-shadow: 0 6px 14px alpha($black, 0.06);
-  }
+  @include neo-edge;
  }
 
  &.stake-ticket-col {
@@ -525,11 +659,13 @@
   border-radius: $radius-card;
   border: 1.2px solid alpha($gold, 0.6);
   background: linear-gradient(90deg, alpha($gold, 0.2), alpha($gold, 0.04));
+  @include neo-edge;
 
   &.rival {
-   padding: 0 $space-12 0 1.875rem;
+   padding: 0 $space-12 0 1.875rem !important;
    border-color: alpha($appText, 0.12);
    background: alpha($appText, 0.04);
+   box-shadow: none;
   }
  }
 
@@ -669,7 +805,7 @@
   width: 100%;
   gap: 0.25rem;
   background: $appSurface;
-  border: 1px solid $appCardBorder;
+  @include neo-plunk;
   border-radius: $radius-card;
   padding: 0.25rem;
 
@@ -679,13 +815,15 @@
 
   &.room-segment {
    padding: 0.3rem;
-   border-radius: 999px;
+   border: 1px solid alpha($appText, 0.1);
+   background: alpha($appText, 0.04);
+   box-shadow: none;
 
    > .segment-thumb {
     top: 0.3rem;
     bottom: 0.3rem;
     border: 1.5px solid $gold;
-    border-radius: 999px;
+    border-radius: 0;
     background: alpha($gold, 0.18);
    }
   }
@@ -706,7 +844,6 @@
   top: 0.25rem;
   bottom: 0.25rem;
   left: 0;
-  border-radius: 11px;
   border: 1px solid alpha(#fff1b8, 0.8);
   background: $gold;
   transition:
@@ -721,18 +858,21 @@
   align-items: center;
   text-align: center;
   gap: $space-8;
-  padding: 3rem 1rem;
+  padding: 1.75rem $space-16 $space-24;
  }
 
  &.empty-state-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 4.5rem;
-  height: 4.5rem;
-  margin-bottom: $space-8;
-  border-radius: 50%;
-  background: alpha($appText, 0.06);
+  width: 2.25rem;
+  height: 2.25rem;
+  color: $gold;
+
+  svg {
+   width: 100%;
+   height: 100%;
+  }
  }
 
  &.matches-stats {
@@ -752,7 +892,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
   color: $gold;
 
   &.silver {
@@ -845,7 +984,6 @@
   flex-direction: column;
   gap: $space-4;
   padding: $space-12 0.875rem;
-  border-radius: 8px;
   border: 1px solid alpha($gold, 0.4);
   background: alpha($gold, 0.06);
  }
@@ -891,9 +1029,9 @@
    align-items: center;
    gap: $space-12;
    padding: $space-16;
-   border: 1px solid $appCardBorder;
+   border: 1px solid alpha($appText, 0.1);
    border-radius: $radius-card;
-   background: $appSurface;
+   background: alpha($appText, 0.04);
   }
  }
 
@@ -932,14 +1070,12 @@
 
  &.room-expiry-bar {
   height: 3px;
-  border-radius: 2px;
   background: alpha($appText, 0.08);
   overflow: hidden;
  }
 
  &.room-expiry-fill {
   height: 100%;
-  border-radius: 2px;
   background: $gold;
   transform-origin: left center;
   transition: transform 1s linear;
@@ -987,7 +1123,7 @@
  &.room-meta-strip {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  border: 1px solid $appCardBorder;
+  @include neo-plunk;
   border-radius: $radius-card;
   background: $appSurface;
  }
@@ -1023,7 +1159,6 @@
   height: 3rem;
   transform: translateY(-50%);
   border: 1px solid $gold;
-  border-radius: 12px;
   background: alpha($gold, 0.14);
   pointer-events: none;
   z-index: $z-base;
@@ -1142,10 +1277,15 @@
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  padding: 0.125rem $space-8;
-  border: 2px solid $appSurface;
+  padding: 0.1875rem 0.625rem 0.1875rem $space-8;
+  border: 2px solid $primaryContrast;
   border-radius: 999px;
-  background: $gold;
+  background: linear-gradient(
+   180deg,
+   $primaryHover,
+   $primary 50%,
+   $primaryDark
+  );
   color: $primaryContrast;
   transform: translateX(-50%);
 
@@ -1158,7 +1298,8 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   margin: $space-16 (-$space-16) 0;
-  border-top: 1px solid $appLine;
+  border-top: 1px solid alpha($appText, 0.08);
+  background: alpha($appText, 0.03);
  }
 
  &.profile-stat {
@@ -1171,7 +1312,7 @@
   color: $gold;
 
   & + & {
-   border-left: 1px solid $appLine;
+   border-left: 1px solid alpha($appText, 0.08);
   }
  }
 
@@ -1230,9 +1371,8 @@
   display: flex;
   align-items: center;
   padding: $space-8 0.875rem;
-  border: 1px solid alpha($greenishTeal, 0.35);
-  border-radius: 999px;
-  background: alpha($greenishTeal, 0.08);
+  border: 1px solid alpha($greenishTeal, 0.45);
+  background: alpha($greenishTeal, 0.12);
  }
 
  &.wallet-btn-row {
@@ -1251,9 +1391,7 @@
    content: "";
    width: 4px;
    height: 1.25rem;
-   border-radius: 2px;
    background: $gold;
-   box-shadow: 0 0 10px alpha($gold, 0.6);
   }
  }
 
@@ -1277,11 +1415,7 @@
  }
 
  &.wallet-tx-item {
-  padding-bottom: $space-8;
-
-  &.group-end {
-   padding-bottom: $space-12;
-  }
+  padding-bottom: $space-12;
  }
 
  &.wallet-tx-info {
@@ -1347,9 +1481,8 @@
   justify-content: space-between;
   gap: $space-12;
   padding: 0.875rem $space-16;
-  background: $appSurface;
-  border: 1px solid $appCardBorder;
-  border-left: 1px solid $appCardBorder;
+  background: $appCard;
+  @include neo-plunk;
   border-radius: $radius-card;
 
   &.clickable {
@@ -1469,7 +1602,7 @@
   background:
    linear-gradient(180deg, #2d3290, #0e1033) padding-box,
    linear-gradient(180deg, #ffe27a, $gold 55%, $primaryDark) border-box;
-  box-shadow: 0 0 22px alpha($gold, 0.55);
+  box-shadow: 0 4px 0 $btnEdgeGold;
   transform: translateX(-50%);
 
   &::before {
@@ -1605,8 +1738,8 @@
   gap: $space-12;
   min-height: 3.75rem;
   padding: 0.875rem $space-16;
-  background: $appSurface;
-  border: 1px solid $appCardBorder;
+  background: $appCard;
+  @include neo-plunk;
   border-radius: $radius-card;
  }
 
@@ -1709,8 +1842,8 @@
   display: flex;
   align-items: center;
   gap: 0.625rem;
-  background: $appSurface;
-  border: 1px solid $appCardBorder;
+  background: alpha($appText, 0.05);
+  border: 1px solid alpha($appText, 0.12);
   border-radius: $radius-card;
   padding: $space-12 0.875rem;
   color: $gold;
@@ -1770,9 +1903,8 @@
   display: flex;
   align-items: center;
   gap: $space-12;
-  border: 1px solid $appCardBorder;
-  border-radius: $space-12;
-  background: $appSecondary;
+  border: 1px solid alpha($appText, 0.12);
+  background: alpha($appText, 0.04);
   padding: $space-4 0.875rem;
   min-height: 3rem;
   margin: 0.375rem 0 $space-16;
@@ -1789,7 +1921,6 @@
   height: 3px;
   margin-top: $space-8;
   overflow: hidden;
-  border-radius: 999px;
   background: $appLine;
  }
 
@@ -1826,9 +1957,10 @@
   justify-content: space-between;
   gap: $space-12;
   padding: 0.625rem 0.875rem;
-  background: $appSurface;
-  border: 1.5px solid $appCardBorder;
+  background: $appCard;
+  border: 1px solid $neoOutline;
   border-radius: $radius-card;
+  @include neo-edge;
   flex-shrink: 0;
   transition:
    border-color 0.25s ease,
@@ -1847,9 +1979,7 @@
   }
 
   &.active {
-   border-color: $gold;
-   background: alpha($gold, 0.06);
-   box-shadow: 0 0 18px alpha($gold, 0.22);
+   border: 1.5px solid alpha($gold, 0.85);
   }
  }
 
@@ -1896,9 +2026,7 @@
   gap: 0.7rem;
   padding: 1.1rem 1.2rem;
   background: $appSheet;
-  border: 1px solid $appCardBorder;
-  border-radius: 1rem;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+  @include neo-plunk;
  }
 
  &.gr-promotion-options {
@@ -1923,7 +2051,7 @@
   margin-top: 0.9rem;
   padding: 0.6rem 0.8rem;
   background: $appSurface;
-  border: 1px solid $appCardBorder;
+  @include neo-plunk;
   border-radius: $radius-card;
 
   &.gr-draw-offer {
@@ -1990,16 +2118,51 @@
   min-width: 0;
   height: 2.5rem;
   padding: 0 $space-8;
-  border: 1px solid $appCardBorder;
+  @include neo-plunk;
   border-radius: $radius-card;
-  background: $appSurface;
+  background: $appCard;
   overflow-x: auto;
   white-space: nowrap;
-  mask-image: linear-gradient(90deg, transparent, #000 15%);
   scrollbar-width: none;
 
   &::-webkit-scrollbar {
    display: none;
+  }
+
+  &::before {
+   content: "";
+   position: sticky;
+   left: -$space-8;
+   z-index: $z-raised;
+   flex: 0 0 2.25rem;
+   align-self: stretch;
+   margin-right: -2.25rem;
+   background: linear-gradient(90deg, $appCard, transparent);
+   opacity: 0;
+   pointer-events: none;
+   transition: opacity 0.2s ease;
+  }
+
+  &.scrolled::before {
+   opacity: 1;
+  }
+ }
+
+ &.gr-premove {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 0.375rem;
+  height: 2rem;
+  margin: 0 $space-8;
+  padding: 0.1875rem 0.3125rem 0.1875rem 0.375rem;
+  border: 1px solid alpha($gold, 0.8);
+  background: alpha($gold, 0.08);
+
+  .gr-premove-piece {
+   flex-shrink: 0;
+   width: 1.5rem;
+   height: 1.5rem;
   }
  }
 
@@ -2042,7 +2205,6 @@
   img {
    width: 6rem;
    height: 6rem;
-   border-radius: 14px;
    object-fit: cover;
   }
  }
@@ -2112,7 +2274,6 @@
 
   .win-burst-glow {
    border: 2px solid $gold;
-   border-radius: 14px;
    box-shadow: 0 0 18px alpha($gold, 0.6);
   }
  }
@@ -2137,17 +2298,17 @@
    padding: 0.875rem $space-12;
    border-radius: $radius-card;
    background: $appSurface;
-   border: 1px solid alpha($gold, 0.2);
+   @include neo-plunk;
 
    &.highlight {
     border: 1.5px solid alpha($gold, 0.85);
-    box-shadow: 0 0 14px alpha($gold, 0.2);
    }
 
    .result-tile {
     padding: 0;
     border: none;
     background: transparent;
+    box-shadow: none;
    }
   }
  }
@@ -2180,9 +2341,8 @@
  &.result-tile {
   width: 100%;
   padding: $space-16;
-  border-radius: 14px;
   background: $appSurface;
-  border: 1px solid $appCardBorder;
+  @include neo-plunk;
   text-align: center;
 
   &.loss-edge,
@@ -2259,7 +2419,6 @@
   align-items: center;
   gap: $space-8;
   padding: 0.4375rem 0.875rem;
-  border-radius: 1000px;
   background: alpha($appText, 0.06);
   border: 1px solid alpha($appText, 0.14);
 
@@ -2282,8 +2441,8 @@
   align-items: stretch;
   height: 2.25rem;
   overflow: hidden;
-  border: 1.2px solid alpha($gold, 0.55);
-  box-shadow: 3px 4px 0 $btnEdgeGold;
+  border: 1.2px solid alpha($gold, 0.8);
+  @include neo-edge;
   background: #232878;
   // box-shadow: 0 0 12px alpha($gold, 0.25);
  }

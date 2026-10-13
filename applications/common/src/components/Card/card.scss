@@ -2,20 +2,27 @@
 
 .common-card {
  position: relative;
- background: $appSurface;
- border: 1px solid $appCardBorder;
- border-radius: 14px;
+
+ &.MuiCard-root {
+  background: $appCard;
+  border-radius: $radius-card;
+  @include neo-plunk;
+ }
 
  &.clickable {
   cursor: pointer;
-  transition: border-color 0.15s ease;
+  transition:
+   border-color 0.15s ease,
+   transform 0.12s cubic-bezier(0.22, 1, 0.36, 1),
+   box-shadow 0.12s cubic-bezier(0.22, 1, 0.36, 1);
 
   &:hover {
    border-color: alpha($gold, 0.35);
   }
 
   &:active {
-   transform: scale(0.99);
+   transform: translate(2px, 2px);
+   @include neo-edge($neoEdge, 1px);
   }
  }
 
@@ -38,10 +45,7 @@
   justify-content: flex-start;
   align-items: stretch;
   gap: 0.625rem;
-  background: $appSurface;
-  border-color: alpha($gold, 0.3);
   border-radius: $radius-card;
-  box-shadow: 0 6px 14px alpha($black, 0.35);
 
   &.practice,
   &.friend {
@@ -49,9 +53,7 @@
   }
 
   &.selected {
-   border-color: $gold;
-   background: alpha($gold, 0.08);
-   box-shadow: 0 0 0 1px alpha($gold, 0.25);
+   border: 1.5px solid alpha($gold, 0.85);
   }
 
   &.insufficient {
@@ -59,10 +61,6 @@
    .pool-entry-fee {
     opacity: 0.6;
    }
-  }
-
-  :root[data-theme="light"] & {
-   box-shadow: 0 6px 14px alpha($black, 0.06);
   }
  }
 
@@ -92,8 +90,7 @@
   border: 1.2px solid alpha($gold, 0.7);
   background:
    radial-gradient(circle at 50% 40%, alpha($gold, 0.14), transparent 70%),
-   $appSurface;
-  box-shadow: 0 0 18px alpha($gold, 0.15);
+   $appCard;
  }
 
  &.stat-card {
@@ -102,7 +99,6 @@
   gap: 0.625rem;
   min-width: 0;
   padding: 0.875rem;
-  box-shadow: none;
  }
 
  &.rules-card {
@@ -112,7 +108,6 @@
   padding: $space-16;
   margin-bottom: $space-12;
   border-radius: $radius-card;
-  box-shadow: none;
  }
 
  &.profile-id-card {
@@ -121,28 +116,23 @@
   border-radius: $radius-card;
   overflow: hidden;
   background:
-   radial-gradient(ellipse at 50% 30%, alpha($gold, 0.08), transparent 60%),
-   $appSurface;
-
-  &.skeleton {
-   padding-bottom: $space-16;
-  }
+   radial-gradient(ellipse at 50% 30%, alpha($gold, 0.12), transparent 60%),
+   $appCard;
  }
 
  &.lb-row {
   display: flex;
   align-items: center;
   gap: $space-12;
-  min-height: 3.0625rem;
+  min-height: 3.75rem;
   padding: 0.875rem $space-16;
-  margin-bottom: $space-8;
+  margin-bottom: $space-12;
   border-radius: $radius-card;
-  box-shadow: none;
   font-size: $font14;
   font-weight: 600;
 
   &.me {
-   border-color: $gold;
+   border: 1.5px solid alpha($gold, 0.85);
 
    .lb-earnings {
     color: $gold;
@@ -151,34 +141,30 @@
  }
 
  &.lb-podium-card {
-  --podium-tone: #{$gold};
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   margin-top: $space-4;
-  border-radius: $radius-card $radius-card 0 0;
-  border: 1px solid alpha(var(--podium-tone), 0.55);
-  background: linear-gradient(180deg, $appSecondary, $appBg);
-  box-shadow: inset 0 2px 0 alpha(var(--podium-tone), 0.25);
+  border-radius: 0;
+  background: $appPodiumFill;
 
   &.first {
    height: 6.25rem;
+   border-color: alpha($gold, 0.55);
   }
 
   &.second {
-   --podium-tone: #{$medalSilver};
    height: 4.375rem;
   }
 
   &.third {
-   --podium-tone: #{$medalBronze};
    height: 3.125rem;
   }
 
   &.me {
    border: 1.5px solid alpha($gold, 0.9);
-   background: linear-gradient(180deg, alpha($gold, 0.22), $appBg);
+   background: linear-gradient(180deg, alpha($gold, 0.22), $appCard);
   }
  }
 

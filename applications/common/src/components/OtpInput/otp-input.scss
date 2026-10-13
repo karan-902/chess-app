@@ -15,14 +15,15 @@
   justify-content: center;
   background: $appSecondary;
   border: 1.5px solid $appCardBorder;
-  border-radius: 12px;
+  border-radius: $radius-card;
+  @include neo-edge;
   font-family: $fontOutfitExtraBold;
   font-size: $font24;
   color: $appText;
 
   &.active {
    border-color: $gold;
-   box-shadow: 0 0 0 3px alpha($gold, 0.12);
+   @include neo-edge($btnEdgeGold);
   }
  }
 

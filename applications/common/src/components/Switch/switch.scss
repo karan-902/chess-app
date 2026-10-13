@@ -15,7 +15,12 @@
     color: $white;
 
     + .MuiSwitch-track {
-     background: $gold;
+     background: linear-gradient(
+      180deg,
+      $primaryHover,
+      $primary 50%,
+      $primaryDark
+     );
      opacity: 1;
     }
    }
@@ -24,11 +29,11 @@
   .MuiSwitch-thumb {
    width: 1.25rem;
    height: 1.25rem;
-   box-shadow: 0 1px 3px alpha($black, 0.25);
+   box-shadow: none;
   }
 
   .MuiSwitch-track {
-   border-radius: 8px;
+   border-radius: 0;
    background: alpha($appText, 0.2);
    opacity: 1;
   }

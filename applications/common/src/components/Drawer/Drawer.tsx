@@ -4,6 +4,12 @@ import classNames from "classnames";
 import "./drawer.scss";
 import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
 import { closeText } from "@gopvp/common/src/constants/message";
+import {
+ DRAWER_ENTER_MS,
+ DRAWER_EXIT_MS,
+ DRAWER_ENTER_EASING,
+ DRAWER_EXIT_EASING,
+} from "@gopvp/common/src/constants/limit";
 
 interface IDrawerProps {
  open: boolean;
@@ -34,6 +40,16 @@ export function CustomDrawer({
    disableAutoFocus
    disableRestoreFocus={disableRestoreFocus}
    container={() => document.querySelector(".app-root") as HTMLElement}
+   transitionDuration={
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+     ? 0
+     : { enter: DRAWER_ENTER_MS, exit: DRAWER_EXIT_MS }
+   }
+   slotProps={{
+    transition: {
+     easing: { enter: DRAWER_ENTER_EASING, exit: DRAWER_EXIT_EASING },
+    },
+   }}
   >
    {!hideCloseIcon && (
     <CustomIconButton

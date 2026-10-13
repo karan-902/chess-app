@@ -15,7 +15,7 @@
   letter-spacing: 0.04em;
   color: $appTextMuted;
   background: alpha($appText, 0.06);
-  border-radius: 0.25rem;
+  border-radius: 0;
   padding: 0.05rem 0.3rem;
  }
 
@@ -25,8 +25,8 @@
 
  &.lb-you-tag .MuiBadge-badge {
   padding: 0.125rem $space-8;
-  border-radius: 1000px;
-  background: linear-gradient(180deg, $primaryHover, $primaryDark);
+  border-radius: 0;
+  background: linear-gradient(180deg, #ffe27a, #e5a900);
   font-family: $fontOutfitExtraBold;
   font-size: $font10;
   letter-spacing: 0;
@@ -43,7 +43,6 @@
   border-radius: 50%;
   border: 3px solid $appSheet;
   background: linear-gradient(180deg, $primaryHover, $primary 50%, $btnEdgeGold);
-  box-shadow: 0 0 10px alpha($gold, 0.45);
   font-family: $fontOutfitBlack;
   font-size: $font12;
   letter-spacing: 0;

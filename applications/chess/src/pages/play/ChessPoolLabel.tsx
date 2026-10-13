@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
+import CustomChip from "@gopvp/common/src/components/Chip/Chip";
 import Text from "@gopvp/common/src/components/Text/Text";
 import { formatText } from "@gopvp/common/src/util/format";
 import { deriveCategory, msToSeconds } from "@gopvp/chess/src/utils";
@@ -23,9 +24,10 @@ export default function ChessPoolLabel({ pool }: IPoolLabelProps) {
      {formatText(CATEGORY_LABELS[category])}
     </Text>
    </Box>
-   <Text component="span" customClass="pool-duration">
-    {minutesText(poolSeconds / 60)}
-   </Text>
+   <CustomChip
+    customClass="minute-chip"
+    label={minutesText(poolSeconds / 60)}
+   />
   </Box>
  );
 }

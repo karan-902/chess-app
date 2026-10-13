@@ -10,9 +10,9 @@
   width: 100%;
   height: 3.375rem;
   padding: 0 0.875rem 0 0;
-  border: 1.2px solid $appCardBorder;
-  background: $appSecondary;
-  box-shadow: inset 0 1px 0 alpha($white, 0.04);
+  border: 1.2px solid alpha($gold, 0.85);
+  background: $appInputFill;
+  @include neo-edge;
   font-family: $fontOutfitMedium;
   font-size: max(#{$input-font-min}, #{$font16});
   border-radius: $radius-card;
@@ -36,7 +36,7 @@
 
   @media (hover: hover) {
    &:hover:not(.Mui-focused):not(.Mui-error):not(.Mui-disabled) {
-    border-color: $appBorderHover;
+    border-color: $gold;
    }
   }
 
@@ -51,15 +51,15 @@
 
   &.Mui-focused {
    border-color: $primary;
-   box-shadow: 0 0 0 3px alpha($primary, 0.12);
+   @include neo-edge($btnEdgeGold);
   }
 
   &.Mui-error {
    border: 1.5px solid $paleRed;
    border-radius: $radius-card !important;
+   @include neo-edge($btnEdgeRed);
    &.Mui-focused {
     border-color: $paleRed;
-    box-shadow: 0 0 0 3px alpha($paleRed, 0.12);
    }
   }
 
@@ -94,6 +94,10 @@
   input {
    text-align: center;
    color: $appText;
+
+   &::placeholder {
+    color: alpha($appText, 0.35);
+   }
   }
 
   &.Mui-error input {
@@ -161,6 +165,10 @@
 
   @include from-height(tall) {
    height: 3.5rem;
+  }
+
+  .gopvp-signup-form & {
+   height: 2.75rem;
   }
  }
 }

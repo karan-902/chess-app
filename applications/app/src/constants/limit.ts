@@ -26,7 +26,9 @@ export const TRANSACTIONS_SKELETON_ROWS = 12;
 export const POOL_SKELETON_ROWS = 4;
 export const WALLET_SUCCESS_CLOSE_MS = 2800;
 export const COPIED_FEEDBACK_MS = 1500;
-export const PROFILE_ACCOUNT_SKELETON_ROWS = 3;
+export const TOAST_AUTO_HIDE_MS = 2400;
+export const PROFILE_ACCOUNT_SKELETON_ROWS = 2;
+export const PROFILE_STAT_SKELETON_COUNT = 3;
 export const LIVE_WIN_SHOW_MS = 3500;
 export const LIVE_WIN_EXIT_MS = 600;
 export const LIVE_WIN_MAX_AGE_MS = 86400000;
@@ -34,3 +36,46 @@ export const SCROLLBAR_HIDE_DELAY_MS = 800;
 export const DAY_MS = 86400000;
 export const HERO_COIN_COUNT = 5;
 export const HERO_SPARK_COUNT = 6;
+export const HERO_FLOOR = {
+ width: 390,
+ height: 260,
+ rows: 9,
+ cols: 15,
+ spread: 1080,
+ vanishY: -200,
+ depthCurve: 1.7,
+ dissolveMin: 0.12,
+ dissolveCurve: 1.3,
+};
+export const HERO_FLOOR_PATH_LEFT = [
+ "8-5",
+ "7-5",
+ "7-6",
+ "6-6",
+ "5-6",
+ "5-7",
+ "4-7",
+ "3-7",
+ "2-7",
+ "1-7",
+ "0-7",
+];
+export const HERO_FLOOR_PATH_RIGHT = [
+ "8-9",
+ "7-9",
+ "7-8",
+ "6-8",
+ "5-8",
+ "5-7",
+ "4-7",
+ "3-7",
+ "2-7",
+ "1-7",
+ "0-7",
+];
+export const HERO_PATH_WALK = {
+ restOpacity: 0.35,
+ periodSeconds: 2.6,
+ pulseWidth: 2.2,
+ leadSteps: 2,
+};

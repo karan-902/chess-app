@@ -60,22 +60,26 @@ export default function LiveWinsTicker() {
  return (
   <Box customClass="live-wins-ticker" aria-live="polite">
    {win && (
-    <Text
+    <Box
      key={win.id}
-     customClass={classNames("live-win-line", isLeaving && "leaving")}
+     customClass={classNames("live-win-card", isLeaving && "leaving")}
     >
-     <icons.trophy />
+     <Box customClass="live-win-badge">
+      <icons.trophy />
+     </Box>
      <Text component="span" customClass="live-win-name">
       {shortenUsername(win.winner)}
      </Text>
-     {wonText}
+     <Text component="span" customClass="live-win-label">
+      {wonText}
+     </Text>
      <Text component="span" customClass="live-win-amount">
       {formatAmount(win.amount)}
      </Text>
-     <Text component="span" customClass="live-win-time">
+     <Text component="span" customClass="live-win-label">
       {formatTimeAgo(win.created)}
      </Text>
-    </Text>
+    </Box>
    )}
   </Box>
  );

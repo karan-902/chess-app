@@ -16,7 +16,6 @@ import {
  CallMadeIcon,
  CallReceivedIcon,
  ScheduleIcon,
- Wallet as WalletIcon,
 } from "@gopvp/common/src/components/images";
 import { formatAmount, formatTime } from "@gopvp/common/src/util/format";
 import { TRANSACTION_CODE_DESCRIPTIONS } from "@gopvp/app/src/constants/label";
@@ -73,8 +72,8 @@ function txRow(tx: ITransactionResponse, groupEdgeClass: string) {
  const TxIcon = isPending
   ? ScheduleIcon
   : isDebit
-   ? CallMadeIcon
-   : CallReceivedIcon;
+    ? CallMadeIcon
+    : CallReceivedIcon;
  return (
   <Box
    customClass={classNames(
@@ -149,7 +148,6 @@ export default function Wallet() {
   <Box customClass="wallet-page">
    <Box customClass="wallet-hero">
     <Box customClass="wallet-hero-label">
-     <WalletIcon size={18} strokeWidth={2.2} />
      <Text component="span" customClass="wallet-hero-lbl">
       {totalBalanceText}
      </Text>

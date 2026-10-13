@@ -15,6 +15,11 @@
  &.match-id-label {
   font-size: $font14 !important;
  }
+ .gopvp-signup-form & {
+  font-size: $font14 !important;
+  line-height: 1.25 !important;
+ }
+
  &.room-field-label {
   text-align: left !important;
   font-size: $font14;

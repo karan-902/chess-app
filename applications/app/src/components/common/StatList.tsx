@@ -16,7 +16,11 @@ export default function StatList({
     (row, index) => (
      <Card key={row?.label ?? index} customClass="stat-card">
       <Box customClass={classNames("stat-card-icon", row?.tone)}>
-       {row?.icon && <row.icon strokeWidth={2} />}
+       {row ? (
+        row.icon && <row.icon strokeWidth={2} />
+       ) : (
+        <Skeleton variant="rectangular" customClass="icon" />
+       )}
       </Box>
       <Text component="span" customClass="stat-card-label">
        {row ? row.label : <Skeleton customClass="text" width={80} />}

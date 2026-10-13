@@ -5,9 +5,8 @@
 
  .MuiTabs-indicator {
   height: 3px;
-  border-radius: 3px 3px 0 0;
+  border-radius: 0;
   background: $gold;
-  box-shadow: 0 0 12px alpha($gold, 0.6);
  }
 
  .common-tab {
@@ -18,7 +17,7 @@
   color: $appTextMuted;
   font-family: $fontOutfitSemiBold;
   font-weight: 600;
-  font-size: $font14;
+  font-size: 14px;
 
   &.Mui-selected {
    color: $appTabActive;
@@ -27,7 +26,7 @@
 
  &.appbar-nav-tabs {
   padding: 0 0.5rem 0 0.625rem;
-  border-bottom: 1px solid $appLine;
+  border-bottom: 1px solid alpha($appText, 0.18);
   flex-shrink: 0;
 
   @include from(tablet) {
