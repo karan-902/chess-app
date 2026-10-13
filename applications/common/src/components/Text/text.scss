@@ -187,6 +187,10 @@
   &.neutral {
    color: $appTextMuted;
   }
+
+  .lb-row & {
+   font-size: $font15;
+  }
  }
 
  &.auth-account-name {
@@ -735,11 +739,8 @@
   width: 1.4rem;
   flex-shrink: 0;
   text-align: center;
-  font-family: $fontOutfitExtraBold;
-  font-size: $font15;
-  @include from(phone) {
-   font-size: $font16;
-  }
+  font-family: $fontOutfitBold;
+  font-size: $font14;
   color: $appTextMuted;
 
   &.gold {
@@ -758,6 +759,8 @@
  &.lb-name {
   flex: 1;
   min-width: 0;
+  font-family: $fontOutfitSemiBold;
+  font-size: $font15;
  }
 
  &.lb-earnings {
@@ -766,17 +769,31 @@
 
  &.lb-podium-name {
   max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: $fontOutfitBold;
   font-size: $font13;
-  @include from(phone) {
-   font-size: $font14;
-  }
+  color: $appText;
  }
 
  &.lb-podium-value {
-  font-family: $fontOutfitExtraBold;
   font-size: $font15;
-  @include from(phone) {
-   font-size: $font16;
+ }
+
+ &.lb-podium-rank {
+  font-family: $fontOutfitBlack;
+  font-size: $font30;
+  line-height: 1;
+  color: $medalSilver;
+
+  .first & {
+   font-size: $font40;
+   color: $appTabActive;
+  }
+
+  .third & {
+   color: $medalBronze;
   }
  }
 

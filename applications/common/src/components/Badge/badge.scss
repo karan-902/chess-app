@@ -23,6 +23,16 @@
   flex-shrink: 0;
  }
 
+ &.lb-you-tag .MuiBadge-badge {
+  padding: 0.125rem $space-8;
+  border-radius: 1000px;
+  background: linear-gradient(180deg, $primaryHover, $primaryDark);
+  font-family: $fontOutfitExtraBold;
+  font-size: $font10;
+  letter-spacing: 0;
+  color: $primaryContrast;
+ }
+
  &.result-vs .MuiBadge-badge {
   display: flex;
   align-items: center;

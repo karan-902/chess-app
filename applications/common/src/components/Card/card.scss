@@ -124,9 +124,10 @@
  &.lb-row {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.9rem;
-  margin-bottom: 0.5rem;
+  gap: $space-12;
+  min-height: 3.0625rem;
+  padding: 0.875rem $space-16;
+  margin-bottom: $space-8;
   border-radius: $radius-card;
   box-shadow: none;
   font-size: $font14;
@@ -142,40 +143,34 @@
  }
 
  &.lb-podium-card {
+  --podium-tone: #{$gold};
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: flex-end;
-  gap: $space-4;
-  grid-row: 1;
-  min-width: 0;
-  padding: 2rem $space-8 $space-12;
-  border-radius: $radius-card;
-  box-shadow: none;
-  overflow: visible;
-  text-align: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: $space-4;
+  border-radius: $radius-card $radius-card 0 0;
+  border: 1px solid alpha(var(--podium-tone), 0.55);
+  background: linear-gradient(180deg, $appSecondary, $appBg);
+  box-shadow: inset 0 2px 0 alpha(var(--podium-tone), 0.25);
 
   &.first {
-   grid-column: 2;
-   min-height: 8.25rem;
+   height: 6.25rem;
   }
 
   &.second {
-   grid-column: 1;
-   min-height: 7.25rem;
+   --podium-tone: #{$medalSilver};
+   height: 4.375rem;
   }
 
   &.third {
-   grid-column: 3;
-   min-height: 6.5rem;
+   --podium-tone: #{$medalBronze};
+   height: 3.125rem;
   }
 
   &.me {
-   border-color: $gold;
-
-   .lb-earnings {
-    color: $gold;
-   }
+   border: 1.5px solid alpha($gold, 0.9);
+   background: linear-gradient(180deg, alpha($gold, 0.22), $appBg);
   }
  }
 
