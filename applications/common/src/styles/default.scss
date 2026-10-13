@@ -91,6 +91,10 @@
  --app-text-placeholder: #7a7ebf;
  --app-prize: var(--gold);
  --app-entry-fee: var(--app-text);
+ --btn-edge-gold: #8a6a00;
+ --btn-edge-red: #8f1f2c;
+ --btn-ghost-bg: color-mix(in srgb, #ffffff 6%, transparent);
+ --btn-ghost-edge: transparent;
  --primary: #ffc400;
  --primary-hover: #ffd633;
  --primary-dark: #e5a900;
@@ -125,6 +129,10 @@
  --app-text-placeholder: #8c91b8;
  --app-prize: var(--greenish-teal);
  --app-entry-fee: var(--app-text-muted);
+ --btn-edge-gold: #8a6a00;
+ --btn-edge-red: #8f1f2c;
+ --btn-ghost-bg: #ffffff;
+ --btn-ghost-edge: #5b60a8;
  --primary: #f2b200;
  --primary-hover: #e0a200;
  --primary-dark: #e0a200;
@@ -215,6 +223,11 @@ $gold: var(--gold);
 $cyan: var(--cyan);
 $appPrize: var(--app-prize);
 $appEntryFee: var(--app-entry-fee);
+$btnEdgeGold: var(--btn-edge-gold);
+$btnEdgeRed: var(--btn-edge-red);
+$btnGhostBg: var(--btn-ghost-bg);
+$btnGhostEdge: var(--btn-ghost-edge);
+$radius-card: 14px;
 
 $space-4: 0.25rem;
 $space-8: 0.5rem;

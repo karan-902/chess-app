@@ -24,7 +24,7 @@
   align-items: center;
   gap: 0.7rem;
   padding: 0.7rem 0.85rem;
-  border-radius: 5px;
+  border-radius: $radius-card;
  }
 
  &.bet-card {
@@ -38,7 +38,7 @@
   align-items: center;
   gap: 0.15rem;
   background: $appSurface;
-  border-radius: 8px;
+  border-radius: $radius-card;
 
   &.selected {
    border-color: $gold;
@@ -67,7 +67,7 @@
   overflow: hidden;
   flex: 1;
   min-height: 0;
-  border-radius: 0.85rem;
+  border-radius: $radius-card;
   box-shadow: none;
 
   &.match-row-list {
@@ -86,14 +86,14 @@
   gap: $space-8;
   padding: $space-16;
   margin-bottom: $space-12;
-  border-radius: 0.85rem;
+  border-radius: $radius-card;
   box-shadow: none;
  }
 
  &.profile-id-card {
   padding: 1.1rem 1rem;
   margin-bottom: 1.1rem;
-  border-radius: 0.85rem;
+  border-radius: $radius-card;
  }
 
  &.lb-row {
@@ -102,7 +102,7 @@
   gap: 0.75rem;
   padding: 0.9rem;
   margin-bottom: 0.5rem;
-  border-radius: 0.6rem;
+  border-radius: $radius-card;
   box-shadow: none;
   font-size: $font14;
   font-weight: 600;
@@ -125,7 +125,7 @@
   grid-row: 1;
   min-width: 0;
   padding: 2rem $space-8 $space-12;
-  border-radius: 0.8rem;
+  border-radius: $radius-card;
   box-shadow: none;
   overflow: visible;
   text-align: center;

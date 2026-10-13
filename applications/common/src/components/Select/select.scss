@@ -4,11 +4,11 @@
  width: 100%;
 
  .MuiInputBase-root {
-  min-height: 2.75rem;
+  min-height: 3.25rem;
   background: $appSecondary;
-  border-radius: 4px;
-  font-family: $fontOutfitRegular;
-  font-size: $font15;
+  border-radius: $radius-card;
+  font-family: $fontOutfitMedium;
+  font-size: $font16;
   color: $appText;
   transition:
    border-color 0.15s ease,
@@ -34,7 +34,7 @@
   }
 
   &.Mui-error {
-   border-radius: 0.375rem !important;
+   border-radius: $radius-card !important;
 
    .MuiOutlinedInput-notchedOutline {
     border: 2px solid $paleRed;
@@ -77,7 +77,7 @@
 .common-select-menu.MuiPaper-root {
  max-height: 250px;
  overflow-y: auto;
- border-radius: 4px;
+ border-radius: $radius-card;
 
  .MuiList-root {
   padding-block: $space-4;

@@ -66,7 +66,7 @@
   padding: 0.7rem 0.75rem;
   background: $appSurface;
   border: 1px solid $appCardBorder;
-  border-radius: 4px;
+  border-radius: $radius-card;
  }
 
  &.auth-account-info {
@@ -239,7 +239,7 @@
   gap: 0.35rem;
   background: $appSurface;
   border: 1px solid $appCardBorder;
-  border-radius: 0.7rem;
+  border-radius: $radius-card;
   padding: 0.3rem;
 
   &.compact {
@@ -262,7 +262,7 @@
   top: 0.2rem;
   bottom: 0.2rem;
   left: 0;
-  border-radius: 0.5rem;
+  border-radius: $radius-card;
   background: $gold;
   transition:
    transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
@@ -347,7 +347,7 @@
    align-items: center;
    padding: 1.1rem 1rem;
    border: 1px solid $appCardBorder;
-   border-radius: 0.85rem;
+   border-radius: $radius-card;
    background: $appSurface;
   }
 
@@ -375,7 +375,7 @@
   width: 100%;
   align-self: stretch;
   height: 8.4rem;
-  border-radius: 0.85rem;
+  border-radius: $radius-card;
   overflow: hidden;
  }
 
@@ -387,7 +387,7 @@
   height: 2.8rem;
   transform: translateY(-50%);
   border: 1px solid $appCardBorder;
-  border-radius: 0.6rem;
+  border-radius: $radius-card;
   background: $appSecondary;
   pointer-events: none;
   z-index: $z-base;
@@ -624,7 +624,7 @@
   background: $appSurface;
   border: 1px solid $appCardBorder;
   border-left: 1px solid $appCardBorder;
-  border-radius: 0.6rem;
+  border-radius: $radius-card;
 
   &.clickable {
    cursor: pointer;
@@ -669,7 +669,7 @@
   overflow: hidden;
   background: $appSurface;
   border: 1px solid $appCardBorder;
-  border-radius: 0.6rem;
+  border-radius: $radius-card;
   transition: background-color 0.15s ease;
 
   > svg {
@@ -832,7 +832,7 @@
   gap: 0.5rem;
   background: $appSurface;
   border: 1px solid $appBtnBorder;
-  border-radius: 4px;
+  border-radius: $radius-card;
   padding: 0.5rem 0.5rem;
   margin-bottom: 0.9rem;
   color: $appTextMuted;
@@ -874,7 +874,7 @@
   align-items: center;
   gap: 0.5rem;
   border: 1px solid $appCardBorder;
-  border-radius: 4px;
+  border-radius: $radius-card;
   padding: 0.5rem 0.6rem;
   margin-bottom: 0.7rem;
  }
@@ -901,7 +901,7 @@
   padding: $space-12;
   background: $appSurface;
   border: 1px solid $appCardBorder;
-  border-radius: 0.6rem;
+  border-radius: $radius-card;
   flex-shrink: 0;
   transition: border-color 0.25s ease;
 
@@ -993,7 +993,7 @@
   padding: 0.6rem 0.8rem;
   background: $appSurface;
   border: 1px solid $appCardBorder;
-  border-radius: 4px;
+  border-radius: $radius-card;
 
   &.gr-draw-offer {
    flex-direction: column;
@@ -1001,7 +1001,7 @@
    padding: $space-12;
    background: alpha($gold, 0.06);
    border-color: alpha($gold, 0.4);
-   border-radius: 0.85rem;
+   border-radius: $radius-card;
    animation: draw-offer-in 0.3s ease-out;
 
    @media (prefers-reduced-motion: reduce) {
