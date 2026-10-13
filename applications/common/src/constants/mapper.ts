@@ -3,7 +3,7 @@ import {
  youBeatText,
  youLostToText,
  drawWithText,
- cancelledWithText,
+ betReturnedText,
 } from "@gopvp/common/src/constants/message";
 
 export const MATCH_RESULT_OUTCOMES: Record<MatchResult, MatchOutcome> = {
@@ -20,5 +20,5 @@ export const MATCH_OUTCOME_SUBTITLES: Record<
  win: youBeatText,
  loss: youLostToText,
  draw: drawWithText,
- match_cancelled: cancelledWithText,
+ match_cancelled: betReturnedText,
 };

@@ -1,6 +1,12 @@
 import classNames from "classnames";
 import Text from "@gopvp/common/src/components/Text/Text";
-import { Crown, Medal } from "@gopvp/common/src/components/images";
+import {
+ Crown,
+ DollarSign,
+ Flame,
+ Medal,
+ Trophy,
+} from "@gopvp/common/src/components/images";
 import { GAME_LOGO_PATH } from "@gopvp/chess/src/constants/asset";
 import type { ILeaderboardPlayerResponse } from "@gopvp/common/src/types/response";
 import type { IChessLogoProps, IStatRow } from "@gopvp/app/src/types/component";
@@ -10,10 +16,10 @@ export const STAT_ICONS: Record<
  Pick<IStatRow, "icon" | "tone">
 > = {
  score: { icon: Crown, tone: "gold" },
- wins: { icon: Medal, tone: "gold" },
- current_streak: { icon: Medal, tone: "silver" },
- best_streak: { icon: Medal, tone: "silver" },
- gross_income: { icon: Crown, tone: "bronze" },
+ wins: { icon: Trophy, tone: "gold" },
+ current_streak: { icon: Flame, tone: "gold" },
+ best_streak: { icon: Medal, tone: "gold" },
+ gross_income: { icon: DollarSign, tone: "gold" },
 };
 
 export function ChessLogo({ size = 42, muted = false }: IChessLogoProps) {

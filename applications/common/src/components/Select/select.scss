@@ -3,30 +3,41 @@
 .common-select {
  width: 100%;
 
- .MuiInputBase-root {
+ .gopvp-signup-form & .MuiInputBase-root {
   min-height: 2.75rem;
-  background: $appSecondary;
-  border-radius: 4px;
-  font-family: $fontOutfitRegular;
-  font-size: $font15;
+  height: 2.75rem;
+
+  .MuiInputBase-input {
+   padding-block: 0;
+   height: 100%;
+  }
+ }
+
+ .MuiInputBase-root {
+  min-height: 3.25rem;
+  background: $appInputFill;
+  border-radius: $radius-card;
+  @include neo-edge;
+  font-family: $fontOutfitMedium;
+  font-size: max(#{$input-font-min}, #{$font16});
   color: $appText;
   transition:
    border-color 0.15s ease,
    box-shadow 0.15s ease;
 
   .MuiOutlinedInput-notchedOutline {
-   border-color: $appCardBorder;
+   border: 1.2px solid alpha($gold, 0.85);
   }
 
   @media (hover: hover) {
    &:hover:not(.Mui-focused):not(.Mui-error):not(.Mui-disabled)
     .MuiOutlinedInput-notchedOutline {
-    border-color: $appBorderHover;
+    border-color: $gold;
    }
   }
 
   &.Mui-focused {
-   box-shadow: 0 0 0 3px alpha($primary, 0.12);
+   @include neo-edge($btnEdgeGold);
 
    .MuiOutlinedInput-notchedOutline {
     border: 1px solid $primary;
@@ -34,15 +45,14 @@
   }
 
   &.Mui-error {
-   border-radius: 0.375rem !important;
+   border-radius: $radius-card !important;
+   @include neo-edge($btnEdgeRed);
 
    .MuiOutlinedInput-notchedOutline {
     border: 2px solid $paleRed;
    }
 
    &.Mui-focused {
-    box-shadow: 0 0 0 3px alpha($paleRed, 0.12);
-
     .MuiOutlinedInput-notchedOutline {
      border-color: $paleRed;
     }
@@ -77,7 +87,8 @@
 .common-select-menu.MuiPaper-root {
  max-height: 250px;
  overflow-y: auto;
- border-radius: 4px;
+ border-radius: $radius-card;
+ @include neo-plunk;
 
  .MuiList-root {
   padding-block: $space-4;

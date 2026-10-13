@@ -70,7 +70,7 @@ export function getMuiTheme(mode: ThemeMode) {
    divider: border,
   },
 
-  shape: { borderRadius: 5 },
+  shape: { borderRadius: 0 },
 
   typography: {
    fontFamily,
@@ -109,7 +109,7 @@ export function getMuiTheme(mode: ThemeMode) {
    MuiButton: {
     defaultProps: { disableElevation: true },
     styleOverrides: {
-     root: { borderRadius: 5, textTransform: "none" },
+     root: { borderRadius: 0, textTransform: "none" },
     },
    },
    MuiPaper: {
@@ -121,7 +121,7 @@ export function getMuiTheme(mode: ThemeMode) {
      paper: {
       backgroundColor: isDark ? COLOR_SURFACE : COLOR_SURFACE_LIGHT,
       border: `1px solid ${border}`,
-      borderRadius: 8,
+      borderRadius: 0,
      },
     },
    },
@@ -146,7 +146,7 @@ export function getMuiTheme(mode: ThemeMode) {
    MuiOutlinedInput: {
     styleOverrides: {
      root: {
-      borderRadius: 10,
+      borderRadius: 0,
       backgroundColor: surfaceRaised,
      },
      notchedOutline: { borderColor: border },

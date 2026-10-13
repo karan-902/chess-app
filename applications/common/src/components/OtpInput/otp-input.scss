@@ -2,26 +2,28 @@
 
 .common-otp-input {
  display: flex;
- gap: 0.6rem;
+ gap: $space-8;
  justify-content: center;
 
  .otp-slot {
   position: relative;
-  width: 2.75rem;
-  height: 3.25rem;
+  flex: 1 1 0;
+  max-width: 3.25rem;
+  height: 3.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
   background: $appSecondary;
-  border: 1px solid $appCardBorder;
-  border-radius: 4px;
-  font-family: $fontOutfitSemiBold;
-  font-size: $font20;
+  border: 1.5px solid $appCardBorder;
+  border-radius: $radius-card;
+  @include neo-edge;
+  font-family: $fontOutfitExtraBold;
+  font-size: $font24;
   color: $appText;
 
   &.active {
-   border-color: $primary;
-   box-shadow: 0 0 0 3px alpha($primary, 0.12);
+   border-color: $gold;
+   @include neo-edge($btnEdgeGold);
   }
  }
 

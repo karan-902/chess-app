@@ -36,7 +36,9 @@ import {
  LEADERBOARD_SKELETON_ROWS,
  LEADERBOARD_PODIUM_SIZE,
 } from "@gopvp/app/src/constants/limit";
-import { Crown, Medal } from "@gopvp/common/src/components/images";
+import { Crown } from "@gopvp/common/src/components/images";
+import Button from "@gopvp/common/src/components/Button/Button";
+import CustomBadge from "@gopvp/common/src/components/Badge/Badge";
 import { renderSkeletons } from "@gopvp/app/src/utils/skeleton";
 
 export default function Leaderboard() {
@@ -61,18 +63,30 @@ export default function Leaderboard() {
    : shortenUsername(player.username);
  const playerValue = (player: ILeaderboardRowResponse) =>
   "wins" in player ? player.wins : formatAmount(player.win_amount);
+ const valueClass = classNames(
+  "amount-value",
+  sort === "earnings" && "lb-earnings",
+ );
  const podiumSize =
   players.length >= LEADERBOARD_PODIUM_SIZE ? LEADERBOARD_PODIUM_SIZE : 0;
 
  return (
   <Box customClass="leaderboard-page">
    <Box customClass="filter-pill-row">
-    <FilterDropdown
-     options={LEADERBOARD_SORTS}
-     value={sort}
-     onChange={(value) => dispatch(setLeaderboardSort(value))}
-     label={(value) => LEADERBOARD_SORT_LABELS[value]}
-    />
+    {LEADERBOARD_SORTS.map((option) => (
+     <Button
+      key={option}
+      type="button"
+      customClass={classNames(
+       "filter-dropdown-btn",
+       sort === option && "active",
+      )}
+      aria-pressed={sort === option}
+      onClick={() => dispatch(setLeaderboardSort(option))}
+     >
+      {LEADERBOARD_SORT_LABELS[option]}
+     </Button>
+    ))}
     <FilterDropdown
      options={LEADERBOARD_SCOPES}
      value={scope}
@@ -100,37 +114,38 @@ export default function Leaderboard() {
      )}
      {podiumSize > 0 && (
       <Box customClass="lb-podium">
-       {players.slice(0, podiumSize).map((player, index) => {
-        const isFirst = index === 0;
-        const PodiumIcon = isFirst ? Crown : Medal;
-        return (
+       {players.slice(0, podiumSize).map((player, index) => (
+        <Box
+         key={player.id}
+         customClass={classNames(
+          "lb-podium-col",
+          LEADERBOARD_PODIUM_PLACES[index],
+         )}
+         onClick={() => setSelectedPlayerId(player.id)}
+        >
+         {index === 0 && <Crown />}
+         {isMe(player.id) && (
+          <CustomBadge customClass="lb-you-tag" badgeContent={youText} />
+         )}
+         <Text customClass="lb-podium-name">
+          {shortenUsername(player.username)}
+         </Text>
+         <Text customClass={classNames("lb-podium-value", valueClass)}>
+          {playerValue(player)}
+         </Text>
          <Card
-          key={player.id}
           customClass={classNames(
            "lb-podium-card",
-           "clickable",
            LEADERBOARD_PODIUM_PLACES[index],
            isMe(player.id) && "me",
           )}
-          onClick={() => setSelectedPlayerId(player.id)}
          >
-          <Box
-           customClass={classNames(
-            "lb-podium-badge",
-            isFirst ? "gold" : "silver",
-           )}
-          >
-           <PodiumIcon />
-          </Box>
-          <Text customClass="lb-podium-name row-title">
-           {playerName(player)}
-          </Text>
-          <Text customClass="lb-podium-value lb-earnings amount-value">
-           {playerValue(player)}
+          <Text component="span" customClass="lb-podium-rank">
+           {index + 1}
           </Text>
          </Card>
-        );
-       })}
+        </Box>
+       ))}
       </Box>
      )}
      <VirtualList<ILeaderboardRowResponse>
@@ -157,9 +172,7 @@ export default function Leaderboard() {
           {rank}
          </Text>
          <Text customClass="lb-name row-title">{playerName(player)}</Text>
-         <Text customClass="lb-earnings amount-value">
-          {playerValue(player)}
-         </Text>
+         <Text customClass={valueClass}>{playerValue(player)}</Text>
         </Card>
        );
       }}

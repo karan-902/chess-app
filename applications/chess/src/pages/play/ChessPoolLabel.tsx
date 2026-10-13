@@ -1,4 +1,6 @@
+import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
+import CustomChip from "@gopvp/common/src/components/Chip/Chip";
 import Text from "@gopvp/common/src/components/Text/Text";
 import { formatText } from "@gopvp/common/src/util/format";
 import { deriveCategory, msToSeconds } from "@gopvp/chess/src/utils";
@@ -13,14 +15,19 @@ export default function ChessPoolLabel({ pool }: IPoolLabelProps) {
  const CategoryIcon = CATEGORY_ICONS[category];
 
  return (
-  <Box customClass="pool-meta">
-   <CategoryIcon className="bet-card-icon" size="1em" strokeWidth={2} />
-   <Text customClass="description" component="span">
-    {formatText(CATEGORY_LABELS[category])}
-   </Text>
-   <Text component="span" customClass="description">
-    {minutesText(poolSeconds / 60)}
-   </Text>
+  <Box customClass={classNames("pool-meta", category.toLowerCase())}>
+   <Box customClass="pool-mode">
+    <Box customClass="pool-mode-icon">
+     <CategoryIcon size="1em" strokeWidth={2} />
+    </Box>
+    <Text component="span" customClass="pool-mode-name">
+     {formatText(CATEGORY_LABELS[category])}
+    </Text>
+   </Box>
+   <CustomChip
+    customClass="minute-chip"
+    label={minutesText(poolSeconds / 60)}
+   />
   </Box>
  );
 }

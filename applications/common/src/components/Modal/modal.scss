@@ -4,8 +4,8 @@
  width: 100%;
  margin: $space-8 !important;
  background: $appSheet !important;
- border: 1px solid $appCardBorder;
- border-radius: 16px !important;
+ border-radius: 0 !important;
+ @include neo-plunk;
  padding: 1.5rem;
 
  &:focus {
@@ -18,6 +18,12 @@
   font-weight: 700;
   color: $appText;
   margin-bottom: 0.4rem;
+ }
+
+ &.edit-profile-modal {
+  max-width: 21.875rem;
+  gap: 1.125rem;
+  padding: 1.25rem;
  }
 
  &.rejoin-game-modal {

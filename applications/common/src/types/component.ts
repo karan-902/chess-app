@@ -56,7 +56,6 @@ export interface IEmailValues {
 
 export interface IEmailScreenProps {
  formik: FormikProps<IEmailValues>;
- error: string | null;
  isGoogleProcessing: boolean;
  onGoogleLogin: () => void;
 }
@@ -69,7 +68,6 @@ export interface IPasswordScreenProps {
  verifiedEmail: string;
  verifiedUsername: string;
  formik: FormikProps<IPasswordValues>;
- error: string | null;
  onChangeEmail: () => void;
 }
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Box from "@gopvp/common/src/components/Box/Box";
 import CustomLabel from "@gopvp/common/src/components/Label/Label";
 import CustomSelect, {
@@ -21,28 +21,34 @@ export default function CountrySelect<TValues extends { country: string }>({
 }: ICountrySelectProps<TValues>) {
  const { value, error, touched } = formik.getFieldMeta<string>("country");
  const [countries, setCountries] = useState<ISelectOption[]>([]);
+ const [isLoading, setIsLoading] = useState(false);
+ const isUnmountedRef = useRef(false);
 
  useEffect(() => {
-  let isCancelled = false;
-  const loadCountries = async () => {
-   try {
-    const res = await callAPIInterface<ICountriesResponse, undefined>(
-     "GET",
-     ENDPOINTS.COUNTRIES,
-    );
-    if (!isCancelled)
-     setCountries(
-      res.countries.map(({ code, name }) => ({ value: code, label: name })),
-     );
-   } catch (err) {
-    showApiErrorToast(err);
-   }
-  };
-  loadCountries();
+  isUnmountedRef.current = false;
   return () => {
-   isCancelled = true;
+   isUnmountedRef.current = true;
   };
  }, []);
+
+ const loadCountries = async () => {
+  if (isLoading || countries.length > 0) return;
+  setIsLoading(true);
+  try {
+   const res = await callAPIInterface<ICountriesResponse, undefined>(
+    "GET",
+    ENDPOINTS.COUNTRIES,
+   );
+   if (!isUnmountedRef.current)
+    setCountries(
+     res.countries.map(({ code, name }) => ({ value: code, label: name })),
+    );
+  } catch (err) {
+   showApiErrorToast(err);
+  } finally {
+   if (!isUnmountedRef.current) setIsLoading(false);
+  }
+ };
 
  return (
   <Box customClass="form-field">
@@ -54,8 +60,10 @@ export default function CountrySelect<TValues extends { country: string }>({
      formik.setFieldTouched("country", true, false);
     }}
     onBlur={() => formik.setFieldTouched("country", true)}
+    onOpen={loadCountries}
+    loading={isLoading}
     options={countries}
-    disabled={formik.isSubmitting || countries.length === 0}
+    disabled={formik.isSubmitting}
     placeholder={selectCountryText}
     isError={touched && !!error}
     helperText={error}

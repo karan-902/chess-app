@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
@@ -7,9 +7,26 @@ import Button from "@gopvp/common/src/components/Button/Button";
 import CustomDrawer from "@gopvp/common/src/components/Drawer/Drawer";
 import { formatAmount } from "@gopvp/common/src/util/format";
 import { GAME_LOGO_PATH } from "@gopvp/chess/src/constants/asset";
+import { RESULT_COUNT_TIMING } from "@gopvp/chess/src/constants/limit";
 import { MATCH_OUTCOME_SUBTITLES } from "@gopvp/common/src/constants/mapper";
+import { easeOutCubic, prefersReducedMotion } from "@gopvp/chess/src/utils/index";
+import WinBurst from "@gopvp/chess/src/pages/play/WinBurst";
 import type { IGameOverOverlayProps } from "@gopvp/chess/src/types/component";
-import { backText, chessText } from "@gopvp/common/src/constants/message";
+import {
+ backText,
+ chessText,
+ winningsText,
+ refundText,
+ matchCancelledText,
+ scoreText,
+} from "@gopvp/common/src/constants/message";
+
+const AMOUNT_LABELS = {
+ win: winningsText,
+ loss: winningsText,
+ draw: refundText,
+ match_cancelled: matchCancelledText,
+};
 
 export default function GameOverOverlay({
  gameEnded,
@@ -19,17 +36,48 @@ export default function GameOverOverlay({
  onNewGame,
 }: IGameOverOverlayProps) {
  const [isLogoLoaded, setIsLogoLoaded] = useState(false);
+ const logoRef = useRef<HTMLImageElement>(null);
+ const amountTileRef = useRef<HTMLDivElement>(null);
+ const [isReducedMotion] = useState(prefersReducedMotion);
+ const countTiming =
+  outcome === "match_cancelled" ? undefined : RESULT_COUNT_TIMING[outcome];
+ const [countProgress, setCountProgress] = useState(
+  countTiming && !isReducedMotion ? 0 : 1,
+ );
  const tone = outcome === "win" || outcome === "loss" ? outcome : "neutral";
  const scoreChange = Math.round(gameEnded.score_change);
+ const amount = gameEnded.amount * countProgress;
+ const showBurst =
+  outcome === "win" && !isPvc && gameEnded.amount > 0 && !isReducedMotion;
+
+ useEffect(() => {
+  if (!countTiming || isReducedMotion) return;
+  let raf = 0;
+  const start = performance.now();
+  const tick = (now: number) => {
+   const progress = easeOutCubic(
+    ((now - start) / 1000 - countTiming.startS) / countTiming.durationS,
+   );
+   setCountProgress(progress);
+   if (progress < 1) raf = requestAnimationFrame(tick);
+  };
+  raf = requestAnimationFrame(tick);
+  return () => cancelAnimationFrame(raf);
+ }, [countTiming, isReducedMotion]);
+
  const tiles = [
   {
-   value: `${gameEnded.amount > 0 ? "+" : ""}${formatAmount(gameEnded.amount)}`,
+   key: "amount",
+   label: AMOUNT_LABELS[outcome],
+   value: `${amount > 0 ? "+" : ""}${formatAmount(amount)}`,
    change: gameEnded.amount,
   },
   ...(scoreChange === 0
    ? []
    : [
       {
+       key: "score",
+       label: scoreText,
        value: `${scoreChange > 0 ? "+" : ""}${scoreChange}`,
        change: scoreChange,
       },
@@ -48,6 +96,7 @@ export default function GameOverOverlay({
      <Skeleton variant="rounded" customClass="result-logo-skeleton" />
     )}
     <img
+     ref={logoRef}
      src={GAME_LOGO_PATH}
      alt=""
      hidden={!isLogoLoaded}
@@ -60,13 +109,26 @@ export default function GameOverOverlay({
    </Box>
 
    {!isPvc && (
-    <Box customClass="result-tiles">
-     {tiles.map(({ value, change }) => (
-      <Box key={value} customClass="result-tile">
+    <Box customClass={classNames("result-tiles", { single: tiles.length === 1 })}>
+     {tiles.map(({ key, label, value, change }) => (
+      <Box
+       key={key}
+       ref={key === "amount" ? amountTileRef : undefined}
+       customClass={classNames("result-tile", {
+        "loss-edge": key === "amount" && outcome === "loss",
+        "refund-sheen": key === "amount" && outcome === "draw",
+       })}
+      >
+       <Text customClass="result-tile-caption" uppercase>
+        {label}
+       </Text>
        <Text
         customClass={classNames("result-tile-val", {
-         pos: change > 0,
+         pos: change > 0 && outcome !== "draw" && outcome !== "match_cancelled",
          neg: change < 0,
+         refund: key === "amount" && outcome === "draw",
+         returned: key === "amount" && outcome === "match_cancelled",
+         shake: key === "amount" && outcome === "loss",
         })}
        >
         {value}
@@ -75,6 +137,8 @@ export default function GameOverOverlay({
      ))}
     </Box>
    )}
+
+   {showBurst && <WinBurst originRef={logoRef} targetRef={amountTileRef} />}
 
    <Button
     type="button"

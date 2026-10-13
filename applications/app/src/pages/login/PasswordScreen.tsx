@@ -16,7 +16,6 @@ export default function PasswordScreen({
  verifiedEmail,
  verifiedUsername,
  formik,
- error,
  onChangeEmail,
 }: IPasswordScreenProps) {
  const initials = verifiedUsername
@@ -34,7 +33,7 @@ export default function PasswordScreen({
    onSubmit={formSubmitHandler(formik.handleSubmit)}
   >
    <Box customClass="auth-account-card">
-    <CustomAvatar letter={initials} customClass="md neutral" />
+    <CustomAvatar letter={initials} customClass="account" />
     <Box customClass="auth-account-info">
      <Text customClass="auth-account-name">{verifiedUsername}</Text>
      <Text customClass="auth-account-email">{verifiedEmail}</Text>
@@ -43,7 +42,7 @@ export default function PasswordScreen({
      type="button"
      size="small"
      variant="outlined"
-     startIcon="edit"
+     startIcon="pencil"
      customClass="auth-change-btn"
      onClick={onChangeEmail}
     >
@@ -61,10 +60,8 @@ export default function PasswordScreen({
     onChange={formik.handleChange}
     onBlur={formik.handleBlur}
     disabled={formik.isSubmitting}
-    isError={(formik.touched.password && !!formik.errors.password) || !!error}
-    helperText={
-     (formik.touched.password && formik.errors.password) || error || undefined
-    }
+    isError={formik.touched.password && !!formik.errors.password}
+    helperText={formik.errors.password}
     customClass="form-input"
     fullWidth
    />
@@ -74,8 +71,7 @@ export default function PasswordScreen({
      type="submit"
      variant="contained"
      fullWidth
-     endIcon="arrowForward"
-     customClass="auth-submit-btn auth-submit-btn-arrow"
+     customClass="auth-submit-btn"
      disabled={!formik.dirty || formik.isSubmitting}
      isLoading={formik.isSubmitting}
     >

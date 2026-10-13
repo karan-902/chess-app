@@ -76,19 +76,42 @@
 
 :root {
  color-scheme: dark;
- --app-bg: #090b14;
- --app-secondary: #171c2b;
- --app-surface: #111522;
- --app-sheet: #1a1f2e;
- --app-card-border: #2a3042;
- --app-line: #202638;
+ --app-bg: #090b20;
+ --app-secondary: #16194b;
+ --app-surface: #101337;
+ --app-sheet: #121540;
+ --app-card-border: #1f246b;
+ --app-line: #191d57;
  --app-frame: var(--color-black);
- --app-text: #f7f8fc;
- --app-text-muted: #a8afbf;
- --app-btn-bg: #171c2b;
- --app-btn-border: #3a435a;
- --app-border-hover: #3a435a;
- --app-text-placeholder: #6f778a;
+ --app-text: #f4f7ff;
+ --app-text-muted: #b9bce6;
+ --app-btn-bg: #16194b;
+ --app-btn-border: #29308f;
+ --app-border-hover: #29308f;
+ --app-text-placeholder: #c3c6f2;
+ --app-prize: var(--gold);
+ --app-entry-fee: var(--app-text);
+ --btn-edge-gold: #8a6a00;
+ --btn-edge-red: #5e0a18;
+ --btn-red-fill: linear-gradient(180deg, #e8455c, #c81e3a 50%, #a3142c);
+ --btn-ghost-bg: color-mix(in srgb, #ffffff 8%, transparent);
+ --btn-ghost-border: color-mix(in srgb, #ffffff 20%, transparent);
+ --btn-ghost-edge: transparent;
+ --app-card: #1e1f33;
+ --app-sheet-fill: linear-gradient(180deg, #282a42, #1e2034 40%, #181a2a);
+ --app-menu-fill: linear-gradient(180deg, #1c1d2e, #0c0c14);
+ --app-input-fill: linear-gradient(180deg, #3a3d5e, #272a45);
+ --app-podium-fill: linear-gradient(180deg, #2a2c48, #14152a);
+ --app-ticker: #1b1e3d;
+ --app-tab-active: var(--gold);
+ --app-glow: radial-gradient(
+  20rem 15.625rem at 50% 0%,
+  color-mix(in srgb, #4b4fd8 32%, transparent),
+  transparent
+ );
+ --app-balance: var(--gold);
+ --neo-outline: #3a3f74;
+ --neo-edge: #4b4fd8;
  --primary: #ffc400;
  --primary-hover: #ffd633;
  --primary-dark: #e5a900;
@@ -108,32 +131,52 @@
 
 :root[data-theme="light"] {
  color-scheme: light;
- --app-bg: #f5f7fb;
- --app-secondary: #f8f9fc;
+ --app-bg: #f3f4fc;
+ --app-secondary: #eceefa;
  --app-surface: #ffffff;
- --app-sheet: #eef1f6;
- --app-card-border: #dde2ec;
- --app-line: #dde2ec;
+ --app-sheet: #f7f8fe;
+ --app-card-border: #d7daf0;
+ --app-line: #e3e6f5;
  --app-frame: #dfe2e7;
- --app-text: #101522;
- --app-text-muted: #5e6678;
- --app-btn-bg: #f8f9fc;
- --app-btn-border: #c7cedc;
- --app-border-hover: #c7cedc;
- --app-text-placeholder: #9299a8;
- --primary: #f5b900;
- --primary-hover: #e5a900;
- --primary-dark: #e5a900;
+ --app-text: #12143a;
+ --app-text-muted: #555a86;
+ --app-btn-bg: #ffffff;
+ --app-btn-border: #bcc1e2;
+ --app-border-hover: #bcc1e2;
+ --app-text-placeholder: #555a86;
+ --app-prize: var(--greenish-teal);
+ --app-entry-fee: var(--app-text-muted);
+ --btn-edge-gold: #8a6a00;
+ --btn-edge-red: #8f1f2c;
+ --btn-red-fill: linear-gradient(180deg, #e8455c, #de3349 50%, #c81e3a);
+ --btn-ghost-bg: #ffffff;
+ --btn-ghost-border: #bcc1e2;
+ --btn-ghost-edge: #5b60a8;
+ --app-card: #ffffff;
+ --app-sheet-fill: linear-gradient(180deg, #f0f1f6, #e4e7ef);
+ --app-sheet-card-border: #d3d7e1;
+ --app-sheet-card-edge: #6b7184;
+ --app-menu-fill: var(--app-surface);
+ --app-input-fill: #ffffff;
+ --app-podium-fill: linear-gradient(180deg, #ffffff, #eceefa);
+ --app-ticker: #ffffff;
+ --app-tab-active: var(--app-text);
+ --app-balance: var(--app-text);
+ --neo-outline: var(--app-card-border);
+ --neo-edge: var(--btn-ghost-edge);
+ --primary: #f2b200;
+ --primary-hover: #e0a200;
+ --primary-dark: #e0a200;
  --primary-contrast: #0b0d14;
- --secondary: #2868e8;
+ --secondary: #2862e0;
  --secondary-contrast: #ffffff;
- --warning: #ff9f1c;
- --error: #e5394f;
+ --warning: #d97f00;
+ --error: #de3349;
  --gold: var(--primary);
- --cyan: #2868e8;
+ --cyan: #2862e0;
  --pale-red: var(--error);
  --brink-pink: #e06a5a;
- --greenish-teal: #159957;
+ --greenish-teal: #0f7d4c;
  --backdrop-center: #1a1d22;
  --backdrop-edge: #000000;
 }
@@ -166,22 +209,25 @@ $medalGold: #c9a227;
 $medalSilver: #9aa0a6;
 $medalBronze: #b5651d;
 
-$font7: 7px;
-$font8: 8px;
-$font10: 10px;
-$font11: 11px;
-$font12: 12px;
-$font13: 13px;
-$font14: 14px;
-$font15: 15px;
-$font16: 16px;
-$font18: 18px;
-$font20: 20px;
-$font22: 22px;
-$font24: 24px;
-$font30: 30px;
-$font40: 40px;
-$font48: 48px;
+$font7: 0.4375rem;
+$font8: 0.5rem;
+$font10: 0.625rem;
+$font11: 0.6875rem;
+$font12: 0.75rem;
+$font13: 0.8125rem;
+$font14: 0.875rem;
+$font15: 0.9375rem;
+$font16: 1rem;
+$font17: 1.0625rem;
+$font18: 1.125rem;
+$font20: 1.25rem;
+$font22: 1.375rem;
+$font24: 1.5rem;
+$font30: 1.875rem;
+$font40: 2.5rem;
+$font48: 3rem;
+$font56: 3.5rem;
+$input-font-min: 16px;
 
 $fontOutfitThin: "Outfit-Thin";
 $fontOutfitExtraLight: "Outfit-ExtraLight";
@@ -209,6 +255,48 @@ $backdropCenter: var(--backdrop-center);
 $backdropEdge: var(--backdrop-edge);
 $gold: var(--gold);
 $cyan: var(--cyan);
+$appPrize: var(--app-prize);
+$appEntryFee: var(--app-entry-fee);
+$btnEdgeGold: var(--btn-edge-gold);
+$btnEdgeRed: var(--btn-edge-red);
+$btnGhostBg: var(--btn-ghost-bg);
+$btnGhostEdge: var(--btn-ghost-edge);
+$btnGhostBorder: var(--btn-ghost-border);
+$appCard: var(--app-card);
+$appSheetFill: var(--app-sheet-fill);
+$appMenuFill: var(--app-menu-fill);
+$appInputFill: var(--app-input-fill);
+$appPodiumFill: var(--app-podium-fill);
+$appTicker: var(--app-ticker);
+$btnRedFill: var(--btn-red-fill);
+$btnGoldFill: linear-gradient(180deg, #ffe27a, #ffc400 50%, #e5a900);
+$modeTintBullet: #3478ff;
+$modeTintBlitz: #ff9f1c;
+$modeTintRapid: #2ed47a;
+$modeTintClassical: #ffc400;
+$modeChipBullet: #2d58be;
+$modeChipBlitz: #d63a3a;
+$modeChipRapid: #15935a;
+$modeChipClassical: #7c4dd6;
+$appTabActive: var(--app-tab-active);
+$appGlow: var(--app-glow);
+$appBalance: var(--app-balance);
+$neoOutline: var(--neo-outline);
+$neoEdge: var(--neo-edge);
+$radius-card: 0;
+
+@mixin neo-edge($color: $neoEdge, $x: 3px, $y: $x, $important: false) {
+ @if $important {
+  box-shadow: $x $y 0 $color !important;
+ } @else {
+  box-shadow: $x $y 0 $color;
+ }
+}
+
+@mixin neo-plunk($edge: $neoEdge) {
+ border: 1px solid $neoOutline;
+ @include neo-edge($edge);
+}
 
 $space-4: 0.25rem;
 $space-8: 0.5rem;
@@ -237,6 +325,20 @@ $breakpoints: (
   @error "Unknown breakpoint `#{$name}`. Available: #{map.keys($breakpoints)}";
  }
  @media (min-width: map.get($breakpoints, $name)) {
+  @content;
+ }
+}
+
+$height-breakpoints: (
+ medium: 640px,
+ tall: 760px,
+);
+
+@mixin from-height($name) {
+ @if not map.has-key($height-breakpoints, $name) {
+  @error "Unknown height breakpoint `#{$name}`. Available: #{map.keys($height-breakpoints)}";
+ }
+ @media (min-height: map.get($height-breakpoints, $name)) {
   @content;
  }
 }

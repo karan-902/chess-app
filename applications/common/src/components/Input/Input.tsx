@@ -78,7 +78,7 @@ export const Input = forwardRef<HTMLInputElement, IInputProps>(
      }
     />
     {isError && helperText && (
-     <AlertMessage severity="error" message={helperText} />
+     <AlertMessage severity="error" message={helperText} inline />
     )}
    </Box>
   );

@@ -72,8 +72,8 @@ function txRow(tx: ITransactionResponse, groupEdgeClass: string) {
  const TxIcon = isPending
   ? ScheduleIcon
   : isDebit
-   ? CallMadeIcon
-   : CallReceivedIcon;
+    ? CallMadeIcon
+    : CallReceivedIcon;
  return (
   <Box
    customClass={classNames(
@@ -86,7 +86,7 @@ function txRow(tx: ITransactionResponse, groupEdgeClass: string) {
    <Box customClass="wallet-tx-row">
     <Box customClass="wallet-tx-info">
      <Box customClass="wallet-tx-icon">
-      <TxIcon sx={{ fontSize: 24 }} />
+      <TxIcon sx={{ fontSize: 18 }} />
      </Box>
      <Box customClass="wallet-tx-text">
       <Box customClass="wallet-tx-title">
@@ -146,22 +146,27 @@ export default function Wallet() {
 
  return (
   <Box customClass="wallet-page">
-   <Box customClass="wallet-split">
-    <Box customClass="wallet-split-block accent">
-     <Text customClass="wallet-split-lbl">{totalBalanceText}</Text>
-     <Text customClass="wallet-split-val">
-      {balanceLoading ? (
-       <Skeleton customClass="text" width={80} />
-      ) : (
-       formatAmount(usdValue)
-      )}
+   <Box customClass="wallet-hero">
+    <Box customClass="wallet-hero-label">
+     <Text component="span" customClass="wallet-hero-lbl">
+      {totalBalanceText}
      </Text>
     </Box>
-    <Box customClass="wallet-split-block">
-     <Text customClass="wallet-split-lbl">{withdrawBalanceText}</Text>
-     <Text customClass="wallet-split-val">
+    <Text customClass="wallet-hero-amount">
+     {balanceLoading ? (
+      <Skeleton customClass="text" width={160} />
+     ) : (
+      formatAmount(usdValue)
+     )}
+    </Text>
+    <Box customClass="wallet-hero-underline" />
+    <Box customClass="wallet-withdrawable-pill">
+     <Text component="span" customClass="wallet-withdrawable-lbl">
+      {withdrawBalanceText}
+     </Text>
+     <Text component="span" customClass="wallet-withdrawable-val">
       {balanceLoading ? (
-       <Skeleton customClass="text" width={80} />
+       <Skeleton customClass="text" width={48} />
       ) : (
        formatAmount(withdrawableUsd)
       )}

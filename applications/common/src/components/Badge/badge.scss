@@ -15,11 +15,37 @@
   letter-spacing: 0.04em;
   color: $appTextMuted;
   background: alpha($appText, 0.06);
-  border-radius: 0.25rem;
+  border-radius: 0;
   padding: 0.05rem 0.3rem;
  }
 
  &.room-vs {
   flex-shrink: 0;
+ }
+
+ &.lb-you-tag .MuiBadge-badge {
+  padding: 0.125rem $space-8;
+  border-radius: 0;
+  background: linear-gradient(180deg, #ffe27a, #e5a900);
+  font-family: $fontOutfitExtraBold;
+  font-size: $font10;
+  letter-spacing: 0;
+  color: $primaryContrast;
+ }
+
+ &.result-vs .MuiBadge-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border-radius: 50%;
+  border: 3px solid $appSheet;
+  background: linear-gradient(180deg, $primaryHover, $primary 50%, $btnEdgeGold);
+  font-family: $fontOutfitBlack;
+  font-size: $font12;
+  letter-spacing: 0;
+  color: $primaryContrast;
  }
 }

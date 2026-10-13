@@ -34,12 +34,14 @@ export interface ICountrySelectProps<TValues extends { country: string }> {
 
 export interface ICopyButtonProps {
  text: string;
+ showLabel?: boolean;
 }
 
 export interface IUsernameFieldProps<TValues extends { username: string }> {
  formik: FormikProps<TValues>;
  inputRef?: Ref<HTMLInputElement>;
  customClass?: string;
+ showHint?: boolean;
 }
 
 export interface IStatRow {
@@ -47,6 +49,7 @@ export interface IStatRow {
  value: string | number;
  icon?: LucideIcon;
  tone?: "gold" | "silver" | "bronze";
+ isPrize?: boolean;
 }
 
 export interface IStatListProps {
@@ -67,6 +70,7 @@ export type TResultTone = "win" | "loss" | "neutral" | "gold";
 export interface IResultTile {
  label: string;
  value: string | number;
+ highlight?: boolean;
 }
 
 export interface IResultSheetProps {
@@ -79,6 +83,7 @@ export interface IResultSheetProps {
  tiles: IResultTile[] | null;
  skeletonTiles: number;
  tileIcon?: TIconName;
+ versus?: boolean;
  children?: ReactNode;
 }
 
@@ -96,7 +101,11 @@ export interface IRoomSheetProps {
  isOwner: boolean;
  roomCode: string | null;
  opponentName: string;
+ myName: string;
+ roomFee: number;
+ roomTimeMs: number;
  expiresInSeconds: number;
+ expiryWindowMs: number;
  onCreateRoom: (betUsd: number, durationSeconds: number) => void;
  onJoinRoom: (code: string) => void;
  onStartRoom: () => void;
@@ -114,6 +123,15 @@ export interface IPoolConfirmSheetProps {
  onConfirmCancel: () => void;
 }
 
+export interface IStakeTicketProps {
+ entry: number;
+ prize: number;
+}
+
+export interface IFaceOffProps {
+ opponentName?: string | null;
+}
+
 export interface IChessLogoProps {
  size: number;
  showText: boolean;
@@ -121,10 +139,20 @@ export interface IChessLogoProps {
  muted?: boolean;
 }
 
+export interface IAuthFooter {
+ title: string;
+ tagline: string;
+ actionText: string;
+ to: string;
+}
+
 export interface IAuthLayoutProps {
- title: ReactNode;
- subtitle?: ReactNode;
+ title: string;
+ titleAccent?: string;
+ subtitle?: string;
+ subtitleAccent?: string;
  footer?: ReactNode;
+ footerCard?: IAuthFooter;
  children: ReactNode;
 }
 

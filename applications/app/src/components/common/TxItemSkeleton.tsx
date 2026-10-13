@@ -8,7 +8,7 @@ export default function TxItemSkeleton() {
    <Box customClass="wallet-tx-row">
     <Box customClass="wallet-tx-info">
      <Box customClass="wallet-tx-icon">
-      <Skeleton variant="circular" width={24} height={24} />
+      <Skeleton variant="circular" width={36} height={36} />
      </Box>
      <Box customClass="wallet-tx-text">
       <Text customClass="row-title">

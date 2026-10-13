@@ -6,27 +6,36 @@ import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
 import Input from "@gopvp/common/src/components/Input/Input";
 import CopyButton from "@gopvp/app/src/components/common/CopyButton";
-import { speedLogo, qrLogo } from "@gopvp/common/src/components/images";
+import {
+ speedLogo,
+ qrLogo,
+ Timer,
+ Zap,
+} from "@gopvp/common/src/components/images";
+import { formatAmount } from "@gopvp/common/src/util/format";
 import WalletSheetShell from "@gopvp/app/src/components/common/WalletSheetShell";
 import WalletSuccessStage from "@gopvp/app/src/components/common/WalletSuccessStage";
 import WalletInfoNote from "@gopvp/app/src/components/common/WalletInfoNote";
 import { useWalletModal } from "@gopvp/app/src/context/WalletModalContext";
 import { useReduxSelector } from "@gopvp/app/src/redux/hooks";
 import { paymentRequest } from "@gopvp/app/src/hooks/useWallet";
-import { getApiErrorResponse } from "@gopvp/common/src/util/api";
+import { showApiErrorToast } from "@gopvp/common/src/util/api";
 import type { IPaymentRequestResponse } from "@gopvp/common/src/types/response";
 import {
  depositText,
- depositingAmountText,
+ depositingText,
+ instantPayViaText,
+ lightningText,
+ lightningInvoiceText,
+ expiresInLabelText,
  fastSecuredTransparentText,
  buyCryptoInstantlyText,
  enterAmountText,
  generateQrCodeText,
  amountRequiredText,
  maxDepositAmountText,
- btcOnlyWarningText,
- scanToDepositText,
- expiresInText,
+ // btcOnlyWarningText,
+ // scanToDepositText,
  qrExpiredText,
  paymentReceivedText,
  depositsNotWithdrawableText,
@@ -121,7 +130,7 @@ export default function DepositSheet() {
    setExpired(false);
    setStage("qr");
   } catch (err) {
-   setAmountError(getApiErrorResponse(err)?.data?.message ?? "");
+   showApiErrorToast(err);
   } finally {
    setSubmitting(false);
   }
@@ -210,13 +219,26 @@ export default function DepositSheet() {
        icon="arrowLeft"
       />
       <Text customClass="modal-heading value-heading">
-       {depositingAmountText(amountUsd)}
+       {depositingText}{" "}
+       <Text component="span" customClass="deposit-heading-amount">
+        {formatAmount(amountUsd)}
+       </Text>
       </Text>
      </Box>
 
-     <WalletInfoNote text={btcOnlyWarningText} />
+     {/* <WalletInfoNote text={btcOnlyWarningText} /> */}
 
-     <Text customClass="deposit-scan-hint caption">{scanToDepositText}</Text>
+     {/* <Text customClass="deposit-scan-hint caption">{scanToDepositText}</Text> */}
+
+     <Box customClass="deposit-lightning-row">
+      <Zap size={14} strokeWidth={2.4} />
+      <Text component="span" customClass="deposit-lightning-text">
+       {instantPayViaText}{" "}
+       <Text component="span" customClass="deposit-lightning-name">
+        {lightningText}
+       </Text>
+      </Text>
+     </Box>
 
      <Box customClass="deposit-qr-wrap">
       <QRCodeSVG
@@ -234,16 +256,35 @@ export default function DepositSheet() {
       />
      </Box>
 
+     <Text customClass="deposit-invoice-label">{lightningInvoiceText}</Text>
      <Box customClass="deposit-address-row">
       <Text customClass="deposit-address">{address}</Text>
-      <CopyButton text={payment.payment_request} />
+      <CopyButton text={payment.payment_request} showLabel />
      </Box>
 
-     <Text
-      customClass={classNames("deposit-timer", "caption", expired && "expired")}
-     >
-      {expired ? qrExpiredText : expiresInText(formatCountdown(remainingMs))}
-     </Text>
+     {expired ? (
+      <Text customClass="deposit-timer caption expired">{qrExpiredText}</Text>
+     ) : (
+      <>
+       <Box customClass="deposit-expiry-row">
+        <Timer size={16} strokeWidth={2.2} />
+        <Text component="span" customClass="deposit-expiry-label">
+         {expiresInLabelText}
+        </Text>
+        <Text component="span" customClass="deposit-expiry-time">
+         {formatCountdown(remainingMs)}
+        </Text>
+       </Box>
+       <Box customClass="deposit-expiry-track">
+        <Box
+         customClass="deposit-expiry-fill"
+         style={{
+          transform: `scaleX(${payment.ttl ? remainingMs / (payment.ttl * 1000) : 0})`,
+         }}
+        />
+       </Box>
+      </>
+     )}
     </Box>
    )}
 

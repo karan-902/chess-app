@@ -38,12 +38,13 @@ import type { IGameRoomProps } from "@gopvp/chess/src/types/component";
 import {
  resignText,
  drawText,
- opponentOfferedDrawText,
+ offersDrawText,
  acceptText,
  declineText,
  waitingForOpponentText,
 } from "@gopvp/chess/src/constants/message";
 import Button from "@gopvp/common/src/components/Button/Button";
+import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
 import { icons } from "@gopvp/common/src/components/images";
 import ResignSheet from "@gopvp/chess/src/components/common/ResignSheet";
 
@@ -93,6 +94,7 @@ export default function GameRoom({ mode }: IGameRoomProps) {
   getCapturedPieces,
   getPremoveMoves,
   getPremovePieceColor,
+  getPremovePieceCode,
  } = useChessGame();
 
  const { viewIndex, isReviewing, displayFen, goBack, goForward, jumpTo } =
@@ -405,6 +407,15 @@ export default function GameRoom({ mode }: IGameRoomProps) {
     fenHistory={fenHistory}
     viewIndex={viewIndex}
     onJump={jumpTo}
+    premove={
+     !isReviewing && premoveQueue.length > 0
+      ? {
+         ...premoveQueue[0],
+         pieceCode: getPremovePieceCode(premoveQueue[0].from),
+        }
+      : null
+    }
+    onCancelPremoves={clearPremoves}
     isReviewing={isReviewing}
     goBack={goBack}
     goForward={goForward}
@@ -420,8 +431,6 @@ export default function GameRoom({ mode }: IGameRoomProps) {
     clock={myClock}
     clockReady={clockReady}
     lowTime={clockReady && myTimeMs < CLOCK_LOW_TIME_MS}
-    hasPremoves={!isReviewing && premoveQueue.length > 0}
-    onCancelPremoves={clearPremoves}
     firstMoveSeconds={myTurnActive ? firstMoveSeconds : null}
    />
 
@@ -433,47 +442,45 @@ export default function GameRoom({ mode }: IGameRoomProps) {
 
    {drawOffer && (
     <Box customClass="gr-draw-banner gr-draw-offer">
-     <Box customClass="gr-draw-offer-text">
+     <Box customClass="gr-draw-offer-icon">
       <icons.handshake />
-      <Text component="span" customClass="row-title">
-       {opponentOfferedDrawText}
-      </Text>
      </Box>
-     <Box customClass="gr-draw-offer-actions">
-      <Button
-       variant="outlined"
-       customClass="gr-draw-btn common-play"
-       onClick={declineDraw}
-      >
-       {declineText}
-      </Button>
-      <Button
-       variant="contained"
-       customClass="common-play"
-       onClick={acceptDraw}
-      >
-       {acceptText}
-      </Button>
-     </Box>
+     <Text component="span" customClass="gr-draw-offer-text">
+      <b>{opponentName}</b> {offersDrawText}
+     </Text>
+     <CustomIconButton
+      customClass="gr-draw-offer-btn decline"
+      onClick={declineDraw}
+      aria-label={declineText}
+      icon="x"
+     />
+     <CustomIconButton
+      customClass="gr-draw-offer-btn accept"
+      onClick={acceptDraw}
+      aria-label={acceptText}
+      icon="check"
+     />
+     <Box customClass="gr-draw-offer-timer" />
     </Box>
    )}
 
    <Box customClass="gr-foot">
-    <Button
-     customClass="gr-resign-btn cancel-btn common-play"
-     onClick={() => setResignOpen(true)}
-    >
-     {resignText}
-    </Button>
     {!isPvc && (
      <Button
       variant="outlined"
-      customClass="gr-draw-btn common-play"
+      startIcon="handshake"
+      customClass="gr-draw-btn"
       onClick={offerDraw}
      >
       {drawText}
      </Button>
     )}
+    <Button
+     customClass="gr-resign-btn cancel-btn"
+     onClick={() => setResignOpen(true)}
+    >
+     {resignText}
+    </Button>
    </Box>
 
    <ResignSheet

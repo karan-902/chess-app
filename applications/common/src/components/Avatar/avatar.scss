@@ -28,10 +28,90 @@
   font-size: $font14;
  }
 
+ &.header {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 2px solid $gold;
+  background: linear-gradient(180deg, #2a2f8a, #141757) !important;
+  box-shadow: 0 0 10px alpha($gold, 0.4);
+  font-family: $fontOutfitBlack;
+  font-size: $font18;
+  color: $gold;
+ }
+
+ &.gr-avatar {
+  flex-shrink: 0;
+  width: 2.625rem;
+  height: 2.625rem;
+  border: 2px solid alpha($gold, 0.55);
+  background: $appSecondary !important;
+  font-family: $fontOutfitBlack;
+  font-size: $font18;
+  color: $appText;
+
+  .gr-row.active & {
+   border-color: $gold;
+   color: $gold;
+  }
+ }
+
+ &.room-face-avatar {
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 2px solid $appTextMuted;
+  background: $appSurface !important;
+  font-family: $fontOutfitBlack;
+  font-size: $font18;
+  color: $appText;
+
+  .room-face-card.me & {
+   border-color: $gold;
+   color: $gold;
+  }
+ }
+
+ &.face-off {
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 2px solid $primaryHover;
+  background: linear-gradient(180deg, #2d3290, #12153f) !important;
+  box-shadow: 0 0 12px alpha($gold, 0.45);
+  font-family: $fontOutfitBlack;
+  font-size: $font20;
+  color: $gold;
+ }
+
+ &.account {
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 2px solid $gold;
+  background: linear-gradient(180deg, #2d3290, #14174a) !important;
+  box-shadow: 0 0 12px alpha($gold, 0.4);
+  font-family: $fontOutfitBlack;
+  font-size: $font20;
+  color: $gold;
+
+  :root[data-theme="light"] & {
+   background: $appSurface !important;
+  }
+ }
+
+ &.header.md {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-width: 1.5px;
+  box-shadow: none;
+  font-size: $font16;
+ }
+
  &.lg {
-  width: 4.5rem;
-  height: 4.5rem;
-  font-size: $font30;
-  font-family: $fontOutfitExtraBold;
+  width: 6rem;
+  height: 6rem;
+  font-size: $font40;
+  font-family: $fontOutfitBlack;
+  box-shadow: 0 0 24px alpha($gold, 0.45);
  }
 }

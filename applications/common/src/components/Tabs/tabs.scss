@@ -4,8 +4,8 @@
  min-height: 44px;
 
  .MuiTabs-indicator {
-  height: 2px;
-  border-radius: 2px;
+  height: 3px;
+  border-radius: 0;
   background: $gold;
  }
 
@@ -13,25 +13,20 @@
   text-transform: none;
   min-height: 44px;
   min-width: 0 !important;
-  padding: 0.75rem 0.4rem;
+  padding: 0.625rem 0.5rem 0.5625rem;
   color: $appTextMuted;
-  font-family: $fontOutfitRegular;
-  font-size: $font14;
+  font-family: $fontOutfitSemiBold;
+  font-weight: 600;
+  font-size: 14px;
 
   &.Mui-selected {
-   color: $gold;
-   font-family: $fontOutfitSemiBold;
-   font-weight: 600;
-  }
-
-  @include from(phone) {
-   padding: 0.75rem 0.6rem;
+   color: $appTabActive;
   }
  }
 
  &.appbar-nav-tabs {
-  padding: 0 0.5rem;
-  border-bottom: 1px solid $appLine;
+  padding: 0 0.5rem 0 0.625rem;
+  border-bottom: 1px solid alpha($appText, 0.18);
   flex-shrink: 0;
 
   @include from(tablet) {

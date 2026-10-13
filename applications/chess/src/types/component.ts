@@ -38,8 +38,6 @@ export interface IPlayerRowProps {
  lowTime: boolean;
  isReconnecting?: boolean;
  firstMoveSeconds?: number | null;
- hasPremoves?: boolean;
- onCancelPremoves?: () => void;
 }
 
 export interface IPromotionOverlayProps {
@@ -53,6 +51,8 @@ export interface IMoveListProps {
  fenHistory: string[];
  viewIndex: number | null;
  onJump: (index: number) => void;
+ premove?: { from: string; to: string; pieceCode: string | null } | null;
+ onCancelPremoves?: () => void;
 }
 
 export interface IReviewControlsProps extends IMoveListProps {
@@ -67,6 +67,11 @@ export interface IGameOverOverlayProps {
  isPvc: boolean;
  opponentName: string;
  onNewGame: () => void;
+}
+
+export interface IWinBurstProps {
+ originRef: React.RefObject<HTMLElement | null>;
+ targetRef: React.RefObject<HTMLElement | null>;
 }
 
 export interface IResignSheetProps {

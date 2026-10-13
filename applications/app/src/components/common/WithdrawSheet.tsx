@@ -137,6 +137,7 @@ export default function WithdrawSheet() {
        id="withdraw-destination"
        type="text"
        label={destinationText}
+       labelClassName="wallet-field-label"
        fullWidth
        customClass="wallet-input"
        placeholder={btcAddressOrInvoiceText}

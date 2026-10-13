@@ -6,22 +6,23 @@ import Card from "@gopvp/common/src/components/Card/Card";
 import CustomDrawer from "@gopvp/common/src/components/Drawer/Drawer";
 import PoolCardSkeleton from "@gopvp/app/src/components/common/PoolCardSkeleton";
 import type { IBetSheetProps } from "@gopvp/common/src/types/component";
-import { playText } from "@gopvp/common/src/constants/message";
+import { icons } from "@gopvp/common/src/components/images";
+import { playText, practiceText } from "@gopvp/common/src/constants/message";
 import {
- largestPrizesTipText,
  forFunText,
- practiceText,
  freeToPlayText,
  friendlyText,
  roomText,
  customFeeText,
  winText,
- entryFeeAmountText,
+ entryText,
  addFundsText,
- tipText,
 } from "@gopvp/app/src/constants/message";
 import { renderSkeletons } from "@gopvp/app/src/utils/skeleton";
-import { POOL_SKELETON_ROWS } from "@gopvp/app/src/constants/limit";
+import {
+ POOL_SKELETON_ROWS,
+ MIN_ROOM_FEE_USD,
+} from "@gopvp/app/src/constants/limit";
 
 export default function BetSheet({
  open,
@@ -35,6 +36,7 @@ export default function BetSheet({
  onRoomOpen,
  onInsufficientBalance,
 }: IBetSheetProps) {
+ const canAffordRoom = usdValue >= MIN_ROOM_FEE_USD;
  return (
   <CustomDrawer
    anchor="bottom"
@@ -55,12 +57,16 @@ export default function BetSheet({
          customClass={classNames("bet-card", !canAfford && "insufficient")}
         >
          <PoolLabel pool={pool} />
-         <Text customClass="bet-card-tc">{winText}</Text>
-         <Text customClass="pool-win-amt">${pool.prize}</Text>
-         <Text customClass="pool-entry-fee">
-          {entryFeeAmountText(`$${pool.bet}`)}
-         </Text>
-
+         <Box customClass="pool-stats">
+          <Box customClass="pool-stat">
+           <Text customClass="stake-label win">{winText}</Text>
+           <Text customClass="stake-value win">${pool.prize}</Text>
+          </Box>
+          <Box customClass="pool-stat entry">
+           <Text customClass="stake-label">{entryText}</Text>
+           <Text customClass="pool-entry-fee">${pool.bet}</Text>
+          </Box>
+         </Box>
          <Button
           type="button"
           variant="contained"
@@ -79,12 +85,15 @@ export default function BetSheet({
     )}
     {onPracticeOpen && (
      <Card customClass={classNames("bet-card", "practice")}>
-      <Text customClass="bet-card-tc">{forFunText}</Text>
+      <Text customClass="bet-card-tc">
+       <icons.bot />
+       {forFunText}
+      </Text>
       <Text customClass="bet-card-practice-title">{practiceText}</Text>
-      <Text customClass="caption">{freeToPlayText}</Text>
+      <Text customClass="bet-card-sub">{freeToPlayText}</Text>
       <Button
        type="button"
-       variant="contained"
+       variant="outlined"
        fullWidth
        customClass="common-play"
        onClick={onPracticeOpen}
@@ -93,26 +102,35 @@ export default function BetSheet({
       </Button>
      </Card>
     )}
-    <Card customClass={classNames("bet-card", "friend")}>
-     <Text customClass="bet-card-tc">{friendlyText}</Text>
+    <Card
+     customClass={classNames(
+      "bet-card",
+      "friend",
+      !canAffordRoom && "insufficient",
+     )}
+    >
+     <Text customClass="bet-card-tc">
+      <icons.users />
+      {friendlyText}
+     </Text>
      <Text customClass="bet-card-practice-title">{roomText}</Text>
-     <Text customClass="caption">{customFeeText}</Text>
+     <Text customClass="bet-card-sub">{customFeeText}</Text>
      <Button
       type="button"
-      variant="contained"
+      variant="outlined"
       fullWidth
       customClass="common-play"
-      onClick={onRoomOpen}
+      onClick={canAffordRoom ? onRoomOpen : onInsufficientBalance}
      >
-      {playText}
+      {canAffordRoom ? playText : addFundsText}
      </Button>
     </Card>
    </Box>
-   <Text customClass="sheet-tip meta-text">
+   {/* <Text customClass="sheet-tip meta-text">
     <>
      <b>{tipText}</b> {largestPrizesTipText}
     </>
-   </Text>
+   </Text> */}
   </CustomDrawer>
  );
 }
