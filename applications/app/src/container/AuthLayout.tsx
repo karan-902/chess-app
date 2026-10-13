@@ -4,9 +4,15 @@ import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
 import { icons } from "@gopvp/common/src/components/images";
 import {
- LOGO_STAGE_PATH,
+ HERO_LOGO_PATH,
+ HERO_COIN_PATH,
+ HERO_SPARK_PATH,
  TROPHY_ART_PATH,
 } from "@gopvp/app/src/constants/asset";
+import {
+ HERO_COIN_COUNT,
+ HERO_SPARK_COUNT,
+} from "@gopvp/app/src/constants/limit";
 import type { IAuthLayoutProps } from "@gopvp/app/src/types/component";
 
 export default function AuthLayout({
@@ -24,7 +30,23 @@ export default function AuthLayout({
   <Box customClass="public-page">
    <Box customClass="public-page-wrapper">
     <Box customClass="public-brand">
-     <img src={LOGO_STAGE_PATH} alt="gopvp-logo" />
+     <Box customClass="hero-stage">
+      <Box customClass="hero-glow" />
+      {Array.from({ length: HERO_SPARK_COUNT }, (_, i) => (
+       <img
+        key={`spark-${i}`}
+        className={`hero-spark s${i + 1}`}
+        src={HERO_SPARK_PATH}
+        alt=""
+       />
+      ))}
+      {Array.from({ length: HERO_COIN_COUNT }, (_, i) => (
+       <Box key={`coin-${i}`} customClass={`hero-coin c${i + 1}`}>
+        <img src={HERO_COIN_PATH} alt="" />
+       </Box>
+      ))}
+      <img className="hero-logo" src={HERO_LOGO_PATH} alt="gopvp-logo" />
+     </Box>
     </Box>
     <Box customClass="public-heading">
      <Text component="h1" customClass="public-title">

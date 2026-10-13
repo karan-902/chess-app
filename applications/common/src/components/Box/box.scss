@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "default.scss" as *;
 
 .common-box {
@@ -26,14 +27,76 @@
   display: flex;
   justify-content: center;
   width: 100%;
+ }
+
+ &.hero-stage {
+  position: relative;
+  width: min(21.875rem, 100%);
+  aspect-ratio: 350 / 184;
+  pointer-events: none;
 
   img {
+   position: absolute;
    display: block;
-   width: calc(100% + 2.5rem);
-   max-width: 24.375rem;
    height: auto;
-   margin: -1.75rem -1.25rem;
-   pointer-events: none;
+  }
+
+  .hero-glow {
+   position: absolute;
+   left: 17.143%;
+   top: 17.391%;
+   width: 65.714%;
+   height: 65.217%;
+   background: radial-gradient(closest-side, alpha($gold, 0.35), transparent);
+  }
+
+  .hero-logo {
+   left: 21.429%;
+   top: 26.087%;
+   width: 57.143%;
+  }
+
+  .hero-spark {
+   opacity: 0.9;
+
+   @each $name, $x, $y, $size in (s1, 118, 8, 12), (s2, 246, 160, 10), (s3, 334, 54, 9), (s4, 12, 36, 10), (s5, 92, 156, 8), (s6, 262, 22, 8) {
+    &.#{$name} {
+     left: math.div($x, 350) * 100%;
+     top: math.div($y, 184) * 100%;
+     width: math.div($size, 350) * 100%;
+    }
+   }
+  }
+
+  .hero-coin {
+   position: absolute;
+   aspect-ratio: 1;
+   animation: hero-coin-float var(--float-duration) var(--float-delay) ease-in-out infinite;
+   will-change: transform;
+
+   img {
+    left: -34.375%;
+    top: -34.375%;
+    width: 168.75%;
+    transform: rotate(var(--tilt));
+   }
+
+   @each $name, $x, $y, $size, $tilt, $opacity, $lift, $duration, $delay in (c1, 52, 6, 30, -22deg, 0.75, 8px, 3.6s, -0.4s), (c2, 300, 8, 34, 20deg, 0.8, 7px, 4.2s, -1.6s), (c3, 26, 142, 22, -12deg, 0.7, 8px, 3.2s, -2.1s), (c4, 2, 62, 64, 16deg, 1, 5px, 4.8s, -0.9s), (c5, 282, 76, 56, -18deg, 1, 6px, 4.4s, -2.8s) {
+    &.#{$name} {
+     left: math.div($x, 350) * 100%;
+     top: math.div($y, 184) * 100%;
+     width: math.div($size, 350) * 100%;
+     opacity: $opacity;
+     --tilt: #{$tilt};
+     --lift: #{$lift};
+     --float-duration: #{$duration};
+     --float-delay: #{$delay};
+    }
+   }
+
+   @media (prefers-reduced-motion: reduce) {
+    animation: none;
+   }
   }
  }
 
@@ -2243,6 +2306,16 @@
  to {
   -webkit-mask-position: -25% center;
   mask-position: -25% center;
+ }
+}
+
+@keyframes hero-coin-float {
+ 0%,
+ 100% {
+  transform: translate3d(0, 0, 0) rotate(0deg);
+ }
+ 50% {
+  transform: translate3d(0, calc(var(--lift) * -1), 0) rotate(4deg);
  }
 }
 
