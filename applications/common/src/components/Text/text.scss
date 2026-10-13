@@ -141,6 +141,22 @@
   color: $appText;
  }
 
+ .edit-profile-modal &.dialog-title {
+  display: flex;
+  align-items: center;
+  min-height: 2rem;
+  padding-right: 2.5rem;
+  font-size: $font22;
+ }
+
+ &.field-hint {
+  display: block;
+  margin-top: $space-8;
+  font-family: $fontOutfitMedium;
+  font-size: $font12;
+  color: $appTextMuted;
+ }
+
  &.value-heading {
   font-family: $fontOutfitExtraBold;
   font-size: $font16;
@@ -981,12 +997,42 @@
 
  &.profile-id-name {
   display: block;
-  font-family: $fontOutfitExtraBold;
-  font-size: $font15;
-  @include from(phone) {
-   font-size: $font18;
-  }
+  font-family: $fontOutfitBlack;
+  font-size: $font22;
   color: $appText;
+ }
+
+ &.profile-score-text {
+  font-family: $fontOutfitExtraBold;
+  font-size: $font12;
+  color: inherit;
+ }
+
+ &.profile-stat-val {
+  max-width: 100%;
+  font-family: $fontOutfitExtraBold;
+  font-size: $font18;
+  color: $appText;
+
+  &.pos {
+   color: $greenishTeal;
+  }
+ }
+
+ &.profile-stat-lbl {
+  max-width: 100%;
+  font-family: $fontOutfitMedium;
+  font-size: $font12;
+  color: $appTextMuted;
+ }
+
+ .profile-list &.stat-title {
+  font-size: $font14;
+ }
+
+ .profile-list &.stat-val {
+  font-family: $fontOutfitSemiBold;
+  font-size: $font14 !important;
  }
 
  &.sheet-title {
@@ -1109,7 +1155,8 @@
   }
  }
 
- &.wallet-tx-group-label {
+ &.wallet-tx-group-label,
+ &.profile-section-heading {
   display: block;
   font-family: $fontOutfitBold;
   font-size: $font12;

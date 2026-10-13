@@ -721,6 +721,11 @@
    padding: $space-8 0;
    border-bottom: 1px solid $appLine;
   }
+
+  .profile-list & {
+   gap: $space-12;
+   padding: 0.875rem $space-16;
+  }
  }
 
  &.rules-title-row {
@@ -1034,6 +1039,65 @@
   gap: $space-8;
  }
 
+ &.profile-id-top {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: -$space-12;
+ }
+
+ &.profile-avatar-wrap {
+  position: relative;
+  margin-bottom: 0.875rem;
+ }
+
+ &.profile-score-badge {
+  position: absolute;
+  left: 50%;
+  bottom: -0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.125rem $space-8;
+  border: 2px solid $appSurface;
+  border-radius: 999px;
+  background: $gold;
+  color: $primaryContrast;
+  transform: translateX(-50%);
+
+  svg {
+   fill: currentColor;
+  }
+ }
+
+ &.profile-stats-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin: $space-16 (-$space-16) 0;
+  border-top: 1px solid $appLine;
+ }
+
+ &.profile-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  min-width: 0;
+  padding: 0.875rem $space-8;
+  color: $gold;
+
+  & + & {
+   border-left: 1px solid $appLine;
+  }
+ }
+
+ &.profile-row-label {
+  display: flex;
+  align-items: center;
+  gap: $space-12;
+  flex-shrink: 0;
+  color: $gold;
+ }
+
  &.profile-name-row {
   display: flex;
   align-items: center;
@@ -1041,10 +1105,10 @@
   min-width: 0;
 
   img {
-   width: 1.25rem;
-   height: 0.9375rem;
+   width: 1.625rem;
+   height: 1.125rem;
    flex-shrink: 0;
-   border-radius: 2px;
+   border-radius: 3px;
    object-fit: cover;
   }
  }
@@ -1052,7 +1116,7 @@
  &.edit-profile-form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.125rem;
  }
 
  &.wallet-hero {

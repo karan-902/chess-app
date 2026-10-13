@@ -116,9 +116,17 @@
  }
 
  &.profile-id-card {
-  padding: 1.1rem 1rem;
-  margin-bottom: 1.1rem;
+  padding: $space-16 $space-16 0;
+  margin-bottom: $space-24;
   border-radius: $radius-card;
+  overflow: hidden;
+  background:
+   radial-gradient(ellipse at 50% 30%, alpha($gold, 0.08), transparent 60%),
+   $appSurface;
+
+  &.skeleton {
+   padding-bottom: $space-16;
+  }
  }
 
  &.lb-row {

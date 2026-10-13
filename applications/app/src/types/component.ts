@@ -41,6 +41,7 @@ export interface IUsernameFieldProps<TValues extends { username: string }> {
  formik: FormikProps<TValues>;
  inputRef?: Ref<HTMLInputElement>;
  customClass?: string;
+ showHint?: boolean;
 }
 
 export interface IStatRow {

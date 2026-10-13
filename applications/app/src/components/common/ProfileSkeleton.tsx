@@ -10,9 +10,9 @@ import { accountText } from "@gopvp/app/src/constants/message";
 export default function ProfileSkeleton() {
  return (
   <>
-   <Card customClass="profile-id-card">
+   <Card customClass="profile-id-card skeleton">
     <Box customClass="profile-hero">
-     <Skeleton variant="circular" width={72} height={72} />
+     <Skeleton variant="circular" width={96} height={96} />
      <Box customClass="profile-name-row">
       <Text customClass="profile-id-name">
        <Skeleton customClass="text" width={100} />
@@ -22,10 +22,13 @@ export default function ProfileSkeleton() {
     </Box>
    </Card>
 
-   <Text component="h3" customClass="subsection-heading section-heading">
+   <Text
+    component="h3"
+    customClass="subsection-heading profile-section-heading"
+   >
     {accountText}
    </Text>
-   <Card customClass="stat-list">
+   <Card customClass="stat-list profile-list">
     {renderSkeletons(PROFILE_ACCOUNT_SKELETON_ROWS, StatRowSkeleton)}
    </Card>
   </>

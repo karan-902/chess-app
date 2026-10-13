@@ -20,6 +20,13 @@
   margin-bottom: 0.4rem;
  }
 
+ &.edit-profile-modal {
+  max-width: 21.875rem;
+  gap: 1.125rem;
+  padding: 1.25rem;
+  border-radius: 20px !important;
+ }
+
  &.rejoin-game-modal {
   .modal-title {
    padding: 0;

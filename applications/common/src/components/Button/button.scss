@@ -465,14 +465,15 @@
  }
 
  &.profile-edit-icon-btn {
-  position: absolute;
-  top: 0.9rem;
-  right: 0.9rem;
-  width: 40px;
-  height: 40px;
+  position: relative;
+  z-index: $z-raised;
+  width: 2.125rem;
+  height: 2.125rem;
+  min-height: 0;
   padding: 0;
   border-radius: 50%;
   border: 1px solid $appBtnBorder;
+  box-shadow: none;
   color: $appText;
  }
 

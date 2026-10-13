@@ -1,0 +1,36 @@
+@use "default.scss" as *;
+
+.common-switch {
+ &.square-toggle {
+  width: 2.875rem;
+  height: 1.625rem;
+  padding: 0;
+
+  .MuiSwitch-switchBase {
+   padding: 3px;
+   color: $white;
+
+   &.Mui-checked {
+    transform: translateX(1.25rem);
+    color: $white;
+
+    + .MuiSwitch-track {
+     background: $gold;
+     opacity: 1;
+    }
+   }
+  }
+
+  .MuiSwitch-thumb {
+   width: 1.25rem;
+   height: 1.25rem;
+   box-shadow: 0 1px 3px alpha($black, 0.25);
+  }
+
+  .MuiSwitch-track {
+   border-radius: 8px;
+   background: alpha($appText, 0.2);
+   opacity: 1;
+  }
+ }
+}

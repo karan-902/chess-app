@@ -46,6 +46,9 @@ export const gloryStartsHereText = "Glory starts here";
 export const beenHereBeforeText = "Been Here Before";
 export const yourWinsAreWaitingText = "Your wins are waiting";
 export const logInText = "Log in";
+export const usernameHintText = (min: number, max: number) =>
+ `${min} to ${max} characters, letters and numbers`;
+export const earningsText = "Earnings";
 export const changeText = "Change";
 export const forgotYourPasswordText = "Forgot your password?";
 export const resetNowText = "Reset now";

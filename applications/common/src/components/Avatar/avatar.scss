@@ -100,9 +100,10 @@
  }
 
  &.lg {
-  width: 4.5rem;
-  height: 4.5rem;
-  font-size: $font30;
-  font-family: $fontOutfitExtraBold;
+  width: 6rem;
+  height: 6rem;
+  font-size: $font40;
+  font-family: $fontOutfitBlack;
+  box-shadow: 0 0 24px alpha($gold, 0.45);
  }
 }
