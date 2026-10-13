@@ -693,6 +693,15 @@
   svg {
    vertical-align: top;
   }
+
+  .rules-card & {
+   font-family: $fontOutfitSemiBold;
+   font-size: $font14 !important;
+  }
+
+  &.neg {
+   color: $paleRed;
+  }
  }
  &.score-hero-label {
   font-family: $fontOutfitSemiBold;
@@ -733,6 +742,10 @@
   font-size: $font16;
   color: $appTextMuted;
   flex-shrink: 0;
+
+  .rules-card & {
+   color: $appText;
+  }
  }
 
  &.lb-rank {
@@ -963,13 +976,26 @@
   color: $appText;
  }
 
+ &.rules-title {
+  font-family: $fontOutfitBold;
+  font-size: $font20;
+  color: $appText;
+ }
+
  &.rules-text {
   display: block;
+  font-family: $fontOutfitRegular;
   font-size: $font14;
-  line-height: 1.6;
-  color: $appTextMuted;
+  line-height: 1.45;
+  color: $appText;
   white-space: normal;
   overflow: visible;
+ }
+
+ &.rules-example-title {
+  font-family: $fontOutfitSemiBold;
+  font-size: $font13;
+  color: $appTabActive;
  }
 
  &.rules-about {

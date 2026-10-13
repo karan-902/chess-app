@@ -29,18 +29,27 @@ export const playFreeText = "play free";
 export const difficultyText = "Difficulty";
 export const timeControlText = "Time control";
 export const howBettingWorksText = "How Betting Works";
-export const bettingExplainedText =
- "Every match is winner-take-most. Both players bet the same amount when the game starts; the winner takes the pot minus a 13% platform fee.";
+export const winnerTakeMostText = "Every match is winner-take-most";
+export const equalBetText =
+ "Both players bet the same amount when the game starts";
+export const winnerTakesPotText =
+ "The winner takes the pot minus a 13% platform fee";
+export const withdrawableWinningsText =
+ "Only winnings and draws are withdrawable, deposits are for playing";
 export const payoutsText = "Payouts";
 export const anyWinText = "Any win";
 export const potMinusFeeText = "Pot − 13% fee";
 export const splitPotMinusFeeText = "Split pot − fee";
 export const inactiveTooLongText = "Inactive too long";
 export const forfeitText = "Forfeit";
-export const payoutExampleText =
- "Example: $10 bet each makes a $20 pot. The winner gets $17.40; a draw returns $8.70 each.";
+export const exampleText = "Example";
+export const examplePotText = "$10 bet each makes a $20 pot";
+export const exampleWinnerText = "Winner gets $17.40";
+export const exampleDrawText = "A draw returns $8.70 each";
 export const fairMatchingText = "Fair Matching";
-export const fairMatchingExplainedText =
- "You're matched by rating and bet size, not queue order — so the board you get is close to even before the first move.";
+export const matchedByScoreText =
+ "You're matched by score and bet size, not queue order";
+export const evenBoardText =
+ "So the board you get is close to even before the first move";
 export const pieceSetCreditText =
- 'Chess - Piece set "cburnett" by Colin M.L. Burnett, CC BY-SA 3.0';
+ 'Chess piece set "cburnett" by Colin M.L. Burnett, CC BY-SA 3.0';
