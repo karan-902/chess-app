@@ -25,12 +25,12 @@
 
  &.filter-dropdown-btn {
   gap: 0.35rem;
-  height: 40px !important;
+  height: 2.625rem !important;
   min-width: 96px !important;
-  padding: 0 0.75rem;
+  padding: 0.625rem 1rem;
   border-radius: 1000px;
-  border: 1px solid transparent;
-  background: $appBg;
+  border: 1px solid $appCardBorder;
+  background: $appSecondary;
   color: $appText;
 
   .button-text {
@@ -340,23 +340,27 @@
 
  &.tx-filter-chip {
   flex-shrink: 0;
-  background: transparent;
+  min-height: 2.375rem;
+  background: $appSecondary;
   border: 1px solid $appCardBorder;
   border-radius: 999px;
-  padding: 0.4rem 0.75rem;
-  font-size: $font12;
-  font-family: $fontOutfitExtraBold;
+  padding: 0.4375rem 1rem;
   color: $appTextMuted;
   white-space: nowrap;
+
+  .button-text {
+   font-family: $fontOutfitSemiBold !important;
+   font-size: $font14;
+  }
 
   &:hover:not(.Mui-disabled) {
    border-color: alpha($gold, 0.35);
   }
 
   &.active {
-   border-color: $gold;
-   color: $gold;
-   background: alpha($gold, 0.08);
+   border: 1.5px solid $gold;
+   color: $appTabActive;
+   background: alpha($gold, 0.12);
   }
  }
 
