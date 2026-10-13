@@ -48,6 +48,7 @@ export interface IStatRow {
  value: string | number;
  icon?: LucideIcon;
  tone?: "gold" | "silver" | "bronze";
+ isPrize?: boolean;
 }
 
 export interface IStatListProps {

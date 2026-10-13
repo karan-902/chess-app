@@ -690,6 +690,40 @@
    vertical-align: top;
   }
  }
+ &.score-hero-label {
+  font-family: $fontOutfitSemiBold;
+  font-size: $font13;
+  color: $appText;
+ }
+
+ &.score-hero-val {
+  font-family: $fontOutfitBlack;
+  font-size: $font56;
+  line-height: 1;
+  color: $appTabActive;
+ }
+
+ &.stat-card-label {
+  font-family: $fontOutfitMedium;
+  font-size: $font13;
+  color: $appText;
+ }
+
+ &.stat-card-val {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: $fontOutfitExtraBold;
+  font-size: $font30;
+  line-height: 1.1;
+  color: $appText;
+
+  &.prize {
+   color: $appPrize;
+  }
+ }
+
  &.stat-title {
   font-family: $fontOutfitMedium !important;
   font-size: $font16;
