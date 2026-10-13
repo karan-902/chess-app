@@ -273,9 +273,13 @@
   }
 
   .bet-card.insufficient & {
-   background: transparent !important;
-   border-color: $gold;
+   background: alpha($gold, 0.12) !important;
+   border: 1px solid $gold;
    color: $gold !important;
+
+   &:hover {
+    background: alpha($gold, 0.22) !important;
+   }
   }
   @include from(tablet) {
    height: 30px !important;

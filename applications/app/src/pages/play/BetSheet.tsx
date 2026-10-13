@@ -21,7 +21,10 @@ import {
  tipText,
 } from "@gopvp/app/src/constants/message";
 import { renderSkeletons } from "@gopvp/app/src/utils/skeleton";
-import { POOL_SKELETON_ROWS } from "@gopvp/app/src/constants/limit";
+import {
+ POOL_SKELETON_ROWS,
+ MIN_ROOM_FEE_USD,
+} from "@gopvp/app/src/constants/limit";
 
 export default function BetSheet({
  open,
@@ -35,6 +38,7 @@ export default function BetSheet({
  onRoomOpen,
  onInsufficientBalance,
 }: IBetSheetProps) {
+ const canAffordRoom = usdValue >= MIN_ROOM_FEE_USD;
  return (
   <CustomDrawer
    anchor="bottom"
@@ -93,7 +97,13 @@ export default function BetSheet({
       </Button>
      </Card>
     )}
-    <Card customClass={classNames("bet-card", "friend")}>
+    <Card
+     customClass={classNames(
+      "bet-card",
+      "friend",
+      !canAffordRoom && "insufficient",
+     )}
+    >
      <Text customClass="bet-card-tc">{friendlyText}</Text>
      <Text customClass="bet-card-practice-title">{roomText}</Text>
      <Text customClass="caption">{customFeeText}</Text>
@@ -102,9 +112,9 @@ export default function BetSheet({
       variant="contained"
       fullWidth
       customClass="common-play"
-      onClick={onRoomOpen}
+      onClick={canAffordRoom ? onRoomOpen : onInsufficientBalance}
      >
-      {playText}
+      {canAffordRoom ? playText : addFundsText}
      </Button>
     </Card>
    </Box>
