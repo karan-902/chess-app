@@ -715,21 +715,44 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-family: $fontOutfitSemiBold;
-  font-size: $font16;
+  font-family: $fontOutfitBold;
+  font-size: $font15;
   font-weight: 400;
   letter-spacing: 0.01em;
   color: $appText;
  }
 
  &.gr-score-label {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-4;
   flex-shrink: 0;
-  padding: 0.1rem $space-8;
-  border-radius: 4px;
-  background: alpha($appText, 0.08);
+  padding: 0.125rem $space-8;
+  border-radius: 8px;
+  background: alpha($gold, 0.14);
   font-family: $fontOutfitSemiBold;
-  font-size: $font12;
-  color: $appTextMuted;
+  font-size: $font11;
+  color: $gold;
+
+  svg {
+   width: 0.6875rem;
+   height: 0.6875rem;
+   fill: currentColor;
+  }
+ }
+
+ &.gr-draw-offer-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-family: $fontOutfitSemiBold;
+  font-size: $font14;
+  color: $appText;
+
+  b {
+   font-family: $fontOutfitBold;
+   font-weight: 400;
+   color: $gold;
+  }
  }
 
  &.gr-advantage {
@@ -769,8 +792,9 @@
   display: block;
   flex-shrink: 0;
   min-width: 5.5rem;
-  padding: $space-4 $space-12;
-  border-radius: 0.5rem;
+  padding: 0.375rem $space-12;
+  border: 1px solid $appCardBorder;
+  border-radius: $radius-card;
   background: alpha($appText, 0.06);
   text-align: center;
   font-family: $fontOutfitExtraBold;
@@ -785,8 +809,10 @@
 
   .gr-row.active & {
    background: $gold;
+   border-color: $gold;
    color: $primaryContrast;
    font-weight: 600;
+   box-shadow: 0 0 14px alpha($gold, 0.35);
   }
 
   &.low {
@@ -794,16 +820,18 @@
 
    .gr-row.active & {
     background: $paleRed;
+    border-color: $paleRed;
     color: $primaryContrast;
+    box-shadow: none;
    }
   }
  }
 
  &.gr-move-n {
-  font-family: $fontOutfitRegular;
-  font-size: $font14;
-  opacity: 0.85;
-  margin-right: 0.3rem;
+  font-family: $fontOutfitMedium;
+  font-size: $font12;
+  color: $appTextMuted;
+  margin-right: $space-4;
  }
 
  &.gr-promotion-label {

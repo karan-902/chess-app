@@ -417,6 +417,21 @@
 
  &.gr-draw-btn {
   color: $appText !important;
+
+  .MuiButton-startIcon {
+   margin: 0;
+
+   svg {
+    width: 1.25rem;
+    height: 1.25rem;
+   }
+  }
+ }
+
+ &.gr-draw-btn,
+ &.gr-resign-btn {
+  flex: 1 1 0;
+  height: 3.25rem;
  }
 
  &.gr-promotion-btn {

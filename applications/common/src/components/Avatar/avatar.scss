@@ -39,6 +39,22 @@
   color: $gold;
  }
 
+ &.gr-avatar {
+  flex-shrink: 0;
+  width: 2.625rem;
+  height: 2.625rem;
+  border: 2px solid alpha($gold, 0.55);
+  background: $appSecondary !important;
+  font-family: $fontOutfitBlack;
+  font-size: $font18;
+  color: $appText;
+
+  .gr-row.active & {
+   border-color: $gold;
+   color: $gold;
+  }
+ }
+
  &.lg {
   width: 4.5rem;
   height: 4.5rem;

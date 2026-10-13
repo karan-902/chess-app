@@ -6,6 +6,7 @@ export const firstMoveText = (seconds: number) => `First move in ${seconds}s`;
 export const cancelPremovesText = "Cancel premoves";
 export const drawOfferDeclinedText = "Draw offer declined";
 export const opponentOfferedDrawText = "Opponent offered a draw";
+export const offersDrawText = "offers a draw";
 export const waitingForOpponentText = "Waiting for opponent…";
 export const acceptText = "Accept";
 export const declineText = "Decline";

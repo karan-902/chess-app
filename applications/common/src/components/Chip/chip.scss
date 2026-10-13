@@ -20,14 +20,14 @@
   border: none;
   transition: none;
   margin-right: 0.15rem;
-  border-radius: 4px;
+  border-radius: 8px !important;
   cursor: pointer;
 
   .MuiChip-label {
-   font-family: $fontOutfitRegular;
-   font-size: $font14;
+   font-family: $fontOutfitSemiBold;
+   font-size: $font13;
    color: $appText;
-   padding: 0.15rem 0.5rem;
+   padding: 0.3125rem 0.4375rem;
    overflow: visible;
    text-overflow: unset;
   }
