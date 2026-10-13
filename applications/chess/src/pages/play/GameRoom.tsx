@@ -94,6 +94,7 @@ export default function GameRoom({ mode }: IGameRoomProps) {
   getCapturedPieces,
   getPremoveMoves,
   getPremovePieceColor,
+  getPremovePieceCode,
  } = useChessGame();
 
  const { viewIndex, isReviewing, displayFen, goBack, goForward, jumpTo } =
@@ -406,6 +407,15 @@ export default function GameRoom({ mode }: IGameRoomProps) {
     fenHistory={fenHistory}
     viewIndex={viewIndex}
     onJump={jumpTo}
+    premove={
+     !isReviewing && premoveQueue.length > 0
+      ? {
+         ...premoveQueue[0],
+         pieceCode: getPremovePieceCode(premoveQueue[0].from),
+        }
+      : null
+    }
+    onCancelPremoves={clearPremoves}
     isReviewing={isReviewing}
     goBack={goBack}
     goForward={goForward}
@@ -421,8 +431,6 @@ export default function GameRoom({ mode }: IGameRoomProps) {
     clock={myClock}
     clockReady={clockReady}
     lowTime={clockReady && myTimeMs < CLOCK_LOW_TIME_MS}
-    hasPremoves={!isReviewing && premoveQueue.length > 0}
-    onCancelPremoves={clearPremoves}
     firstMoveSeconds={myTurnActive ? firstMoveSeconds : null}
    />
 

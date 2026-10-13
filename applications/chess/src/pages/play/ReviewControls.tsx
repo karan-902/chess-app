@@ -12,6 +12,8 @@ export default function ReviewControls({
  fenHistory,
  viewIndex,
  onJump,
+ premove,
+ onCancelPremoves,
  isReviewing,
  goBack,
  goForward,
@@ -30,6 +32,8 @@ export default function ReviewControls({
     fenHistory={fenHistory}
     viewIndex={viewIndex}
     onJump={onJump}
+    premove={premove}
+    onCancelPremoves={onCancelPremoves}
    />
    <CustomIconButton
     customClass="gr-review-btn"

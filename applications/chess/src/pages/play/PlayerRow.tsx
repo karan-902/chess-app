@@ -2,7 +2,6 @@ import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
-import Button from "@gopvp/common/src/components/Button/Button";
 import CustomAvatar from "@gopvp/common/src/components/Avatar/Avatar";
 import { icons } from "@gopvp/common/src/components/images";
 import PieceIcon from "@gopvp/chess/src/components/board/PieceIcon";
@@ -11,7 +10,6 @@ import { FIRST_MOVE_URGENT_SECONDS } from "@gopvp/chess/src/constants/limit";
 import {
  reconnectingText,
  firstMoveText,
- cancelPremovesText,
 } from "@gopvp/chess/src/constants/message";
 
 function capturedCode(type: string, color: "w" | "b") {
@@ -39,8 +37,6 @@ export default function PlayerRow({
  lowTime,
  isReconnecting,
  firstMoveSeconds,
- hasPremoves,
- onCancelPremoves,
 }: IPlayerRowProps) {
  return (
   <Box
@@ -103,19 +99,6 @@ export default function PlayerRow({
      )} */}
     </Box>
    </Box>
-   {hasPremoves && (
-    <Button
-     type="button"
-     variant="text"
-     size="small"
-     startIcon="x"
-     disableRipple
-     customClass="gr-premove-cancel"
-     onClick={onCancelPremoves}
-    >
-     {cancelPremovesText}
-    </Button>
-   )}
    <Text customClass={classNames("gr-clock", lowTime && "low")}>
     {clockReady ? (
      clock

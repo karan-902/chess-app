@@ -4,6 +4,7 @@ export const computerText = "Computer";
 export const reconnectingText = "Reconnecting…";
 export const firstMoveText = (seconds: number) => `First move in ${seconds}s`;
 export const cancelPremovesText = "Cancel premoves";
+export const premoveRouteText = (from: string, to: string) => `${from} → ${to}`;
 export const drawOfferDeclinedText = "Draw offer declined";
 export const opponentOfferedDrawText = "Opponent offered a draw";
 export const offersDrawText = "offers a draw";
