@@ -986,24 +986,6 @@
   color: inherit;
  }
 
- &.profile-stat-val {
-  max-width: 100%;
-  font-family: $fontOutfitExtraBold;
-  font-size: $font18;
-  color: $appText;
-
-  &.pos {
-   color: $greenishTeal;
-  }
- }
-
- &.profile-stat-lbl {
-  max-width: 100%;
-  font-family: $fontOutfitMedium;
-  font-size: $font12;
-  color: $appTextMuted;
- }
-
  .profile-list &.stat-title {
   font-size: $font14;
  }
@@ -1085,6 +1067,14 @@
    color: $appText;
   }
 
+  .compact & {
+   order: 1;
+   max-width: 100%;
+   font-family: $fontOutfitMedium;
+   font-size: $font12;
+   letter-spacing: normal;
+  }
+
   .stake & {
    font-family: $fontOutfitExtraBold;
    line-height: 1.6;
@@ -1148,6 +1138,13 @@
    white-space: nowrap;
    font-family: $fontOutfitExtraBold;
    font-size: $font30;
+  }
+
+  .compact & {
+   max-width: 100%;
+   font-family: $fontOutfitExtraBold;
+   font-size: $font18;
+   line-height: normal;
   }
 
   .stake & {

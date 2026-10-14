@@ -903,8 +903,8 @@
  }
 
  &.stat-card-icon {
-  width: 2.25rem;
-  height: 2.25rem;
+  width: 1.5rem;
+  height: 1.5rem;
 
   svg {
    width: 1.5rem;
@@ -1284,24 +1284,9 @@
 
  &.profile-stats-strip {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  margin: $space-16 (-$space-16) 0;
-  border-top: 1px solid alpha($appText, 0.08);
-  background: alpha($appText, 0.03);
- }
-
- &.profile-stat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
-  min-width: 0;
-  padding: 0.875rem $space-8;
-  color: $gold;
-
-  & + & {
-   border-left: 1px solid alpha($appText, 0.08);
-  }
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: $space-8;
+  margin: $space-16 0;
  }
 
  &.profile-row-label {
@@ -2307,6 +2292,14 @@
    justify-content: flex-end;
   }
 
+  .compact & {
+   display: contents;
+
+   > svg {
+    color: $gold;
+   }
+  }
+
   .result-tiles.versus & {
    flex-direction: row-reverse;
 
@@ -2332,6 +2325,15 @@
    min-width: 0;
    padding: 0.875rem;
    text-align: left;
+  }
+
+  &.compact {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 0.25rem;
+   min-width: 0;
+   padding: 0.875rem $space-8;
   }
 
   &.stake {

@@ -21,6 +21,7 @@ import CustomSwitch from "@gopvp/common/src/components/Switch/Switch";
 // import CustomChip from "@gopvp/common/src/components/Chip/Chip";
 import CustomAvatar from "@gopvp/common/src/components/Avatar/Avatar";
 import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
+import StatTile from "@gopvp/common/src/components/StatTile/StatTile";
 import ProfileSkeleton from "@gopvp/app/src/components/common/ProfileSkeleton";
 import UsernameField from "@gopvp/app/src/components/common/UsernameField";
 import { useReduxSelector, useReduxDispatch } from "@gopvp/app/src/redux/hooks";
@@ -257,13 +258,16 @@ export default function Profile() {
 
       <Box customClass="profile-stats-strip">
        {statItems.map(({ label, value, Icon, isMoney }) => (
-        <Box key={label} customClass="profile-stat">
-         <Icon size={18} strokeWidth={2.2} />
-         <Text customClass={classNames("profile-stat-val", isMoney && "pos")}>
-          {statsLoading ? <Skeleton customClass="text" width={40} /> : value}
-         </Text>
-         <Text customClass="profile-stat-lbl">{label}</Text>
-        </Box>
+        <StatTile
+         key={label}
+         layout="compact"
+         icon={<Icon size={18} strokeWidth={2.2} />}
+         label={label}
+         value={
+          statsLoading ? <Skeleton customClass="text" width={40} /> : value
+         }
+         valueClass={classNames(isMoney && "pos")}
+        />
        ))}
       </Box>
      </Card>

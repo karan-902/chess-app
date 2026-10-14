@@ -2,6 +2,7 @@ import Box from "@gopvp/common/src/components/Box/Box";
 import Card from "@gopvp/common/src/components/Card/Card";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
+import StatTile from "@gopvp/common/src/components/StatTile/StatTile";
 import StatRowSkeleton from "@gopvp/app/src/components/common/StatRowSkeleton";
 import { renderSkeletons } from "@gopvp/app/src/utils/skeleton";
 import {
@@ -30,15 +31,15 @@ export default function ProfileSkeleton() {
     </Box>
     <Box customClass="profile-stats-strip">
      {Array.from({ length: PROFILE_STAT_SKELETON_COUNT }, (_, index) => (
-      <Box key={index} customClass="profile-stat">
-       <Skeleton variant="rectangular" customClass="profile-stat-icon-skeleton" />
-       <Text customClass="profile-stat-val">
-        <Skeleton customClass="text" width={40} />
-       </Text>
-       <Text customClass="profile-stat-lbl">
-        <Skeleton customClass="text" width={56} />
-       </Text>
-      </Box>
+      <StatTile
+       key={index}
+       layout="compact"
+       icon={
+        <Skeleton variant="rectangular" customClass="profile-stat-icon-skeleton" />
+       }
+       label={<Skeleton customClass="text" width={56} />}
+       value={<Skeleton customClass="text" width={40} />}
+      />
      ))}
     </Box>
    </Card>
