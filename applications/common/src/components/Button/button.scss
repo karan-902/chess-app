@@ -1,124 +1,182 @@
 @use "default.scss" as *;
 
+.common-button-ref {
+ display: contents;
+}
+
 .common-button {
- min-width: 0px !important;
- display: inline-flex;
- align-items: center;
- justify-content: center;
- gap: 0.5rem;
- border: none;
- border-radius: $radius-card;
+ display: inline-flex !important;
+ align-items: stretch;
+ min-width: 0;
+ height: auto;
  min-height: 2.625rem;
+ padding: 0 !important;
+ border: 0 !important;
+ background: transparent !important;
+ color: $appText;
  font-family: $fontOutfitRegular;
  font-weight: 600;
  letter-spacing: 0;
  text-transform: none;
  cursor: pointer;
- transition:
-  transform 0.12s cubic-bezier(0.22, 1, 0.36, 1),
-  box-shadow 0.12s cubic-bezier(0.22, 1, 0.36, 1);
+
+ &.full-width {
+  display: flex !important;
+  width: 100%;
+ }
+
+ &:focus-visible {
+  outline: 2px solid $gold;
+  outline-offset: 2px;
+ }
+
+ .button-face {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  height: auto !important;
+  padding: var(--btn-pad, 0 1rem) !important;
+  border: var(--btn-border, 0 solid transparent) !important;
+  border-radius: var(--btn-radius, 0);
+  background: var(--btn-bg, transparent) !important;
+  transition:
+   transform 0.12s ease-in-out,
+   background-color 0.15s ease,
+   border-color 0.15s ease;
+
+  > div {
+   display: flex;
+   align-items: center;
+   justify-content: var(--btn-justify, center);
+   gap: var(--btn-gap, 0.5rem);
+   width: 100%;
+   min-width: 0;
+   color: inherit;
+  }
+ }
+
+ .button-edge {
+  &.right {
+   background-color: var(--btn-edge-right, transparent) !important;
+  }
+
+  &.bottom {
+   background-color: var(--btn-edge-bottom, transparent) !important;
+  }
+
+  &.top,
+  &.left {
+   display: none;
+  }
+ }
+
+ &:not(.contained):active .button-face {
+  transform: none !important;
+ }
 
  .button-text {
   font-family: $fontOutfitBold !important;
   font-size: $font16;
+  color: inherit;
  }
 
- &.filter-dropdown-btn {
-  gap: 0.35rem;
-  height: 2.625rem !important;
-  min-width: 6rem !important;
-  padding: 0.625rem 1rem;
-  border-radius: 0;
-  border: 1px solid alpha($appText, 0.12);
-  background: alpha($appText, 0.03);
+ .button-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+
+  svg {
+   width: 1.25rem;
+   height: 1.25rem;
+  }
+ }
+
+ .button-spinner {
+  width: 1.375rem;
+  height: 1.375rem;
+  border: 2.5px solid color-mix(in srgb, currentColor 22%, transparent);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: button-spin 0.75s linear infinite;
+  will-change: transform;
+
+  &.on-dark {
+   color: $primaryContrast;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+   animation-duration: 1.6s;
+  }
+ }
+
+ &.size-small {
+  min-height: 2rem;
+ }
+
+ &.size-large {
+  min-height: 3.25rem;
+ }
+
+ &.contained {
+  min-height: 3.25rem;
+  --btn-bg: #{$btnGoldFill};
+  --btn-edge-right: color-mix(in srgb, #{$primaryDark} 55%, #{$btnEdgeGold});
+  --btn-edge-bottom: #{$btnEdgeGold};
+  color: $primaryContrast !important;
+
+  .button-face {
+   height: calc(100% - 3px) !important;
+  }
+
+  .button-spinner {
+   color: $primaryContrast;
+  }
+
+  @media screen and (max-width: 568px) {
+   min-height: 2rem;
+  }
+ }
+
+ &.outlined {
+  --btn-bg: #{$btnGhostBg};
+  --btn-border: 1px solid #{$btnGhostBorder};
   color: $appText;
 
-  .button-text {
-   font-size: $font14;
-   letter-spacing: 0;
+  &:hover:not(.disabled) {
+   --btn-bg: #{alpha($appText, 0.1)};
   }
 
-  .MuiButton-endIcon {
-   margin: 0;
-
-   svg {
-    width: 1.125rem;
-    height: 1.125rem;
-   }
-  }
-
-  &.active {
-   border: 1.5px solid $gold;
+  &:active:not(.disabled) {
+   --btn-bg: #{alpha($appText, 0.14)};
   }
  }
- &.Mui-disabled:not(.loading) {
-  background: alpha($appText, 0.06) !important;
-  border: 1px solid alpha($appText, 0.1) !important;
-  box-shadow: none !important;
+
+ &.text {
+  color: $appText;
+
+  &:hover:not(.disabled) {
+   --btn-bg: #{alpha($primary, 0.08)};
+  }
+ }
+
+ &.disabled:not(.loading) {
+  --btn-bg: #{alpha($appText, 0.06)} !important;
+  --btn-border: 1px solid #{alpha($appText, 0.1)} !important;
+  --btn-edge-right: transparent !important;
+  --btn-edge-bottom: transparent !important;
+
+  .button-face {
+   height: 100% !important;
+   margin: 0 !important;
+  }
+
   .button-text {
    font-family: $fontOutfitBold !important;
    color: alpha($appText, 0.35);
   }
-  .MuiButton-icon svg {
+
+  .button-icon svg {
    color: alpha($appText, 0.35);
-  }
- }
-
- &.MuiButton-sizeSmall {
-  min-height: 2rem;
- }
- &.MuiButton-sizeLarge {
-  min-height: 3.25rem;
- }
-
- &.MuiButton-contained {
-  min-height: 3.25rem;
-  background: $btnGoldFill;
-  color: $primaryContrast !important;
-  border: 1px solid alpha(#fff1b8, 0.8);
-  @include neo-edge($btnEdgeGold, 3px, 4px);
-  .MuiButton-icon svg {
-   color: $primaryContrast;
-  }
-  @media screen and (max-width: 568px) {
-   min-height: 2rem;
-  }
-
-  @media (hover: hover) {
-   &:hover:not(.Mui-disabled) {
-    background: $btnGoldFill;
-    opacity: 1;
-    @include neo-edge($btnEdgeGold, 3px, 4px);
-   }
-  }
-
-  &:active:not(.Mui-disabled) {
-   transform: translate3d(2px, 3px, 0);
-   @include neo-edge($btnEdgeGold, 1px);
-  }
- }
-
- &.MuiButton-outlined {
-  background: $btnGhostBg;
-  border: 1px solid $btnGhostBorder;
-  @include neo-edge($btnGhostEdge, 3px, 4px);
-  color: $appText;
-
-  &:hover:not(.Mui-disabled) {
-   @include neo-edge($btnGhostEdge, 3px, 4px);
-  }
-
-  &:active:not(.Mui-disabled) {
-   transform: translate3d(2px, 3px, 0);
-   @include neo-edge($btnGhostEdge, 1px);
-  }
- }
-
- &.MuiButton-text {
-  color: $appText;
-
-  &:hover:not(.Mui-disabled) {
-   background: alpha($primary, 0.08);
   }
  }
 
@@ -127,61 +185,107 @@
   pointer-events: none;
  }
 
- &:hover:not(.Mui-disabled) {
+ &:hover:not(.disabled) {
   opacity: 0.92;
  }
 
- @media (prefers-reduced-motion: reduce) {
-  transition: none;
- }
-
- &.appbar-back-btn {
-  align-self: flex-start;
-  gap: 0.35rem;
-  min-height: 0;
-  padding: 0.75rem 1.1rem;
-  background: transparent;
+ &.filter-dropdown-btn {
+  --btn-gap: 0.35rem;
+  --btn-pad: 0.625rem 1rem;
+  --btn-border: 1px solid #{alpha($appText, 0.12)};
+  --btn-bg: #{alpha($appText, 0.03)};
+  height: 2.625rem !important;
+  min-width: 6rem !important;
   color: $appText;
 
   .button-text {
-   font-size: $font16;
+   font-size: $font14;
    letter-spacing: 0;
   }
 
-  .MuiButton-startIcon {
-   margin: 0;
-
-   svg {
-    width: 1.75rem;
-    height: 1.25rem;
-    stroke-width: 1.6;
-   }
+  .button-icon.end svg {
+   width: 1.125rem;
+   height: 1.125rem;
   }
 
-  &:hover:not(.Mui-disabled) {
-   background: transparent;
+  &.active {
+   --btn-border: 1.5px solid #{$gold};
+  }
+ }
+
+ &.appbar-back-btn {
+  --btn-gap: 0.5rem;
+  --btn-pad: 0.75rem 1.25rem;
+  align-self: flex-start;
+  min-height: 0;
+  color: $appText;
+
+  .button-text {
+   font-family: $fontOutfitMedium !important;
+   font-size: $font15;
+   letter-spacing: 0;
+   color: alpha($appText, 0.7);
+  }
+
+  .button-icon.start svg {
+   width: 1.75rem;
+   height: 1.25rem;
+   stroke-width: 1.6;
+  }
+
+  &:hover:not(.disabled) {
+   --btn-bg: transparent;
+  }
+ }
+
+ &.sheet-cancel-link {
+  --btn-pad: 0.25rem 0.5rem;
+  --btn-bg: transparent;
+  align-self: center;
+  min-height: 0;
+  color: alpha($appText, 0.7);
+
+  &:hover:not(.disabled) {
+   --btn-bg: transparent;
+  }
+
+  .button-text {
+   font-family: $fontOutfitSemiBold !important;
+   font-size: $font14;
+   text-decoration: underline;
+   text-underline-offset: 0.25rem;
+  }
+ }
+
+ &.appbar-dropdown-item {
+  --btn-justify: flex-start;
+  --btn-bg: transparent;
+  --btn-gap: 0.625rem;
+
+  &:hover:not(.disabled) {
+   --btn-bg: transparent;
+   opacity: 1;
   }
  }
 
  &.auth-back-btn {
+  --btn-pad: 0;
+  --btn-justify: flex-start;
   align-self: flex-start;
-  justify-content: flex-start;
   width: fit-content;
   height: auto;
-  padding: 0;
   margin-bottom: 0.25rem;
-  background: transparent;
   color: alpha($appText, 0.4);
   font-weight: 400;
   font-size: $font14;
 
-  .MuiButton-startIcon svg {
+  .button-icon.start svg {
    width: 1rem;
    height: 1rem;
   }
 
-  &:hover:not(.Mui-disabled) {
-   background: transparent;
+  &:hover:not(.disabled) {
+   --btn-bg: transparent;
    color: alpha($appText, 0.7) !important;
   }
  }
@@ -202,43 +306,125 @@
  }
 
  &.auth-change-btn {
+  --btn-gap: 0.375rem;
+  --btn-pad: 0.5rem 0;
+  --btn-bg: transparent;
+  --btn-border: 0 solid transparent;
   flex-shrink: 0;
-  gap: 0.375rem;
   height: auto;
   min-height: 0;
-  padding: 0.5rem 0.75rem 0.5rem 0.625rem;
-  align-items: center;
-  border-radius: 0;
-  background: alpha($gold, 0.1);
-  border: 1px solid alpha($gold, 0.55);
-  box-shadow: none;
-  color: $gold;
+  color: $appText;
 
-  &:hover:not(.Mui-disabled) {
-   background: alpha($gold, 0.16);
-  }
-
-  &:active:not(.Mui-disabled) {
-   transform: translate3d(0, 1px, 0);
-   box-shadow: none;
+  &:hover:not(.disabled) {
+   --btn-bg: transparent;
   }
 
   .button-text {
+   font-family: $fontOutfitSemiBold !important;
    font-size: $font13;
    color: inherit;
+   text-decoration: underline;
+   text-underline-offset: 0.25rem;
+   text-decoration-color: alpha($appText, 0.4);
   }
 
-  .MuiButton-startIcon {
-   margin: 0;
+  .button-icon.start {
+   display: none;
+  }
+ }
 
-   svg {
-    width: 0.875rem;
-    height: 0.875rem;
+ &.auth-submit-btn.contained:not(.disabled) .button-face,
+ &.play-cta.contained:not(.disabled) .button-face {
+  position: relative;
+  overflow: hidden;
+
+  > div {
+   position: relative;
+   z-index: 1;
+  }
+
+  &::after {
+   content: "";
+   position: absolute;
+   inset: 0;
+   background: linear-gradient(
+     90deg,
+     rgba(255, 248, 229, 0.5) 0 20px,
+     transparent 20px 25px,
+     rgba(255, 248, 229, 0.5) 25px 35px,
+     transparent 35px
+    )
+    no-repeat;
+   transform: translate3d(-4rem, 0, 0) skewX(-21deg);
+   animation: button-shimmer 4s 0.6s linear infinite;
+   pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+   &::after {
+    animation: none;
+    opacity: 0;
    }
   }
+ }
 
-  :root[data-theme="light"] & {
-   color: $btnEdgeGold;
+ &.tilted.contained {
+  overflow: visible !important;
+  height: 4.5rem;
+  padding-top: 0.5rem !important;
+  perspective: 26rem;
+
+  .button-edge {
+   display: none;
+  }
+
+  .button-face {
+   height: 3.25rem !important;
+   transform: rotateX(24deg);
+   transform-origin: 50% 100%;
+   box-shadow: 0 0.5rem 0 $btnEdgeGold;
+   animation: tilted-float 3s ease-in-out infinite;
+  }
+
+  &::before {
+   content: "";
+   position: absolute;
+   left: 4%;
+   right: 4%;
+   bottom: 0;
+   height: 0.875rem;
+   background: alpha($black, 0.45);
+   transform: perspective(26rem) rotateX(55deg);
+   transform-origin: 50% 0;
+   animation: tilted-shadow 3s ease-in-out infinite;
+   pointer-events: none;
+  }
+
+  &:active:not(.disabled) .button-face {
+   animation: none;
+   transform: rotateX(24deg) translate3d(0, 0.375rem, 0) !important;
+   box-shadow: 0 0.125rem 0 $btnEdgeGold;
+  }
+
+  &.disabled .button-face,
+  &.disabled::before,
+  &.loading .button-face {
+   animation: none;
+  }
+
+  &.disabled .button-face {
+   box-shadow: 0 0.5rem 0 alpha($appText, 0.06);
+  }
+
+  &.disabled::before {
+   display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+   .button-face,
+   &::before {
+    animation: none;
+   }
   }
  }
 
@@ -249,47 +435,67 @@
  }
 
  &.auth-footer-btn {
+  --btn-pad: 0 0.875rem;
+  --btn-bg: transparent;
+  --btn-border: 1px solid #{alpha($appText, 0.6)};
   flex-shrink: 0;
-  width: 6rem;
   height: 2.375rem;
   min-height: 0;
-  padding: 0 1rem;
+  color: $appText !important;
+
+  &:hover:not(.disabled) {
+   --btn-bg: #{alpha($appText, 0.06)};
+  }
+
+  .button-text {
+   display: inline-flex;
+   align-items: center;
+   gap: 0.5rem;
+   font-size: $font13;
+   color: inherit;
+
+   &::after {
+    content: "";
+    width: 1.125rem;
+    height: 0.625rem;
+    background: currentColor;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 10' fill='none' stroke='black' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 5h16M12.5 1 17 5l-4.5 4'/%3E%3C/svg%3E") center / contain no-repeat;
+   }
+  }
  }
 
  &.auth-google-btn {
-  gap: 0.75rem;
-  background: $white;
-  border: 1px solid $white;
-  @include neo-edge(#5b60a8, 3px, 4px);
-  color: $primaryContrast;
+  --btn-gap: 0.75rem;
+  --btn-bg: #{$white};
+  --btn-border: 1px solid #{$white};
   height: 3.25rem;
-  .MuiButton-icon {
-   margin: 0;
+  color: $primaryContrast;
+
+  :root[data-theme="light"] & {
+   --btn-border: 1px solid #{alpha($appText, 0.2)};
   }
+
   .button-text {
    letter-spacing: 0.3px;
   }
-  &:hover:not(.Mui-disabled) {
-   background: $white;
+
+  &:hover:not(.disabled) {
+   --btn-bg: #{$white};
    color: $primaryContrast !important;
-   @include neo-edge(#5b60a8, 3px, 4px);
   }
-  &:active:not(.Mui-disabled) {
-   transform: translate3d(2px, 3px, 0);
-   @include neo-edge(#5b60a8, 1px);
+
+  &:active:not(.disabled) {
+   --btn-bg: #{alpha($white, 0.9)};
   }
  }
 
  &.game-cta,
  &.options-play {
   color: $primaryContrast !important;
-
-  &:not(.Mui-disabled):hover {
-   opacity: 0.92;
-  }
  }
+
  &.options-play {
-  padding: 0;
+  --btn-pad: 0;
   height: 3.25rem !important;
  }
 
@@ -304,6 +510,15 @@
   .button-text {
    font-family: $fontOutfitExtraBold !important;
    font-size: $font18;
+   letter-spacing: 0.4px;
+  }
+
+  &.tilted {
+   height: 4.875rem;
+
+   .button-face {
+    height: 3.625rem !important;
+   }
   }
 
   @include from(laptop) {
@@ -322,9 +537,10 @@
  }
 
  &.common-play {
+  --btn-pad: 0;
   width: min(9.375rem, 100%) !important;
   height: 2.375rem !important;
-  padding: 0 !important;
+
   .button-text {
    font-size: $font16;
   }
@@ -340,33 +556,34 @@
   }
 
   .bet-card.insufficient & {
-   background: alpha($gold, 0.12) !important;
-   border: 1px solid $gold;
+   --btn-bg: #{alpha($gold, 0.12)} !important;
+   --btn-border: 1px solid #{$gold};
    color: $gold !important;
 
    &:hover {
-    background: alpha($gold, 0.22) !important;
+    --btn-bg: #{alpha($gold, 0.22)} !important;
    }
   }
  }
 
  &.cancel-btn {
-  background: $btnRedFill;
-  border: 1px solid alpha(#ff8a9a, 0.45);
-  @include neo-edge($btnEdgeRed, 3px, 4px);
+  --btn-bg: #{$btnRedFill};
+  --btn-border: 1px solid #{alpha(#ff8a9a, 0.45)};
 
-  &:hover:not(.Mui-disabled) {
-   background: $btnRedFill;
-   @include neo-edge($btnEdgeRed, 3px, 4px);
+  &.contained {
+   --btn-border: 0 solid transparent;
+   --btn-edge-right: color-mix(in srgb, #{$paleRed} 55%, #{$btnEdgeRed});
+   --btn-edge-bottom: #{$btnEdgeRed};
   }
 
-  &:active:not(.Mui-disabled) {
-   @include neo-edge($btnEdgeRed, 1px);
+  &:hover:not(.disabled) {
+   --btn-bg: #{$btnRedFill};
   }
 
-  &.Mui-disabled {
+  &.disabled {
    opacity: 0.5;
   }
+
   .common-text {
    color: $white !important;
   }
@@ -379,34 +596,19 @@
  }
 
  &.wallet-withdraw-btn {
-  background: $btnGhostBg;
-  border: 1px solid $btnGhostBorder;
-  @include neo-edge($neoEdge, 3px, 4px);
   color: $appText;
 
   .button-text {
    letter-spacing: 0.3px;
   }
-
-  &:hover:not(.Mui-disabled) {
-   background: $btnGhostBg;
-   border-color: $btnGhostBorder;
-   @include neo-edge($neoEdge, 3px, 4px);
-  }
-
-  &:active:not(.Mui-disabled) {
-   transform: translate3d(2px, 3px, 0);
-   @include neo-edge($neoEdge, 1px);
-  }
  }
 
  &.tx-filter-chip {
+  --btn-pad: 0.4375rem 1rem;
+  --btn-bg: #{alpha($appText, 0.03)};
+  --btn-border: 1px solid #{alpha($appText, 0.12)};
   flex-shrink: 0;
   min-height: 2.375rem;
-  background: alpha($appText, 0.03);
-  border: 1px solid alpha($appText, 0.12);
-  border-radius: 0;
-  padding: 0.4375rem 1rem;
   color: $appTextMuted;
   white-space: nowrap;
 
@@ -415,14 +617,14 @@
    font-size: $font14;
   }
 
-  &:hover:not(.Mui-disabled) {
-   border-color: alpha($gold, 0.35);
+  &:hover:not(.disabled) {
+   --btn-border: 1px solid #{alpha($gold, 0.35)};
   }
 
   &.active {
-   border: 1.5px solid $gold;
+   --btn-border: 1.5px solid #{$gold};
+   --btn-bg: #{alpha($gold, 0.12)};
    color: $appTabActive;
-   background: alpha($gold, 0.12);
   }
 
   .deposit-amount-chips & {
@@ -431,42 +633,22 @@
   }
  }
 
- &.copy-label-btn {
-  .deposit-address-row & {
-   height: auto;
-   padding: 0 0 0 $space-12;
-   border: none;
-   border-left: 1px solid $appCardBorder;
-   border-radius: 0;
-   background: transparent;
-   color: $appBalance;
-
-   .button-text {
-    font-size: $font14;
-    color: inherit;
-   }
-
-   &:hover:not(.Mui-disabled) {
-    background: transparent;
-   }
-  }
- }
-
  &.segment-btn {
+  --btn-pad: 0.4rem 0.3rem;
   position: relative;
   z-index: $z-raised;
   flex: 1 1 0;
-  flex-direction: column;
-  gap: 0.1rem;
-  background: transparent;
-  border-radius: 0;
-  padding: 0.4rem 0.3rem;
   font-family: $fontOutfitExtraBold;
   color: $appTextMuted;
   transition: color 0.2s ease;
 
-  &:hover:not(.Mui-disabled) {
-   background: transparent;
+  .button-face > div {
+   flex-direction: column;
+   gap: 0.1rem;
+  }
+
+  &:hover:not(.disabled) {
+   --btn-bg: transparent;
   }
 
   .segment.room-segment & {
@@ -474,34 +656,27 @@
   }
 
   .practice-field & {
-   padding-block: 0.875rem;
+   --btn-pad: 0.875rem 0.3rem;
   }
 
   .segment.category-select & {
-   padding: 0.625rem 0.1rem;
+   --btn-pad: 0.625rem 0.1rem;
    letter-spacing: normal;
   }
  }
 
  &.modal-submit-btn {
   margin-top: 0.5rem;
-
-  &.Mui-disabled:not(.loading) {
-   @include neo-edge(alpha($appText, 0.15), 3px, 4px, $important: true);
-  }
  }
 
  &.profile-edit-icon-btn {
+  --btn-pad: 0;
+  --btn-radius: 50%;
   position: relative;
   z-index: $z-raised;
   width: 2.125rem;
   height: 2.125rem;
   min-height: 0;
-  padding: 0;
-  border-radius: 50%;
-  border: 1px solid $btnGhostBorder;
-  background: $btnGhostBg;
-  box-shadow: none;
   color: $appText;
  }
 
@@ -516,13 +691,9 @@
  &.gr-draw-btn {
   color: $appText !important;
 
-  .MuiButton-startIcon {
-   margin: 0;
-
-   svg {
-    width: 1.25rem;
-    height: 1.25rem;
-   }
+  .button-icon.start svg {
+   width: 1.25rem;
+   height: 1.25rem;
   }
  }
 
@@ -535,52 +706,97 @@
 
  &.room-paste-btn,
  &.copy-label-btn {
+  --btn-gap: 0.375rem;
   flex-shrink: 0;
-  gap: 0.375rem;
   min-height: 0;
 
   .button-text {
    font-size: $font13;
   }
 
-  .MuiButton-startIcon {
-   margin: 0;
-
-   svg {
-    width: 1rem;
-    height: 1rem;
-   }
+  .button-icon.start svg {
+   width: 1rem;
+   height: 1rem;
   }
  }
 
  &.room-paste-btn {
-  padding: $space-4 0;
+  --btn-pad: #{$space-4} 0;
   color: $gold;
 
-  &:hover:not(.Mui-disabled) {
-   background: transparent;
+  &:hover:not(.disabled) {
+   --btn-bg: transparent;
   }
  }
 
  &.copy-label-btn {
+  --btn-pad: 0 #{$space-12};
+  --btn-border: 1px solid #{$appCardBorder};
+  --btn-bg: #{$appSecondary};
   height: 2.5rem;
-  padding: 0 $space-12;
-  border: 1px solid $appCardBorder;
-  border-radius: 0;
-  background: $appSecondary;
   color: $appText;
+
+  .deposit-address-row & {
+   --btn-pad: 0 0 0 #{$space-12};
+   --btn-border: 0 solid transparent;
+   --btn-bg: transparent;
+   height: auto;
+   border-left: 1px solid $appCardBorder !important;
+   color: $appBalance;
+
+   .button-text {
+    font-size: $font14;
+    color: inherit;
+   }
+  }
  }
 
  &.gr-promotion-btn {
+  --btn-pad: 0;
+  --btn-border: 1px solid #{$appCardBorder};
   width: 3.5rem;
   height: 3.5rem;
-  padding: 0;
-  border-radius: 0;
-  border: 1px solid $appCardBorder;
-  transition: border-color 0.15s ease;
 
-  &:hover:not(.Mui-disabled) {
-   border-color: $gold;
+  &:hover:not(.disabled) {
+   --btn-border: 1px solid #{$gold};
   }
+ }
+}
+
+@keyframes tilted-float {
+ 0%,
+ 100% {
+  transform: rotateX(24deg) translate3d(0, 0, 0);
+ }
+ 50% {
+  transform: rotateX(24deg) translate3d(0, -0.3125rem, 0);
+ }
+}
+
+@keyframes tilted-shadow {
+ 0%,
+ 100% {
+  opacity: 1;
+  transform: perspective(26rem) rotateX(55deg) scaleX(1);
+ }
+ 50% {
+  opacity: 0.6;
+  transform: perspective(26rem) rotateX(55deg) scaleX(0.94);
+ }
+}
+
+@keyframes button-shimmer {
+ 0% {
+  transform: translate3d(-4rem, 0, 0) skewX(-21deg);
+ }
+ 50%,
+ 100% {
+  transform: translate3d(calc(100% + 3rem), 0, 0) skewX(-21deg);
+ }
+}
+
+@keyframes button-spin {
+ to {
+  transform: rotate(360deg);
  }
 }

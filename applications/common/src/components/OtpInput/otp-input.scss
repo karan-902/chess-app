@@ -13,17 +13,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: $appSecondary;
-  border: 1.5px solid $appCardBorder;
-  border-radius: $radius-card;
-  @include neo-edge;
+  background: transparent;
+  border: 0;
+  border-bottom: 1.5px solid alpha($appText, 0.22);
+  border-radius: 0;
   font-family: $fontOutfitExtraBold;
   font-size: $font24;
   color: $appText;
+  transition: border-color 0.15s ease;
 
   &.active {
-   border-color: $gold;
-   @include neo-edge($btnEdgeGold);
+   border-bottom-color: $gold;
   }
  }
 

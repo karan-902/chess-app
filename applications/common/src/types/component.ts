@@ -118,6 +118,14 @@ export interface IChipSelectProps<T extends string> {
  customClass?: string;
 }
 
+export interface ISlideToConfirmProps {
+ label: string;
+ onConfirm: () => void;
+ isLoading?: boolean;
+ disabled?: boolean;
+ customClass?: string;
+}
+
 export interface ISheetActionsProps {
  children?: ReactNode;
  cancelLabel?: string;

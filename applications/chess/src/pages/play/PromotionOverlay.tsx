@@ -23,7 +23,7 @@ export default function PromotionOverlay({
        key={piece}
        type="button"
        customClass="gr-promotion-btn"
-       style={{ backgroundColor: LIGHT_SQUARE_COLOR }}
+       style={{ "--btn-bg": LIGHT_SQUARE_COLOR } as React.CSSProperties}
        onClick={() => onSelect(piece)}
        aria-label={PROMOTION_LABELS[piece]}
       >

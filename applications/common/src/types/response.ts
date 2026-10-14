@@ -186,6 +186,7 @@ export type IStartMatchResponse =
 export type IPoolMatchedEvent = {
  matchId: string;
  firstMoveDeadlineMs: number;
+ players?: IMatchPlayer[];
 };
 
 export type IRoomMatchedEvent = {

@@ -88,7 +88,7 @@
  --app-btn-bg: #16194b;
  --app-btn-border: #29308f;
  --app-border-hover: #29308f;
- --app-text-placeholder: #c3c6f2;
+ --app-text-placeholder: color-mix(in srgb, var(--app-text) 35%, transparent);
  --app-prize: var(--gold);
  --app-entry-fee: var(--app-text);
  --btn-edge-gold: #8a6a00;
@@ -100,7 +100,7 @@
  --app-card: #1e1f33;
  --app-sheet-fill: linear-gradient(180deg, #222668, #11143c);
  --app-menu-fill: linear-gradient(180deg, #1c1d2e, #0c0c14);
- --app-input-fill: linear-gradient(180deg, #3a3d5e, #272a45);
+ --app-input-fill: linear-gradient(180deg, #222668, #11143c);
  --app-podium-fill: linear-gradient(180deg, #2a2c48, #14152a);
  --app-ticker: #1b1e3d;
  --app-tab-active: var(--gold);
@@ -143,7 +143,7 @@
  --app-btn-bg: #ffffff;
  --app-btn-border: #bcc1e2;
  --app-border-hover: #bcc1e2;
- --app-text-placeholder: #555a86;
+ --app-text-placeholder: color-mix(in srgb, var(--app-text) 40%, transparent);
  --app-prize: var(--greenish-teal);
  --app-entry-fee: var(--app-text-muted);
  --btn-edge-gold: #8a6a00;
@@ -265,6 +265,12 @@ $btnGhostEdge: var(--btn-ghost-edge);
 $btnGhostBorder: var(--btn-ghost-border);
 $appCard: var(--app-card);
 $appSheetFill: var(--app-sheet-fill);
+$poolBlocks: (
+ (#5b3fd1, #7a5cf0, #3a25a0),
+ (#5f6a1c, #7d8a2a, #3f480f),
+ (#8f2343, #b8335a, #5e1229),
+ (#147a63, #1fa383, #0a4f40)
+);
 $appMenuFill: var(--app-menu-fill);
 $appInputFill: var(--app-input-fill);
 $appPodiumFill: var(--app-podium-fill);
@@ -295,8 +301,61 @@ $radius-card: 0;
 }
 
 @mixin neo-plunk($edge: $neoEdge) {
- border: 1px solid $neoOutline;
- @include neo-edge($edge);
+ border: 1px solid alpha($appText, 0.1);
+ box-shadow: none;
+}
+
+@mixin neo-elevated($right, $bottom, $depth: 3px) {
+ position: relative;
+ overflow: visible;
+ border-color: transparent;
+ box-shadow: none !important;
+ transition: transform 0.12s ease-in-out;
+
+ &::before,
+ &::after {
+  content: "";
+  position: absolute;
+  transform-origin: 0 0;
+  pointer-events: none;
+  transition: opacity 0.12s ease-in-out;
+ }
+
+ &::before {
+  top: -1px;
+  left: calc(100% + 1px);
+  width: $depth;
+  height: calc(100% + 2px);
+  background: $right;
+  transform: skewY(45deg);
+ }
+
+ &::after {
+  top: calc(100% + 1px);
+  left: -1px;
+  width: calc(100% + 2px);
+  height: $depth;
+  background: $bottom;
+  transform: skewX(45deg);
+ }
+
+ &:active:not(.Mui-disabled) {
+  transform: translate3d($depth, $depth, 0);
+
+  &::before,
+  &::after {
+   opacity: 0;
+  }
+ }
+
+ &.Mui-disabled::before,
+ &.Mui-disabled::after {
+  display: none;
+ }
+
+ @media (prefers-reduced-motion: reduce) {
+  transition: none;
+ }
 }
 
 $space-4: 0.25rem;

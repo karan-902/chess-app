@@ -1,6 +1,7 @@
 @use "default.scss" as *;
 
 .common-select {
+ position: relative;
  width: 100%;
 
  .gopvp-signup-form & .MuiInputBase-root {
@@ -15,41 +16,45 @@
 
  .MuiInputBase-root {
   min-height: 3.25rem;
-  background: $appInputFill;
-  border-radius: $radius-card;
-  @include neo-edge;
-  font-family: $fontOutfitMedium;
-  font-size: max(#{$input-font-min}, #{$font16});
+  padding-left: 0;
+  padding-right: 0;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  font-family: $fontOutfitSemiBold;
+  font-size: max(#{$input-font-min}, #{$font18});
   color: $appText;
-  transition:
-   border-color 0.15s ease,
-   box-shadow 0.15s ease;
+
+  .MuiInputBase-input {
+   padding-left: 0;
+  }
 
   .MuiOutlinedInput-notchedOutline {
-   border: 1.2px solid alpha($gold, 0.85);
+   border-width: 0 0 1px;
+   border-style: solid;
+   border-color: alpha($appText, 0.22);
+   border-radius: 0;
+   transition: border-color 0.15s ease;
   }
 
   @media (hover: hover) {
    &:hover:not(.Mui-focused):not(.Mui-error):not(.Mui-disabled)
     .MuiOutlinedInput-notchedOutline {
-    border-color: $gold;
+    border-color: alpha($appText, 0.45);
    }
   }
 
   &.Mui-focused {
-   @include neo-edge($btnEdgeGold);
-
    .MuiOutlinedInput-notchedOutline {
-    border: 1px solid $primary;
+    border-width: 0 0 1.5px;
+    border-color: $gold;
    }
   }
 
   &.Mui-error {
-   border-radius: $radius-card !important;
-   @include neo-edge($btnEdgeRed);
-
    .MuiOutlinedInput-notchedOutline {
-    border: 2px solid $paleRed;
+    border-width: 0 0 1.5px;
+    border-color: $paleRed;
    }
 
    &.Mui-focused {
@@ -70,7 +75,7 @@
  }
 
  .select-arrow {
-  color: alpha($appText, 0.4);
+  color: alpha($appText, 0.6);
   cursor: pointer;
   transition: transform 0.2s ease;
 
@@ -85,37 +90,83 @@
 }
 
 .common-select-menu.MuiPaper-root {
- max-height: 250px;
+ max-height: 13.5rem;
  overflow-y: auto;
- border-radius: $radius-card;
- @include neo-plunk;
+ overscroll-behavior: contain;
+ scrollbar-width: none;
+
+ &::-webkit-scrollbar {
+  display: none;
+ }
+ border-radius: 0;
+ background: $appSheetFill;
+ border: 1px solid alpha($appText, 0.12);
+ box-shadow: 0 0.75rem 1.5rem alpha($black, 0.45);
+ animation: select-menu-in 0.14s ease-out;
+
+ @media (prefers-reduced-motion: reduce) {
+  animation: none;
+ }
+
+ :root[data-theme="light"] & {
+  background: $appSurface;
+  box-shadow: 0 0.75rem 1.5rem alpha($primaryContrast, 0.12);
+ }
 
  .MuiList-root {
-  padding-block: $space-4;
+  padding-block: 0;
  }
 
  .MuiMenuItem-root {
-  min-height: 2.25rem;
-  padding-block: $space-4;
-  font-family: $fontOutfitRegular;
-  font-size: $font14;
-  color: $appText;
+  position: relative;
+  min-height: 3rem;
+  padding: 0 1rem;
+  font-family: $fontOutfitMedium;
+  font-size: $font16;
+  color: alpha($appText, 0.75);
+
+  & + .MuiMenuItem-root {
+   border-top: 1px solid alpha($appText, 0.07);
+  }
 
   &:hover,
   &.active {
    background: alpha($appText, 0.06);
+   color: $appText;
   }
 
   &.Mui-selected,
   &.Mui-selected:hover,
   &.Mui-selected.active {
-   background: alpha($gold, 0.12);
+   background: alpha($gold, 0.08);
    color: $gold;
+   font-family: $fontOutfitSemiBold;
+
+   &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 3px;
+    background: $gold;
+   }
+
+   :root[data-theme="light"] & {
+    color: $appText;
+   }
   }
 
   &.Mui-disabled {
    opacity: 1;
    color: $appTextMuted;
   }
+ }
+}
+
+@keyframes select-menu-in {
+ from {
+  opacity: 0;
+  transform: translateY(-0.25rem);
  }
 }

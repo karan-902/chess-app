@@ -71,7 +71,6 @@
    border-color: $gold;
    background: $gold;
    color: $primaryContrast;
-   @include neo-edge($btnEdgeGold, 2px);
 
    svg {
     stroke-width: 3;
@@ -188,25 +187,6 @@
 
   &:hover {
    background: alpha($appText, 0.2);
-  }
- }
-
- &.appbar-add-funds {
-  width: 2.25rem;
-  height: 100%;
-  padding: 0;
-  border-radius: 0;
-  background: linear-gradient(180deg, #ffe27a, #e5a900);
-  color: $primaryContrast;
-
-  svg {
-   width: 1rem;
-   height: 1rem;
-   stroke-width: 2.6;
-  }
-
-  &:hover {
-   background: $primaryHover;
   }
  }
 

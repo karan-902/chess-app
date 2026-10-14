@@ -198,7 +198,7 @@ export default function AuthLayout({
      </Box>
      <Button
       type="button"
-      variant="contained"
+      variant="outlined"
       customClass="auth-footer-btn"
       onClick={() => navigate(footerCard.to)}
      >

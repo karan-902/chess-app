@@ -1,4 +1,6 @@
+import type { KeyboardEvent } from "react";
 import { beatsText } from "@gopvp/app/src/constants/message";
+import { POOL_TONE_COUNT } from "@gopvp/app/src/constants/limit";
 import { shortenUsername } from "@gopvp/common/src/util/format";
 import { GAMES, type GameSlug } from "@gopvp/app/src/config/game";
 
@@ -35,3 +37,17 @@ export function sanitizeAmountInput(value: string, max: number): string | null {
 
 export const endingBeforeQuery = (cursor: string | null) =>
  cursor ? `&ending_before=${encodeURIComponent(cursor)}` : "";
+
+export const poolTone = (index: number) =>
+ (Math.max(index, 0) % POOL_TONE_COUNT) + 1;
+
+export const pressProps =(action: () => void) => ({
+ role: "button",
+ tabIndex: 0,
+ onClick: action,
+ onKeyDown: (e: KeyboardEvent) => {
+  if (e.key !== "Enter" && e.key !== " ") return;
+  e.preventDefault();
+  action();
+ },
+});

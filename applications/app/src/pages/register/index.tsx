@@ -1,10 +1,8 @@
 import AuthLayout from "@gopvp/app/src/container/AuthLayout";
 import RegisterForm from "@gopvp/app/src/pages/register/RegisterForm";
 import {
- joinTheText,
- winnersText,
- signUpFindRivalText,
- winRealCashText,
+ joinTheWinnersText,
+ beatRealPlayersText,
  beenHereBeforeText,
  yourWinsAreWaitingText,
  logInText,
@@ -14,10 +12,8 @@ import { ROUTES } from "@gopvp/app/src/constants/route";
 export default function Register() {
  return (
   <AuthLayout
-   title={joinTheText}
-   titleAccent={winnersText}
-   subtitle={signUpFindRivalText}
-   subtitleAccent={winRealCashText}
+   title={joinTheWinnersText}
+   subtitle={beatRealPlayersText}
    footerCard={{
     title: beenHereBeforeText,
     tagline: yourWinsAreWaitingText,

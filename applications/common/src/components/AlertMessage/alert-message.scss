@@ -52,6 +52,20 @@
    justify-content: center;
    margin-top: 0;
   }
+
+  .common-input > & {
+   margin-top: 0;
+  }
+
+  .common-input.form-input > &,
+  .form-field .common-select > & {
+   position: absolute;
+   top: 100%;
+   left: 0;
+   right: 0;
+   margin-top: 0.25rem;
+   font-size: $font12 !important;
+  }
  }
 
  &.MuiAlert-standard.MuiAlert-colorSuccess {
@@ -79,7 +93,7 @@
   font-size: $font13 !important;
   background: var(--toast-color);
   color: $white;
-  @include neo-edge(color-mix(in srgb, var(--toast-color) 55%, #000));
+  box-shadow: none;
 
   &.MuiAlert-colorError {
    --toast-color: #{$paleRed};

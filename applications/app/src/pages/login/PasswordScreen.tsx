@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Input from "@gopvp/common/src/components/Input/Input";
@@ -9,6 +10,8 @@ import {
  enterPasswordText,
  changeText,
  loginText,
+ forgotYourPasswordText,
+ resetNowText,
 } from "@gopvp/app/src/constants/message";
 import { formSubmitHandler } from "@gopvp/common/src/util/form";
 
@@ -71,7 +74,7 @@ export default function PasswordScreen({
      type="submit"
      variant="contained"
      fullWidth
-     customClass="auth-submit-btn"
+     customClass="auth-submit-btn tilted"
      disabled={!formik.dirty || formik.isSubmitting}
      isLoading={formik.isSubmitting}
     >
@@ -79,12 +82,12 @@ export default function PasswordScreen({
     </Button>
    </Box>
 
-   {/* <Text customClass="auth-forgot-row">
-    {forgotYourPasswordText}{" "}
+   <Text customClass="auth-forgot-row">
+    {forgotYourPasswordText}
     <NavLink to="/forgot-password" className="auth-forgot-link">
      {resetNowText}
     </NavLink>
-   </Text> */}
+   </Text>
   </Box>
  );
 }

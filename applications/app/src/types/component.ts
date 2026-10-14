@@ -1,10 +1,11 @@
-import type { ReactNode, Ref } from "react";
+import type { ComponentType, ReactNode, Ref } from "react";
 import type { FormikProps } from "formik";
 import type {
  IMatchHistoryItem,
  IPoolResponse,
 } from "@gopvp/common/src/types/response";
 import type { MatchOutcome } from "@gopvp/common/src/types/index";
+import type { IPoolLabelProps } from "@gopvp/common/src/types/component";
 import type {
  LucideIcon,
  TIconName,
@@ -117,6 +118,9 @@ export interface IPoolConfirmSheetProps {
  status: MatchmakingStatus;
  queuedPool: IPoolResponse | null;
  confirmPool: IPoolResponse | null;
+ opponentName: string;
+ confirmTone: number;
+ PoolLabel: ComponentType<IPoolLabelProps>;
  secondsLeft: number;
  onLeaveQueue: () => void;
  onConfirmJoin: () => void;
@@ -128,8 +132,21 @@ export interface IStakeTicketProps {
  prize: number;
 }
 
+export interface IPoolCardProps {
+ pool: IPoolResponse;
+ PoolLabel: ComponentType<IPoolLabelProps>;
+ tone: number;
+ isInsufficient?: boolean;
+ onPress?: () => void;
+}
+
 export interface IFaceOffProps {
  opponentName?: string | null;
+}
+
+export interface IMatchDeckProps {
+ isRevealed: boolean;
+ opponentName: string;
 }
 
 export interface IChessLogoProps {

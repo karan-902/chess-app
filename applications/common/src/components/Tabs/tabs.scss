@@ -14,23 +14,34 @@
   min-height: 44px;
   min-width: 0 !important;
   padding: 0.625rem 0.5rem 0.5625rem;
-  color: $appTextMuted;
+  color: alpha($appText, 0.5);
   font-family: $fontOutfitSemiBold;
   font-weight: 600;
   font-size: 14px;
 
   &.Mui-selected {
-   color: $appTabActive;
+   color: $appText;
   }
  }
 
  &.appbar-nav-tabs {
-  padding: 0 0.5rem 0 0.625rem;
-  border-bottom: 1px solid alpha($appText, 0.18);
+  padding: 0 0.75rem;
+  border-bottom: 1px solid alpha($appText, 0.08);
   flex-shrink: 0;
+
+  .MuiTabs-indicator {
+   height: 2px;
+   transition:
+    left 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    width 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  }
 
   @include from(tablet) {
    padding: 0 1rem;
+  }
+
+  :root[data-theme="light"] & .common-tab.Mui-selected {
+   font-family: $fontOutfitBold;
   }
  }
 }
