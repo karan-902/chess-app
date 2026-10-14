@@ -1096,10 +1096,18 @@
   }
  }
 
- &.result-tile-lbl {
-  font-family: $fontOutfitSemiBold;
-  font-size: $font14;
-  color: $appText;
+ &.stat-tile-label-text {
+  font-family: $fontOutfitBold;
+  font-size: $font10;
+  letter-spacing: 0.14em;
+  color: $appTextMuted;
+
+  .label-top & {
+   font-family: $fontOutfitSemiBold;
+   font-size: $font14;
+   letter-spacing: normal;
+   color: $appText;
+  }
 
   .result-tiles.versus & {
    min-width: 0;
@@ -1111,15 +1119,7 @@
   }
  }
 
- &.stat-tile-label {
-  font-family: $fontOutfitBold;
-  font-size: $font10;
-  letter-spacing: 0.14em;
-  color: $appTextMuted;
- }
-
- &.stat-tile-value,
- &.result-tile-val {
+ &.stat-tile-value {
   font-family: $fontOutfitBlack;
   font-size: $font24;
   line-height: 1.1;

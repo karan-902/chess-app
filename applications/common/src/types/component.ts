@@ -128,6 +128,8 @@ export interface ISheetActionsProps {
 export interface IStatTileProps {
  label: ReactNode;
  value: ReactNode;
+ icon?: ReactNode;
+ layout?: "caption" | "label-top";
  customClass?: string;
  valueClass?: string;
 }
