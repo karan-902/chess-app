@@ -20,6 +20,7 @@ import {
  playNowText,
 } from "@gopvp/app/src/constants/message";
 import { ROUTES } from "@gopvp/app/src/constants/route";
+import { poolTone } from "@gopvp/app/src/utils";
 
 export default function PlayPage() {
  const [sheetOpen, setSheetOpen] = useState(false);
@@ -31,8 +32,15 @@ export default function PlayPage() {
  } = useGame();
  const { pools, loading: poolsLoading } = usePools();
  const { usdValue, loading: balanceLoading } = useWalletBalance();
- const { status, queuedPool, secondsLeft, joinQueue, leaveQueue, resetStatus } =
-  useMatchmaking();
+ const {
+  status,
+  queuedPool,
+  opponentName: poolOpponentName,
+  secondsLeft,
+  joinQueue,
+  leaveQueue,
+  resetStatus,
+ } = useMatchmaking();
  const gameId = searchParams.get("practice_id");
  const matchId = searchParams.get("match_id");
  const [confirmOpen, setConfirmOpen] = useState(false);
@@ -80,7 +88,8 @@ export default function PlayPage() {
  }, [roomStatus]);
 
  useEffect(() => {
-  if (status === "queued" || roomOpen) preloadGameRoom();
+  if (status === "queued" || status === "revealing" || roomOpen)
+   preloadGameRoom();
  }, [status, roomOpen, preloadGameRoom]);
 
  if (matchId || gameId) {
@@ -164,7 +173,7 @@ export default function PlayPage() {
      type="button"
      variant="contained"
      fullWidth
-     customClass="game-cta play-cta"
+     customClass="game-cta play-cta tilted"
      onClick={() => setSheetOpen(true)}
     >
      {playNowText}
@@ -218,6 +227,9 @@ export default function PlayPage() {
     status={status}
     queuedPool={queuedPool}
     confirmPool={confirmPool}
+    opponentName={poolOpponentName}
+    confirmTone={poolTone(pools.findIndex((p) => p.id === confirmPool?.id))}
+    PoolLabel={PoolLabel}
     secondsLeft={secondsLeft}
     onLeaveQueue={leaveQueue}
     onConfirmJoin={handleConfirmJoin}

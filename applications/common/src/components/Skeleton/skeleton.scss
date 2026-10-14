@@ -24,7 +24,7 @@
  }
 
  .result-hero &,
- .result-tile & {
+ .stat-tile:is(.caption, .label-top, .compact) & {
   margin-inline: auto;
  }
  &.select-option {

@@ -20,6 +20,16 @@
   line-height: 1.25 !important;
  }
 
+ .common-input > &,
+ .form-field > & {
+  font-family: $fontOutfitBold !important;
+  font-size: $font11 !important;
+  line-height: 1.25 !important;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: alpha($appText, 0.5) !important;
+ }
+
  &.room-field-label {
   text-align: left !important;
   font-size: $font14;

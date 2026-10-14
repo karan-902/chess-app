@@ -242,10 +242,11 @@
   display: flex;
   align-items: center;
   gap: 0.3125rem;
-  font-family: $fontOutfitSemiBold;
-  font-size: $font12;
+  font-family: $fontOutfitBold;
+  font-size: $font10;
   line-height: 1rem;
-  letter-spacing: 0.3px;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
   color: $gold;
 
   svg {
@@ -263,16 +264,23 @@
 
  &.auth-forgot-row {
   display: flex;
-  text-align: center;
+  align-items: center;
   justify-content: center;
+  gap: 0.375rem;
+  margin-top: -0.75rem;
+  font-family: $fontOutfitMedium;
   font-size: $font14;
-  color: $appTextMuted;
-  margin-top: $font16;
+  color: alpha($appText, 0.55);
+
   .auth-forgot-link {
-   font-size: $font14;
-   display: block;
-   margin-left: $space-12;
+   max-width: none;
+   align-self: auto;
+   font-family: $fontOutfitSemiBold;
+   font-size: inherit;
+   color: $appText;
    text-decoration: underline;
+   text-underline-offset: 0.25rem;
+   text-decoration-color: alpha($appText, 0.4);
   }
  }
 
@@ -300,6 +308,40 @@
 
    .public-title-accent {
     font-size: 2.625rem;
+   }
+  }
+ }
+
+ &.public-title {
+  background: linear-gradient(180deg, #ffe27a, $gold 55%, $primaryDark);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-family: $fontOutfitExtraBold;
+  font-size: 1.5rem;
+  line-height: 1.875rem;
+  letter-spacing: 0.2px;
+
+  .public-title-accent {
+   font-size: inherit;
+  }
+
+  @include from-height(tall) {
+   font-size: 1.75rem;
+   line-height: 2.1875rem;
+
+   .public-title-accent {
+    font-size: inherit;
+   }
+  }
+
+  :root[data-theme="light"] & {
+   background: none;
+   color: $appText;
+
+   .public-title-accent {
+    background: none;
+    color: inherit;
    }
   }
  }
@@ -349,21 +391,16 @@
  &.public-subtitle {
   font-family: $fontOutfitMedium;
   line-height: 1.5rem !important;
-  text-align: center;
-  color: $appText;
+  text-align: left;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  color: alpha($appText, 0.55);
 
   .public-subtitle-accent {
-   font-family: $fontOutfitBold;
+   font-family: inherit;
    font-size: inherit;
-   color: $gold;
-  }
-
-  :root[data-theme="light"] & {
-   color: $appTextMuted;
-
-   .public-subtitle-accent {
-    color: inherit;
-   }
+   color: inherit;
   }
  }
 
@@ -683,19 +720,123 @@
   }
  }
 
- &.pool-entry-fee {
-  display: flex;
-  align-items: center;
-  height: 2rem;
-  font-family: $fontOutfitBold;
-  font-size: $font16;
-  letter-spacing: 0.2px;
-  color: $appEntryFee;
- }
-
  &.pool-insufficient-label {
   display: block;
   margin-top: 0.35rem;
+ }
+
+ &.pool-card-win {
+  grid-area: win;
+  font-family: $fontOutfitBlack;
+  font-size: $font20;
+  line-height: 1.15;
+  white-space: nowrap;
+  color: $white;
+
+  @include from-height(tall) {
+   font-size: $font22;
+  }
+ }
+
+ &.match-card-avatar {
+  position: absolute;
+  top: 1.25rem;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-left: -1.375rem;
+  border-radius: 50%;
+  background: #1b1e3d;
+  box-shadow: 0 0 0 1.5px $gold;
+  font-family: $fontOutfitBlack;
+  font-size: $font18;
+  color: $gold;
+ }
+
+ &.match-card-name {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 58%;
+  margin-top: -0.625rem;
+  transform: rotate(-28deg);
+  text-align: center;
+  font-family: $fontOutfitExtraBold;
+  font-size: $font13;
+  line-height: 1.25rem;
+  color: $primaryContrast;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+ }
+
+ &.match-timer {
+  flex-shrink: 0;
+  padding: 0.25rem 0.625rem;
+  border: 1px solid alpha($appText, 0.16);
+  background: alpha($black, 0.3);
+  font-family: $fontOutfitBlack;
+  font-size: $font14;
+  color: $appText;
+
+  &.low {
+   color: $paleRed;
+  }
+ }
+
+ &.pool-card-entry {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.125rem 0.5rem;
+  border: 1px solid alpha($white, 0.35);
+  border-width: 0 0 1px 1px;
+
+  @include from-height(tall) {
+   padding: 0.25rem 0.5rem;
+  }
+  background: alpha($white, 0.14);
+  font-family: $fontOutfitExtraBold;
+  font-size: $font13;
+  line-height: 1.2;
+  color: $white;
+
+  span {
+   font-family: $fontOutfitBold;
+   font-size: 0.5625rem;
+   letter-spacing: 1.5px;
+   text-transform: uppercase;
+   color: alpha($white, 0.75);
+  }
+ }
+
+ &.pool-card-title {
+  grid-area: win;
+  font-family: $fontOutfitBlack;
+  font-size: $font18;
+  line-height: 1.2;
+  color: $white;
+ }
+
+ &.pool-card-sub {
+  grid-area: time;
+  font-family: $fontOutfitMedium;
+  font-size: $font12;
+  color: alpha($white, 0.6);
+ }
+
+ &.pool-card-add {
+  grid-area: arrow;
+  font-family: $fontOutfitBold;
+  font-size: $font12;
+  color: $white;
+  text-decoration: underline;
+  text-underline-offset: 0.25rem;
  }
 
  &.bet-card-tc {
@@ -855,27 +996,6 @@
   color: $appTabActive;
  }
 
- &.stat-card-label {
-  font-family: $fontOutfitMedium;
-  font-size: $font13;
-  color: $appText;
- }
-
- &.stat-card-val {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-family: $fontOutfitExtraBold;
-  font-size: $font30;
-  line-height: 1.1;
-  color: $appText;
-
-  &.prize {
-   color: $appPrize;
-  }
- }
-
  &.stat-title {
   font-family: $fontOutfitMedium !important;
   font-size: $font16;
@@ -1017,24 +1137,6 @@
   color: inherit;
  }
 
- &.profile-stat-val {
-  max-width: 100%;
-  font-family: $fontOutfitExtraBold;
-  font-size: $font18;
-  color: $appText;
-
-  &.pos {
-   color: $greenishTeal;
-  }
- }
-
- &.profile-stat-lbl {
-  max-width: 100%;
-  font-family: $fontOutfitMedium;
-  font-size: $font12;
-  color: $appTextMuted;
- }
-
  .profile-list &.stat-title {
   font-size: $font14;
  }
@@ -1048,7 +1150,6 @@
   display: block;
   margin: 0 0 1.1rem;
  }
-
  &.result-title {
   font-family: $fontOutfitExtraBold;
   font-size: $font24;
@@ -1096,10 +1197,48 @@
   }
  }
 
- &.result-tile-lbl {
-  font-family: $fontOutfitSemiBold;
-  font-size: $font14;
-  color: $appText;
+ &.stat-tile-label-text {
+  font-family: $fontOutfitBold;
+  font-size: $font10;
+  letter-spacing: 0.14em;
+  color: $appTextMuted;
+
+  .label-top & {
+   font-family: $fontOutfitSemiBold;
+   font-size: $font14;
+   letter-spacing: normal;
+   color: $appText;
+  }
+
+  .icon-card & {
+   font-family: $fontOutfitMedium;
+   font-size: $font13;
+   letter-spacing: normal;
+   color: $appText;
+  }
+
+  .compact & {
+   order: 1;
+   max-width: 100%;
+   font-family: $fontOutfitMedium;
+   font-size: $font12;
+   letter-spacing: normal;
+  }
+
+  .stake & {
+   font-family: $fontOutfitExtraBold;
+   line-height: 1.6;
+   letter-spacing: 1.2px;
+   color: $appEntryFee;
+  }
+
+  .stake.win & {
+   color: $appPrize;
+
+   :root[data-theme="light"] & {
+    color: $appTextMuted;
+   }
+  }
 
   .result-tiles.versus & {
    min-width: 0;
@@ -1111,14 +1250,7 @@
   }
  }
 
- &.result-tile-caption {
-  font-family: $fontOutfitBold;
-  font-size: $font10;
-  letter-spacing: 0.14em;
-  color: $appTextMuted;
- }
-
- &.result-tile-val {
+ &.stat-tile-value {
   font-family: $fontOutfitBlack;
   font-size: $font24;
   line-height: 1.1;
@@ -1140,9 +1272,57 @@
    color: $appTextMuted;
   }
 
+  &.prize {
+   color: $appPrize;
+  }
+
   .result-tiles.versus & {
    font-family: $fontOutfitExtraBold;
    font-size: $font30;
+  }
+
+  .icon-card & {
+   min-width: 0;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+   font-family: $fontOutfitExtraBold;
+   font-size: $font30;
+  }
+
+  .compact & {
+   max-width: 100%;
+   font-family: $fontOutfitExtraBold;
+   font-size: $font18;
+   line-height: normal;
+  }
+
+  .stake & {
+   font-family: $fontOutfitExtraBold;
+   font-size: $font30;
+   letter-spacing: -1px;
+   color: $appEntryFee;
+  }
+
+  .stake.win & {
+   color: $appPrize;
+
+   :root:not([data-theme="light"]) & {
+    background: $btnGoldFill;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+   }
+  }
+
+  .stake.entry & {
+   display: flex;
+   align-items: center;
+   justify-content: flex-end;
+   height: 2rem;
+   font-family: $fontOutfitBold;
+   font-size: $font16;
+   letter-spacing: 0.2px;
   }
 
   &.shake {
@@ -1442,10 +1622,10 @@
  &.appbar-dropdown-email {
   max-width: 100%;
   overflow-wrap: anywhere;
-  font-family: $fontOutfitSemiBold;
-  font-size: 11px;
-  line-height: 14px;
-  color: $appText;
+  font-family: $fontOutfitMedium;
+  font-size: $font12;
+  line-height: 1.25;
+  color: alpha($appText, 0.55);
  }
 
  &.modal-description {

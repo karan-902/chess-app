@@ -271,11 +271,7 @@ export default function RoomSheet({
          type="text"
          inputMode="numeric"
          autoComplete="off"
-         slotProps={{
-          input: {
-           maxLength: MAX_AMOUNT_DIGITS,
-          },
-         }}
+         maxLength={MAX_AMOUNT_DIGITS}
          fullWidth
          placeholder="0.00"
          customClass="amount-input-hero"

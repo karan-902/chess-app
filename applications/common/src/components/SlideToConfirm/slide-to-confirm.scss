@@ -1,0 +1,108 @@
+@use "default.scss" as *;
+
+.common-slide-confirm {
+ --slide-offset: 0px;
+ --slide-progress: 0;
+ position: relative;
+ display: flex;
+ align-items: center;
+ width: 100%;
+ height: 3.75rem;
+ padding: 0.25rem;
+ border: 1px solid alpha($white, 0.12);
+ background: alpha($black, 0.3);
+ user-select: none;
+ touch-action: none;
+
+ :root[data-theme="light"] & {
+  border-color: alpha($appText, 0.14);
+  background: alpha($appText, 0.05);
+
+  .slide-confirm-label {
+   color: alpha($appText, 0.7);
+  }
+ }
+
+ .slide-confirm-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 5.5rem;
+  font-family: $fontOutfitSemiBold;
+  font-size: $font15;
+  color: alpha($white, 0.65);
+  opacity: calc(1 - var(--slide-progress) * 1.4);
+  pointer-events: none;
+ }
+
+ .slide-confirm-knob {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 5.25rem;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: linear-gradient(180deg, #ffe27a, $gold);
+  color: $primaryContrast;
+  cursor: grab;
+  transform: translate3d(var(--slide-offset), 0, 0);
+
+  svg {
+   width: 1.75rem;
+   height: 1.75rem;
+   stroke-width: 1.6;
+  }
+
+  &:active {
+   cursor: grabbing;
+  }
+
+  &:focus-visible {
+   outline: 2px solid $white;
+   outline-offset: 2px;
+  }
+ }
+
+ &.returning .slide-confirm-knob {
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+ }
+
+ &.returning .slide-confirm-label {
+  transition: opacity 0.28s ease-out;
+ }
+
+ &.locked .slide-confirm-knob {
+  cursor: default;
+ }
+
+ &.locked:not(.loading) {
+  opacity: 0.5;
+ }
+
+ .slide-confirm-spinner {
+  width: 1.375rem;
+  height: 1.375rem;
+  border: 2.5px solid alpha($primaryContrast, 0.22);
+  border-top-color: $primaryContrast;
+  border-radius: 50%;
+  animation: slide-confirm-spin 0.7s linear infinite;
+ }
+
+ @media (prefers-reduced-motion: reduce) {
+  &.returning .slide-confirm-knob,
+  &.returning .slide-confirm-label {
+   transition: none;
+  }
+ }
+}
+
+@keyframes slide-confirm-spin {
+ to {
+  transform: rotate(360deg);
+ }
+}

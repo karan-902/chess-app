@@ -19,7 +19,10 @@
   "paths": {
    "@gopvp/app/*": ["../app/*"],
    "@gopvp/chess/*": ["../chess/*"],
-   "@gopvp/common/*": ["../common/*"]
+   "@gopvp/common/*": ["../common/*"],
+   "@cred/neopop-web/lib/components": [
+    "../../node_modules/@cred/neopop-web/lib/components/index.d.ts"
+   ]
   }
  },
  "include": ["src"]

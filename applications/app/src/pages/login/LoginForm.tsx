@@ -33,12 +33,8 @@ import {
  // backToLoginText,
  welcomeBackText,
  championText,
- logInFindRivalText,
- takeThePrizeText,
- oneStepToText,
- gloryText,
- unlockPlaySmartText,
- winFastText,
+ pickRivalWinCashText,
+ enterPasswordJumpInText,
  joinTheArenaText,
  gloryStartsHereText,
  signUpText,
@@ -239,10 +235,9 @@ export default function LoginForm() {
  if (step === "password") {
   return (
    <AuthLayout
-    title={oneStepToText}
-    titleAccent={gloryText}
-    subtitle={unlockPlaySmartText}
-    subtitleAccent={winFastText}
+    title={welcomeBackText}
+    titleAccent={verifiedUsername}
+    subtitle={enterPasswordJumpInText}
    >
     <PasswordScreen
      verifiedEmail={verifiedEmail}
@@ -258,8 +253,7 @@ export default function LoginForm() {
   <AuthLayout
    title={welcomeBackText}
    titleAccent={championText}
-   subtitle={logInFindRivalText}
-   subtitleAccent={takeThePrizeText}
+   subtitle={pickRivalWinCashText}
    footerCard={loginFooter}
   >
    <EmailScreen

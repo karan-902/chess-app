@@ -23,12 +23,10 @@ import {
  logOutText,
  walletText,
  goToPlayText,
- addFundsText,
 } from "@gopvp/app/src/constants/message";
-import { useWalletModal } from "@gopvp/app/src/context/WalletModalContext";
 import { backText } from "@gopvp/common/src/constants/message";
-import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
 import { ROUTES } from "@gopvp/app/src/constants/route";
+import { WALLET_3D_PATH } from "@gopvp/app/src/constants/asset";
 
 export default function Header() {
  const { pathname } = useLocation();
@@ -46,7 +44,6 @@ export default function Header() {
  const session = useReduxSelector((state) => state.auth.session);
  const logout = useLogout();
  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
- const { openDeposit } = useWalletModal();
  const initial = session?.username?.charAt(0).toUpperCase() ?? "";
 
  const closeMenu = () => setAnchorEl(null);
@@ -93,20 +90,13 @@ export default function Header() {
      <Skeleton variant="rounded" customClass="appbar-balance-skeleton" />
     ) : (
      <Box customClass="appbar-wallet">
-      <NavLink to={ROUTES.WALLET} style={{ textDecoration: "none" }}>
+      <NavLink to={ROUTES.WALLET}>
        <CustomChip
-        icon={<Wallet strokeWidth={2.2} />}
+        icon={<img src={WALLET_3D_PATH} alt="" />}
         label={formatAmount(usdValue)}
         customClass="appbar-balance"
        />
       </NavLink>
-      <CustomIconButton
-       type="button"
-       customClass="appbar-add-funds"
-       onClick={openDeposit}
-       aria-label={addFundsText}
-       icon="plus"
-      />
      </Box>
     )}
 
@@ -167,7 +157,6 @@ export default function Header() {
      </NavLink>
      <Button
       type="button"
-      sx={{ justifyContent: "flex-start" }}
       startIcon="logOut"
       customClass="appbar-dropdown-item  danger"
       onClick={() => {

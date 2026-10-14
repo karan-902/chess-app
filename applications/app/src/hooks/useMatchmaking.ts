@@ -2,28 +2,40 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { getSocket } from "@gopvp/common/src/util/socket";
 import { useSocket } from "@gopvp/app/src/context/SocketContext";
-import { useReduxDispatch } from "@gopvp/app/src/redux/hooks";
+import { useReduxDispatch, useReduxSelector } from "@gopvp/app/src/redux/hooks";
 import { showToast } from "@gopvp/app/src/redux/common/slice";
 import { showAckErrorToast } from "@gopvp/common/src/util/api";
 import { buildMatchUrl } from "@gopvp/app/src/utils";
 import { useGame } from "@gopvp/app/src/hooks/useGame";
 import { useCountdown } from "@gopvp/common/src/hooks/useCountdown";
-import { POOL_TIMEOUT_SECONDS } from "@gopvp/app/src/constants/limit";
+import {
+ POOL_TIMEOUT_SECONDS,
+ MATCH_REVEAL_MS,
+} from "@gopvp/app/src/constants/limit";
 import { noOpponentFoundText } from "@gopvp/app/src/constants/message";
 import type {
  IPoolResponse,
  IMatchmakingResponse,
  IPoolMatchedEvent,
+ IMatchPlayer,
  ISocketAckError,
 } from "@gopvp/common/src/types/response";
 import { SOCKET_EVENTS } from "@gopvp/common/src/constants/event";
 
-export type MatchmakingStatus = "idle" | "joining" | "queued" | "found";
+export type MatchmakingStatus =
+ | "idle"
+ | "joining"
+ | "queued"
+ | "revealing"
+ | "found";
 
 export function useMatchmaking() {
  const [status, setStatus] = useState<MatchmakingStatus>("idle");
  const [queuedPool, setQueuedPool] = useState<IPoolResponse | null>(null);
  const [queueDeadlineAt, setQueueDeadlineAt] = useState<number | null>(null);
+ const [opponentName, setOpponentName] = useState("");
+ const revealTimerRef = useRef<ReturnType<typeof setTimeout>>();
+ const myId = useReduxSelector((state) => state.auth.session?.id);
  const secondsLeft = useCountdown(queueDeadlineAt);
  const poolRef = useRef<IPoolResponse | null>(null);
  const navigate = useNavigate();
@@ -32,9 +44,11 @@ export function useMatchmaking() {
  const dispatch = useReduxDispatch();
 
  const resetStatus = useCallback(() => {
+  clearTimeout(revealTimerRef.current);
   setStatus("idle");
   setQueuedPool(null);
   setQueueDeadlineAt(null);
+  setOpponentName("");
   poolRef.current = null;
  }, []);
 
@@ -44,13 +58,21 @@ export function useMatchmaking() {
  }, [resetStatus]);
 
  const openMatch = useCallback(
-  (matchId: string) => {
+  (matchId: string, players?: IMatchPlayer[]) => {
    if (!poolRef.current) return;
    poolRef.current = null;
-   setStatus("found");
-   navigate(buildMatchUrl(game, matchId), { replace: true });
+   setQueueDeadlineAt(null);
+   setOpponentName(players?.find((p) => p.id !== myId)?.username ?? "");
+   setStatus("revealing");
+   const delay = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ? 0
+    : MATCH_REVEAL_MS;
+   revealTimerRef.current = setTimeout(() => {
+    setStatus("found");
+    navigate(buildMatchUrl(game, matchId), { replace: true });
+   }, delay);
   },
-  [game, navigate],
+  [game, navigate, myId],
  );
 
  const emitPoolJoin = useCallback(
@@ -66,7 +88,7 @@ export function useMatchmaking() {
       return;
      }
      if (data.status === "MATCHED" && data.match_type === "POOL") {
-      openMatch(data.match_id);
+      openMatch(data.match_id, data.players);
       return;
      }
      setQueueDeadlineAt(Date.now() + POOL_TIMEOUT_SECONDS * 1000);
@@ -91,7 +113,7 @@ export function useMatchmaking() {
 
   const onMatched = (data: IPoolMatchedEvent) => {
    if (!data.matchId || !poolRef.current) return;
-   openMatch(data.matchId);
+   openMatch(data.matchId, data.players);
   };
 
   const onPoolTimeout = () => {
@@ -127,6 +149,7 @@ export function useMatchmaking() {
 
  useEffect(
   () => () => {
+   clearTimeout(revealTimerRef.current);
    if (poolRef.current) getSocket()?.emit(SOCKET_EVENTS.POOL_LEAVE, () => {});
   },
   [],
@@ -135,6 +158,7 @@ export function useMatchmaking() {
  return {
   status,
   queuedPool,
+  opponentName,
   secondsLeft: secondsLeft ?? 0,
   joinQueue,
   leaveQueue,

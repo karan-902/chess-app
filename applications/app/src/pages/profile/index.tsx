@@ -1,17 +1,17 @@
 import { useState, useEffect, useRef } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import classNames from "classnames";
+// import classNames from "classnames";
 import {
  // CheckCircleIcon,
- DollarSign,
- Flame,
+ // DollarSign,
+ // Flame,
  Globe,
  Mail,
  Moon,
  Pencil,
  Star,
- Trophy,
+ // Trophy,
 } from "@gopvp/common/src/components/images";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
@@ -20,7 +20,8 @@ import Button from "@gopvp/common/src/components/Button/Button";
 import CustomSwitch from "@gopvp/common/src/components/Switch/Switch";
 // import CustomChip from "@gopvp/common/src/components/Chip/Chip";
 import CustomAvatar from "@gopvp/common/src/components/Avatar/Avatar";
-import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
+// import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
+// import StatTile from "@gopvp/common/src/components/StatTile/StatTile";
 import ProfileSkeleton from "@gopvp/app/src/components/common/ProfileSkeleton";
 import UsernameField from "@gopvp/app/src/components/common/UsernameField";
 import { useReduxSelector, useReduxDispatch } from "@gopvp/app/src/redux/hooks";
@@ -32,7 +33,7 @@ import {
  showApiErrorToast,
 } from "@gopvp/common/src/util/api";
 import {
- formatAmount,
+ // formatAmount,
  formatNumber,
  shortenUsername,
 } from "@gopvp/common/src/util/format";
@@ -54,16 +55,16 @@ import {
  // statusText,
  // verifiedText,
  // notVerifiedText,
- bestStreakText,
- winsText,
- earningsText,
+ // bestStreakText,
+ // winsText,
+ // earningsText,
 } from "@gopvp/app/src/constants/message";
 import CustomModal from "@gopvp/common/src/components/Modal/Modal";
 import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
 import { formSubmitHandler } from "@gopvp/common/src/util/form";
 import { usernameRule } from "@gopvp/app/src/utils/validation";
 import { flagCdnUrl } from "@gopvp/common/src/constants/env";
-import { MATCHES_STATS_FALLBACK } from "@gopvp/app/src/constants/limit";
+// import { MATCHES_STATS_FALLBACK } from "@gopvp/app/src/constants/limit";
 
 const profileEditSchema = Yup.object({ username: usernameRule });
 
@@ -161,7 +162,7 @@ export default function Profile() {
   loadProfile();
  }, [dispatch]);
 
- const { stats, statsLoading } = useGameHistory("own", true);
+ const { stats /* , statsLoading */ } = useGameHistory("own", true);
 
  const accountRows = session
   ? [
@@ -190,24 +191,24 @@ export default function Profile() {
     ].filter((row) => row.value)
   : [];
 
- const statItems = [
-  {
-   label: bestStreakText,
-   value: stats?.best_streak ?? MATCHES_STATS_FALLBACK,
-   Icon: Flame,
-  },
-  {
-   label: winsText,
-   value: stats?.wins ?? MATCHES_STATS_FALLBACK,
-   Icon: Trophy,
-  },
-  {
-   label: earningsText,
-   value: formatAmount(stats?.gross_income ?? MATCHES_STATS_FALLBACK),
-   Icon: DollarSign,
-   isMoney: true,
-  },
- ];
+ // const statItems = [
+ //  {
+ //   label: bestStreakText,
+ //   value: stats?.best_streak ?? MATCHES_STATS_FALLBACK,
+ //   Icon: Flame,
+ //  },
+ //  {
+ //   label: winsText,
+ //   value: stats?.wins ?? MATCHES_STATS_FALLBACK,
+ //   Icon: Trophy,
+ //  },
+ //  {
+ //   label: earningsText,
+ //   value: formatAmount(stats?.gross_income ?? MATCHES_STATS_FALLBACK),
+ //   Icon: DollarSign,
+ //   isMoney: true,
+ //  },
+ // ];
 
  return (
   <Box customClass="profile-page">
@@ -255,17 +256,20 @@ export default function Profile() {
        </Box>
       </Box>
 
-      <Box customClass="profile-stats-strip">
+      {/* <Box customClass="profile-stats-strip">
        {statItems.map(({ label, value, Icon, isMoney }) => (
-        <Box key={label} customClass="profile-stat">
-         <Icon size={18} strokeWidth={2.2} />
-         <Text customClass={classNames("profile-stat-val", isMoney && "pos")}>
-          {statsLoading ? <Skeleton customClass="text" width={40} /> : value}
-         </Text>
-         <Text customClass="profile-stat-lbl">{label}</Text>
-        </Box>
+        <StatTile
+         key={label}
+         layout="compact"
+         icon={<Icon size={18} strokeWidth={2.2} />}
+         label={label}
+         value={
+          statsLoading ? <Skeleton customClass="text" width={40} /> : value
+         }
+         valueClass={classNames(isMoney && "pos")}
+        />
        ))}
-      </Box>
+      </Box> */}
      </Card>
 
      <Text

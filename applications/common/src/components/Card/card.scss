@@ -13,16 +13,14 @@
   cursor: pointer;
   transition:
    border-color 0.15s ease,
-   transform 0.12s cubic-bezier(0.22, 1, 0.36, 1),
-   box-shadow 0.12s cubic-bezier(0.22, 1, 0.36, 1);
+   background-color 0.15s ease;
 
   &:hover {
    border-color: alpha($gold, 0.35);
   }
 
   &:active {
-   transform: translate(2px, 2px);
-   @include neo-edge($neoEdge, 1px);
+   border-color: alpha($gold, 0.6);
   }
  }
 
@@ -57,10 +55,103 @@
   }
 
   &.insufficient {
-   .stake-value,
-   .pool-entry-fee {
+   .stat-tile-value {
     opacity: 0.6;
    }
+  }
+ }
+
+ &.pool-card {
+  --pool-face: #{nth(nth($poolBlocks, 1), 1)};
+  @include neo-elevated(var(--pool-edge-r), var(--pool-edge-b), 4px);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas:
+   "icon time arrow"
+   "icon win arrow";
+  align-items: center;
+  column-gap: 0.75rem;
+  row-gap: 0;
+  min-height: 4.5rem;
+  padding: 0.625rem 0.875rem;
+
+  @include from-height(tall) {
+   min-height: 5.25rem;
+   padding: 0.875rem 1rem;
+  }
+
+  .minute-chip,
+  .pool-card-title {
+   align-self: end;
+  }
+
+  .pool-card-win,
+  .pool-card-sub {
+   align-self: start;
+  }
+  border: 0;
+  border-radius: 0;
+  color: $white;
+  text-align: left;
+  cursor: pointer;
+  background:
+   linear-gradient(90deg, var(--pool-face) 30%, transparent),
+   url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='41.57' height='24'%3E%3Cpath d='M0 -24l10.39 6l0 12l-10.39 -6ZM0 -24l-10.39 6l0 12l10.39 -6M0 0l10.39 6l0 12l-10.39 -6ZM0 0l-10.39 6l0 12l10.39 -6M0 24l10.39 6l0 12l-10.39 -6ZM0 24l-10.39 6l0 12l10.39 -6M20.78 -12l10.39 6l0 12l-10.39 -6ZM20.78 -12l-10.39 6l0 12l10.39 -6M20.78 12l10.39 6l0 12l-10.39 -6ZM20.78 12l-10.39 6l0 12l10.39 -6M20.78 36l10.39 6l0 12l-10.39 -6ZM20.78 36l-10.39 6l0 12l10.39 -6M41.57 -24l10.39 6l0 12l-10.39 -6ZM41.57 -24l-10.39 6l0 12l10.39 -6M41.57 0l10.39 6l0 12l-10.39 -6ZM41.57 0l-10.39 6l0 12l10.39 -6M41.57 24l10.39 6l0 12l-10.39 -6ZM41.57 24l-10.39 6l0 12l10.39 -6' fill='none' stroke='white' stroke-opacity='0.09'/%3E%3C/svg%3E"),
+   var(--pool-face);
+
+  @for $i from 1 through length($poolBlocks) {
+   $block: nth($poolBlocks, $i);
+
+   &.tone-#{$i} {
+    --pool-face: #{nth($block, 1)};
+    --pool-edge-r: #{nth($block, 2)};
+    --pool-edge-b: #{nth($block, 3)};
+   }
+  }
+
+  &:focus-visible {
+   outline: 2px solid $gold;
+   outline-offset: 3px;
+  }
+
+  &.static {
+   cursor: default;
+
+   &:active {
+    transform: none;
+
+    &::before,
+    &::after {
+     opacity: 1;
+    }
+   }
+  }
+
+  &.insufficient {
+   opacity: 0.6;
+  }
+
+  &.more {
+   min-height: 0;
+   --pool-face: #262a6e;
+   --pool-edge-r: #3a3fa0;
+   --pool-edge-b: #14174a;
+   grid-template-areas:
+    "icon win arrow"
+    "icon time arrow";
+
+   .pool-card-arrow {
+    color: $gold;
+   }
+  }
+
+  .pool-card-arrow {
+   justify-self: end;
+   align-self: center;
+   grid-area: arrow;
+   width: 1.75rem;
+   height: 1.75rem;
+   stroke-width: 1.4;
   }
  }
 
@@ -93,14 +184,6 @@
    $appCard;
  }
 
- &.stat-card {
-  display: flex;
-  flex-direction: column;
-  gap: 0.625rem;
-  min-width: 0;
-  padding: 0.875rem;
- }
-
  &.rules-card {
   display: flex;
   flex-direction: column;
@@ -111,7 +194,7 @@
  }
 
  &.profile-id-card {
-  padding: $space-16 $space-16 0;
+  padding: $space-16;
   margin-bottom: $space-24;
   border-radius: $radius-card;
   overflow: hidden;

@@ -5,6 +5,7 @@ import Text from "@gopvp/common/src/components/Text/Text";
 import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
 import Button from "@gopvp/common/src/components/Button/Button";
 import CustomDrawer from "@gopvp/common/src/components/Drawer/Drawer";
+import StatTile from "@gopvp/common/src/components/StatTile/StatTile";
 import { formatAmount } from "@gopvp/common/src/util/format";
 import { GAME_LOGO_PATH } from "@gopvp/chess/src/constants/asset";
 import { RESULT_COUNT_TIMING } from "@gopvp/chess/src/constants/limit";
@@ -111,29 +112,23 @@ export default function GameOverOverlay({
    {!isPvc && (
     <Box customClass={classNames("result-tiles", { single: tiles.length === 1 })}>
      {tiles.map(({ key, label, value, change }) => (
-      <Box
+      <StatTile
        key={key}
        ref={key === "amount" ? amountTileRef : undefined}
-       customClass={classNames("result-tile", {
+       label={label}
+       value={value}
+       customClass={classNames({
         "loss-edge": key === "amount" && outcome === "loss",
         "refund-sheen": key === "amount" && outcome === "draw",
        })}
-      >
-       <Text customClass="result-tile-caption" uppercase>
-        {label}
-       </Text>
-       <Text
-        customClass={classNames("result-tile-val", {
-         pos: change > 0 && outcome !== "draw" && outcome !== "match_cancelled",
-         neg: change < 0,
-         refund: key === "amount" && outcome === "draw",
-         returned: key === "amount" && outcome === "match_cancelled",
-         shake: key === "amount" && outcome === "loss",
-        })}
-       >
-        {value}
-       </Text>
-      </Box>
+       valueClass={classNames({
+        pos: change > 0 && outcome !== "draw" && outcome !== "match_cancelled",
+        neg: change < 0,
+        refund: key === "amount" && outcome === "draw",
+        returned: key === "amount" && outcome === "match_cancelled",
+        shake: key === "amount" && outcome === "loss",
+       })}
+      />
      ))}
     </Box>
    )}

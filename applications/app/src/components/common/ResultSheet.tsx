@@ -5,6 +5,7 @@ import Text from "@gopvp/common/src/components/Text/Text";
 import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
 import CustomDrawer from "@gopvp/common/src/components/Drawer/Drawer";
 import CustomBadge from "@gopvp/common/src/components/Badge/Badge";
+import StatTile from "@gopvp/common/src/components/StatTile/StatTile";
 import { icons } from "@gopvp/common/src/components/images";
 import { useGame } from "@gopvp/app/src/hooks/useGame";
 import { vsText } from "@gopvp/app/src/constants/message";
@@ -64,24 +65,13 @@ export default function ResultSheet({
         ) : (
          <CustomBadge customClass="result-vs" badgeContent={vsText} />
         ))}
-       <Box
-        customClass={classNames(
-         "result-tile-wrap",
-         tile?.highlight && "highlight",
-        )}
-       >
-        <Box customClass="result-tile-label">
-         <Text component="span" customClass="result-tile-lbl">
-          {tile ? tile.label : <Skeleton customClass="text" width={60} />}
-         </Text>
-         {tile && TileIcon && <TileIcon />}
-        </Box>
-        <Box customClass="result-tile">
-         <Text customClass="result-tile-val">
-          {tile ? tile.value : <Skeleton customClass="text" width={50} />}
-         </Text>
-        </Box>
-       </Box>
+       <StatTile
+        layout="label-top"
+        label={tile ? tile.label : <Skeleton customClass="text" width={60} />}
+        value={tile ? tile.value : <Skeleton customClass="text" width={50} />}
+        icon={tile && TileIcon && <TileIcon />}
+        customClass={classNames(tile?.highlight && "highlight")}
+       />
       </Fragment>
      ),
     )}

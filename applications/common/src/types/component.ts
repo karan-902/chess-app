@@ -118,11 +118,28 @@ export interface IChipSelectProps<T extends string> {
  customClass?: string;
 }
 
+export interface ISlideToConfirmProps {
+ label: string;
+ onConfirm: () => void;
+ isLoading?: boolean;
+ disabled?: boolean;
+ customClass?: string;
+}
+
 export interface ISheetActionsProps {
  children?: ReactNode;
  cancelLabel?: string;
  onCancel?: () => void;
  isCancelDisabled?: boolean;
+}
+
+export interface IStatTileProps {
+ label: ReactNode;
+ value: ReactNode;
+ icon?: ReactNode;
+ layout?: "caption" | "label-top" | "icon-card" | "stake" | "compact";
+ customClass?: string;
+ valueClass?: string;
 }
 
 export interface IDurationWheelProps {

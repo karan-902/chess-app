@@ -9,7 +9,7 @@
   gap: 0.15rem;
   overflow-y: auto;
   border-radius: 0 !important;
-  @include neo-edge($btnEdgeGold, 4px, $important: true);
+  box-shadow: none !important;
  }
 
  &.MuiDrawer-anchorRight .MuiDrawer-paper {
@@ -26,8 +26,8 @@
   width: 100%;
   max-height: 85%;
   background: $appSheetFill;
-  border-top: 1px solid alpha($gold, 0.6);
   box-shadow: none !important;
+  overflow-x: hidden;
   padding: 3.25rem 1.25rem 1.75rem;
 
   :root[data-theme="light"] & {
@@ -64,7 +64,7 @@
   background:
    radial-gradient(
     8.75rem 8rem at 50% 4.0625rem,
-    alpha($paleRed, 0.22),
+    alpha($paleRed, 0.26),
     transparent
    ),
    $appSheetFill;
@@ -75,7 +75,17 @@
   background:
    radial-gradient(
     8.75rem 8rem at 50% 4.0625rem,
-    alpha($gold, 0.22),
+    alpha($gold, 0.3),
+    transparent
+   ),
+   $appSheetFill;
+ }
+
+ &.result-sheet.neutral .MuiDrawer-paper {
+  background:
+   radial-gradient(
+    8.75rem 8rem at 50% 4.0625rem,
+    alpha($auraIndigo, 0.28),
     transparent
    ),
    $appSheetFill;
