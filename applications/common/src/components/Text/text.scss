@@ -1111,13 +1111,14 @@
   }
  }
 
- &.result-tile-caption {
+ &.stat-tile-label {
   font-family: $fontOutfitBold;
   font-size: $font10;
   letter-spacing: 0.14em;
   color: $appTextMuted;
  }
 
+ &.stat-tile-value,
  &.result-tile-val {
   font-family: $fontOutfitBlack;
   font-size: $font24;

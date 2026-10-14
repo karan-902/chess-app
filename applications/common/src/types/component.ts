@@ -125,6 +125,13 @@ export interface ISheetActionsProps {
  isCancelDisabled?: boolean;
 }
 
+export interface IStatTileProps {
+ label: ReactNode;
+ value: ReactNode;
+ customClass?: string;
+ valueClass?: string;
+}
+
 export interface IDurationWheelProps {
  value: number;
  onChange: (value: number) => void;
