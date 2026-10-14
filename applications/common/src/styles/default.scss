@@ -98,7 +98,7 @@
  --btn-ghost-border: color-mix(in srgb, #ffffff 20%, transparent);
  --btn-ghost-edge: transparent;
  --app-card: #1e1f33;
- --app-sheet-fill: linear-gradient(180deg, #282a42, #1e2034 40%, #181a2a);
+ --app-sheet-fill: linear-gradient(180deg, #222668, #11143c);
  --app-menu-fill: linear-gradient(180deg, #1c1d2e, #0c0c14);
  --app-input-fill: linear-gradient(180deg, #3a3d5e, #272a45);
  --app-podium-fill: linear-gradient(180deg, #2a2c48, #14152a);
@@ -153,7 +153,7 @@
  --btn-ghost-border: #bcc1e2;
  --btn-ghost-edge: #5b60a8;
  --app-card: #ffffff;
- --app-sheet-fill: linear-gradient(180deg, #f0f1f6, #e4e7ef);
+ --app-sheet-fill: linear-gradient(180deg, #ffffff, #eceefa);
  --app-sheet-card-border: #d3d7e1;
  --app-sheet-card-edge: #6b7184;
  --app-menu-fill: var(--app-surface);
@@ -184,6 +184,7 @@
  @return color-mix(in srgb, #{$color} #{$opacity * 100%}, transparent);
 }
 $white: #fff;
+$auraIndigo: #787eff;
 $paleRed: var(--pale-red);
 $brinkPink: var(--brink-pink);
 $greenishTeal: var(--greenish-teal);
