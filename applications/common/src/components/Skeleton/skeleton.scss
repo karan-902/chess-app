@@ -24,7 +24,7 @@
  }
 
  .result-hero &,
- .stat-tile:not(.icon-card) & {
+ .stat-tile:is(.caption, .label-top) & {
   margin-inline: auto;
  }
  &.select-option {

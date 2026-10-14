@@ -4,6 +4,7 @@ import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
 import Card from "@gopvp/common/src/components/Card/Card";
 import CustomDrawer from "@gopvp/common/src/components/Drawer/Drawer";
+import StatTile from "@gopvp/common/src/components/StatTile/StatTile";
 import PoolCardSkeleton from "@gopvp/app/src/components/common/PoolCardSkeleton";
 import type { IBetSheetProps } from "@gopvp/common/src/types/component";
 import { icons } from "@gopvp/common/src/components/images";
@@ -58,14 +59,18 @@ export default function BetSheet({
         >
          <PoolLabel pool={pool} />
          <Box customClass="pool-stats">
-          <Box customClass="pool-stat">
-           <Text customClass="stake-label win">{winText}</Text>
-           <Text customClass="stake-value win">${pool.prize}</Text>
-          </Box>
-          <Box customClass="pool-stat entry">
-           <Text customClass="stake-label">{entryText}</Text>
-           <Text customClass="pool-entry-fee">${pool.bet}</Text>
-          </Box>
+          <StatTile
+           layout="stake"
+           customClass="win"
+           label={winText}
+           value={`$${pool.prize}`}
+          />
+          <StatTile
+           layout="stake"
+           customClass="entry"
+           label={entryText}
+           value={`$${pool.bet}`}
+          />
          </Box>
          <Button
           type="button"

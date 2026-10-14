@@ -57,8 +57,7 @@
   }
 
   &.insufficient {
-   .stake-value,
-   .pool-entry-fee {
+   .stat-tile-value {
     opacity: 0.6;
    }
   }

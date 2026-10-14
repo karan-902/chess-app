@@ -683,16 +683,6 @@
   }
  }
 
- &.pool-entry-fee {
-  display: flex;
-  align-items: center;
-  height: 2rem;
-  font-family: $fontOutfitBold;
-  font-size: $font16;
-  letter-spacing: 0.2px;
-  color: $appEntryFee;
- }
-
  &.pool-insufficient-label {
   display: block;
   margin-top: 0.35rem;
@@ -1095,6 +1085,21 @@
    color: $appText;
   }
 
+  .stake & {
+   font-family: $fontOutfitExtraBold;
+   line-height: 1.6;
+   letter-spacing: 1.2px;
+   color: $appEntryFee;
+  }
+
+  .stake.win & {
+   color: $appPrize;
+
+   :root[data-theme="light"] & {
+    color: $appTextMuted;
+   }
+  }
+
   .result-tiles.versus & {
    min-width: 0;
    overflow: hidden;
@@ -1143,6 +1148,34 @@
    white-space: nowrap;
    font-family: $fontOutfitExtraBold;
    font-size: $font30;
+  }
+
+  .stake & {
+   font-family: $fontOutfitExtraBold;
+   font-size: $font30;
+   letter-spacing: -1px;
+   color: $appEntryFee;
+  }
+
+  .stake.win & {
+   color: $appPrize;
+
+   :root:not([data-theme="light"]) & {
+    background: $btnGoldFill;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+   }
+  }
+
+  .stake.entry & {
+   display: flex;
+   align-items: center;
+   justify-content: flex-end;
+   height: 2rem;
+   font-family: $fontOutfitBold;
+   font-size: $font16;
+   letter-spacing: 0.2px;
   }
 
   &.shake {
