@@ -2298,17 +2298,23 @@
   max-width: 100%;
   min-width: 0;
 
-  svg {
+  > svg {
    width: 1.125rem;
    height: 1.125rem;
    flex-shrink: 0;
    color: $appTextMuted;
   }
 
+  .icon-card & {
+   flex-direction: column-reverse;
+   align-items: flex-start;
+   gap: 0.625rem;
+  }
+
   .result-tiles.versus & {
    flex-direction: row-reverse;
 
-   svg {
+   > svg {
     width: 0.75rem;
     height: 0.75rem;
     color: $appText;
@@ -2319,9 +2325,18 @@
  &.stat-tile {
   width: 100%;
   padding: $space-16;
-  background: $appSurface;
+  background: $appCard;
   @include neo-plunk;
   text-align: center;
+
+  &.icon-card {
+   display: flex;
+   flex-direction: column;
+   gap: 0.625rem;
+   min-width: 0;
+   padding: 0.875rem;
+   text-align: left;
+  }
 
   &.label-top {
    display: flex;

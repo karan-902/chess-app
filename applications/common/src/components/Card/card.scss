@@ -93,14 +93,6 @@
    $appCard;
  }
 
- &.stat-card {
-  display: flex;
-  flex-direction: column;
-  gap: 0.625rem;
-  min-width: 0;
-  padding: 0.875rem;
- }
-
  &.rules-card {
   display: flex;
   flex-direction: column;

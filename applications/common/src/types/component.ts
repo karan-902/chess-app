@@ -129,7 +129,7 @@ export interface IStatTileProps {
  label: ReactNode;
  value: ReactNode;
  icon?: ReactNode;
- layout?: "caption" | "label-top";
+ layout?: "caption" | "label-top" | "icon-card";
  customClass?: string;
  valueClass?: string;
 }

@@ -855,27 +855,6 @@
   color: $appTabActive;
  }
 
- &.stat-card-label {
-  font-family: $fontOutfitMedium;
-  font-size: $font13;
-  color: $appText;
- }
-
- &.stat-card-val {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-family: $fontOutfitExtraBold;
-  font-size: $font30;
-  line-height: 1.1;
-  color: $appText;
-
-  &.prize {
-   color: $appPrize;
-  }
- }
-
  &.stat-title {
   font-family: $fontOutfitMedium !important;
   font-size: $font16;
@@ -1109,6 +1088,13 @@
    color: $appText;
   }
 
+  .icon-card & {
+   font-family: $fontOutfitMedium;
+   font-size: $font13;
+   letter-spacing: normal;
+   color: $appText;
+  }
+
   .result-tiles.versus & {
    min-width: 0;
    overflow: hidden;
@@ -1141,7 +1127,20 @@
    color: $appTextMuted;
   }
 
+  &.prize {
+   color: $appPrize;
+  }
+
   .result-tiles.versus & {
+   font-family: $fontOutfitExtraBold;
+   font-size: $font30;
+  }
+
+  .icon-card & {
+   min-width: 0;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   white-space: nowrap;
    font-family: $fontOutfitExtraBold;
    font-size: $font30;
   }
