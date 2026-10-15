@@ -51,8 +51,8 @@
   }
 
   &.Mui-disabled {
-   opacity: 0.3;
-   cursor: not-allowed;
+   color: alpha($appText, 0.8);
+   cursor: default;
   }
  }
 
