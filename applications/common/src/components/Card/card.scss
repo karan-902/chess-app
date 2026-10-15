@@ -1,3 +1,4 @@
+@use "sass:list";
 @use "default.scss" as *;
 
 .common-card {
@@ -62,23 +63,19 @@
  }
 
  &.pool-card {
-  --pool-face: #{nth(nth($poolBlocks, 1), 1)};
-  @include neo-elevated(var(--pool-edge-r), var(--pool-edge-b), 4px);
+  --pool-face: #{list.nth(list.nth($poolBlocks, 1), 1)};
+  --pool-ink: #{list.nth(list.nth($poolBlocks, 1), 2)};
+  @include neo-elevated($poolEdgeRight, $poolEdgeBottom);
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: 4.25rem 1fr auto;
   grid-template-areas:
    "icon time arrow"
    "icon win arrow";
   align-items: center;
-  column-gap: 0.75rem;
+  column-gap: 0.9375rem;
   row-gap: 0;
-  min-height: 4.5rem;
-  padding: 0.625rem 0.875rem;
-
-  @include from-height(tall) {
-   min-height: 5.25rem;
-   padding: 0.875rem 1rem;
-  }
+  min-height: 4.25rem;
+  padding: 0 1rem 0 0;
 
   .minute-chip,
   .pool-card-title {
@@ -91,21 +88,22 @@
   }
   border: 0;
   border-radius: 0;
-  color: $white;
+  color: $poolInk;
   text-align: left;
   cursor: pointer;
-  background:
-   linear-gradient(90deg, var(--pool-face) 30%, transparent),
-   url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='41.57' height='24'%3E%3Cpath d='M0 -24l10.39 6l0 12l-10.39 -6ZM0 -24l-10.39 6l0 12l10.39 -6M0 0l10.39 6l0 12l-10.39 -6ZM0 0l-10.39 6l0 12l10.39 -6M0 24l10.39 6l0 12l-10.39 -6ZM0 24l-10.39 6l0 12l10.39 -6M20.78 -12l10.39 6l0 12l-10.39 -6ZM20.78 -12l-10.39 6l0 12l10.39 -6M20.78 12l10.39 6l0 12l-10.39 -6ZM20.78 12l-10.39 6l0 12l10.39 -6M20.78 36l10.39 6l0 12l-10.39 -6ZM20.78 36l-10.39 6l0 12l10.39 -6M41.57 -24l10.39 6l0 12l-10.39 -6ZM41.57 -24l-10.39 6l0 12l10.39 -6M41.57 0l10.39 6l0 12l-10.39 -6ZM41.57 0l-10.39 6l0 12l10.39 -6M41.57 24l10.39 6l0 12l-10.39 -6ZM41.57 24l-10.39 6l0 12l10.39 -6' fill='none' stroke='white' stroke-opacity='0.09'/%3E%3C/svg%3E"),
-   var(--pool-face);
+  background: $poolInfoBg;
 
-  @for $i from 1 through length($poolBlocks) {
-   $block: nth($poolBlocks, $i);
+  :root[data-theme="light"] & {
+   border: 1px solid $poolEdgeBottom;
+   border-width: 1px 0 0 1px;
+  }
+
+  @for $i from 1 through list.length($poolBlocks) {
+   $block: list.nth($poolBlocks, $i);
 
    &.tone-#{$i} {
-    --pool-face: #{nth($block, 1)};
-    --pool-edge-r: #{nth($block, 2)};
-    --pool-edge-b: #{nth($block, 3)};
+    --pool-face: #{list.nth($block, 1)};
+    --pool-ink: #{list.nth($block, 2)};
    }
   }
 
@@ -132,17 +130,13 @@
   }
 
   &.more {
-   min-height: 0;
-   --pool-face: #262a6e;
-   --pool-edge-r: #3a3fa0;
-   --pool-edge-b: #14174a;
+   --pool-face: #{$poolInk};
+   --pool-ink: #{$white};
+   grid-template-columns: 3.5rem 1fr auto;
    grid-template-areas:
     "icon win arrow"
     "icon time arrow";
-
-   .pool-card-arrow {
-    color: $gold;
-   }
+   min-height: 3.5rem;
   }
 
   .pool-card-arrow {
@@ -152,6 +146,7 @@
    width: 1.75rem;
    height: 1.75rem;
    stroke-width: 1.4;
+   color: alpha($poolInk, 0.9);
   }
  }
 

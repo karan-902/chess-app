@@ -91,6 +91,49 @@
    $appSheetFill;
  }
 
+ &.bet-sheet,
+ &.room-sheet,
+ &.match-confirm-sheet,
+ &.practice-sheet {
+  .MuiDrawer-paper {
+   max-height: 94%;
+   overflow-x: hidden;
+
+   > * {
+    flex-shrink: 0;
+   }
+  }
+ }
+
+ &.bet-sheet .MuiDrawer-paper,
+ &.room-sheet .MuiDrawer-paper,
+ &.match-confirm-sheet .MuiDrawer-paper,
+ &.practice-sheet .MuiDrawer-paper {
+  padding-top: 1.75rem;
+ }
+
+ &.room-sheet .MuiDrawer-paper {
+  padding-bottom: 1rem;
+
+  @include from-height(medium) {
+   padding-bottom: 1.75rem;
+  }
+ }
+
+ &.bet-sheet .MuiDrawer-paper {
+  &::after {
+   content: "";
+   position: absolute;
+   inset: 0;
+   z-index: -1;
+   @include cubes-pattern(
+    alpha($appText, 0.05),
+    linear-gradient(180deg, transparent 8%, #000 30%, #000 80%, transparent)
+   );
+   pointer-events: none;
+  }
+ }
+
  &.wallet-sheet .MuiDrawer-paper {
   min-height: 24rem;
   justify-content: safe center;

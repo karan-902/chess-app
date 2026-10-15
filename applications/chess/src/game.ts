@@ -1,5 +1,6 @@
 import { lazy } from "react";
 import ChessPoolLabel from "@gopvp/chess/src/pages/play/ChessPoolLabel";
+import BoardSurface from "@gopvp/chess/src/components/board/BoardSurface";
 import { GAME_LOGO_PATH } from "@gopvp/chess/src/constants/asset";
 import type { IGameModule } from "@gopvp/common/src/types/component";
 
@@ -13,4 +14,5 @@ export const chessGame: IGameModule = {
  logoSrc: GAME_LOGO_PATH,
  Practice: lazy(() => import("@gopvp/chess/src/pages/play/ChessPractice")),
  Rules: lazy(() => import("@gopvp/chess/src/pages/rules/ChessRules")),
+ RevealSurface: BoardSurface,
 };

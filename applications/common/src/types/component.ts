@@ -29,6 +29,20 @@ export interface IGameContext {
   matchId: string,
   onResult: (result: IMatchResultResponse) => void,
  ) => () => void;
+ isRevealing?: boolean;
+ startReveal?: (ticket: HTMLElement) => void;
+}
+
+export interface ISplitRevealTicket {
+ node: HTMLElement;
+ rect: DOMRect;
+ tearY: number;
+}
+
+export interface ISplitRevealProps {
+ ticket: ISplitRevealTicket;
+ Surface: ComponentType;
+ onDone: () => void;
 }
 
 export interface IPoolLabelProps {
@@ -48,6 +62,7 @@ export interface IGameModule {
  logoSrc: string;
  Practice?: ComponentType<IGamePracticeProps>;
  Rules: ComponentType;
+ RevealSurface: ComponentType;
 }
 
 export interface IEmailValues {

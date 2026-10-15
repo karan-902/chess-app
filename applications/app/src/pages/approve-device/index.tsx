@@ -89,7 +89,7 @@ export default function ApproveDevice() {
     type="button"
     variant="contained"
     fullWidth
-    customClass="auth-submit-btn"
+    customClass="auth-submit-btn tilted"
     disabled={submitting}
     isLoading={submitting}
     onClick={handleApprove}

@@ -103,12 +103,17 @@
 
  &.amount-input-hero .input-row {
   height: auto;
-  padding: 0.5rem 0;
+  padding: 0.25rem 0;
   border: none;
   font-family: $fontOutfitBlack;
-  font-size: 3.5rem;
+  font-size: 2.75rem;
   line-height: 1.1;
   text-align: center;
+
+  @include from-height(medium) {
+   padding: 0.5rem 0;
+   font-size: 3.5rem;
+  }
 
   input::placeholder {
    color: alpha($appText, 0.35) !important;

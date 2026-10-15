@@ -9,6 +9,7 @@ import type { IMoveListProps } from "@gopvp/chess/src/types/component";
 import {
  cancelPremovesText,
  premoveRouteText,
+ noMovesYetText,
 } from "@gopvp/chess/src/constants/message";
 
 export default function MoveList({
@@ -18,6 +19,7 @@ export default function MoveList({
  onJump,
  premove,
  onCancelPremoves,
+ status,
 }: IMoveListProps) {
  const movesRef = useRef<HTMLDivElement>(null);
  const [isScrolled, setIsScrolled] = useState(false);
@@ -37,7 +39,15 @@ export default function MoveList({
    ?.scrollIntoView({ behavior: "smooth", inline: "end", block: "nearest" });
  }, [premoveKey]);
 
- if (moveHistory.length === 0 && !premove) return null;
+ if (status || (moveHistory.length === 0 && !premove))
+  return (
+   <Box customClass="gr-move-strip empty">
+    {status && <Box customClass="gr-move-spinner" />}
+    <Text component="span" customClass="gr-move-empty">
+     {status ?? noMovesYetText}
+    </Text>
+   </Box>
+  );
 
  const indexOffset = moveHistory[0]?.w ? 0 : -1;
 
@@ -53,7 +63,7 @@ export default function MoveList({
     return (
      <Box key={m.n} customClass="gr-move-pair">
       <Text component="span" customClass="gr-move-n">
-       {m.n}.
+       {m.n}
       </Text>
       {m.w && (
        <CustomChip

@@ -13,6 +13,9 @@ import {
  playAFriendText,
  customFeeText,
  addFundsText,
+ pickYourBetText,
+ moreWaysToPlayText,
+ winItWithdrawItText,
 } from "@gopvp/app/src/constants/message";
 import { renderSkeletons } from "@gopvp/app/src/utils/skeleton";
 import { pressProps, poolTone } from "@gopvp/app/src/utils";
@@ -41,6 +44,7 @@ export default function BetSheet({
    onClose={onClose}
    customClass="bet-sheet"
   >
+   <Text customClass="sheet-title dialog-title">{pickYourBetText}</Text>
    <Box customClass="bet-grid">
     {poolsLoading
      ? renderSkeletons(POOL_SKELETON_ROWS, PoolCardSkeleton)
@@ -60,6 +64,7 @@ export default function BetSheet({
         );
        })}
    </Box>
+   <Text customClass="bet-section-label">{moreWaysToPlayText}</Text>
    <Box customClass="bet-grid">
     {onPracticeOpen && (
      <Card customClass="pool-card more" {...pressProps(onPracticeOpen)}>
@@ -91,6 +96,10 @@ export default function BetSheet({
      )}
     </Card>
    </Box>
+   <Text customClass="bet-sheet-footer">
+    <icons.shieldCheck />
+    {winItWithdrawItText}
+   </Text>
    {/* <Text customClass="sheet-tip meta-text">
     <>
      <b>{tipText}</b> {largestPrizesTipText}

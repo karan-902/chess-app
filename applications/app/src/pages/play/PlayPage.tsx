@@ -38,6 +38,7 @@ export default function PlayPage() {
   opponentName: poolOpponentName,
   secondsLeft,
   joinQueue,
+  retryQueue,
   leaveQueue,
   resetStatus,
  } = useMatchmaking();
@@ -88,9 +89,9 @@ export default function PlayPage() {
  }, [roomStatus]);
 
  useEffect(() => {
-  if (status === "queued" || status === "revealing" || roomOpen)
+  if (status === "queued" || status === "revealing" || roomOpen || practiceOpen)
    preloadGameRoom();
- }, [status, roomOpen, preloadGameRoom]);
+ }, [status, roomOpen, practiceOpen, preloadGameRoom]);
 
  if (matchId || gameId) {
   return (
@@ -147,8 +148,14 @@ export default function PlayPage() {
 
  const handleConfirmClose = () => {
   if (status === "joining" || status === "queued") leaveQueue();
+  if (status === "timeout") resetStatus();
   setConfirmOpen(false);
   setConfirmPool(null);
+ };
+
+ const handlePickAnotherBet = () => {
+  resetStatus();
+  setSheetOpen(true);
  };
 
  return (
@@ -234,6 +241,8 @@ export default function PlayPage() {
     onLeaveQueue={leaveQueue}
     onConfirmJoin={handleConfirmJoin}
     onConfirmCancel={handleConfirmCancel}
+    onRetry={retryQueue}
+    onPickAnotherBet={handlePickAnotherBet}
    />
   </Box>
  );

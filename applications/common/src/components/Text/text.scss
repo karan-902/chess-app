@@ -102,7 +102,7 @@
  }
 
  &.dialog-title {
-  font-family: $fontOutfitBlack;
+  font-family: $fontOutfitMedium;
   font-size: 1.625rem;
   line-height: 1.15;
   letter-spacing: -0.01em;
@@ -727,15 +727,11 @@
 
  &.pool-card-win {
   grid-area: win;
-  font-family: $fontOutfitBlack;
+  font-family: $fontOutfitBold;
   font-size: $font20;
   line-height: 1.15;
   white-space: nowrap;
-  color: $white;
-
-  @include from-height(tall) {
-   font-size: $font22;
-  }
+  color: alpha($poolInk, 0.9);
  }
 
  &.match-card-avatar {
@@ -776,13 +772,215 @@
   flex-shrink: 0;
   padding: 0.25rem 0.625rem;
   border: 1px solid alpha($appText, 0.16);
-  background: alpha($black, 0.3);
+  background: transparent;
   font-family: $fontOutfitBlack;
   font-size: $font14;
   color: $appText;
 
   &.low {
    color: $paleRed;
+  }
+
+  &.settled {
+   opacity: 0.45;
+  }
+ }
+
+ .match-sheet.lost &.public-title {
+  background: none;
+  color: $appText;
+ }
+
+ &.match-status-lines {
+  display: grid;
+
+  span {
+   grid-area: 1 / 1;
+   opacity: 0;
+   animation: match-line-cycle 9s ease-in-out infinite;
+
+   &:nth-child(2) {
+    animation-delay: 3s;
+   }
+
+   &:nth-child(3) {
+    animation-delay: 6s;
+   }
+  }
+ }
+
+ &.match-starting {
+  align-self: center;
+  font-family: $fontOutfitBold;
+  font-size: $font15;
+  color: $greenishTeal;
+
+  .match-countdown {
+   display: inline-grid;
+   min-width: 0.75rem;
+
+   b {
+    grid-area: 1 / 1;
+    opacity: 0;
+    animation: match-count-step 1s ease-out both;
+
+    &:nth-child(2) {
+     animation-delay: 1s;
+    }
+
+    &:nth-child(3) {
+     animation-delay: 2s;
+     animation-name: match-count-last;
+    }
+   }
+  }
+ }
+
+ &.ticket-stub-label {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: $fontOutfitBold;
+  font-size: 0.5625rem;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  transition:
+   opacity 0.3s,
+   transform 0.3s;
+
+  &.confirmed {
+   opacity: 0;
+   transform: translateY(0.5rem);
+   background: $gold;
+   color: $poolInk;
+  }
+
+  &.none {
+   opacity: 0;
+   background: #c9ccd8;
+   color: $poolInk;
+  }
+
+  .match-ticket.found &.confirmed {
+   opacity: 1;
+   transform: none;
+  }
+
+  .match-ticket.found &.pending,
+  .match-ticket.lost &.pending {
+   opacity: 0;
+  }
+
+  .match-ticket.lost &.none {
+   opacity: 1;
+   transition-delay: 0.3s;
+  }
+ }
+
+ &.practice-ticket-stub-label {
+  font-family: $fontOutfitBold;
+  font-size: 0.5625rem;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: $gold;
+ }
+
+ .practice-options &.sheet-title {
+  margin: 0;
+ }
+
+ &.practice-ticket-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: $fontOutfitBold;
+  font-size: 0.5625rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: alpha($poolInk, 0.55);
+
+  &::before,
+  &::after {
+   content: "";
+   flex: 1;
+   height: 1px;
+   background: alpha($poolInk, 0.15);
+  }
+ }
+
+ &.ticket-name {
+  max-width: 4.5rem;
+  font-family: $fontOutfitBold;
+  font-size: 0.625rem;
+  line-height: 0.75rem;
+  color: alpha($poolInk, 0.75);
+
+  &.pending {
+   color: alpha($poolInk, 0.45);
+   text-transform: lowercase;
+  }
+ }
+
+ &.ticket-vs {
+  margin-top: 0.9375rem;
+  font-family: $fontOutfitExtraBold;
+  font-size: 0.625rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: alpha($poolInk, 0.4);
+ }
+
+ &.ticket-stat-label {
+  display: block;
+  font-family: $fontOutfitBold;
+  font-size: 0.4375rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #5c5a52;
+ }
+
+ &.ticket-stat-value {
+  display: block;
+  margin-top: 0.125rem;
+  font-family: $fontOutfitExtraBold;
+  font-size: 0.75rem;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: $poolInk;
+
+  .ticket-stat.win & {
+   color: var(--pool-ink);
+  }
+ }
+
+ &.ticket-void {
+  position: absolute;
+  z-index: 3;
+  left: 1.625rem;
+  top: 5.5rem;
+  padding: 0.3125rem 0.75rem;
+  overflow: visible;
+  border: 3px solid #e5484d;
+  font-family: $fontOutfitExtraBold;
+  font-size: $font17;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #e5484d;
+  opacity: 0;
+  transform: rotate(-14deg) scale(1.8);
+  pointer-events: none;
+
+  .match-ticket.lost & {
+   animation: match-void-thud 0.35s cubic-bezier(0.3, 1.4, 0.5, 1) 0.6s
+    forwards;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+   .match-ticket.lost & {
+    opacity: 0.9;
+    transform: rotate(-14deg);
+   }
   }
  }
 
@@ -792,51 +990,64 @@
   right: 0;
   display: inline-flex;
   align-items: center;
-  gap: 0.375rem;
-  padding: 0.125rem 0.5rem;
-  border: 1px solid alpha($white, 0.35);
-  border-width: 0 0 1px 1px;
-
-  @include from-height(tall) {
-   padding: 0.25rem 0.5rem;
-  }
-  background: alpha($white, 0.14);
-  font-family: $fontOutfitExtraBold;
-  font-size: $font13;
+  gap: 0.25rem;
+  padding: 0.25rem 0.625rem;
+  background: var(--pool-face);
+  font-family: $fontOutfitBold;
+  font-size: $font12;
   line-height: 1.2;
-  color: $white;
-
-  span {
-   font-family: $fontOutfitBold;
-   font-size: 0.5625rem;
-   letter-spacing: 1.5px;
-   text-transform: uppercase;
-   color: alpha($white, 0.75);
-  }
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--pool-ink);
  }
 
  &.pool-card-title {
   grid-area: win;
-  font-family: $fontOutfitBlack;
-  font-size: $font18;
+  font-family: $fontOutfitBold;
+  font-size: $font17;
   line-height: 1.2;
-  color: $white;
+  color: alpha($poolInk, 0.9);
  }
 
  &.pool-card-sub {
   grid-area: time;
-  font-family: $fontOutfitMedium;
+  font-family: $fontOutfitRegular;
   font-size: $font12;
-  color: alpha($white, 0.6);
+  color: alpha($poolInk, 0.5);
  }
 
  &.pool-card-add {
   grid-area: arrow;
   font-family: $fontOutfitBold;
   font-size: $font12;
-  color: $white;
+  color: $poolInk;
   text-decoration: underline;
   text-underline-offset: 0.25rem;
+ }
+
+ &.bet-section-label {
+  display: block;
+  margin: 1.25rem 0 0.625rem;
+  font-family: $fontOutfitBold;
+  font-size: $font10;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: alpha($appText, 0.5);
+ }
+
+ &.bet-sheet-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin-top: 1rem;
+  font-family: $fontOutfitMedium;
+  font-size: $font13;
+  color: alpha($appText, 0.7);
+
+  svg {
+   width: 0.875rem;
+   height: 0.875rem;
+  }
  }
 
  &.bet-card-tc {
@@ -885,6 +1096,20 @@
 
   .segment-btn.active & {
    color: $primaryContrast;
+  }
+
+  .segment.ticket-pills & {
+   font-family: $fontOutfitBold;
+   font-size: 0.8125rem;
+   letter-spacing: 1px;
+   padding-left: 1px;
+   text-transform: uppercase;
+   color: alpha($poolInk, 0.75);
+  }
+
+  .segment.ticket-pills .segment-btn.active & {
+   color: $poolInk;
+   transform: translateY(-0.25rem);
   }
 
   .room-segment .segment-btn & {
@@ -1481,42 +1706,84 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   font-family: $fontOutfitBold;
-  font-size: $font15;
+  font-size: $font16;
   font-weight: 400;
   letter-spacing: 0.01em;
-  color: $appText;
- }
+  color: alpha($appText, 0.9);
 
- &.gr-score-label {
-  display: inline-flex;
-  align-items: center;
-  gap: $space-4;
-  flex-shrink: 0;
-  padding: 0.125rem $space-8;
-  background: alpha($gold, 0.14);
-  font-family: $fontOutfitSemiBold;
-  font-size: $font11;
-  color: $gold;
-
-  svg {
-   width: 0.6875rem;
-   height: 0.6875rem;
-   fill: currentColor;
+  .gr-row:not(.active) & {
+   opacity: 0.55;
   }
  }
 
- &.gr-draw-offer-text {
-  flex: 1 1 auto;
-  min-width: 0;
+ &.gr-score-label {
+  flex-shrink: 0;
+  padding: 0.125rem 0.375rem;
+  background: alpha($appText, 0.08);
+  font-family: $fontOutfitBold;
+  font-size: $font10;
+  letter-spacing: 1px;
+  color: alpha($appText, 0.7);
+ }
+
+ &.gr-win-label,
+ &.gr-win-amount {
+  font-family: $fontOutfitBold;
+  font-size: $font16;
+  letter-spacing: 0.4px;
+ }
+
+ &.gr-win-label {
+  color: alpha($appText, 0.6);
+
+  &:only-child {
+   color: $appText;
+  }
+ }
+
+ &.gr-win-amount {
+  color: $appPrize;
+ }
+
+ &.gr-board-tag-text {
   font-family: $fontOutfitSemiBold;
-  font-size: $font14;
-  color: $appText;
+  font-size: $font12;
+  color: alpha($appText, 0.9);
+
+  .reconnecting & {
+   color: $warning;
+  }
 
   b {
    font-family: $fontOutfitBold;
    font-weight: 400;
-   color: $gold;
+   color: alpha($appText, 0.92);
   }
+ }
+
+ &.gr-move-empty {
+  font-family: $fontOutfitSemiBold;
+  font-size: $font13;
+  color: alpha($appText, 0.55);
+ }
+
+ &.gr-draw-offer-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: $fontOutfitBold;
+  font-size: $font14;
+  color: $gold;
+
+  :root[data-theme="light"] & {
+   color: $appText;
+  }
+ }
+
+ &.gr-draw-offer-text {
+  font-family: $fontOutfitMedium;
+  font-size: $font12;
+  color: alpha($appText, 0.6);
  }
 
  &.gr-premove-route {
@@ -1524,11 +1791,7 @@
   font-size: $font12;
   line-height: 1.25;
   white-space: nowrap;
-  color: $gold;
-
-  :root[data-theme="light"] & {
-   color: $appText;
-  }
+  color: alpha($appText, 0.85);
  }
 
  &.gr-advantage {
@@ -1537,75 +1800,75 @@
   margin-left: 0.15rem;
  }
 
- &.gr-grace,
  &.gr-first-move {
   flex-shrink: 0;
   white-space: nowrap;
-  padding: 0 $space-8;
-  font-family: $fontOutfitSemiBold;
-  font-size: $font12;
-  line-height: 1.5rem;
- }
-
- &.gr-grace {
-  background: alpha($paleRed, 0.12);
-  color: $paleRed;
- }
-
- &.gr-first-move {
-  background: alpha($warning, 0.12);
-  font-variant-numeric: tabular-nums;
+  font-family: $fontOutfitExtraBold;
+  font-size: $font10;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
   color: $warning;
 
   &.urgent {
-   background: alpha($paleRed, 0.12);
    color: $paleRed;
   }
  }
 
  &.gr-clock {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
-  min-width: 5.5rem;
-  padding: 0.375rem $space-12;
-  border: 1px solid alpha($appText, 0.12);
-  border-radius: $radius-card;
-  background: alpha($appText, 0.06);
-  text-align: center;
+  min-width: 5.25rem;
+  height: 2.625rem;
+  padding: 0 0.75rem;
+  border: 1px solid alpha($appText, 0.28);
+  background: transparent;
   font-family: $fontOutfitExtraBold;
-  font-size: $font24;
-  font-weight: 300;
-  color: $appTextMuted;
+  font-size: $font22;
+  font-weight: 400;
+  color: alpha($appText, 0.32);
   letter-spacing: -0.01em;
   transition:
    color 0.25s ease,
-   background-color 0.25s ease,
-   font-weight 0.25s ease;
+   border-color 0.25s ease;
 
-  .gr-row.active & {
-   background: $btnGoldFill;
-   border-color: transparent;
-   color: $primaryContrast;
-   font-weight: 600;
+  .gr-row:not(.active) & {
+   opacity: 0.55;
   }
 
-  &.low {
-   color: $paleRed;
+  .gr-row.active & {
+   min-width: 6.125rem;
+   height: 2.875rem;
+   border: 1.5px solid $gold;
+   box-shadow: 0 0 0.875rem alpha($gold, 0.22);
+   font-size: $font26;
+   color: $gold;
 
-   .gr-row.active & {
-    background: $paleRed;
-    border-color: $paleRed;
-    color: $primaryContrast;
-    box-shadow: none;
+   :root[data-theme="light"] & {
+    color: $appText;
    }
+  }
+
+  &.low,
+  .gr-row.active &.low {
+   color: $paleRed;
+  }
+
+  .common-skeleton.MuiSkeleton-root {
+   height: 0.875rem;
+   background: linear-gradient(90deg, alpha($appText, 0.16), alpha($appText, 0.38), alpha($appText, 0.16));
+   background-size: 200% 100%;
+   transform: none;
   }
  }
 
  &.gr-move-n {
-  font-family: $fontOutfitMedium;
-  font-size: $font12;
-  color: $appTextMuted;
-  margin-right: $space-4;
+  font-family: $fontOutfitBold;
+  font-size: $font10;
+  letter-spacing: 1px;
+  color: alpha($appText, 0.4);
+  margin-right: 0.25rem;
  }
 
  &.gr-promotion-label {

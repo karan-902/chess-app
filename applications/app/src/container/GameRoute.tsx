@@ -1,7 +1,10 @@
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { GameContext } from "@gopvp/common/src/contexts/GameContext";
+import SplitReveal from "@gopvp/common/src/components/SplitReveal/SplitReveal";
 import type { GamePage } from "@gopvp/common/src/types/index";
+import type { ISplitRevealTicket } from "@gopvp/common/src/types/component";
+import { GAMES } from "@gopvp/app/src/config/game";
 import EnteredGameRedirect from "@gopvp/app/src/container/EnteredGameRedirect";
 import PlayPage from "@gopvp/app/src/pages/play/PlayPage";
 import MyMatches from "@gopvp/app/src/pages/history";
@@ -34,6 +37,22 @@ export default function GameRoute() {
  const isInGame =
   searchParams.has("match_id") || searchParams.has("practice_id");
  const playPath = isGameSlug(game) ? getGamePath(game) : "";
+ const [revealTicket, setRevealTicket] = useState<ISplitRevealTicket | null>(
+  null,
+ );
+ const startReveal = useCallback((ticket: HTMLElement) => {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const rect = ticket.getBoundingClientRect();
+  const tearLine = ticket
+   .querySelector("[data-tear-line]")
+   ?.getBoundingClientRect();
+  setRevealTicket({
+   node: ticket.cloneNode(true) as HTMLElement,
+   rect,
+   tearY: tearLine ? tearLine.top - rect.top : rect.height / 2,
+  });
+ }, []);
+ const finishReveal = useCallback(() => setRevealTicket(null), []);
  const gameContext = useMemo(
   () => ({
    playPath,
@@ -44,8 +63,10 @@ export default function GameRoute() {
     matchId: string,
     onResult: (result: IMatchResultResponse) => void,
    ) => subscribeMatchResult(matchId, userId, onResult),
+   isRevealing: !!revealTicket,
+   startReveal,
   }),
-  [playPath, userId, username, socket],
+  [playPath, userId, username, socket, revealTicket, startReveal],
  );
 
  useEffect(() => {
@@ -57,6 +78,13 @@ export default function GameRoute() {
  return (
   <GameContext.Provider value={gameContext}>
    <ActivePage />
+   {revealTicket && (
+    <SplitReveal
+     ticket={revealTicket}
+     Surface={GAMES[game].module.RevealSurface}
+     onDone={finishReveal}
+    />
+   )}
   </GameContext.Provider>
  );
 }

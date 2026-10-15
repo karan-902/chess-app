@@ -1,21 +1,27 @@
 export const resignText = "Resign";
 export const drawText = "Draw";
 export const computerText = "Computer";
-export const reconnectingText = "Reconnecting…";
-export const firstMoveText = (seconds: number) => `First move in ${seconds}s`;
+export const isReconnectingText = "is reconnecting";
+export const firstMoveText = (seconds: number) => `${seconds}s to move`;
+export const winText = "Win";
+export const noMovesYetText = "No moves yet";
+export const moveOfText = (move: number, total: number) =>
+ `Move ${move} of ${total}`;
+export const startPositionText = "Start position";
+export const drawOfferedText = "Draw offered";
 export const cancelPremovesText = "Cancel premoves";
 export const premoveRouteText = (from: string, to: string) => `${from} → ${to}`;
 export const drawOfferDeclinedText = "Draw offer declined";
 export const opponentOfferedDrawText = "Opponent offered a draw";
 export const offersDrawText = "offers a draw";
-export const waitingForOpponentText = "Waiting for opponent…";
+export const waitingForOpponentText = "Waiting for opponent";
 export const acceptText = "Accept";
 export const declineText = "Decline";
-export const resignThisGameText = "Resign This Game?";
-export const opponentWinsEntryLostText = (amount: string) =>
- `Your opponent wins and you lose your ${amount} entry.`;
-export const computerWinsPracticeText =
- "The computer wins this one. You can start a new practice game anytime.";
+export const giveUpThisGameText = "Give Up This Game?";
+export const lossCantBeUndoneText = "It counts as a loss and can't be undone";
+export const computerWinsRoundText = "The computer wins this round";
+export const backToGameText = "Back to Game";
+export const endGameText = "End Game";
 export const previousMoveText = "Previous move";
 export const nextMoveText = "Next move";
 export const promotePawnText = "Promote pawn";
@@ -29,6 +35,12 @@ export const pickLevelSetClockText = "Pick a level, set the clock,";
 export const playFreeText = "play free";
 export const difficultyText = "Difficulty";
 export const timeControlText = "Time control";
+export const warmUpBeforeMatchText = "Warm up before a real match";
+export const freePlayTicketText = "Free play ticket";
+export const challengeText = "Challenge";
+export const timeText = "Time";
+export const vsText = "VS";
+export const playFreeButtonText = "Play free";
 export const howBettingWorksText = "How Betting Works";
 export const winnerTakeMostText = "Every match is winner-take-most";
 export const equalBetText =
