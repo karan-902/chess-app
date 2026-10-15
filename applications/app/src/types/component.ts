@@ -125,6 +125,8 @@ export interface IPoolConfirmSheetProps {
  onLeaveQueue: () => void;
  onConfirmJoin: () => void;
  onConfirmCancel: () => void;
+ onRetry: () => void;
+ onPickAnotherBet: () => void;
 }
 
 export interface IStakeTicketProps {
@@ -146,6 +148,14 @@ export interface IFaceOffProps {
 
 export interface IMatchDeckProps {
  isRevealed: boolean;
+ opponentName: string;
+}
+
+export interface IMatchTicketProps {
+ status: MatchmakingStatus;
+ pool: IPoolResponse;
+ tone: number;
+ myName: string;
  opponentName: string;
 }
 

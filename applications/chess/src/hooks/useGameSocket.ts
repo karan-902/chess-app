@@ -75,6 +75,7 @@ export function useGameSocket({
  const [isAwaitingResult, setIsAwaitingResult] = useState(false);
  const [clockReady, setClockReady] = useState(isPvc);
  const [drawOffer, setDrawOffer] = useState<IDrawOfferEvent | null>(null);
+ const [isDrawOffered, setIsDrawOffered] = useState(false);
  const [isOpponentOffline, setIsOpponentOffline] = useState(false);
  const [firstMoveDeadlineAt, setFirstMoveDeadlineAt] = useState<number | null>(
   null,
@@ -152,10 +153,12 @@ export function useGameSocket({
   const remainingTime = (color: PieceColor) =>
    players.find((player) => player.color === color)?.remaining_time ?? 0;
   const opponent = players.find((player) => player.user_id !== userId);
+  const self = players.find((player) => player.user_id === userId);
   if (!applyServerFen(fen) && !replaySavedMoves(match_id, fen)) loadFen(fen);
   syncClock(remainingTime("w"), remainingTime("b"));
   setClockReady(true);
   setDrawOffer(opponent?.draw_offer ? { offererId: opponent.user_id } : null);
+  setIsDrawOffered(!!self?.draw_offer);
   setFirstMoveDeadlineAt(toDeadlineAt(matchState.first_move_deadline_ms));
  }, [
   isPvc,
@@ -207,6 +210,7 @@ export function useGameSocket({
   };
 
   const onMove = (data: IMoveEvent) => {
+   setIsDrawOffered(false);
    if (data.isCheckmate || data.isDraw || data.isStaleMate || data.isTimeout) {
     showBackdropLoader();
     setIsAwaitingResult(true);
@@ -215,11 +219,13 @@ export function useGameSocket({
    syncClock(data.remainingTime.white, data.remainingTime.black);
    setFirstMoveDeadlineAt(toDeadlineAt(data.firstMoveDeadlineMs));
   };
-  const onDrawDecline = () =>
+  const onDrawDecline = () => {
+   setIsDrawOffered(false);
    showToastMessage({
     toastMessage: drawOfferDeclinedText,
     toastVariant: "info",
    });
+  };
   const onOpponentOffline = () => setIsOpponentOffline(true);
   const onOpponentOnline = () => setIsOpponentOffline(false);
 
@@ -282,7 +288,10 @@ export function useGameSocket({
  };
 
  const offerDraw = () =>
-  socket?.emit(GAME_EVENTS.DRAW_OFFER, showAckErrorToast);
+  socket?.emit(GAME_EVENTS.DRAW_OFFER, (err: ISocketAckError | null) => {
+   if (err) showAckErrorToast(err);
+   else setIsDrawOffered(true);
+  });
 
  const acceptDraw = () => {
   setDrawOffer(null);
@@ -305,6 +314,7 @@ export function useGameSocket({
  return {
   clockReady,
   drawOffer,
+  isDrawOffered,
   isOpponentOffline,
   firstMoveSeconds,
   sendMove,

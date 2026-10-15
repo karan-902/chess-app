@@ -6,7 +6,8 @@ import CustomDrawer from "@gopvp/common/src/components/Drawer/Drawer";
 // import { icons } from "@gopvp/common/src/components/images";
 // import StakeTicket from "@gopvp/app/src/components/common/StakeTicket";
 // import FaceOff from "@gopvp/app/src/components/common/FaceOff";
-import MatchDeck from "@gopvp/app/src/components/common/MatchDeck";
+// import MatchDeck from "@gopvp/app/src/components/common/MatchDeck";
+import MatchTicket from "@gopvp/app/src/components/common/MatchTicket";
 import type { IPoolConfirmSheetProps } from "@gopvp/app/src/types/component";
 import {
  cancelSearchText,
@@ -15,17 +16,38 @@ import {
  // opponentFoundText,
  confirmYourMatchText,
  slideToPlayText,
- slideToFindOpponentText,
+ swipeToFindRivalText,
  drawingYourRivalText,
- oneCardIsOpponentText,
- youreMatchedText,
- getSetText,
+ // oneCardIsOpponentText,
+ // youreMatchedText,
+ // getSetText,
+ // checkingPlayersText,
+ // matchingSkillText,
+ // almostThereText,
+ // stillLookingText,
+ rivalFoundText,
+ rivalReadyText,
+ noRivalNowText,
+ nothingChargedText,
+ startingInText,
+ tryAgainText,
+ pickAnotherBetText,
 } from "@gopvp/app/src/constants/message";
 import { cancelText } from "@gopvp/common/src/constants/message";
-import { formatMMSS } from "@gopvp/common/src/util/format";
-import { MATCH_TIMER_LOW_SECONDS } from "@gopvp/app/src/constants/limit";
+import {
+ formatMMSS,
+ formatAmount,
+ shortenUsername,
+} from "@gopvp/common/src/util/format";
+import {
+ MATCH_TIMER_LOW_SECONDS,
+ MATCH_COUNTDOWN_STEPS,
+} from "@gopvp/app/src/constants/limit";
+import { useReduxSelector } from "@gopvp/app/src/redux/hooks";
 import SlideToConfirm from "@gopvp/common/src/components/SlideToConfirm/SlideToConfirm";
 import PoolCard from "@gopvp/app/src/components/common/PoolCard";
+
+// const SEARCH_LINES = [checkingPlayersText, matchingSkillText, almostThereText];
 
 export default function PoolConfirmSheet({
  open,
@@ -40,47 +62,114 @@ export default function PoolConfirmSheet({
  onLeaveQueue,
  onConfirmJoin,
  onConfirmCancel,
+ onRetry,
+ onPickAnotherBet,
 }: IPoolConfirmSheetProps) {
  // const elapsedSeconds = POOL_TIMEOUT_SECONDS - secondsLeft;
  const isRevealed = status === "revealing" || status === "found";
+ const isTimeout = status === "timeout";
+ const isLowTime =
+  (status === "queued" || status === "joining") &&
+  secondsLeft <= MATCH_TIMER_LOW_SECONDS;
+ const myName = shortenUsername(
+  useReduxSelector((state) => state.auth.session?.username ?? ""),
+ );
 
  return (
-  <CustomDrawer anchor="bottom" open={open} onClose={onClose}>
-   {status === "queued" || status === "revealing" || status === "found" ? (
-    <Box customClass="pool-confirm-slide">
+  <CustomDrawer
+   anchor="bottom"
+   open={open}
+   onClose={onClose}
+   customClass="match-confirm-sheet"
+  >
+   {queuedPool && status !== "idle" ? (
+    <Box customClass={classNames("pool-confirm-slide", "match-sheet", isTimeout && "lost")}>
      <Box customClass="match-head">
       <Box customClass="public-heading">
        <Text component="h2" customClass="public-title" aria-live="polite">
-        {isRevealed ? youreMatchedText : drawingYourRivalText}
+        {isTimeout
+         ? noRivalNowText
+         : isRevealed
+           ? rivalFoundText
+           : drawingYourRivalText}
        </Text>
-       <Text customClass="page-subtitle public-subtitle">
-        {isRevealed ? getSetText : oneCardIsOpponentText}
-       </Text>
+       {(isTimeout || isRevealed) && (
+        <Text customClass="page-subtitle public-subtitle">
+         {isTimeout
+          ? nothingChargedText(formatAmount(queuedPool.bet))
+          : rivalReadyText(opponentName)}
+        </Text>
+       )}
+       {/* {!isTimeout && !isRevealed && (isLowTime ? (
+        <Text customClass="page-subtitle public-subtitle">
+         {stillLookingText}
+        </Text>
+       ) : (
+        <Text customClass="page-subtitle public-subtitle match-status-lines">
+         {SEARCH_LINES.map((line) => (
+          <span key={line}>{line}</span>
+         ))}
+        </Text>
+       ))} */}
       </Box>
-      {!isRevealed && (
-       <Text
-        customClass={classNames(
-         "match-timer",
-         secondsLeft <= MATCH_TIMER_LOW_SECONDS && "low",
-        )}
-       >
-        {formatMMSS(secondsLeft)}
-       </Text>
-      )}
+      <Text
+       customClass={classNames(
+        "match-timer",
+        isLowTime && "low",
+        (isRevealed || isTimeout) && "settled",
+       )}
+      >
+       {formatMMSS(isTimeout ? 0 : secondsLeft)}
+      </Text>
      </Box>
-     <MatchDeck isRevealed={isRevealed} opponentName={opponentName} />
-     {queuedPool && (
-      <PoolCard pool={queuedPool} PoolLabel={PoolLabel} tone={confirmTone} />
+     {/* <MatchDeck isRevealed={isRevealed} opponentName={opponentName} /> */}
+     <MatchTicket
+      status={status}
+      pool={queuedPool}
+      tone={confirmTone}
+      myName={myName}
+      opponentName={opponentName}
+     />
+     {/* <PoolCard pool={queuedPool} PoolLabel={PoolLabel} tone={confirmTone} /> */}
+     {isTimeout ? (
+      <Box customClass="match-retry">
+       <Button
+        type="button"
+        variant="contained"
+        fullWidth
+        customClass="game-cta play-cta tilted"
+        onClick={onRetry}
+       >
+        {tryAgainText}
+       </Button>
+       <Button
+        type="button"
+        variant="text"
+        customClass="sheet-cancel-link"
+        onClick={onPickAnotherBet}
+       >
+        {pickAnotherBetText}
+       </Button>
+      </Box>
+     ) : isRevealed ? (
+      <Text customClass="match-starting" aria-live="polite">
+       {startingInText}{" "}
+       <span className="match-countdown">
+        {MATCH_COUNTDOWN_STEPS.map((step) => (
+         <b key={step}>{step}</b>
+        ))}
+       </span>
+      </Text>
+     ) : (
+      <Button
+       type="button"
+       variant="text"
+       customClass="sheet-cancel-link"
+       onClick={onLeaveQueue}
+      >
+       {cancelSearchText}
+      </Button>
      )}
-     <Button
-      type="button"
-      variant="text"
-      customClass="sheet-cancel-link"
-      disabled={isRevealed}
-      onClick={onLeaveQueue}
-     >
-      {cancelSearchText}
-     </Button>
     </Box>
    ) : (
     confirmPool && (
@@ -95,7 +184,7 @@ export default function PoolConfirmSheet({
       </Box>
       <PoolCard pool={confirmPool} PoolLabel={PoolLabel} tone={confirmTone} />
       <SlideToConfirm
-       label={slideToFindOpponentText}
+       label={swipeToFindRivalText}
        onConfirm={onConfirmJoin}
        isLoading={status === "joining"}
       />

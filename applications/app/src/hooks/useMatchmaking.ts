@@ -2,8 +2,9 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { getSocket } from "@gopvp/common/src/util/socket";
 import { useSocket } from "@gopvp/app/src/context/SocketContext";
-import { useReduxDispatch, useReduxSelector } from "@gopvp/app/src/redux/hooks";
-import { showToast } from "@gopvp/app/src/redux/common/slice";
+import { useReduxSelector } from "@gopvp/app/src/redux/hooks";
+// import { useReduxDispatch } from "@gopvp/app/src/redux/hooks";
+// import { showToast } from "@gopvp/app/src/redux/common/slice";
 import { showAckErrorToast } from "@gopvp/common/src/util/api";
 import { buildMatchUrl } from "@gopvp/app/src/utils";
 import { useGame } from "@gopvp/app/src/hooks/useGame";
@@ -12,7 +13,7 @@ import {
  POOL_TIMEOUT_SECONDS,
  MATCH_REVEAL_MS,
 } from "@gopvp/app/src/constants/limit";
-import { noOpponentFoundText } from "@gopvp/app/src/constants/message";
+// import { noOpponentFoundText } from "@gopvp/app/src/constants/message";
 import type {
  IPoolResponse,
  IMatchmakingResponse,
@@ -27,7 +28,8 @@ export type MatchmakingStatus =
  | "joining"
  | "queued"
  | "revealing"
- | "found";
+ | "found"
+ | "timeout";
 
 export function useMatchmaking() {
  const [status, setStatus] = useState<MatchmakingStatus>("idle");
@@ -41,7 +43,7 @@ export function useMatchmaking() {
  const navigate = useNavigate();
  const { game } = useGame();
  const { socket: ctxSocket } = useSocket();
- const dispatch = useReduxDispatch();
+ // const dispatch = useReduxDispatch();
 
  const resetStatus = useCallback(() => {
   clearTimeout(revealTimerRef.current);
@@ -50,6 +52,13 @@ export function useMatchmaking() {
   setQueueDeadlineAt(null);
   setOpponentName("");
   poolRef.current = null;
+ }, []);
+
+ const markTimedOut = useCallback(() => {
+  if (!poolRef.current) return;
+  poolRef.current = null;
+  setQueueDeadlineAt(null);
+  setStatus("timeout");
  }, []);
 
  const leaveQueue = useCallback(() => {
@@ -91,7 +100,6 @@ export function useMatchmaking() {
       openMatch(data.match_id, data.players);
       return;
      }
-     setQueueDeadlineAt(Date.now() + POOL_TIMEOUT_SECONDS * 1000);
      setStatus("queued");
     },
    );
@@ -103,8 +111,13 @@ export function useMatchmaking() {
   if (!getSocket()) return;
   poolRef.current = pool;
   setQueuedPool(pool);
+  setQueueDeadlineAt(Date.now() + POOL_TIMEOUT_SECONDS * 1000);
   setStatus("joining");
   emitPoolJoin(pool);
+ };
+
+ const retryQueue = () => {
+  if (queuedPool) joinQueue(queuedPool);
  };
 
  useEffect(() => {
@@ -117,18 +130,20 @@ export function useMatchmaking() {
   };
 
   const onPoolTimeout = () => {
-   resetStatus();
-   dispatch(
-    showToast({
-     isToastOpen: true,
-     toastMessage: noOpponentFoundText,
-     toastVariant: "info",
-    }),
-   );
+   markTimedOut();
+   // dispatch(
+   //  showToast({
+   //   isToastOpen: true,
+   //   toastMessage: noOpponentFoundText,
+   //   toastVariant: "info",
+   //  }),
+   // );
   };
 
   const onReconnect = () => {
-   if (poolRef.current) emitPoolJoin(poolRef.current);
+   if (!poolRef.current) return;
+   setQueueDeadlineAt(Date.now() + POOL_TIMEOUT_SECONDS * 1000);
+   emitPoolJoin(poolRef.current);
   };
 
   socket.on(SOCKET_EVENTS.MATCHED, onMatched);
@@ -145,7 +160,12 @@ export function useMatchmaking() {
    socket.off(SOCKET_EVENTS.POOL_TIMEOUT, onPoolTimeout);
    socket.off(SOCKET_EVENTS.CONNECT, onReconnect);
   };
- }, [ctxSocket, dispatch, openMatch, resetStatus, emitPoolJoin]);
+ }, [ctxSocket, openMatch, emitPoolJoin, markTimedOut]);
+
+ useEffect(() => {
+  if (secondsLeft !== 0 || (status !== "queued" && status !== "joining")) return;
+  getSocket()?.emit(SOCKET_EVENTS.POOL_LEAVE, markTimedOut);
+ }, [secondsLeft, status, markTimedOut]);
 
  useEffect(
   () => () => {
@@ -161,6 +181,7 @@ export function useMatchmaking() {
   opponentName,
   secondsLeft: secondsLeft ?? 0,
   joinQueue,
+  retryQueue,
   leaveQueue,
   resetStatus,
  };

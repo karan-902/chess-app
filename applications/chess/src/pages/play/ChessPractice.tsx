@@ -13,10 +13,15 @@ export default function ChessPractice({
 }: IGamePracticeProps) {
  const navigate = useNavigate();
  const dispatch = useChessDispatch();
- const { playPath, username } = useGameContext();
+ const { playPath, username, startReveal } = useGameContext();
 
- const handlePlay = (difficulty: Difficulty, timeControl: GameCategory) => {
+ const handlePlay = (
+  difficulty: Difficulty,
+  timeControl: GameCategory,
+  ticket: HTMLElement | null,
+ ) => {
   const gameId = `pvc_${Date.now()}`;
+  if (ticket) startReveal?.(ticket);
   onClose();
   dispatch(
    startPvcGame({
@@ -33,6 +38,7 @@ export default function ChessPractice({
  return (
   <PracticeSheet
    open={open}
+   username={username}
    onClose={onClose}
    onPlay={handlePlay}
   />

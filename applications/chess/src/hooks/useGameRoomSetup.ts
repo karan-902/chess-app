@@ -22,7 +22,7 @@ export function useGameRoomSetup(mode: GameMode) {
   difficulty: pvc.difficulty,
   gameId,
   startingMs: isPvc ? pvc.time : (match.state?.time ?? 0),
-  betAmount: isPvc ? 0 : (match.state?.bet ?? 0),
+  prize: isPvc ? 0 : (match.state?.prize ?? 0),
   isStarted: isPvc || !!match.state?.is_started,
   playerSide,
   computerSide: oppositeSide(playerSide),

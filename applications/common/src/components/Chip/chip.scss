@@ -41,15 +41,16 @@
    .MuiChip-label {
     padding: 0;
     font-family: $fontOutfitBold;
-    font-size: $font11;
-    letter-spacing: 1.5px;
+    font-size: $font10;
+    letter-spacing: 2px;
     text-transform: uppercase;
-    color: alpha($white, 0.75);
+    color: alpha($poolInk, 0.7);
    }
   }
  }
 
  &.gr-move-chip {
+  position: relative;
   background: transparent;
   border: none;
   transition: none;
@@ -57,8 +58,8 @@
   cursor: pointer;
 
   .MuiChip-label {
-   font-size: $font13;
-   color: $appText;
+   font-size: $font14;
+   color: alpha($appText, 0.75);
    padding: 0.3125rem 0.4375rem;
    overflow: visible;
    text-overflow: unset;
@@ -85,10 +86,27 @@
   &.active.MuiChip-clickable:hover,
   &.active.MuiChip-clickable:active,
   &.active.Mui-focusVisible {
-   background: $gold;
+   background: transparent;
 
    .MuiChip-label {
-    color: $primaryContrast;
+    font-family: $fontOutfitBold;
+    color: #ffe27a;
+
+    :root[data-theme="light"] & {
+     color: $appText;
+    }
+   }
+
+   &::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 1.125rem;
+    height: 2px;
+    margin-left: -0.5625rem;
+    background: $gold;
+    box-shadow: 0 0 0.375rem alpha($gold, 0.8);
    }
   }
  }

@@ -14,18 +14,19 @@ export default function DurationWheel({
  const listRef = useRef<HTMLDivElement>(null);
  const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
  const initialValueRef = useRef(value);
+ const itemHeight = () =>
+  (listRef.current?.firstElementChild as HTMLElement | null)?.offsetHeight ||
+  DURATION_WHEEL_ITEM_HEIGHT;
 
  useEffect(() => {
   listRef.current?.scrollTo({
-   top:
-    (initialValueRef.current - DURATION_MINUTES[0]) *
-    DURATION_WHEEL_ITEM_HEIGHT,
+   top: (initialValueRef.current - DURATION_MINUTES[0]) * itemHeight(),
   });
  }, []);
 
  const scrollToValue = (minutes: number) => {
   listRef.current?.scrollTo({
-   top: (minutes - DURATION_MINUTES[0]) * DURATION_WHEEL_ITEM_HEIGHT,
+   top: (minutes - DURATION_MINUTES[0]) * itemHeight(),
    behavior: "smooth",
   });
  };
@@ -35,7 +36,7 @@ export default function DurationWheel({
   scrollTimeoutRef.current = setTimeout(() => {
    const el = listRef.current;
    if (!el) return;
-   const index = Math.round(el.scrollTop / DURATION_WHEEL_ITEM_HEIGHT);
+   const index = Math.round(el.scrollTop / itemHeight());
    const picked =
     DURATION_MINUTES[Math.min(Math.max(index, 0), DURATION_MINUTES.length - 1)];
    if (picked !== value) onChange(picked);

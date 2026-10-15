@@ -95,6 +95,7 @@ export default function Board({
  premoveMoves = [],
  draggableColor,
  onEntranceEnd,
+ holdEntrance = false,
 }: IChessBoardProps) {
  const gridRef = useRef<HTMLDivElement>(null);
  const [boardWidth, setBoardWidth] = useState(400);
@@ -176,7 +177,7 @@ export default function Board({
  }, []);
 
  useEffect(() => {
-  if (!entranceGhosts) return;
+  if (!entranceGhosts || holdEntrance) return;
   const timers: ReturnType<typeof setTimeout>[] = [];
   for (let w = 0; w < BOARD_ENTRANCE_WAVE_COUNT; w++) {
    const launchAt = 150 + w * BOARD_ENTRANCE_WAVE_MS;
@@ -201,9 +202,10 @@ export default function Board({
    ),
   );
   return () => timers.forEach(clearTimeout);
- }, [entranceGhosts, onEntranceEnd]);
+ }, [entranceGhosts, onEntranceEnd, holdEntrance]);
 
  useEffect(() => {
+  if (holdEntrance) return;
   const raf = requestAnimationFrame(() => {
    requestAnimationFrame(() => setShimmerPhase("running"));
   });
@@ -212,7 +214,7 @@ export default function Board({
    cancelAnimationFrame(raf);
    clearTimeout(timer);
   };
- }, []);
+ }, [holdEntrance]);
 
  const ranks = flipped ? RANKS_FLIP : RANKS;
  const files = flipped ? FILES_FLIP : FILES;

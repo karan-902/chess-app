@@ -19,7 +19,12 @@ export default function ChipSelect<T extends string>({
  useLayoutEffect(() => {
   const btn = btnRefs.current[options.indexOf(value)];
   if (!btn) return;
-  setThumb({ left: btn.offsetLeft, width: btn.offsetWidth });
+  const measure = () =>
+   setThumb({ left: btn.offsetLeft, width: btn.offsetWidth });
+  measure();
+  const observer = new ResizeObserver(measure);
+  observer.observe(btn);
+  return () => observer.disconnect();
  }, [value, options]);
 
  return (

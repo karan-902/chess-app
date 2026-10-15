@@ -79,6 +79,7 @@ body {
  max-width: 600px;
  margin: 0 auto;
  overflow: hidden;
+ overflow: clip;
  background: $appGlow no-repeat, $appBg;
  color: $appText;
  position: relative;

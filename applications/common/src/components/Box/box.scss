@@ -1,5 +1,29 @@
+@use "sass:list";
 @use "sass:math";
 @use "default.scss" as *;
+
+%ticket-notches {
+ border-top: 1px dashed alpha($poolInk, 0.3);
+
+ &::before,
+ &::after {
+  content: "";
+  position: absolute;
+  top: -0.5rem;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background: $appSheet;
+ }
+
+ &::before {
+  left: -1.25rem;
+ }
+
+ &::after {
+  right: -1.25rem;
+ }
+}
 
 .common-box {
  &.public-page {
@@ -518,6 +542,15 @@
   gap: 1.25rem;
   overflow-x: clip;
 
+  &.match-sheet {
+   overflow-x: visible;
+   gap: 1rem;
+
+   @include from-height(medium) {
+    gap: 1.25rem;
+   }
+  }
+
   .public-heading {
    margin: 0;
   }
@@ -529,11 +562,514 @@
   justify-content: space-between;
   gap: 0.5rem;
 
+  .match-sheet & {
+   padding-right: 2.75rem;
+  }
+
   .public-heading {
    flex: 1;
    width: auto;
    min-width: 0;
   }
+ }
+
+ &.match-ticket {
+  --pool-face: #{list.nth(list.nth($poolBlocks, 1), 1)};
+  --pool-ink: #{list.nth(list.nth($poolBlocks, 1), 2)};
+  position: relative;
+  width: 20.9375rem;
+  height: 18.75rem;
+  margin: 0 auto 2.25rem;
+  transform: scale(1.12);
+  transform-origin: 50% 0;
+
+  @include from-height(tall) {
+   margin-bottom: 4.125rem;
+   transform: scale(1.22);
+  }
+
+  @for $i from 1 through list.length($poolBlocks) {
+   &.tone-#{$i} {
+    --pool-face: #{list.nth(list.nth($poolBlocks, $i), 1)};
+    --pool-ink: #{list.nth(list.nth($poolBlocks, $i), 2)};
+   }
+  }
+
+  .match-floor {
+   position: absolute;
+   left: 0;
+   right: 0;
+   bottom: 0;
+   height: 6.25rem;
+   @include cubes-pattern(
+    alpha($appText, 0.08),
+    linear-gradient(180deg, transparent, #000 60%)
+   );
+  }
+
+  .match-beam {
+   position: absolute;
+   left: 4.5625rem;
+   top: 0;
+   width: 11.8125rem;
+   height: 16.375rem;
+   background: linear-gradient(180deg, alpha($gold, 0), alpha($gold, 0.28));
+   clip-path: polygon(25% 0, 75% 0, 100% 100%, 0 100%);
+   opacity: 0;
+   transition: opacity 0.8s ease-out;
+  }
+
+  &.searching .match-beam {
+   opacity: 1;
+   animation: match-beam-breathe 2.4s ease-in-out 0.8s infinite;
+  }
+
+  &.found .match-beam {
+   opacity: 1;
+  }
+
+  .match-slot {
+   position: absolute;
+   z-index: 3;
+   left: 3.875rem;
+   top: 16.125rem;
+   width: 13.1875rem;
+   height: 0.625rem;
+   background: #05061a;
+   border-top: 2px solid $gold;
+
+   &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 100%;
+    height: 1.375rem;
+    background: linear-gradient(0deg, alpha($gold, 0.55), transparent);
+    opacity: 0;
+   }
+  }
+
+  &.searching .match-slot::after {
+   animation: match-slot-glow 1s ease-in-out infinite;
+  }
+
+  &.lost .match-slot {
+   border-top-color: alpha($white, 0.25);
+  }
+
+  .match-rise {
+   position: absolute;
+   left: 0;
+   top: 0;
+   width: 100%;
+   height: 16.25rem;
+   overflow: hidden;
+   will-change: transform;
+  }
+
+  &.found .match-rise {
+   animation: match-ticket-pop 0.7s cubic-bezier(0.33, 1, 0.68, 1) 0.4s;
+  }
+
+  .match-ticket-wrap {
+   position: absolute;
+   left: 5rem;
+   top: 2.5rem;
+   width: 11rem;
+   height: 12.25rem;
+   filter: drop-shadow(0 1rem 0.875rem alpha($black, 0.45))
+    drop-shadow(0 0.1875rem 0.1875rem alpha($black, 0.3));
+   transform: translateY(15rem);
+   will-change: transform;
+  }
+
+  &.searching .match-ticket-wrap,
+  &.found .match-ticket-wrap {
+   animation: match-ticket-rise 1.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s
+    forwards;
+  }
+
+  &.lost .match-ticket-wrap {
+   transform: translateY(0);
+   animation: match-ticket-tug 0.32s ease-in-out 1.2s;
+  }
+
+  .ticket-half {
+   position: absolute;
+   inset: 0;
+   overflow: hidden;
+   background: linear-gradient(180deg, #fffdf6, #f1ecdf);
+   color: $poolInk;
+   clip-path: polygon(0% 0%, 100% 0%, 98.86% 100%, 95.45% 95.92%, 92.05% 100%, 88.64% 95.92%, 85.23% 100%, 81.82% 95.92%, 78.41% 100%, 75% 95.92%, 71.59% 100%, 68.18% 95.92%, 64.77% 100%, 61.36% 95.92%, 57.95% 100%, 54.55% 95.92%, 51.14% 100%, 47.73% 95.92%, 44.32% 100%, 40.91% 95.92%, 37.5% 100%, 34.09% 95.92%, 30.68% 100%, 27.27% 95.92%, 23.86% 100%, 20.45% 95.92%, 17.05% 100%, 13.64% 95.92%, 10.23% 100%, 6.82% 95.92%, 3.41% 100%, 0% 95.92%);
+
+   &.top {
+    transform-origin: 18% 50%;
+   }
+
+   &.bottom {
+    visibility: hidden;
+    transform-origin: 82% 50%;
+   }
+  }
+
+  &.lost .ticket-half {
+   &.top {
+    animation:
+     match-tear-top-cut 0.01s linear 1.45s both,
+     match-tear-top 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 1.5s forwards,
+     match-tear-fade 0.5s ease-out 2.2s forwards;
+   }
+
+   &.bottom {
+    animation:
+     match-tear-bottom-cut 0.01s linear 1.45s both,
+     match-tear-bottom 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 1.5s forwards,
+     match-tear-fade 0.5s ease-out 2.2s forwards;
+   }
+  }
+
+  .ticket-stub {
+   position: relative;
+   z-index: 1;
+   height: 1.875rem;
+   background: var(--pool-face);
+   color: var(--pool-ink);
+  }
+
+  .ticket-players {
+   position: absolute;
+   z-index: 1;
+   top: 2.125rem;
+   left: 0;
+   right: 0;
+   display: flex;
+   justify-content: center;
+   align-items: flex-start;
+   gap: 0.5rem;
+  }
+
+  .ticket-side {
+   width: 4.5rem;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 0.375rem;
+  }
+
+  .ticket-seat {
+   position: relative;
+   width: 2.75rem;
+   height: 2.75rem;
+   perspective: 18.75rem;
+  }
+
+  .ticket-flipper {
+   position: absolute;
+   inset: 0;
+   transform-style: preserve-3d;
+   will-change: transform;
+
+   > * {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+   }
+  }
+
+  &.found .ticket-flipper {
+   animation: match-seat-flip 0.75s cubic-bezier(0.45, 0, 0.2, 1) forwards;
+  }
+
+  .ticket-masks {
+   border-radius: 50%;
+   border: 1.5px dashed alpha($poolInk, 0.35);
+  }
+
+  &.searching .ticket-masks {
+   animation: match-seat-pulse 1.2s ease-in-out infinite;
+  }
+
+  .ticket-mask {
+   position: absolute;
+   inset: 0;
+   border-radius: 50%;
+   opacity: 0;
+
+   img {
+    width: 100%;
+    height: 100%;
+    display: block;
+   }
+
+   @each $index, $color in (1: #ffc400, 2: #ff7b9a, 3: #c379ff, 4: #3bffad) {
+    &.mask-#{$index} {
+     background: $color;
+     animation: match-mask-cycle 2.8s steps(1, end) #{($index - 1) * 0.7s} infinite;
+    }
+   }
+  }
+
+  &.found .ticket-mask,
+  &.lost .ticket-mask {
+   animation: none;
+  }
+
+  &.found .ticket-mask.mask-1,
+  &.lost .ticket-mask.mask-1 {
+   opacity: 1;
+  }
+
+  .ticket-empty-seat {
+   border-radius: 50%;
+   border: 1.5px dashed alpha($poolInk, 0.4);
+   opacity: 0;
+   transition: opacity 0.4s ease-out;
+  }
+
+  .ticket-masks {
+   transition: opacity 0.4s ease-out;
+  }
+
+  &.lost .ticket-masks {
+   opacity: 0.6;
+  }
+
+  // &.lost .ticket-empty-seat {
+  //  opacity: 1;
+  // }
+
+  .ticket-stats {
+   position: absolute;
+   z-index: 1;
+   top: 8.125rem;
+   left: 0.625rem;
+   right: 0.625rem;
+   display: flex;
+  }
+
+  .ticket-stat {
+   flex: 1 1 0;
+   min-width: max-content;
+   padding: 0.4375rem 0.25rem 0;
+   text-align: center;
+
+   & + .ticket-stat {
+    border-left: 1px solid alpha($poolInk, 0.12);
+   }
+  }
+
+  .ticket-perf {
+   position: absolute;
+   z-index: 1;
+   top: 6.125rem;
+   left: 0.75rem;
+   right: 0.75rem;
+   @extend %ticket-notches;
+  }
+
+  .ticket-glare {
+   position: absolute;
+   top: -60%;
+   left: 40%;
+   width: 2.875rem;
+   height: 220%;
+   background: linear-gradient(90deg, transparent, alpha($white, 0.55), transparent);
+   transform: rotate(28deg);
+  }
+
+  .ticket-dim {
+   position: absolute;
+   z-index: 2;
+   inset: 0;
+   background: alpha(#1a1d55, 0.16);
+   opacity: 0;
+  }
+
+  &.lost .ticket-dim {
+   opacity: 1;
+   transition: opacity 0.4s 0.3s;
+  }
+
+  .match-spark {
+   position: absolute;
+   opacity: 0;
+   transform: scale(0);
+
+   &.spark-1 {
+    left: 16.25rem;
+    top: 3.75rem;
+    width: 1rem;
+   }
+
+   &.spark-2 {
+    left: 3.5rem;
+    top: 6rem;
+    width: 0.6875rem;
+   }
+
+   &.spark-3 {
+    left: 17.25rem;
+    top: 10.625rem;
+    width: 0.5625rem;
+   }
+
+   &.spark-4 {
+    left: 2.5rem;
+    top: 12.5rem;
+    width: 0.625rem;
+   }
+  }
+
+  &.found .match-spark {
+   animation: match-spark-pop 0.7s cubic-bezier(0.34, 1.4, 0.64, 1) 0.5s forwards;
+
+   @for $i from 2 through 4 {
+    &.spark-#{$i} {
+     animation-delay: #{0.5 + ($i - 1) * 0.08}s;
+    }
+   }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+   *,
+   & {
+    animation: none !important;
+    transition: none !important;
+   }
+
+   .match-ticket-wrap {
+    transform: none;
+   }
+
+   &.found .ticket-flipper {
+    transform: rotateY(180deg);
+   }
+
+   &.found .match-spark {
+    opacity: 1;
+    transform: none;
+   }
+  }
+ }
+
+ &.match-retry {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+ }
+
+ &.practice-options {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
+  .public-heading {
+   margin: 0;
+   padding-right: 2.75rem;
+  }
+ }
+
+ &.practice-ticket {
+  position: relative;
+  width: 100%;
+  max-width: 18.75rem;
+  margin: 0 auto;
+  padding-bottom: 1rem;
+  overflow: hidden;
+  background: linear-gradient(180deg, #fffdf6, #f1ecdf);
+  box-shadow:
+   0 0.875rem 1.125rem alpha($black, 0.45),
+   0 0.1875rem 0.1875rem alpha($black, 0.3);
+  color: $poolInk;
+ }
+
+ &.practice-ticket-stub {
+  display: grid;
+  place-items: center;
+  height: 1.875rem;
+  background: $poolInk;
+ }
+
+ &.practice-ticket-players {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 0.875rem 0 0.25rem;
+ }
+
+ &.practice-ticket-bot {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  background: list.nth(list.nth($poolBlocks, 1), 1);
+  color: list.nth(list.nth($poolBlocks, 1), 2);
+
+  svg {
+   width: 1.5rem;
+   height: 1.5rem;
+   stroke-width: 1.8;
+  }
+ }
+
+ &.practice-ticket-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  padding: 0.75rem 1.125rem 0;
+ }
+
+ &.segment.ticket-pills {
+  gap: 0.5rem;
+  padding: 0 0 0.375rem;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+
+  &:has(> :nth-child(5)) {
+   gap: 0.375rem;
+  }
+
+  > .segment-thumb {
+   top: -0.1875rem;
+   bottom: 0.25rem;
+   border: 0;
+   background:
+    linear-gradient(115deg, transparent 52%, alpha($white, 0.5) 57%, transparent 62%) top center / calc(100% - 6px) calc(100% - 7px) no-repeat,
+    linear-gradient(180deg, #ffe27a, $gold) top center / calc(100% - 6px) calc(100% - 7px) no-repeat;
+
+   &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 7px;
+    background: $slabEdgeGold;
+    clip-path: polygon(3px 0, calc(100% - 3px) 0, 100% 100%, 0 100%);
+   }
+
+   &::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    left: 2px;
+    right: 2px;
+    bottom: -7px;
+    height: 8px;
+    border-radius: 50%;
+    background: alpha($black, 0.32);
+   }
+  }
+ }
+
+ &.practice-ticket-perf {
+  position: relative;
+  margin: 1rem 0.75rem 0;
+  @extend %ticket-notches;
  }
 
  &.match-deck {
@@ -730,24 +1266,22 @@
 
   .pool-card & {
    grid-area: icon;
-   width: 2.75rem;
-   height: 2.75rem;
-   font-size: 1.375rem;
-   border-radius: 50%;
-   background: $white;
-   color: var(--pool-face);
+   align-self: stretch;
+   width: 100%;
+   height: 100%;
+   font-size: 2.125rem;
+   background: var(--pool-face);
+   color: var(--pool-ink);
 
    svg {
     width: 1em;
     height: 1em;
-    stroke-width: 2.4;
+    stroke-width: 1.8;
    }
+  }
 
-   @include from-height(tall) {
-    width: 3.25rem;
-    height: 3.25rem;
-    font-size: 1.625rem;
-   }
+  .pool-card.more & {
+   font-size: 1.625rem;
   }
  }
 
@@ -756,6 +1290,12 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: $space-4;
+ }
+
+ &.resign-sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
  }
 
  &.matchmaking-searching {
@@ -1230,8 +1770,12 @@
   &.room-duration-field {
    align-items: center;
    gap: $space-12;
-   padding: $space-16;
+   padding: $space-12;
    border: 1px solid alpha($appText, 0.1);
+
+   @include from-height(medium) {
+    padding: $space-16;
+   }
    border-radius: $radius-card;
    background: alpha($appText, 0.04);
   }
@@ -1655,6 +2199,11 @@
  &.room-options {
   align-items: normal;
   text-align: left;
+  gap: 0.4rem;
+
+  @include from-height(medium) {
+   gap: 0.6rem;
+  }
  }
  &.match-row-item {
   padding-bottom: $space-12;
@@ -2134,12 +2683,48 @@
   align-items: center;
  }
  &.game-room {
+  position: relative;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
+  justify-content: safe center;
   height: 100%;
   padding: $space-16;
-  background: $appSurface;
+  background:
+   radial-gradient(30rem 28rem at 50% 38%, alpha(#4b4fd8, 0.32), transparent 70%),
+   $appSurface;
   overflow-y: auto;
+
+  &::before {
+   content: "";
+   position: absolute;
+   inset: 0;
+   z-index: -1;
+   @include cubes-pattern(
+    alpha($appText, 0.05),
+    linear-gradient(180deg, transparent, #000 18%, #000 82%, transparent)
+   );
+   pointer-events: none;
+  }
+
+  :root[data-theme="light"] & {
+   background:
+    radial-gradient(30rem 28rem at 50% 38%, alpha(#5b60a8, 0.16), transparent 70%),
+    $appBg;
+
+   &::before {
+    background: alpha(#5b60a8, 0.1);
+   }
+  }
+ }
+
+ &.gr-win-counter {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.375rem;
+  flex-shrink: 0;
+  margin-bottom: 0.75rem;
  }
 
  &.gr-row {
@@ -2147,18 +2732,10 @@
   align-items: center;
   justify-content: space-between;
   gap: $space-12;
-  padding: 0.625rem 0.875rem;
-  background: $appCard;
-  border: 1px solid $neoOutline;
-  border-radius: $radius-card;
-  @include neo-edge;
   flex-shrink: 0;
-  transition:
-   border-color 0.25s ease,
-   box-shadow 0.25s ease;
 
   &.opp {
-   margin-bottom: $font12;
+   margin-bottom: 0.75rem;
 
    @include from(tablet) {
     margin-top: auto;
@@ -2166,11 +2743,7 @@
   }
 
   &.me {
-   margin-top: $font12;
-  }
-
-  &.active {
-   border: 1.5px solid alpha($gold, 0.85);
+   margin-top: 0.75rem;
   }
  }
 
@@ -2197,6 +2770,59 @@
   width: 100%;
   aspect-ratio: 1 / 1;
   min-height: 0;
+  padding: 0.25rem;
+  border: 1px solid alpha($gold, 0.12);
+  border-top-color: alpha(#ffe27a, 0.95);
+  border-radius: 0.1875rem;
+  background: linear-gradient(180deg, #3a3f9a, #14174a 50%, #0a0c26);
+  box-shadow:
+   0 1.125rem 1.875rem -0.375rem rgba(0, 0, 0, 0.55),
+   0 0 2.75rem alpha(#4b4fd8, 0.35);
+
+  &::after {
+   content: "";
+   position: absolute;
+   inset: 0.25rem;
+   z-index: $z-raised;
+   background: linear-gradient(122deg, transparent 22%, alpha($white, 0.09) 32%, transparent 42%);
+   pointer-events: none;
+  }
+
+  :root[data-theme="light"] & {
+   border-color: #bcc1e2;
+   border-top-color: $gold;
+   background: linear-gradient(180deg, #ffffff, #eceefa 55%, #dfe2f5);
+   box-shadow: 0 0.875rem 1.625rem -0.375rem alpha(#12143a, 0.18);
+  }
+ }
+
+ &.gr-board-tag {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: $z-top;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  border: 1px solid alpha($appText, 0.2);
+  background: linear-gradient(180deg, #23276a, #121540);
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
+
+  svg {
+   width: 0.875rem;
+   height: 0.875rem;
+   color: $warning;
+  }
+
+  &.reconnecting {
+   border-color: alpha($warning, 0.5);
+  }
+
+  :root[data-theme="light"] & {
+   background: $appSurface;
+  }
  }
 
  &.gr-promotion-overlay {
@@ -2214,10 +2840,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.7rem;
-  padding: 1.1rem 1.2rem;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid alpha($appText, 0.1);
+  border-top-color: alpha($gold, 0.6);
   background: $appSheet;
-  @include neo-plunk;
  }
 
  &.gr-promotion-options {
@@ -2228,37 +2855,36 @@
  &.gr-sub-line {
   display: flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.5rem;
   max-width: 100%;
   height: 1.375rem;
   margin-top: 0.3rem;
   overflow: hidden;
  }
 
- &.gr-draw-banner {
+ &.gr-draw-offer {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  margin-top: 0.9rem;
-  padding: 0.6rem 0.8rem;
-  background: $appSurface;
-  @include neo-plunk;
-  border-radius: $radius-card;
+  flex: 1 1 auto;
+  gap: 0.625rem;
+  min-height: 3.5rem;
+  padding: 0 0.5rem 0 0.625rem;
+  overflow: hidden;
+  border: 1px solid alpha($gold, 0.5);
+  background: linear-gradient(90deg, alpha($gold, 0.12), alpha($gold, 0.03));
+  animation: draw-offer-in 0.3s ease-out;
 
-  &.gr-draw-offer {
-   position: relative;
-   gap: $space-8;
-   min-height: 4rem;
-   padding: 0 0.625rem 0 $space-12;
-   overflow: hidden;
-   background: alpha($gold, 0.06);
-   border-color: alpha($gold, 0.4);
-   animation: draw-offer-in 0.3s ease-out;
-
-   @media (prefers-reduced-motion: reduce) {
-    animation: none;
-   }
+  @media (prefers-reduced-motion: reduce) {
+   animation: none;
   }
+ }
+
+ &.gr-draw-offer-copy {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-width: 0;
  }
 
  &.gr-draw-offer-icon {
@@ -2266,9 +2892,8 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: $radius-card;
+  width: 2.25rem;
+  height: 2.25rem;
   background: alpha($gold, 0.14);
   color: $gold;
 
@@ -2283,7 +2908,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  height: 3px;
+  height: 2px;
   background: $gold;
   transform-origin: left center;
   animation: draw-offer-timer 15s linear forwards;
@@ -2297,9 +2922,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: $space-8;
-  margin-top: 1.1rem;
+  gap: 0.375rem;
+  margin-top: 0.75rem;
   flex-shrink: 0;
+
+  &.reviewing .gr-move-strip {
+   border-bottom-color: alpha($gold, 0.6);
+  }
  }
 
  &.gr-move-strip {
@@ -2308,10 +2937,8 @@
   flex: 1 1 auto;
   min-width: 0;
   height: 2.5rem;
-  padding: 0 $space-8;
-  @include neo-plunk;
-  border-radius: $radius-card;
-  background: $appCard;
+  padding: 0 0.25rem;
+  border-bottom: 1px solid alpha($appText, 0.12);
   overflow-x: auto;
   white-space: nowrap;
   scrollbar-width: none;
@@ -2323,19 +2950,42 @@
   &::before {
    content: "";
    position: sticky;
-   left: -$space-8;
+   left: -0.25rem;
    z-index: $z-raised;
-   flex: 0 0 2.25rem;
+   flex: 0 0 1.75rem;
    align-self: stretch;
-   margin-right: -2.25rem;
-   background: linear-gradient(90deg, $appCard, transparent);
+   margin-right: -1.75rem;
+   background: linear-gradient(90deg, $appSurface, transparent);
    opacity: 0;
    pointer-events: none;
    transition: opacity 0.2s ease;
+
+   :root[data-theme="light"] & {
+    background: linear-gradient(90deg, $appBg, transparent);
+   }
   }
 
   &.scrolled::before {
    opacity: 1;
+  }
+
+  &.empty {
+   justify-content: center;
+   gap: 0.5rem;
+  }
+ }
+
+ &.gr-move-spinner {
+  flex-shrink: 0;
+  width: 0.875rem;
+  height: 0.875rem;
+  border: 2px solid alpha($appText, 0.2);
+  border-top-color: $gold;
+  border-radius: 50%;
+  animation: gr-move-spin 0.8s linear infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+   animation: none;
   }
  }
 
@@ -2345,10 +2995,9 @@
   flex-shrink: 0;
   gap: 0.375rem;
   height: 2rem;
-  margin: 0 $space-8;
+  margin: 0 0.5rem;
   padding: 0.1875rem 0.3125rem 0.1875rem 0.375rem;
-  border: 1px solid alpha($gold, 0.8);
-  background: alpha($gold, 0.08);
+  border: 1px solid alpha($appText, 0.22);
 
   .gr-premove-piece {
    flex-shrink: 0;
@@ -2363,13 +3012,7 @@
   flex-shrink: 0;
 
   & + & {
-   &::before {
-    content: "";
-    width: 1px;
-    height: 0.875rem;
-    margin: 0 $space-8;
-    background: $appLine;
-   }
+   margin-left: 0.5rem;
   }
  }
 
@@ -2377,7 +3020,7 @@
   display: flex;
   justify-content: center;
   gap: 0.625rem;
-  padding-top: 1.2rem;
+  padding-top: 0.75rem;
   flex-shrink: 0;
 
   @include from(tablet) {
@@ -2413,6 +3056,61 @@
    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
    align-items: center;
    gap: $space-8;
+  }
+ }
+
+ &.split-reveal {
+  position: fixed;
+  inset: 0;
+  z-index: 1400;
+  overflow: hidden;
+  contain: strict;
+
+  .split-reveal-backdrop {
+   position: absolute;
+   inset: 0;
+   background: $appBg;
+   opacity: 0;
+  }
+
+  .split-reveal-ticket {
+   position: absolute;
+  }
+
+  .split-reveal-half {
+   position: absolute;
+   inset: 0;
+  }
+
+  .split-reveal-leak {
+   position: absolute;
+   left: -0.625rem;
+   right: -0.625rem;
+   height: 2.25rem;
+   margin-top: -1.125rem;
+   background: radial-gradient(50% 50% at 50% 50%, alpha($gold, 0.85), alpha($gold, 0));
+   opacity: 0;
+  }
+
+  .split-reveal-debris {
+   position: absolute;
+   width: 0.25rem;
+   height: 0.25rem;
+   border-radius: 50%;
+   background: #ffe27a;
+   opacity: 0;
+
+   &.fibre {
+    width: 0.125rem;
+    height: 0.5625rem;
+    border-radius: 0.0625rem;
+    background: #f4efe3;
+   }
+  }
+
+  .split-reveal-surface {
+   position: absolute;
+   opacity: 0;
   }
  }
 
@@ -2779,6 +3477,12 @@
  }
 }
 
+@keyframes gr-move-spin {
+ to {
+  transform: rotate(360deg);
+ }
+}
+
 @keyframes draw-offer-in {
  from {
   opacity: 0;
@@ -2825,5 +3529,179 @@
  100% {
   opacity: 0;
   transform: translate3d(480px, 0, 0) rotate(20deg);
+ }
+}
+
+@keyframes match-beam-breathe {
+ 0%,
+ 100% {
+  opacity: 1;
+ }
+ 50% {
+  opacity: 0.6;
+ }
+}
+
+@keyframes match-slot-glow {
+ 0%,
+ 100% {
+  opacity: 0;
+ }
+ 50% {
+  opacity: 1;
+ }
+}
+
+@keyframes match-ticket-rise {
+ to {
+  transform: translateY(0);
+ }
+}
+
+@keyframes match-ticket-pop {
+ 0%,
+ 100% {
+  transform: translateY(0) scale(1);
+ }
+ 40% {
+  transform: translateY(-0.5rem) scale(1.03);
+ }
+}
+
+@keyframes match-ticket-tug {
+ 0%,
+ 100% {
+  transform: translateX(0);
+ }
+ 30% {
+  transform: translateX(-2px) rotate(-0.6deg);
+ }
+ 65% {
+  transform: translateX(2px) rotate(0.6deg);
+ }
+}
+
+@keyframes match-seat-flip {
+ 0% {
+  transform: rotateY(0) scale(1);
+ }
+ 50% {
+  transform: rotateY(90deg) scale(1.14);
+ }
+ 100% {
+  transform: rotateY(180deg) scale(1);
+ }
+}
+
+@keyframes match-seat-pulse {
+ 0%,
+ 100% {
+  transform: scale(1);
+ }
+ 50% {
+  transform: scale(1.06);
+ }
+}
+
+@keyframes match-mask-cycle {
+ 0% {
+  opacity: 1;
+ }
+ 25%,
+ 100% {
+  opacity: 0;
+ }
+}
+
+@keyframes match-spark-pop {
+ 0% {
+  opacity: 0;
+  transform: scale(0) rotate(0);
+ }
+ 60% {
+  opacity: 1;
+  transform: scale(1.3) rotate(45deg);
+ }
+ 100% {
+  opacity: 1;
+  transform: scale(1) rotate(90deg);
+ }
+}
+
+@keyframes match-tear-top-cut {
+ to {
+  clip-path: polygon(0% 0%, 100% 0%, 99.43% 51.53%, 95.45% 49.24%, 91.48% 51.53%, 87.5% 48.47%, 83.52% 52.3%, 79.55% 48.47%, 75.57% 51.53%, 71.59% 49.24%, 67.61% 51.53%, 63.64% 48.47%, 59.66% 52.3%, 55.68% 48.47%, 51.7% 51.53%, 47.73% 49.24%, 43.75% 51.53%, 39.77% 48.47%, 35.8% 52.3%, 31.82% 48.47%, 27.84% 51.53%, 23.86% 49.24%, 19.89% 51.53%, 15.91% 48.47%, 11.93% 52.3%, 7.95% 48.47%, 3.98% 51.53%, 0% 49.24%);
+ }
+}
+
+@keyframes match-tear-bottom-cut {
+ to {
+  visibility: visible;
+  clip-path: polygon(0% 49.24%, 3.98% 51.53%, 7.95% 48.47%, 11.93% 52.3%, 15.91% 48.47%, 19.89% 51.53%, 23.86% 49.24%, 27.84% 51.53%, 31.82% 48.47%, 35.8% 52.3%, 39.77% 48.47%, 43.75% 51.53%, 47.73% 49.24%, 51.7% 51.53%, 55.68% 48.47%, 59.66% 52.3%, 63.64% 48.47%, 67.61% 51.53%, 71.59% 49.24%, 75.57% 51.53%, 79.55% 48.47%, 83.52% 52.3%, 87.5% 48.47%, 91.48% 51.53%, 95.45% 49.24%, 99.43% 51.53%, 98.86% 100%, 95.45% 95.92%, 92.05% 100%, 88.64% 95.92%, 85.23% 100%, 81.82% 95.92%, 78.41% 100%, 75% 95.92%, 71.59% 100%, 68.18% 95.92%, 64.77% 100%, 61.36% 95.92%, 57.95% 100%, 54.55% 95.92%, 51.14% 100%, 47.73% 95.92%, 44.32% 100%, 40.91% 95.92%, 37.5% 100%, 34.09% 95.92%, 30.68% 100%, 27.27% 95.92%, 23.86% 100%, 20.45% 95.92%, 17.05% 100%, 13.64% 95.92%, 10.23% 100%, 6.82% 95.92%, 3.41% 100%, 0% 95.92%);
+ }
+}
+
+@keyframes match-tear-top {
+ to {
+  transform: translate(-0.375rem, -0.375rem) rotate(-6deg);
+ }
+}
+
+@keyframes match-tear-bottom {
+ to {
+  transform: translate(0.75rem, 1.375rem) rotate(7deg);
+ }
+}
+
+@keyframes match-tear-fade {
+ to {
+  opacity: 0.85;
+ }
+}
+
+@keyframes match-void-thud {
+ to {
+  opacity: 0.9;
+  transform: rotate(-14deg) scale(1);
+ }
+}
+
+@keyframes match-line-cycle {
+ 0%,
+ 34%,
+ 100% {
+  opacity: 0;
+ }
+ 4%,
+ 30% {
+  opacity: 1;
+ }
+}
+
+@keyframes match-count-step {
+ 0% {
+  opacity: 0;
+  transform: scale(1.4);
+ }
+ 15%,
+ 85% {
+  opacity: 1;
+  transform: scale(1);
+ }
+ 100% {
+  opacity: 0;
+  transform: scale(1);
+ }
+}
+
+@keyframes match-count-last {
+ 0% {
+  opacity: 0;
+  transform: scale(1.4);
+ }
+ 15%,
+ 100% {
+  opacity: 1;
+  transform: scale(1);
  }
 }

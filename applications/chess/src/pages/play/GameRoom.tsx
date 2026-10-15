@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useBlocker } from "react-router-dom";
+import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import ChessBoard from "@gopvp/chess/src/components/board/Board";
@@ -38,11 +39,18 @@ import type { IGameRoomProps } from "@gopvp/chess/src/types/component";
 import {
  resignText,
  drawText,
+ drawOfferedText,
  offersDrawText,
  acceptText,
  declineText,
  waitingForOpponentText,
+ winText,
+ isReconnectingText,
+ moveOfText,
+ startPositionText,
 } from "@gopvp/chess/src/constants/message";
+import { practiceText } from "@gopvp/common/src/constants/message";
+import { formatAmount } from "@gopvp/common/src/util/format";
 import Button from "@gopvp/common/src/components/Button/Button";
 import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
 import { icons } from "@gopvp/common/src/components/images";
@@ -55,7 +63,7 @@ function pickBySide<T>(side: "w" | "b", whiteVal: T, blackVal: T): T {
 export default function GameRoom({ mode }: IGameRoomProps) {
  const navigate = useNavigate();
  const dispatch = useChessDispatch();
- const { playPath } = useGameContext();
+ const { playPath, isRevealing } = useGameContext();
 
  const {
   isPvc,
@@ -68,7 +76,7 @@ export default function GameRoom({ mode }: IGameRoomProps) {
   myScoreLabel,
   opponentName,
   opponentScoreLabel,
-  betAmount,
+  prize,
   isStarted,
  } = useGameRoomSetup(mode);
 
@@ -221,6 +229,7 @@ export default function GameRoom({ mode }: IGameRoomProps) {
  const {
   clockReady,
   drawOffer,
+  isDrawOffered,
   isOpponentOffline,
   firstMoveSeconds,
   sendMove,
@@ -362,6 +371,16 @@ export default function GameRoom({ mode }: IGameRoomProps) {
 
  return (
   <Box customClass="game-room">
+   <Box customClass="gr-win-counter">
+    <Text component="span" customClass="gr-win-label">
+     {isPvc ? practiceText : winText}
+    </Text>
+    {!isPvc && (
+     <Text component="span" customClass="gr-win-amount">
+      {formatAmount(prize)}
+     </Text>
+    )}
+   </Box>
    <PlayerRow
     variant="opponent"
     active={!myTurnActive}
@@ -373,11 +392,10 @@ export default function GameRoom({ mode }: IGameRoomProps) {
     clock={oppClock}
     clockReady={clockReady}
     lowTime={clockReady && oppTimeMs < CLOCK_LOW_TIME_MS}
-    isReconnecting={isOpponentOffline}
     firstMoveSeconds={myTurnActive ? null : firstMoveSeconds}
    />
 
-   <Box customClass="gr-board-wrap">
+   <Box customClass="gr-board-wrap" data-reveal-target>
     <ChessBoard
      fen={boardFen}
      selectedSquare={myTurnActive ? selectedSquare : premoveFrom}
@@ -393,7 +411,27 @@ export default function GameRoom({ mode }: IGameRoomProps) {
      lastMove={isReviewing ? null : lastMove}
      flipped={playerSide === "b"}
      onEntranceEnd={markBoardReady}
+     holdEntrance={isRevealing}
     />
+    {isOpponentOffline ? (
+     <Box customClass="gr-board-tag reconnecting">
+      <icons.wifiOff />
+      <Text component="span" customClass="gr-board-tag-text">
+       <b>{opponentName}</b> {isReconnectingText}
+      </Text>
+     </Box>
+    ) : (
+     isReviewing &&
+     viewIndex !== null && (
+      <Box customClass="gr-board-tag">
+       <Text component="span" customClass="gr-board-tag-text">
+        {viewIndex === 0
+         ? startPositionText
+         : moveOfText(viewIndex, fenHistory.length - 1)}
+       </Text>
+      </Box>
+     )
+    )}
     {pendingPromotion && (
      <PromotionOverlay
       playerSide={playerSide}
@@ -416,6 +454,7 @@ export default function GameRoom({ mode }: IGameRoomProps) {
       : null
     }
     onCancelPremoves={clearPremoves}
+    status={isStarted ? null : waitingForOpponentText}
     isReviewing={isReviewing}
     goBack={goBack}
     goForward={goForward}
@@ -434,59 +473,61 @@ export default function GameRoom({ mode }: IGameRoomProps) {
     firstMoveSeconds={myTurnActive ? firstMoveSeconds : null}
    />
 
-   {!isStarted && (
-    <Box customClass="gr-draw-banner">
-     <Text component="span">{waitingForOpponentText}</Text>
-    </Box>
-   )}
-
-   {drawOffer && (
-    <Box customClass="gr-draw-banner gr-draw-offer">
-     <Box customClass="gr-draw-offer-icon">
-      <icons.handshake />
-     </Box>
-     <Text component="span" customClass="gr-draw-offer-text">
-      <b>{opponentName}</b> {offersDrawText}
-     </Text>
-     <CustomIconButton
-      customClass="gr-draw-offer-btn decline"
-      onClick={declineDraw}
-      aria-label={declineText}
-      icon="x"
-     />
-     <CustomIconButton
-      customClass="gr-draw-offer-btn accept"
-      onClick={acceptDraw}
-      aria-label={acceptText}
-      icon="check"
-     />
-     <Box customClass="gr-draw-offer-timer" />
-    </Box>
-   )}
-
    <Box customClass="gr-foot">
-    {!isPvc && (
-     <Button
-      variant="outlined"
-      startIcon="handshake"
-      customClass="gr-draw-btn"
-      onClick={offerDraw}
-     >
-      {drawText}
-     </Button>
+    {drawOffer ? (
+     <Box customClass="gr-draw-offer">
+      <Box customClass="gr-draw-offer-icon">
+       <icons.handshake />
+      </Box>
+      <Box customClass="gr-draw-offer-copy">
+       <Text component="span" customClass="gr-draw-offer-name">
+        {opponentName}
+       </Text>
+       <Text component="span" customClass="gr-draw-offer-text">
+        {offersDrawText}
+       </Text>
+      </Box>
+      <CustomIconButton
+       customClass="gr-draw-offer-btn decline"
+       onClick={declineDraw}
+       aria-label={declineText}
+       icon="x"
+      />
+      <CustomIconButton
+       customClass="gr-draw-offer-btn accept"
+       onClick={acceptDraw}
+       aria-label={acceptText}
+       icon="check"
+      />
+      <Box customClass="gr-draw-offer-timer" />
+     </Box>
+    ) : (
+     <>
+      {!isPvc && (
+       <Button
+        variant="outlined"
+        startIcon="handshake"
+        customClass={classNames("gr-draw-btn", isDrawOffered && "offered")}
+        disabled={isDrawOffered}
+        onClick={offerDraw}
+       >
+        {isDrawOffered ? drawOfferedText : drawText}
+       </Button>
+      )}
+      <Button
+       variant="outlined"
+       customClass="gr-resign-btn"
+       onClick={() => setResignOpen(true)}
+      >
+       {resignText}
+      </Button>
+     </>
     )}
-    <Button
-     customClass="gr-resign-btn cancel-btn"
-     onClick={() => setResignOpen(true)}
-    >
-     {resignText}
-    </Button>
    </Box>
 
    <ResignSheet
     open={resignOpen || (blocker.state === "blocked" && !gameEnded)}
     isPvc={isPvc}
-    betAmount={betAmount}
     onKeepPlaying={handleKeepPlaying}
     onResign={handleResignConfirm}
    />

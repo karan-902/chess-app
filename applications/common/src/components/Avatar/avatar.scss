@@ -39,19 +39,50 @@
   color: $gold;
  }
 
+ &.ticket-me,
+ &.ticket-rival {
+  width: 2.75rem;
+  height: 2.75rem;
+  font-family: $fontOutfitExtraBold;
+  font-size: 1.25rem;
+ }
+
+ &.ticket-me {
+  background-color: $poolInk !important;
+  color: $gold;
+ }
+
+ &.ticket-rival {
+  background-color: var(--pool-face) !important;
+  color: var(--pool-ink);
+  transform: rotateY(180deg);
+ }
+
  &.gr-avatar {
   flex-shrink: 0;
   width: 2.625rem;
   height: 2.625rem;
-  border: 2px solid alpha($gold, 0.55);
-  background: $appSecondary !important;
+  border: 1px solid alpha($appText, 0.14);
+  background: linear-gradient(180deg, #2a2e7a, #14174a) !important;
   font-family: $fontOutfitBlack;
   font-size: $font18;
-  color: $appText;
+  color: alpha($appText, 0.85);
+
+  :root[data-theme="light"] & {
+   background: linear-gradient(180deg, #ffffff, #e3e6f5) !important;
+  }
+
+  .gr-row:not(.active) & {
+   opacity: 0.55;
+  }
 
   .gr-row.active & {
-   border-color: $gold;
+   border: 2px solid $gold;
    color: $gold;
+
+   :root[data-theme="light"] & {
+    color: $appText;
+   }
   }
  }
 

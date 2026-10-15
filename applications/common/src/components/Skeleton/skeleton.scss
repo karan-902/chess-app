@@ -66,9 +66,44 @@
   height: 2rem;
  }
 
- &.pool-play-skeleton {
+ .pool-card &.MuiSkeleton-root {
+  background: linear-gradient(
+   90deg,
+   alpha($poolInk, 0.06) 0%,
+   alpha($poolInk, 0.12) 50%,
+   alpha($poolInk, 0.06) 100%
+  );
+  background-size: 200% 100%;
+ }
+
+ &.pool-art-skeleton {
+  grid-area: icon;
+  align-self: stretch;
   width: 100%;
-  height: 2.375rem;
+  height: 100%;
+ }
+
+ &.pool-time-skeleton {
+  grid-area: time;
+  align-self: end;
+  width: 2.5rem;
+  height: 0.625rem;
+  margin-bottom: 0.25rem;
+ }
+
+ &.pool-win-skeleton {
+  grid-area: win;
+  align-self: start;
+  width: 6rem;
+  height: 1.375rem;
+ }
+
+ &.pool-entry-skeleton {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 4.5rem;
+  height: 1.25rem;
  }
 
  &.face-off-bar {
@@ -109,11 +144,6 @@
   flex-shrink: 0;
   width: 1.125rem;
   height: 1.125rem;
- }
-
- &.pool-mode-icon {
-  width: 1.75rem;
-  height: 1.75rem;
  }
 }
 

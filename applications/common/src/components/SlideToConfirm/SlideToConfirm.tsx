@@ -63,6 +63,7 @@ export function SlideToConfirm({
  const handleUp = () => {
   if (!drag.current.active) return;
   drag.current.active = false;
+  cancelAnimationFrame(frame.current);
   const { offset, max } = drag.current;
   if (max && offset / max >= SLIDE_CONFIRM_THRESHOLD) {
    paint(max, true);
@@ -91,6 +92,7 @@ export function SlideToConfirm({
     onPointerMove={handleMove}
     onPointerUp={handleUp}
     onPointerCancel={handleUp}
+    onLostPointerCapture={handleUp}
     onClick={(e) => {
      if (e.detail === 0) onConfirm();
     }}
