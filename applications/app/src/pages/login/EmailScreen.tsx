@@ -43,7 +43,7 @@ export default function EmailScreen({
     type="submit"
     variant="contained"
     fullWidth
-    customClass="auth-submit-btn tilted"
+    customClass="auth-submit-btn"
     disabled={!formik.dirty || formik.isSubmitting}
     isLoading={formik.isSubmitting}
    >

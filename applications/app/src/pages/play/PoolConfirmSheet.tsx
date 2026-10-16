@@ -3,7 +3,7 @@ import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
 import CustomDrawer from "@gopvp/common/src/components/Drawer/Drawer";
-// import { icons } from "@gopvp/common/src/components/images";
+import { icons } from "@gopvp/common/src/components/images";
 // import StakeTicket from "@gopvp/app/src/components/common/StakeTicket";
 // import FaceOff from "@gopvp/app/src/components/common/FaceOff";
 // import MatchDeck from "@gopvp/app/src/components/common/MatchDeck";
@@ -32,6 +32,10 @@ import {
  startingInText,
  tryAgainText,
  pickAnotherBetText,
+ timeText,
+ entryText,
+ winText,
+ poolMinutesText,
 } from "@gopvp/app/src/constants/message";
 import { cancelText } from "@gopvp/common/src/constants/message";
 import {
@@ -42,6 +46,7 @@ import {
 import {
  MATCH_TIMER_LOW_SECONDS,
  MATCH_COUNTDOWN_STEPS,
+ MS_PER_MINUTE,
 } from "@gopvp/app/src/constants/limit";
 import { useReduxSelector } from "@gopvp/app/src/redux/hooks";
 import SlideToConfirm from "@gopvp/common/src/components/SlideToConfirm/SlideToConfirm";
@@ -83,7 +88,13 @@ export default function PoolConfirmSheet({
    customClass="match-confirm-sheet"
   >
    {queuedPool && status !== "idle" ? (
-    <Box customClass={classNames("pool-confirm-slide", "match-sheet", isTimeout && "lost")}>
+    <Box
+     customClass={classNames(
+      "pool-confirm-slide",
+      "match-sheet",
+      isTimeout && "lost",
+     )}
+    >
      <Box customClass="match-head">
       <Box customClass="public-heading">
        <Text component="h2" customClass="public-title" aria-live="polite">
@@ -119,13 +130,21 @@ export default function PoolConfirmSheet({
         (isRevealed || isTimeout) && "settled",
        )}
       >
+       <icons.timer />
        {formatMMSS(isTimeout ? 0 : secondsLeft)}
       </Text>
      </Box>
      {/* <MatchDeck isRevealed={isRevealed} opponentName={opponentName} /> */}
      <MatchTicket
       status={status}
-      pool={queuedPool}
+      stats={[
+       {
+        label: timeText,
+        value: poolMinutesText(Math.round(queuedPool.time / MS_PER_MINUTE)),
+       },
+       { label: entryText, value: formatAmount(queuedPool.bet) },
+       { label: winText, value: formatAmount(queuedPool.prize), isWin: true },
+      ]}
       tone={confirmTone}
       myName={myName}
       opponentName={opponentName}
@@ -137,7 +156,7 @@ export default function PoolConfirmSheet({
         type="button"
         variant="contained"
         fullWidth
-        customClass="game-cta play-cta tilted"
+        customClass="game-cta play-cta"
         onClick={onRetry}
        >
         {tryAgainText}
@@ -249,7 +268,7 @@ export default function PoolConfirmSheet({
       type="button"
       variant="outlined"
       fullWidth
-      customClass="common-play cancel-btn"
+      customClass="cancel-btn"
       disabled={status === "found"}
       onClick={onLeaveQueue}
      >

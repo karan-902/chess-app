@@ -42,9 +42,14 @@ export function SlideToConfirm({
   const knob = knobRef.current;
   if (isLocked || !track || !knob) return;
   knob.setPointerCapture(e.pointerId);
+  const trackStyle = getComputedStyle(track);
   drag.current = {
    startX: e.clientX,
-   max: track.clientWidth - knob.offsetWidth - knob.offsetLeft * 2,
+   max:
+    track.clientWidth -
+    parseFloat(trackStyle.paddingLeft) -
+    parseFloat(trackStyle.paddingRight) -
+    parseFloat(getComputedStyle(knob).width),
    offset: 0,
    active: true,
   };

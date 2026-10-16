@@ -65,14 +65,12 @@ export interface IGameOverOverlayProps {
  gameEnded: IMatchResultResponse;
  outcome: MatchOutcome;
  isPvc: boolean;
+ myName: string;
  opponentName: string;
  onNewGame: () => void;
 }
 
-export interface IWinBurstProps {
- originRef: React.RefObject<HTMLElement | null>;
- targetRef: React.RefObject<HTMLElement | null>;
-}
+export type IPayoutTicketProps = Omit<IGameOverOverlayProps, "onNewGame">;
 
 export interface IResignSheetProps {
  open: boolean;
@@ -83,7 +81,6 @@ export interface IResignSheetProps {
 
 export interface IPracticeSheetProps {
  open: boolean;
- username: string;
  onClose: () => void;
  onPlay: (
   difficulty: Difficulty,

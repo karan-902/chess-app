@@ -505,9 +505,12 @@ export default function GameRoom({ mode }: IGameRoomProps) {
      <>
       {!isPvc && (
        <Button
-        variant="outlined"
+        variant="text"
         startIcon="handshake"
-        customClass={classNames("gr-draw-btn", isDrawOffered && "offered")}
+        customClass={classNames(
+         "sheet-cancel-link gr-draw-btn",
+         isDrawOffered && "offered",
+        )}
         disabled={isDrawOffered}
         onClick={offerDraw}
        >
@@ -515,8 +518,8 @@ export default function GameRoom({ mode }: IGameRoomProps) {
        </Button>
       )}
       <Button
-       variant="outlined"
-       customClass="gr-resign-btn"
+       variant="text"
+       customClass="sheet-cancel-link gr-resign-btn"
        onClick={() => setResignOpen(true)}
       >
        {resignText}
@@ -537,6 +540,7 @@ export default function GameRoom({ mode }: IGameRoomProps) {
      gameEnded={gameEnded}
      outcome={MATCH_RESULT_OUTCOMES[gameEnded.result]}
      isPvc={isPvc}
+     myName={myName}
      opponentName={opponentName}
      onNewGame={() => navigate(playPath, { replace: true })}
     />

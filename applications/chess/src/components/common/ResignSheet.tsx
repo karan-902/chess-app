@@ -29,7 +29,7 @@ export default function ResignSheet({
      type="button"
      variant="contained"
      fullWidth
-     customClass="game-cta play-cta tilted"
+     customClass="game-cta play-cta"
      onClick={onKeepPlaying}
     >
      {backToGameText}

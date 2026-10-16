@@ -71,7 +71,7 @@
   }
  }
 
- &:not(.contained):active .button-face {
+ &.text:active .button-face {
   transform: none !important;
  }
 
@@ -118,36 +118,139 @@
  }
 
  &.contained {
-  min-height: 3.25rem;
   --btn-bg: #{$btnGoldFill};
-  --btn-edge-right: color-mix(in srgb, #{$primaryDark} 55%, #{$btnEdgeGold});
-  --btn-edge-bottom: #{$btnEdgeGold};
+  --btn-edge: #{$btnEdgeGold};
+  overflow: visible !important;
+  height: 4.5rem;
+  padding-top: 0.5rem !important;
+  perspective: 26rem;
   color: $primaryContrast !important;
 
+  .button-edge {
+   display: none;
+  }
+
   .button-face {
-   height: calc(100% - 3px) !important;
+   height: 3.25rem !important;
+   transform: rotateX(24deg);
+   transform-origin: 50% 100%;
+   animation: tilted-float 3.75s ease-in-out infinite;
+  }
+
+  &::after {
+   content: "";
+   position: absolute;
+   left: 0;
+   right: 0;
+   top: 3.75rem;
+   height: 0.5rem;
+   background: var(--btn-edge);
+   clip-path: polygon(0 0, 100% 0, calc(100% - 0.5rem) 100%, 0.5rem 100%);
+   transform-origin: 50% 100%;
+   animation: tilted-edge 3.75s ease-in-out infinite;
+   pointer-events: none;
+  }
+
+  &::before {
+   content: "";
+   position: absolute;
+   left: 0;
+   right: 0;
+   top: 4.25rem;
+   height: 0.625rem;
+   background: alpha($black, 0.9);
+   clip-path: polygon(
+    1.25rem 0,
+    calc(100% - 1.25rem) 0,
+    calc(100% - 0.875rem) 100%,
+    0.875rem 100%
+   );
+   transform-origin: 50% 0;
+   animation: tilted-shadow 3.75s ease-in-out infinite;
+   pointer-events: none;
+
+   :root[data-theme="light"] & {
+    background: alpha(#0d0d0d, 0.22);
+   }
+  }
+
+  .button-text {
+   font-family: $fontOutfitExtraBold !important;
+   font-size: $font18;
+   letter-spacing: 0.4px;
   }
 
   .button-spinner {
    color: $primaryContrast;
   }
 
-  @media screen and (max-width: 568px) {
-   min-height: 2rem;
+  &:active:not(.disabled) .button-face {
+   animation: none;
+   transform: rotateX(24deg) translate3d(0, 0.375rem, 0) !important;
+  }
+
+  &:active:not(.disabled)::after {
+   animation: none;
+   transform: scaleY(0.31);
+  }
+
+  &.disabled:not(.loading) {
+   --btn-bg: color-mix(in srgb, #{$appText} 12%, #{$appSheet}) !important;
+   --btn-edge: color-mix(in srgb, #{$appText} 26%, #{$appSheet});
+
+   .button-face {
+    height: 3.25rem !important;
+   }
+  }
+
+  &.disabled .button-face,
+  &.disabled::before,
+  &.disabled::after,
+  &.loading .button-face,
+  &.loading::after {
+   animation: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+   .button-face,
+   &::before,
+   &::after {
+    animation: none;
+   }
   }
  }
 
  &.outlined {
-  --btn-bg: #{$btnGhostBg};
-  --btn-border: 1px solid #{$btnGhostBorder};
-  color: $appText;
+  --btn-bg: #1a1d55;
+  --btn-border: 1px solid #{alpha($appText, 0.24)};
+  --btn-edge-right: #4b4fd8;
+  --btn-edge-bottom: #2a2e7a;
+  height: calc(3.25rem + 3px);
+  color: $appText !important;
 
-  &:hover:not(.disabled) {
-   --btn-bg: #{alpha($appText, 0.1)};
+  .button-face {
+   height: calc(100% - 3px) !important;
   }
 
-  &:active:not(.disabled) {
-   --btn-bg: #{alpha($appText, 0.14)};
+  .button-spinner {
+   color: $appText;
+  }
+
+  :root[data-theme="light"] & {
+   --btn-bg: #{$white};
+   --btn-border: 1px solid #0d0d0d;
+   --btn-edge-right: #e0e0e0;
+   --btn-edge-bottom: #8a8a8a;
+   color: #0d0d0d !important;
+  }
+
+  &.disabled:not(.loading) {
+   --btn-edge-right: #{alpha($appText, 0.18)} !important;
+   --btn-edge-bottom: #{alpha($appText, 0.1)} !important;
+
+   .button-face {
+    height: calc(100% - 3px) !important;
+   }
   }
  }
 
@@ -208,8 +311,28 @@
    height: 1.125rem;
   }
 
+  &.dropdown {
+   --btn-gap: 0.125rem;
+   --btn-pad: 0 0.59375rem 0 0.875rem;
+   min-width: 0 !important;
+  }
+
   &.active {
-   --btn-border: 1.5px solid #{$gold};
+   --btn-bg: #{$gold} !important;
+   --btn-border: 1px solid #{$gold};
+   --btn-edge-right: transparent;
+   color: $primaryContrast;
+
+   :root[data-theme="light"] & {
+    --btn-bg: #5b60a8 !important;
+    --btn-border: 1px solid #5b60a8;
+    color: $white;
+   }
+   --btn-edge-bottom: transparent;
+
+   .button-face {
+    transform: none !important;
+   }
   }
  }
 
@@ -290,12 +413,6 @@
   }
  }
 
- &.auth-submit-btn,
- &.modal-submit-btn,
- &.profile-save-btn {
-  height: 3.25rem;
- }
-
  .gopvp-signup-form &.auth-submit-btn {
   flex-shrink: 0;
   margin-top: 0.5rem;
@@ -323,9 +440,8 @@
    font-family: $fontOutfitSemiBold !important;
    font-size: $font13;
    color: inherit;
-   text-decoration: underline;
-   text-underline-offset: 0.25rem;
-   text-decoration-color: alpha($appText, 0.4);
+   padding-bottom: 0.125rem;
+   border-bottom: 1px solid currentColor;
   }
 
   .button-icon.start {
@@ -333,8 +449,7 @@
   }
  }
 
- &.auth-submit-btn.contained:not(.disabled) .button-face,
- &.play-cta.contained:not(.disabled) .button-face {
+ &.contained:not(.disabled) .button-face {
   position: relative;
   overflow: hidden;
 
@@ -356,7 +471,7 @@
     )
     no-repeat;
    transform: translate3d(-4rem, 0, 0) skewX(-21deg);
-   animation: button-shimmer 4s 0.6s linear infinite;
+   animation: button-shimmer 3.5s 0.6s linear infinite;
    pointer-events: none;
   }
 
@@ -368,84 +483,10 @@
   }
  }
 
- &.tilted.contained {
-  overflow: visible !important;
-  height: 4.5rem;
-  padding-top: 0.5rem !important;
-  perspective: 26rem;
-
-  .button-edge {
-   display: none;
-  }
-
-  .button-face {
-   height: 3.25rem !important;
-   transform: rotateX(24deg);
-   transform-origin: 50% 100%;
-   box-shadow: 0 0.5rem 0 $btnEdgeGold;
-   animation: tilted-float 3s ease-in-out infinite;
-  }
-
-  &::before {
-   content: "";
-   position: absolute;
-   left: 4%;
-   right: 4%;
-   bottom: 0;
-   height: 0.875rem;
-   background: alpha($black, 0.45);
-   transform: perspective(26rem) rotateX(55deg);
-   transform-origin: 50% 0;
-   animation: tilted-shadow 3s ease-in-out infinite;
-   pointer-events: none;
-  }
-
-  &:active:not(.disabled) .button-face {
-   animation: none;
-   transform: rotateX(24deg) translate3d(0, 0.375rem, 0) !important;
-   box-shadow: 0 0.125rem 0 $btnEdgeGold;
-  }
-
-  &.disabled .button-face,
-  &.disabled::before,
-  &.loading .button-face {
-   animation: none;
-  }
-
-  &.disabled .button-face {
-   box-shadow: 0 0.5rem 0 alpha($appText, 0.06);
-  }
-
-  &.disabled::before {
-   display: none;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-   .button-face,
-   &::before {
-    animation: none;
-   }
-  }
- }
-
- &.auth-submit-btn .button-text {
-  font-family: $fontOutfitExtraBold !important;
-  font-size: $font18;
-  letter-spacing: 0.4px;
- }
-
  &.auth-footer-btn {
   --btn-pad: 0 0.875rem;
-  --btn-bg: transparent;
-  --btn-border: 1px solid #{alpha($appText, 0.6)};
   flex-shrink: 0;
-  height: 2.375rem;
-  min-height: 0;
-  color: $appText !important;
-
-  &:hover:not(.disabled) {
-   --btn-bg: #{alpha($appText, 0.06)};
-  }
+  height: calc(2.375rem + 3px);
 
   .button-text {
    display: inline-flex;
@@ -466,42 +507,14 @@
 
  &.auth-google-btn {
   --btn-gap: 0.75rem;
-  --btn-bg: #{$white};
-  --btn-border: 1px solid #{$white};
-  height: 3.25rem;
-  color: $primaryContrast;
-
-  :root[data-theme="light"] & {
-   --btn-border: 1px solid #{alpha($appText, 0.2)};
-  }
-
-  .button-text {
-   letter-spacing: 0.3px;
-  }
-
-  &:hover:not(.disabled) {
-   --btn-bg: #{$white};
-   color: $primaryContrast !important;
-  }
-
-  &:active:not(.disabled) {
-   --btn-bg: #{alpha($white, 0.9)};
-  }
- }
-
- &.game-cta,
- &.options-play {
-  color: $primaryContrast !important;
- }
-
- &.options-play {
-  --btn-pad: 0;
-  height: 3.25rem !important;
+  --btn-bg: #{$white} !important;
+  --btn-border: 1px solid #0d0d0d !important;
+  --btn-edge-right: #e0e0e0 !important;
+  --btn-edge-bottom: #8a8a8a !important;
+  color: #0d0d0d !important;
  }
 
  &.game-cta {
-  height: 3.25rem;
-
   .resign-sheet & {
    margin-top: 0.75rem;
   }
@@ -509,20 +522,9 @@
 
  &.play-cta {
   width: 100% !important;
-  height: 3.625rem;
 
-  .button-text {
-   font-family: $fontOutfitExtraBold !important;
-   font-size: $font18;
-   letter-spacing: 0.4px;
-  }
-
-  &.tilted {
-   height: 4.875rem;
-
-   .button-face {
-    height: 3.625rem !important;
-   }
+  .game-over-sheet & {
+   margin-top: $space-20;
   }
 
   @include from(laptop) {
@@ -539,67 +541,13 @@
   max-width: 22.375rem;
  }
 
- &.create-room-btn,
- &.join-room-btn {
-  width: 100% !important;
- }
-
- &.common-play {
-  --btn-pad: 0;
-  width: min(9.375rem, 100%) !important;
-  height: 2.375rem !important;
-
-  .button-text {
-   font-size: $font16;
-  }
-
-  .bet-card & {
-   width: 100% !important;
-  }
-
-  .pool-confirm & {
-   flex: 1 1 0;
-   width: 100% !important;
-   height: 3.25rem !important;
-  }
-  .bet-card.insufficient & {
-   --btn-bg: #{alpha($gold, 0.12)} !important;
-   --btn-border: 1px solid #{$gold};
-   color: $gold !important;
-
-   &:hover {
-    --btn-bg: #{alpha($gold, 0.22)} !important;
-   }
-  }
- }
-
  &.cancel-btn {
-  --btn-bg: #{$btnRedFill};
-  --btn-border: 1px solid #{alpha(#ff8a9a, 0.45)};
-
-  &.contained {
-   --btn-border: 0 solid transparent;
-   --btn-edge-right: color-mix(in srgb, #{$paleRed} 55%, #{$btnEdgeRed});
-   --btn-edge-bottom: #{$btnEdgeRed};
-  }
-
-  &:hover:not(.disabled) {
-   --btn-bg: #{$btnRedFill};
-  }
-
-  &.disabled {
-   opacity: 0.5;
-  }
-
-  .common-text {
-   color: $white !important;
-  }
+  color: $paleRed !important;
  }
 
  &.wallet-deposit-btn,
  &.wallet-withdraw-btn {
   flex: 1;
-  height: 3.25rem;
  }
 
  &.wallet-withdraw-btn {
@@ -658,8 +606,17 @@
    --btn-bg: transparent;
   }
 
-  .segment.room-segment & {
-   min-height: 3rem;
+  .segment.gold-bar & {
+   --btn-pad: 0.5rem 0.125rem;
+   min-height: 3.25rem;
+
+   .button-face {
+    transform: none !important;
+   }
+  }
+
+  .segment.gold-bar.tabs & {
+   min-height: 2.75rem;
   }
 
   .practice-field & {
@@ -671,25 +628,6 @@
    letter-spacing: normal;
   }
 
-  .segment.ticket-pills & {
-   --btn-pad: 0.5625rem 0.125rem;
-   --btn-bg: #{$white};
-   box-shadow: inset 0 0 0 1px alpha($poolInk, 0.18);
-
-   &.active,
-   &.active:hover:not(.disabled) {
-    --btn-bg: transparent;
-    box-shadow: none;
-   }
-
-   .button-face {
-    transform: none !important;
-   }
-
-   .common-text {
-    overflow: visible;
-   }
-  }
  }
 
  &.modal-submit-btn {
@@ -699,6 +637,8 @@
  &.profile-edit-icon-btn {
   --btn-pad: 0;
   --btn-radius: 50%;
+  --btn-bg: #{$btnGhostBg};
+  --btn-border: 1px solid #{$btnGhostBorder};
   position: relative;
   z-index: $z-raised;
   width: 2.125rem;
@@ -711,17 +651,9 @@
   margin-top: 0.4rem;
  }
 
- &.result-back-btn {
-  margin-top: $space-20;
- }
-
  &.gr-draw-btn,
  &.gr-resign-btn {
-  --btn-bg: transparent;
-  --btn-border: 1px solid #{alpha($appText, 0.12)};
   flex: 1 1 0;
-  height: 2.5rem;
-  color: alpha($appText, 0.85) !important;
 
   .button-icon.start svg {
    width: 1rem;
@@ -729,15 +661,8 @@
   }
 
   &.offered {
-   --btn-bg: transparent !important;
-   --btn-border: 1px solid #{alpha($gold, 0.3)} !important;
    color: alpha($appText, 0.45) !important;
   }
- }
-
- &.room-action-btn {
-  flex: 1 1 0;
-  height: 3.25rem;
  }
 
  &.room-paste-btn,
@@ -758,7 +683,17 @@
 
  &.room-paste-btn {
   --btn-pad: #{$space-4} 0;
+  align-self: center;
   color: $gold;
+
+  :root[data-theme="light"] & {
+   color: #9a6f00;
+  }
+
+  .button-text {
+   padding-bottom: 0.125rem;
+   border-bottom: 1px solid currentColor;
+  }
 
   &:hover:not(.disabled) {
    --btn-bg: transparent;
@@ -801,23 +736,36 @@
 
 @keyframes tilted-float {
  0%,
+ 80%,
  100% {
   transform: rotateX(24deg) translate3d(0, 0, 0);
  }
- 50% {
+ 40% {
   transform: rotateX(24deg) translate3d(0, -0.3125rem, 0);
+ }
+}
+
+@keyframes tilted-edge {
+ 0%,
+ 80%,
+ 100% {
+  transform: translate3d(0, 0, 0);
+ }
+ 40% {
+  transform: translate3d(0, -0.285rem, 0);
  }
 }
 
 @keyframes tilted-shadow {
  0%,
+ 80%,
  100% {
   opacity: 1;
-  transform: perspective(26rem) rotateX(55deg) scaleX(1);
+  transform: scaleX(1);
  }
- 50% {
+ 40% {
   opacity: 0.6;
-  transform: perspective(26rem) rotateX(55deg) scaleX(0.94);
+  transform: scaleX(0.94);
  }
 }
 
@@ -825,7 +773,7 @@
  0% {
   transform: translate3d(-4rem, 0, 0) skewX(-21deg);
  }
- 50%,
+ 43%,
  100% {
   transform: translate3d(calc(100% + 3rem), 0, 0) skewX(-21deg);
  }

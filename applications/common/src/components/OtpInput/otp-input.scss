@@ -27,6 +27,25 @@
   }
  }
 
+ &.room-code-otp {
+  align-self: stretch;
+  gap: 0.5rem;
+
+  .otp-slot {
+   max-width: 3.25rem;
+   height: 4rem;
+   font-size: $font30;
+   border: 1px solid alpha($poolInk, 0.22);
+   background: $white;
+   font-family: $fontOutfitBlack;
+   color: $poolInk;
+
+   &.active {
+    border: 1.5px solid $gold;
+   }
+  }
+ }
+
  .otp-slot-caret {
   position: absolute;
   width: 1px;

@@ -40,11 +40,27 @@
  }
 
  &.ticket-me,
- &.ticket-rival {
+ &.ticket-rival,
+ &.payout-rival {
   width: 2.75rem;
   height: 2.75rem;
   font-family: $fontOutfitExtraBold;
   font-size: 1.25rem;
+
+  .payout-paper & {
+   width: 2.25rem;
+   height: 2.25rem;
+   font-size: 1rem;
+  }
+ }
+
+ &.payout-rival {
+  background-color: #ff7b9a !important;
+  color: $poolInk;
+
+  .practice & {
+   background-color: #3bffad !important;
+  }
  }
 
  &.ticket-me {
@@ -83,22 +99,6 @@
    :root[data-theme="light"] & {
     color: $appText;
    }
-  }
- }
-
- &.room-face-avatar {
-  flex-shrink: 0;
-  width: 2.75rem;
-  height: 2.75rem;
-  border: 2px solid $appTextMuted;
-  background: $appSurface !important;
-  font-family: $fontOutfitBlack;
-  font-size: $font18;
-  color: $appText;
-
-  .room-face-card.me & {
-   border-color: $gold;
-   color: $gold;
   }
  }
 

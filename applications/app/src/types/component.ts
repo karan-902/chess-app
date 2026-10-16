@@ -106,7 +106,6 @@ export interface IRoomSheetProps {
  roomFee: number;
  roomTimeMs: number;
  expiresInSeconds: number;
- expiryWindowMs: number;
  onCreateRoom: (betUsd: number, durationSeconds: number) => void;
  onJoinRoom: (code: string) => void;
  onStartRoom: () => void;
@@ -151,9 +150,16 @@ export interface IMatchDeckProps {
  opponentName: string;
 }
 
+export interface IMatchTicketStat {
+ label: string;
+ value: string;
+ isWin?: boolean;
+}
+
 export interface IMatchTicketProps {
  status: MatchmakingStatus;
- pool: IPoolResponse;
+ title?: string;
+ stats: IMatchTicketStat[];
  tone: number;
  myName: string;
  opponentName: string;

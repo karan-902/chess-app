@@ -44,7 +44,7 @@ export default function PasswordScreen({
     <Button
      type="button"
      size="small"
-     variant="outlined"
+     variant="text"
      startIcon="pencil"
      customClass="auth-change-btn"
      onClick={onChangeEmail}
@@ -74,7 +74,7 @@ export default function PasswordScreen({
      type="submit"
      variant="contained"
      fullWidth
-     customClass="auth-submit-btn tilted"
+     customClass="auth-submit-btn"
      disabled={!formik.dirty || formik.isSubmitting}
      isLoading={formik.isSubmitting}
     >

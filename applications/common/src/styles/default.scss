@@ -306,7 +306,10 @@ $radius-card: 0;
  }
 }
 
-@mixin sheet-pattern($color: alpha($appText, 0.05)) {
+@mixin sheet-pattern(
+ $color: alpha($appText, 0.05),
+ $clear: radial-gradient(70% 40% at 50% 50%, transparent 55%, #000)
+) {
  content: "";
  position: absolute;
  inset: 0;
@@ -315,7 +318,7 @@ $radius-card: 0;
  mask:
   url("/pattern-cubes.svg") 50% 0 / 1.515625rem 2.625rem repeat,
   linear-gradient(180deg, transparent, #000 18%, #000 82%, transparent),
-  radial-gradient(70% 40% at 50% 50%, transparent 55%, #000);
+  $clear;
  mask-composite: intersect;
  pointer-events: none;
 }

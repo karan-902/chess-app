@@ -6,6 +6,7 @@ export const ROUTES = {
  WALLET: "/wallet",
  PROFILE: "/profile",
  APPROVE_DEVICE: "/approve-device",
+ PREVIEW: "/preview",
 } as const;
 
 export const GAME_PAGES = {

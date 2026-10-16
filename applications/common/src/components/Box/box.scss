@@ -2,29 +2,6 @@
 @use "sass:math";
 @use "default.scss" as *;
 
-%ticket-notches {
- border-top: 1px dashed alpha($poolInk, 0.3);
-
- &::before,
- &::after {
-  content: "";
-  position: absolute;
-  top: -0.5rem;
-  width: 1rem;
-  height: 1rem;
-  border-radius: 50%;
-  background: $appSheet;
- }
-
- &::before {
-  left: -1.25rem;
- }
-
- &::after {
-  right: -1.25rem;
- }
-}
-
 .common-box {
  &.public-page {
   display: flex;
@@ -241,6 +218,12 @@
   gap: 0.5rem;
   margin: 0.75rem 0 0.5rem;
   text-align: left;
+
+  .payout-logo {
+   width: 2.75rem;
+   height: 2.75rem;
+   object-fit: cover;
+  }
 
   @include from-height(tall) {
    gap: 0.625rem;
@@ -562,7 +545,8 @@
   justify-content: space-between;
   gap: 0.5rem;
 
-  .match-sheet & {
+  .match-sheet &,
+  .room-options & {
    padding-right: 2.75rem;
   }
 
@@ -597,14 +581,24 @@
 
   .match-beam {
    position: absolute;
-   left: 4.5625rem;
+   left: 50%;
    top: 0;
-   width: 11.8125rem;
-   height: 16.375rem;
-   background: linear-gradient(180deg, alpha($gold, 0), alpha($gold, 0.28));
-   clip-path: polygon(25% 0, 75% 0, 100% 100%, 0 100%);
+   width: 17.5rem;
+   height: 16.125rem;
+   margin-left: -8.75rem;
+   background: linear-gradient(180deg, alpha($gold, 0), alpha($gold, 0.3));
+   clip-path: polygon(38% 0, 62% 0, 100% 100%, 0 100%);
    opacity: 0;
    transition: opacity 0.8s ease-out;
+
+   :root[data-theme="light"] & {
+    background: linear-gradient(
+     180deg,
+     alpha(#ffc400, 0),
+     alpha(#ffc400, 0.1) 45%,
+     alpha(#f2a900, 0.24)
+    );
+   }
   }
 
   &.searching .match-beam {
@@ -632,11 +626,15 @@
    &::after {
     content: "";
     position: absolute;
-    left: 0;
-    right: 0;
+    left: 0.375rem;
+    right: 0.375rem;
     bottom: 100%;
-    height: 1.375rem;
-    background: linear-gradient(0deg, alpha($gold, 0.55), transparent);
+    height: 0.75rem;
+    background: radial-gradient(
+     50% 100% at 50% 100%,
+     alpha($gold, 0.6),
+     transparent
+    );
     opacity: 0;
    }
   }
@@ -664,19 +662,27 @@
 
   .match-ticket-wrap {
    position: absolute;
-   left: 5rem;
-   top: 2.5rem;
-   width: 11rem;
-   height: 12.25rem;
+   left: 4.21875rem;
+   top: 3.25rem;
+   width: 12.5rem;
+   height: 11.5rem;
    isolation: isolate;
    transform: translateY(15rem);
+
+   :root[data-theme="light"] & {
+    filter: drop-shadow(0 0 0.5px alpha(#5b60a8, 0.9));
+   }
 
    &::before {
     content: "";
     position: absolute;
     z-index: -1;
     inset: 1rem 0 -1rem;
-    background: radial-gradient(closest-side, alpha($black, 0.35) 70%, transparent);
+    background: radial-gradient(
+     closest-side,
+     alpha($black, 0.35) 70%,
+     transparent
+    );
     transition: opacity 0.3s ease-out 1.4s;
    }
   }
@@ -687,8 +693,7 @@
 
   &.searching .match-ticket-wrap,
   &.found .match-ticket-wrap {
-   animation: match-ticket-rise 1.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s
-    forwards;
+   animation: match-ticket-rise 1.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
   }
 
   &.lost .match-ticket-wrap {
@@ -702,7 +707,44 @@
    overflow: hidden;
    background: linear-gradient(180deg, #fffdf6, #f1ecdf);
    color: $poolInk;
-   clip-path: polygon(0% 0%, 100% 0%, 98.86% 100%, 95.45% 95.92%, 92.05% 100%, 88.64% 95.92%, 85.23% 100%, 81.82% 95.92%, 78.41% 100%, 75% 95.92%, 71.59% 100%, 68.18% 95.92%, 64.77% 100%, 61.36% 95.92%, 57.95% 100%, 54.55% 95.92%, 51.14% 100%, 47.73% 95.92%, 44.32% 100%, 40.91% 95.92%, 37.5% 100%, 34.09% 95.92%, 30.68% 100%, 27.27% 95.92%, 23.86% 100%, 20.45% 95.92%, 17.05% 100%, 13.64% 95.92%, 10.23% 100%, 6.82% 95.92%, 3.41% 100%, 0% 95.92%);
+   mask:
+    radial-gradient(circle at 0 6.5rem, transparent 0.5rem, #000 0.5rem),
+    radial-gradient(circle at 100% 6.5rem, transparent 0.5rem, #000 0.5rem);
+   mask-composite: intersect;
+   clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    98.86% 100%,
+    95.45% 95.65%,
+    92.05% 100%,
+    88.64% 95.65%,
+    85.23% 100%,
+    81.82% 95.65%,
+    78.41% 100%,
+    75% 95.65%,
+    71.59% 100%,
+    68.18% 95.65%,
+    64.77% 100%,
+    61.36% 95.65%,
+    57.95% 100%,
+    54.55% 95.65%,
+    51.14% 100%,
+    47.73% 95.65%,
+    44.32% 100%,
+    40.91% 95.65%,
+    37.5% 100%,
+    34.09% 95.65%,
+    30.68% 100%,
+    27.27% 95.65%,
+    23.86% 100%,
+    20.45% 95.65%,
+    17.05% 100%,
+    13.64% 95.65%,
+    10.23% 100%,
+    6.82% 95.65%,
+    3.41% 100%,
+    0% 95.65%
+   );
 
    &.top {
     transform-origin: 18% 50%;
@@ -751,7 +793,8 @@
   }
 
   .ticket-side {
-   width: 4.5rem;
+   width: 5rem;
+   min-width: 0;
    display: flex;
    flex-direction: column;
    align-items: center;
@@ -801,7 +844,12 @@
    @each $index, $color in (1: #ffc400, 2: #ff7b9a, 3: #c379ff, 4: #3bffad) {
     &.mask-#{$index} {
      background: $color;
-     animation: match-mask-cycle 2.8s steps(1, end) #{($index - 1) * 0.7s} infinite;
+     animation: match-mask-cycle
+      2.8s
+      steps(1, end)
+      #{($index - 1) *
+      0.7s}
+      infinite;
     }
    }
   }
@@ -838,16 +886,16 @@
   .ticket-stats {
    position: absolute;
    z-index: 1;
-   top: 8.125rem;
-   left: 0.625rem;
-   right: 0.625rem;
+   top: 7.375rem;
+   left: 0.25rem;
+   right: 0.25rem;
    display: flex;
   }
 
   .ticket-stat {
-   flex: 1 1 0;
+   flex: 1 1 auto;
    min-width: max-content;
-   padding: 0.4375rem 0.25rem 0;
+   padding: 0.4375rem 0.375rem 0;
    text-align: center;
 
    & + .ticket-stat {
@@ -858,10 +906,10 @@
   .ticket-perf {
    position: absolute;
    z-index: 1;
-   top: 6.125rem;
+   top: 6.5rem;
    left: 0.75rem;
    right: 0.75rem;
-   @extend %ticket-notches;
+   border-top: 1px dashed alpha($poolInk, 0.3);
   }
 
   .ticket-glare {
@@ -870,7 +918,12 @@
    left: 40%;
    width: 2.875rem;
    height: 220%;
-   background: linear-gradient(90deg, transparent, alpha($white, 0.55), transparent);
+   background: linear-gradient(
+    90deg,
+    transparent,
+    alpha($white, 0.55),
+    transparent
+   );
    transform: rotate(28deg);
   }
 
@@ -918,7 +971,8 @@
   }
 
   &.found .match-spark {
-   animation: match-spark-pop 0.7s cubic-bezier(0.34, 1.4, 0.64, 1) 0.5s forwards;
+   animation: match-spark-pop 0.7s cubic-bezier(0.34, 1.4, 0.64, 1) 0.5s
+    forwards;
 
    @for $i from 2 through 4 {
     &.spark-#{$i} {
@@ -966,106 +1020,10 @@
   }
  }
 
- &.practice-ticket {
-  position: relative;
-  width: 100%;
-  max-width: 18.75rem;
-  margin: 0 auto;
-  padding-bottom: 1rem;
-  overflow: hidden;
-  background: linear-gradient(180deg, #fffdf6, #f1ecdf);
-  box-shadow:
-   0 0.875rem 1.125rem alpha($black, 0.45),
-   0 0.1875rem 0.1875rem alpha($black, 0.3);
-  color: $poolInk;
- }
-
- &.practice-ticket-stub {
-  display: grid;
-  place-items: center;
-  height: 1.875rem;
-  background: $poolInk;
- }
-
- &.practice-ticket-players {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1.5rem;
-  padding: 0.875rem 0 0.25rem;
- }
-
- &.practice-ticket-bot {
-  display: grid;
-  place-items: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  border-radius: 50%;
-  background: list.nth(list.nth($poolBlocks, 1), 1);
-  color: list.nth(list.nth($poolBlocks, 1), 2);
-
-  svg {
-   width: 1.5rem;
-   height: 1.5rem;
-   stroke-width: 1.8;
-  }
- }
-
- &.practice-ticket-field {
+ &.practice-fields {
   display: flex;
   flex-direction: column;
-  gap: 0.375rem;
-  padding: 0.75rem 1.125rem 0;
- }
-
- &.segment.ticket-pills {
-  gap: 0.5rem;
-  padding: 0 0 0.375rem;
-  border: 0;
-  background: transparent;
-  box-shadow: none;
-
-  &:has(> :nth-child(5)) {
-   gap: 0.375rem;
-  }
-
-  > .segment-thumb {
-   top: -0.1875rem;
-   bottom: 0.25rem;
-   border: 0;
-   background:
-    linear-gradient(115deg, transparent 52%, alpha($white, 0.5) 57%, transparent 62%) top center / calc(100% - 6px) calc(100% - 7px) no-repeat,
-    linear-gradient(180deg, #ffe27a, $gold) top center / calc(100% - 6px) calc(100% - 7px) no-repeat;
-
-   &::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 7px;
-    background: $slabEdgeGold;
-    clip-path: polygon(3px 0, calc(100% - 3px) 0, 100% 100%, 0 100%);
-   }
-
-   &::after {
-    content: "";
-    position: absolute;
-    z-index: -1;
-    left: 2px;
-    right: 2px;
-    bottom: -7px;
-    height: 8px;
-    border-radius: 50%;
-    background: alpha($black, 0.32);
-   }
-  }
- }
-
- &.practice-ticket-perf {
-  position: relative;
-  margin: 1rem 0.75rem 0;
-  @extend %ticket-notches;
+  gap: $space-16;
  }
 
  &.match-deck {
@@ -1314,17 +1272,6 @@
   width: 100%;
  }
 
- &.bet-card-live-dot {
-  position: absolute;
-  top: $space-8;
-  right: $space-8;
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 50%;
-  background: $greenishTeal;
-  box-shadow: 0 0 0 3px alpha($greenishTeal, 0.2);
- }
-
  &.pool-confirm {
   gap: $space-16;
 
@@ -1529,6 +1476,13 @@
   }
  }
 
+ &.preview-page {
+  display: flex;
+  flex-direction: column;
+  gap: $space-8;
+  padding: $space-16;
+ }
+
  &.matches-page {
   display: flex;
   flex-direction: column;
@@ -1551,21 +1505,6 @@
    margin-bottom: 0.5rem;
   }
 
-  &.room-segment {
-   padding: 0.3rem;
-   border: 1px solid alpha($appText, 0.1);
-   background: alpha($appText, 0.04);
-   box-shadow: none;
-
-   > .segment-thumb {
-    top: 0.3rem;
-    bottom: 0.3rem;
-    border: 1.5px solid $gold;
-    border-radius: 0;
-    background: alpha($gold, 0.18);
-   }
-  }
-
   &.category-select {
    gap: 0.25rem;
    padding: 0.25rem;
@@ -1573,6 +1512,26 @@
    @include from(tablet) {
     gap: 0.35rem;
     padding: 0.3rem;
+   }
+  }
+
+  &.gold-bar {
+   gap: 0;
+   padding: 3px;
+   border: 1px solid alpha($appText, 0.2);
+   background: transparent;
+   box-shadow: none;
+
+   > .segment-thumb {
+    top: 3px;
+    bottom: 3px;
+    border: 0;
+    background: linear-gradient(180deg, #ffe27a, #ffc400);
+   }
+
+   .room-form > & {
+    align-self: stretch;
+    width: auto;
    }
   }
  }
@@ -1755,175 +1714,6 @@
     color: $medalBronze;
    }
   }
- }
-
- &.room-field {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-
-  &.room-bet-field,
-  &.room-duration-field {
-   align-items: center;
-   gap: $space-12;
-   padding: $space-12;
-   border: 1px solid alpha($appText, 0.1);
-
-   @include from-height(medium) {
-    padding: $space-16;
-   }
-   border-radius: $radius-card;
-   background: alpha($appText, 0.04);
-  }
- }
-
- &.create-room-button-wrap {
-  position: relative;
- }
-
- &.room-field-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
- }
-
- &.room-code-card {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: $space-12;
-  padding: $space-8 $space-8 $space-8 1.125rem;
-  border: 1px solid $gold;
-  border-radius: $radius-card;
-  background: $appSurface;
- }
-
- &.room-expiry {
-  display: flex;
-  align-items: center;
-  gap: 0.375rem;
-  color: $gold;
-
-  svg {
-   width: 1rem;
-   height: 1rem;
-  }
- }
-
- &.room-expiry-bar {
-  height: 3px;
-  background: alpha($appText, 0.08);
-  overflow: hidden;
- }
-
- &.room-expiry-fill {
-  height: 100%;
-  background: $gold;
-  transform-origin: left center;
-  transition: transform 1s linear;
-
-  @media (prefers-reduced-motion: reduce) {
-   transition: none;
-  }
- }
-
- &.room-face-off {
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: $space-12;
-  margin-top: $space-8;
- }
-
- &.room-face-card {
-  display: flex;
-  align-items: center;
-  gap: $space-12;
-  min-width: 0;
-  padding: $space-16 $space-12;
-  border: 1.2px solid alpha($appTextMuted, 0.55);
-  border-radius: $radius-card;
-  background: $appSecondary;
-
-  &.me {
-   padding-right: 1.75rem;
-   border-color: $gold;
-   background: alpha($gold, 0.1);
-  }
-
-  &.rival {
-   padding-left: 1.75rem;
-  }
- }
-
- &.room-face-meta {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
- }
-
- &.room-meta-strip {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  @include neo-plunk;
-  border-radius: $radius-card;
-  background: $appSurface;
- }
-
- &.room-meta-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.125rem;
-  min-width: 0;
-  padding: $space-12 $space-4;
-  text-align: center;
-
-  & + & {
-   border-left: 1px solid $appCardBorder;
-  }
- }
-
- &.duration-wheel {
-  position: relative;
-  width: 100%;
-  align-self: stretch;
-  height: 8.4rem;
-  border-radius: $radius-card;
-  overflow: hidden;
- }
-
- &.duration-wheel-highlight {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 3rem;
-  transform: translateY(-50%);
-  border: 1px solid $gold;
-  background: alpha($gold, 0.14);
-  pointer-events: none;
-  z-index: $z-base;
- }
-
- &.duration-wheel-list {
-  position: relative;
-  z-index: $z-raised;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow-y: auto;
-  scroll-snap-type: y mandatory;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-   display: none;
-  }
- }
-
- &.duration-wheel-pad {
-  height: 2.8rem;
-  flex-shrink: 0;
  }
 
  &.leaderboard-page {
@@ -2127,7 +1917,6 @@
   flex-wrap: wrap;
   gap: 0.5rem;
 
-  &.room-bet-chips,
   &.deposit-amount-chips {
    justify-content: center;
   }
@@ -2193,12 +1982,82 @@
  }
 
  &.room-options {
+  display: flex;
+  flex-direction: column;
   align-items: normal;
   text-align: left;
-  gap: 0.4rem;
+  gap: $space-12;
+ }
 
-  @include from-height(medium) {
-   gap: 0.6rem;
+ &.room-heading {
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+ }
+
+ &.room-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.625rem;
+ }
+
+ &.room-ticket-hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 76%;
+  min-height: 3.75rem;
+
+  &::before,
+  &::after {
+   content: "";
+   position: absolute;
+   left: 0;
+   right: 0;
+   height: 1px;
+   background: linear-gradient(90deg, alpha($gold, 0), $gold, alpha($gold, 0));
+  }
+
+  &::before {
+   top: 0;
+  }
+
+  &::after {
+   bottom: 0;
+  }
+
+  :root[data-theme="light"] & {
+   &::before,
+   &::after {
+    background: linear-gradient(
+     90deg,
+     alpha(#c99a00, 0),
+     #c99a00,
+     alpha(#c99a00, 0)
+    );
+   }
+  }
+ }
+
+ &.room-actions {
+  display: flex;
+  flex-direction: column;
+  gap: $space-8;
+ }
+
+ &.room-wait-spinner {
+  align-self: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 2.5px solid alpha($appText, 0.2);
+  border-top-color: $appText;
+  border-radius: 50%;
+  animation: room-wait-spin 0.8s linear infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+   animation-duration: 1.6s;
   }
  }
  &.match-row-item {
@@ -2687,17 +2546,33 @@
   height: 100%;
   padding: $space-16;
   background:
-   radial-gradient(30rem 28rem at 50% 38%, alpha(#4b4fd8, 0.32), transparent 70%),
+   radial-gradient(
+    30rem 28rem at 50% 38%,
+    alpha(#4b4fd8, 0.32),
+    transparent 70%
+   ),
    $appSurface;
   overflow-y: auto;
 
   &::before {
-   @include sheet-pattern;
+   @include sheet-pattern(
+    $clear: linear-gradient(
+      90deg,
+      #000,
+      transparent $space-16,
+      transparent calc(100% - #{$space-16}),
+      #000
+     )
+   );
   }
 
   :root[data-theme="light"] & {
    background:
-    radial-gradient(30rem 28rem at 50% 38%, alpha(#5b60a8, 0.16), transparent 70%),
+    radial-gradient(
+     30rem 28rem at 50% 38%,
+     alpha(#5b60a8, 0.16),
+     transparent 70%
+    ),
     $appBg;
 
    &::before {
@@ -2721,6 +2596,20 @@
   justify-content: space-between;
   gap: $space-12;
   flex-shrink: 0;
+  padding: 0.375rem 0.375rem 0.375rem 0.625rem;
+  border: 1px solid alpha($appText, 0.16);
+  background:
+   linear-gradient(alpha($appText, 0.05), alpha($appText, 0.05)), $appSurface;
+  transition:
+   border-color 0.25s ease,
+   box-shadow 0.25s ease;
+
+  &.active {
+   border-color: $gold;
+   box-shadow: 0 0 0.875rem alpha($gold, 0.22);
+   background:
+    linear-gradient(alpha($gold, 0.08), alpha($gold, 0.08)), $appSurface;
+  }
 
   &.opp {
    margin-bottom: 0.75rem;
@@ -2753,30 +2642,52 @@
 
  &.gr-board-wrap {
   position: relative;
+  isolation: isolate;
   display: flex;
   justify-content: center;
   width: 100%;
   aspect-ratio: 1 / 1;
   min-height: 0;
   padding: 0.25rem;
-  border: 1px solid alpha($gold, 0.12);
-  border-top-color: alpha(#ffe27a, 0.95);
-  border-radius: 0.1875rem;
-  background: linear-gradient(180deg, #3a3f9a, #14174a 50%, #0a0c26);
-  box-shadow:
-   0 1.125rem 1.875rem -0.375rem rgba(0, 0, 0, 0.55),
-   0 0 2.75rem alpha(#4b4fd8, 0.35);
+  container-type: size;
 
+  &::before,
   &::after {
    content: "";
    position: absolute;
-   inset: 0.25rem;
-   z-index: $z-raised;
-   background: linear-gradient(122deg, transparent 22%, alpha($white, 0.09) 32%, transparent 42%);
+   top: 0;
+   left: 50%;
+   box-sizing: border-box;
+   width: calc(min(100cqw, 100cqh) + 0.5rem);
+   aspect-ratio: 1 / 1;
+   transform: translateX(-50%);
    pointer-events: none;
   }
 
-  :root[data-theme="light"] & {
+  &::before {
+   z-index: -1;
+   border: 1px solid alpha($gold, 0.12);
+   border-top-color: alpha(#ffe27a, 0.95);
+   border-radius: 0.1875rem;
+   background: linear-gradient(180deg, #3a3f9a, #14174a 50%, #0a0c26);
+   box-shadow:
+    0 1.125rem 1.875rem -0.375rem rgba(0, 0, 0, 0.55),
+    0 0 2.75rem alpha(#4b4fd8, 0.35);
+  }
+
+  &::after {
+   z-index: $z-raised;
+   border: 0.25rem solid transparent;
+   background: linear-gradient(
+     122deg,
+     transparent 22%,
+     alpha($white, 0.09) 32%,
+     transparent 42%
+    )
+    padding-box;
+  }
+
+  :root[data-theme="light"] &::before {
    border-color: #bcc1e2;
    border-top-color: $gold;
    background: linear-gradient(180deg, #ffffff, #eceefa 55%, #dfe2f5);
@@ -2848,6 +2759,10 @@
   height: 1.375rem;
   margin-top: 0.3rem;
   overflow: hidden;
+
+  &:empty {
+   display: none;
+  }
  }
 
  &.gr-draw-offer {
@@ -3076,7 +2991,11 @@
    right: -0.625rem;
    height: 2.25rem;
    margin-top: -1.125rem;
-   background: radial-gradient(50% 50% at 50% 50%, alpha($gold, 0.85), alpha($gold, 0));
+   background: radial-gradient(
+    50% 50% at 50% 50%,
+    alpha($gold, 0.85),
+    alpha($gold, 0)
+   );
    opacity: 0;
   }
 
@@ -3102,56 +3021,378 @@
   }
  }
 
- &.win-burst {
-  position: fixed;
-  inset: 0;
-  z-index: 1400;
-  overflow: hidden;
-  pointer-events: none;
-  contain: strict;
+ &.payout-stage {
+  --payout-stub: linear-gradient(180deg, #5affbd, #2fe89c);
+  --payout-stub-ink: #{$poolInk};
+  --payout-money: #0b8a50;
+  --payout-stamp: #0b8a50;
+  position: relative;
+  --ticket-h: 16.25rem;
+  --rise-h: calc(var(--ticket-h) + 1.25rem);
+  isolation: isolate;
+  height: calc(var(--rise-h) + 1rem);
+  margin-top: 0.75rem;
 
-  .win-burst-coin-wrap {
-   display: contents;
+  &.loss {
+   --payout-stub: linear-gradient(180deg, #9a9fc6, #7e83ad);
+   --payout-stub-ink: #{$white};
+   --payout-money: #d33a3a;
+   --payout-stamp: #d33a3a;
   }
 
-  .win-burst-piece {
+  &.draw {
+   --payout-stub: linear-gradient(180deg, #8f94ff, #6a70f0);
+   --payout-stub-ink: #{$white};
+   --payout-money: #{$poolInk};
+   --payout-stamp: #4b4fd8;
+  }
+
+  &.match_cancelled {
+   --payout-stub: linear-gradient(180deg, #9a9db4, #82869f);
+   --payout-stub-ink: #{$white};
+   --payout-money: #{alpha($poolInk, 0.7)};
+   --payout-stamp: #6a6f95;
+  }
+
+  &.practice {
+   --payout-stub: #{$poolInk};
+   --payout-stub-ink: #{$white};
+  }
+
+  &::before {
+   @include sheet-pattern(
+    $clear: radial-gradient(42% 38% at 50% 48%, transparent 70%, #000)
+   );
+   inset: -2rem -1.25rem;
+  }
+
+  .payout-floor {
+   position: absolute;
+   z-index: -1;
+   left: -8.75rem;
+   right: -8.75rem;
+   top: calc(var(--rise-h) + 0.875rem);
+   height: 12rem;
+   background: alpha($appText, 0.12);
+   mask:
+    url("/pattern-cubes.svg") 50% 0 / 1.515625rem 2.625rem repeat,
+    radial-gradient(60% 90% at 50% 0, #000 20%, transparent 75%);
+   mask-composite: intersect;
+   transform: perspective(16.25rem) rotateX(64deg);
+   transform-origin: 50% 0;
+   pointer-events: none;
+  }
+
+  .payout-beam {
+   position: absolute;
+   z-index: -1;
+   left: 50%;
+   top: -3rem;
+   width: 20rem;
+   height: calc(var(--rise-h) + 3rem);
+   margin-left: -10rem;
+   clip-path: polygon(38% 0, 62% 0, 100% 100%, 0 100%);
+   background: linear-gradient(180deg, alpha($gold, 0), alpha($gold, 0.3));
+   opacity: 0;
+   transition: opacity 0.8s ease-out;
+  }
+
+  &.lit.rising .payout-beam {
+   opacity: 1;
+  }
+
+  .payout-rise {
    position: absolute;
    top: 0;
    left: 0;
+   right: 0;
+   height: var(--rise-h);
+   overflow: hidden;
+   perspective: 47.5rem;
+   perspective-origin: 50% 100%;
+  }
+
+  .payout-ticket {
+   position: absolute;
+   isolation: isolate;
+   bottom: 0.75rem;
+   left: 50%;
+   width: 12.5rem;
+   margin-left: -6.25rem;
+   transform: translateY(calc(var(--ticket-h) + 1.5rem)) rotateX(38deg);
+   transform-origin: 50% 100%;
+
+   &::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: auto 1rem -1rem;
+    height: 3rem;
+    background: radial-gradient(
+     closest-side,
+     alpha($black, 0.35) 70%,
+     transparent
+    );
+   }
+  }
+
+  &.rising .payout-ticket {
+   transform: none;
+   transition: transform 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .payout-paper {
+   &::after {
+    content: "";
+    position: absolute;
+    top: -30%;
+    bottom: -30%;
+    left: -5.625rem;
+    width: 4.375rem;
+    background: linear-gradient(
+     90deg,
+     transparent,
+     alpha($white, 0.75),
+     transparent
+    );
+    transform: skewX(-18deg);
+    opacity: 0;
+   }
+  }
+
+  &.glare .payout-paper::after {
+   animation: payout-glare 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .payout-players {
+   display: flex;
+   justify-content: space-between;
+   align-items: flex-start;
+   align-self: stretch;
+  }
+
+  .payout-bottom {
+   position: relative;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 0.25rem;
+   align-self: stretch;
+   min-height: 5.75rem;
+  }
+
+  &:not(.practice) {
+   .payout-players {
+    margin-bottom: 0.75rem;
+   }
+
+   .payout-bottom {
+    padding-top: 1.25rem;
+   }
+  }
+
+  &.match_cancelled .payout-players {
+   margin-bottom: 1.125rem;
+  }
+
+  &.practice .payout-bottom {
+   min-height: 0;
+  }
+
+  .payout-side {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 0.25rem;
+   flex: 0 1 4.75rem;
+   min-width: 0;
+
+   &.rival {
+    opacity: 0.75;
+   }
+  }
+
+  .payout-stamp-shadow {
+   position: absolute;
+   left: 0;
+   right: 0;
+   top: -2rem;
+   width: 5.75rem;
+   height: 2.5rem;
+   margin: 0 auto;
+   border-radius: 50%;
+   background: radial-gradient(
+    closest-side,
+    alpha($poolInk, 0.45),
+    transparent
+   );
    opacity: 0;
+   transform: rotate(-11deg) scale(2.4);
+  }
+
+  &.practice .payout-stamp-shadow {
+   top: 0.25rem;
+   width: 9rem;
+   height: 3.5rem;
+  }
+
+  &.stamped .payout-stamp-shadow {
+   animation: payout-stamp-shadow 0.3s cubic-bezier(0.5, 0, 0.75, 0) forwards;
+  }
+
+  .payout-slot {
+   position: absolute;
+   left: 50%;
+   top: var(--rise-h);
+   width: 14rem;
+   height: 1rem;
+   margin-left: -7rem;
+   background: linear-gradient(
+    180deg,
+    #020312 0 0.25rem,
+    #2a2e7a 0.25rem,
+    #141640
+   );
+
+   &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 2px;
+    background: alpha($white, 0.25);
+   }
+
+   &::after {
+    content: "";
+    position: absolute;
+    left: 0.375rem;
+    right: 0.375rem;
+    bottom: 100%;
+    height: 0.75rem;
+    background: radial-gradient(
+     50% 100% at 50% 100%,
+     alpha($white, 0.18),
+     transparent
+    );
+    pointer-events: none;
+   }
+  }
+
+  &.lit .payout-slot::after {
+   background: radial-gradient(
+    50% 100% at 50% 100%,
+    alpha($gold, 0.6),
+    transparent
+   );
+  }
+
+  &.lit .payout-slot::before {
+   background: linear-gradient(90deg, #8a6300, #ffe58a 50%, #8a6300);
+  }
+
+  .payout-coin,
+  .payout-spark {
+   position: absolute;
+   z-index: $z-raised;
+   left: 0;
+   top: 0;
+   opacity: 0;
+   pointer-events: none;
    will-change: transform, opacity;
   }
 
-  .win-burst-streak,
-  .win-burst-trail {
-   width: 100px;
-   height: 2px;
-   border-radius: 2px;
+  .payout-spark {
+   left: -0.5rem;
+   top: -0.5rem;
+   width: 1rem;
+   height: 1rem;
+   background: #9a6a00;
+   clip-path: polygon(
+    50% 0,
+    62% 38%,
+    100% 50%,
+    62% 62%,
+    50% 100%,
+    38% 62%,
+    0 50%,
+    38% 38%
+   );
+
+   &::after {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    background: linear-gradient(180deg, #ffe27a, #f2a900);
+    clip-path: inherit;
+   }
   }
 
-  .win-burst-streak {
-   background: linear-gradient(90deg, alpha(#ffd866, 0), #fff3cc);
+  :root[data-theme="light"] & {
+   &::before {
+    background: alpha(#5b60a8, 0.07);
+   }
+
+   .payout-floor {
+    background: alpha(#5b60a8, 0.2);
+   }
+
+   .payout-paper {
+    box-shadow: inset 0 0 0 1px alpha(#5b60a8, 0.28);
+   }
+
+   .payout-beam {
+    background: linear-gradient(
+     180deg,
+     alpha(#ffc400, 0),
+     alpha(#ffc400, 0.1) 45%,
+     alpha(#f2a900, 0.24)
+    );
+   }
+
+   .payout-ticket::before {
+    inset: auto 1rem -0.75rem;
+    height: 3rem;
+    background: radial-gradient(
+     closest-side,
+     alpha(#5b60a8, 0.38) 75%,
+     transparent
+    );
+   }
+
+   .payout-slot {
+    background: #5b60a8;
+
+    &::after {
+     background: radial-gradient(
+      50% 100% at 50% 100%,
+      alpha(#5b60a8, 0.3),
+      transparent
+     );
+    }
+   }
+
+   &.lit .payout-slot::after {
+    background: radial-gradient(
+     50% 100% at 50% 100%,
+     alpha($gold, 0.6),
+     transparent
+    );
+   }
   }
 
-  .win-burst-trail {
-   background: linear-gradient(90deg, alpha($gold, 0), alpha(#ffe06e, 0.95));
-  }
+  @media (prefers-reduced-motion: reduce) {
+   .payout-ticket,
+   .payout-beam {
+    transition: none !important;
+   }
 
-  .win-burst-coin {
-   background: url("/coin-star.svg") center / contain no-repeat;
-  }
-
-  .win-burst-spark {
-   background: url("/spark.svg") center / contain no-repeat;
-  }
-
-  .win-burst-confetti {
-   border-radius: 1px;
-  }
-
-  .win-burst-glow {
-   border: 2px solid $gold;
-   box-shadow: 0 0 18px alpha($gold, 0.6);
+   .payout-ticket,
+   .payout-paper::after,
+   .payout-stamp-shadow {
+    animation: none !important;
+   }
   }
  }
 
@@ -3270,47 +3511,6 @@
    }
   }
 
-  &.loss-edge,
-  &.refund-sheen {
-   position: relative;
-   overflow: hidden;
-
-   &::after {
-    content: "";
-    position: absolute;
-    pointer-events: none;
-    opacity: 0;
-   }
-
-   @media (prefers-reduced-motion: reduce) {
-    &::after {
-     animation: none;
-    }
-   }
-  }
-
-  &.loss-edge::after {
-   inset: 0;
-   border: 1.5px solid $paleRed;
-   border-radius: inherit;
-   animation: result-loss-edge 0.95s 0.95s ease-out;
-  }
-
-  &.refund-sheen::after {
-   top: -50%;
-   left: 0;
-   width: 60px;
-   height: 200%;
-   background: linear-gradient(
-    90deg,
-    transparent,
-    alpha($gold, 0.22),
-    transparent
-   );
-   transform: translate3d(-90px, 0, 0) rotate(20deg);
-   animation: result-refund-sheen 0.6s 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
   &.room-player {
    display: flex;
    flex: 1;
@@ -3348,9 +3548,10 @@
   border: 1px solid alpha($appText, 0.14);
 
   svg {
-   width: 0.9375rem;
-   height: 0.9375rem;
+   width: 1.125rem;
+   height: 1.125rem;
    flex-shrink: 0;
+   stroke-width: 2.25;
    color: $gold;
   }
  }
@@ -3491,32 +3692,37 @@
  }
 }
 
-@keyframes result-loss-edge {
+@keyframes payout-glare {
  0% {
   opacity: 0;
+  transform: translateX(0) skewX(-18deg);
  }
  20% {
-  opacity: 0.9;
- }
- 40% {
-  opacity: 0.9;
+  opacity: 1;
  }
  100% {
   opacity: 0;
+  transform: translateX(26.25rem) skewX(-18deg);
  }
 }
 
-@keyframes result-refund-sheen {
+@keyframes payout-stamp-shadow {
  0% {
-  opacity: 1;
-  transform: translate3d(-90px, 0, 0) rotate(20deg);
+  opacity: 0;
+  transform: translate(0.625rem, 0.875rem) rotate(-11deg) scale(2.4);
  }
- 85% {
-  opacity: 1;
+ 60% {
+  opacity: 0.35;
  }
  100% {
   opacity: 0;
-  transform: translate3d(480px, 0, 0) rotate(20deg);
+  transform: rotate(-11deg) scale(0.9);
+ }
+}
+
+@keyframes room-wait-spin {
+ to {
+  transform: rotate(360deg);
  }
 }
 
@@ -3597,12 +3803,98 @@
 }
 
 %match-tear-top-cut {
- clip-path: polygon(0% 0%, 100% 0%, 99.43% 51.53%, 95.45% 49.24%, 91.48% 51.53%, 87.5% 48.47%, 83.52% 52.3%, 79.55% 48.47%, 75.57% 51.53%, 71.59% 49.24%, 67.61% 51.53%, 63.64% 48.47%, 59.66% 52.3%, 55.68% 48.47%, 51.7% 51.53%, 47.73% 49.24%, 43.75% 51.53%, 39.77% 48.47%, 35.8% 52.3%, 31.82% 48.47%, 27.84% 51.53%, 23.86% 49.24%, 19.89% 51.53%, 15.91% 48.47%, 11.93% 52.3%, 7.95% 48.47%, 3.98% 51.53%, 0% 49.24%);
+ clip-path: polygon(
+  0% 0%,
+  100% 0%,
+  99.43% 58.15%,
+  95.45% 55.71%,
+  91.48% 58.15%,
+  87.5% 54.89%,
+  83.52% 58.97%,
+  79.55% 54.89%,
+  75.57% 58.15%,
+  71.59% 55.71%,
+  67.61% 58.15%,
+  63.64% 54.89%,
+  59.66% 58.97%,
+  55.68% 54.89%,
+  51.7% 58.15%,
+  47.73% 55.71%,
+  43.75% 58.15%,
+  39.77% 54.89%,
+  35.8% 58.97%,
+  31.82% 54.89%,
+  27.84% 58.15%,
+  23.86% 55.71%,
+  19.89% 58.15%,
+  15.91% 54.89%,
+  11.93% 58.97%,
+  7.95% 54.89%,
+  3.98% 58.15%,
+  0% 55.71%
+ );
 }
 
 %match-tear-bottom-cut {
  visibility: visible;
- clip-path: polygon(0% 49.24%, 3.98% 51.53%, 7.95% 48.47%, 11.93% 52.3%, 15.91% 48.47%, 19.89% 51.53%, 23.86% 49.24%, 27.84% 51.53%, 31.82% 48.47%, 35.8% 52.3%, 39.77% 48.47%, 43.75% 51.53%, 47.73% 49.24%, 51.7% 51.53%, 55.68% 48.47%, 59.66% 52.3%, 63.64% 48.47%, 67.61% 51.53%, 71.59% 49.24%, 75.57% 51.53%, 79.55% 48.47%, 83.52% 52.3%, 87.5% 48.47%, 91.48% 51.53%, 95.45% 49.24%, 99.43% 51.53%, 98.86% 100%, 95.45% 95.92%, 92.05% 100%, 88.64% 95.92%, 85.23% 100%, 81.82% 95.92%, 78.41% 100%, 75% 95.92%, 71.59% 100%, 68.18% 95.92%, 64.77% 100%, 61.36% 95.92%, 57.95% 100%, 54.55% 95.92%, 51.14% 100%, 47.73% 95.92%, 44.32% 100%, 40.91% 95.92%, 37.5% 100%, 34.09% 95.92%, 30.68% 100%, 27.27% 95.92%, 23.86% 100%, 20.45% 95.92%, 17.05% 100%, 13.64% 95.92%, 10.23% 100%, 6.82% 95.92%, 3.41% 100%, 0% 95.92%);
+ clip-path: polygon(
+  0% 55.71%,
+  3.98% 58.15%,
+  7.95% 54.89%,
+  11.93% 58.97%,
+  15.91% 54.89%,
+  19.89% 58.15%,
+  23.86% 55.71%,
+  27.84% 58.15%,
+  31.82% 54.89%,
+  35.8% 58.97%,
+  39.77% 54.89%,
+  43.75% 58.15%,
+  47.73% 55.71%,
+  51.7% 58.15%,
+  55.68% 54.89%,
+  59.66% 58.97%,
+  63.64% 54.89%,
+  67.61% 58.15%,
+  71.59% 55.71%,
+  75.57% 58.15%,
+  79.55% 54.89%,
+  83.52% 58.97%,
+  87.5% 54.89%,
+  91.48% 58.15%,
+  95.45% 55.71%,
+  99.43% 58.15%,
+  98.86% 100%,
+  95.45% 95.65%,
+  92.05% 100%,
+  88.64% 95.65%,
+  85.23% 100%,
+  81.82% 95.65%,
+  78.41% 100%,
+  75% 95.65%,
+  71.59% 100%,
+  68.18% 95.65%,
+  64.77% 100%,
+  61.36% 95.65%,
+  57.95% 100%,
+  54.55% 95.65%,
+  51.14% 100%,
+  47.73% 95.65%,
+  44.32% 100%,
+  40.91% 95.65%,
+  37.5% 100%,
+  34.09% 95.65%,
+  30.68% 100%,
+  27.27% 95.65%,
+  23.86% 100%,
+  20.45% 95.65%,
+  17.05% 100%,
+  13.64% 95.65%,
+  10.23% 100%,
+  6.82% 95.65%,
+  3.41% 100%,
+  0% 95.65%
+ );
 }
 
 @keyframes match-tear-top {

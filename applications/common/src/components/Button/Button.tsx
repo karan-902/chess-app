@@ -33,7 +33,7 @@ const NeoPopButton = NeoPopButtonBase as ComponentType<
 
 const NEOPOP_KIND = {
  contained: "elevated",
- outlined: "flat",
+ outlined: "elevated",
  text: "flat",
 } as const;
 

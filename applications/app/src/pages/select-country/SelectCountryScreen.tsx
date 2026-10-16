@@ -68,7 +68,7 @@ export default function SelectCountryScreen({
     type="submit"
     variant="contained"
     fullWidth
-    customClass="auth-submit-btn tilted"
+    customClass="auth-submit-btn"
     disabled={!formik.values.country || formik.isSubmitting}
     isLoading={formik.isSubmitting}
    >

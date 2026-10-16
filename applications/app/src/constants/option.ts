@@ -5,10 +5,7 @@ import type {
 import type { MatchesSubtab, RoomTab } from "@gopvp/common/src/types/component";
 import { GAME_PAGES } from "@gopvp/app/src/constants/route";
 import { GAME_PAGE_TITLES } from "@gopvp/app/src/constants/label";
-import {
- MAX_DEPOSIT_USD,
- MAX_ROOM_DURATION_MINUTES,
-} from "@gopvp/app/src/constants/limit";
+import { MAX_DEPOSIT_USD } from "@gopvp/app/src/constants/limit";
 
 export const LEADERBOARD_SCOPES: LeaderboardScope[] = [
  "daily",
@@ -40,10 +37,9 @@ export const BET_CHIP_AMOUNTS = [10, 25, 50];
 
 export const DEPOSIT_CHIP_AMOUNTS = [...BET_CHIP_AMOUNTS, MAX_DEPOSIT_USD];
 
-export const DURATION_MINUTES = Array.from(
- { length: MAX_ROOM_DURATION_MINUTES },
- (_, i) => i + 1,
-);
+export const DURATION_MINUTES = ["1", "3", "5", "10", "30"];
+
+export const DEFAULT_DURATION_MINUTES = "5";
 
 // const COUNTRIES = [
 //  "Afghanistan",

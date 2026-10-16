@@ -30,8 +30,10 @@ export function useRoomMatch(onRoomExpired?: () => void) {
  const [roomCode, setRoomCode] = useState<string | null>(null);
  const [players, setPlayers] = useState<IMatchPlayer[]>([]);
  const userId = useReduxSelector((state) => state.auth.session?.id);
+ const sessionUsername = useReduxSelector(
+  (state) => state.auth.session?.username ?? "",
+ );
  const [expiryAt, setExpiryAt] = useState<number | null>(null);
- const [expiryWindowMs, setExpiryWindowMs] = useState(0);
  const isRoomOpen =
   status === "waiting" || status === "ready" || status === "starting";
  const expiresInSeconds = useCountdown(isRoomOpen ? expiryAt : null);
@@ -97,7 +99,6 @@ export function useRoomMatch(onRoomExpired?: () => void) {
      return;
     }
     setExpiryAt(data.expiry);
-    setExpiryWindowMs(data.expiry - Date.now());
     enterRoom(
      { code: data.room_code, bet: data.bet, time: data.time },
      true,
@@ -129,7 +130,6 @@ export function useRoomMatch(onRoomExpired?: () => void) {
     if (data.status === "MATCHED" && data.match_type === "ROOM") {
      setPlayers(data.players);
      setExpiryAt(data.expiry);
-     setExpiryWindowMs(data.expiry - Date.now());
      enterRoom(
       { code: data.room_code, bet: data.bet, time: data.time },
       false,
@@ -214,12 +214,11 @@ export function useRoomMatch(onRoomExpired?: () => void) {
    players.find((player) => player.id !== userId)?.username ?? "",
   ),
   myName: shortenUsername(
-   players.find((player) => player.id === userId)?.username ?? "",
+   players.find((player) => player.id === userId)?.username ?? sessionUsername,
   ),
   roomFee: roomRef.current?.bet ?? 0,
   roomTimeMs: roomRef.current?.time ?? 0,
   expiresInSeconds: expiresInSeconds ?? 0,
-  expiryWindowMs,
   createRoom,
   joinRoom,
   startRoom,

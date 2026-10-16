@@ -2,7 +2,6 @@ import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import CustomAvatar from "@gopvp/common/src/components/Avatar/Avatar";
-import { formatAmount } from "@gopvp/common/src/util/format";
 import {
  RIVAL_MASK_PATH,
  HERO_SPARK_PATH,
@@ -15,13 +14,8 @@ import {
  rivalText,
  noRivalText,
  vsText,
- timeText,
- entryText,
- winText,
- poolMinutesText,
 } from "@gopvp/app/src/constants/message";
 import {
- MS_PER_MINUTE,
  POOL_TONE_COUNT,
  MATCH_SPARK_COUNT,
 } from "@gopvp/app/src/constants/limit";
@@ -33,7 +27,8 @@ const initialOf = (name: string) => name.charAt(0).toUpperCase();
 
 export default function MatchTicket({
  status,
- pool,
+ title = matchTicketText,
+ stats,
  tone,
  myName,
  opponentName,
@@ -44,14 +39,16 @@ export default function MatchTicket({
    : status === "revealing" || status === "found"
      ? "found"
      : "searching";
- const rivalName =
-  phase === "lost" ? noRivalText : opponentName || rivalText;
+ const rivalName = phase === "lost" ? noRivalText : opponentName || rivalText;
 
  const renderHalf = (half: "top" | "bottom") => (
-  <Box customClass={classNames("ticket-half", half)} aria-hidden={half === "bottom"}>
+  <Box
+   customClass={classNames("ticket-half", half)}
+   aria-hidden={half === "bottom"}
+  >
    <Box customClass="ticket-stub">
     <Text component="span" customClass="ticket-stub-label pending">
-     {matchTicketText}
+     {title}
     </Text>
     <Text component="span" customClass="ticket-stub-label confirmed">
      {matchConfirmedText}
@@ -93,20 +90,12 @@ export default function MatchTicket({
     </Box>
    </Box>
    <Box customClass="ticket-stats">
-    <Box customClass="ticket-stat">
-     <Text customClass="ticket-stat-label">{timeText}</Text>
-     <Text customClass="ticket-stat-value">
-      {poolMinutesText(Math.round(pool.time / MS_PER_MINUTE))}
-     </Text>
-    </Box>
-    <Box customClass="ticket-stat">
-     <Text customClass="ticket-stat-label">{entryText}</Text>
-     <Text customClass="ticket-stat-value">{formatAmount(pool.bet)}</Text>
-    </Box>
-    <Box customClass="ticket-stat win">
-     <Text customClass="ticket-stat-label">{winText}</Text>
-     <Text customClass="ticket-stat-value">{formatAmount(pool.prize)}</Text>
-    </Box>
+    {stats.map(({ label, value, isWin }) => (
+     <Box key={label} customClass={classNames("ticket-stat", isWin && "win")}>
+      <Text customClass="ticket-stat-label">{label}</Text>
+      <Text customClass="ticket-stat-value">{value}</Text>
+     </Box>
+    ))}
    </Box>
    <Box customClass="ticket-perf" />
    <Box customClass="ticket-glare" />

@@ -18,5 +18,3 @@ export const ANNOTATION_COLORS: Record<string, string> = {
 export const PIECE_DARK_COLOR = "#000";
 export const PIECE_LIGHT_COLOR = "#fff";
 export const PIECE_DARK_DETAIL_COLOR = "#ececec";
-
-export const WIN_CONFETTI_COLORS = ["#e8455c", "#2ed47a", "#4b8bff"];

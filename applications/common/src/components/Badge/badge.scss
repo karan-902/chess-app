@@ -47,5 +47,10 @@
   font-size: $font12;
   letter-spacing: 0;
   color: $primaryContrast;
+
+  :root[data-theme="light"] & {
+   background: #5b60a8;
+   color: $white;
+  }
  }
 }
