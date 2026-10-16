@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from "react";
-import classNames from "classnames";
+import { useEffect, useRef } from "react";
 import Box from "@gopvp/common/src/components/Box/Box";
 import PieceIcon from "@gopvp/chess/src/components/board/PieceIcon";
 import "./board.scss";
@@ -15,310 +14,280 @@ import {
  DARK_SQUARE_LABEL_COLOR,
 } from "@gopvp/chess/src/constants/color";
 
-interface PieceData {
- code: string;
- col: number;
- row: number;
- noTransition?: boolean;
- captured?: boolean;
- inCheck?: boolean;
- breathing?: boolean;
+interface PieceState {
+ x: number;
+ y: number;
+ sx: number;
+ sy: number;
+ r: number;
+ o: number;
 }
 
-interface RenderedPiece extends PieceData {
- id: string;
+interface Tween {
+ start: number;
+ dur: number;
+ update: (p: number) => void;
+ resolve: () => void;
 }
 
-interface OverlayItem {
- id: number;
- kind: "ghost" | "ring" | "flash" | "check-ring";
- col: number;
- row: number;
- code?: string;
- danger?: boolean;
- phase: "in" | "out";
-}
+type FxName = "ring" | "flash" | "check" | "glow" | "sweep";
 
-function squareToRC(square: string) {
- return { col: FILES.indexOf(square[0]), row: RANKS.indexOf(square[1]) };
-}
+const START_PIECES = FILES.flatMap((file, i) => [
+ {
+  id: `b${BACK_RANK_PIECES[i]}-${file}8`,
+  code: `b${BACK_RANK_PIECES[i]}`,
+  square: `${file}8`,
+ },
+ { id: `bP-${file}7`, code: "bP", square: `${file}7` },
+ { id: `wP-${file}2`, code: "wP", square: `${file}2` },
+ {
+  id: `w${BACK_RANK_PIECES[i]}-${file}1`,
+  code: `w${BACK_RANK_PIECES[i]}`,
+  square: `${file}1`,
+ },
+]);
 
-function startPosition() {
- const list: { id: string; code: string; square: string }[] = [];
- FILES.forEach((f, i) => {
-  list.push({
-   id: `b${BACK_RANK_PIECES[i]}-${f}8`,
-   code: `b${BACK_RANK_PIECES[i]}`,
-   square: `${f}8`,
-  });
-  list.push({ id: `bP-${f}7`, code: "bP", square: `${f}7` });
-  list.push({ id: `wP-${f}2`, code: "wP", square: `${f}2` });
-  list.push({
-   id: `w${BACK_RANK_PIECES[i]}-${f}1`,
-   code: `w${BACK_RANK_PIECES[i]}`,
-   square: `${f}1`,
-  });
- });
- return list;
-}
+const MOVES: [string, string, string?][] = [
+ ["e2", "e4"],
+ ["e7", "e5"],
+ ["d1", "h5"],
+ ["b8", "c6"],
+ ["f1", "c4"],
+ ["g8", "f6"],
+ ["h5", "f7", "e8"],
+];
 
-function sleep(ms: number) {
- return new Promise<void>((resolve) => setTimeout(resolve, ms));
-}
+const squareOf = (square: string) => ({
+ x: FILES.indexOf(square[0]),
+ y: RANKS.indexOf(square[1]),
+});
+
+const easeOutQuart = (p: number) => 1 - (1 - p) ** 4;
+const easeOutBack = (p: number) => 1 + 2.2 * (p - 1) ** 3 + 1.2 * (p - 1) ** 2;
+const easeInOutCubic = (p: number) =>
+ p < 0.5 ? 4 * p ** 3 : 1 - (-2 * p + 2) ** 3 / 2;
+const lerp = (a: number, b: number, p: number) => a + (b - a) * p;
 
 export default function BoardPreview() {
- const pieceDataRef = useRef<Record<string, PieceData>>({});
- const boardMapRef = useRef<Record<string, string>>({});
- const overlayIdRef = useRef(0);
- const cancelledRef = useRef(false);
- const [pieces, setPieces] = useState<RenderedPiece[]>([]);
- const [overlays, setOverlays] = useState<OverlayItem[]>([]);
- const [shimmerPhase, setShimmerPhase] = useState<
-  "idle" | "mounted" | "running"
- >("idle");
+ const rootRef = useRef<HTMLDivElement>(null);
+ const gridRef = useRef<HTMLDivElement>(null);
+ const pieceEls = useRef<Record<string, HTMLDivElement | null>>({});
+ const fxEls = useRef<Partial<Record<FxName, HTMLDivElement | null>>>({});
+ const isReducedMotion = window.matchMedia(
+  "(prefers-reduced-motion: reduce)",
+ ).matches;
 
  useEffect(() => {
-  cancelledRef.current = false;
+  if (isReducedMotion) return;
+  let cancelled = false;
+  let frame = 0;
+  let clock = 0;
+  let last = 0;
+  let isVisible = true;
+  let isOnScreen = true;
+  let tweens: Tween[] = [];
+  const pieces: Record<string, PieceState> = {};
+  let board: Record<string, string> = {};
 
-  const render = () => {
-   setPieces(
-    Object.entries(pieceDataRef.current).map(([id, d]) => ({
-     id,
-     ...d,
-    })),
-   );
+  const paint = (id: string) => {
+   const el = pieceEls.current[id];
+   const s = pieces[id];
+   if (!el) return;
+   el.style.transform = `translate3d(${s.x * 100}%, ${s.y * 100}%, 0) scale(${s.sx}, ${s.sy}) rotate(${s.r}deg)`;
+   el.style.opacity = `${s.o}`;
   };
 
-  const addOverlay = (item: Omit<OverlayItem, "id" | "phase">, ttl: number) => {
-   const id = ++overlayIdRef.current;
-   setOverlays((prev) => [...prev, { id, phase: "in", ...item }]);
-   requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-     if (cancelledRef.current) return;
-     setOverlays((prev) =>
-      prev.map((o) => (o.id === id ? { ...o, phase: "out" } : o)),
+  const fx = (
+   name: FxName,
+   x: number,
+   y: number,
+   scale: number,
+   opacity: number,
+  ) => {
+   const el = fxEls.current[name];
+   if (!el) return;
+   el.style.transform = `translate3d(${x * 100}%, ${y * 100}%, 0) scale(${scale})`;
+   el.style.opacity = `${opacity}`;
+  };
+
+  const tween = (dur: number, update: (p: number) => void) =>
+   new Promise<void>((resolve) => {
+    tweens.push({ start: clock, dur, update, resolve });
+   });
+  const wait = (ms: number) => tween(ms, () => {});
+
+  const tick = (time: number) => {
+   const delta = last ? Math.min(time - last, 50) : 16;
+   last = time;
+   if (isVisible && isOnScreen) {
+    clock += delta;
+    const running = tweens;
+    tweens = [];
+    running.forEach((t) => {
+     const p = Math.min((clock - t.start) / t.dur, 1);
+     t.update(p);
+     if (p < 1) tweens.push(t);
+     else t.resolve();
+    });
+   }
+   frame = requestAnimationFrame(tick);
+  };
+
+  const entrance = async () => {
+   board = {};
+   START_PIECES.forEach(({ id, square }) => {
+    const { x } = squareOf(square);
+    pieces[id] = { x, y: id[0] === "w" ? 9 : -2, sx: 1, sy: 1, r: 0, o: 0 };
+    board[square] = id;
+    paint(id);
+   });
+   await Promise.all(
+    START_PIECES.map(({ id, square }) => {
+     const { x, y } = squareOf(square);
+     const fromY = pieces[id].y;
+     const wave = (id[0] === "w" ? 7 - y : y) * 70 + Math.abs(x - 3.5) * 22;
+     return wait(wave).then(() =>
+      tween(640, (p) => {
+       pieces[id].y = lerp(fromY, y, easeOutBack(p));
+       pieces[id].o = Math.min(p * 3, 1);
+       paint(id);
+      }),
      );
-    });
-   });
-   setTimeout(() => {
-    setOverlays((prev) => prev.filter((o) => o.id !== id));
-   }, ttl);
+    }),
+   );
   };
 
-  const cascadeEntrance = async () => {
-   pieceDataRef.current = {};
-   boardMapRef.current = {};
-   setOverlays([]);
-
-   const list = startPosition();
-   list.forEach(({ id, code, square }) => {
-    const { col } = squareToRC(square);
-    const isWhite = code[0] === "w";
-    pieceDataRef.current[id] = {
-     code,
-     col,
-     row: isWhite ? 9 : -2,
-     noTransition: true,
-    };
-    boardMapRef.current[square] = id;
+  const sweep = async () => {
+   const ids = Object.keys(pieces).filter((id) => pieces[id].o > 0);
+   const pulse = Promise.all(
+    ids.map((id) =>
+     wait(pieces[id].x * 55).then(() =>
+      tween(420, (p) => {
+       const s = 1 + 0.06 * Math.sin(Math.PI * p);
+       pieces[id].sx = s;
+       pieces[id].sy = s;
+       paint(id);
+      }),
+     ),
+    ),
+   );
+   await tween(1100, (p) => {
+    fx("sweep", lerp(-1.5, 9, easeInOutCubic(p)), 0, 1, Math.sin(Math.PI * p));
    });
-   render();
-
-   await sleep(60);
-   if (cancelledRef.current) return;
-
-   list
-    .slice()
-    .sort(
-     (a, b) =>
-      Math.abs(squareToRC(a.square).col - 3.5) -
-      Math.abs(squareToRC(b.square).col - 3.5),
-    )
-    .forEach(({ id, square }, i) => {
-     setTimeout(() => {
-      if (cancelledRef.current || !pieceDataRef.current[id]) return;
-      const { col, row } = squareToRC(square);
-      pieceDataRef.current[id] = {
-       ...pieceDataRef.current[id],
-       col,
-       row,
-       noTransition: false,
-      };
-      render();
-     }, i * 24);
-    });
-
-   await sleep(list.length * 24 + 900);
+   await pulse;
   };
 
-  const idleShimmer = async () => {
-   setShimmerPhase("mounted");
-   requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-     if (!cancelledRef.current) setShimmerPhase("running");
-    });
-   });
+  const ring = (x: number, y: number, isDanger: boolean) => {
+   fxEls.current.ring?.classList.toggle("danger", isDanger);
+   return tween(680, (p) =>
+    fx("ring", x, y, lerp(0.35, 1.25, easeOutQuart(p)), 0.9 * (1 - p)),
+   );
+  };
 
-   Object.keys(pieceDataRef.current).forEach((id, i) => {
-    setTimeout(
-     () => {
-      if (cancelledRef.current || !pieceDataRef.current[id]) return;
-      pieceDataRef.current[id] = {
-       ...pieceDataRef.current[id],
-       breathing: true,
-      };
-      render();
-      setTimeout(() => {
-       if (cancelledRef.current || !pieceDataRef.current[id]) return;
-       pieceDataRef.current[id] = {
-        ...pieceDataRef.current[id],
-        breathing: false,
-       };
-       render();
-      }, 900);
-     },
-     (i % 8) * 40,
+  const capture = async (id: string, x: number, y: number) => {
+   const nudge = tween(200, (p) => {
+    if (gridRef.current)
+     gridRef.current.style.transform = `translate3d(0, ${2 * Math.sin(Math.PI * p)}px, 0)`;
+   });
+   const flash = tween(420, (p) => fx("flash", x, y, 1, 1 - p));
+   await tween(340, (p) => {
+    pieces[id].sx = pieces[id].sy = lerp(1, 1.35, easeOutQuart(p));
+    pieces[id].r = 14 * p;
+    pieces[id].o = 1 - p;
+    paint(id);
+   });
+   await Promise.all([nudge, flash]);
+  };
+
+  const check = async (square: string) => {
+   const { x, y } = squareOf(square);
+   const kingId = board[square];
+   const glowIn = tween(220, (p) => fx("glow", x, y, 1, p));
+   const shake = kingId
+    ? tween(450, (p) => {
+       pieces[kingId].x = x + 0.05 * Math.sin(p * Math.PI * 6) * (1 - p);
+       paint(kingId);
+      })
+    : wait(0);
+   for (let i = 0; i < 2; i++) {
+    await tween(750, (p) =>
+     fx("check", x, y, lerp(0.6, 1.8, easeOutQuart(p)), 0.7 * (1 - p)),
     );
+   }
+   await Promise.all([glowIn, shake]);
+   await tween(320, (p) => fx("glow", x, y, 1, 1 - p));
+  };
+
+  const move = async (from: string, to: string, checkSquare?: string) => {
+   const id = board[from];
+   if (!id) return;
+   const a = squareOf(from);
+   const b = squareOf(to);
+   const capturedId = board[to];
+   const distance = Math.hypot(b.x - a.x, b.y - a.y);
+   const dur = 420 + distance * 40;
+   const el = pieceEls.current[id];
+   if (el) el.style.zIndex = "3";
+   await tween(dur, (p) => {
+    const e = easeOutQuart(p);
+    const lift = Math.sin(Math.PI * p);
+    pieces[id].x = lerp(a.x, b.x, e);
+    pieces[id].y = lerp(a.y, b.y, e) - 0.22 * lift;
+    pieces[id].sx = pieces[id].sy = 1 + 0.1 * lift;
+    paint(id);
    });
-
-   await sleep(1400);
-   if (!cancelledRef.current) setShimmerPhase("idle");
+   if (el) el.style.zIndex = "";
+   delete board[from];
+   board[to] = id;
+   const squash = capturedId ? 0.06 : 0.035;
+   const land = tween(240, (p) => {
+    const k = Math.sin(Math.PI * p) * (1 - p * 0.4);
+    pieces[id].sx = 1 + squash * k;
+    pieces[id].sy = 1 - squash * k;
+    paint(id);
+   });
+   const effects = [land, ring(b.x, b.y, !!capturedId)];
+   if (capturedId) effects.push(capture(capturedId, b.x, b.y));
+   await Promise.all(effects);
+   if (checkSquare) await check(checkSquare);
   };
 
-  const animateCapture = async (
-   capturedId: string,
-   rc: { col: number; row: number },
-  ) => {
-   if (!pieceDataRef.current[capturedId]) return;
-   pieceDataRef.current[capturedId] = {
-    ...pieceDataRef.current[capturedId],
-    captured: true,
-   };
-   render();
-
-   addOverlay({ kind: "flash", col: rc.col, row: rc.row }, 450);
-
-   await sleep(350);
-   delete pieceDataRef.current[capturedId];
-   render();
-  };
-
-  const animateCheck = async (kingSquare: string) => {
-   const rc = squareToRC(kingSquare);
-   const kingId = boardMapRef.current[kingSquare];
-
-   addOverlay({ kind: "check-ring", col: rc.col, row: rc.row }, 1500);
-
-   if (kingId && pieceDataRef.current[kingId]) {
-    pieceDataRef.current[kingId] = {
-     ...pieceDataRef.current[kingId],
-     inCheck: true,
-    };
-    render();
-   }
-
-   await sleep(1500);
-   if (cancelledRef.current) return;
-
-   if (kingId && pieceDataRef.current[kingId]) {
-    pieceDataRef.current[kingId] = {
-     ...pieceDataRef.current[kingId],
-     inCheck: false,
-    };
-    render();
+  const run = async () => {
+   while (!cancelled) {
+    await entrance();
+    await sweep();
+    for (const [from, to, checkSquare] of MOVES) {
+     if (cancelled) return;
+     await move(from, to, checkSquare);
+     await wait(380);
+    }
+    await sweep();
+    await wait(700);
    }
   };
 
-  const playMove = async (
-   from: string,
-   to: string,
-   opts?: { capture?: boolean; check?: string },
-  ) => {
-   const fromRC = squareToRC(from);
-   const toRC = squareToRC(to);
-   const movingId = boardMapRef.current[from];
-   if (!movingId) return;
-   const movingData = pieceDataRef.current[movingId];
-
-   addOverlay(
-    { kind: "ghost", col: fromRC.col, row: fromRC.row, code: movingData.code },
-    620,
-   );
-
-   if (opts?.capture) {
-    const capturedId = boardMapRef.current[to];
-    if (capturedId) await animateCapture(capturedId, toRC);
-    if (cancelledRef.current) return;
-   }
-
-   pieceDataRef.current[movingId] = {
-    ...pieceDataRef.current[movingId],
-    col: toRC.col,
-    row: toRC.row,
-   };
-   delete boardMapRef.current[from];
-   boardMapRef.current[to] = movingId;
-   render();
-
-   addOverlay(
-    { kind: "ring", col: toRC.col, row: toRC.row, danger: !!opts?.capture },
-    680,
-   );
-   await sleep(620);
-   if (cancelledRef.current) return;
-
-   if (opts?.check) await animateCheck(opts.check);
+  const onVisibility = () => {
+   isVisible = document.visibilityState === "visible";
   };
-
-  const runLoop = async () => {
-   while (!cancelledRef.current) {
-    await cascadeEntrance();
-    if (cancelledRef.current) return;
-    await idleShimmer();
-    if (cancelledRef.current) return;
-
-    await playMove("e2", "e4");
-    await sleep(420);
-    await playMove("e7", "e5");
-    await sleep(420);
-    await playMove("d1", "h5");
-    await sleep(420);
-    await playMove("b8", "c6");
-    await sleep(420);
-    await playMove("f1", "c4");
-    await sleep(420);
-    await playMove("g8", "f6");
-    await sleep(500);
-    await playMove("h5", "f7", { capture: true, check: "e8" });
-    if (cancelledRef.current) return;
-
-    await idleShimmer();
-    await sleep(600);
-   }
-  };
-
-  const start = () => {
-   if (!cancelledRef.current) runLoop();
-  };
-
-  let idleId: number | undefined;
-  let timeoutId: ReturnType<typeof setTimeout> | undefined;
-  if (typeof window.requestIdleCallback === "function") {
-   idleId = window.requestIdleCallback(start, { timeout: 1000 });
-  } else {
-   timeoutId = setTimeout(start, 200);
-  }
+  const observer = new IntersectionObserver(([entry]) => {
+   isOnScreen = entry.isIntersecting;
+  });
+  if (rootRef.current) observer.observe(rootRef.current);
+  document.addEventListener("visibilitychange", onVisibility);
+  frame = requestAnimationFrame(tick);
+  run();
 
   return () => {
-   cancelledRef.current = true;
-   if (idleId !== undefined) window.cancelIdleCallback?.(idleId);
-   if (timeoutId !== undefined) clearTimeout(timeoutId);
+   cancelled = true;
+   cancelAnimationFrame(frame);
+   observer.disconnect();
+   document.removeEventListener("visibilitychange", onVisibility);
   };
- }, []);
+ }, [isReducedMotion]);
 
  return (
-  <Box customClass="chess-board fit-board">
-   <Box customClass="chess-board-grid">
+  <Box ref={rootRef} customClass="chess-board fit-board">
+   <Box ref={gridRef} customClass="chess-board-grid">
     {Array.from({ length: 8 }, (_, r) =>
      Array.from({ length: 8 }, (_, c) => {
       const isLight = (r + c) % 2 === 0;
@@ -349,89 +318,39 @@ export default function BoardPreview() {
     )}
 
     <Box customClass="board-preview-layer">
-     {pieces.map((p) => (
+     {(["flash", "glow", "ring", "check"] as const).map((name) => (
       <Box
-       key={p.id}
-       customClass={classNames(
-        "board-preview-piece",
-        p.captured && "captured",
-        p.inCheck && "in-check",
-        p.breathing && "breathing",
-       )}
-       style={
-        {
-         "--tx": `${p.col * 100}%`,
-         "--ty": `${p.row * 100}%`,
-         transform: "translate(var(--tx), var(--ty))",
-         transition: p.noTransition ? "none" : undefined,
-        } as React.CSSProperties
-       }
-      >
-       <PieceIcon code={p.code} className="board-preview-piece-svg" />
-      </Box>
+       key={name}
+       ref={(el: HTMLDivElement | null) => {
+        fxEls.current[name] = el;
+       }}
+       customClass={`board-preview-fx ${name}`}
+      />
      ))}
-
-     {overlays.map((o) => {
-      if (o.kind === "ghost") {
-       return (
-        <Box
-         key={o.id}
-         customClass="board-preview-ghost"
-         style={{
-          transform:
-           o.phase === "out"
-            ? `translate(${o.col * 100}%, calc(${o.row * 100}% - 6px)) scale(0.82)`
-            : `translate(${o.col * 100}%, ${o.row * 100}%)`,
-          opacity: o.phase === "out" ? 0 : 0.55,
-         }}
-        >
-         <PieceIcon code={o.code!} className="board-preview-piece-svg" />
-        </Box>
-       );
-      }
-      if (o.kind === "ring") {
-       return (
-        <Box
-         key={o.id}
-         customClass={classNames("board-preview-ring", o.danger && "danger")}
-         style={{
-          transform: `translate(${o.col * 100}%, ${o.row * 100}%) scale(${o.phase === "out" ? 1.15 : 0.3})`,
-          opacity: o.phase === "out" ? 0 : 0.9,
-         }}
-        />
-       );
-      }
-      if (o.kind === "flash") {
-       return (
-        <Box
-         key={o.id}
-         customClass="board-preview-flash"
-         style={{
-          transform: `translate(${o.col * 100}%, ${o.row * 100}%)`,
-          opacity: o.phase === "out" ? 0 : 1,
-         }}
-        />
-       );
-      }
+     {START_PIECES.map(({ id, code, square }) => {
+      const { x, y } = squareOf(square);
       return (
        <Box
-        key={o.id}
-        customClass="board-preview-check-ring"
-        style={{
-         transform: `translate(${o.col * 100}%, ${o.row * 100}%)`,
+        key={id}
+        ref={(el: HTMLDivElement | null) => {
+         pieceEls.current[id] = el;
         }}
-       />
+        customClass="board-preview-piece"
+        style={{
+         transform: `translate3d(${x * 100}%, ${y * 100}%, 0)`,
+         opacity: isReducedMotion ? 1 : 0,
+        }}
+       >
+        <PieceIcon code={code} className="board-preview-piece-svg" />
+       </Box>
       );
      })}
-
-     {shimmerPhase !== "idle" && (
-      <Box
-       customClass={classNames(
-        "board-preview-shimmer",
-        shimmerPhase === "running" && "run",
-       )}
-      />
-     )}
+     <Box
+      ref={(el: HTMLDivElement | null) => {
+       fxEls.current.sweep = el;
+      }}
+      customClass="board-preview-fx sweep"
+     />
     </Box>
    </Box>
   </Box>
