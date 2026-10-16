@@ -625,6 +625,10 @@
    background: #05061a;
    border-top: 2px solid $gold;
 
+   :root[data-theme="light"] & {
+    background: #5b60a8;
+   }
+
    &::after {
     content: "";
     position: absolute;
