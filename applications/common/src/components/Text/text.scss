@@ -548,33 +548,6 @@
   color: $primaryContrast;
   transform: translate(-50%, -50%);
  }
- &.duration-wheel-item {
-  height: 2.8rem;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.3rem;
-  scroll-snap-align: center;
-  font-size: $font17 !important;
-  font-family: $fontOutfitSemiBold;
-  color: $appTextMuted;
-  cursor: pointer;
-  transition:
-   color 0.25s ease,
-   transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-
-  &.active {
-   color: $gold;
-   font-family: $fontOutfitExtraBold;
-   transform: scale(1.29);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-   transition: none;
-  }
- }
-
  &.room-code {
   min-width: 0;
   font-family: $fontOutfitBlack;
@@ -583,74 +556,6 @@
   color: $gold;
  }
 
- &.room-expiry-label {
-  font-family: $fontOutfitMedium;
-  font-size: $font13;
-  color: $appTextMuted;
- }
-
- &.room-expiry-time {
-  font-family: $fontOutfitExtraBold;
-  font-size: $font15;
-  color: $gold;
- }
-
- &.room-face-name {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-family: $fontOutfitBold;
-  font-size: $font15;
-  color: $appText;
- }
-
- &.room-face-username {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-family: $fontOutfitMedium;
-  font-size: $font12;
-  color: $appTextMuted;
-
-  .room-face-card.me & {
-   color: $gold;
-  }
- }
-
- &.room-face-vs {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: $z-raised;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.875rem;
-  height: 2.875rem;
-  border: 4px solid $appSheet;
-  border-radius: 50%;
-  background: $gold;
-  transform: translate(-50%, -50%);
-  font-family: $fontOutfitBlack;
-  font-size: $font14;
-  color: $primaryContrast;
- }
-
- &.room-meta-label {
-  font-family: $fontOutfitMedium;
-  font-size: $font12;
-  color: $appTextMuted;
- }
-
- &.room-meta-value {
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-family: $fontOutfitExtraBold;
-  font-size: $font15;
-  color: $appText;
- }
  &.sheet-tip {
   text-align: center;
   line-height: 1.5;
@@ -769,8 +674,17 @@
  }
 
  &.match-timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
   flex-shrink: 0;
   padding: 0.25rem 0.625rem;
+
+  svg {
+   width: 0.875rem;
+   height: 0.875rem;
+  }
+
   border: 1px solid alpha($appText, 0.16);
   background: transparent;
   font-family: $fontOutfitBlack;
@@ -784,9 +698,16 @@
   &.settled {
    opacity: 0.45;
   }
+
+  &.room-code-chip {
+   align-self: center;
+   cursor: pointer;
+   letter-spacing: 1px;
+  }
  }
 
- .match-sheet.lost &.public-title {
+ .match-sheet.lost &.public-title,
+ .result-sheet:not(.win) &.public-title {
   background: none;
   color: $appText;
  }
@@ -842,8 +763,8 @@
   display: grid;
   place-items: center;
   font-family: $fontOutfitBold;
-  font-size: 0.5625rem;
-  letter-spacing: 2.5px;
+  font-size: $font13;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
   transition:
    opacity 0.3s,
@@ -878,64 +799,154 @@
   }
  }
 
- &.practice-ticket-stub-label {
+ &.payout-stub-label {
+  font-family: $fontOutfitExtraBold;
+  font-size: $font14;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--payout-stub-ink);
+ }
+
+ &.payout-score {
+  text-align: center;
   font-family: $fontOutfitBold;
-  font-size: 0.5625rem;
+  text-transform: uppercase;
+  font-size: $font14;
+  letter-spacing: 1.5px;
+  color: alpha($poolInk, 0.75);
+ }
+
+ &.payout-amount {
+  align-self: stretch;
+  display: flex;
+  justify-content: center;
+  height: 2.625rem;
+  contain: layout;
+
+  > span {
+   display: inline-block;
+   text-align: right;
+   white-space: nowrap;
+   font-family: $fontOutfitBlack;
+   font-size: 1.75rem;
+   line-height: 2.625rem;
+   color: var(--payout-money);
+   text-shadow:
+    0 1px 0 alpha($white, 0.9),
+    0 -1px 0 alpha(#003c1e, 0.2);
+  }
+ }
+
+ &.payout-stamp {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  top: -1.8rem;
+  width: fit-content;
+  margin: 0 auto;
+  padding: 0.25rem 0.75rem;
+  background: alpha(#fffdf6, 0.85);
+  border: 2.5px solid var(--payout-stamp);
+  border-radius: 4px;
+  font-family: $fontOutfitBlack;
+  font-size: 1rem;
   letter-spacing: 2.5px;
   text-transform: uppercase;
-  color: $gold;
+  color: var(--payout-stamp);
+  opacity: 0;
+  transform: rotate(-11deg) scale(1.8);
+
+  &::after {
+   content: "";
+   position: absolute;
+   inset: 2px;
+   border: 1px solid var(--payout-stamp);
+   border-radius: 2px;
+  }
+
+  .practice & {
+   position: relative;
+   top: auto;
+   margin: 0.25rem auto;
+   padding: 0.25rem 0.75rem;
+   border-width: 2.5px;
+   font-size: 1.125rem;
+   letter-spacing: 2.5px;
+  }
+
+  .match_cancelled & {
+   padding: 0.1875rem 0.5rem;
+   font-size: $font14;
+   letter-spacing: 1.5px;
+  }
+
+  .stamped & {
+   animation:
+    payout-slam 0.3s cubic-bezier(0.5, 0, 0.75, 0) forwards,
+    payout-squash 0.22s ease-out 0.3s;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+   .stamped & {
+    animation: none;
+    opacity: 0.85;
+    transform: rotate(-11deg);
+   }
+  }
  }
 
  .practice-options &.sheet-title {
   margin: 0;
  }
 
- &.practice-ticket-label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-family: $fontOutfitBold;
-  font-size: 0.5625rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: alpha($poolInk, 0.55);
-
-  &::before,
-  &::after {
-   content: "";
-   flex: 1;
-   height: 1px;
-   background: alpha($poolInk, 0.15);
-  }
- }
-
  &.ticket-name {
-  max-width: 4.5rem;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-family: $fontOutfitBold;
-  font-size: 0.625rem;
-  line-height: 0.75rem;
+  font-size: $font13;
+  line-height: 1rem;
   color: alpha($poolInk, 0.75);
 
   &.pending {
    color: alpha($poolInk, 0.45);
    text-transform: lowercase;
   }
+
+  .payout-paper & {
+   max-width: 100%;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+   font-size: $font14;
+   line-height: 1.125rem;
+   color: alpha($poolInk, 0.9);
+  }
  }
 
  &.ticket-vs {
   margin-top: 0.9375rem;
   font-family: $fontOutfitExtraBold;
-  font-size: 0.625rem;
+  font-size: $font13;
   letter-spacing: 1px;
   text-transform: uppercase;
   color: alpha($poolInk, 0.4);
+
+  .payout-paper & {
+   flex-shrink: 0;
+   margin-top: 0.625rem;
+   font-size: $font14;
+   color: alpha($poolInk, 0.55);
+  }
  }
 
  &.ticket-stat-label {
   display: block;
   font-family: $fontOutfitBold;
-  font-size: 0.4375rem;
-  letter-spacing: 1.5px;
+  font-size: $font11;
+  letter-spacing: 1px;
   text-transform: uppercase;
   color: #5c5a52;
  }
@@ -944,7 +955,7 @@
   display: block;
   margin-top: 0.125rem;
   font-family: $fontOutfitExtraBold;
-  font-size: 0.75rem;
+  font-size: $font13;
   line-height: 1.2;
   text-transform: uppercase;
   color: $poolInk;
@@ -972,8 +983,7 @@
   pointer-events: none;
 
   .match-ticket.lost & {
-   animation: match-void-thud 0.35s cubic-bezier(0.3, 1.4, 0.5, 1) 0.6s
-    forwards;
+   animation: match-void-thud 0.35s cubic-bezier(0.3, 1.4, 0.5, 1) 0.6s forwards;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -1050,44 +1060,6 @@
   }
  }
 
- &.bet-card-tc {
-  display: inline-flex;
-  align-self: flex-start;
-  align-items: center;
-  gap: 5px;
-  padding: 3px 8px 3px 6px;
-  background: $modeChipRapid;
-  font-family: $fontOutfitSemiBold;
-  font-size: $font12;
-  line-height: 1.35;
-  letter-spacing: 0.2px;
-  color: $white;
-
-  svg {
-   width: 0.75rem;
-   height: 0.75rem;
-  }
-
-  .bet-card.friend & {
-   background: $modeChipBullet;
-  }
- }
-
- &.bet-card-practice-title {
-  font-family: $fontOutfitBold;
-  font-size: $font20;
-  line-height: 1.3;
-  letter-spacing: -0.3px;
-  color: $appText;
- }
-
- &.bet-card-sub {
-  font-family: $fontOutfitRegular;
-  font-size: $font14;
-  line-height: 1.45;
-  color: $appTextMuted;
- }
-
  &.segment-btn-label {
   display: block;
   font-size: $font14;
@@ -1098,27 +1070,24 @@
    color: $primaryContrast;
   }
 
-  .segment.ticket-pills & {
-   font-family: $fontOutfitBold;
-   font-size: 0.8125rem;
-   letter-spacing: 1px;
-   padding-left: 1px;
+  .segment.gold-bar & {
+   font-family: $fontOutfitBlack;
+   font-size: $font18;
+   color: alpha($appText, 0.85);
+  }
+
+  .practice-field .segment.gold-bar & {
+   font-size: $font14;
    text-transform: uppercase;
-   color: alpha($poolInk, 0.75);
   }
 
-  .segment.ticket-pills .segment-btn.active & {
-   color: $poolInk;
-   transform: translateY(-0.25rem);
-  }
-
-  .room-segment .segment-btn & {
-   font-family: $fontOutfitSemiBold;
-  }
-
-  .room-segment .segment-btn.active & {
+  .segment.gold-bar.tabs & {
    font-family: $fontOutfitBold;
-   color: $appTabActive;
+   font-size: $font14;
+  }
+
+  .segment.gold-bar .segment-btn.active & {
+   color: #0d0d0d;
   }
 
   .segment.category-select & {
@@ -1142,6 +1111,33 @@
   .segment-btn.active & {
    color: $primaryContrast;
   }
+
+  .segment.gold-bar & {
+   font-family: $fontOutfitBold;
+   font-size: 0.5625rem;
+   letter-spacing: 1.5px;
+   text-transform: uppercase;
+   color: alpha($appText, 0.45);
+  }
+
+  .segment.gold-bar .segment-btn.active & {
+   color: alpha(#0d0d0d, 0.7);
+  }
+ }
+
+ &.room-ticket-label {
+  font-family: $fontOutfitBold;
+  font-size: $font13;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: alpha($appText, 0.85);
+ }
+
+ &.room-ticket-error {
+  margin-top: -$space-4;
+  font-family: $fontOutfitBold;
+  font-size: $font12;
+  color: $paleRed;
  }
 
  &.public-footer {
@@ -1211,7 +1207,7 @@
  &.score-hero-label {
   font-family: $fontOutfitSemiBold;
   font-size: $font13;
-  color: $appText;
+  color: alpha($appText, 0.7);
  }
 
  &.score-hero-val {
@@ -1238,7 +1234,7 @@
   text-align: center;
   font-family: $fontOutfitBold;
   font-size: $font14;
-  color: $appTextMuted;
+  color: alpha($appText, 0.5);
 
   &.gold {
    color: $medalGold;
@@ -1258,6 +1254,7 @@
   min-width: 0;
   font-family: $fontOutfitSemiBold;
   font-size: $font15;
+  color: alpha($appText, 0.9);
  }
 
  &.lb-earnings {
@@ -1271,7 +1268,7 @@
   white-space: nowrap;
   font-family: $fontOutfitBold;
   font-size: $font13;
-  color: $appText;
+  color: alpha($appText, 0.9);
  }
 
  &.lb-podium-value {
@@ -1353,7 +1350,7 @@
   display: block;
   font-family: $fontOutfitBlack;
   font-size: $font22;
-  color: $appText;
+  color: alpha($appText, 0.9);
  }
 
  &.profile-score-text {
@@ -1378,6 +1375,7 @@
  &.result-title {
   font-family: $fontOutfitExtraBold;
   font-size: $font24;
+  display: none;
   color: $appText;
 
   .result-sheet.versus & {
@@ -1426,20 +1424,20 @@
   font-family: $fontOutfitBold;
   font-size: $font10;
   letter-spacing: 0.14em;
-  color: $appTextMuted;
+  color: alpha($appText, 0.5);
 
   .label-top & {
    font-family: $fontOutfitSemiBold;
    font-size: $font14;
    letter-spacing: normal;
-   color: $appText;
+   color: alpha($appText, 0.7);
   }
 
   .icon-card & {
    font-family: $fontOutfitMedium;
    font-size: $font13;
    letter-spacing: normal;
-   color: $appText;
+   color: alpha($appText, 0.7);
   }
 
   .compact & {
@@ -1479,22 +1477,10 @@
   font-family: $fontOutfitBlack;
   font-size: $font24;
   line-height: 1.1;
-  color: $appText;
+  color: alpha($appText, 0.9);
 
   &.pos {
    color: $greenishTeal;
-  }
-
-  &.neg {
-   color: $paleRed;
-  }
-
-  &.refund {
-   color: $appText;
-  }
-
-  &.returned {
-   color: $appTextMuted;
   }
 
   &.prize {
@@ -1549,15 +1535,6 @@
    font-size: $font16;
    letter-spacing: 0.2px;
   }
-
-  &.shake {
-   display: inline-block;
-   animation: result-amount-shake 0.45s 1s linear;
-
-   @media (prefers-reduced-motion: reduce) {
-    animation: none;
-   }
-  }
  }
 
  &.subsection-heading {
@@ -1576,18 +1553,17 @@
   font-size: $font12;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: $appTextMuted;
+  color: alpha($appText, 0.5);
 
   &.wallet-tx-group-label {
    font-family: $fontOutfitExtraBold;
-   color: $appText;
   }
  }
 
  &.rules-title {
   font-family: $fontOutfitBold;
   font-size: $font20;
-  color: $appText;
+  color: alpha($appText, 0.9);
  }
 
  &.rules-text {
@@ -1595,7 +1571,7 @@
   font-family: $fontOutfitRegular;
   font-size: $font14;
   line-height: 1.45;
-  color: $appText;
+  color: alpha($appText, 0.7);
   white-space: normal;
   overflow: visible;
  }
@@ -1614,7 +1590,7 @@
   font-size: $font12;
   line-height: 1.6;
   white-space: normal;
-  color: $appTextMuted;
+  color: alpha($appText, 0.5);
  }
 
  &.modal-heading {
@@ -1819,30 +1795,17 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  min-width: 5.25rem;
-  height: 2.625rem;
+  min-width: 6.125rem;
+  height: 2.875rem;
   padding: 0 0.75rem;
-  border: 1px solid alpha($appText, 0.28);
-  background: transparent;
   font-family: $fontOutfitExtraBold;
-  font-size: $font22;
+  font-size: $font26;
   font-weight: 400;
-  color: alpha($appText, 0.32);
+  color: alpha($appText, 0.75);
   letter-spacing: -0.01em;
-  transition:
-   color 0.25s ease,
-   border-color 0.25s ease;
-
-  .gr-row:not(.active) & {
-   opacity: 0.55;
-  }
+  transition: color 0.25s ease;
 
   .gr-row.active & {
-   min-width: 6.125rem;
-   height: 2.875rem;
-   border: 1.5px solid $gold;
-   box-shadow: 0 0 0.875rem alpha($gold, 0.22);
-   font-size: $font26;
    color: $gold;
 
    :root[data-theme="light"] & {
@@ -1857,7 +1820,12 @@
 
   .common-skeleton.MuiSkeleton-root {
    height: 0.875rem;
-   background: linear-gradient(90deg, alpha($appText, 0.16), alpha($appText, 0.38), alpha($appText, 0.16));
+   background: linear-gradient(
+    90deg,
+    alpha($appText, 0.16),
+    alpha($appText, 0.38),
+    alpha($appText, 0.16)
+   );
    background-size: 200% 100%;
    transform: none;
   }
@@ -1936,21 +1904,26 @@
  }
 }
 
-@keyframes result-amount-shake {
- 0%,
- 100% {
-  transform: translate3d(0, 0, 0);
- }
- 20% {
-  transform: translate3d(-5px, 0, 0);
+@keyframes payout-slam {
+ 0% {
+  opacity: 0;
+  transform: translate(-0.5rem, -1.625rem) rotate(-17deg) scale(2.1);
  }
  40% {
-  transform: translate3d(3.5px, 0, 0);
+  opacity: 0.5;
  }
- 60% {
-  transform: translate3d(-2px, 0, 0);
+ 100% {
+  opacity: 0.85;
+  transform: rotate(-11deg) scale(1);
  }
- 80% {
-  transform: translate3d(1px, 0, 0);
+}
+
+@keyframes payout-squash {
+ 0%,
+ 100% {
+  transform: rotate(-11deg) scale(1);
+ }
+ 35% {
+  transform: rotate(-11deg) scale(0.94, 0.9);
  }
 }

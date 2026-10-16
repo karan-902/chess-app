@@ -136,6 +136,8 @@ export const minText = "min";
 export const createText = "Create";
 export const roomCodeText = "Room code";
 export const pasteText = "Paste";
+export const pasteCodeText = "Paste code";
+export const privateRoomTicketText = "Room ticket";
 export const joinText = "Join";
 export const waitingForOpponentText = "Waiting for Opponent";
 export const shareCodeWithFriendText = "Share this code with your friend";
@@ -166,6 +168,7 @@ export const scanToDepositText =
  "Scan/copy with your crypto wallet to deposit instantly.";
 export const copyText = "Copy";
 export const copiedText = "Copied";
+export const copyCodeText = "Copy code";
 export const matchIdText = "Match ID";
 export const beatsYouText = (name: string) => `${name} beats you`;
 export const beatsText = (winner: string, loser: string) =>

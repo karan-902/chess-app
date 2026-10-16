@@ -1,15 +1,13 @@
 import { useEffect, useState } from "react";
-import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
 import CustomDrawer from "@gopvp/common/src/components/Drawer/Drawer";
 import Input from "@gopvp/common/src/components/Input/Input";
-import CopyButton from "@gopvp/app/src/components/common/CopyButton";
-import CustomLabel from "@gopvp/common/src/components/Label/Label";
+import MatchTicket from "@gopvp/app/src/components/common/MatchTicket";
 import OTPInput from "@gopvp/common/src/components/OtpInput/OtpInput";
 import ChipSelect from "@gopvp/common/src/components/ChipSelect/ChipSelect";
-import CustomAvatar from "@gopvp/common/src/components/Avatar/Avatar";
+import { useCopyToClipboard } from "@gopvp/app/src/hooks/useCopyToClipboard";
 import { formatAmount, formatMMSS } from "@gopvp/common/src/util/format";
 import type { RoomTab } from "@gopvp/common/src/types/component";
 import type { IRoomSheetProps } from "@gopvp/app/src/types/component";
@@ -22,7 +20,7 @@ import {
  durationText,
  createText,
  roomCodeText,
- pasteText,
+ pasteCodeText,
  joinText,
  waitingForOpponentText,
  shareCodeWithFriendText,
@@ -33,53 +31,26 @@ import {
  leaveText,
  cancelRoomText,
  expiresText,
- rivalText,
  entryText,
+ timeText,
  codeText,
  minText,
  roomText,
- vsText,
+ privateRoomTicketText,
+ copiedText,
+ copyCodeText,
 } from "@gopvp/app/src/constants/message";
 import {
  MAX_AMOUNT_DIGITS,
  MS_PER_MINUTE,
+ ROOM_CODE_LENGTH,
 } from "@gopvp/app/src/constants/limit";
-import { youText } from "@gopvp/common/src/constants/message";
 import { icons } from "@gopvp/common/src/components/images";
 import {
  ROOM_TABS,
- BET_CHIP_AMOUNTS,
  DURATION_MINUTES,
+ DEFAULT_DURATION_MINUTES,
 } from "@gopvp/app/src/constants/option";
-import DurationWheel from "@gopvp/app/src/pages/play/DurationWheel";
-
-function roomPlayer(label: string, name: string, side: "me" | "rival") {
- return (
-  <Box customClass={classNames("room-face-card", side)}>
-   <CustomAvatar
-    letter={name.charAt(0).toUpperCase()}
-    customClass="room-face-avatar"
-   />
-   <Box customClass="room-face-meta">
-    <Text customClass="room-face-name">{label}</Text>
-    <Text customClass="room-face-username">{name}</Text>
-   </Box>
-  </Box>
- );
-}
-
-function roomMeta(label: string, value: string) {
- return (
-  <Box customClass="room-meta-item">
-   <Text component="span" customClass="room-meta-label">
-    {label}
-   </Text>
-   <Text component="span" customClass="room-meta-value">
-    {value}
-   </Text>
-  </Box>
- );
-}
 
 export default function RoomSheet({
  open,
@@ -94,7 +65,6 @@ export default function RoomSheet({
  roomFee,
  roomTimeMs,
  expiresInSeconds,
- expiryWindowMs,
  onCreateRoom,
  onJoinRoom,
  onStartRoom,
@@ -102,15 +72,32 @@ export default function RoomSheet({
  const [roomTab, setRoomTab] = useState<RoomTab>("create");
  const [roomBet, setRoomBet] = useState("");
  const [roomBetError, setRoomBetError] = useState("");
- const [roomMinutes, setRoomMinutes] = useState(String(DURATION_MINUTES[4]));
+ const [roomMinutes, setRoomMinutes] = useState(DEFAULT_DURATION_MINUTES);
  const [joinCode, setJoinCode] = useState("");
+ const { copied, copy } = useCopyToClipboard();
+ const isCodeComplete = joinCode.length === ROOM_CODE_LENGTH;
+ const roomMinutesLabel = `${Math.round(roomTimeMs / MS_PER_MINUTE)} ${minText}`;
+ const roomTicket = (
+  <MatchTicket
+   status={roomStatus === "waiting" ? "queued" : "found"}
+   title={privateRoomTicketText}
+   stats={[
+    { label: entryText, value: formatAmount(roomFee) },
+    { label: timeText, value: roomMinutesLabel },
+    { label: codeText, value: roomCode ?? "" },
+   ]}
+   tone={1}
+   myName={myName}
+   opponentName={opponentName}
+  />
+ );
 
  useEffect(() => {
   if (!open) return;
   setRoomTab("create");
   setRoomBet("");
   setRoomBetError("");
-  setRoomMinutes(String(DURATION_MINUTES[4]));
+  setRoomMinutes(DEFAULT_DURATION_MINUTES);
   setJoinCode("");
  }, [open]);
 
@@ -125,9 +112,7 @@ export default function RoomSheet({
    return;
   }
   setRoomBetError("");
-  const minutes = Number(roomMinutes);
-  if (!minutes || minutes <= 0) return;
-  onCreateRoom(bet, Math.round(minutes * 60));
+  onCreateRoom(bet, Number(roomMinutes) * 60);
  };
 
  const handleJoinRoomSubmit = () => {
@@ -136,15 +121,17 @@ export default function RoomSheet({
   onJoinRoom(code);
  };
 
+ const handleCodeChange = (value: string) => {
+  const code = value
+   .toUpperCase()
+   .replace(/[^A-Z0-9]/g, "")
+   .slice(0, ROOM_CODE_LENGTH);
+  setJoinCode(code);
+ };
+
  const handlePasteCode = async () => {
   try {
-   const text = await navigator.clipboard.readText();
-   setJoinCode(
-    text
-     .toUpperCase()
-     .replace(/[^A-Z0-9]/g, "")
-     .slice(0, 6),
-   );
+   handleCodeChange(await navigator.clipboard.readText());
   } catch (error) {
    console.error(error);
   }
@@ -158,46 +145,21 @@ export default function RoomSheet({
    customClass="room-sheet"
   >
    {roomStatus === "ready" || roomStatus === "starting" ? (
-    <Box customClass="matchmaking-searching room-options">
-     <Text customClass="dialog-title">
-      {isOwner ? opponentJoinedText : waitingForOwnerText}
-     </Text>
-     {isOwner && (
-      <Text customClass="description">{startWhenReadyText}</Text>
-     )}
-     <Box customClass="room-face-off">
-      {roomPlayer(youText, myName, "me")}
-      <Text component="span" customClass="room-face-vs">
-       {vsText}
+    <Box customClass="room-options">
+     <Box customClass="room-heading">
+      <Text customClass="dialog-title">
+       {isOwner ? opponentJoinedText : waitingForOwnerText}
       </Text>
-      {roomPlayer(rivalText, opponentName, "rival")}
+      {isOwner && <Text customClass="description">{startWhenReadyText}</Text>}
      </Box>
-     <Box customClass="room-meta-strip">
-      {roomMeta(entryText, formatAmount(roomFee))}
-      {roomMeta(
-       durationText,
-       `${Math.round(roomTimeMs / MS_PER_MINUTE)} ${minText}`,
-      )}
-      {roomMeta(codeText, roomCode ?? "")}
-     </Box>
-     {/* <Text customClass="searching-timer">{roomCode}</Text>
-     <Text customClass="empty-state-desc description">
-      {expiresInText(formatMMSS(expiresInSeconds))}
-     </Text> */}
-     <Box customClass="pool-confirm-actions">
-      <Button
-       type="button"
-       customClass="cancel-btn room-action-btn"
-       disabled={roomStatus === "starting"}
-       onClick={onCancel}
-      >
-       {leaveText}
-      </Button>
+     {roomTicket}
+     {!isOwner && <Box customClass="room-wait-spinner" aria-hidden />}
+     <Box customClass="room-actions">
       {isOwner && (
        <Button
         type="button"
         variant="contained"
-        customClass="room-action-btn"
+        fullWidth
         isLoading={roomStatus === "starting"}
         loaderOnDark
         onClick={onStartRoom}
@@ -205,126 +167,113 @@ export default function RoomSheet({
         {startText}
        </Button>
       )}
+      <Button
+       type="button"
+       variant="text"
+       customClass="sheet-cancel-link"
+       disabled={roomStatus === "starting"}
+       onClick={onCancel}
+      >
+       {leaveText}
+      </Button>
      </Box>
     </Box>
    ) : roomStatus === "waiting" ? (
-    <Box customClass="matchmaking-searching room-options">
-     <Text customClass="dialog-title">{waitingForOpponentText}</Text>
-     <Text customClass="description">{shareCodeWithFriendText}</Text>
-     <Box customClass="room-code-card">
-      <Text component="span" customClass="room-code">
-       {roomCode}
-      </Text>
-      <CopyButton text={roomCode ?? ""} showLabel />
-     </Box>
-     <Box customClass="room-expiry">
-      <icons.timer />
-      <Text component="span" customClass="room-expiry-label">
-       {expiresText}
-      </Text>
-      <Text component="span" customClass="room-expiry-time">
+    <Box customClass="room-options">
+     <Box customClass="match-head">
+      <Box customClass="room-heading">
+       <Text customClass="dialog-title">{waitingForOpponentText}</Text>
+       <Text customClass="description">{shareCodeWithFriendText}</Text>
+      </Box>
+      <Text customClass="match-timer" aria-label={expiresText}>
+       <icons.timer />
        {formatMMSS(expiresInSeconds)}
       </Text>
      </Box>
-     <Box customClass="room-expiry-bar">
-      <Box
-       customClass="room-expiry-fill"
-       style={{
-        transform: `scaleX(${
-         expiryWindowMs > 0
-          ? Math.min(1, (expiresInSeconds * 1000) / expiryWindowMs)
-          : 0
-        })`,
-       }}
-      />
+     {roomTicket}
+     <Box customClass="room-actions">
+      <Text
+       component="button"
+       customClass="match-timer room-code-chip"
+       aria-label={copyCodeText}
+       onClick={() => copy(roomCode ?? "")}
+      >
+       <icons.copy />
+       {copied ? copiedText : roomCode}
+      </Text>
+      <Button
+       type="button"
+       variant="text"
+       customClass="sheet-cancel-link"
+       onClick={onCancel}
+      >
+       {cancelRoomText}
+      </Button>
      </Box>
-     <Button
-      type="button"
-      fullWidth
-      customClass="cancel-btn room-action-btn"
-      onClick={onCancel}
-     >
-      {cancelRoomText}
-     </Button>
     </Box>
    ) : (
-    <Box customClass="matchmaking-searching room-options">
-     <Text customClass="sheet-title dialog-title">{roomText}</Text>
+    <Box customClass="room-options">
+     <Text customClass="dialog-title">{roomText}</Text>
      <ChipSelect
       options={ROOM_TABS}
       value={roomTab}
       onChange={setRoomTab}
       label={(t) => (t === "create" ? createRoomText : joinRoomText)}
-      customClass="segment compact room-segment"
+      customClass="segment compact gold-bar tabs"
      />
      {roomTab === "create" ? (
       <>
-       <Box customClass="room-field room-bet-field">
-        <CustomLabel
-         htmlFor="room-bet"
-         customClass="room-field-label room-bet-label"
-        >
+       <Box customClass="room-form">
+        <Text component="span" customClass="room-ticket-label">
          {feeAmountText}
-        </CustomLabel>
-        <Input
-         id="room-bet"
-         type="text"
-         inputMode="numeric"
-         autoComplete="off"
-         maxLength={MAX_AMOUNT_DIGITS}
-         fullWidth
-         placeholder="0.00"
-         customClass="amount-input-hero"
-         value={roomBet}
-         isError={!!roomBetError}
-         helperText={roomBetError}
-         onChange={(e) => {
-          setRoomBet(
-           e.target.value
-            .replace(/\D/g, "")
-            .replace(/^0+/, "")
-            .slice(0, MAX_AMOUNT_DIGITS),
-          );
-          setRoomBetError("");
-         }}
-        />
-        <Box customClass="tx-filter-chip-grid room-bet-chips">
-         {BET_CHIP_AMOUNTS.map((amount) => (
-          <Button
-           key={amount}
-           type="button"
-           customClass={classNames(
-            "tx-filter-chip",
-            roomBet === String(amount) && "active",
-           )}
-           onClick={() => {
-            setRoomBet(String(amount));
-            setRoomBetError("");
-           }}
-          >
-           ${amount}
-          </Button>
-         ))}
+        </Text>
+        <Box customClass="room-ticket-hero">
+         <Input
+          id="room-bet"
+          type="text"
+          inputMode="numeric"
+          autoComplete="off"
+          maxLength={MAX_AMOUNT_DIGITS}
+          fullWidth
+          placeholder="0"
+          aria-label={feeAmountText}
+          customClass="room-fee-input"
+          value={roomBet}
+          isError={!!roomBetError}
+          onChange={(e) => {
+           setRoomBet(
+            e.target.value
+             .replace(/\D/g, "")
+             .replace(/^0+/, "")
+             .slice(0, MAX_AMOUNT_DIGITS),
+           );
+           setRoomBetError("");
+          }}
+         />
         </Box>
-       </Box>
-
-       <Box customClass="room-field room-duration-field">
-        <CustomLabel customClass="room-field-label room-bet-label">
+        {roomBetError && (
+         <Text customClass="room-ticket-error" role="alert">
+          {roomBetError}
+         </Text>
+        )}
+        <Text component="span" customClass="room-ticket-label">
          {durationText}
-        </CustomLabel>
-        <DurationWheel
-         value={Number(roomMinutes)}
-         onChange={(minutes) => setRoomMinutes(String(minutes))}
+        </Text>
+        <ChipSelect
+         options={DURATION_MINUTES}
+         value={roomMinutes}
+         onChange={setRoomMinutes}
+         label={(m) => m}
+         subLabel={() => minText}
+         customClass="segment gold-bar"
         />
        </Box>
-
-       <Box customClass="create-room-button-wrap">
+       <Box customClass="room-actions">
         <Button
          type="button"
          variant="contained"
          fullWidth
-         customClass="game-cta create-room-btn"
-         disabled={!(Number(roomBet) > 0) || !(Number(roomMinutes) > 0)}
+         disabled={!(Number(roomBet) > 0)}
          isLoading={roomStatus === "creating"}
          loaderOnDark
          onClick={handleCreateRoomSubmit}
@@ -335,42 +284,39 @@ export default function RoomSheet({
       </>
      ) : (
       <>
-       <Box customClass="room-field">
-        <Box customClass="room-field-head">
-         <CustomLabel customClass="room-field-label">
-          {roomCodeText}
-         </CustomLabel>
-         <Button
-          type="button"
-          variant="text"
-          startIcon="clipboard"
-          customClass="room-paste-btn"
-          onClick={handlePasteCode}
-         >
-          {pasteText}
-         </Button>
-        </Box>
+       <Box customClass="room-form">
+        <Text component="span" customClass="room-ticket-label">
+         {roomCodeText}
+        </Text>
         <OTPInput
-         length={6}
+         length={ROOM_CODE_LENGTH}
          value={joinCode}
          alphanumeric
-         onChange={(v) =>
-          setJoinCode(v.toUpperCase().replace(/[^A-Z0-9]/g, ""))
-         }
+         customClass="room-code-otp"
+         onChange={handleCodeChange}
         />
+        <Button
+         type="button"
+         variant="text"
+         customClass="room-paste-btn"
+         onClick={handlePasteCode}
+        >
+         {pasteCodeText}
+        </Button>
        </Box>
-       <Button
-        type="button"
-        variant="contained"
-        fullWidth
-        customClass="game-cta join-room-btn"
-        disabled={joinCode.length !== 6}
-        isLoading={roomStatus === "joining"}
-        loaderOnDark
-        onClick={handleJoinRoomSubmit}
-       >
-        {joinText}
-       </Button>
+       <Box customClass="room-actions">
+        <Button
+         type="button"
+         variant="contained"
+         fullWidth
+         disabled={!isCodeComplete}
+         isLoading={roomStatus === "joining"}
+         loaderOnDark
+         onClick={handleJoinRoomSubmit}
+        >
+         {joinText}
+        </Button>
+       </Box>
       </>
      )}
     </Box>

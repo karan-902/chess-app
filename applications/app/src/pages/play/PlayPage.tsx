@@ -58,7 +58,6 @@ export default function PlayPage() {
   roomFee,
   roomTimeMs,
   expiresInSeconds,
-  expiryWindowMs,
   createRoom,
   joinRoom,
   startRoom,
@@ -180,7 +179,7 @@ export default function PlayPage() {
      type="button"
      variant="contained"
      fullWidth
-     customClass="game-cta play-cta tilted"
+     customClass="game-cta play-cta"
      onClick={() => setSheetOpen(true)}
     >
      {playNowText}
@@ -222,7 +221,6 @@ export default function PlayPage() {
     roomFee={roomFee}
     roomTimeMs={roomTimeMs}
     expiresInSeconds={expiresInSeconds}
-    expiryWindowMs={expiryWindowMs}
     onCreateRoom={createRoom}
     onJoinRoom={joinRoom}
     onStartRoom={startRoom}

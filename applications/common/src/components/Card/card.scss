@@ -33,35 +33,6 @@
   border-radius: $radius-card;
  }
 
- &.bet-card {
-  padding: 0.75rem;
-  text-align: left;
-  width: 100%;
-  min-width: 0;
-  overflow: visible;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: stretch;
-  gap: 0.625rem;
-  border-radius: $radius-card;
-
-  &.practice,
-  &.friend {
-   gap: $space-4;
-  }
-
-  &.selected {
-   border: 1.5px solid alpha($gold, 0.85);
-  }
-
-  &.insufficient {
-   .stat-tile-value {
-    opacity: 0.6;
-   }
-  }
- }
-
  &.pool-card {
   --pool-face: #{list.nth(list.nth($poolBlocks, 1), 1)};
   --pool-ink: #{list.nth(list.nth($poolBlocks, 1), 2)};
@@ -173,10 +144,7 @@
   align-items: center;
   gap: $space-4;
   padding: 1.375rem $space-16;
-  border: 1.2px solid alpha($gold, 0.7);
-  background:
-   radial-gradient(circle at 50% 40%, alpha($gold, 0.14), transparent 70%),
-   $appCard;
+  border: 1px solid alpha($gold, 0.7);
  }
 
  &.rules-card {
@@ -193,9 +161,6 @@
   margin-bottom: $space-24;
   border-radius: $radius-card;
   overflow: hidden;
-  background:
-   radial-gradient(ellipse at 50% 30%, alpha($gold, 0.12), transparent 60%),
-   $appCard;
  }
 
  &.lb-row {
@@ -242,7 +207,6 @@
 
   &.me {
    border: 1.5px solid alpha($gold, 0.9);
-   background: linear-gradient(180deg, alpha($gold, 0.22), $appCard);
   }
  }
 

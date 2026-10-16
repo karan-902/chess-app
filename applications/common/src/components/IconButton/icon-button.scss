@@ -28,13 +28,16 @@
  &.gr-review-btn {
   display: flex;
   flex-shrink: 0;
-  width: 1.75rem;
+  width: 2.5rem;
   height: 2.5rem;
   padding: 0;
-  border: 0;
+  border: 1px solid alpha($appText, 0.16);
+  border-radius: 50%;
   background: transparent;
   color: alpha($appText, 0.8);
-  transition: color 0.15s ease;
+  transition:
+   color 0.15s ease,
+   border-color 0.15s ease;
 
   svg {
    width: 1.25rem;
@@ -43,10 +46,12 @@
 
   &:hover:not(.Mui-disabled) {
    background: transparent;
+   border-color: alpha($appText, 0.32);
    color: $appText;
   }
 
   &.live {
+   border-color: alpha($gold, 0.5);
    color: $gold;
   }
 

@@ -10,20 +10,28 @@ export const BOARD_ENTRANCE_WAVE_MS = 160;
 export const BOARD_ENTRANCE_WAVE_COUNT = 4;
 export const BOARD_ENTRANCE_LANDING_MS = 600;
 export const PIECE_FILL_RATIO = 0.92;
-export const WIN_BURST_LEAD_S = 0.3;
-export const WIN_BURST_END_S = 2.6;
-export const WIN_BURST_COIN_COUNT = 7;
-export const WIN_BURST_SPARK_COUNT = 5;
-export const WIN_BURST_CONFETTI_COUNT = 3;
-export const WIN_BURST_STREAK_COUNT = 8;
-export const WIN_BURST_POP_COUNT = 5;
-export const WIN_BURST_SEED = 90210;
-export const RESULT_COUNT_TIMING: Partial<
- Record<"win" | "loss" | "draw", { startS: number; durationS: number }>
+export const PAYOUT_COIN_COUNT = 7;
+export const PAYOUT_SPARK_COUNT = 8;
+export const PAYOUT_TIMING: Record<
+ "win" | "loss" | "draw" | "quick",
+ Partial<
+  Record<
+   | "rise"
+   | "burst"
+   | "count"
+   | "countDur"
+   | "sparks"
+   | "stamp"
+   | "glare"
+   | "end",
+   number
+  >
+ >
 > = {
- win: { startS: 1.25, durationS: 0.6 },
- loss: { startS: 0.35, durationS: 0.65 },
- draw: { startS: 0.35, durationS: 0.65 },
+ win: { rise: 0.35, burst: 1.3, count: 1.4, countDur: 0.85, sparks: 1.96, stamp: 2.35, glare: 2.75, end: 3.4 },
+ loss: { rise: 0.35, count: 1.3, countDur: 0.6, stamp: 2.1, end: 2.6 },
+ draw: { rise: 0.35, count: 1.4, countDur: 0.8, glare: 2.3, stamp: 2.35, end: 3.4 },
+ quick: { rise: 0.35, stamp: 1.45, sparks: 1.67, glare: 1.95, end: 2.8 },
 };
 // export const PIECE_MOVE_SPRING = {
 //  type: "spring",

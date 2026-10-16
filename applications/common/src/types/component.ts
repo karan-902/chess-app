@@ -141,6 +141,13 @@ export interface ISlideToConfirmProps {
  customClass?: string;
 }
 
+export interface ITicketProps {
+ stub: ReactNode;
+ top: ReactNode;
+ bottom: ReactNode;
+ customClass?: string;
+}
+
 export interface ISheetActionsProps {
  children?: ReactNode;
  cancelLabel?: string;
@@ -155,11 +162,6 @@ export interface IStatTileProps {
  layout?: "caption" | "label-top" | "icon-card" | "stake" | "compact";
  customClass?: string;
  valueClass?: string;
-}
-
-export interface IDurationWheelProps {
- value: number;
- onChange: (value: number) => void;
 }
 
 export interface IBetSheetProps {

@@ -10,7 +10,9 @@ import Profile from "@gopvp/app/src/pages/profile";
 import GameRoute from "@gopvp/app/src/container/GameRoute";
 import EnteredGameRedirect from "@gopvp/app/src/container/EnteredGameRedirect";
 import GamePicker from "@gopvp/app/src/pages/games";
+import Preview from "@gopvp/app/src/pages/preview";
 import { ROUTES } from "@gopvp/app/src/constants/route";
+import { isDev } from "@gopvp/common/src/constants/env";
 
 export const router = createBrowserRouter([
  {
@@ -24,6 +26,7 @@ export const router = createBrowserRouter([
     ],
    },
    // { path: ROUTES.APPROVE_DEVICE, element: <ApproveDevice /> },
+   ...(isDev ? [{ path: ROUTES.PREVIEW, element: <Preview /> }] : []),
    {
     element: <PrivateRoute />,
     children: [

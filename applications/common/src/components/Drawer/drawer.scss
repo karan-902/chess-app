@@ -60,18 +60,7 @@
   backdrop-filter: blur(6px);
  }
 
- &.result-sheet.loss .MuiDrawer-paper {
-  background:
-   radial-gradient(
-    8.75rem 8rem at 50% 4.0625rem,
-    alpha($paleRed, 0.26),
-    transparent
-   ),
-   $appSheetFill;
- }
-
- &.result-sheet.win .MuiDrawer-paper,
- &.result-sheet.gold .MuiDrawer-paper {
+ &.result-sheet.gold:not(.versus) .MuiDrawer-paper {
   background:
    radial-gradient(
     8.75rem 8rem at 50% 4.0625rem,
@@ -89,6 +78,19 @@
     transparent
    ),
    $appSheetFill;
+ }
+
+ &.game-over-sheet.win .MuiDrawer-paper,
+ &.game-over-sheet.loss .MuiDrawer-paper {
+  background: $appSheetFill;
+ }
+
+ &.game-over-sheet .MuiDrawer-paper {
+  padding-top: 1.5rem;
+
+  .public-heading {
+   margin-top: 0;
+  }
  }
 
  &.bet-sheet,
@@ -120,18 +122,8 @@
   }
  }
 
- &.bet-sheet .MuiDrawer-paper {
-  &::after {
-   content: "";
-   position: absolute;
-   inset: 0;
-   z-index: -1;
-   @include cubes-pattern(
-    alpha($appText, 0.05),
-    linear-gradient(180deg, transparent 8%, #000 30%, #000 80%, transparent)
-   );
-   pointer-events: none;
-  }
+ &.MuiDrawer-anchorBottom:not(.game-over-sheet) .MuiDrawer-paper::after {
+  @include sheet-pattern;
  }
 
  &.wallet-sheet .MuiDrawer-paper {

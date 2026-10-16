@@ -218,7 +218,6 @@ export default function Profile() {
       <Box customClass="profile-id-top">
        <Button
         type="button"
-        variant="outlined"
         customClass="profile-edit-icon-btn"
         title={editProfileText}
         aria-label={editProfileText}

@@ -124,13 +124,38 @@
   }
  }
 
+ &.room-fee-input .input-row {
+  height: auto;
+  border: none;
+  font-family: $fontOutfitBlack;
+  font-size: 2.5rem;
+  line-height: 1.1;
+  background: transparent;
+  text-align: center;
+  color: $appText;
+
+  input {
+   text-align: center;
+   caret-color: $gold;
+   -webkit-text-fill-color: $appText;
+  }
+
+  input::placeholder {
+   color: alpha($appText, 0.3) !important;
+   -webkit-text-fill-color: alpha($appText, 0.3);
+  }
+
+  &:focus-within {
+   border: none;
+  }
+ }
+
  &.amount-input-hero.error .input-row {
   border: none;
   color: $paleRed;
  }
 
- &.match-id-input,
- &.room-code-input {
+ &.match-id-input {
   .input-row {
    padding: 0 0.875rem;
    background: $appSecondary;
@@ -155,19 +180,6 @@
 
   input {
    -webkit-text-fill-color: $appText;
-  }
- }
-
- &.room-code-input .input-row {
-  height: 3.5rem;
-  padding-left: calc(2rem + #{$space-4});
-  font-family: $fontOutfitExtraBold;
-  font-size: $font24;
-  letter-spacing: 0.2em;
-  text-align: center;
-
-  input {
-   -webkit-text-fill-color: $gold;
   }
  }
 
