@@ -595,18 +595,6 @@
    }
   }
 
-  .match-floor {
-   position: absolute;
-   left: 0;
-   right: 0;
-   bottom: 0;
-   height: 6.25rem;
-   @include cubes-pattern(
-    alpha($appText, 0.08),
-    linear-gradient(180deg, transparent, #000 60%)
-   );
-  }
-
   .match-beam {
    position: absolute;
    left: 4.5625rem;
@@ -2696,15 +2684,7 @@
   overflow-y: auto;
 
   &::before {
-   content: "";
-   position: absolute;
-   inset: 0;
-   z-index: -1;
-   @include cubes-pattern(
-    alpha($appText, 0.05),
-    linear-gradient(180deg, transparent, #000 18%, #000 82%, transparent)
-   );
-   pointer-events: none;
+   @include sheet-pattern;
   }
 
   :root[data-theme="light"] & {
@@ -2713,7 +2693,7 @@
     $appBg;
 
    &::before {
-    background: alpha(#5b60a8, 0.1);
+    background: alpha(#5b60a8, 0.07);
    }
   }
  }

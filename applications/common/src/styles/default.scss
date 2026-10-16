@@ -306,12 +306,18 @@ $radius-card: 0;
  }
 }
 
-@mixin cubes-pattern($color, $fade) {
+@mixin sheet-pattern($color: alpha($appText, 0.05)) {
+ content: "";
+ position: absolute;
+ inset: 0;
+ z-index: -1;
  background: $color;
  mask:
-  url("/pattern-cubes.svg") 0 0 / 1.515625rem 2.625rem repeat,
-  $fade;
+  url("/pattern-cubes.svg") 50% 0 / 1.515625rem 2.625rem repeat,
+  linear-gradient(180deg, transparent, #000 18%, #000 82%, transparent),
+  radial-gradient(70% 40% at 50% 50%, transparent 55%, #000);
  mask-composite: intersect;
+ pointer-events: none;
 }
 
 @mixin neo-plunk($edge: $neoEdge) {

@@ -119,7 +119,6 @@ export default function MatchTicket({
 
  return (
   <Box customClass={classNames("match-ticket", `tone-${tone}`, phase)}>
-   <Box customClass="match-floor" />
    <Box customClass="match-beam" />
    <Box customClass="match-rise">
     <Box customClass="match-ticket-wrap">

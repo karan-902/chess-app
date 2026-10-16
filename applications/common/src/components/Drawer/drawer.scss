@@ -120,17 +120,11 @@
   }
  }
 
- &.bet-sheet .MuiDrawer-paper {
+ &.bet-sheet .MuiDrawer-paper,
+ &.match-confirm-sheet .MuiDrawer-paper,
+ &.practice-sheet .MuiDrawer-paper {
   &::after {
-   content: "";
-   position: absolute;
-   inset: 0;
-   z-index: -1;
-   @include cubes-pattern(
-    alpha($appText, 0.05),
-    linear-gradient(180deg, transparent 8%, #000 30%, #000 80%, transparent)
-   );
-   pointer-events: none;
+   @include sheet-pattern;
   }
  }
 
