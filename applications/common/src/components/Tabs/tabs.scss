@@ -4,9 +4,18 @@
  min-height: 44px;
 
  .MuiTabs-indicator {
+  left: 0 !important;
+  width: 1px !important;
   height: 3px;
   border-radius: 0;
   background: $gold;
+  transform-origin: left center;
+  transform: translate3d(var(--tab-x, 0), 0, 0) scaleX(var(--tab-w, 0));
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+
+  @media (prefers-reduced-motion: reduce) {
+   transition: none;
+  }
  }
 
  .common-tab {
@@ -31,9 +40,7 @@
 
   .MuiTabs-indicator {
    height: 2px;
-   transition:
-    left 0.25s cubic-bezier(0.22, 1, 0.36, 1),
-    width 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+   transition-duration: 0.25s;
   }
 
   @include from(tablet) {
