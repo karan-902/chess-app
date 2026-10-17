@@ -145,6 +145,7 @@
   gap: $space-4;
   padding: 1.375rem $space-16;
   border: 1px solid alpha($gold, 0.7);
+  background: $appSurface;
  }
 
  &.rules-card {
@@ -153,14 +154,23 @@
   gap: $space-12;
   padding: $space-16;
   margin-bottom: $space-12;
+  border: 1px solid $appCardBorder;
   border-radius: $radius-card;
+  background: $appSurface;
  }
 
  &.profile-id-card {
   padding: $space-16;
   margin-bottom: $space-24;
+  border: 1px solid $appCardBorder;
   border-radius: $radius-card;
+  background: $appSurface;
   overflow: hidden;
+ }
+
+ &.stat-list.profile-list {
+  border: 1px solid $appCardBorder;
+  background: $appSurface;
  }
 
  &.lb-row {
