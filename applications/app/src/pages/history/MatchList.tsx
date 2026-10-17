@@ -5,7 +5,7 @@ import { shortenUsername } from "@gopvp/common/src/util/format";
 import { MATCH_RESULT_OUTCOMES } from "@gopvp/common/src/constants/mapper";
 import {
  MATCH_ROW_HEADLINES,
- MATCH_ROW_TAGS,
+ // MATCH_ROW_TAGS,
 } from "@gopvp/app/src/constants/mapper";
 import type { IMatchHistoryItem } from "@gopvp/common/src/types/response";
 import type { IMatchListProps } from "@gopvp/common/src/types/component";
@@ -32,7 +32,7 @@ function matchRow(
   <MatchRow
    outcome={outcome}
    headline={MATCH_ROW_HEADLINES[outcome](shortenUsername(item.opponent))}
-   resultTag={MATCH_ROW_TAGS[outcome]}
+   // resultTag={MATCH_ROW_TAGS[outcome]}
    amount={Math.abs(item.amount)}
    onClick={onClick}
   />
