@@ -187,6 +187,7 @@ export const maxWithdrawalAmountText = (max: number) =>
 export const insufficientWithdrawableText = "Insufficient withdrawable balance";
 export const enterDestinationText = "Enter a destination address";
 export const withdrawalCompletedText = "Withdrawal completed";
+export const withdrawalProcessingText = "Withdrawal processing";
 export const noRankedPlayersText = "No Ranked Players Yet";
 export const winToRankText = "Win a match to get your name on the board.";
 export const dashText = "–";
@@ -226,6 +227,7 @@ export const totalBalanceText = "Total Balance";
 export const withdrawBalanceText = "Withdrawable";
 export const transactionsText = "Transactions";
 export const pendingText = "Pending";
+export const processingText = "Processing";
 export const noTransactionsYetText = "No Transactions Yet";
 export const transactionsEmptyText =
  "Your deposits, withdrawals, and match payouts will show up here.";
