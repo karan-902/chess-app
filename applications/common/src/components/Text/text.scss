@@ -192,11 +192,19 @@
 
  &.amount-value {
   font-family: $fontOutfitExtraBold;
-  font-size: $font15;
+  font-size: $font14;
   flex-shrink: 0;
 
   @include from(phone) {
+   font-size: $font15;
+  }
+
+  @include from(tablet) {
    font-size: $font16;
+  }
+
+  @include from(laptop) {
+   font-size: $font17;
   }
 
   &.pos {
@@ -211,9 +219,6 @@
    color: $appTextMuted;
   }
 
-  .lb-row & {
-   font-size: $font15;
-  }
  }
 
  &.auth-account-name {
@@ -917,7 +922,6 @@
 
   &.pending {
    color: alpha($poolInk, 0.45);
-   text-transform: lowercase;
   }
 
   .payout-paper & {
@@ -1363,10 +1367,6 @@
  .wallet-tx-row &.meta-text {
   font-family: $fontOutfitMedium;
   font-size: $font12;
- }
-
- .wallet-tx-row &.amount-value {
-  font-size: $font15;
  }
 
  &.profile-id-name {
