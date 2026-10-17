@@ -2066,9 +2066,15 @@
   justify-content: space-between;
   gap: $space-12;
   padding: 0.875rem $space-16;
-  background: $appCard;
-  @include neo-plunk;
+  background: #1a1e5c;
+  border: 1px solid alpha($white, 0.1);
   border-radius: $radius-card;
+
+  :root[data-theme="light"] & {
+   border-color: $appCardBorder;
+   background: $white;
+   box-shadow: 0 4px 12px alpha(#aeb3d9, 0.35);
+  }
 
   &.clickable {
    cursor: pointer;
