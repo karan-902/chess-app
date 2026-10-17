@@ -284,11 +284,11 @@
  &.filter-dropdown-btn {
   --btn-gap: 0.35rem;
   --btn-pad: 0.625rem 1rem;
-  --btn-border: 1px solid #{alpha($appText, 0.12)};
-  --btn-bg: #{alpha($appText, 0.03)};
+  --btn-border: 1px solid #{alpha($appText, 0.1)};
+  --btn-bg: transparent;
   height: 2.625rem !important;
   min-width: 6rem !important;
-  color: $appText;
+  color: alpha($appText, 0.5);
 
   .button-text {
    font-size: $font14;
