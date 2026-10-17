@@ -447,22 +447,18 @@
   &::before {
    content: "";
    position: absolute;
-   bottom: -0.375rem;
+   bottom: -1.1rem;
    left: 50%;
    z-index: -1;
-   width: min(20.625rem, 100%);
-   height: 4.375rem;
-   border-radius: 50%;
-   background: alpha($gold, 0.35);
-   filter: blur(24px);
+   width: min(26.625rem, calc(100% + 2.2rem));
+   height: 7rem;
+   background: radial-gradient(closest-side, alpha($gold, 0.35), transparent);
    transform: translateX(-50%);
    pointer-events: none;
 
    :root[data-theme="light"] & {
-    bottom: -1.75rem;
-    height: 2rem;
+    height: 3rem;
     opacity: 0.6;
-    filter: blur(16px);
    }
   }
  }
