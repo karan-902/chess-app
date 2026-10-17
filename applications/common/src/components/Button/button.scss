@@ -117,21 +117,20 @@
   min-height: 3.25rem;
  }
 
- &.contained {
-  --btn-bg: #{$btnGoldFill};
-  --btn-edge: #{$btnEdgeGold};
+ &.contained,
+ &.outlined {
+  --btn-face-h: 3.25rem;
   overflow: visible !important;
-  height: 4.5rem;
+  height: calc(var(--btn-face-h) + 1.25rem);
   padding-top: 0.5rem !important;
   perspective: 26rem;
-  color: $primaryContrast !important;
 
   .button-edge {
    display: none;
   }
 
   .button-face {
-   height: 3.25rem !important;
+   height: var(--btn-face-h) !important;
    transform: rotateX(24deg);
    transform-origin: 50% 100%;
    animation: tilted-float 3.75s ease-in-out infinite;
@@ -142,7 +141,7 @@
    position: absolute;
    left: 0;
    right: 0;
-   top: 3.75rem;
+   top: calc(var(--btn-face-h) + 0.5rem);
    height: 0.5rem;
    background: var(--btn-edge);
    clip-path: polygon(0 0, 100% 0, calc(100% - 0.5rem) 100%, 0.5rem 100%);
@@ -156,7 +155,7 @@
    position: absolute;
    left: 0;
    right: 0;
-   top: 4.25rem;
+   top: calc(var(--btn-face-h) + 1rem);
    height: 0.625rem;
    background: alpha($black, 0.9);
    clip-path: polygon(
@@ -180,10 +179,6 @@
    letter-spacing: 0.4px;
   }
 
-  .button-spinner {
-   color: $primaryContrast;
-  }
-
   &:active:not(.disabled) .button-face {
    animation: none;
    transform: rotateX(24deg) translate3d(0, 0.375rem, 0) !important;
@@ -199,7 +194,7 @@
    --btn-edge: color-mix(in srgb, #{$appText} 26%, #{$appSheet});
 
    .button-face {
-    height: 3.25rem !important;
+    height: var(--btn-face-h) !important;
    }
   }
 
@@ -220,17 +215,22 @@
   }
  }
 
+ &.contained {
+  --btn-bg: #{$btnGoldFill};
+  --btn-edge: #{$btnEdgeGold};
+  color: $primaryContrast !important;
+
+  .button-spinner {
+   color: $primaryContrast;
+  }
+ }
+
  &.outlined {
   --btn-bg: #1a1d55;
   --btn-border: 1px solid #{alpha($appText, 0.24)};
-  --btn-edge-right: #4b4fd8;
   --btn-edge-bottom: #2a2e7a;
-  height: calc(3.25rem + 3px);
+  --btn-edge: var(--btn-edge-bottom);
   color: $appText !important;
-
-  .button-face {
-   height: calc(100% - 3px) !important;
-  }
 
   .button-spinner {
    color: $appText;
@@ -239,18 +239,8 @@
   :root[data-theme="light"] & {
    --btn-bg: #{$white};
    --btn-border: 1px solid #0d0d0d;
-   --btn-edge-right: #e0e0e0;
    --btn-edge-bottom: #8a8a8a;
    color: #0d0d0d !important;
-  }
-
-  &.disabled:not(.loading) {
-   --btn-edge-right: #{alpha($appText, 0.18)} !important;
-   --btn-edge-bottom: #{alpha($appText, 0.1)} !important;
-
-   .button-face {
-    height: calc(100% - 3px) !important;
-   }
   }
  }
 
@@ -485,8 +475,8 @@
 
  &.auth-footer-btn {
   --btn-pad: 0 0.875rem;
+  --btn-face-h: 2.375rem;
   flex-shrink: 0;
-  height: calc(2.375rem + 3px);
 
   .button-text {
    display: inline-flex;
