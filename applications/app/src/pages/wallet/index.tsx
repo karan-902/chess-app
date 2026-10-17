@@ -163,7 +163,7 @@ export default function Wallet() {
       formatAmount(usdValue)
      )}
     </Text>
-    <Box customClass="wallet-hero-underline" />
+    {/* <Box customClass="wallet-hero-underline" /> */}
     <Box customClass="wallet-withdrawable-pill">
      <Text component="span" customClass="wallet-withdrawable-lbl">
       {withdrawBalanceText}

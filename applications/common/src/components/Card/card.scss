@@ -172,16 +172,18 @@
   min-height: 3.75rem;
   padding: 0.875rem $space-16;
   margin-bottom: $space-12;
+  border: 1px solid $appCardBorder;
   border-radius: $radius-card;
+  background: $appSurface;
   font-size: $font14;
   font-weight: 600;
 
   &.me {
    border: 1.5px solid alpha($gold, 0.85);
 
-   .lb-earnings {
-    color: $gold;
-   }
+   // .lb-earnings {
+   //  color: $gold;
+   // }
   }
  }
 

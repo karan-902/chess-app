@@ -159,12 +159,12 @@
   height: auto;
   padding: $space-4 $space-8;
   border-radius: 0;
-  background: $warning;
-  color: $white;
+  background: transparent;
+  color: $warning;
 
   .MuiChip-label {
    padding: 0;
-   color: $white;
+   color: $warning;
    font-size: $font11;
    line-height: 1;
   }

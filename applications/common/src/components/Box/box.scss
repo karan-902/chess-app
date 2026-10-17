@@ -1898,12 +1898,12 @@
   gap: 0.625rem;
   margin-bottom: $space-16;
 
-  &::before {
-   content: "";
-   width: 4px;
-   height: 1.25rem;
-   background: $gold;
-  }
+  // &::before {
+  //  content: "";
+  //  width: 4px;
+  //  height: 1.25rem;
+  //  background: $gold;
+  // }
  }
 
  &.tx-filter-chip-grid {
@@ -2336,8 +2336,8 @@
   gap: $space-12;
   min-height: 3.75rem;
   padding: 0.875rem $space-16;
-  background: $appCard;
-  @include neo-plunk;
+  background: $appSurface;
+  border: 1px solid $appCardBorder;
   border-radius: $radius-card;
  }
 
