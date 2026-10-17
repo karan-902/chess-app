@@ -7,6 +7,7 @@ import type { IMatchRowProps } from "@gopvp/app/src/types/component";
 export default function MatchRow({
  outcome,
  headline,
+ resultTag,
  amount,
  onClick,
 }: IMatchRowProps) {
@@ -19,6 +20,11 @@ export default function MatchRow({
     <Box customClass="match-row-info">
      <Box customClass="match-row-text">
       <Text customClass="match-row-headline row-title">{headline}</Text>
+      {resultTag && (
+       <Text component="span" customClass={classNames("match-row-tag", outcome)}>
+        {resultTag}
+       </Text>
+      )}
      </Box>
     </Box>
     <Box customClass="match-row-amt-wrap">

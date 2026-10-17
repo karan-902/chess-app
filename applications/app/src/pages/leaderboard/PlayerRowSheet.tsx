@@ -25,7 +25,7 @@ export default function PlayerRowSheet({
  playerId,
  onClose,
 }: IPlayerRowSheetProps) {
- const { game, gameLabel } = useGame();
+ const { game } = useGame();
  const scope = useReduxSelector((state) => state.game.leaderboardScope);
  const [stats, setStats] = useState<ILeaderboardPlayerResponse | null>(null);
 
@@ -57,7 +57,6 @@ export default function PlayerRowSheet({
    onClose={onClose}
    tone="gold"
    title={stats ? shortenUsername(stats.username) : undefined}
-   subtitle={gameLabel}
    amount={stats ? formatAmount(stats.gross_income) : undefined}
    tiles={
     stats && [

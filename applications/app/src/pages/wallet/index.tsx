@@ -25,6 +25,7 @@ import {
  withdrawBalanceText,
  transactionsText,
  pendingText,
+ processingText,
  noTransactionsYetText,
  transactionsEmptyText,
  depositText,
@@ -94,7 +95,10 @@ function txRow(tx: ITransactionResponse, groupEdgeClass: string) {
         {TRANSACTION_CODE_DESCRIPTIONS[tx.transaction_code]}
        </Text>
        {isPending && (
-        <CustomChip label={pendingText} customClass="tx-pending-chip" />
+        <CustomChip
+         label={tx.status === "PROCESSING" ? processingText : pendingText}
+         customClass="tx-pending-chip"
+        />
        )}
       </Box>
       <Text customClass="meta-text">{formatTime(tx.created)}</Text>
@@ -159,7 +163,7 @@ export default function Wallet() {
       formatAmount(usdValue)
      )}
     </Text>
-    <Box customClass="wallet-hero-underline" />
+    {/* <Box customClass="wallet-hero-underline" /> */}
     <Box customClass="wallet-withdrawable-pill">
      <Text component="span" customClass="wallet-withdrawable-lbl">
       {withdrawBalanceText}
@@ -200,7 +204,7 @@ export default function Wallet() {
       </Button>
       <Button
        type="button"
-       variant="outlined"
+       variant="contained"
        customClass="wallet-withdraw-btn"
        onClick={openWithdraw}
       >

@@ -5,7 +5,6 @@ import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
 import Input from "@gopvp/common/src/components/Input/Input";
 import ResultSheet from "@gopvp/app/src/components/common/ResultSheet";
 import CopyButton from "@gopvp/app/src/components/common/CopyButton";
-import { useGame } from "@gopvp/app/src/hooks/useGame";
 import {
  callAPIInterface,
  showApiErrorToast,
@@ -37,7 +36,6 @@ export default function MatchInfoSheet({
  match,
  onClose,
 }: IMatchInfoSheetProps) {
- const { gameLabel } = useGame();
  const currentUsername = useReduxSelector(
   (state) => state.auth.session?.username,
  );
@@ -90,8 +88,7 @@ export default function MatchInfoSheet({
        ? MATCH_OUTCOME_TONES[outcome]
        : "neutral"
    }
-   title={gameLabel}
-   subtitle={
+   title={
     worldInfo
      ? getWorldMatchHeadline(
         worldInfo.winner.username,

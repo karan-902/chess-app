@@ -17,7 +17,7 @@ import {
  cancelledText,
  vsText,
 } from "@gopvp/chess/src/constants/message";
-import { coinImage } from "@gopvp/common/src/components/images";
+import { COIN_PATH } from "@gopvp/chess/src/constants/asset";
 import {
  PAYOUT_TIMING,
  PAYOUT_COIN_COUNT,
@@ -290,7 +290,7 @@ export default function PayoutTicket({
        coinRefs.current[i] = el;
       }}
       className="payout-coin"
-      src={coinImage}
+      src={COIN_PATH}
       alt=""
       style={{ width: coin.size, height: coin.size }}
      />

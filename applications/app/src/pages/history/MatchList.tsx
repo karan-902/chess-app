@@ -3,7 +3,10 @@ import VirtualList from "@gopvp/common/src/components/VirtualList/VirtualList";
 import MatchRowSkeleton from "@gopvp/app/src/components/common/MatchRowSkeleton";
 import { shortenUsername } from "@gopvp/common/src/util/format";
 import { MATCH_RESULT_OUTCOMES } from "@gopvp/common/src/constants/mapper";
-import { MATCH_ROW_HEADLINES } from "@gopvp/app/src/constants/mapper";
+import {
+ MATCH_ROW_HEADLINES,
+ // MATCH_ROW_TAGS,
+} from "@gopvp/app/src/constants/mapper";
 import type { IMatchHistoryItem } from "@gopvp/common/src/types/response";
 import type { IMatchListProps } from "@gopvp/common/src/types/component";
 import { getWorldMatchHeadline } from "@gopvp/app/src/utils";
@@ -29,6 +32,7 @@ function matchRow(
   <MatchRow
    outcome={outcome}
    headline={MATCH_ROW_HEADLINES[outcome](shortenUsername(item.opponent))}
+   // resultTag={MATCH_ROW_TAGS[outcome]}
    amount={Math.abs(item.amount)}
    onClick={onClick}
   />

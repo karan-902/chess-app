@@ -102,6 +102,7 @@ body {
  flex: 1;
  overflow-y: auto;
  overscroll-behavior-y: none;
+ scrollbar-gutter: stable both-edges;
  -webkit-overflow-scrolling: touch;
 }
 

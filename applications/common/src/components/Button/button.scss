@@ -118,20 +118,19 @@
  }
 
  &.contained {
-  --btn-bg: #{$btnGoldFill};
-  --btn-edge: #{$btnEdgeGold};
+  --btn-face-h: 3.25rem;
   overflow: visible !important;
-  height: 4.5rem;
+  height: calc(var(--btn-face-h) + 1.25rem);
   padding-top: 0.5rem !important;
   perspective: 26rem;
-  color: $primaryContrast !important;
 
   .button-edge {
    display: none;
   }
 
   .button-face {
-   height: 3.25rem !important;
+   height: var(--btn-face-h) !important;
+   margin: 0 !important;
    transform: rotateX(24deg);
    transform-origin: 50% 100%;
    animation: tilted-float 3.75s ease-in-out infinite;
@@ -142,7 +141,7 @@
    position: absolute;
    left: 0;
    right: 0;
-   top: 3.75rem;
+   top: calc(var(--btn-face-h) + 0.5rem);
    height: 0.5rem;
    background: var(--btn-edge);
    clip-path: polygon(0 0, 100% 0, calc(100% - 0.5rem) 100%, 0.5rem 100%);
@@ -156,7 +155,7 @@
    position: absolute;
    left: 0;
    right: 0;
-   top: 4.25rem;
+   top: calc(var(--btn-face-h) + 1rem);
    height: 0.625rem;
    background: alpha($black, 0.9);
    clip-path: polygon(
@@ -180,18 +179,12 @@
    letter-spacing: 0.4px;
   }
 
-  .button-spinner {
-   color: $primaryContrast;
-  }
-
   &:active:not(.disabled) .button-face {
-   animation: none;
    transform: rotateX(24deg) translate3d(0, 0.375rem, 0) !important;
   }
 
   &:active:not(.disabled)::after {
-   animation: none;
-   transform: scaleY(0.31);
+   transform: scaleY(0.31) !important;
   }
 
   &.disabled:not(.loading) {
@@ -199,7 +192,7 @@
    --btn-edge: color-mix(in srgb, #{$appText} 26%, #{$appSheet});
 
    .button-face {
-    height: 3.25rem !important;
+    height: var(--btn-face-h) !important;
    }
   }
 
@@ -220,16 +213,29 @@
   }
  }
 
+ &.contained {
+  --btn-bg: #{$btnGoldFill};
+  --btn-edge: #{$btnEdgeGold};
+  color: $primaryContrast !important;
+
+  .button-spinner {
+   color: $primaryContrast;
+  }
+ }
+
  &.outlined {
   --btn-bg: #1a1d55;
   --btn-border: 1px solid #{alpha($appText, 0.24)};
-  --btn-edge-right: #4b4fd8;
-  --btn-edge-bottom: #2a2e7a;
-  height: calc(3.25rem + 3px);
+  height: 3.25rem;
   color: $appText !important;
 
+  .button-edge {
+   display: none;
+  }
+
   .button-face {
-   height: calc(100% - 3px) !important;
+   height: 100% !important;
+   margin: 0 !important;
   }
 
   .button-spinner {
@@ -239,18 +245,7 @@
   :root[data-theme="light"] & {
    --btn-bg: #{$white};
    --btn-border: 1px solid #0d0d0d;
-   --btn-edge-right: #e0e0e0;
-   --btn-edge-bottom: #8a8a8a;
    color: #0d0d0d !important;
-  }
-
-  &.disabled:not(.loading) {
-   --btn-edge-right: #{alpha($appText, 0.18)} !important;
-   --btn-edge-bottom: #{alpha($appText, 0.1)} !important;
-
-   .button-face {
-    height: calc(100% - 3px) !important;
-   }
   }
  }
 
@@ -295,11 +290,11 @@
  &.filter-dropdown-btn {
   --btn-gap: 0.35rem;
   --btn-pad: 0.625rem 1rem;
-  --btn-border: 1px solid #{alpha($appText, 0.12)};
-  --btn-bg: #{alpha($appText, 0.03)};
+  --btn-border: 1px solid #{alpha($appText, 0.1)};
+  --btn-bg: transparent;
   height: 2.625rem !important;
   min-width: 6rem !important;
-  color: $appText;
+  color: alpha($appText, 0.5);
 
   .button-text {
    font-size: $font14;
@@ -315,6 +310,13 @@
    --btn-gap: 0.125rem;
    --btn-pad: 0 0.59375rem 0 0.875rem;
    min-width: 0 !important;
+  }
+
+  .deposit-amount-chips & {
+   --btn-pad: 0 0.875rem;
+   height: 2.25rem !important;
+   min-height: 2.25rem;
+   min-width: 4.5rem !important;
   }
 
   &.active {
@@ -449,7 +451,7 @@
   }
  }
 
- &.contained:not(.disabled) .button-face {
+ &.contained:not(.disabled, .wallet-withdraw-btn) .button-face {
   position: relative;
   overflow: hidden;
 
@@ -464,9 +466,9 @@
    inset: 0;
    background: linear-gradient(
      90deg,
-     rgba(255, 248, 229, 0.5) 0 20px,
+     var(--btn-shine, rgba(255, 248, 229, 0.5)) 0 20px,
      transparent 20px 25px,
-     rgba(255, 248, 229, 0.5) 25px 35px,
+     var(--btn-shine, rgba(255, 248, 229, 0.5)) 25px 35px,
      transparent 35px
     )
     no-repeat;
@@ -485,8 +487,8 @@
 
  &.auth-footer-btn {
   --btn-pad: 0 0.875rem;
+  height: 2.375rem;
   flex-shrink: 0;
-  height: calc(2.375rem + 3px);
 
   .button-text {
    display: inline-flex;
@@ -496,11 +498,7 @@
    color: inherit;
 
    &::after {
-    content: "";
-    width: 1.125rem;
-    height: 0.625rem;
-    background: currentColor;
-    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 10' fill='none' stroke='black' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 5h16M12.5 1 17 5l-4.5 4'/%3E%3C/svg%3E") center / contain no-repeat;
+    @include long-arrow;
    }
   }
  }
@@ -551,10 +549,20 @@
  }
 
  &.wallet-withdraw-btn {
-  color: $appText;
+  --btn-bg: #{alpha($white, 0.08)};
+  --btn-border: 1px solid #{alpha($white, 0.22)};
+  --btn-edge: #2a2e7a;
+  color: #f4f7ff !important;
 
   .button-text {
    letter-spacing: 0.3px;
+  }
+
+  :root[data-theme="light"] & {
+   --btn-bg: #{$white};
+   --btn-border: 1.5px solid #bcc1e2;
+   --btn-edge: #5b60a8;
+   color: #12143a !important;
   }
  }
 

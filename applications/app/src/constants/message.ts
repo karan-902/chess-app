@@ -1,3 +1,5 @@
+import { formatAmount } from "@gopvp/common/src/util/format";
+
 export const rejoinMatchText = "Rejoin Match";
 export const matchStillLiveText = (opponentName: string) =>
  `Your match with ${opponentName} is still live. Reconnect now before it's forfeited.`;
@@ -113,6 +115,9 @@ export const winItAllText = "win it all";
 export const playNowText = "Play now";
 export const tapPlayNowHintText = "Play now to choose a pool";
 export const wonText = "won";
+export const lostText = "lost";
+export const drawText = "draw";
+export const voidText = "void";
 export const firebaseConfigMissingText =
  "Firebase config missing: set the VITE_FIREBASE_* env variables.";
 export const largestPrizesTipText =
@@ -161,7 +166,7 @@ export const enterAmountText = "Enter Amount";
 export const generateQrCodeText = "Generate QR Code";
 export const amountRequiredText = "Amount is required";
 export const maxDepositAmountText = (max: number) =>
- `Maximum deposit amount is $${max}.`;
+ `Maximum deposit amount is ${formatAmount(max)}`;
 export const btcOnlyWarningText =
  "Deposits must be in BTC only. Other currencies will be lost.";
 export const scanToDepositText =
@@ -183,10 +188,11 @@ export const destinationText = "Destination";
 export const btcAddressOrInvoiceText = "Bitcoin address or Lightning invoice";
 export const requestWithdrawalText = "Withdraw";
 export const maxWithdrawalAmountText = (max: number) =>
- `Maximum withdrawal amount is $${max}.`;
+ `Maximum withdrawal amount is ${formatAmount(max)}`;
 export const insufficientWithdrawableText = "Insufficient withdrawable balance";
 export const enterDestinationText = "Enter a destination address";
 export const withdrawalCompletedText = "Withdrawal completed";
+export const withdrawalProcessingText = "Withdrawal processing";
 export const noRankedPlayersText = "No Ranked Players Yet";
 export const winToRankText = "Win a match to get your name on the board.";
 export const dashText = "–";
@@ -226,6 +232,7 @@ export const totalBalanceText = "Total Balance";
 export const withdrawBalanceText = "Withdrawable";
 export const transactionsText = "Transactions";
 export const pendingText = "Pending";
+export const processingText = "Processing";
 export const noTransactionsYetText = "No Transactions Yet";
 export const transactionsEmptyText =
  "Your deposits, withdrawals, and match payouts will show up here.";
