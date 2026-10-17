@@ -2066,7 +2066,7 @@
   justify-content: space-between;
   gap: $space-12;
   padding: 0.875rem $space-16;
-  background: transparent;
+  background: $appSheetFill;
   @include neo-plunk;
   border-radius: $radius-card;
 
@@ -3498,7 +3498,7 @@
    .result-tiles.versus & {
     gap: $space-4;
     padding: 0.875rem $space-12;
-    background: transparent;
+    background: $appSheetFill;
    }
 
    &.highlight {
