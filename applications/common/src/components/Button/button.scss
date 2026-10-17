@@ -181,13 +181,11 @@
   }
 
   &:active:not(.disabled) .button-face {
-   animation: none;
    transform: rotateX(24deg) translate3d(0, 0.375rem, 0) !important;
   }
 
   &:active:not(.disabled)::after {
-   animation: none;
-   transform: scaleY(0.31);
+   transform: scaleY(0.31) !important;
   }
 
   &.disabled:not(.loading) {
