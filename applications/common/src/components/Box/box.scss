@@ -2066,7 +2066,7 @@
   justify-content: space-between;
   gap: $space-12;
   padding: 0.875rem $space-16;
-  background: $appSurface;
+  background: $appSheetFill;
   border: 1px solid $appCardBorder;
   border-radius: $radius-card;
 
@@ -2336,7 +2336,7 @@
   gap: $space-12;
   min-height: 3.75rem;
   padding: 0.875rem $space-16;
-  background: $appSurface;
+  background: $appSheetFill;
   border: 1px solid $appCardBorder;
   border-radius: $radius-card;
  }
