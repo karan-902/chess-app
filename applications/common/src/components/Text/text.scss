@@ -1308,8 +1308,8 @@
 
  &.wallet-hero-lbl {
   font-family: $fontOutfitBold;
-  font-size: $font15;
-  color: $appTextMuted;
+  font-size: $font16;
+  color: alpha($appText, 0.85);
  }
 
  &.wallet-hero-amount {
