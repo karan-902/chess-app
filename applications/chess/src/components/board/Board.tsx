@@ -537,6 +537,14 @@ export default function Board({
           />
          )}
          {isAttacked && <span className="water-drop-ripple" />}
+         {(isCheck || isStalemate || isAttacked) && (
+          <span
+           className={classNames(
+            "piece-glow",
+            isCheck ? "check" : isStalemate ? "stalemate" : "danger",
+           )}
+          />
+         )}
         </DroppableSquare>
        );
       }),
@@ -550,7 +558,6 @@ export default function Board({
       const isAttacked =
        attackedSquares.includes(square) && square !== activeDrag?.square;
       const isCheck = square === checkSquare;
-      const isStalemate = square === stalemateSquare;
       return (
        <DraggablePiece
         key={pieceKeys[square]}
@@ -562,7 +569,6 @@ export default function Board({
          "piece-black": code[0] === "b",
          "piece-danger": isAttacked,
          "piece-in-check": isCheck,
-         "piece-in-stalemate": isStalemate,
          "piece-capture-pending": isCaptureTarget,
          "piece-premove-ghost": displaySquare !== square,
         })}
