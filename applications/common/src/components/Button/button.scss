@@ -454,9 +454,9 @@
    inset: 0;
    background: linear-gradient(
      90deg,
-     rgba(255, 248, 229, 0.5) 0 20px,
+     var(--btn-shine, rgba(255, 248, 229, 0.5)) 0 20px,
      transparent 20px 25px,
-     rgba(255, 248, 229, 0.5) 25px 35px,
+     var(--btn-shine, rgba(255, 248, 229, 0.5)) 25px 35px,
      transparent 35px
     )
     no-repeat;
@@ -541,17 +541,22 @@
  }
 
  &.wallet-withdraw-btn {
-  --btn-border: 0 solid transparent;
-  color: $appText;
+  --btn-bg: #{alpha($white, 0.08)};
+  --btn-border: 1px solid #{alpha($white, 0.22)};
+  --btn-edge: #2a2e7a;
+  --btn-shine: #{alpha($white, 0.12)};
+  color: #f4f7ff !important;
 
   .button-text {
    letter-spacing: 0.3px;
   }
 
   :root[data-theme="light"] & {
-   --btn-bg: linear-gradient(180deg, #ffffff, #e9ebf4 50%, #c3c7da);
-   --btn-border: 0 solid transparent;
-   --btn-edge: #6f7387;
+   --btn-bg: #{$white};
+   --btn-border: 1.5px solid #bcc1e2;
+   --btn-edge: #5b60a8;
+   --btn-shine: #{alpha(#5b60a8, 0.1)};
+   color: #12143a !important;
   }
  }
 
