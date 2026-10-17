@@ -54,30 +54,48 @@ $pieceFill: 92%;
  align-items: center;
  justify-content: center;
  touch-action: none;
- transition: box-shadow 0.18s ease-out;
 
- &.square-selected {
+ &::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease-out;
+ }
+
+ &.square-selected::after {
   box-shadow: inset 0 0 0 3px alpha($gold, 0.65);
  }
 
- &.square-premove-from {
+ &.square-premove-from::after {
   box-shadow: inset 0 0 0 3px alpha($premoveRed, 0.45);
  }
 
- &.square-premove-queued {
+ &.square-premove-queued::after {
   box-shadow: inset 0 0 0 999px alpha($premoveRed, 0.5);
  }
 
- &.square-selected-premove {
+ &.square-selected-premove::after {
   box-shadow: inset 0 0 0 3px alpha($premoveRed, 0.75);
  }
 
- &.square-drag-hover {
+ &.square-drag-hover::after {
   box-shadow: inset 0 0 0 4px alpha($gold, 0.9);
  }
 
- &.square-drag-hover-premove {
+ &.square-drag-hover-premove::after {
   box-shadow: inset 0 0 0 4px alpha($premoveRed, 0.9);
+ }
+
+ &.square-selected,
+ &.square-premove-from,
+ &.square-premove-queued,
+ &.square-drag-hover,
+ &.square-drag-hover-premove {
+  &::after {
+   opacity: 1;
+  }
  }
 }
 
@@ -233,18 +251,20 @@ $pieceFill: 92%;
 
 
 .square-flash {
- animation: chess-square-flash 0.5s ease !important;
+ position: absolute;
+ inset: 0;
+ background: rgba(220, 50, 50, 0.85);
+ pointer-events: none;
+ animation: chess-square-flash 0.5s ease both;
 }
 
 @keyframes chess-square-flash {
- 0% {
-  background-color: rgba(220, 50, 50, 0.85) !important;
+ 0%,
+ 100% {
+  opacity: 1;
  }
  50% {
-  background-color: rgba(220, 50, 50, 0.3) !important;
- }
- 100% {
-  background-color: rgba(220, 50, 50, 0.85) !important;
+  opacity: 0.35;
  }
 }
 
@@ -514,7 +534,8 @@ $pieceFill: 92%;
 
  .board-highlight,
  .board-arrow,
- .piece-glow {
+ .piece-glow,
+ .square-flash {
   animation: none;
  }
 

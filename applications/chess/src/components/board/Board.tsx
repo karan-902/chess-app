@@ -496,7 +496,6 @@ export default function Board({
          key={square}
          square={square}
          className={classNames("chess-board-square", {
-          "square-flash": isFlash,
           "square-selected": isSelected,
           "square-premove-from": premoveFromSquares.has(square),
           "square-premove-queued": premoveToSquares.has(square),
@@ -536,6 +535,7 @@ export default function Board({
            className={`legal-capture-ring${premoveMode ? " legal-capture-ring-premove" : ""}`}
           />
          )}
+         {isFlash && <span className="square-flash" />}
          {isAttacked && <span className="water-drop-ripple" />}
          {(isCheck || isStalemate || isAttacked) && (
           <span
