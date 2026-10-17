@@ -13,6 +13,28 @@ import {
  LIGHT_SQUARE_LABEL_COLOR,
  DARK_SQUARE_LABEL_COLOR,
 } from "@gopvp/chess/src/constants/color";
+import {
+ BOARD_ENTRANCE_LANDING_MS,
+ BOARD_NUDGE_MS,
+ BOARD_SWEEP_MS,
+ PIECE_LAND_MS,
+ PIECE_SHAKE_MS,
+} from "@gopvp/chess/src/constants/limit";
+import {
+ boardNudgeFrames,
+ boardSweepFrames,
+ easeOutQuart,
+ entranceDelayMs,
+ fxFrame,
+ lerp,
+ pieceEntranceFrames,
+ pieceFrame,
+ pieceLandFrames,
+ pieceMoveFrames,
+ pieceMoveMs,
+ pieceShakeFrames,
+ sampleFrames,
+} from "@gopvp/chess/src/utils";
 
 interface PieceState {
  x: number;
@@ -21,8 +43,6 @@ interface PieceState {
 }
 
 type FxName = "ring" | "flash" | "check" | "glow" | "sweep";
-
-const FRAME_SAMPLES = 30;
 
 const START_PIECES = FILES.flatMap((file, i) => [
  {
@@ -53,39 +73,6 @@ const squareOf = (square: string) => ({
  x: FILES.indexOf(square[0]),
  y: RANKS.indexOf(square[1]),
 });
-
-const easeOutQuart = (p: number) => 1 - (1 - p) ** 4;
-const easeOutBack = (p: number) => 1 + 2.2 * (p - 1) ** 3 + 1.2 * (p - 1) ** 2;
-const easeInOutCubic = (p: number) =>
- p < 0.5 ? 4 * p ** 3 : 1 - (-2 * p + 2) ** 3 / 2;
-const lerp = (a: number, b: number, p: number) => a + (b - a) * p;
-
-const pieceFrame = (
- x: number,
- y: number,
- opacity = 1,
- scaleX = 1,
- scaleY = scaleX,
- rotate = 0,
-): Keyframe => ({
- transform: `translate3d(${x * 100}%, ${y * 100}%, 0) scale(${scaleX}, ${scaleY}) rotate(${rotate}deg)`,
- opacity,
-});
-
-const fxFrame = (
- x: number,
- y: number,
- scale: number,
- opacity: number,
-): Keyframe => ({
- transform: `translate3d(${x * 100}%, ${y * 100}%, 0) scale(${scale})`,
- opacity,
-});
-
-const sample = (frameAt: (p: number) => Keyframe) =>
- Array.from({ length: FRAME_SAMPLES + 1 }, (_, i) =>
-  frameAt(i / FRAME_SAMPLES),
- );
 
 export default function BoardPreview() {
  const rootRef = useRef<HTMLDivElement>(null);
@@ -140,17 +127,13 @@ export default function BoardPreview() {
    return Promise.all(
     START_PIECES.map(({ id, square }) => {
      const { x, y } = squareOf(square);
-     const fromY = id[0] === "w" ? 9 : -2;
-     const wave = (id[0] === "w" ? 7 - y : y) * 70 + Math.abs(x - 3.5) * 22;
      pieces[id] = { x, y, o: 1 };
      board[square] = id;
      return animate(
       pieceEls.current[id],
-      sample((p) =>
-       pieceFrame(x, lerp(fromY, y, easeOutBack(p)), Math.min(p * 3, 1)),
-      ),
-      640,
-      wave,
+      pieceEntranceFrames(x, id[0] === "w" ? 9 : -2, y),
+      BOARD_ENTRANCE_LANDING_MS,
+      entranceDelayMs(x, y),
      );
     }),
    );
@@ -163,25 +146,21 @@ export default function BoardPreview() {
      .map(([id, { x, y }]) =>
       animate(
        pieceEls.current[id],
-       sample((p) => pieceFrame(x, y, 1, 1 + 0.06 * Math.sin(Math.PI * p))),
+       sampleFrames((p) =>
+        pieceFrame(x, y, 1, 1 + 0.06 * Math.sin(Math.PI * p)),
+       ),
        420,
        x * 55,
       ),
      ),
-    animate(
-     fxEls.current.sweep,
-     sample((p) =>
-      fxFrame(lerp(-1.5, 9, easeInOutCubic(p)), 0, 1, Math.sin(Math.PI * p)),
-     ),
-     1100,
-    ),
+    animate(fxEls.current.sweep, boardSweepFrames(), BOARD_SWEEP_MS),
    ]);
 
   const ring = (x: number, y: number, isDanger: boolean) => {
    fxEls.current.ring?.classList.toggle("danger", isDanger);
    return animate(
     fxEls.current.ring,
-    sample((p) =>
+    sampleFrames((p) =>
      fxFrame(x, y, lerp(0.35, 1.25, easeOutQuart(p)), 0.9 * (1 - p)),
     ),
     680,
@@ -191,21 +170,15 @@ export default function BoardPreview() {
   const capture = (id: string, x: number, y: number) => {
    pieces[id].o = 0;
    return Promise.all([
-    animate(
-     gridRef.current,
-     sample((p) => ({
-      transform: `translate3d(0, ${2 * Math.sin(Math.PI * p)}px, 0)`,
-     })),
-     200,
-    ),
+    animate(gridRef.current, boardNudgeFrames(), BOARD_NUDGE_MS),
     animate(
      fxEls.current.flash,
-     sample((p) => fxFrame(x, y, 1, 1 - p)),
+     sampleFrames((p) => fxFrame(x, y, 1, 1 - p)),
      420,
     ),
     animate(
      pieceEls.current[id],
-     sample((p) => {
+     sampleFrames((p) => {
       const scale = lerp(1, 1.35, easeOutQuart(p));
       return pieceFrame(x, y, 1 - p, scale, scale, 14 * p);
      }),
@@ -218,20 +191,18 @@ export default function BoardPreview() {
    const { x, y } = squareOf(square);
    const glowIn = animate(
     fxEls.current.glow,
-    sample((p) => fxFrame(x, y, 1, p)),
+    sampleFrames((p) => fxFrame(x, y, 1, p)),
     220,
    );
    const shake = animate(
     pieceEls.current[board[square]],
-    sample((p) =>
-     pieceFrame(x + 0.05 * Math.sin(p * Math.PI * 6) * (1 - p), y),
-    ),
-    450,
+    pieceShakeFrames(x, y),
+    PIECE_SHAKE_MS,
    );
    for (let i = 0; i < 2; i++) {
     await animate(
      fxEls.current.check,
-     sample((p) =>
+     sampleFrames((p) =>
       fxFrame(x, y, lerp(0.6, 1.8, easeOutQuart(p)), 0.7 * (1 - p)),
      ),
      750,
@@ -240,7 +211,7 @@ export default function BoardPreview() {
    await Promise.all([glowIn, shake]);
    await animate(
     fxEls.current.glow,
-    sample((p) => fxFrame(x, y, 1, 1 - p)),
+    sampleFrames((p) => fxFrame(x, y, 1, 1 - p)),
     320,
    );
   };
@@ -252,37 +223,19 @@ export default function BoardPreview() {
    const a = squareOf(from);
    const b = squareOf(to);
    const capturedId = board[to];
-   const distance = Math.hypot(b.x - a.x, b.y - a.y);
    el.style.zIndex = "3";
    await animate(
     el,
-    sample((p) => {
-     const e = easeOutQuart(p);
-     const lift = Math.sin(Math.PI * p);
-     return pieceFrame(
-      lerp(a.x, b.x, e),
-      lerp(a.y, b.y, e) - 0.22 * lift,
-      1,
-      1 + 0.1 * lift,
-     );
-    }),
-    420 + distance * 40,
+    pieceMoveFrames(a.x, a.y, b.x, b.y),
+    pieceMoveMs(a.x, a.y, b.x, b.y),
    );
    el.style.zIndex = "";
    delete board[from];
    board[to] = id;
    pieces[id].x = b.x;
    pieces[id].y = b.y;
-   const squash = capturedId ? 0.06 : 0.035;
    const effects: Promise<unknown>[] = [
-    animate(
-     el,
-     sample((p) => {
-      const k = Math.sin(Math.PI * p) * (1 - p * 0.4);
-      return pieceFrame(b.x, b.y, 1, 1 + squash * k, 1 - squash * k);
-     }),
-     240,
-    ),
+    animate(el, pieceLandFrames(b.x, b.y, !!capturedId), PIECE_LAND_MS),
     ring(b.x, b.y, !!capturedId),
    ];
    if (capturedId) effects.push(capture(capturedId, b.x, b.y));

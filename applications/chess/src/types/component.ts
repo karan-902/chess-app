@@ -108,6 +108,8 @@ export interface IDraggablePieceProps {
  draggable: boolean;
  hidden?: boolean;
  instant?: boolean;
+ isCaptureMove?: boolean;
+ isInCheck?: boolean;
 }
 
 export interface IMatchLoaderProps {

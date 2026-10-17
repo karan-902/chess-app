@@ -117,7 +117,6 @@ $pieceFill: 92%;
  z-index: $z-overlay;
  will-change: transform;
  outline: none;
- transition: transform 0.45s cubic-bezier(0.25, 1.15, 0.5, 1);
 
  &:focus-visible {
   outline: 2px solid $gold;
@@ -132,12 +131,13 @@ $pieceFill: 92%;
   z-index: $z-top;
  }
 
- &.instant {
-  transition: none;
+ &.captured {
+  animation: board-piece-captured 0.34s cubic-bezier(0.25, 1, 0.5, 1) both;
  }
 
- &.captured {
-  animation: board-piece-captured 0.35s ease-out both;
+ .sweeping & .chess-piece-svg {
+  animation: piece-sweep-pulse 0.42s ease-in-out both;
+  animation-delay: calc(var(--col) * 55ms);
  }
 }
 
@@ -426,7 +426,7 @@ $pieceFill: 92%;
  border-radius: 50%;
  border: 2px solid $gold;
  box-sizing: border-box;
- animation: board-ring-land 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+ animation: board-ring-land 0.68s cubic-bezier(0.25, 1, 0.5, 1) both;
  pointer-events: none;
 
  &.danger {
@@ -441,7 +441,18 @@ $pieceFill: 92%;
  width: 12.5%;
  height: 12.5%;
  background: alpha($paleRed, 0.55);
- animation: board-fade-out 0.4s ease-out both;
+ animation: board-fade-out 0.42s linear both;
+ pointer-events: none;
+}
+
+.board-check-ring {
+ position: absolute;
+ width: 12.5%;
+ height: 12.5%;
+ border-radius: 50%;
+ border: 2px solid $paleRed;
+ box-sizing: border-box;
+ animation: board-check-ring 0.75s cubic-bezier(0.25, 1, 0.5, 1) 2 both;
  pointer-events: none;
 }
 
@@ -459,11 +470,22 @@ $pieceFill: 92%;
 @keyframes board-ring-land {
  from {
   opacity: 0.9;
-  transform: scale(0.3);
+  transform: scale(0.35);
  }
  to {
   opacity: 0;
-  transform: scale(1.15);
+  transform: scale(1.25);
+ }
+}
+
+@keyframes board-check-ring {
+ from {
+  opacity: 0.7;
+  transform: scale(0.6);
+ }
+ to {
+  opacity: 0;
+  transform: scale(1.8);
  }
 }
 
@@ -474,7 +496,17 @@ $pieceFill: 92%;
  }
  to {
   opacity: 0;
-  transform: scale(1.35) rotate(12deg);
+  transform: scale(1.35) rotate(14deg);
+ }
+}
+
+@keyframes piece-sweep-pulse {
+ 0%,
+ 100% {
+  transform: scale(1);
+ }
+ 50% {
+  transform: scale(1.06);
  }
 }
 
@@ -497,37 +529,10 @@ $pieceFill: 92%;
  }
 }
 
-.board-preview-shimmer {
- position: absolute;
- top: -20%;
- left: -60%;
- width: 45%;
- height: 140%;
- background: linear-gradient(
-  100deg,
-  transparent 0%,
-  alpha($gold, 0.22) 45%,
-  alpha($gold, 0.4) 50%,
-  alpha($gold, 0.22) 55%,
-  transparent 100%
- );
- transform: skewX(-18deg) translateX(0%);
- transition: transform 1.3s cubic-bezier(0.4, 0, 0.2, 1);
- pointer-events: none;
-
- &.run {
-  transform: skewX(-18deg) translateX(420%);
- }
-}
-
 @media (prefers-reduced-motion: reduce) {
- .board-preview-shimmer,
- .chess-piece-slot {
-  transition: none !important;
- }
-
  .board-preview-ring,
  .board-preview-flash,
+ .board-check-ring,
  .chess-piece-slot.captured {
   animation-duration: 1ms !important;
  }

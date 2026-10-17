@@ -34,11 +34,20 @@ import {
  ANNOTATION_COLORS,
 } from "@gopvp/chess/src/constants/color";
 import {
- BOARD_ENTRANCE_WAVE_MS,
- BOARD_ENTRANCE_WAVE_COUNT,
+ BOARD_ENTRANCE_START_MS,
+ BOARD_ENTRANCE_RANK_MS,
  BOARD_ENTRANCE_LANDING_MS,
+ BOARD_NUDGE_MS,
+ BOARD_SWEEP_MS,
  PIECE_FILL_RATIO,
 } from "@gopvp/chess/src/constants/limit";
+import {
+ boardNudgeFrames,
+ boardSweepFrames,
+ entranceDelayMs,
+ pieceEntranceFrames,
+ prefersReducedMotion,
+} from "@gopvp/chess/src/utils";
 import DroppableSquare from "@gopvp/chess/src/components/board/DroppableSquare";
 import DraggablePiece from "@gopvp/chess/src/components/board/DraggablePiece";
 import type { IChessBoardProps } from "@gopvp/chess/src/types/component";
@@ -53,6 +62,18 @@ function colorKeyFromEvent(e: {
  if (e.altKey) return "alt";
  if (e.ctrlKey || e.metaKey) return "ctrl";
  return "plain";
+}
+
+function capturedSquareOf(
+ prevBoard: Record<string, string>,
+ move: { from: string; to: string },
+) {
+ const moving = prevBoard[move.from];
+ if (!moving) return null;
+ if (prevBoard[move.to] && prevBoard[move.to][0] !== moving[0]) return move.to;
+ if (moving[1] === "P" && move.from[0] !== move.to[0] && !prevBoard[move.to])
+  return `${move.to[0]}${move.from[1]}`;
+ return null;
 }
 
 type Arrow = { from: string; to: string; colorKey: string };
@@ -106,22 +127,25 @@ export default function Board({
  const [arrows, setArrows] = useState<Arrow[]>([]);
  const [highlights, setHighlights] = useState<Highlight[]>([]);
  const annotateRef = useRef<{ square: string; colorKey: string } | null>(null);
- const [landings, setLandings] = useState<{ id: number; square: string }[]>([]);
- const [shimmerPhase, setShimmerPhase] = useState<
-  "idle" | "mounted" | "running"
- >("mounted");
+ const [landings, setLandings] = useState<
+  { id: number; square: string; isCapture: boolean }[]
+ >([]);
+ const [checkRings, setCheckRings] = useState<
+  { id: number; square: string }[]
+ >([]);
+ const [isSweeping, setIsSweeping] = useState(false);
+ const sweepRef = useRef<HTMLDivElement>(null);
  const [captures, setCaptures] = useState<
   { id: number; square: string; code: string }[]
  >([]);
  const captureIdRef = useRef(0);
  const prevBoardRef = useRef<Record<string, string>>({});
  const [entranceGhosts, setEntranceGhosts] = useState<
-  { square: string; code: string; wave: number }[] | null
+  { square: string; code: string }[] | null
  >(() =>
   Object.entries(boardFromFen(fen)).map(([square, code]) => ({
    square,
    code,
-   wave: Math.round(Math.abs(FILES.indexOf(square[0]) - 3.5) - 0.5),
   })),
  );
  const ghostEls = useRef<Record<string, HTMLDivElement | null>>({});
@@ -146,7 +170,8 @@ export default function Board({
    (!prev || prev.from !== lastMove.from || prev.to !== lastMove.to)
   ) {
    const id = ++landingIdRef.current;
-   setLandings((q) => [...q, { id, square: lastMove.to }]);
+   const isCapture = !!capturedSquareOf(prevBoardRef.current, lastMove);
+   setLandings((q) => [...q, { id, square: lastMove.to, isCapture }]);
   }
   prevLastMoveRef.current = lastMove ?? null;
   setDroppedSquare((dropped) => (lastMove?.to === dropped ? dropped : null));
@@ -157,7 +182,7 @@ export default function Board({
    const last = premoveMoves[premoveMoves.length - 1];
    if (last) {
     const id = ++landingIdRef.current;
-    setLandings((q) => [...q, { id, square: last.to }]);
+    setLandings((q) => [...q, { id, square: last.to, isCapture: false }]);
    }
   }
   prevPremoveCountRef.current = premoveMoves.length;
@@ -175,40 +200,45 @@ export default function Board({
   return () => observer.disconnect();
  }, []);
 
+ const ranks = flipped ? RANKS_FLIP : RANKS;
+ const files = flipped ? FILES_FLIP : FILES;
+ const board = useMemo(() => boardFromFen(fen), [fen]);
+
  useEffect(() => {
   if (!entranceGhosts || holdEntrance) return;
-  const isReducedMotion = window.matchMedia(
-   "(prefers-reduced-motion: reduce)",
-  ).matches;
-  const animations = entranceGhosts.map(({ square, wave }) =>
-   ghostEls.current[square]?.animate(
-    [{ transform: "translate3d(0, 0, 0)" }],
+  const isReducedMotion = prefersReducedMotion();
+  const animations = entranceGhosts.map(({ square }) => {
+   const col = files.indexOf(square[0]);
+   const row = ranks.indexOf(square[1]);
+   return ghostEls.current[square]?.animate(
+    pieceEntranceFrames(0, (row >= 4 ? 9 : -2) - row, 0),
     {
      duration: isReducedMotion ? 0 : BOARD_ENTRANCE_LANDING_MS,
-     delay: isReducedMotion ? 0 : 150 + wave * BOARD_ENTRANCE_WAVE_MS,
-     easing: "cubic-bezier(0.4, 0, 0.2, 1)",
+     delay: isReducedMotion
+      ? 0
+      : BOARD_ENTRANCE_START_MS + entranceDelayMs(col, row),
      fill: "forwards",
     },
-   ),
-  );
-  const timers: ReturnType<typeof setTimeout>[] = [];
-  for (let w = 0; w < BOARD_ENTRANCE_WAVE_COUNT; w++) {
-   const launchAt = 150 + w * BOARD_ENTRANCE_WAVE_MS;
-   timers.push(
-    setTimeout(
-     () => playSound("move", 0.4),
-     launchAt + BOARD_ENTRANCE_LANDING_MS,
-    ),
    );
-  }
+  });
+  const landedAt = BOARD_ENTRANCE_START_MS + BOARD_ENTRANCE_LANDING_MS * 0.45;
+  const timers = [0, BOARD_ENTRANCE_RANK_MS].map((offset) =>
+   setTimeout(() => playSound("move", 0.4), landedAt + offset),
+  );
   timers.push(
    setTimeout(
     () => {
      setEntranceGhosts(null);
      onEntranceEnd?.();
+     const sweep = sweepRef.current;
+     if (isReducedMotion || !sweep) return;
+     setIsSweeping(true);
+     sweep
+      .animate(boardSweepFrames(), BOARD_SWEEP_MS)
+      .finished.then(() => setIsSweeping(false), () => {});
     },
-    150 +
-     BOARD_ENTRANCE_WAVE_COUNT * BOARD_ENTRANCE_WAVE_MS +
+    BOARD_ENTRANCE_START_MS +
+     entranceDelayMs(0, 1) +
      BOARD_ENTRANCE_LANDING_MS +
      100,
    ),
@@ -217,49 +247,27 @@ export default function Board({
    timers.forEach(clearTimeout);
    animations.forEach((animation) => animation?.cancel());
   };
- }, [entranceGhosts, onEntranceEnd, holdEntrance]);
-
- useEffect(() => {
-  if (holdEntrance) return;
-  const raf = requestAnimationFrame(() => {
-   requestAnimationFrame(() => setShimmerPhase("running"));
-  });
-  const timer = setTimeout(() => setShimmerPhase("idle"), 1400);
-  return () => {
-   cancelAnimationFrame(raf);
-   clearTimeout(timer);
-  };
- }, [holdEntrance]);
-
- const ranks = flipped ? RANKS_FLIP : RANKS;
- const files = flipped ? FILES_FLIP : FILES;
- const board = useMemo(() => boardFromFen(fen), [fen]);
+ }, [entranceGhosts, onEntranceEnd, holdEntrance, files, ranks]);
 
  useEffect(() => {
   if (!lastMove) return;
   const prevBoard = prevBoardRef.current;
-  const moving = prevBoard[lastMove.from];
-  if (!moving) return;
-
-  let capturedSquare: string | null = null;
-  if (prevBoard[lastMove.to] && prevBoard[lastMove.to][0] !== moving[0]) {
-   capturedSquare = lastMove.to;
-  } else if (
-   moving[1] === "P" &&
-   lastMove.from[0] !== lastMove.to[0] &&
-   !prevBoard[lastMove.to]
-  ) {
-   capturedSquare = `${lastMove.to[0]}${lastMove.from[1]}`;
-  }
-
-  if (capturedSquare && prevBoard[capturedSquare]) {
-   const id = ++captureIdRef.current;
-   setCaptures((q) => [
-    ...q,
-    { id, square: capturedSquare!, code: prevBoard[capturedSquare!] },
-   ]);
-  }
+  const capturedSquare = capturedSquareOf(prevBoard, lastMove);
+  if (!capturedSquare || !prevBoard[capturedSquare]) return;
+  const id = ++captureIdRef.current;
+  setCaptures((q) => [
+   ...q,
+   { id, square: capturedSquare, code: prevBoard[capturedSquare] },
+  ]);
+  if (!prefersReducedMotion())
+   gridRef.current?.animate(boardNudgeFrames(), BOARD_NUDGE_MS);
  }, [lastMove]);
+
+ useEffect(() => {
+  if (!checkSquare) return;
+  const id = ++landingIdRef.current;
+  setCheckRings((q) => [...q, { id, square: checkSquare }]);
+ }, [checkSquare]);
 
  useEffect(() => {
   prevBoardRef.current = board;
@@ -274,6 +282,8 @@ export default function Board({
   left: `${files.indexOf(square[0]) * 12.5}%`,
   top: `${ranks.indexOf(square[1]) * 12.5}%`,
  });
+ const isLastMoveCapture =
+  !!lastMove && !!capturedSquareOf(prevBoardRef.current, lastMove);
 
  const expandedPremoveMoves = useMemo(() => {
   const expanded: { from: string; to: string }[] = [];
@@ -457,7 +467,7 @@ export default function Board({
   >
    <Box customClass="chess-board fit-board">
     <Box
-     customClass="chess-board-grid"
+     customClass={classNames("chess-board-grid", isSweeping && "sweeping")}
      ref={gridRef}
      onMouseDown={handleGridMouseDown}
      onMouseUp={handleGridMouseUp}
@@ -576,17 +586,30 @@ export default function Board({
         draggable={!draggableColor || code[0] === draggableColor}
         hidden={!!entranceGhosts}
         instant={displaySquare === droppedSquare}
+        isCaptureMove={isLastMoveCapture && square === lastMove?.to}
+        isInCheck={isCheck}
        />
       );
      })}
 
-     {landings.map(({ id, square }) => (
+     {landings.map(({ id, square, isCapture }) => (
       <Box
        key={id}
-       customClass="board-preview-ring"
+       customClass={classNames("board-preview-ring", isCapture && "danger")}
        style={squareOffset(square)}
        onAnimationEnd={() =>
         setLandings((q) => q.filter((l) => l.id !== id))
+       }
+      />
+     ))}
+
+     {checkRings.map(({ id, square }) => (
+      <Box
+       key={id}
+       customClass="board-check-ring"
+       style={squareOffset(square)}
+       onAnimationEnd={() =>
+        setCheckRings((q) => q.filter((r) => r.id !== id))
        }
       />
      ))}
@@ -623,6 +646,7 @@ export default function Board({
         style={{
          ...squareOffset(square),
          transform: `translate3d(0, ${(offRow - targetRow) * 100}%, 0)`,
+         opacity: 0,
         }}
        >
         <PieceIcon
@@ -709,14 +733,7 @@ export default function Board({
       </svg>
      )}
 
-     {shimmerPhase !== "idle" && (
-      <Box
-       customClass={classNames(
-        "board-preview-shimmer",
-        shimmerPhase === "running" && "run",
-       )}
-      />
-     )}
+     <Box ref={sweepRef} customClass="board-preview-fx sweep" />
     </Box>
    </Box>
    <DragOverlay dropAnimation={null}>
