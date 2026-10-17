@@ -192,8 +192,16 @@
 
  &.amount-value {
   font-family: $fontOutfitExtraBold;
-  font-size: 18px;
+  font-size: 16px;
   flex-shrink: 0;
+
+  @include from(phone) {
+   font-size: 17px;
+  }
+
+  @include from(tablet) {
+   font-size: 18px;
+  }
 
   &.pos {
    color: $greenishTeal;
@@ -1154,7 +1162,11 @@
  &.match-row-headline {
   line-height: 1.4;
   font-family: $fontOutfitBold;
-  font-size: 16px;
+  font-size: 15px;
+
+  @include from(phone) {
+   font-size: 16px;
+  }
   color: alpha($appText, 0.9);
  }
 
@@ -1248,8 +1260,12 @@
   flex-shrink: 0;
   text-align: center;
   font-family: $fontOutfitBold;
-  font-size: 13px;
+  font-size: 12px;
   color: alpha($appText, 0.5);
+
+  @include from(phone) {
+   font-size: 13px;
+  }
 
   &.gold {
    color: $medalGold;
@@ -1268,7 +1284,11 @@
   flex: 1;
   min-width: 0;
   font-family: $fontOutfitSemiBold;
-  font-size: 16px;
+  font-size: 15px;
+
+  @include from(phone) {
+   font-size: 16px;
+  }
   color: alpha($appText, 0.9);
  }
 
@@ -1308,8 +1328,12 @@
 
  &.wallet-hero-lbl {
   font-family: $fontOutfitBold;
-  font-size: 16px;
+  font-size: 15px;
   color: alpha($appText, 0.85);
+
+  @include from(phone) {
+   font-size: 16px;
+  }
  }
 
  &.wallet-hero-amount {
@@ -1349,12 +1373,20 @@
 
  .wallet-tx-row &.row-title {
   font-family: $fontOutfitSemiBold;
-  font-size: 16px;
+  font-size: 15px;
+
+  @include from(phone) {
+   font-size: 16px;
+  }
  }
 
  .wallet-tx-row &.meta-text {
   font-family: $fontOutfitMedium;
-  font-size: 13px;
+  font-size: 12px;
+
+  @include from(phone) {
+   font-size: 13px;
+  }
  }
 
  &.profile-id-name {
