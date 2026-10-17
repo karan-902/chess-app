@@ -192,19 +192,11 @@
 
  &.amount-value {
   font-family: $fontOutfitExtraBold;
-  font-size: $font14;
+  font-size: $font18;
   flex-shrink: 0;
 
-  @include from(phone) {
-   font-size: $font15;
-  }
-
-  @include from(tablet) {
-   font-size: $font16;
-  }
-
   @include from(laptop) {
-   font-size: $font17;
+   font-size: $font20;
   }
 
   &.pos {
