@@ -62,7 +62,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import PersonIcon from "@mui/icons-material/Person";
 import ScheduleIcon from "@mui/icons-material/Schedule";
 import WarningIcon from "@mui/icons-material/Warning";
-import { imageIconS3Url, lottieBaseUrl } from "@gopvp/common/src/constants/env";
+import { imageIconS3Url } from "@gopvp/common/src/constants/env";
 
 export type { LucideIcon } from "lucide-react";
 export type { SvgIconComponent } from "@mui/icons-material";
@@ -209,5 +209,6 @@ export type TIconName = keyof typeof icons;
 export const logo = `${imageIconS3Url}/chrome-wallet/logo.svg`;
 export const qrLogo = `${imageIconS3Url}/chrome-wallet/qr-logo.svg`;
 export const speedLogo = `${imageIconS3Url}/chrome-wallet/speed-logo.svg`;
-export const walletSuccessLottie = `${lottieBaseUrl}/5af90008-6c9c-4727-a240-0deb476caf0e/pFJSoGdjVw.lottie`;
-export const walletTickLottie = `${lottieBaseUrl}/d37350e0-64f5-4044-bb79-e62d80e17255/Awvs7VIH5s.lottie`;
+// export const walletSuccessLottie = `${lottieBaseUrl}/5af90008-6c9c-4727-a240-0deb476caf0e/pFJSoGdjVw.lottie`;
+// export const walletTickLottie = `${lottieBaseUrl}/d37350e0-64f5-4044-bb79-e62d80e17255/Awvs7VIH5s.lottie`;
+export const coinImage = "/coin-star.svg";

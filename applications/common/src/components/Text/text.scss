@@ -1820,14 +1820,17 @@
 
   .common-skeleton.MuiSkeleton-root {
    height: 0.875rem;
-   background: linear-gradient(
-    90deg,
-    alpha($appText, 0.16),
-    alpha($appText, 0.38),
-    alpha($appText, 0.16)
-   );
-   background-size: 200% 100%;
+   background: alpha($appText, 0.16);
    transform: none;
+
+   &::after {
+    background: linear-gradient(
+     90deg,
+     transparent,
+     alpha($appText, 0.22) 50%,
+     transparent
+    );
+   }
   }
  }
 

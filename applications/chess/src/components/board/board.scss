@@ -54,30 +54,48 @@ $pieceFill: 92%;
  align-items: center;
  justify-content: center;
  touch-action: none;
- transition: box-shadow 0.18s ease-out;
 
- &.square-selected {
+ &::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease-out;
+ }
+
+ &.square-selected::after {
   box-shadow: inset 0 0 0 3px alpha($gold, 0.65);
  }
 
- &.square-premove-from {
+ &.square-premove-from::after {
   box-shadow: inset 0 0 0 3px alpha($premoveRed, 0.45);
  }
 
- &.square-premove-queued {
+ &.square-premove-queued::after {
   box-shadow: inset 0 0 0 999px alpha($premoveRed, 0.5);
  }
 
- &.square-selected-premove {
+ &.square-selected-premove::after {
   box-shadow: inset 0 0 0 3px alpha($premoveRed, 0.75);
  }
 
- &.square-drag-hover {
+ &.square-drag-hover::after {
   box-shadow: inset 0 0 0 4px alpha($gold, 0.9);
  }
 
- &.square-drag-hover-premove {
+ &.square-drag-hover-premove::after {
   box-shadow: inset 0 0 0 4px alpha($premoveRed, 0.9);
+ }
+
+ &.square-selected,
+ &.square-premove-from,
+ &.square-premove-queued,
+ &.square-drag-hover,
+ &.square-drag-hover-premove {
+  &::after {
+   opacity: 1;
+  }
  }
 }
 
@@ -97,7 +115,6 @@ $pieceFill: 92%;
  justify-content: center;
  touch-action: none;
  z-index: $z-overlay;
- will-change: transform;
  outline: none;
 
  &:focus-visible {
@@ -111,6 +128,15 @@ $pieceFill: 92%;
 
  &.moving {
   z-index: $z-top;
+ }
+
+ &.captured {
+  animation: board-piece-captured 0.34s cubic-bezier(0.25, 1, 0.5, 1) both;
+ }
+
+ .sweeping & .chess-piece-svg {
+  animation: piece-sweep-pulse 0.42s ease-in-out both;
+  animation-delay: calc(var(--col) * 55ms);
  }
 }
 
@@ -222,23 +248,22 @@ $pieceFill: 92%;
  animation: chess-king-check-pulse 0.8s ease-in-out infinite alternate !important;
 }
 
-.piece-in-stalemate {
- animation: chess-king-stalemate-pulse 0.9s ease-in-out infinite alternate !important;
-}
 
 .square-flash {
- animation: chess-square-flash 0.5s ease !important;
+ position: absolute;
+ inset: 0;
+ background: rgba(220, 50, 50, 0.85);
+ pointer-events: none;
+ animation: chess-square-flash 0.5s ease both;
 }
 
 @keyframes chess-square-flash {
- 0% {
-  background-color: rgba(220, 50, 50, 0.85) !important;
+ 0%,
+ 100% {
+  opacity: 1;
  }
  50% {
-  background-color: rgba(220, 50, 50, 0.3) !important;
- }
- 100% {
-  background-color: rgba(220, 50, 50, 0.85) !important;
+  opacity: 0.35;
  }
 }
 
@@ -257,39 +282,62 @@ $pieceFill: 92%;
  }
 }
 
+.piece-glow {
+ position: absolute;
+ inset: 0;
+ pointer-events: none;
+
+ &.danger {
+  background: radial-gradient(closest-side, rgba(220, 50, 50, 0.8) 45%, transparent);
+  animation: piece-glow-danger 1.4s ease-in-out infinite;
+ }
+
+ &.check {
+  background: radial-gradient(closest-side, rgba(255, 50, 50, 0.95) 50%, transparent);
+  animation: piece-glow-pulse 0.8s ease-in-out infinite alternate;
+ }
+
+ &.stalemate {
+  background: radial-gradient(closest-side, alpha($gold, 0.9) 50%, transparent);
+  animation: piece-glow-pulse 0.9s ease-in-out infinite alternate;
+ }
+}
+
+@keyframes piece-glow-danger {
+ 0%,
+ 100% {
+  opacity: 0;
+ }
+ 50% {
+  opacity: 1;
+ }
+}
+
+@keyframes piece-glow-pulse {
+ from {
+  opacity: 0.4;
+ }
+ to {
+  opacity: 1;
+ }
+}
+
 @keyframes chess-piece-danger-pulse {
  0%,
  100% {
   transform: scale(1);
-  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.4));
  }
  50% {
   transform: scale(1.15);
-  filter: drop-shadow(0 0 8px rgba(220, 50, 50, 0.8))
-   drop-shadow(0 2px 3px rgba(0, 0, 0, 0.4));
  }
 }
 
 @keyframes chess-king-check-pulse {
  from {
-  filter: drop-shadow(0 0 6px rgba(255, 50, 50, 0.9))
-   drop-shadow(0 2px 3px rgba(0, 0, 0, 0.4));
   transform: scale(1);
  }
  to {
-  filter: drop-shadow(0 0 14px rgba(255, 50, 50, 1))
-   drop-shadow(0 2px 3px rgba(0, 0, 0, 0.4));
   transform: scale(1.08);
- }
-}
-
-@keyframes chess-king-stalemate-pulse {
- from {
-  filter: drop-shadow(0 0 4px alpha($gold, 0.6));
- }
- to {
-  filter: drop-shadow(0 0 14px alpha($gold, 1))
-   drop-shadow(0 0 6px alpha($gold, 0.8));
  }
 }
 
@@ -309,12 +357,11 @@ $pieceFill: 92%;
  align-items: center;
  justify-content: center;
  z-index: $z-overlay;
- filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.35));
- will-change: transform, opacity;
 
  .board-preview-piece-svg {
   width: $pieceFill;
   height: $pieceFill;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.35));
  }
 }
 
@@ -326,7 +373,6 @@ $pieceFill: 92%;
  height: 12.5%;
  opacity: 0;
  pointer-events: none;
- will-change: transform, opacity;
 
  &.flash {
   background: alpha($paleRed, 0.55);
@@ -379,9 +425,7 @@ $pieceFill: 92%;
  border-radius: 50%;
  border: 2px solid $gold;
  box-sizing: border-box;
- transition:
-  transform 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-  opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+ animation: board-ring-land 0.68s cubic-bezier(0.25, 1, 0.5, 1) both;
  pointer-events: none;
 
  &.danger {
@@ -396,37 +440,111 @@ $pieceFill: 92%;
  width: 12.5%;
  height: 12.5%;
  background: alpha($paleRed, 0.55);
- transition: opacity 0.4s ease;
+ animation: board-fade-out 0.42s linear both;
  pointer-events: none;
 }
 
-.board-preview-shimmer {
+.board-check-ring {
  position: absolute;
- top: -20%;
- left: -60%;
- width: 45%;
- height: 140%;
- background: linear-gradient(
-  100deg,
-  transparent 0%,
-  alpha($gold, 0.22) 45%,
-  alpha($gold, 0.4) 50%,
-  alpha($gold, 0.22) 55%,
-  transparent 100%
- );
- transform: skewX(-18deg) translateX(0%);
- transition: transform 1.3s cubic-bezier(0.4, 0, 0.2, 1);
+ width: 12.5%;
+ height: 12.5%;
+ border-radius: 50%;
+ border: 2px solid $paleRed;
+ box-sizing: border-box;
+ animation: board-check-ring 0.75s cubic-bezier(0.25, 1, 0.5, 1) 2 both;
  pointer-events: none;
+}
 
- &.run {
-  transform: skewX(-18deg) translateX(420%);
+.board-highlight {
+ opacity: 0.55;
+ animation: board-fade-in 0.25s ease-out both;
+}
+
+.board-arrow {
+ opacity: 0.85;
+ transform-box: view-box;
+ animation: board-arrow-in 0.18s ease-out both;
+}
+
+@keyframes board-ring-land {
+ from {
+  opacity: 0.9;
+  transform: scale(0.35);
+ }
+ to {
+  opacity: 0;
+  transform: scale(1.25);
+ }
+}
+
+@keyframes board-check-ring {
+ from {
+  opacity: 0.7;
+  transform: scale(0.6);
+ }
+ to {
+  opacity: 0;
+  transform: scale(1.8);
+ }
+}
+
+@keyframes board-piece-captured {
+ from {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+ }
+ to {
+  opacity: 0;
+  transform: scale(1.35) rotate(14deg);
+ }
+}
+
+@keyframes piece-sweep-pulse {
+ 0%,
+ 100% {
+  transform: scale(1);
+ }
+ 50% {
+  transform: scale(1.06);
+ }
+}
+
+@keyframes board-fade-out {
+ to {
+  opacity: 0;
+ }
+}
+
+@keyframes board-fade-in {
+ from {
+  opacity: 0;
+ }
+}
+
+@keyframes board-arrow-in {
+ from {
+  opacity: 0;
+  transform: scale(0.6);
  }
 }
 
 @media (prefers-reduced-motion: reduce) {
  .board-preview-ring,
- .board-preview-shimmer,
- .chess-piece-slot {
-  transition: none !important;
+ .board-preview-flash,
+ .board-check-ring,
+ .chess-piece-slot.captured {
+  animation-duration: 1ms !important;
+ }
+
+ .board-highlight,
+ .board-arrow,
+ .piece-glow,
+ .square-flash {
+  animation: none;
+ }
+
+ .piece-danger,
+ .piece-in-check {
+  animation: none !important;
  }
 }

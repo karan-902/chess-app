@@ -14,3 +14,6 @@ export const SPLIT_REVEAL_DEBRIS_COUNT = 16;
 export const SPLIT_REVEAL_TOOTH_PX = 8;
 export const SPLIT_REVEAL_TEAR_VIBRATE = [18, 30, 12];
 export const SPLIT_REVEAL_LAND_VIBRATE_MS = 8;
+export const SUCCESS_COIN_COUNT = 8;
+export const SUCCESS_COIN_BURST_MS = 1100;
+export const SUCCESS_COIN_DELAY_MS = 140;
