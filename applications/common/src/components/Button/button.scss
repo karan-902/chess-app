@@ -117,8 +117,7 @@
   min-height: 3.25rem;
  }
 
- &.contained,
- &.outlined {
+ &.contained {
   --btn-face-h: 3.25rem;
   overflow: visible !important;
   height: calc(var(--btn-face-h) + 1.25rem);
@@ -227,9 +226,17 @@
  &.outlined {
   --btn-bg: #1a1d55;
   --btn-border: 1px solid #{alpha($appText, 0.24)};
-  --btn-edge-bottom: #2a2e7a;
-  --btn-edge: var(--btn-edge-bottom);
+  height: 3.25rem;
   color: $appText !important;
+
+  .button-edge {
+   display: none;
+  }
+
+  .button-face {
+   height: 100% !important;
+   margin: 0 !important;
+  }
 
   .button-spinner {
    color: $appText;
@@ -238,7 +245,6 @@
   :root[data-theme="light"] & {
    --btn-bg: #{$white};
    --btn-border: 1px solid #0d0d0d;
-   --btn-edge-bottom: #8a8a8a;
    color: #0d0d0d !important;
   }
  }
@@ -445,7 +451,7 @@
   }
  }
 
- &.contained:not(.disabled, .wallet-withdraw-btn) .button-face {
+ &.contained:not(.disabled) .button-face {
   position: relative;
   overflow: hidden;
 
@@ -481,7 +487,7 @@
 
  &.auth-footer-btn {
   --btn-pad: 0 0.875rem;
-  --btn-face-h: 2.375rem;
+  height: 2.375rem;
   flex-shrink: 0;
 
   .button-text {
@@ -543,20 +549,11 @@
  }
 
  &.wallet-withdraw-btn {
-  --btn-bg: #{alpha($white, 0.08)};
-  --btn-border: 1px solid #{alpha($white, 0.22)};
-  --btn-edge: #2a2e7a;
-  color: #f4f7ff !important;
+  align-self: flex-start;
+  margin-top: 0.5rem;
 
   .button-text {
    letter-spacing: 0.3px;
-  }
-
-  :root[data-theme="light"] & {
-   --btn-bg: #{$white};
-   --btn-border: 1.5px solid #bcc1e2;
-   --btn-edge: #5b60a8;
-   color: #12143a !important;
   }
  }
 
