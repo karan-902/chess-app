@@ -9,90 +9,21 @@
  justify-content: center;
  overflow: hidden;
 
- .success-glow {
+ .confetti-lottie {
   position: absolute;
-  width: 9rem;
-  height: 9rem;
-  background: radial-gradient(closest-side, alpha($appPrize, 0.45), transparent);
-  animation: success-glow 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transform: scale(1.6);
   pointer-events: none;
  }
 
- .success-coin {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  opacity: 0;
-  pointer-events: none;
- }
-
- .success-badge {
+ .checkmark-lottie {
   position: relative;
   z-index: $z-raised;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 6rem;
-  height: 6rem;
-  border-radius: 50%;
-  background: $appPrize;
-  color: $primaryContrast;
-  animation: success-badge-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-
-  svg {
-   width: 3rem;
-   height: 3rem;
-   stroke-width: 3;
-   animation: success-tick-pop 0.36s cubic-bezier(0.34, 1.56, 0.64, 1) 0.22s
-    both;
-  }
- }
-
- @media (prefers-reduced-motion: reduce) {
-  .success-glow,
-  .success-badge,
-  .success-badge svg {
-   animation: none;
-  }
-
-  .success-glow {
-   opacity: 0.6;
-  }
- }
-}
-
-@keyframes success-badge-pop {
- from {
-  opacity: 0;
-  transform: scale(0.3);
- }
- to {
-  opacity: 1;
-  transform: scale(1);
- }
-}
-
-@keyframes success-tick-pop {
- from {
-  opacity: 0;
-  transform: scale(0.4) rotate(-14deg);
- }
- to {
-  opacity: 1;
-  transform: scale(1) rotate(0deg);
- }
-}
-
-@keyframes success-glow {
- 0% {
-  opacity: 0;
-  transform: scale(0.5);
- }
- 40% {
-  opacity: 1;
- }
- 100% {
-  opacity: 0.6;
-  transform: scale(1.15);
+  width: 7.5rem;
+  height: 7.5rem;
+  transform: scale(1.3);
  }
 }
