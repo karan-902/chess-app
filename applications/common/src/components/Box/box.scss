@@ -2073,15 +2073,15 @@
   &.clickable {
    cursor: pointer;
 
-   .match-row-amt-row {
-    align-items: center;
-    gap: 0.625rem;
-
-    &::after {
-     @include long-arrow;
-     color: alpha($appText, 0.5);
-    }
-   }
+   // .match-row-amt-row {
+   //  align-items: center;
+   //  gap: 0.625rem;
+   //
+   //  &::after {
+   //   @include long-arrow;
+   //   color: alpha($appText, 0.5);
+   //  }
+   // }
   }
 
   &.system {
