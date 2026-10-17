@@ -17,20 +17,12 @@ import {
 interface PieceState {
  x: number;
  y: number;
- sx: number;
- sy: number;
- r: number;
  o: number;
 }
 
-interface Tween {
- start: number;
- dur: number;
- update: (p: number) => void;
- resolve: () => void;
-}
-
 type FxName = "ring" | "flash" | "check" | "glow" | "sweep";
+
+const FRAME_SAMPLES = 30;
 
 const START_PIECES = FILES.flatMap((file, i) => [
  {
@@ -68,6 +60,33 @@ const easeInOutCubic = (p: number) =>
  p < 0.5 ? 4 * p ** 3 : 1 - (-2 * p + 2) ** 3 / 2;
 const lerp = (a: number, b: number, p: number) => a + (b - a) * p;
 
+const pieceFrame = (
+ x: number,
+ y: number,
+ opacity = 1,
+ scaleX = 1,
+ scaleY = scaleX,
+ rotate = 0,
+): Keyframe => ({
+ transform: `translate3d(${x * 100}%, ${y * 100}%, 0) scale(${scaleX}, ${scaleY}) rotate(${rotate}deg)`,
+ opacity,
+});
+
+const fxFrame = (
+ x: number,
+ y: number,
+ scale: number,
+ opacity: number,
+): Keyframe => ({
+ transform: `translate3d(${x * 100}%, ${y * 100}%, 0) scale(${scale})`,
+ opacity,
+});
+
+const sample = (frameAt: (p: number) => Keyframe) =>
+ Array.from({ length: FRAME_SAMPLES + 1 }, (_, i) =>
+  frameAt(i / FRAME_SAMPLES),
+ );
+
 export default function BoardPreview() {
  const rootRef = useRef<HTMLDivElement>(null);
  const gridRef = useRef<HTMLDivElement>(null);
@@ -80,173 +99,192 @@ export default function BoardPreview() {
  useEffect(() => {
   if (isReducedMotion) return;
   let cancelled = false;
-  let frame = 0;
-  let clock = 0;
-  let last = 0;
   let isVisible = true;
   let isOnScreen = true;
-  let tweens: Tween[] = [];
+  const animations = new Set<Animation>();
   const pieces: Record<string, PieceState> = {};
   let board: Record<string, string> = {};
 
-  const paint = (id: string) => {
-   const el = pieceEls.current[id];
-   const s = pieces[id];
-   if (!el) return;
-   el.style.transform = `translate3d(${s.x * 100}%, ${s.y * 100}%, 0) scale(${s.sx}, ${s.sy}) rotate(${s.r}deg)`;
-   el.style.opacity = `${s.o}`;
-  };
-
-  const fx = (
-   name: FxName,
-   x: number,
-   y: number,
-   scale: number,
-   opacity: number,
+  const animate = (
+   el: Element | null | undefined,
+   keyframes: Keyframe[],
+   duration: number,
+   delay = 0,
   ) => {
-   const el = fxEls.current[name];
-   if (!el) return;
-   el.style.transform = `translate3d(${x * 100}%, ${y * 100}%, 0) scale(${scale})`;
-   el.style.opacity = `${opacity}`;
+   if (cancelled || !el) return Promise.resolve();
+   const animation = el.animate(keyframes, { duration, delay, fill: "both" });
+   animations.add(animation);
+   if (!(isVisible && isOnScreen)) animation.pause();
+   return animation.finished.then(
+    () => {
+     animations.delete(animation);
+     if (cancelled) return;
+     if (keyframes.length) animation.commitStyles();
+     animation.cancel();
+    },
+    () => {},
+   );
   };
 
-  const tween = (dur: number, update: (p: number) => void) =>
-   new Promise<void>((resolve) => {
-    tweens.push({ start: clock, dur, update, resolve });
-   });
-  const wait = (ms: number) => tween(ms, () => {});
+  const wait = (ms: number) => animate(rootRef.current, [], ms);
 
-  const tick = (time: number) => {
-   const delta = last ? Math.min(time - last, 50) : 16;
-   last = time;
-   if (isVisible && isOnScreen) {
-    clock += delta;
-    const running = tweens;
-    tweens = [];
-    running.forEach((t) => {
-     const p = Math.min((clock - t.start) / t.dur, 1);
-     t.update(p);
-     if (p < 1) tweens.push(t);
-     else t.resolve();
-    });
-   }
-   frame = requestAnimationFrame(tick);
+  const syncPlayback = () => {
+   const isActive = isVisible && isOnScreen;
+   animations.forEach((animation) =>
+    isActive ? animation.play() : animation.pause(),
+   );
   };
 
-  const entrance = async () => {
+  const entrance = () => {
    board = {};
-   START_PIECES.forEach(({ id, square }) => {
-    const { x } = squareOf(square);
-    pieces[id] = { x, y: id[0] === "w" ? 9 : -2, sx: 1, sy: 1, r: 0, o: 0 };
-    board[square] = id;
-    paint(id);
-   });
-   await Promise.all(
+   return Promise.all(
     START_PIECES.map(({ id, square }) => {
      const { x, y } = squareOf(square);
-     const fromY = pieces[id].y;
+     const fromY = id[0] === "w" ? 9 : -2;
      const wave = (id[0] === "w" ? 7 - y : y) * 70 + Math.abs(x - 3.5) * 22;
-     return wait(wave).then(() =>
-      tween(640, (p) => {
-       pieces[id].y = lerp(fromY, y, easeOutBack(p));
-       pieces[id].o = Math.min(p * 3, 1);
-       paint(id);
-      }),
+     pieces[id] = { x, y, o: 1 };
+     board[square] = id;
+     return animate(
+      pieceEls.current[id],
+      sample((p) =>
+       pieceFrame(x, lerp(fromY, y, easeOutBack(p)), Math.min(p * 3, 1)),
+      ),
+      640,
+      wave,
      );
     }),
    );
   };
 
-  const sweep = async () => {
-   const ids = Object.keys(pieces).filter((id) => pieces[id].o > 0);
-   const pulse = Promise.all(
-    ids.map((id) =>
-     wait(pieces[id].x * 55).then(() =>
-      tween(420, (p) => {
-       const s = 1 + 0.06 * Math.sin(Math.PI * p);
-       pieces[id].sx = s;
-       pieces[id].sy = s;
-       paint(id);
-      }),
+  const sweep = () =>
+   Promise.all([
+    ...Object.entries(pieces)
+     .filter(([, { o }]) => o > 0)
+     .map(([id, { x, y }]) =>
+      animate(
+       pieceEls.current[id],
+       sample((p) => pieceFrame(x, y, 1, 1 + 0.06 * Math.sin(Math.PI * p))),
+       420,
+       x * 55,
+      ),
      ),
+    animate(
+     fxEls.current.sweep,
+     sample((p) =>
+      fxFrame(lerp(-1.5, 9, easeInOutCubic(p)), 0, 1, Math.sin(Math.PI * p)),
+     ),
+     1100,
     ),
-   );
-   await tween(1100, (p) => {
-    fx("sweep", lerp(-1.5, 9, easeInOutCubic(p)), 0, 1, Math.sin(Math.PI * p));
-   });
-   await pulse;
-  };
+   ]);
 
   const ring = (x: number, y: number, isDanger: boolean) => {
    fxEls.current.ring?.classList.toggle("danger", isDanger);
-   return tween(680, (p) =>
-    fx("ring", x, y, lerp(0.35, 1.25, easeOutQuart(p)), 0.9 * (1 - p)),
+   return animate(
+    fxEls.current.ring,
+    sample((p) =>
+     fxFrame(x, y, lerp(0.35, 1.25, easeOutQuart(p)), 0.9 * (1 - p)),
+    ),
+    680,
    );
   };
 
-  const capture = async (id: string, x: number, y: number) => {
-   const nudge = tween(200, (p) => {
-    if (gridRef.current)
-     gridRef.current.style.transform = `translate3d(0, ${2 * Math.sin(Math.PI * p)}px, 0)`;
-   });
-   const flash = tween(420, (p) => fx("flash", x, y, 1, 1 - p));
-   await tween(340, (p) => {
-    pieces[id].sx = pieces[id].sy = lerp(1, 1.35, easeOutQuart(p));
-    pieces[id].r = 14 * p;
-    pieces[id].o = 1 - p;
-    paint(id);
-   });
-   await Promise.all([nudge, flash]);
+  const capture = (id: string, x: number, y: number) => {
+   pieces[id].o = 0;
+   return Promise.all([
+    animate(
+     gridRef.current,
+     sample((p) => ({
+      transform: `translate3d(0, ${2 * Math.sin(Math.PI * p)}px, 0)`,
+     })),
+     200,
+    ),
+    animate(
+     fxEls.current.flash,
+     sample((p) => fxFrame(x, y, 1, 1 - p)),
+     420,
+    ),
+    animate(
+     pieceEls.current[id],
+     sample((p) => {
+      const scale = lerp(1, 1.35, easeOutQuart(p));
+      return pieceFrame(x, y, 1 - p, scale, scale, 14 * p);
+     }),
+     340,
+    ),
+   ]);
   };
 
   const check = async (square: string) => {
    const { x, y } = squareOf(square);
-   const kingId = board[square];
-   const glowIn = tween(220, (p) => fx("glow", x, y, 1, p));
-   const shake = kingId
-    ? tween(450, (p) => {
-       pieces[kingId].x = x + 0.05 * Math.sin(p * Math.PI * 6) * (1 - p);
-       paint(kingId);
-      })
-    : wait(0);
+   const glowIn = animate(
+    fxEls.current.glow,
+    sample((p) => fxFrame(x, y, 1, p)),
+    220,
+   );
+   const shake = animate(
+    pieceEls.current[board[square]],
+    sample((p) =>
+     pieceFrame(x + 0.05 * Math.sin(p * Math.PI * 6) * (1 - p), y),
+    ),
+    450,
+   );
    for (let i = 0; i < 2; i++) {
-    await tween(750, (p) =>
-     fx("check", x, y, lerp(0.6, 1.8, easeOutQuart(p)), 0.7 * (1 - p)),
+    await animate(
+     fxEls.current.check,
+     sample((p) =>
+      fxFrame(x, y, lerp(0.6, 1.8, easeOutQuart(p)), 0.7 * (1 - p)),
+     ),
+     750,
     );
    }
    await Promise.all([glowIn, shake]);
-   await tween(320, (p) => fx("glow", x, y, 1, 1 - p));
+   await animate(
+    fxEls.current.glow,
+    sample((p) => fxFrame(x, y, 1, 1 - p)),
+    320,
+   );
   };
 
   const move = async (from: string, to: string, checkSquare?: string) => {
    const id = board[from];
-   if (!id) return;
+   const el = pieceEls.current[id];
+   if (!id || !el) return;
    const a = squareOf(from);
    const b = squareOf(to);
    const capturedId = board[to];
    const distance = Math.hypot(b.x - a.x, b.y - a.y);
-   const dur = 420 + distance * 40;
-   const el = pieceEls.current[id];
-   if (el) el.style.zIndex = "3";
-   await tween(dur, (p) => {
-    const e = easeOutQuart(p);
-    const lift = Math.sin(Math.PI * p);
-    pieces[id].x = lerp(a.x, b.x, e);
-    pieces[id].y = lerp(a.y, b.y, e) - 0.22 * lift;
-    pieces[id].sx = pieces[id].sy = 1 + 0.1 * lift;
-    paint(id);
-   });
-   if (el) el.style.zIndex = "";
+   el.style.zIndex = "3";
+   await animate(
+    el,
+    sample((p) => {
+     const e = easeOutQuart(p);
+     const lift = Math.sin(Math.PI * p);
+     return pieceFrame(
+      lerp(a.x, b.x, e),
+      lerp(a.y, b.y, e) - 0.22 * lift,
+      1,
+      1 + 0.1 * lift,
+     );
+    }),
+    420 + distance * 40,
+   );
+   el.style.zIndex = "";
    delete board[from];
    board[to] = id;
+   pieces[id].x = b.x;
+   pieces[id].y = b.y;
    const squash = capturedId ? 0.06 : 0.035;
-   const land = tween(240, (p) => {
-    const k = Math.sin(Math.PI * p) * (1 - p * 0.4);
-    pieces[id].sx = 1 + squash * k;
-    pieces[id].sy = 1 - squash * k;
-    paint(id);
-   });
-   const effects = [land, ring(b.x, b.y, !!capturedId)];
+   const effects: Promise<unknown>[] = [
+    animate(
+     el,
+     sample((p) => {
+      const k = Math.sin(Math.PI * p) * (1 - p * 0.4);
+      return pieceFrame(b.x, b.y, 1, 1 + squash * k, 1 - squash * k);
+     }),
+     240,
+    ),
+    ring(b.x, b.y, !!capturedId),
+   ];
    if (capturedId) effects.push(capture(capturedId, b.x, b.y));
    await Promise.all(effects);
    if (checkSquare) await check(checkSquare);
@@ -268,18 +306,19 @@ export default function BoardPreview() {
 
   const onVisibility = () => {
    isVisible = document.visibilityState === "visible";
+   syncPlayback();
   };
   const observer = new IntersectionObserver(([entry]) => {
    isOnScreen = entry.isIntersecting;
+   syncPlayback();
   });
   if (rootRef.current) observer.observe(rootRef.current);
   document.addEventListener("visibilitychange", onVisibility);
-  frame = requestAnimationFrame(tick);
   run();
 
   return () => {
    cancelled = true;
-   cancelAnimationFrame(frame);
+   animations.forEach((animation) => animation.cancel());
    observer.disconnect();
    document.removeEventListener("visibilitychange", onVisibility);
   };

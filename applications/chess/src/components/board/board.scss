@@ -309,12 +309,11 @@ $pieceFill: 92%;
  align-items: center;
  justify-content: center;
  z-index: $z-overlay;
- filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.35));
- will-change: transform, opacity;
 
  .board-preview-piece-svg {
   width: $pieceFill;
   height: $pieceFill;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.35));
  }
 }
 
@@ -326,7 +325,6 @@ $pieceFill: 92%;
  height: 12.5%;
  opacity: 0;
  pointer-events: none;
- will-change: transform, opacity;
 
  &.flash {
   background: alpha($paleRed, 0.55);
