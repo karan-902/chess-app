@@ -307,8 +307,10 @@
   }
 
   .deposit-amount-chips & {
-   flex: 1;
-   min-width: 0 !important;
+   --btn-pad: 0 0.875rem;
+   height: 2.25rem !important;
+   min-height: 2.25rem;
+   min-width: 4.5rem !important;
   }
 
   &.active {
