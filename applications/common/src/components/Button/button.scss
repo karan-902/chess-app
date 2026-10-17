@@ -548,12 +548,42 @@
   flex: 1;
  }
 
+ &.contained.wallet-deposit-btn {
+  --btn-edge-right: #b38600;
+  --btn-edge-bottom: #{$btnEdgeGold};
+  height: calc(3.25rem + 3px);
+  padding-top: 0 !important;
+  perspective: none;
+
+  &::before,
+  &::after {
+   display: none;
+  }
+
+  .button-edge.right,
+  .button-edge.bottom {
+   display: block;
+  }
+
+  .button-face {
+   height: calc(100% - 3px) !important;
+   margin: 0 3px 3px 0 !important;
+   transform: none;
+   animation: none;
+  }
+
+  &:active:not(.disabled) .button-face {
+   transform: translate3d(3px, 3px, 0) !important;
+  }
+ }
+
  &.wallet-withdraw-btn {
   align-self: flex-start;
-  margin-top: 0.5rem;
 
   .button-text {
-   letter-spacing: 0.3px;
+   font-family: $fontOutfitExtraBold !important;
+   font-size: $font18;
+   letter-spacing: 0.4px;
   }
  }
 
