@@ -225,7 +225,7 @@
  }
 
  &.outlined {
-  --btn-bg: linear-gradient(180deg, #2c3190, #1a1d55 50%, #12153f);
+  --btn-bg: #1a1d55;
   --btn-border: 1px solid #{alpha($appText, 0.24)};
   --btn-edge-bottom: #2a2e7a;
   --btn-edge: var(--btn-edge-bottom);
@@ -236,7 +236,7 @@
   }
 
   :root[data-theme="light"] & {
-   --btn-bg: #{$btnWhiteFill};
+   --btn-bg: #{$white};
    --btn-border: 1px solid #0d0d0d;
    --btn-edge-bottom: #8a8a8a;
    color: #0d0d0d !important;
@@ -497,7 +497,7 @@
 
  &.auth-google-btn {
   --btn-gap: 0.75rem;
-  --btn-bg: #{$btnWhiteFill} !important;
+  --btn-bg: #{$white} !important;
   --btn-border: 1px solid #0d0d0d !important;
   --btn-edge-right: #e0e0e0 !important;
   --btn-edge-bottom: #8a8a8a !important;
