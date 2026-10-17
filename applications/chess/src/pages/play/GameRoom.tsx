@@ -111,7 +111,7 @@ export default function GameRoom({ mode }: IGameRoomProps) {
  const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
  const [premoveFrom, setPremoveFrom] = useState<string | null>(null);
  const [premoveQueue, setPremoveQueue] = useState<
-  { from: string; to: string }[]
+  { from: string; to: string; capture?: string }[]
  >([]);
  const [flashSquare, setFlashSquare] = useState<string | null>(null);
  const [pendingPromotion, setPendingPromotion] = useState<{
@@ -272,7 +272,11 @@ export default function GameRoom({ mode }: IGameRoomProps) {
   const timer = setTimeout(() => {
    const [next, ...rest] = premoveQueue;
    setPremoveQueue(rest);
-   const result = commitMoveRef.current(next.from, next.to);
+   const isTargetGone =
+    !!next.capture && getPremovePieceCode(next.to) !== next.capture;
+   const result = isTargetGone
+    ? null
+    : commitMoveRef.current(next.from, next.to);
    if (result) {
     navigator.vibrate?.(PREMOVE_FIRE_VIBRATE_MS);
    } else {
@@ -282,7 +286,7 @@ export default function GameRoom({ mode }: IGameRoomProps) {
    }
   });
   return () => clearTimeout(timer);
- }, [turn, gameEnded, playerSide, premoveQueue]);
+ }, [turn, gameEnded, playerSide, premoveQueue, getPremovePieceCode]);
 
  const handleSquareClick = (square: string) => {
   if (!isStarted || gameEnded || isReviewing || pendingPromotion) return;
@@ -290,7 +294,9 @@ export default function GameRoom({ mode }: IGameRoomProps) {
   if (turn !== playerSide) {
    if (premoveFrom) {
     if (premoveTargets.includes(square)) {
-     setPremoveQueue((q) => [...q, { from: premoveFrom, to: square }]);
+     const target = getPremovePieceCode(square, premoveQueue);
+     const capture = target && target[0] !== playerSide ? target : undefined;
+     setPremoveQueue((q) => [...q, { from: premoveFrom, to: square, capture }]);
      setPremoveFrom(null);
      playSound("move", PREMOVE_QUEUE_SOUND_VOLUME);
     } else {

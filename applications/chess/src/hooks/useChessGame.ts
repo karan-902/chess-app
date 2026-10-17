@@ -313,8 +313,8 @@ export function useChessGame() {
  );
 
  const getPremovePieceCode = useCallback(
-  (square: string): string | null => {
-   const piece = simulatePremoves([]).get(square);
+  (square: string, priorMoves: PremoveEntry[] = []): string | null => {
+   const piece = simulatePremoves(priorMoves).get(square);
    return piece ? `${piece.color}${piece.type.toUpperCase()}` : null;
   },
   [simulatePremoves],
