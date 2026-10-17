@@ -9,10 +9,11 @@ import CopyButton from "@gopvp/app/src/components/common/CopyButton";
 import {
  speedLogo,
  qrLogo,
- Timer,
+ // Timer,
  Zap,
+ icons,
 } from "@gopvp/common/src/components/images";
-import { formatAmount } from "@gopvp/common/src/util/format";
+import { formatAmount, formatMMSS } from "@gopvp/common/src/util/format";
 import WalletSheetShell from "@gopvp/app/src/components/common/WalletSheetShell";
 import WalletSuccessStage from "@gopvp/app/src/components/common/WalletSuccessStage";
 import WalletInfoNote from "@gopvp/app/src/components/common/WalletInfoNote";
@@ -41,7 +42,10 @@ import {
  depositsNotWithdrawableText,
  speedText,
 } from "@gopvp/app/src/constants/message";
-import { MAX_DEPOSIT_USD } from "@gopvp/app/src/constants/limit";
+import {
+ MAX_DEPOSIT_USD,
+ MATCH_TIMER_LOW_SECONDS,
+} from "@gopvp/app/src/constants/limit";
 import { DEPOSIT_CHIP_AMOUNTS } from "@gopvp/app/src/constants/option";
 import { sanitizeAmountInput } from "@gopvp/app/src/utils";
 import { backText } from "@gopvp/common/src/constants/message";
@@ -53,12 +57,12 @@ import {
 
 type Stage = "amount" | "qr" | "success";
 
-function formatCountdown(ms: number) {
- const totalSeconds = Math.max(0, Math.floor(ms / 1000));
- const minutes = Math.floor(totalSeconds / 60);
- const seconds = totalSeconds % 60;
- return `${minutes}:${seconds.toString().padStart(2, "0")}`;
-}
+// function formatCountdown(ms: number) {
+//  const totalSeconds = Math.max(0, Math.floor(ms / 1000));
+//  const minutes = Math.floor(totalSeconds / 60);
+//  const seconds = totalSeconds % 60;
+//  return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+// }
 
 export default function DepositSheet() {
  const { openModal, close } = useWalletModal();
@@ -224,6 +228,18 @@ export default function DepositSheet() {
         {formatAmount(amountUsd)}
        </Text>
       </Text>
+      {!expired && (
+       <Text
+        customClass={classNames(
+         "match-timer",
+         remainingMs / 1000 <= MATCH_TIMER_LOW_SECONDS && "low",
+        )}
+        aria-label={expiresInLabelText}
+       >
+        <icons.timer />
+        {formatMMSS(Math.floor(remainingMs / 1000))}
+       </Text>
+      )}
      </Box>
 
      {/* <WalletInfoNote text={btcOnlyWarningText} /> */}
@@ -262,9 +278,10 @@ export default function DepositSheet() {
       <CopyButton text={payment.payment_request} showLabel />
      </Box>
 
-     {expired ? (
+     {expired && (
       <Text customClass="deposit-timer caption expired">{qrExpiredText}</Text>
-     ) : (
+     )}
+     {/* {!expired && (
       <>
        <Box customClass="deposit-expiry-row">
         <Timer size={16} strokeWidth={2.2} />
@@ -284,7 +301,7 @@ export default function DepositSheet() {
         />
        </Box>
       </>
-     )}
+     )} */}
     </Box>
    )}
 

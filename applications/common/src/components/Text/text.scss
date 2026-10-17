@@ -704,6 +704,11 @@
    cursor: pointer;
    letter-spacing: 1px;
   }
+
+  .deposit-qr-header & {
+   position: absolute;
+   right: 0;
+  }
  }
 
  .match-sheet.lost &.public-title,
