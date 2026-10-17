@@ -438,7 +438,8 @@
   }
  }
 
- &.contained:not(.disabled) .button-face {
+ &.contained:not(.disabled) .button-face,
+ &.wallet-withdraw-btn:not(.disabled) .button-face {
   position: relative;
   overflow: hidden;
 
@@ -540,10 +541,17 @@
  }
 
  &.wallet-withdraw-btn {
+  --btn-border: 0 solid transparent;
   color: $appText;
 
   .button-text {
    letter-spacing: 0.3px;
+  }
+
+  :root[data-theme="light"] & {
+   --btn-bg: linear-gradient(180deg, #ffffff, #e9ebf4 50%, #c3c7da);
+   --btn-border: 0 solid transparent;
+   --btn-edge: #6f7387;
   }
  }
 
