@@ -3498,6 +3498,20 @@
    .result-tiles.versus & {
     gap: $space-4;
     padding: 0.875rem $space-12;
+    background: #1a1e5c;
+
+    &:not(.highlight) {
+     border-color: alpha($white, 0.1);
+
+     :root[data-theme="light"] & {
+      border-color: $appCardBorder;
+     }
+    }
+
+    :root[data-theme="light"] & {
+     background: $white;
+     box-shadow: 0 4px 12px alpha(#aeb3d9, 0.35);
+    }
    }
 
    &.highlight {
