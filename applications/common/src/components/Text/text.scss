@@ -192,7 +192,7 @@
 
  &.amount-value {
   font-family: $fontOutfitExtraBold;
-  font-size: $font18;
+  font-size: 18px;
   flex-shrink: 0;
 
   &.pos {
@@ -1154,7 +1154,7 @@
  &.match-row-headline {
   line-height: 1.4;
   font-family: $fontOutfitBold;
-  font-size: $font16;
+  font-size: 16px;
   color: alpha($appText, 0.9);
  }
 
@@ -1248,7 +1248,7 @@
   flex-shrink: 0;
   text-align: center;
   font-family: $fontOutfitBold;
-  font-size: $font13;
+  font-size: 13px;
   color: alpha($appText, 0.5);
 
   &.gold {
@@ -1268,7 +1268,7 @@
   flex: 1;
   min-width: 0;
   font-family: $fontOutfitSemiBold;
-  font-size: $font16;
+  font-size: 16px;
   color: alpha($appText, 0.9);
  }
 
@@ -1308,7 +1308,7 @@
 
  &.wallet-hero-lbl {
   font-family: $fontOutfitBold;
-  font-size: $font16;
+  font-size: 16px;
   color: alpha($appText, 0.85);
  }
 
@@ -1349,12 +1349,12 @@
 
  .wallet-tx-row &.row-title {
   font-family: $fontOutfitSemiBold;
-  font-size: $font16;
+  font-size: 16px;
  }
 
  .wallet-tx-row &.meta-text {
   font-family: $fontOutfitMedium;
-  font-size: $font13;
+  font-size: 13px;
  }
 
  &.profile-id-name {
