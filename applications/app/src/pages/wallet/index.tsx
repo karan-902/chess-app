@@ -204,7 +204,7 @@ export default function Wallet() {
       </Button>
       <Button
        type="button"
-       variant="outlined"
+       variant="contained"
        customClass="wallet-withdraw-btn"
        onClick={openWithdraw}
       >

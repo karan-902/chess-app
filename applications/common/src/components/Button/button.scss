@@ -451,7 +451,7 @@
   }
  }
 
- &.contained:not(.disabled) .button-face {
+ &.contained:not(.disabled, .wallet-withdraw-btn) .button-face {
   position: relative;
   overflow: hidden;
 
@@ -549,11 +549,20 @@
  }
 
  &.wallet-withdraw-btn {
-  align-self: flex-start;
-  margin-top: 0.5rem;
+  --btn-bg: #{alpha($white, 0.08)};
+  --btn-border: 1px solid #{alpha($white, 0.22)};
+  --btn-edge: #2a2e7a;
+  color: #f4f7ff !important;
 
   .button-text {
    letter-spacing: 0.3px;
+  }
+
+  :root[data-theme="light"] & {
+   --btn-bg: #{$white};
+   --btn-border: 1.5px solid #bcc1e2;
+   --btn-edge: #5b60a8;
+   color: #12143a !important;
   }
  }
 
