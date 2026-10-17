@@ -307,7 +307,7 @@ $radius-card: 0;
 }
 
 @mixin sheet-pattern(
- $color: alpha($appText, 0.05),
+ $color: alpha($appText, 0.035),
  $clear: radial-gradient(70% 40% at 50% 50%, transparent 55%, #000)
 ) {
  content: "";

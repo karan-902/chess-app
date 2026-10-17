@@ -2493,7 +2493,7 @@
   align-items: center;
   gap: $space-12;
   border: 1px solid alpha($appText, 0.12);
-  background: alpha($appText, 0.04);
+  background: $appSurface;
   padding: $space-4 0.875rem;
   min-height: 3rem;
   margin: 0.375rem 0 $space-16;

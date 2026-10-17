@@ -126,6 +126,14 @@
   @include sheet-pattern;
  }
 
+ &.wallet-sheet .MuiDrawer-paper:has(.deposit-qr-stage)::after {
+  mask:
+   url("/pattern-cubes.svg") 50% 0 / 1.515625rem 2.625rem repeat,
+   radial-gradient(38% 16% at 0 0, #000 40%, transparent),
+   radial-gradient(38% 16% at 100% 0, #000 40%, transparent);
+  mask-composite: intersect, add;
+ }
+
  &.wallet-sheet .MuiDrawer-paper {
   min-height: 24rem;
   justify-content: safe center;
