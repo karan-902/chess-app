@@ -39,9 +39,9 @@ export const PAYOUT_TIMING: Record<
 //  damping: 34,
 //  mass: 1,
 // } as const;
-export const PIECE_MOVE_SPRING = {
- type: "spring",
- stiffness: 400,
- damping: 55,
- mass: 3.5,
-} as const;
+// export const PIECE_MOVE_SPRING = {
+//  type: "spring",
+//  stiffness: 400,
+//  damping: 55,
+//  mass: 3.5,
+// } as const;

@@ -99,6 +99,7 @@ $pieceFill: 92%;
  z-index: $z-overlay;
  will-change: transform;
  outline: none;
+ transition: transform 0.45s cubic-bezier(0.25, 1.15, 0.5, 1);
 
  &:focus-visible {
   outline: 2px solid $gold;
@@ -111,6 +112,14 @@ $pieceFill: 92%;
 
  &.moving {
   z-index: $z-top;
+ }
+
+ &.instant {
+  transition: none;
+ }
+
+ &.captured {
+  animation: board-piece-captured 0.35s ease-out both;
  }
 }
 
@@ -377,9 +386,7 @@ $pieceFill: 92%;
  border-radius: 50%;
  border: 2px solid $gold;
  box-sizing: border-box;
- transition:
-  transform 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-  opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+ animation: board-ring-land 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
  pointer-events: none;
 
  &.danger {
@@ -394,8 +401,60 @@ $pieceFill: 92%;
  width: 12.5%;
  height: 12.5%;
  background: alpha($paleRed, 0.55);
- transition: opacity 0.4s ease;
+ animation: board-fade-out 0.4s ease-out both;
  pointer-events: none;
+}
+
+.board-highlight {
+ opacity: 0.55;
+ animation: board-fade-in 0.25s ease-out both;
+}
+
+.board-arrow {
+ opacity: 0.85;
+ transform-box: view-box;
+ animation: board-arrow-in 0.18s ease-out both;
+}
+
+@keyframes board-ring-land {
+ from {
+  opacity: 0.9;
+  transform: scale(0.3);
+ }
+ to {
+  opacity: 0;
+  transform: scale(1.15);
+ }
+}
+
+@keyframes board-piece-captured {
+ from {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+ }
+ to {
+  opacity: 0;
+  transform: scale(1.35) rotate(12deg);
+ }
+}
+
+@keyframes board-fade-out {
+ to {
+  opacity: 0;
+ }
+}
+
+@keyframes board-fade-in {
+ from {
+  opacity: 0;
+ }
+}
+
+@keyframes board-arrow-in {
+ from {
+  opacity: 0;
+  transform: scale(0.6);
+ }
 }
 
 .board-preview-shimmer {
@@ -422,9 +481,19 @@ $pieceFill: 92%;
 }
 
 @media (prefers-reduced-motion: reduce) {
- .board-preview-ring,
  .board-preview-shimmer,
  .chess-piece-slot {
   transition: none !important;
+ }
+
+ .board-preview-ring,
+ .board-preview-flash,
+ .chess-piece-slot.captured {
+  animation-duration: 1ms !important;
+ }
+
+ .board-highlight,
+ .board-arrow {
+  animation: none;
  }
 }

@@ -12,7 +12,6 @@ import {
  restrictToParentElement,
  snapCenterToCursor,
 } from "@dnd-kit/modifiers";
-import { motion } from "motion/react";
 import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
 import PieceIcon from "@gopvp/chess/src/components/board/PieceIcon";
@@ -125,7 +124,7 @@ export default function Board({
    wave: Math.round(Math.abs(FILES.indexOf(square[0]) - 3.5) - 0.5),
   })),
  );
- const [landedWaves, setLandedWaves] = useState(0);
+ const ghostEls = useRef<Record<string, HTMLDivElement | null>>({});
  const landingIdRef = useRef(0);
  const prevLastMoveRef = useRef<{ from: string; to: string } | null>(null);
  const prevPremoveCountRef = useRef(0);
@@ -178,10 +177,23 @@ export default function Board({
 
  useEffect(() => {
   if (!entranceGhosts || holdEntrance) return;
+  const isReducedMotion = window.matchMedia(
+   "(prefers-reduced-motion: reduce)",
+  ).matches;
+  const animations = entranceGhosts.map(({ square, wave }) =>
+   ghostEls.current[square]?.animate(
+    [{ transform: "translate3d(0, 0, 0)" }],
+    {
+     duration: isReducedMotion ? 0 : BOARD_ENTRANCE_LANDING_MS,
+     delay: isReducedMotion ? 0 : 150 + wave * BOARD_ENTRANCE_WAVE_MS,
+     easing: "cubic-bezier(0.4, 0, 0.2, 1)",
+     fill: "forwards",
+    },
+   ),
+  );
   const timers: ReturnType<typeof setTimeout>[] = [];
   for (let w = 0; w < BOARD_ENTRANCE_WAVE_COUNT; w++) {
    const launchAt = 150 + w * BOARD_ENTRANCE_WAVE_MS;
-   timers.push(setTimeout(() => setLandedWaves(w + 1), launchAt));
    timers.push(
     setTimeout(
      () => playSound("move", 0.4),
@@ -201,7 +213,10 @@ export default function Board({
      100,
    ),
   );
-  return () => timers.forEach(clearTimeout);
+  return () => {
+   timers.forEach(clearTimeout);
+   animations.forEach((animation) => animation?.cancel());
+  };
  }, [entranceGhosts, onEntranceEnd, holdEntrance]);
 
  useEffect(() => {
@@ -255,6 +270,10 @@ export default function Board({
  const epTarget = fen.split(" ")[3];
  const cellSize = boardWidth / 8;
  const pieceSize = cellSize * PIECE_FILL_RATIO;
+ const squareOffset = (square: string) => ({
+  left: `${files.indexOf(square[0]) * 12.5}%`,
+  top: `${ranks.indexOf(square[1]) * 12.5}%`,
+ });
 
  const expandedPremoveMoves = useMemo(() => {
   const expanded: { from: string; to: string }[] = [];
@@ -555,112 +574,56 @@ export default function Board({
       );
      })}
 
-     {landings.map(({ id, square }) => {
-      const col = files.indexOf(square[0]);
-      const row = ranks.indexOf(square[1]);
-      return (
-       <motion.div
-        key={id}
-        className="board-preview-ring"
-        initial={{
-         x: `${col * 100}%`,
-         y: `${row * 100}%`,
-         scale: 0.3,
-         opacity: 0.9,
-        }}
-        animate={{
-         x: `${col * 100}%`,
-         y: `${row * 100}%`,
-         scale: 1.15,
-         opacity: 0,
-        }}
-        transition={{
-         duration: 0.9,
-         ease: [0.16, 1, 0.3, 1],
-        }}
-        onAnimationComplete={() =>
-         setLandings((q) => q.filter((l) => l.id !== id))
-        }
+     {landings.map(({ id, square }) => (
+      <Box
+       key={id}
+       customClass="board-preview-ring"
+       style={squareOffset(square)}
+       onAnimationEnd={() =>
+        setLandings((q) => q.filter((l) => l.id !== id))
+       }
+      />
+     ))}
+
+     {captures.flatMap(({ id, square, code }) => [
+      <Box
+       key={`${id}-flash`}
+       customClass="board-preview-flash"
+       style={squareOffset(square)}
+      />,
+      <Box
+       key={`${id}-piece`}
+       customClass="chess-piece-slot captured"
+       style={squareOffset(square)}
+       onAnimationEnd={() => setCaptures((q) => q.filter((c) => c.id !== id))}
+      >
+       <PieceIcon
+        code={code}
+        className={`chess-piece-svg${code[0] === "b" ? " piece-black" : ""}`}
        />
-      );
-     })}
+      </Box>,
+     ])}
 
-     {captures.flatMap(({ id, square, code }) => {
-      const col = files.indexOf(square[0]);
-      const row = ranks.indexOf(square[1]);
-      return [
-       <motion.div
-        key={`${id}-flash`}
-        className="board-preview-flash"
-        initial={{
-         x: `${col * 100}%`,
-         y: `${row * 100}%`,
-         opacity: 1,
-        }}
-        animate={{
-         x: `${col * 100}%`,
-         y: `${row * 100}%`,
-         opacity: 0,
-        }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
-       />,
-       <motion.div
-        key={`${id}-piece`}
-        className="chess-piece-slot"
-        initial={{
-         x: `${col * 100}%`,
-         y: `${row * 100}%`,
-         scale: 1,
-         rotate: 0,
-         opacity: 1,
-        }}
-        animate={{
-         x: `${col * 100}%`,
-         y: `${row * 100}%`,
-         scale: 1.35,
-         rotate: 12,
-         opacity: 0,
-        }}
-        transition={{ duration: 0.35, ease: "easeOut" }}
-        onAnimationComplete={() =>
-         setCaptures((q) => q.filter((c) => c.id !== id))
-        }
-       >
-        <PieceIcon
-         code={code}
-         className={`chess-piece-svg${code[0] === "b" ? " piece-black" : ""}`}
-        />
-       </motion.div>,
-      ];
-     })}
-
-     {entranceGhosts?.map(({ square, code, wave }) => {
-      const col = files.indexOf(square[0]);
+     {entranceGhosts?.map(({ square, code }) => {
       const targetRow = ranks.indexOf(square[1]);
       const offRow = targetRow >= 4 ? 9 : -2;
-      const landed = wave < landedWaves;
       return (
-       <motion.div
+       <Box
         key={square}
-        className="chess-piece-slot"
-        initial={{
-         x: `${col * 100}%`,
-         y: `${offRow * 100}%`,
+        ref={(el: HTMLDivElement | null) => {
+         ghostEls.current[square] = el;
         }}
-        animate={{
-         x: `${col * 100}%`,
-         y: `${(landed ? targetRow : offRow) * 100}%`,
-        }}
-        transition={{
-         duration: BOARD_ENTRANCE_LANDING_MS / 1000,
-         ease: [0.4, 0, 0.2, 1],
+        customClass="chess-piece-slot"
+        style={{
+         ...squareOffset(square),
+         transform: `translate3d(0, ${(offRow - targetRow) * 100}%, 0)`,
         }}
        >
         <PieceIcon
          code={code}
          className={`chess-piece-svg${code[0] === "b" ? " piece-black" : ""}`}
         />
-       </motion.div>
+       </Box>
       );
      })}
 
@@ -695,10 +658,9 @@ export default function Board({
         const col = files.indexOf(square[0]);
         const row = ranks.indexOf(square[1]);
         return (
-         <motion.rect
+         <rect
           key={`hl-${square}`}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.55 }}
+          className="board-highlight"
           x={col * 100}
           y={row * 100}
           width={100}
@@ -723,20 +685,10 @@ export default function Board({
         const x2 = x2raw - (dx / len) * shorten;
         const y2 = y2raw - (dy / len) * shorten;
         return (
-         <motion.line
+         <line
           key={`arrow-${from}-${to}`}
-          initial={{
-           pathLength: 0,
-           opacity: 0,
-          }}
-          animate={{
-           pathLength: 1,
-           opacity: 0.85,
-          }}
-          transition={{
-           duration: 0.18,
-           ease: "easeOut",
-          }}
+          className="board-arrow"
+          style={{ transformOrigin: `${x1}px ${y1}px` }}
           x1={x1}
           y1={y1}
           x2={x2}
