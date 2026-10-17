@@ -61,13 +61,13 @@ export const pieceMoveFrames = (
  toY: number,
 ) =>
  sampleFrames((p) => {
-  const e = easeOutQuart(p);
+  const e = easeOutCubic(p);
   const lift = Math.sin(Math.PI * p);
   return pieceFrame(
    lerp(fromX, toX, e),
-   lerp(fromY, toY, e) - 0.22 * lift,
+   lerp(fromY, toY, e) - 0.08 * lift,
    1,
-   1 + 0.1 * lift,
+   1 + 0.05 * lift,
   );
  });
 export const pieceLandFrames = (x: number, y: number, isCapture: boolean) => {

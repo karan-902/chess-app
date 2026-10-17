@@ -123,7 +123,10 @@ export default function Board({
   square: string;
   code: string;
  } | null>(null);
- const [droppedSquare, setDroppedSquare] = useState<string | null>(null);
+ const [droppedMove, setDroppedMove] = useState<{
+  from: string;
+  to: string;
+ } | null>(null);
  const [arrows, setArrows] = useState<Arrow[]>([]);
  const [highlights, setHighlights] = useState<Highlight[]>([]);
  const annotateRef = useRef<{ square: string; colorKey: string } | null>(null);
@@ -174,7 +177,11 @@ export default function Board({
    setLandings((q) => [...q, { id, square: lastMove.to, isCapture }]);
   }
   prevLastMoveRef.current = lastMove ?? null;
-  setDroppedSquare((dropped) => (lastMove?.to === dropped ? dropped : null));
+  setDroppedMove((dropped) =>
+   lastMove?.to === dropped?.to && lastMove?.from === dropped?.from
+    ? dropped
+    : null,
+  );
  }, [lastMove]);
 
  useEffect(() => {
@@ -391,7 +398,7 @@ export default function Board({
   const from = e.active.id as string;
   const to = e.over?.id as string | undefined;
   if (!to || to === from) return;
-  setDroppedSquare(to);
+  setDroppedMove({ from, to });
   onSquareClick?.(to);
  };
 
@@ -585,7 +592,10 @@ export default function Board({
         onClick={() => onSquareClick?.(displaySquare)}
         draggable={!draggableColor || code[0] === draggableColor}
         hidden={!!entranceGhosts}
-        instant={displaySquare === droppedSquare}
+        instant={
+         displaySquare === droppedMove?.to &&
+         !(lastMove?.to === droppedMove.to && lastMove.from !== droppedMove.from)
+        }
         isCaptureMove={isLastMoveCapture && square === lastMove?.to}
         isInCheck={isCheck}
        />
