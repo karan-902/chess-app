@@ -705,9 +705,9 @@
    letter-spacing: 1px;
   }
 
-  .deposit-qr-header & {
-   position: absolute;
-   right: 0;
+  .deposit-qr-stage & {
+   align-self: center;
+   margin-bottom: $space-16;
   }
  }
 

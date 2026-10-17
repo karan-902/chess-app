@@ -229,18 +229,6 @@ export default function DepositSheet() {
         {formatAmount(amountUsd)}
        </Text>
       </Text>
-      {!expired && (
-       <Text
-        customClass={classNames(
-         "match-timer",
-         remainingMs / 1000 <= MATCH_TIMER_LOW_SECONDS && "low",
-        )}
-        aria-label={expiresInLabelText}
-       >
-        <icons.timer />
-        {formatMMSS(Math.floor(remainingMs / 1000))}
-       </Text>
-      )}
      </Box>
 
      {/* <WalletInfoNote text={btcOnlyWarningText} /> */}
@@ -272,6 +260,19 @@ export default function DepositSheet() {
        }}
       />
      </Box>
+
+     {!expired && (
+      <Text
+       customClass={classNames(
+        "match-timer",
+        remainingMs / 1000 <= MATCH_TIMER_LOW_SECONDS && "low",
+       )}
+       aria-label={expiresInLabelText}
+      >
+       <icons.timer />
+       {formatMMSS(Math.floor(remainingMs / 1000))}
+      </Text>
+     )}
 
      <Text customClass="deposit-invoice-label">{lightningInvoiceText}</Text>
      <Box customClass="deposit-address-row">
