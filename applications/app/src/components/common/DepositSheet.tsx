@@ -177,9 +177,10 @@ export default function DepositSheet() {
         type="button"
         disabled={submitting}
         customClass={classNames(
-         "tx-filter-chip",
+         "filter-dropdown-btn",
          amount === String(chipAmount) && "active",
         )}
+        aria-pressed={amount === String(chipAmount)}
         onClick={() => {
          setAmount(String(chipAmount));
          setAmountError("");

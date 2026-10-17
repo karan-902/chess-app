@@ -306,6 +306,11 @@
    min-width: 0 !important;
   }
 
+  .deposit-amount-chips & {
+   flex: 1;
+   min-width: 0 !important;
+  }
+
   &.active {
    --btn-bg: #{$gold} !important;
    --btn-border: 1px solid #{$gold};
