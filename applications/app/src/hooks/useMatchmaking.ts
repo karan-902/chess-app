@@ -2,8 +2,11 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { getSocket } from "@gopvp/common/src/util/socket";
 import { useSocket } from "@gopvp/app/src/context/SocketContext";
-import { useReduxSelector } from "@gopvp/app/src/redux/hooks";
-// import { useReduxDispatch } from "@gopvp/app/src/redux/hooks";
+import {
+ useReduxSelector,
+ useReduxDispatch,
+} from "@gopvp/app/src/redux/hooks";
+import { setOpeningMatchId } from "@gopvp/app/src/redux/socketModals/slice";
 // import { showToast } from "@gopvp/app/src/redux/common/slice";
 import { showAckErrorToast } from "@gopvp/common/src/util/api";
 import { buildMatchUrl } from "@gopvp/app/src/utils";
@@ -43,7 +46,7 @@ export function useMatchmaking() {
  const navigate = useNavigate();
  const { game } = useGame();
  const { socket: ctxSocket } = useSocket();
- // const dispatch = useReduxDispatch();
+ const dispatch = useReduxDispatch();
 
  const resetStatus = useCallback(() => {
   clearTimeout(revealTimerRef.current);
@@ -70,6 +73,7 @@ export function useMatchmaking() {
   (matchId: string, players?: IMatchPlayer[]) => {
    if (!poolRef.current) return;
    poolRef.current = null;
+   dispatch(setOpeningMatchId(matchId));
    setQueueDeadlineAt(null);
    setOpponentName(players?.find((p) => p.id !== myId)?.username ?? "");
    setStatus("revealing");
@@ -81,7 +85,7 @@ export function useMatchmaking() {
     navigate(buildMatchUrl(game, matchId), { replace: true });
    }, delay);
   },
-  [game, navigate, myId],
+  [game, navigate, myId, dispatch],
  );
 
  const emitPoolJoin = useCallback(

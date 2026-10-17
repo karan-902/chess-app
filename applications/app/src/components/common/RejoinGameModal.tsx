@@ -43,6 +43,9 @@ export default function RejoinGameModal() {
  const deviceHandoff = useReduxSelector(
   (state) => state.socketModals.deviceHandoff,
  );
+ const openingMatchId = useReduxSelector(
+  (state) => state.socketModals.openingMatchId,
+ );
  const [confirmingExit, setConfirmingExit] = useState(false);
  const [matchResult, setMatchResult] = useState<IMatchResultResponse | null>(
   null,
@@ -61,7 +64,11 @@ export default function RejoinGameModal() {
 
  const shownGame = activeGame ?? (matchResult ? lastActiveGame : null);
 
- if (!shownGame || deviceHandoff !== null) {
+ if (
+  !shownGame ||
+  deviceHandoff !== null ||
+  shownGame.match_id === openingMatchId
+ ) {
   return null;
  }
 
