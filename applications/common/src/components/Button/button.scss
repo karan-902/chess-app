@@ -438,7 +438,7 @@
   }
  }
 
- &.contained:not(.disabled) .button-face {
+ &.contained:not(.disabled, .wallet-withdraw-btn) .button-face {
   position: relative;
   overflow: hidden;
 
