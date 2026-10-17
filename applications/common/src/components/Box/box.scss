@@ -3577,9 +3577,13 @@
   align-items: center;
   height: 2.25rem;
   margin-left: 1rem;
-  border: 1px solid $appCardBorder;
+  border: 1px solid alpha($appText, 0.12);
   border-radius: 999px;
-  background: $appSurface;
+  background: linear-gradient(
+   180deg,
+   alpha($appText, 0.12),
+   alpha($appText, 0.05)
+  );
 
   a {
    display: flex;
