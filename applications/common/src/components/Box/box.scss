@@ -3577,13 +3577,8 @@
   align-items: center;
   height: 2.25rem;
   margin-left: 1rem;
-  border: 1px solid alpha($appText, 0.12);
   border-radius: 999px;
-  background: linear-gradient(
-   180deg,
-   alpha($appText, 0.12),
-   alpha($appText, 0.05)
-  );
+  background: alpha($appText, 0.08);
 
   a {
    display: flex;
