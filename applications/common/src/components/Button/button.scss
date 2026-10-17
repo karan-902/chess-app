@@ -131,6 +131,7 @@
 
   .button-face {
    height: var(--btn-face-h) !important;
+   margin: 0 !important;
    transform: rotateX(24deg);
    transform-origin: 50% 100%;
    animation: tilted-float 3.75s ease-in-out infinite;
