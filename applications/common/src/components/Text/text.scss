@@ -1228,11 +1228,9 @@
   }
  }
  &.score-hero-label {
-  font-family: $fontOutfitBold;
-  font-size: $font10;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: alpha($appText, 0.5);
+  font-family: $fontOutfitSemiBold;
+  font-size: $font13;
+  color: alpha($appText, 0.7);
  }
 
  &.score-hero-val {
