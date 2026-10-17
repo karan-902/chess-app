@@ -195,10 +195,6 @@
   font-size: $font18;
   flex-shrink: 0;
 
-  @include from(laptop) {
-   font-size: $font20;
-  }
-
   &.pos {
    color: $greenishTeal;
   }
@@ -1158,7 +1154,7 @@
  &.match-row-headline {
   line-height: 1.4;
   font-family: $fontOutfitBold;
-  font-size: $font15;
+  font-size: $font16;
   color: alpha($appText, 0.9);
  }
 
@@ -1252,7 +1248,7 @@
   flex-shrink: 0;
   text-align: center;
   font-family: $fontOutfitBold;
-  font-size: $font14;
+  font-size: $font13;
   color: alpha($appText, 0.5);
 
   &.gold {
@@ -1272,7 +1268,7 @@
   flex: 1;
   min-width: 0;
   font-family: $fontOutfitSemiBold;
-  font-size: $font15;
+  font-size: $font16;
   color: alpha($appText, 0.9);
  }
 
@@ -1353,12 +1349,12 @@
 
  .wallet-tx-row &.row-title {
   font-family: $fontOutfitSemiBold;
-  font-size: $font15;
+  font-size: $font16;
  }
 
  .wallet-tx-row &.meta-text {
   font-family: $fontOutfitMedium;
-  font-size: $font12;
+  font-size: $font13;
  }
 
  &.profile-id-name {
