@@ -322,6 +322,14 @@ $radius-card: 0;
  pointer-events: none;
 }
 
+@mixin long-arrow {
+ content: "";
+ width: 1.125rem;
+ height: 0.625rem;
+ background: currentColor;
+ mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 10' fill='none' stroke='black' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 5h16M12.5 1 17 5l-4.5 4'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
 @mixin neo-plunk($edge: $neoEdge) {
  border: 1px solid alpha($appText, 0.1);
  box-shadow: none;

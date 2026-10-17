@@ -2066,12 +2066,22 @@
   justify-content: space-between;
   gap: $space-12;
   padding: 0.875rem $space-16;
-  background: $appSheetFill;
-  @include neo-plunk;
+  background: $appSurface;
+  border: 1px solid $appCardBorder;
   border-radius: $radius-card;
 
   &.clickable {
    cursor: pointer;
+
+   .match-row-amt-row {
+    align-items: center;
+    gap: 0.625rem;
+
+    &::after {
+     @include long-arrow;
+     color: alpha($appText, 0.5);
+    }
+   }
   }
 
   &.system {
@@ -2300,6 +2310,9 @@
  }
 
  &.match-row-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
   min-width: 0;
  }
 

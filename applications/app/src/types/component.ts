@@ -63,6 +63,7 @@ export interface IStatListProps {
 export interface IMatchRowProps {
  outcome: MatchOutcome;
  headline: string;
+ resultTag?: string;
  amount: number;
  onClick?: () => void;
 }

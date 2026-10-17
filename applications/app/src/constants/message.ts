@@ -113,6 +113,9 @@ export const winItAllText = "win it all";
 export const playNowText = "Play now";
 export const tapPlayNowHintText = "Play now to choose a pool";
 export const wonText = "won";
+export const lostText = "lost";
+export const drawText = "draw";
+export const voidText = "void";
 export const firebaseConfigMissingText =
  "Firebase config missing: set the VITE_FIREBASE_* env variables.";
 export const largestPrizesTipText =

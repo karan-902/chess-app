@@ -1161,8 +1161,26 @@
 
  &.match-row-headline {
   line-height: 1.4;
-  font-family: $fontOutfitSemiBold;
+  font-family: $fontOutfitBold;
   font-size: $font15;
+  color: alpha($appText, 0.9);
+ }
+
+ &.match-row-tag {
+  font-family: $fontOutfitBold;
+  font-size: $font10;
+  line-height: 1.2;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: alpha($appText, 0.5);
+
+  &.win {
+   color: $greenishTeal;
+  }
+
+  &.loss {
+   color: $paleRed;
+  }
  }
 
  &.empty-state-title {
