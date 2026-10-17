@@ -36,7 +36,7 @@ export default function MatchRow({
         outcome === "loss" ? "neg" : "pos",
        )}
       >
-       {`${outcome === "loss" ? "-" : "+"}${formatAmount(amount, true)}`}
+       {`${outcome === "loss" ? "-" : "+"}${formatAmount(amount)}`}
       </Text>
      </Box>
     </Box>

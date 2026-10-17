@@ -9,9 +9,8 @@ const currencyFormatter = new Intl.NumberFormat("en-US", {
  currency: "USD",
 });
 
-export function formatAmount(amount: number, keepCents = false): string {
- const formatted = currencyFormatter.format(amount);
- return keepCents ? formatted : formatted.replace(/\.00$/, "");
+export function formatAmount(amount: number): string {
+ return currencyFormatter.format(amount);
 }
 
 export function formatTime(date: number | Date): string {

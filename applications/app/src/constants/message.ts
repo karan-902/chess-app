@@ -1,3 +1,5 @@
+import { formatAmount } from "@gopvp/common/src/util/format";
+
 export const rejoinMatchText = "Rejoin Match";
 export const matchStillLiveText = (opponentName: string) =>
  `Your match with ${opponentName} is still live. Reconnect now before it's forfeited.`;
@@ -164,7 +166,7 @@ export const enterAmountText = "Enter Amount";
 export const generateQrCodeText = "Generate QR Code";
 export const amountRequiredText = "Amount is required";
 export const maxDepositAmountText = (max: number) =>
- `Maximum deposit amount is $${max}.`;
+ `Maximum deposit amount is ${formatAmount(max)}`;
 export const btcOnlyWarningText =
  "Deposits must be in BTC only. Other currencies will be lost.";
 export const scanToDepositText =
@@ -186,7 +188,7 @@ export const destinationText = "Destination";
 export const btcAddressOrInvoiceText = "Bitcoin address or Lightning invoice";
 export const requestWithdrawalText = "Withdraw";
 export const maxWithdrawalAmountText = (max: number) =>
- `Maximum withdrawal amount is $${max}.`;
+ `Maximum withdrawal amount is ${formatAmount(max)}`;
 export const insufficientWithdrawableText = "Insufficient withdrawable balance";
 export const enterDestinationText = "Enter a destination address";
 export const withdrawalCompletedText = "Withdrawal completed";

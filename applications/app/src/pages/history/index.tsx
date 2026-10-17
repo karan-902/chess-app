@@ -145,7 +145,7 @@ export default function MyMatches() {
        { label: winsText, value: stats?.wins ?? MATCHES_STATS_FALLBACK },
        {
         label: totalEarningsText,
-        value: formatAmount(stats?.gross_income ?? MATCHES_STATS_FALLBACK, true),
+        value: formatAmount(stats?.gross_income ?? MATCHES_STATS_FALLBACK),
         valueClass: "prize",
        },
       ].map(({ label, value, valueClass }) => (

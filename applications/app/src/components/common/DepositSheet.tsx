@@ -186,7 +186,7 @@ export default function DepositSheet() {
          setAmountError("");
         }}
        >
-        ${chipAmount}
+        {formatAmount(chipAmount)}
        </Button>
       ))}
      </Box>
