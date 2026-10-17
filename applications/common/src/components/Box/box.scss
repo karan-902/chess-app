@@ -3472,6 +3472,8 @@
    gap: 0.625rem;
    min-width: 0;
    padding: 0.875rem;
+   border: 1px solid $appCardBorder;
+   background: $appSurface;
    text-align: left;
   }
 
@@ -3575,8 +3577,13 @@
   align-items: center;
   height: 2.25rem;
   margin-left: 1rem;
+  border: 1px solid alpha($appText, 0.12);
   border-radius: 999px;
-  background: alpha($appText, 0.08);
+  background: linear-gradient(
+   180deg,
+   alpha($appText, 0.12),
+   alpha($appText, 0.05)
+  );
 
   a {
    display: flex;
