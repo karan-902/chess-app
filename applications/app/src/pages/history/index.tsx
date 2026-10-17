@@ -4,7 +4,8 @@ import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Card from "@gopvp/common/src/components/Card/Card";
 import EmptyState from "@gopvp/app/src/components/common/EmptyState";
-import StatList from "@gopvp/app/src/components/common/StatList";
+// import StatList from "@gopvp/app/src/components/common/StatList";
+import StatTile from "@gopvp/common/src/components/StatTile/StatTile";
 import MatchRowSkeleton from "@gopvp/app/src/components/common/MatchRowSkeleton";
 import Button from "@gopvp/common/src/components/Button/Button";
 import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
@@ -28,14 +29,14 @@ import {
 import {
  MATCHES_STATS_FALLBACK,
  HISTORY_SKELETON_ROWS,
- MATCH_STATS_SKELETON_ROWS,
+ // MATCH_STATS_SKELETON_ROWS,
 } from "@gopvp/app/src/constants/limit";
 import { scoreText } from "@gopvp/common/src/constants/message";
 import { MATCHES_SUBTAB_OPTIONS } from "@gopvp/app/src/constants/option";
 import { MATCHES_SUBTAB_LABELS } from "@gopvp/app/src/constants/label";
 import { renderSkeletons } from "@gopvp/app/src/utils/skeleton";
-import { STAT_ICONS } from "@gopvp/app/src/constants/icon";
-import { Crown } from "@gopvp/common/src/components/images";
+// import { STAT_ICONS } from "@gopvp/app/src/constants/icon";
+// import { Crown } from "@gopvp/common/src/components/images";
 import MatchList from "@gopvp/app/src/pages/history/MatchList";
 import MatchInfoSheet from "@gopvp/app/src/pages/history/MatchInfoSheet";
 
@@ -116,13 +117,13 @@ export default function MyMatches() {
       </Text>
      </Box> */}
      <Card customClass="score-hero">
-      <Box customClass="score-hero-icon">
+      {/* <Box customClass="score-hero-icon">
        {statsLoading ? (
         <Skeleton variant="rectangular" customClass="icon" />
        ) : (
         <Crown strokeWidth={2} />
        )}
-      </Box>
+      </Box> */}
       <Text component="span" customClass="score-hero-label">
        {statsLoading ? <Skeleton customClass="text" width={60} /> : scoreText}
       </Text>
@@ -134,36 +135,28 @@ export default function MyMatches() {
        )}
       </Text>
      </Card>
-     <StatList
-      rows={
-       statsLoading
-        ? null
-        : [
-           {
-            label: currentStreakText,
-            value: stats?.current_streak ?? MATCHES_STATS_FALLBACK,
-            ...STAT_ICONS.current_streak,
-           },
-           {
-            label: bestStreakText,
-            value: stats?.best_streak ?? MATCHES_STATS_FALLBACK,
-            ...STAT_ICONS.best_streak,
-           },
-           {
-            label: winsText,
-            value: stats?.wins ?? MATCHES_STATS_FALLBACK,
-            ...STAT_ICONS.wins,
-           },
-           {
-            label: totalEarningsText,
-            value: formatAmount(stats?.gross_income ?? MATCHES_STATS_FALLBACK),
-            ...STAT_ICONS.gross_income,
-            isPrize: true,
-           },
-          ]
-      }
-      skeletonRows={MATCH_STATS_SKELETON_ROWS}
-     />
+     <Box customClass="result-tiles">
+      {[
+       {
+        label: currentStreakText,
+        value: stats?.current_streak ?? MATCHES_STATS_FALLBACK,
+       },
+       { label: bestStreakText, value: stats?.best_streak ?? MATCHES_STATS_FALLBACK },
+       { label: winsText, value: stats?.wins ?? MATCHES_STATS_FALLBACK },
+       {
+        label: totalEarningsText,
+        value: formatAmount(stats?.gross_income ?? MATCHES_STATS_FALLBACK, true),
+        valueClass: "prize",
+       },
+      ].map(({ label, value, valueClass }) => (
+       <StatTile
+        key={label}
+        label={statsLoading ? <Skeleton customClass="text" width={60} /> : label}
+        value={statsLoading ? <Skeleton customClass="text" width={50} /> : value}
+        valueClass={statsLoading ? undefined : valueClass}
+       />
+      ))}
+     </Box>
     </Box>
    )}
   </Box>

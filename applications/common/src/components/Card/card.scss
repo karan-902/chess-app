@@ -142,9 +142,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: $space-4;
-  padding: 1.375rem $space-16;
-  border: 1px solid alpha($gold, 0.7);
+  gap: $space-8;
+  padding: 1.5rem $space-16 1.75rem;
+  border: none;
+  background: transparent;
+  box-shadow: none;
  }
 
  &.rules-card {
