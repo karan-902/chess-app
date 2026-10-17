@@ -115,7 +115,6 @@ $pieceFill: 92%;
  justify-content: center;
  touch-action: none;
  z-index: $z-overlay;
- will-change: transform;
  outline: none;
 
  &:focus-visible {
