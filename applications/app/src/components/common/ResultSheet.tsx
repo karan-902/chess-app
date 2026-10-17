@@ -46,9 +46,11 @@ export default function ResultSheet({
     <Text customClass="result-title">
      {isLoading ? <Skeleton customClass="text" width={140} /> : title}
     </Text>
-    <Text customClass="result-subtitle">
-     {isLoading ? <Skeleton customClass="text" width={140} /> : subtitle}
-    </Text>
+    {subtitle !== undefined && (
+     <Text customClass="result-subtitle">
+      {isLoading ? <Skeleton customClass="text" width={140} /> : subtitle}
+     </Text>
+    )}
     <Text customClass="result-amount">
      {isLoading ? <Skeleton customClass="text" width={120} /> : amount}
     </Text>
