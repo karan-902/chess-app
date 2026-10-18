@@ -292,52 +292,45 @@ export default function Board({
  const isLastMoveCapture =
   !!lastMove && !!capturedSquareOf(prevBoardRef.current, lastMove);
 
- const expandedPremoveMoves = useMemo(() => {
-  const expanded: { from: string; to: string }[] = [];
+ const { premoveDisplaySquares, hiddenCaptureSquares } = useMemo(() => {
+  const originAt: Record<string, string> = {};
+  for (const square of Object.keys(board)) originAt[square] = square;
+  const displaySquares: Record<string, string> = {};
+  const capturingOrigins = new Set<string>();
+  const hidden = new Set<string>();
+  const shift = (from: string, to: string) => {
+   const origin = originAt[from];
+   if (!origin) return null;
+   const victim = originAt[to];
+   if (victim && board[victim][0] !== board[origin][0]) {
+    hidden.add(victim);
+    capturingOrigins.add(origin);
+   }
+   delete originAt[from];
+   originAt[to] = origin;
+   if (!capturingOrigins.has(origin)) displaySquares[origin] = to;
+   return origin;
+  };
   for (const m of premoveMoves) {
-   expanded.push(m);
-   const piece = board[m.from];
+   const origin = shift(m.from, m.to);
    const isCastle =
-    piece?.[1] === "K" &&
+    !!origin &&
+    board[origin][1] === "K" &&
     Math.abs(FILES.indexOf(m.to[0]) - FILES.indexOf(m.from[0])) === 2;
    if (isCastle) {
     const rank = m.from[1];
     const kingside = m.to[0] === "g";
-    expanded.push({
-     from: `${kingside ? "h" : "a"}${rank}`,
-     to: `${kingside ? "f" : "d"}${rank}`,
-    });
+    shift(`${kingside ? "h" : "a"}${rank}`, `${kingside ? "f" : "d"}${rank}`);
    }
   }
-  return expanded;
+  return {
+   premoveDisplaySquares: displaySquares,
+   hiddenCaptureSquares: hidden,
+  };
  }, [premoveMoves, board]);
 
- const resolveDisplaySquare = (square: string) => {
-  let current = square;
-  for (const m of expandedPremoveMoves) {
-   if (m.from !== current) continue;
-   if (board[m.to]) break;
-   current = m.to;
-  }
-  return current;
- };
-
- const hiddenCaptureSquares = useMemo(() => {
-  const hidden = new Set<string>();
-  for (const [square, code] of Object.entries(board)) {
-   let current = square;
-   for (const m of expandedPremoveMoves) {
-    if (m.from !== current) continue;
-    const occupant = board[m.to];
-    if (occupant) {
-     if (occupant[0] !== code[0]) hidden.add(m.to);
-     break;
-    }
-    current = m.to;
-   }
-  }
-  return hidden;
- }, [board, expandedPremoveMoves]);
+ const resolveDisplaySquare = (square: string) =>
+  premoveDisplaySquares[square] ?? square;
 
  const prevKeyMapRef = useRef<Record<string, string>>({});
  const pieceKeys: Record<string, string> = {};

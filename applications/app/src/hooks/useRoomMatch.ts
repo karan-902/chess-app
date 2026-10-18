@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import type { Socket } from "socket.io-client";
 import { getSocket } from "@gopvp/common/src/util/socket";
 import { useSocket } from "@gopvp/app/src/context/SocketContext";
 import { showAckErrorToast } from "@gopvp/common/src/util/api";
@@ -42,6 +43,7 @@ export function useRoomMatch(onRoomExpired?: () => void) {
   status === "waiting" || status === "ready" || status === "starting";
  const expiresInSeconds = useCountdown(isRoomOpen ? expiryAt : null);
  const roomRef = useRef<TRoomInfo | null>(null);
+ const pendingEmitRef = useRef<((socket: Socket) => void) | null>(null);
  const requestIdRef = useRef(0);
  const statusRef = useRef<RoomStatus>("idle");
  statusRef.current = status;
@@ -58,7 +60,14 @@ export function useRoomMatch(onRoomExpired?: () => void) {
   setIsOwner(false);
   setRoomCode(null);
   roomRef.current = null;
+  pendingEmitRef.current = null;
  }, []);
+
+ const emitWhenConnected = (emit: (socket: Socket) => void) => {
+  const socket = getSocket();
+  if (socket?.connected) emit(socket);
+  else pendingEmitRef.current = emit;
+ };
 
  const enterRoom = (
   room: TRoomInfo,
@@ -82,67 +91,67 @@ export function useRoomMatch(onRoomExpired?: () => void) {
  );
 
  const createRoom = (bet: number, timeSeconds: number) => {
-  const socket = getSocket();
-  if (!socket) return;
   const requestId = requestIdRef.current;
   setStatus("creating");
-  socket.emit(
-   SOCKET_EVENTS.ROOM_CREATE,
-   { game, bet, time: timeSeconds * 1000 },
-   (err: ISocketAckError | null, data: ICreateRoomResponse) => {
-    if (requestId !== requestIdRef.current) {
-     if (!err)
-      socket.emit(
-       SOCKET_EVENTS.ROOM_CANCEL,
-       { room_code: data.room_code },
-       () => {},
-      );
-     return;
-    }
-    if (err) {
-     showAckErrorToast(err);
-     resetStatus();
-     return;
-    }
-    setExpiryAt(data.expiry);
-    enterRoom(
-     { code: data.room_code, bet: data.bet, time: data.time },
-     true,
-     "waiting",
-    );
-   },
+  emitWhenConnected((socket) =>
+   socket.emit(
+    SOCKET_EVENTS.ROOM_CREATE,
+    { game, bet, time: timeSeconds * 1000 },
+    (err: ISocketAckError | null, data: ICreateRoomResponse) => {
+     if (requestId !== requestIdRef.current) {
+      if (!err)
+       socket.emit(
+        SOCKET_EVENTS.ROOM_CANCEL,
+        { room_code: data.room_code },
+        () => {},
+       );
+      return;
+     }
+     if (err) {
+      showAckErrorToast(err);
+      resetStatus();
+      return;
+     }
+     setExpiryAt(data.expiry);
+     enterRoom(
+      { code: data.room_code, bet: data.bet, time: data.time },
+      true,
+      "waiting",
+     );
+    },
+   ),
   );
  };
 
  const joinRoom = (code: string) => {
-  const socket = getSocket();
-  if (!socket) return;
   const requestId = requestIdRef.current;
   setStatus("joining");
-  socket.emit(
-   SOCKET_EVENTS.ROOM_JOIN,
-   { room_code: code },
-   (err: ISocketAckError | null, data: IMatchmakingResponse) => {
-    if (requestId !== requestIdRef.current) {
-     if (!err)
-      socket.emit(SOCKET_EVENTS.ROOM_LEAVE, { room_code: code }, () => {});
-     return;
-    }
-    if (err) {
-     showAckErrorToast(err);
-     resetStatus();
-     return;
-    }
-    if (data.status === "MATCHED" && data.match_type === "ROOM") {
-     setPlayers(data.players);
-     setExpiryAt(data.expiry);
-     enterRoom(
-      { code: data.room_code, bet: data.bet, time: data.time },
-      false,
-      "ready",
-     );
-    }
-   },
+  emitWhenConnected((socket) =>
+   socket.emit(
+    SOCKET_EVENTS.ROOM_JOIN,
+    { room_code: code },
+    (err: ISocketAckError | null, data: IMatchmakingResponse) => {
+     if (requestId !== requestIdRef.current) {
+      if (!err)
+       socket.emit(SOCKET_EVENTS.ROOM_LEAVE, { room_code: code }, () => {});
+      return;
+     }
+     if (err) {
+      showAckErrorToast(err);
+      resetStatus();
+      return;
+     }
+     if (data.status === "MATCHED" && data.match_type === "ROOM") {
+      setPlayers(data.players);
+      setExpiryAt(data.expiry);
+      enterRoom(
+       { code: data.room_code, bet: data.bet, time: data.time },
+       false,
+       "ready",
+      );
+     }
+    },
+   ),
   );
  };
 
@@ -194,11 +203,20 @@ export function useRoomMatch(onRoomExpired?: () => void) {
    if (statusRef.current === "ready") setStatus("waiting");
   };
 
+  const onConnect = () => {
+   const emit = pendingEmitRef.current;
+   pendingEmitRef.current = null;
+   emit?.(socket);
+  };
+
   socket.on(SOCKET_EVENTS.MATCHED, onMatched);
   socket.on(SOCKET_EVENTS.MATCH_STARTED, onMatchStarted);
   socket.on(SOCKET_EVENTS.ROOM_LEFT, onRoomLeft);
+  socket.on(SOCKET_EVENTS.CONNECT, onConnect);
+  if (socket.connected) onConnect();
 
   return () => {
+   socket.off(SOCKET_EVENTS.CONNECT, onConnect);
    socket.off(SOCKET_EVENTS.MATCHED, onMatched);
    socket.off(SOCKET_EVENTS.MATCH_STARTED, onMatchStarted);
    socket.off(SOCKET_EVENTS.ROOM_LEFT, onRoomLeft);
@@ -214,6 +232,7 @@ export function useRoomMatch(onRoomExpired?: () => void) {
 
  return {
   status,
+  isRoomActive: isRoomOpen || status === "creating" || status === "joining",
   isOwner,
   roomCode,
   opponentName: shortenUsername(

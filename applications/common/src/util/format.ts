@@ -10,7 +10,7 @@ const currencyFormatter = new Intl.NumberFormat("en-US", {
 });
 
 export function formatAmount(amount: number): string {
- return currencyFormatter.format(amount);
+ return currencyFormatter.format(amount).replace(/\.00$/, "");
 }
 
 export function formatTime(date: number | Date): string {

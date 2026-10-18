@@ -12,7 +12,7 @@
  }
  .MuiPaper-root {
   @include neo-plunk;
-  border-radius: 0;
+  border-radius: 5px;
   margin-top: $space-4;
  }
  &.filter-dropdown-menu {

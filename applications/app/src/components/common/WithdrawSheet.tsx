@@ -140,7 +140,7 @@ export default function WithdrawSheet() {
        label={enterAmountText}
        labelClassName="wallet-label"
        fullWidth
-       placeholder="0.00"
+       placeholder="0"
        customClass="amount-input-hero"
        value={amount}
        onChange={handleAmountChange}

@@ -171,8 +171,11 @@ export default function GameRoom({ mode }: IGameRoomProps) {
  }, [gameId]);
 
  useEffect(() => {
-  if (turn === playerSide) setPremoveFrom(null);
- }, [turn, playerSide]);
+  if (turn !== playerSide || !premoveFrom) return;
+  if (premoveQueue.length === 0 && getLegalMoves(premoveFrom).length > 0)
+   setSelectedSquare(premoveFrom);
+  setPremoveFrom(null);
+ }, [turn, playerSide, premoveFrom, premoveQueue.length, getLegalMoves]);
 
  const {
   whiteTimer,

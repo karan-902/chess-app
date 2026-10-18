@@ -139,6 +139,10 @@
   justify-content: safe center;
  }
 
+ &.wallet-sheet .MuiDrawer-paper:has(.wallet-modal-layout) {
+  padding-top: 1.75rem;
+ }
+
  &.wallet-sheet-success .MuiDrawer-paper {
   min-height: 0;
  }

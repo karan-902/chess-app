@@ -103,7 +103,7 @@
 
  &.dialog-title {
   font-family: $fontOutfitMedium;
-  font-size: 1.625rem;
+  font-size: $font26;
   line-height: 1.15;
   letter-spacing: -0.01em;
   color: $appText;
@@ -192,15 +192,11 @@
 
  &.amount-value {
   font-family: $fontOutfitExtraBold;
-  font-size: 16px;
+  font-size: 15px;
   flex-shrink: 0;
 
   @include from(phone) {
-   font-size: 17px;
-  }
-
-  @include from(tablet) {
-   font-size: 18px;
+   font-size: 16px;
   }
 
   &.pos {
@@ -214,13 +210,12 @@
   &.neutral {
    color: $appTextMuted;
   }
-
  }
 
  &.auth-account-name {
   display: block;
   font-family: $fontOutfitBold;
-  font-size: 1.0625rem;
+  font-size: $font17;
   color: $appText;
  }
 
@@ -234,7 +229,7 @@
  &.auth-footer-title {
   font-family: $fontOutfitBlack;
   font-size: $font16;
-  line-height: 1.375rem;
+  line-height: 1.375;
   letter-spacing: -0.4px;
   color: $appText;
  }
@@ -245,7 +240,7 @@
   gap: 0.3125rem;
   font-family: $fontOutfitBold;
   font-size: $font10;
-  line-height: 1rem;
+  line-height: 1.33;
   letter-spacing: 1.6px;
   text-transform: uppercase;
   color: $gold;
@@ -288,8 +283,8 @@
  &.public-title,
  &.game-picker-title {
   font-family: $fontOutfitBlack;
-  font-size: 1.875rem;
-  line-height: 2.125rem;
+  font-size: $font36;
+  line-height: 1.11;
   letter-spacing: -1.2px;
   white-space: normal;
   color: $appText;
@@ -298,18 +293,9 @@
    @extend %gold-gradient-text;
    display: block;
    font-family: inherit;
-   font-size: 2.25rem;
+   font-size: $font42;
    line-height: inherit;
    letter-spacing: inherit;
-  }
-
-  @include from-height(tall) {
-   font-size: 2.25rem;
-   line-height: 2.5rem;
-
-   .public-title-accent {
-    font-size: 2.625rem;
-   }
   }
  }
 
@@ -319,21 +305,12 @@
   background-clip: text;
   color: transparent;
   font-family: $fontOutfitExtraBold;
-  font-size: 1.5rem;
-  line-height: 1.875rem;
+  font-size: $font28;
+  line-height: 1.25;
   letter-spacing: 0.2px;
 
   .public-title-accent {
    font-size: inherit;
-  }
-
-  @include from-height(tall) {
-   font-size: 1.75rem;
-   line-height: 2.1875rem;
-
-   .public-title-accent {
-    font-size: inherit;
-   }
   }
 
   :root[data-theme="light"] & {
@@ -348,7 +325,7 @@
  }
 
  &.game-picker-title {
-  font-size: 2.125rem;
+  font-size: $font34;
 
   .public-title-accent {
    display: inline;
@@ -365,8 +342,8 @@
   @extend %gold-gradient-text;
   flex-shrink: 0;
   font-family: $fontOutfitBlack;
-  font-size: 2.375rem;
-  line-height: 3rem;
+  font-size: $font38;
+  line-height: 1.26;
   filter: drop-shadow(0 0 14px alpha($gold, 0.35));
 
   :root[data-theme="light"] & {
@@ -391,7 +368,7 @@
 
  &.public-subtitle {
   font-family: $fontOutfitMedium;
-  line-height: 1.5rem !important;
+  line-height: 1.5 !important;
   text-align: left;
   white-space: nowrap !important;
   overflow: hidden !important;
@@ -667,7 +644,7 @@
   text-align: center;
   font-family: $fontOutfitExtraBold;
   font-size: $font13;
-  line-height: 1.25rem;
+  line-height: 1.54;
   color: $primaryContrast;
   white-space: nowrap;
   overflow: hidden;
@@ -709,6 +686,19 @@
   .deposit-qr-stage & {
    align-self: center;
    margin-bottom: $space-16;
+  }
+ }
+
+ .common-drawer &.public-title {
+  font-size: 18px;
+  line-height: 1.27;
+
+  @include from(phone) {
+   font-size: 24px;
+  }
+
+  @include from(tablet) {
+   font-size: 26px;
   }
  }
 
@@ -834,8 +824,8 @@
    text-align: right;
    white-space: nowrap;
    font-family: $fontOutfitBlack;
-   font-size: 1.75rem;
-   line-height: 2.625rem;
+   font-size: $font28;
+   line-height: 1.5;
    color: var(--payout-money);
    text-shadow:
     0 1px 0 alpha($white, 0.9),
@@ -856,7 +846,7 @@
   border: 2.5px solid var(--payout-stamp);
   border-radius: 4px;
   font-family: $fontOutfitBlack;
-  font-size: 1rem;
+  font-size: $font16;
   letter-spacing: 2.5px;
   text-transform: uppercase;
   color: var(--payout-stamp);
@@ -877,7 +867,7 @@
    margin: 0.25rem auto;
    padding: 0.25rem 0.75rem;
    border-width: 2.5px;
-   font-size: 1.125rem;
+   font-size: $font18;
    letter-spacing: 2.5px;
   }
 
@@ -913,7 +903,7 @@
   white-space: nowrap;
   font-family: $fontOutfitBold;
   font-size: $font13;
-  line-height: 1rem;
+  line-height: 1.23;
   color: alpha($poolInk, 0.75);
 
   &.pending {
@@ -926,7 +916,7 @@
    text-overflow: ellipsis;
    white-space: nowrap;
    font-size: $font14;
-   line-height: 1.125rem;
+   line-height: 1.29;
    color: alpha($poolInk, 0.9);
   }
  }
@@ -1119,7 +1109,7 @@
 
   .segment.gold-bar & {
    font-family: $fontOutfitBold;
-   font-size: 0.5625rem;
+   font-size: $font10;
    letter-spacing: 1.5px;
    text-transform: uppercase;
    color: alpha($appText, 0.45);
@@ -1340,7 +1330,7 @@
   max-width: 100%;
   margin-top: 0.25rem;
   font-family: $fontOutfitBlack;
-  font-size: 3.25rem;
+  font-size: $font52;
   line-height: 1.1;
   letter-spacing: -0.02em;
   color: $appBalance;
@@ -1359,6 +1349,27 @@
   font-family: $fontOutfitBlack;
   font-size: $font16;
   color: $greenishTeal;
+ }
+
+ .wallet-withdrawable-row &.wallet-withdrawable-lbl {
+  padding: 0;
+  border: none;
+  font-size: 14px;
+  color: alpha($appText, 0.7);
+
+  @include from(phone) {
+   font-size: 15px;
+  }
+ }
+
+ .wallet-withdrawable-row &.wallet-withdrawable-val {
+  padding: 0;
+  font-family: $fontOutfitExtraBold;
+  font-size: 15px;
+
+  @include from(phone) {
+   font-size: 16px;
+  }
  }
 
  &.wallet-tx-title {
@@ -1396,6 +1407,45 @@
   color: alpha($appText, 0.9);
  }
 
+ .profile-id-row &.profile-id-name {
+  font-size: 17px;
+
+  @include from(phone) {
+   font-size: 18px;
+  }
+ }
+
+ &.profile-id-email {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: $fontOutfitMedium;
+  font-size: 13px;
+  color: alpha($appText, 0.5);
+ }
+
+ &.profile-stat-val {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: $fontOutfitBlack;
+  font-size: 18px;
+  color: alpha($appText, 0.9);
+
+  @include from(phone) {
+   font-size: 20px;
+  }
+ }
+
+ &.profile-stat-label {
+  font-family: $fontOutfitMedium;
+  font-size: 12px;
+  color: alpha($appText, 0.5);
+
+  @include from(phone) {
+   font-size: 13px;
+  }
+ }
+
  &.profile-score-text {
   font-family: $fontOutfitExtraBold;
   font-size: $font12;
@@ -1403,17 +1453,37 @@
  }
 
  .profile-list &.stat-title {
-  font-size: $font14;
+  font-family: $fontOutfitSemiBold !important;
+  font-size: 15px;
+  color: alpha($appText, 0.9);
+
+  @include from(phone) {
+   font-size: 16px;
+  }
  }
 
  .profile-list &.stat-val {
-  font-family: $fontOutfitSemiBold;
-  font-size: $font14 !important;
+  font-family: $fontOutfitExtraBold;
+  font-size: 15px !important;
+
+  @include from(phone) {
+   font-size: 16px !important;
+  }
  }
 
  &.sheet-title {
   display: block;
   margin: 0 0 1.1rem;
+  font-size: 20px;
+  line-height: 1.27;
+
+  @include from(phone) {
+   font-size: 24px;
+  }
+
+  @include from(tablet) {
+   font-size: 26px;
+  }
  }
  &.result-title {
   font-family: $fontOutfitExtraBold;
@@ -1506,7 +1576,7 @@
    }
   }
 
-  .result-tiles.versus & {
+  .result-tiles & {
    min-width: 0;
    overflow: hidden;
    text-overflow: ellipsis;
@@ -1530,7 +1600,7 @@
    color: $appPrize;
   }
 
-  .result-tiles.versus & {
+  .result-tiles & {
    font-family: $fontOutfitExtraBold;
    font-size: $font30;
   }
@@ -1541,7 +1611,15 @@
    text-overflow: ellipsis;
    white-space: nowrap;
    font-family: $fontOutfitExtraBold;
-   font-size: $font30;
+   font-size: 26px;
+
+   @include from(phone) {
+    font-size: 30px;
+   }
+
+   @include from(tablet) {
+    font-size: 32px;
+   }
   }
 
   .compact & {
@@ -1642,7 +1720,7 @@
 
   &.value-heading {
    font-family: $fontOutfitBlack;
-   font-size: 1.625rem;
+   font-size: $font26;
    letter-spacing: -0.01em;
   }
  }
@@ -1879,7 +1957,11 @@
 
  &.gr-move-n {
   font-family: $fontOutfitBold;
-  font-size: $font10;
+  font-size: 10px;
+
+  @include from(phone) {
+   font-size: 11px;
+  }
   letter-spacing: 1px;
   color: alpha($appText, 0.4);
   margin-right: 0.25rem;
@@ -1893,16 +1975,17 @@
  &.appbar-dropdown-name {
   font-family: $fontOutfitBold;
   font-size: $font15;
-  color: $appText;
+  color: alpha($appText, 0.9);
  }
 
  &.appbar-dropdown-email {
   max-width: 100%;
-  overflow-wrap: anywhere;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-family: $fontOutfitMedium;
   font-size: $font12;
   line-height: 1.25;
-  color: alpha($appText, 0.55);
+  color: alpha($appText, 0.5);
  }
 
  &.modal-description {

@@ -7,10 +7,10 @@ import {
  // DollarSign,
  // Flame,
  Globe,
- Mail,
+ // Mail,
  Moon,
- Pencil,
- Star,
+ SquarePen,
+ // Star,
  // Trophy,
 } from "@gopvp/common/src/components/images";
 import Box from "@gopvp/common/src/components/Box/Box";
@@ -20,7 +20,7 @@ import Button from "@gopvp/common/src/components/Button/Button";
 import CustomSwitch from "@gopvp/common/src/components/Switch/Switch";
 // import CustomChip from "@gopvp/common/src/components/Chip/Chip";
 import CustomAvatar from "@gopvp/common/src/components/Avatar/Avatar";
-// import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
+import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
 // import StatTile from "@gopvp/common/src/components/StatTile/StatTile";
 import ProfileSkeleton from "@gopvp/app/src/components/common/ProfileSkeleton";
 import UsernameField from "@gopvp/app/src/components/common/UsernameField";
@@ -33,7 +33,7 @@ import {
  showApiErrorToast,
 } from "@gopvp/common/src/util/api";
 import {
- // formatAmount,
+ formatAmount,
  formatNumber,
  shortenUsername,
 } from "@gopvp/common/src/util/format";
@@ -45,26 +45,28 @@ import type {
 import type { IEditProfileDrawerProps } from "@gopvp/common/src/types/component";
 import {
  editProfileText,
+ editText,
  // ratingsText,
  saveChangesText,
  appearanceText,
  darkModeText,
  accountText,
- emailText,
+ // emailText,
  countryText,
  // statusText,
  // verifiedText,
  // notVerifiedText,
  // bestStreakText,
- // winsText,
- // earningsText,
+ winsText,
+ earningsText,
 } from "@gopvp/app/src/constants/message";
+import { scoreText } from "@gopvp/common/src/constants/message";
 import CustomModal from "@gopvp/common/src/components/Modal/Modal";
 import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
 import { formSubmitHandler } from "@gopvp/common/src/util/form";
 import { usernameRule } from "@gopvp/app/src/utils/validation";
 import { flagCdnUrl } from "@gopvp/common/src/constants/env";
-// import { MATCHES_STATS_FALLBACK } from "@gopvp/app/src/constants/limit";
+import { MATCHES_STATS_FALLBACK } from "@gopvp/app/src/constants/limit";
 
 const profileEditSchema = Yup.object({ username: usernameRule });
 
@@ -162,11 +164,23 @@ export default function Profile() {
   loadProfile();
  }, [dispatch]);
 
- const { stats /* , statsLoading */ } = useGameHistory("own", true);
+ const { stats, statsLoading } = useGameHistory("own", true);
+
+ const statItems = [
+  {
+   label: scoreText,
+   value: formatNumber(stats?.score ?? MATCHES_STATS_FALLBACK),
+  },
+  { label: winsText, value: formatNumber(stats?.wins ?? MATCHES_STATS_FALLBACK) },
+  {
+   label: earningsText,
+   value: formatAmount(stats?.gross_income ?? MATCHES_STATS_FALLBACK),
+  },
+ ];
 
  const accountRows = session
   ? [
-     { label: emailText, value: session.email, Icon: Mail },
+     // { label: emailText, value: session.email, Icon: Mail },
      {
       label: countryText,
       value:
@@ -215,15 +229,47 @@ export default function Profile() {
    {session && !loading ? (
     <>
      <Card customClass="profile-id-card">
-      <Box customClass="profile-id-top">
+      <Box customClass="profile-id-row">
+       <CustomAvatar
+        letter={session.username.charAt(0).toUpperCase()}
+        customClass="header lg"
+       />
+       <Box customClass="profile-id-text">
+        <Box customClass="profile-name-row">
+         <Text customClass="profile-id-name">
+          {shortenUsername(session.username)}
+         </Text>
+         {session.country && (
+          <img
+           src={`${flagCdnUrl}/${session.country.toLowerCase()}.svg`}
+           alt=""
+          />
+         )}
+        </Box>
+        <Text customClass="profile-id-email">{session.email}</Text>
+       </Box>
        <Button
         type="button"
-        customClass="profile-edit-icon-btn"
+        customClass="sheet-cancel-link profile-edit-icon-btn"
         title={editProfileText}
         aria-label={editProfileText}
         onClick={() => setEditOpen(true)}
        >
-        <Pencil size={16} strokeWidth={2} />
+        <SquarePen size={16} strokeWidth={2} />
+        {editText}
+       </Button>
+      </Box>
+
+      {/* <Box customClass="profile-id-top">
+       <Button
+        type="button"
+        customClass="sheet-cancel-link profile-edit-icon-btn"
+        title={editProfileText}
+        aria-label={editProfileText}
+        onClick={() => setEditOpen(true)}
+       >
+        <SquarePen size={16} strokeWidth={2} />
+        {editText}
        </Button>
       </Box>
 
@@ -253,7 +299,7 @@ export default function Profile() {
          />
         )}
        </Box>
-      </Box>
+      </Box> */}
 
       {/* <Box customClass="profile-stats-strip">
        {statItems.map(({ label, value, Icon, isMoney }) => (
@@ -269,6 +315,17 @@ export default function Profile() {
         />
        ))}
       </Box> */}
+     </Card>
+
+     <Card customClass="profile-stats-card">
+      {statItems.map(({ label, value }) => (
+       <Box key={label} customClass="profile-stat">
+        <Text customClass="profile-stat-val">
+         {statsLoading ? <Skeleton customClass="text" width={44} /> : value}
+        </Text>
+        <Text customClass="profile-stat-label">{label}</Text>
+       </Box>
+      ))}
      </Card>
 
      <Text

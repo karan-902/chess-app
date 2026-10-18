@@ -161,11 +161,20 @@
 
  &.profile-id-card {
   padding: $space-16;
-  margin-bottom: $space-24;
+  margin-bottom: $space-12;
   border: 1px solid $appCardBorder;
   border-radius: $radius-card;
   background: $appSurface;
   overflow: hidden;
+ }
+
+ &.profile-stats-card {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-bottom: $space-24;
+  border: 1px solid $appCardBorder;
+  border-radius: $radius-card;
+  background: $appSurface;
  }
 
  &.stat-list.profile-list {

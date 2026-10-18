@@ -159,7 +159,7 @@ export default function DepositSheet() {
        labelClassName="wallet-label"
        fullWidth
        disabled={submitting}
-       placeholder="0.00"
+       placeholder="0"
        customClass="amount-input-hero"
        value={amount}
        onChange={(e) => {

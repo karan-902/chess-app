@@ -72,7 +72,7 @@ export default function Leaderboard() {
 
  return (
   <Box customClass="leaderboard-page">
-   <Box customClass="filter-pill-row">
+   <Box customClass="filter-pill-row pill-subtabs">
     {LEADERBOARD_SORTS.map((option) => (
      <Button
       key={option}

@@ -135,6 +135,7 @@ export default function Header() {
        )}
       </Box>
      </Box>
+     <Box customClass="appbar-dropdown-sep" />
      <NavLink
       to={ROUTES.PROFILE}
       className={({ isActive }) =>

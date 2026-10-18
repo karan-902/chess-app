@@ -87,33 +87,35 @@ function txRow(tx: ITransactionResponse, groupEdgeClass: string) {
    <Box customClass="wallet-tx-row">
     <Box customClass="wallet-tx-info">
      <Box customClass="wallet-tx-icon">
-      <TxIcon sx={{ fontSize: 18 }} />
+      <TxIcon sx={{ fontSize: 24 }} />
      </Box>
      <Box customClass="wallet-tx-text">
       <Box customClass="wallet-tx-title">
        <Text customClass="row-title">
         {TRANSACTION_CODE_DESCRIPTIONS[tx.transaction_code]}
        </Text>
-       {isPending && (
-        <CustomChip
-         label={tx.status === "PROCESSING" ? processingText : pendingText}
-         customClass="tx-pending-chip"
-        />
-       )}
       </Box>
       <Text customClass="meta-text">{formatTime(tx.created)}</Text>
      </Box>
     </Box>
-    <Text
-     component="span"
-     customClass={classNames(
-      "amount-value",
-      isPending ? "neutral" : isDebit ? "neg" : "pos",
+    <Box customClass="match-row-amt-wrap">
+     <Text
+      component="span"
+      customClass={classNames(
+       "amount-value",
+       isPending ? "neutral" : isDebit ? "neg" : "pos",
+      )}
+     >
+      {isDebit ? "-" : "+"}
+      {formatAmount(Math.abs(tx.amount))}
+     </Text>
+     {isPending && (
+      <CustomChip
+       label={tx.status === "PROCESSING" ? processingText : pendingText}
+       customClass="tx-pending-chip"
+      />
      )}
-    >
-     {isDebit ? "-" : "+"}
-     {formatAmount(Math.abs(tx.amount))}
-    </Text>
+    </Box>
    </Box>
   </Box>
  );
@@ -150,21 +152,36 @@ export default function Wallet() {
 
  return (
   <Box customClass="wallet-page">
-   <Box customClass="wallet-hero">
-    <Box customClass="wallet-hero-label">
-     <Text component="span" customClass="wallet-hero-lbl">
-      {totalBalanceText}
+   <Box customClass="wallet-hero-card">
+    <Box customClass="wallet-hero">
+     <Box customClass="wallet-hero-label">
+      <Text component="span" customClass="wallet-hero-lbl">
+       {totalBalanceText}
+      </Text>
+     </Box>
+     <Text customClass="wallet-hero-amount">
+      {balanceLoading ? (
+       <Skeleton customClass="text" width={160} />
+      ) : (
+       formatAmount(usdValue)
+      )}
      </Text>
+     {/* <Box customClass="wallet-hero-underline" /> */}
+     {/* <Box customClass="wallet-withdrawable-pill">
+      <Text component="span" customClass="wallet-withdrawable-lbl">
+       {withdrawBalanceText}
+      </Text>
+      <Text component="span" customClass="wallet-withdrawable-val">
+       {balanceLoading ? (
+        <Skeleton customClass="text" width={48} />
+       ) : (
+        formatAmount(withdrawableUsd)
+       )}
+      </Text>
+     </Box> */}
     </Box>
-    <Text customClass="wallet-hero-amount">
-     {balanceLoading ? (
-      <Skeleton customClass="text" width={160} />
-     ) : (
-      formatAmount(usdValue)
-     )}
-    </Text>
-    {/* <Box customClass="wallet-hero-underline" /> */}
-    <Box customClass="wallet-withdrawable-pill">
+
+    <Box customClass="wallet-withdrawable-row">
      <Text component="span" customClass="wallet-withdrawable-lbl">
       {withdrawBalanceText}
      </Text>
@@ -176,42 +193,42 @@ export default function Wallet() {
       )}
      </Text>
     </Box>
-   </Box>
 
-   <Box customClass="wallet-btn-row">
-    {balanceLoading ? (
-     <>
-      <Skeleton
-       customClass="wallet-btn-skeleton"
-       variant="rectangular"
-       height="2.6rem"
-      />
-      <Skeleton
-       customClass="wallet-btn-skeleton"
-       variant="rectangular"
-       height="2.6rem"
-      />
-     </>
-    ) : (
-     <>
-      <Button
-       type="button"
-       variant="contained"
-       customClass="wallet-deposit-btn"
-       onClick={openDeposit}
-      >
-       {depositText}
-      </Button>
-      <Button
-       type="button"
-       variant="contained"
-       customClass="wallet-withdraw-btn"
-       onClick={openWithdraw}
-      >
-       {withdrawText}
-      </Button>
-     </>
-    )}
+    <Box customClass="wallet-btn-row">
+     {balanceLoading ? (
+      <>
+       <Skeleton
+        customClass="wallet-btn-skeleton"
+        variant="rectangular"
+        height="2.6rem"
+       />
+       <Skeleton
+        customClass="wallet-btn-skeleton"
+        variant="rectangular"
+        height="2.6rem"
+       />
+      </>
+     ) : (
+      <>
+       <Button
+        type="button"
+        variant="contained"
+        customClass="wallet-deposit-btn"
+        onClick={openDeposit}
+       >
+        {depositText}
+       </Button>
+       <Button
+        type="button"
+        variant="contained"
+        customClass="wallet-withdraw-btn"
+        onClick={openWithdraw}
+       >
+        {withdrawText}
+       </Button>
+      </>
+     )}
+    </Box>
    </Box>
 
    <Box customClass="powered-by-badge">
