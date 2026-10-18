@@ -3,6 +3,22 @@
 
 :root {
  --font-outfit: #{$fontOutfitRegular};
+
+ @each $size, $steps in $text-steps {
+  --font#{$size}: #{nth($steps, 1)};
+ }
+
+ @include from(phone) {
+  @each $size, $steps in $text-steps {
+   --font#{$size}: #{nth($steps, 2)};
+  }
+ }
+
+ @include from(tablet) {
+  @each $size, $steps in $text-steps {
+   --font#{$size}: #{nth($steps, 3)};
+  }
+ }
 }
 
 html {

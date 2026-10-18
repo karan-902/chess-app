@@ -9,12 +9,14 @@ interface ISocketModalsState {
  activeGame: IActiveGameResponse | null;
  deviceHandoff: IDeviceHandoff | null;
  openingMatchId: string | null;
+ isFindingMatch: boolean;
 }
 
 const initialState: ISocketModalsState = {
  activeGame: null,
  deviceHandoff: null,
  openingMatchId: null,
+ isFindingMatch: false,
 };
 
 const socketModalsSlice = createSlice({
@@ -27,8 +29,12 @@ const socketModalsSlice = createSlice({
   setOpeningMatchId: (state, action: PayloadAction<string>) => {
    state.openingMatchId = action.payload;
   },
+  setFindingMatch: (state, action: PayloadAction<boolean>) => {
+   state.isFindingMatch = action.payload;
+  },
  },
 });
 
-export const { setActiveGame, setOpeningMatchId } = socketModalsSlice.actions;
+export const { setActiveGame, setOpeningMatchId, setFindingMatch } =
+ socketModalsSlice.actions;
 export default socketModalsSlice.reducer;

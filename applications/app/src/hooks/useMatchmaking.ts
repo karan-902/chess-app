@@ -43,6 +43,7 @@ export function useMatchmaking() {
  const myId = useReduxSelector((state) => state.auth.session?.id);
  const secondsLeft = useCountdown(queueDeadlineAt);
  const poolRef = useRef<IPoolResponse | null>(null);
+ const joinPendingRef = useRef(false);
  const navigate = useNavigate();
  const { game } = useGame();
  const { socket: ctxSocket } = useSocket();
@@ -55,6 +56,7 @@ export function useMatchmaking() {
   setQueueDeadlineAt(null);
   setOpponentName("");
   poolRef.current = null;
+  joinPendingRef.current = false;
  }, []);
 
  const markTimedOut = useCallback(() => {
@@ -112,12 +114,12 @@ export function useMatchmaking() {
  );
 
  const joinQueue = (pool: IPoolResponse) => {
-  if (!getSocket()) return;
   poolRef.current = pool;
   setQueuedPool(pool);
   setQueueDeadlineAt(Date.now() + POOL_TIMEOUT_SECONDS * 1000);
   setStatus("joining");
-  emitPoolJoin(pool);
+  joinPendingRef.current = !getSocket()?.connected;
+  if (!joinPendingRef.current) emitPoolJoin(pool);
  };
 
  const retryQueue = () => {
@@ -145,6 +147,7 @@ export function useMatchmaking() {
   };
 
   const onReconnect = () => {
+   joinPendingRef.current = false;
    if (!poolRef.current) return;
    setQueueDeadlineAt(Date.now() + POOL_TIMEOUT_SECONDS * 1000);
    emitPoolJoin(poolRef.current);
@@ -153,6 +156,7 @@ export function useMatchmaking() {
   socket.on(SOCKET_EVENTS.MATCHED, onMatched);
   socket.on(SOCKET_EVENTS.POOL_TIMEOUT, onPoolTimeout);
   socket.on(SOCKET_EVENTS.CONNECT, onReconnect);
+  if (socket.connected && joinPendingRef.current) onReconnect();
   // socket.on("queue_joined", onQueueJoined);
   // socket.on("match_found", onMatchFound);
   // socket.on("queue_left", onQueueLeft);
@@ -181,6 +185,8 @@ export function useMatchmaking() {
 
  return {
   status,
+  isSearching:
+   status === "joining" || status === "queued" || status === "revealing",
   queuedPool,
   opponentName,
   secondsLeft: secondsLeft ?? 0,

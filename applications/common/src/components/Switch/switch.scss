@@ -1,6 +1,72 @@
 @use "default.scss" as *;
 
 .common-switch {
+ position: relative;
  display: inline-flex;
  flex-shrink: 0;
+ width: 3.25rem;
+ height: 2rem;
+ border-radius: 999px;
+ background: alpha($appText, 0.16);
+ box-shadow: inset 0 0 0 1px alpha($appText, 0.08);
+ cursor: pointer;
+
+ :root[data-theme="light"] & {
+  background: #e9e9eb;
+ }
+
+ &::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: $gold;
+  opacity: 0;
+  transition: opacity 0.2s ease-out;
+ }
+
+ input {
+  position: absolute;
+  inset: 0;
+  z-index: $z-raised;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+ }
+
+ .switch-thumb {
+  position: absolute;
+  top: 0.125rem;
+  left: 0.125rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  background: $white;
+  box-shadow:
+   0 0 0 1px alpha($black, 0.06),
+   0 3px 6px alpha($black, 0.18);
+  transition: transform 0.28s cubic-bezier(0.3, 1.4, 0.5, 1);
+ }
+
+ &:has(input:focus-visible) {
+  outline: 2px solid $gold;
+  outline-offset: 2px;
+ }
+
+ &.checked {
+  &::before {
+   opacity: 1;
+  }
+
+  .switch-thumb {
+   transform: translateX(1.25rem);
+  }
+ }
+
+ @media (prefers-reduced-motion: reduce) {
+  &::before,
+  .switch-thumb {
+   transition: none;
+  }
+ }
 }

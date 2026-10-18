@@ -31,12 +31,24 @@
  &.header {
   width: 2.25rem;
   height: 2.25rem;
-  border: 1.5px solid $gold;
-  background: $appSurface !important;
+  border: none;
+  background: $gold !important;
   box-shadow: none;
   font-family: $fontOutfitBlack;
   font-size: $font18;
-  color: $gold;
+  color: $poolInk;
+
+  :root[data-theme="light"] & {
+   background: linear-gradient(180deg, #222668, #11143c) !important;
+   color: $gold;
+  }
+
+  &.lg,
+  :root[data-theme="light"] &.lg {
+   border: 1px solid alpha($appText, 0.18);
+   background: $poolInk !important;
+   color: $gold;
+  }
  }
 
  &.ticket-me,
@@ -45,12 +57,12 @@
   width: 2.75rem;
   height: 2.75rem;
   font-family: $fontOutfitExtraBold;
-  font-size: 1.25rem;
+  font-size: $font20;
 
   .payout-paper & {
    width: 2.25rem;
    height: 2.25rem;
-   font-size: 1rem;
+   font-size: $font16;
   }
  }
 
@@ -118,22 +130,17 @@
   flex-shrink: 0;
   width: 2.75rem;
   height: 2.75rem;
-  border: 1.5px solid $gold;
-  background: $appSurface !important;
+  border: 1px solid alpha($appText, 0.18);
+  background: $poolInk !important;
   box-shadow: none;
   font-family: $fontOutfitBlack;
   font-size: $font20;
   color: $gold;
-
-  :root[data-theme="light"] & {
-   background: $appSurface !important;
-  }
  }
 
  &.header.md {
   width: 2.25rem;
   height: 2.25rem;
-  border-width: 1.5px;
   box-shadow: none;
   font-size: $font16;
  }
@@ -143,6 +150,17 @@
   height: 6rem;
   font-size: $font40;
   font-family: $fontOutfitBlack;
-  box-shadow: 0 0 24px alpha($gold, 0.45);
+
+  .profile-id-row & {
+   width: 3rem;
+   height: 3rem;
+   font-size: $font20;
+
+   @include from(phone) {
+    width: 3.5rem;
+    height: 3.5rem;
+    font-size: $font24;
+   }
+  }
  }
 }

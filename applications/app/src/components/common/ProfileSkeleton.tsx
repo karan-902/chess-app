@@ -7,7 +7,7 @@ import StatRowSkeleton from "@gopvp/app/src/components/common/StatRowSkeleton";
 import { renderSkeletons } from "@gopvp/app/src/utils/skeleton";
 import {
  PROFILE_ACCOUNT_SKELETON_ROWS,
- // PROFILE_STAT_SKELETON_COUNT,
+ PROFILE_STAT_SKELETON_COUNT,
 } from "@gopvp/app/src/constants/limit";
 import { accountText } from "@gopvp/app/src/constants/message";
 
@@ -15,7 +15,18 @@ export default function ProfileSkeleton() {
  return (
   <>
    <Card customClass="profile-id-card">
-    <Box customClass="profile-id-top">
+    <Box customClass="profile-id-row">
+     <Skeleton variant="circular" width={56} height={56} />
+     <Box customClass="profile-id-text">
+      <Text customClass="profile-id-name">
+       <Skeleton customClass="text" width={110} />
+      </Text>
+      <Text customClass="profile-id-email">
+       <Skeleton customClass="text" width={150} />
+      </Text>
+     </Box>
+    </Box>
+    {/* <Box customClass="profile-id-top">
      <Skeleton variant="rectangular" customClass="profile-edit-skeleton" />
     </Box>
     <Box customClass="profile-hero">
@@ -28,7 +39,7 @@ export default function ProfileSkeleton() {
       </Text>
       <Skeleton variant="rectangular" customClass="profile-flag-skeleton" />
      </Box>
-    </Box>
+    </Box> */}
     {/* <Box customClass="profile-stats-strip">
      {Array.from({ length: PROFILE_STAT_SKELETON_COUNT }, (_, index) => (
       <StatTile
@@ -42,6 +53,19 @@ export default function ProfileSkeleton() {
       />
      ))}
     </Box> */}
+   </Card>
+
+   <Card customClass="profile-stats-card">
+    {Array.from({ length: PROFILE_STAT_SKELETON_COUNT }, (_, index) => (
+     <Box key={index} customClass="profile-stat">
+      <Text customClass="profile-stat-val">
+       <Skeleton customClass="text" width={44} />
+      </Text>
+      <Text customClass="profile-stat-label">
+       <Skeleton customClass="text" width={48} />
+      </Text>
+     </Box>
+    ))}
    </Card>
 
    <Text

@@ -1,5 +1,5 @@
 import type { ChangeEvent } from "react";
-import { Toggle as NeoPopToggle } from "@cred/neopop-web/lib/components";
+// import { Toggle as NeoPopToggle } from "@cred/neopop-web/lib/components";
 import classNames from "classnames";
 import "./switch.scss";
 
@@ -9,35 +9,48 @@ interface ISwitchProps {
  customClass?: string;
 }
 
-const MUTED = "color-mix(in srgb, var(--app-text) 60%, transparent)";
+// const MUTED = "color-mix(in srgb, var(--app-text) 60%, transparent)";
 
-const TOGGLE_COLORS = {
- on: {
-  switchBackground: "var(--gold)",
-  switchBorder: "var(--gold)",
-  buttonBackground: "#ffffff",
-  buttonBorder: "var(--gold)",
-  buttonMarkBackground: "var(--gold)",
- },
- off: {
-  switchBackground: "transparent",
-  switchBorder: MUTED,
-  buttonBackground: "#ffffff",
-  buttonBorder: MUTED,
-  buttonMarkBackground: "rgba(0, 0, 0, 0.25)",
- },
-};
+// const TOGGLE_COLORS = {
+//  on: {
+//   switchBackground: "var(--gold)",
+//   switchBorder: "var(--gold)",
+//   buttonBackground: "#ffffff",
+//   buttonBorder: "var(--gold)",
+//   buttonMarkBackground: "var(--gold)",
+//  },
+//  off: {
+//   switchBackground: "transparent",
+//   switchBorder: MUTED,
+//   buttonBackground: "#ffffff",
+//   buttonBorder: MUTED,
+//   buttonMarkBackground: "rgba(0, 0, 0, 0.25)",
+//  },
+// };
 
 export function CustomSwitch({ checked, onChange, customClass }: ISwitchProps) {
  return (
-  <span className={classNames("common-switch", customClass)}>
-   <NeoPopToggle
-    isChecked={!!checked}
+  <label
+   className={classNames("common-switch", checked && "checked", customClass)}
+  >
+   <input
+    type="checkbox"
+    role="switch"
+    checked={!!checked}
     onChange={onChange}
-    colorConfig={TOGGLE_COLORS}
    />
-  </span>
+   <span className="switch-thumb" />
+  </label>
  );
+ // return (
+ //  <span className={classNames("common-switch", customClass)}>
+ //   <NeoPopToggle
+ //    isChecked={!!checked}
+ //    onChange={onChange}
+ //    colorConfig={TOGGLE_COLORS}
+ //   />
+ //  </span>
+ // );
 }
 
 export default CustomSwitch;

@@ -106,13 +106,13 @@
   padding: 0.25rem 0;
   border: none;
   font-family: $fontOutfitBlack;
-  font-size: 2.75rem;
+  font-size: $font44;
   line-height: 1.1;
   text-align: center;
 
   @include from-height(medium) {
    padding: 0.5rem 0;
-   font-size: 3.5rem;
+   font-size: $font56;
   }
 
   input::placeholder {
@@ -128,7 +128,7 @@
   height: auto;
   border: none;
   font-family: $fontOutfitBlack;
-  font-size: 2.5rem;
+  font-size: $font40;
   line-height: 1.1;
   background: transparent;
   text-align: center;

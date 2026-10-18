@@ -35,17 +35,49 @@ const SocketContext = createContext<ISocketContext>({
  socket: null,
 });
 
+const isLiveGameLocation = ({
+ pathname,
+ search,
+}: {
+ pathname: string;
+ search: string;
+}) =>
+ !!getGameFromPath(pathname) && new URLSearchParams(search).has("match_id");
+
 export function SocketProvider({ children }: PropsWithChildren) {
  const session = useReduxSelector((state) => state.auth.session);
  const isLoggedIn = useReduxSelector((state) => state.auth.isLoggedIn);
  const isGameReady = useReduxSelector((state) => !!state.game.details);
+ const isFindingMatch = useReduxSelector(
+  (state) => state.socketModals.isFindingMatch,
+ );
+ const hasActiveGame = useReduxSelector(
+  (state) => !!state.socketModals.activeGame,
+ );
+ const [isInLiveGame, setIsInLiveGame] = useState(() =>
+  isLiveGameLocation(router.state.location),
+ );
+ const isSocketNeeded = isInLiveGame || isFindingMatch || hasActiveGame;
  const dispatch = useReduxDispatch();
  const [socket, setSocket] = useState<Socket | null>(null);
  const reconnectingRef = useRef(false);
  const invalidTokenRetriedRef = useRef(false);
 
+ useEffect(
+  () =>
+   router.subscribe(({ location }) =>
+    setIsInLiveGame(isLiveGameLocation(location)),
+   ),
+  [],
+ );
+
  useEffect(() => {
-  if (!isLoggedIn || !session?.access_token || !isGameReady) {
+  if (
+   !isLoggedIn ||
+   !session?.access_token ||
+   !isGameReady ||
+   !isSocketNeeded
+  ) {
    disconnectSocket();
    setSocket(null);
    return;
@@ -113,7 +145,7 @@ export function SocketProvider({ children }: PropsWithChildren) {
    sock.off(SOCKET_EVENTS.CONNECT_ERROR, onConnectError);
    sock.off(SOCKET_EVENTS.SESSION_REPLACED, onSessionTerminated);
   };
- }, [isLoggedIn, session?.access_token, isGameReady, dispatch]);
+ }, [isLoggedIn, session?.access_token, isGameReady, isSocketNeeded, dispatch]);
 
  useEffect(
   () =>

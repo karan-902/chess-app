@@ -14,6 +14,8 @@ import { useMatchmaking } from "@gopvp/app/src/hooks/useMatchmaking";
 import { useRoomMatch } from "@gopvp/app/src/hooks/useRoomMatch";
 import { useWalletBalance } from "@gopvp/app/src/hooks/useWallet";
 import { useGame } from "@gopvp/app/src/hooks/useGame";
+import { useReduxDispatch } from "@gopvp/app/src/redux/hooks";
+import { setFindingMatch } from "@gopvp/app/src/redux/socketModals/slice";
 import type { IPoolResponse } from "@gopvp/common/src/types/response";
 import {
  // tapPlayNowHintText,
@@ -26,6 +28,7 @@ export default function PlayPage() {
  const [sheetOpen, setSheetOpen] = useState(false);
  const [searchParams] = useSearchParams();
  const navigate = useNavigate();
+ const dispatch = useReduxDispatch();
  const {
   gamePath,
   gameModule: { Preview, PoolLabel, GameRoom, preloadGameRoom, Practice },
@@ -34,6 +37,7 @@ export default function PlayPage() {
  const { usdValue, loading: balanceLoading } = useWalletBalance();
  const {
   status,
+  isSearching,
   queuedPool,
   opponentName: poolOpponentName,
   secondsLeft,
@@ -51,6 +55,7 @@ export default function PlayPage() {
 
  const {
   status: roomStatus,
+  isRoomActive,
   isOwner,
   roomCode,
   opponentName,
@@ -67,6 +72,13 @@ export default function PlayPage() {
   setRoomOpen(false);
   navigate(gamePath, { replace: true });
  });
+
+ useEffect(() => {
+  dispatch(setFindingMatch(isSearching || isRoomActive));
+  return () => {
+   dispatch(setFindingMatch(false));
+  };
+ }, [isSearching, isRoomActive, dispatch]);
 
  useEffect(() => {
   if (status !== "found") return;

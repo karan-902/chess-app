@@ -295,6 +295,7 @@
   height: 2.625rem !important;
   min-width: 6rem !important;
   color: alpha($appText, 0.5);
+  border-radius: 5px;
 
   .button-text {
    font-size: $font14;
@@ -312,11 +313,54 @@
    min-width: 0 !important;
   }
 
+  .pill-subtabs & {
+   --btn-pad: 0 12px;
+
+   @include from(phone) {
+    --btn-pad: 0 16px;
+   }
+   --btn-radius: 999px;
+   --btn-bg: #{$appSurface};
+   --btn-border: 1px solid #{alpha($white, 0.12)};
+   height: 36px !important;
+   min-height: 36px !important;
+   min-width: 0 !important;
+   border-radius: 999px;
+   color: alpha($appText, 0.75);
+
+   .button-text {
+    font-family: $fontOutfitSemiBold !important;
+    font-size: 14px;
+
+    @include from(phone) {
+     font-size: 15px;
+    }
+   }
+
+   &.active {
+    --btn-bg: #{$gold} !important;
+    --btn-border: 1px solid #{$gold};
+    color: $primaryContrast;
+   }
+
+   :root[data-theme="light"] & {
+    --btn-bg: #{$appSurface};
+    --btn-border: 1px solid #1f246b;
+    color: alpha($appText, 0.7);
+
+    &.active {
+     --btn-bg: #29308f !important;
+     --btn-border: 1px solid #29308f;
+     color: $white;
+    }
+   }
+  }
+
   .deposit-amount-chips & {
-   --btn-pad: 0 0.875rem;
+   --btn-pad: 0 0.5rem;
    height: 2.25rem !important;
    min-height: 2.25rem;
-   min-width: 4.5rem !important;
+   min-width: 0 !important;
   }
 
   &.active {
@@ -326,14 +370,26 @@
    color: $primaryContrast;
 
    :root[data-theme="light"] & {
-    --btn-bg: #5b60a8 !important;
-    --btn-border: 1px solid #5b60a8;
+    --btn-bg: #29308f !important;
+    --btn-border: 1px solid #29308f;
     color: $white;
    }
    --btn-edge-bottom: transparent;
 
    .button-face {
     transform: none !important;
+   }
+
+   &.disabled {
+    opacity: 0.6;
+
+    .button-text {
+     color: $primaryContrast;
+
+     :root[data-theme="light"] & {
+      color: $white;
+     }
+    }
    }
   }
  }
@@ -635,24 +691,35 @@
    --btn-pad: 0.625rem 0.1rem;
    letter-spacing: normal;
   }
-
  }
 
  &.modal-submit-btn {
   margin-top: 0.5rem;
+
+  .deposit-speed-wrapper + .common-button-ref & {
+   margin-top: -0.625rem;
+  }
  }
 
  &.profile-edit-icon-btn {
-  --btn-pad: 0;
-  --btn-radius: 50%;
-  --btn-bg: #{$btnGhostBg};
-  --btn-border: 1px solid #{$btnGhostBorder};
+  --btn-pad: 0.25rem 0;
   position: relative;
   z-index: $z-raised;
-  width: 2.125rem;
-  height: 2.125rem;
-  min-height: 0;
-  color: $appText;
+  height: 44px;
+
+  .button-text {
+   font-size: 14px;
+   text-decoration: none;
+   border-bottom: 1.5px solid currentColor;
+  }
+
+  svg {
+   width: 1.125rem;
+   height: 1.125rem;
+   margin-right: 0.375rem;
+   vertical-align: -0.25rem;
+   stroke-width: 1.75;
+  }
  }
 
  &.profile-save-btn {

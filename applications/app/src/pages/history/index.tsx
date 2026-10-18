@@ -51,7 +51,7 @@ export default function MyMatches() {
 
  return (
   <Box customClass="matches-page">
-   <Box customClass="filter-pill-row">
+   <Box customClass="filter-pill-row pill-subtabs">
     {MATCHES_SUBTAB_OPTIONS.map((tab) => (
      <Button
       key={tab}
