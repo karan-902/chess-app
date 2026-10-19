@@ -48,7 +48,7 @@ export default function EmailFormScreen({
   validationSchema: registerSchema,
   onSubmit: async (values, { setSubmitting }) => {
    try {
-    await callAPIInterface<IRegisterResponse, IRegisterBody>(
+    const response = await callAPIInterface<IRegisterResponse, IRegisterBody>(
      "POST",
      ENDPOINTS.REGISTER,
      {
@@ -58,7 +58,7 @@ export default function EmailFormScreen({
       country: values.country,
      },
     );
-    onRegistered(values.email, values.password);
+    onRegistered(values.email, values.password, response.message);
    } catch (err) {
     showApiErrorToast(err);
    } finally {

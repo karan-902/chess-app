@@ -166,7 +166,8 @@
      }
     }
 
-    &.lit {
+    &.lit,
+    :root[data-theme="light"] &.lit {
      fill: $gold;
      stroke: $primaryHover;
     }
@@ -320,7 +321,7 @@
  }
 
  &.gopvp-signup-form {
-  gap: 1.875rem;
+  gap: 1.5rem;
 
   .common-input,
   .form-field {
