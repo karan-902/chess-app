@@ -40,6 +40,11 @@ export default function PlayerRow({
    <Box customClass="gr-meta">
     <Box customClass="gr-name-line">
      <Text customClass="gr-name">{name}</Text>
+     {scoreLabel && (
+      <Text component="span" customClass="gr-score-label">
+       {scoreLabel}
+      </Text>
+     )}
      {typeof firstMoveSeconds === "number" && (
       <Text
        component="span"
@@ -54,11 +59,6 @@ export default function PlayerRow({
     </Box>
 
     <Box customClass="gr-sub-line">
-     {scoreLabel && (
-      <Text component="span" customClass="gr-score-label">
-       {scoreLabel}
-      </Text>
-     )}
      {capturedPieces.length > 0 && (
       <Box customClass="gr-captured">
        {capturedPieces.map((type, i) => (
@@ -66,6 +66,7 @@ export default function PlayerRow({
          key={i}
          customClass={classNames(
           "gr-captured-slot",
+          type,
           capturedPieces[i + 1] !== type && "stack-end",
          )}
         >

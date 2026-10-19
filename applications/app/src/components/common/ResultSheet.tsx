@@ -22,6 +22,7 @@ export default function ResultSheet({
  skeletonTiles,
  tileIcon,
  versus = false,
+ hideGlow = false,
  children,
 }: IResultSheetProps) {
  const {
@@ -35,7 +36,12 @@ export default function ResultSheet({
    anchor="bottom"
    open={open}
    onClose={onClose}
-   customClass={classNames("result-sheet", tone, versus && "versus")}
+   customClass={classNames(
+    "result-sheet",
+    tone,
+    versus && "versus",
+    hideGlow && "no-glow",
+   )}
   >
    <Box customClass="result-hero">
     {isLoading ? (
@@ -71,7 +77,7 @@ export default function ResultSheet({
         layout="label-top"
         label={tile ? tile.label : <Skeleton customClass="text" width={60} />}
         value={tile ? tile.value : <Skeleton customClass="text" width={50} />}
-        icon={tile && TileIcon && <TileIcon />}
+        icon={tile && (tile.icon ? <tile.icon /> : TileIcon && <TileIcon />)}
         customClass={classNames(tile?.highlight && "highlight")}
        />
       </Fragment>

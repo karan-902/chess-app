@@ -80,6 +80,10 @@
    $appSheetFill;
  }
 
+ &.result-sheet.no-glow:not(.versus) .MuiDrawer-paper {
+  background: $appSheetFill;
+ }
+
  &.game-over-sheet.win .MuiDrawer-paper,
  &.game-over-sheet.loss .MuiDrawer-paper {
   background: $appSheetFill;

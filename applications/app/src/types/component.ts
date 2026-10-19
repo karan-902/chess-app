@@ -44,6 +44,7 @@ export interface IUsernameFieldProps<TValues extends { username: string }> {
  inputRef?: Ref<HTMLInputElement>;
  customClass?: string;
  showHint?: boolean;
+ hideClear?: boolean;
 }
 
 export interface IStatRow {
@@ -73,6 +74,7 @@ export type TResultTone = "win" | "loss" | "neutral" | "gold";
 export interface IResultTile {
  label: string;
  value: string | number;
+ icon?: LucideIcon;
  highlight?: boolean;
 }
 
@@ -87,6 +89,7 @@ export interface IResultSheetProps {
  skeletonTiles: number;
  tileIcon?: TIconName;
  versus?: boolean;
+ hideGlow?: boolean;
  children?: ReactNode;
 }
 

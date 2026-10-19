@@ -189,6 +189,39 @@
   }
  }
 
+ &.username-suggestion {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin-top: $space-8;
+  font-family: $fontOutfitMedium;
+  font-size: 14px;
+  color: $appTextMuted;
+
+  @include from(phone) {
+   font-size: 15px;
+  }
+
+  .form-input ~ & {
+   position: absolute;
+   top: 100%;
+   left: 0;
+   z-index: $z-alert + 1;
+   margin-top: 0.25rem;
+   font-size: 12px;
+
+   @include from(phone) {
+    font-size: 13px;
+   }
+  }
+
+  &.beside-error {
+   right: 0;
+   justify-content: flex-end;
+   margin-top: 3px;
+  }
+ }
+
  &.field-hint {
   display: block;
   margin-top: $space-8;
@@ -471,7 +504,11 @@
   }
 
   &.next {
-   background-image: linear-gradient(90deg, textOpacity($appText, 0.45), transparent);
+   background-image: linear-gradient(
+    90deg,
+    textOpacity($appText, 0.45),
+    transparent
+   );
   }
  }
 
@@ -1599,11 +1636,12 @@
  }
 
  &.lb-rank {
-  width: 1.4rem;
+  width: 1.75rem;
   flex-shrink: 0;
   text-align: center;
   font-family: $fontOutfitBold;
   font-size: 12px;
+  line-height: 1;
   color: textOpacity($appText, 0.5);
 
   @include from(phone) {
@@ -1611,15 +1649,33 @@
   }
 
   &.gold {
+   font-family: $fontOutfitBlack;
+   font-size: 22px;
    color: $medalGold;
+
+   @include from(phone) {
+    font-size: 24px;
+   }
   }
 
   &.silver {
+   font-family: $fontOutfitBlack;
+   font-size: 19px;
    color: $medalSilver;
+
+   @include from(phone) {
+    font-size: 21px;
+   }
   }
 
   &.bronze {
+   font-family: $fontOutfitBlack;
+   font-size: 17px;
    color: $medalBronze;
+
+   @include from(phone) {
+    font-size: 18px;
+   }
   }
  }
 
