@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 // import { login } from "@gopvp/app/src/redux/auth/thunk";
 // import { showLoader, hideLoader } from "@gopvp/app/src/redux/common/slice";
 // import { settingUpAccountText } from "@gopvp/app/src/constants/message";
+import { showToastMessage } from "@gopvp/common/src/util/injectStore";
+import { accountCreatedText } from "@gopvp/app/src/constants/message";
 import { ROUTES } from "@gopvp/app/src/constants/route";
 import EmailFormScreen from "@gopvp/app/src/pages/register/EmailFormScreen";
 
@@ -10,7 +12,13 @@ export default function RegisterForm() {
  // const dispatch = useReduxDispatch();
  const navigate = useNavigate();
 
- const handleRegistered = () => navigate(ROUTES.LOGIN, { replace: true });
+ const handleRegistered = (_email: string, _password: string, message?: string) => {
+  showToastMessage({
+   toastMessage: message ?? accountCreatedText,
+   toastVariant: "success",
+  });
+  navigate(ROUTES.LOGIN, { replace: true });
+ };
 
  // const handleRegistered = async (email: string, password: string) => {
  //  dispatch(showLoader({ text: settingUpAccountText }));

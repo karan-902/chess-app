@@ -23,14 +23,15 @@ export const fetchGameDetails = createAsyncThunk(
     "GET",
     `${ENDPOINTS.GAMES}/${slug}`,
    );
-   if (res.is_active) dispatch(setGameDetails(res));
-   else
+   dispatch(setGameDetails(res.is_active ? res : null));
+   if (!res.is_active)
     showToastMessage({
      toastMessage: gameUnavailableText,
      toastVariant: "error",
     });
    return res;
   } catch (err) {
+   dispatch(setGameDetails(null));
    showApiErrorToast(err);
    return rejectWithValue(throwThunkError(err));
   } finally {

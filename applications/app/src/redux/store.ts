@@ -58,6 +58,7 @@ const gamePersistConfig = buildPersistConfig<IGameState>({
   "matchesSubtab",
   "leaderboardScope",
   "leaderboardSort",
+  "details",
  ],
 });
 

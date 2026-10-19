@@ -46,6 +46,7 @@ export type IRegisterResponse = {
  email: string;
  country: string;
  created: number;
+ message?: string;
 };
 
 export type ILoginResponse = {

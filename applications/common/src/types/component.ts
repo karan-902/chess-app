@@ -105,7 +105,7 @@ export interface IPasswordScreenProps {
 // }
 
 export interface IEmailFormScreenProps {
- onRegistered: (email: string, password: string) => void;
+ onRegistered: (email: string, password: string, message?: string) => void;
 }
 
 export interface ISelectCountryScreenProps {
