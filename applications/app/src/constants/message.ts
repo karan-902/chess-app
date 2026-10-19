@@ -210,6 +210,7 @@ export const myResultsText = "My results";
 export const worldwideText = "Worldwide";
 export const myStatsText = "My Stats";
 export const welcomeText = "Welcome!";
+export const accountCreatedText = "Welcome to GoPvP! Log in to get started.";
 export const todayText = "Today";
 export const yesterdayText = "Yesterday";
 export const makeFirstMoveText =
