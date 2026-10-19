@@ -11,12 +11,16 @@
   height: auto;
   min-width: 0;
   font-family: $fontOutfitExtraBold;
-  font-size: $font12;
+  font-size: 12px;
   letter-spacing: 0.04em;
   color: $appTextMuted;
-  background: alpha($appText, 0.06);
+  background: textOpacity($appText, 0.06);
   border-radius: 0;
   padding: 0.05rem 0.3rem;
+
+  @include from(phone) {
+   font-size: 13px;
+  }
  }
 
  &.room-vs {
@@ -26,9 +30,9 @@
  &.lb-you-tag .MuiBadge-badge {
   padding: 0.125rem $space-8;
   border-radius: 0;
-  background: linear-gradient(180deg, #ffe27a, #e5a900);
+  background: linear-gradient(180deg, $goldLight, #e5a900);
   font-family: $fontOutfitExtraBold;
-  font-size: $font10;
+  font-size: 12px;
   letter-spacing: 0;
   color: $primaryContrast;
  }
@@ -44,12 +48,16 @@
   border: 3px solid $appSheet;
   background: linear-gradient(180deg, $primaryHover, $primary 50%, $btnEdgeGold);
   font-family: $fontOutfitBlack;
-  font-size: $font12;
+  font-size: 12px;
   letter-spacing: 0;
   color: $primaryContrast;
 
+  @include from(phone) {
+   font-size: 13px;
+  }
+
   :root[data-theme="light"] & {
-   background: #5b60a8;
+   background: $indigoEdge;
    color: $white;
   }
  }

@@ -6,7 +6,7 @@
  }
  .MuiButtonBase-root {
   &.Mui-focusVisible {
-   background: alpha($gold, 0.12);
+   background: textOpacity($gold, 0.12);
    color: $gold;
   }
  }
@@ -26,10 +26,15 @@
    align-items: center;
    justify-content: space-between;
    gap: 1.5rem;
-   padding: $font12;
+   padding: 12px;
    font-family: $fontOutfitSemiBold !important;
-   font-size: $font14;
+   font-size: 14px;
    color: $appText;
+
+   @include from(phone) {
+    padding: 13px;
+    font-size: 15px;
+   }
 
    &.Mui-selected,
    &.Mui-selected:hover {

@@ -1,0 +1,197 @@
+@use "mixin.scss" as *;
+
+:root {
+ color-scheme: dark;
+ --app-bg: #090b20;
+ --app-secondary: #16194b;
+ --app-surface: #101337;
+ --app-sheet: #121540;
+ --app-card-border: #1f246b;
+ --app-line: #191d57;
+ --app-frame: #000;
+ --app-text: #f4f7ff;
+ --app-text-muted: #b9bce6;
+ --app-btn-bg: #16194b;
+ --app-btn-border: #29308f;
+ --app-text-placeholder: #{textOpacity(var(--app-text), 0.35)};
+ --app-prize: var(--gold);
+ --app-entry-fee: var(--app-text);
+ --btn-edge-gold: #8a6a00;
+ --btn-ghost-bg: #{textOpacity(#ffffff, 0.08)};
+ --btn-ghost-edge: transparent;
+ --app-card: #1e1f33;
+ --app-sheet-fill: linear-gradient(180deg, #222668, #11143c);
+ --app-podium-fill: linear-gradient(180deg, #2a2c48, #14152a);
+ --app-ticker: #1b1e3d;
+ --app-tab-active: var(--gold);
+ --app-glow: radial-gradient(
+  20rem 15.625rem at 50% 0%,
+  #{textOpacity(#4b4fd8, 0.32)},
+  transparent
+ );
+ --app-balance: var(--gold);
+ --neo-edge: #4b4fd8;
+ --primary: #ffc400;
+ --primary-hover: #ffd633;
+ --primary-dark: #e5a900;
+ --primary-contrast: #0b0d14;
+ --warning: #ff9f1c;
+ --error: #ff4d5e;
+ --gold: var(--primary);
+ --cyan: #3478ff;
+ --pale-red: var(--error);
+ --brink-pink: #e06a5a;
+ --greenish-teal: #2ed47a;
+ --backdrop-center: #2a2b2c;
+}
+
+:root[data-theme="light"] {
+ color-scheme: light;
+ --app-bg: #f3f4fc;
+ --app-secondary: #eceefa;
+ --app-surface: #ffffff;
+ --app-sheet: #f7f8fe;
+ --app-card-border: #d7daf0;
+ --app-line: #e3e6f5;
+ --app-frame: #dfe2e7;
+ --app-text: #12143a;
+ --app-text-muted: #555a86;
+ --app-btn-bg: #ffffff;
+ --app-btn-border: #bcc1e2;
+ --app-text-placeholder: #{textOpacity(var(--app-text), 0.4)};
+ --app-prize: var(--greenish-teal);
+ --app-entry-fee: var(--app-text-muted);
+ --btn-edge-gold: #8a6a00;
+ --btn-ghost-bg: #ffffff;
+ --btn-ghost-edge: #5b60a8;
+ --app-card: #ffffff;
+ --app-sheet-fill: linear-gradient(180deg, #ffffff, #eceefa);
+ --app-sheet-card-border: #d3d7e1;
+ --app-sheet-card-edge: #6b7184;
+ --app-podium-fill: linear-gradient(180deg, #ffffff, #eceefa);
+ --app-ticker: #ffffff;
+ --app-tab-active: var(--app-text);
+ --app-balance: var(--app-text);
+ --neo-edge: var(--btn-ghost-edge);
+ --primary: #f2b200;
+ --primary-hover: #e0a200;
+ --primary-dark: #e0a200;
+ --primary-contrast: #0b0d14;
+ --warning: #d97f00;
+ --error: #de3349;
+ --gold: var(--primary);
+ --cyan: #2862e0;
+ --pale-red: var(--error);
+ --brink-pink: #e06a5a;
+ --greenish-teal: #0f7d4c;
+ --backdrop-center: #1a1d22;
+}
+
+$appBg: var(--app-bg);
+$appSecondary: var(--app-secondary);
+$appSurface: var(--app-surface);
+$appSheet: var(--app-sheet);
+$appCard: var(--app-card);
+$appSheetFill: var(--app-sheet-fill);
+$appPodiumFill: var(--app-podium-fill);
+$appTicker: var(--app-ticker);
+$appFrame: var(--app-frame);
+$appGlow: var(--app-glow);
+$backdropCenter: var(--backdrop-center);
+
+$appCardBorder: var(--app-card-border);
+$appLine: var(--app-line);
+$neoEdge: var(--neo-edge);
+
+$appText: var(--app-text);
+$appTextMuted: var(--app-text-muted);
+$appTextPlaceholder: var(--app-text-placeholder);
+$appBalance: var(--app-balance);
+$appTabActive: var(--app-tab-active);
+
+$primary: var(--primary);
+$primaryHover: var(--primary-hover);
+$primaryDark: var(--primary-dark);
+$primaryContrast: var(--primary-contrast);
+$gold: var(--gold);
+$cyan: var(--cyan);
+
+$appBtnBg: var(--app-btn-bg);
+$appBtnBorder: var(--app-btn-border);
+$btnEdgeGold: var(--btn-edge-gold);
+$btnGhostBg: var(--btn-ghost-bg);
+$btnGhostEdge: var(--btn-ghost-edge);
+$btnGoldFill: linear-gradient(180deg, #ffe27a, #ffc400 50%, #e5a900);
+$slabEdgeGold: #b38600;
+
+$greenishTeal: var(--greenish-teal);
+$paleRed: var(--pale-red);
+$brinkPink: var(--brink-pink);
+$warning: var(--warning);
+$error: var(--error);
+$appPrize: var(--app-prize);
+$appEntryFee: var(--app-entry-fee);
+
+$white: #fff;
+$black: #000000;
+$auraIndigo: #787eff;
+$goldenRod: #f1c40f;
+$bitcoinOrange: #f7931a;
+$premoveRed: #f42a32;
+$tooltipText: #f5f5f5;
+$menuShadow: #0b254b1f;
+$menuBorder: #e4e9ee;
+
+$medalGold: #c9a227;
+$medalSilver: #9aa0a6;
+$medalBronze: #b5651d;
+
+$poolBlocks: (
+ (#3bffad, #124d34),
+ (#ffcb45, #4d3d15),
+ (#ff7b9a, #4d1421),
+ (#c379ff, #33134d)
+);
+$poolInfoBg: #f7f7ff;
+$poolInk: #0d0d0d;
+$poolEdgeRight: #e0e0e0;
+$poolEdgeBottom: #8a8a8a;
+
+$modeTintBullet: #3478ff;
+$modeTintBlitz: #ff9f1c;
+$modeTintRapid: #2ed47a;
+$modeTintClassical: #ffc400;
+$modeChipBullet: #2d58be;
+$modeChipBlitz: #d63a3a;
+$modeChipRapid: #15935a;
+$modeChipClassical: #7c4dd6;
+
+$goldLight: #ffe27a;
+$goldSolid: #ffc400;
+$goldMid: #f2a900;
+$goldDark: #c99a00;
+$goldDarkest: #8a6300;
+
+$indigo: #4b4fd8;
+$indigoEdge: #5b60a8;
+$indigoEdgeDark: #2a2e7a;
+$indigoDeep: #29308f;
+$indigoSurface: #1a1d55;
+$indigoFaceTop: #2d3290;
+$indigoFaceBottom: #12153f;
+$indigoNight: #14174a;
+
+$lightText: #12143a;
+$lightBorderStrong: #bcc1e2;
+$lightRaised: #eceefa;
+
+$ticketPaperTop: #fffdf6;
+$ticketPaperBottom: #f1ecdf;
+
+$poolGreen: #3bffad;
+$poolPink: #ff7b9a;
+
+$payoutWin: #0b8a50;
+$payoutLoss: #d33a3a;
+$stampRed: #e5484d;
+$capsuleBlack: #08090d;

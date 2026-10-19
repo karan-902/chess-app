@@ -3,6 +3,29 @@
 @use "default.scss" as *;
 
 .common-box {
+ &.gopvp-circular-loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100dvh;
+  background: $appBg;
+ }
+
+ &.app-content {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior-y: none;
+  scrollbar-gutter: stable both-edges;
+  -webkit-overflow-scrolling: touch;
+ }
+
+ &.appbar-dropdown-sep {
+  height: 1px;
+  margin: 0 0.375rem 0.25rem;
+  background: textOpacity($appText, 0.08);
+ }
+
  &.public-page {
   display: flex;
   flex-direction: column;
@@ -126,20 +149,20 @@
    overflow: visible;
 
    path {
-    fill: alpha($black, 0.35);
-    stroke: alpha($appText, 0.14);
+    fill: textOpacity($black, 0.35);
+    stroke: textOpacity($appText, 0.14);
     stroke-width: 1;
     vector-effect: non-scaling-stroke;
 
     &.alt {
-     fill: alpha($white, 0.1);
+     fill: textOpacity($white, 0.1);
     }
 
     :root[data-theme="light"] & {
-     fill: alpha($black, 0.08);
+     fill: textOpacity($black, 0.08);
 
      &.alt {
-      fill: alpha($white, 0.7);
+      fill: textOpacity($white, 0.7);
      }
     }
 
@@ -250,7 +273,7 @@
   width: 2.375rem;
   height: 2.375rem;
 
-  img {
+  svg {
    width: 2rem;
    height: 2rem;
   }
@@ -270,8 +293,12 @@
   justify-content: center;
   gap: 0.4rem;
   margin-bottom: 1rem;
-  color: alpha($appText, 0.4);
-  font-size: $font12;
+  color: textOpacity($appText, 0.4);
+  font-size: 12px;
+
+  @include from(phone) {
+   font-size: 13px;
+  }
 
   span {
    color: inherit;
@@ -333,7 +360,7 @@
 
   .common-avatar {
    border-color: $gold;
-   background: alpha($black, 0.25) !important;
+   background: textOpacity($black, 0.25) !important;
   }
  }
 
@@ -352,13 +379,6 @@
 
   flex-direction: column;
   gap: 0.4rem;
- }
-
- &.auth-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-top: 0.25rem;
  }
 
  &.otp-heading {
@@ -381,10 +401,14 @@
 
   .common-text {
    font-family: $fontOutfitBold;
-   font-size: $font11;
+   font-size: 12px;
    letter-spacing: 2px;
    line-height: 1.5;
-   color: alpha($appText, 0.5);
+   color: textOpacity($appText, 0.5);
+
+   @include from(tablet) {
+    font-size: 13px;
+   }
   }
 
   &::before,
@@ -392,11 +416,11 @@
    content: "";
    flex: 1;
    height: 1px;
-   background: alpha($appText, 0.12);
+   background: textOpacity($appText, 0.12);
   }
 
   &::after {
-   background: alpha($appText, 0.12);
+   background: textOpacity($appText, 0.12);
   }
 
   :root[data-theme="light"] & {
@@ -431,7 +455,7 @@
 
   .chess-board-grid {
    border-radius: 0;
-   box-shadow: 0 3px 6px alpha($black, 0.35);
+   box-shadow: 0 3px 6px textOpacity($black, 0.35);
   }
  }
 
@@ -452,7 +476,7 @@
    z-index: -1;
    width: min(26.625rem, calc(100% + 2.2rem));
    height: 7rem;
-   background: radial-gradient(closest-side, alpha($gold, 0.35), transparent);
+   background: radial-gradient(closest-side, textOpacity($gold, 0.35), transparent);
    transform: translateX(-50%);
    pointer-events: none;
 
@@ -582,7 +606,7 @@
    width: 17.5rem;
    height: 16.125rem;
    margin-left: -8.75rem;
-   background: linear-gradient(180deg, alpha($gold, 0), alpha($gold, 0.3));
+   background: linear-gradient(180deg, textOpacity($gold, 0), textOpacity($gold, 0.3));
    clip-path: polygon(38% 0, 62% 0, 100% 100%, 0 100%);
    opacity: 0;
    transition: opacity 0.8s ease-out;
@@ -590,9 +614,9 @@
    :root[data-theme="light"] & {
     background: linear-gradient(
      180deg,
-     alpha(#ffc400, 0),
-     alpha(#ffc400, 0.1) 45%,
-     alpha(#f2a900, 0.24)
+     textOpacity($goldSolid, 0),
+     textOpacity($goldSolid, 0.1) 45%,
+     textOpacity($goldMid, 0.24)
     );
    }
   }
@@ -616,7 +640,7 @@
    border-top: 2px solid $gold;
 
    :root[data-theme="light"] & {
-    background: #5b60a8;
+    background: $indigoEdge;
    }
 
    &::after {
@@ -628,7 +652,7 @@
     height: 0.75rem;
     background: radial-gradient(
      50% 100% at 50% 100%,
-     alpha($gold, 0.6),
+     textOpacity($gold, 0.6),
      transparent
     );
     opacity: 0;
@@ -640,7 +664,7 @@
   }
 
   &.lost .match-slot {
-   border-top-color: alpha($white, 0.25);
+   border-top-color: textOpacity($white, 0.25);
   }
 
   .match-rise {
@@ -666,7 +690,7 @@
    transform: translateY(15rem);
 
    :root[data-theme="light"] & {
-    filter: drop-shadow(0 0 0.5px alpha(#5b60a8, 0.9));
+    filter: drop-shadow(0 0 0.5px textOpacity($indigoEdge, 0.9));
    }
 
    &::before {
@@ -676,7 +700,7 @@
     inset: 1rem 0 -1rem;
     background: radial-gradient(
      closest-side,
-     alpha($black, 0.35) 70%,
+     textOpacity($black, 0.35) 70%,
      transparent
     );
     transition: opacity 0.3s ease-out 1.4s;
@@ -701,7 +725,7 @@
    position: absolute;
    inset: 0;
    overflow: hidden;
-   background: linear-gradient(180deg, #fffdf6, #f1ecdf);
+   background: linear-gradient(180deg, $ticketPaperTop, $ticketPaperBottom);
    color: $poolInk;
    mask:
     radial-gradient(circle at 0 6.5rem, transparent 0.5rem, #000 0.5rem),
@@ -822,7 +846,7 @@
 
   .ticket-masks {
    border-radius: 50%;
-   border: 1.5px dashed alpha($poolInk, 0.35);
+   border: 1.5px dashed textOpacity($poolInk, 0.35);
   }
 
   .ticket-mask {
@@ -837,7 +861,7 @@
     display: block;
    }
 
-   @each $index, $color in (1: #ffc400, 2: #ff7b9a, 3: #c379ff, 4: #3bffad) {
+   @each $index, $color in (1: $goldSolid, 2: $poolPink, 3: #c379ff, 4: $poolGreen) {
     &.mask-#{$index} {
      background: $color;
      animation: match-mask-cycle
@@ -862,7 +886,7 @@
 
   .ticket-empty-seat {
    border-radius: 50%;
-   border: 1.5px dashed alpha($poolInk, 0.4);
+   border: 1.5px dashed textOpacity($poolInk, 0.4);
    opacity: 0;
    transition: opacity 0.4s ease-out;
   }
@@ -895,7 +919,7 @@
    text-align: center;
 
    & + .ticket-stat {
-    border-left: 1px solid alpha($poolInk, 0.12);
+    border-left: 1px solid textOpacity($poolInk, 0.12);
    }
   }
 
@@ -905,7 +929,7 @@
    top: 6.5rem;
    left: 0.75rem;
    right: 0.75rem;
-   border-top: 1px dashed alpha($poolInk, 0.3);
+   border-top: 1px dashed textOpacity($poolInk, 0.3);
   }
 
   .ticket-glare {
@@ -917,7 +941,7 @@
    background: linear-gradient(
     90deg,
     transparent,
-    alpha($white, 0.55),
+    textOpacity($white, 0.55),
     transparent
    );
    transform: rotate(28deg);
@@ -927,54 +951,13 @@
    position: absolute;
    z-index: 2;
    inset: 0;
-   background: alpha(#1a1d55, 0.16);
+   background: textOpacity($indigoSurface, 0.16);
    opacity: 0;
   }
 
   &.lost .ticket-dim {
    opacity: 1;
    transition: opacity 0.4s 0.3s;
-  }
-
-  .match-spark {
-   position: absolute;
-   opacity: 0;
-   transform: scale(0);
-
-   &.spark-1 {
-    left: 16.25rem;
-    top: 3.75rem;
-    width: 1rem;
-   }
-
-   &.spark-2 {
-    left: 3.5rem;
-    top: 6rem;
-    width: 0.6875rem;
-   }
-
-   &.spark-3 {
-    left: 17.25rem;
-    top: 10.625rem;
-    width: 0.5625rem;
-   }
-
-   &.spark-4 {
-    left: 2.5rem;
-    top: 12.5rem;
-    width: 0.625rem;
-   }
-  }
-
-  &.found .match-spark {
-   animation: match-spark-pop 0.7s cubic-bezier(0.34, 1.4, 0.64, 1) 0.5s
-    forwards;
-
-   @for $i from 2 through 4 {
-    &.spark-#{$i} {
-     animation-delay: #{0.5 + ($i - 1) * 0.08}s;
-    }
-   }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -990,11 +973,6 @@
 
    &.found .ticket-flipper {
     transform: rotateY(180deg);
-   }
-
-   &.found .match-spark {
-    opacity: 1;
-    transform: none;
    }
   }
  }
@@ -1042,7 +1020,7 @@
     bottom: -0.875rem;
     height: 0.625rem;
     border-radius: 50%;
-    background: alpha($black, 0.45);
+    background: textOpacity($black, 0.45);
     filter: blur(5px);
     z-index: -1;
    }
@@ -1077,10 +1055,10 @@
    inset: 0;
    overflow: hidden;
    backface-visibility: hidden;
-   background: radial-gradient(120% 90% at 50% 0%, #1d1f2a, #08090d 70%);
+   background: radial-gradient(120% 90% at 50% 0%, #1d1f2a, $capsuleBlack 70%);
    box-shadow:
-    inset 0 0 0 5px #08090d,
-    inset 0 0 0 6px alpha($gold, 0.6);
+    inset 0 0 0 5px $capsuleBlack,
+    inset 0 0 0 6px textOpacity($gold, 0.6);
   }
 
   .match-card-back,
@@ -1108,7 +1086,7 @@
      linear-gradient(
       180deg,
       transparent 6px,
-      #ffe27a 6px,
+      $goldLight 6px,
       $gold 50%,
       $primaryDark calc(100% - 6px),
       transparent calc(100% - 6px)
@@ -1119,7 +1097,7 @@
     position: relative;
     width: 4.25rem;
     height: auto;
-    filter: drop-shadow(0 2px 0 alpha($black, 0.65));
+    filter: drop-shadow(0 2px 0 textOpacity($black, 0.65));
    }
   }
 
@@ -1130,7 +1108,7 @@
     top: 58%;
     height: 2.125rem;
     margin-top: -1.0625rem;
-    background: linear-gradient(180deg, #ffe27a, $gold);
+    background: linear-gradient(180deg, $goldLight, $gold);
    }
   }
 
@@ -1212,16 +1190,24 @@
   height: 1.75rem;
   background: var(--mode-chip-bg);
   color: $white;
-  font-size: $font16;
+  font-size: 16px;
+
+  @include from(phone) {
+   font-size: 17px;
+  }
 
   .pool-card & {
    grid-area: icon;
    align-self: stretch;
    width: 100%;
    height: 100%;
-   font-size: $font34;
+   font-size: 34px;
    background: var(--pool-face);
    color: var(--pool-ink);
+
+   @include from(phone) {
+    font-size: 36px;
+   }
 
    svg {
     width: 1em;
@@ -1231,7 +1217,11 @@
   }
 
   .pool-card.more & {
-   font-size: $font26;
+   font-size: 26px;
+
+   @include from(phone) {
+    font-size: 28px;
+   }
   }
  }
 
@@ -1295,7 +1285,7 @@
   align-items: center;
   width: 100%;
   background: $appSurface;
-  border: 1px solid alpha($gold, 0.3);
+  border: 1px solid textOpacity($gold, 0.3);
   border-radius: $radius-card;
   @include neo-edge;
  }
@@ -1317,7 +1307,7 @@
    left: 0;
    width: 1px;
    height: 3.5rem;
-   background: alpha($gold, 0.25);
+   background: textOpacity($gold, 0.25);
    transform: translateY(-50%);
   }
  }
@@ -1338,14 +1328,14 @@
   height: 6rem;
   padding: 0 $space-12 0 $space-12 !important;
   border-radius: $radius-card;
-  border: 1.2px solid alpha($gold, 0.6);
-  background: linear-gradient(90deg, alpha($gold, 0.2), alpha($gold, 0.04));
+  border: 1.2px solid textOpacity($gold, 0.6);
+  background: linear-gradient(90deg, textOpacity($gold, 0.2), textOpacity($gold, 0.04));
   @include neo-edge;
 
   &.rival {
    padding: 0 $space-12 0 1.875rem !important;
-   border-color: alpha($appText, 0.12);
-   background: alpha($appText, 0.04);
+   border-color: textOpacity($appText, 0.12);
+   background: textOpacity($appText, 0.04);
    box-shadow: none;
   }
  }
@@ -1368,7 +1358,7 @@
   width: 2.75rem;
   height: 2.75rem;
   border-radius: 50%;
-  background: alpha($appText, 0.08);
+  background: textOpacity($appText, 0.08);
   color: $appTextMuted;
 
   svg {
@@ -1409,8 +1399,8 @@
    border-radius: 50%;
    background: radial-gradient(
     circle,
-    alpha($gold, 0.22) 0%,
-    alpha($gold, 0.06) 55%,
+    textOpacity($gold, 0.22) 0%,
+    textOpacity($gold, 0.06) 55%,
     transparent 72%
    );
    animation: mm-radar-pulse 2.4s cubic-bezier(0.45, 0, 0.55, 1) infinite;
@@ -1428,7 +1418,7 @@
   }
 
   .mm-radar-track {
-   stroke: alpha($gold, 0.14);
+   stroke: textOpacity($gold, 0.14);
   }
 
   .mm-radar-progress {
@@ -1514,7 +1504,7 @@
   &.gold-bar {
    gap: 0;
    padding: 3px;
-   border: 1px solid alpha($appText, 0.2);
+   border: 1px solid textOpacity($appText, 0.2);
    background: transparent;
    box-shadow: none;
 
@@ -1522,7 +1512,7 @@
     top: 3px;
     bottom: 3px;
     border: 0;
-    background: linear-gradient(180deg, #ffe27a, #ffc400);
+    background: linear-gradient(180deg, $goldLight, $goldSolid);
    }
 
    .room-form > & {
@@ -1537,7 +1527,7 @@
   top: 0.25rem;
   bottom: 0.25rem;
   left: 0;
-  border: 1px solid alpha(#fff1b8, 0.8);
+  border: 1px solid textOpacity(#fff1b8, 0.8);
   background: $gold;
   transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: $z-base;
@@ -1675,8 +1665,8 @@
   flex-direction: column;
   gap: $space-4;
   padding: $space-12 0.875rem;
-  border: 1px solid alpha($gold, 0.4);
-  background: alpha($gold, 0.06);
+  border: 1px solid textOpacity($gold, 0.4);
+  background: textOpacity($gold, 0.06);
  }
 
  &.stat-label {
@@ -1849,7 +1839,7 @@
   gap: 0.125rem;
   min-width: 0;
   padding: 0.875rem $space-8;
-  border-left: 1px solid alpha($appText, 0.08);
+  border-left: 1px solid textOpacity($appText, 0.08);
 
   &:first-child {
    border-left: none;
@@ -1918,9 +1908,9 @@
   align-items: center;
   justify-content: space-between;
   gap: $space-12;
-  margin-bottom: $space-16;
+  margin-bottom: $space-20;
   padding-top: $space-12;
-  border-top: 1px solid alpha($appText, 0.08);
+  border-top: 1px solid textOpacity($appText, 0.08);
  }
 
  &.wallet-hero-label {
@@ -1942,8 +1932,8 @@
   display: flex;
   align-items: center;
   padding: $space-8 0.875rem;
-  border: 1px solid alpha($greenishTeal, 0.45);
-  background: alpha($greenishTeal, 0.12);
+  border: 1px solid textOpacity($greenishTeal, 0.45);
+  background: textOpacity($greenishTeal, 0.12);
  }
 
  &.wallet-btn-row {
@@ -2062,7 +2052,7 @@
    left: 0;
    right: 0;
    height: 1px;
-   background: linear-gradient(90deg, alpha($gold, 0), $gold, alpha($gold, 0));
+   background: linear-gradient(90deg, textOpacity($gold, 0), $gold, textOpacity($gold, 0));
   }
 
   &::before {
@@ -2078,9 +2068,9 @@
    &::after {
     background: linear-gradient(
      90deg,
-     alpha(#c99a00, 0),
-     #c99a00,
-     alpha(#c99a00, 0)
+     textOpacity($goldDark, 0),
+     $goldDark,
+     textOpacity($goldDark, 0)
     );
    }
   }
@@ -2096,7 +2086,7 @@
   align-self: center;
   width: 1.5rem;
   height: 1.5rem;
-  border: 2.5px solid alpha($appText, 0.2);
+  border: 2.5px solid textOpacity($appText, 0.2);
   border-top-color: $appText;
   border-radius: 50%;
   animation: room-wait-spin 0.8s linear infinite;
@@ -2130,7 +2120,7 @@
    //
    //  &::after {
    //   @include long-arrow;
-   //   color: alpha($appText, 0.5);
+   //   color: textOpacity($appText, 0.5);
    //  }
    // }
   }
@@ -2162,7 +2152,7 @@
   padding: 1rem 1rem 2.25rem;
   overflow: hidden;
   background:
-   radial-gradient(60% 22% at 50% 0%, #{alpha(#4b4fd8, 0.32)}, transparent)
+   radial-gradient(60% 22% at 50% 0%, #{textOpacity($indigo, 0.32)}, transparent)
     no-repeat,
    $appBg;
  }
@@ -2209,12 +2199,12 @@
   left: 50%;
   width: 18.75rem;
   height: 18.75rem;
-  border: 1.5px solid alpha($gold, 0.12);
+  border: 1.5px solid textOpacity($gold, 0.12);
   border-radius: 50%;
   background: radial-gradient(
    circle,
-   #{alpha($gold, 0.35)} 0,
-   #{alpha($gold, 0.12)} 30%,
+   #{textOpacity($gold, 0.35)} 0,
+   #{textOpacity($gold, 0.12)} 30%,
    transparent 50%
   );
   transform: translateX(-50%);
@@ -2228,12 +2218,12 @@
 
   &::before {
    inset: 1.875rem;
-   border: 1.5px solid alpha($gold, 0.22);
+   border: 1.5px solid textOpacity($gold, 0.22);
   }
 
   &::after {
    inset: 3.75rem;
-   border: 1.5px solid alpha($gold, 0.35);
+   border: 1.5px solid textOpacity($gold, 0.35);
   }
  }
 
@@ -2246,8 +2236,8 @@
   border: 2.5px solid transparent;
   border-radius: 50%;
   background:
-   linear-gradient(180deg, #2d3290, #0e1033) padding-box,
-   linear-gradient(180deg, #ffe27a, $gold 55%, $primaryDark) border-box;
+   linear-gradient(180deg, $indigoFaceTop, #0e1033) padding-box,
+   linear-gradient(180deg, $goldLight, $gold 55%, $primaryDark) border-box;
   box-shadow: 0 4px 0 $btnEdgeGold;
   transform: translateX(-50%);
 
@@ -2258,16 +2248,16 @@
    left: 50%;
    width: 11.25rem;
    height: 1.8125rem;
-   border: 1px solid alpha(#ffe27a, 0.6);
+   border: 1px solid textOpacity($goldLight, 0.6);
    border-radius: 50%;
-   background: alpha($gold, 0.15);
+   background: textOpacity($gold, 0.15);
    transform: translateX(-50%);
   }
 
   :root[data-theme="light"] & {
    background:
     linear-gradient($appSurface, $appSurface) padding-box,
-    linear-gradient(180deg, #ffe27a, $gold 55%, $primaryDark) border-box;
+    linear-gradient(180deg, $goldLight, $gold 55%, $primaryDark) border-box;
   }
  }
 
@@ -2279,9 +2269,9 @@
   justify-content: center;
   width: 8.125rem;
   height: 11.875rem;
-  border: 1px solid alpha(#6870f0, 0.4);
+  border: 1px solid textOpacity(#6870f0, 0.4);
   border-radius: $radius-card;
-  background: linear-gradient(180deg, #262a7a, #12153f);
+  background: linear-gradient(180deg, #262a7a, $indigoFaceBottom);
   color: #a9ade0;
   opacity: 0.45;
   filter: blur(2px);
@@ -2309,7 +2299,7 @@
   inset: 0;
   z-index: $z-raised;
   pointer-events: none;
-  color: #ffe27a;
+  color: $goldLight;
 
   svg {
    position: absolute;
@@ -2494,8 +2484,8 @@
   width: 100%;
   min-height: 2.25rem;
   padding: 0.3125rem 0.75rem 0.3125rem 0.625rem;
-  background: alpha($appText, 0.05);
-  border: 1px solid alpha($appText, 0.12);
+  background: textOpacity($appText, 0.05);
+  border: 1px solid textOpacity($appText, 0.12);
   border-radius: $radius-card;
   color: $gold;
 
@@ -2516,8 +2506,12 @@
   display: flex;
   align-items: center;
   gap: 0.375rem;
-  font-size: $font14;
+  font-size: 14px;
   color: $gold;
+
+  @include from(phone) {
+   font-size: 15px;
+  }
 
   span {
    font-family: $fontOutfitSemiBold;
@@ -2556,7 +2550,7 @@
   display: flex;
   align-items: center;
   gap: $space-12;
-  border: 1px solid alpha($appText, 0.12);
+  border: 1px solid textOpacity($appText, 0.12);
   background: $appSurface;
   padding: $space-4 0.875rem;
   min-height: 3rem;
@@ -2606,7 +2600,7 @@
   background:
    radial-gradient(
     30rem 28rem at 50% 38%,
-    alpha(#4b4fd8, 0.32),
+    textOpacity($indigo, 0.32),
     transparent 70%
    ),
    $appSurface;
@@ -2628,13 +2622,13 @@
    background:
     radial-gradient(
      30rem 28rem at 50% 38%,
-     alpha(#5b60a8, 0.16),
+     textOpacity($indigoEdge, 0.16),
      transparent 70%
     ),
     $appBg;
 
    &::before {
-    background: alpha(#5b60a8, 0.07);
+    background: textOpacity($indigoEdge, 0.07);
    }
   }
  }
@@ -2655,18 +2649,18 @@
   gap: $space-12;
   flex-shrink: 0;
   padding: 0.375rem 0.375rem 0.375rem 0.625rem;
-  border: 1px solid alpha($appText, 0.16);
+  border: 1px solid textOpacity($appText, 0.16);
   background:
-   linear-gradient(alpha($appText, 0.05), alpha($appText, 0.05)), $appSurface;
+   linear-gradient(textOpacity($appText, 0.05), textOpacity($appText, 0.05)), $appSurface;
   transition:
    border-color 0.25s ease,
    box-shadow 0.25s ease;
 
   &.active {
    border-color: $gold;
-   box-shadow: 0 0 0.875rem alpha($gold, 0.22);
+   box-shadow: 0 0 0.875rem textOpacity($gold, 0.22);
    background:
-    linear-gradient(alpha($gold, 0.08), alpha($gold, 0.08)), $appSurface;
+    linear-gradient(textOpacity($gold, 0.08), textOpacity($gold, 0.08)), $appSurface;
   }
 
   &.opp {
@@ -2724,13 +2718,13 @@
 
   &::before {
    z-index: -1;
-   border: 1px solid alpha($gold, 0.12);
-   border-top-color: alpha(#ffe27a, 0.95);
+   border: 1px solid textOpacity($gold, 0.12);
+   border-top-color: textOpacity($goldLight, 0.95);
    border-radius: 0;
-   background: linear-gradient(180deg, #3a3f9a, #14174a 50%, #0a0c26);
+   background: linear-gradient(180deg, #3a3f9a, $indigoNight 50%, #0a0c26);
    box-shadow:
     0 1.125rem 1.875rem -0.375rem rgba(0, 0, 0, 0.55),
-    0 0 2.75rem alpha(#4b4fd8, 0.35);
+    0 0 2.75rem textOpacity($indigo, 0.35);
   }
 
   &::after {
@@ -2739,17 +2733,17 @@
    background: linear-gradient(
      122deg,
      transparent 22%,
-     alpha($white, 0.09) 32%,
+     textOpacity($white, 0.09) 32%,
      transparent 42%
     )
     padding-box;
   }
 
   :root[data-theme="light"] &::before {
-   border-color: #bcc1e2;
+   border-color: $lightBorderStrong;
    border-top-color: $gold;
-   background: linear-gradient(180deg, #ffffff, #eceefa 55%, #dfe2f5);
-   box-shadow: 0 0.875rem 1.625rem -0.375rem alpha(#12143a, 0.18);
+   background: linear-gradient(180deg, $white, $lightRaised 55%, #dfe2f5);
+   box-shadow: 0 0.875rem 1.625rem -0.375rem textOpacity($lightText, 0.18);
   }
  }
 
@@ -2762,7 +2756,7 @@
   align-items: center;
   gap: 0.375rem;
   padding: 0.375rem 0.75rem;
-  border: 1px solid alpha($appText, 0.2);
+  border: 1px solid textOpacity($appText, 0.2);
   background: linear-gradient(180deg, #23276a, #121540);
   white-space: nowrap;
   transform: translate(-50%, -50%);
@@ -2774,7 +2768,7 @@
   }
 
   &.reconnecting {
-   border-color: alpha($warning, 0.5);
+   border-color: textOpacity($warning, 0.5);
   }
 
   :root[data-theme="light"] & {
@@ -2799,8 +2793,8 @@
   align-items: center;
   gap: 0.75rem;
   padding: 1rem;
-  border: 1px solid alpha($appText, 0.1);
-  border-top-color: alpha($gold, 0.6);
+  border: 1px solid textOpacity($appText, 0.1);
+  border-top-color: textOpacity($gold, 0.6);
   background: $appSheet;
  }
 
@@ -2823,6 +2817,27 @@
   }
  }
 
+ &.gr-captured {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+ }
+
+ &.gr-captured-slot {
+  display: flex;
+  flex: 0 1 0.4rem;
+  min-width: 0.15rem;
+
+  &.stack-end {
+   flex-basis: 1.75rem;
+   min-width: 0.5rem;
+  }
+
+  &:last-child {
+   flex: none;
+  }
+ }
+
  &.gr-draw-offer {
   position: relative;
   display: flex;
@@ -2832,8 +2847,8 @@
   min-height: 3.5rem;
   padding: 0 0.5rem 0 0.625rem;
   overflow: hidden;
-  border: 1px solid alpha($gold, 0.5);
-  background: linear-gradient(90deg, alpha($gold, 0.12), alpha($gold, 0.03));
+  border: 1px solid textOpacity($gold, 0.5);
+  background: linear-gradient(90deg, textOpacity($gold, 0.12), textOpacity($gold, 0.03));
   animation: draw-offer-in 0.3s ease-out;
 
   @media (prefers-reduced-motion: reduce) {
@@ -2855,7 +2870,7 @@
   flex-shrink: 0;
   width: 2.25rem;
   height: 2.25rem;
-  background: alpha($gold, 0.14);
+  background: textOpacity($gold, 0.14);
   color: $gold;
 
   svg {
@@ -2888,7 +2903,7 @@
   flex-shrink: 0;
 
   &.reviewing .gr-move-strip {
-   border-bottom-color: alpha($gold, 0.6);
+   border-bottom-color: textOpacity($gold, 0.6);
   }
  }
 
@@ -2899,7 +2914,7 @@
   min-width: 0;
   height: 2.5rem;
   padding: 0 0.25rem;
-  border-bottom: 1px solid alpha($appText, 0.12);
+  border-bottom: 1px solid textOpacity($appText, 0.12);
   overflow-x: auto;
   white-space: nowrap;
   scrollbar-width: none;
@@ -2940,7 +2955,7 @@
   flex-shrink: 0;
   width: 0.875rem;
   height: 0.875rem;
-  border: 2px solid alpha($appText, 0.2);
+  border: 2px solid textOpacity($appText, 0.2);
   border-top-color: $gold;
   border-radius: 50%;
   animation: gr-move-spin 0.8s linear infinite;
@@ -2958,13 +2973,7 @@
   height: 2rem;
   margin: 0 0.5rem;
   padding: 0.1875rem 0.3125rem 0.1875rem 0.375rem;
-  border: 1px solid alpha($appText, 0.22);
-
-  .gr-premove-piece {
-   flex-shrink: 0;
-   width: 1.5rem;
-   height: 1.5rem;
-  }
+  border: 1px solid textOpacity($appText, 0.22);
  }
 
  &.gr-move-pair {
@@ -3051,8 +3060,8 @@
    margin-top: -1.125rem;
    background: radial-gradient(
     50% 50% at 50% 50%,
-    alpha($gold, 0.85),
-    alpha($gold, 0)
+    textOpacity($gold, 0.85),
+    textOpacity($gold, 0)
    );
    opacity: 0;
   }
@@ -3062,7 +3071,7 @@
    width: 0.25rem;
    height: 0.25rem;
    border-radius: 50%;
-   background: #ffe27a;
+   background: $goldLight;
    opacity: 0;
 
    &.fibre {
@@ -3082,8 +3091,8 @@
  &.payout-stage {
   --payout-stub: linear-gradient(180deg, #5affbd, #2fe89c);
   --payout-stub-ink: #{$poolInk};
-  --payout-money: #0b8a50;
-  --payout-stamp: #0b8a50;
+  --payout-money: #{$payoutWin};
+  --payout-stamp: #{$payoutWin};
   position: relative;
   --ticket-h: 16.25rem;
   --rise-h: calc(var(--ticket-h) + 1.25rem);
@@ -3094,21 +3103,21 @@
   &.loss {
    --payout-stub: linear-gradient(180deg, #9a9fc6, #7e83ad);
    --payout-stub-ink: #{$white};
-   --payout-money: #d33a3a;
-   --payout-stamp: #d33a3a;
+   --payout-money: #{$payoutLoss};
+   --payout-stamp: #{$payoutLoss};
   }
 
   &.draw {
    --payout-stub: linear-gradient(180deg, #8f94ff, #6a70f0);
    --payout-stub-ink: #{$white};
    --payout-money: #{$poolInk};
-   --payout-stamp: #4b4fd8;
+   --payout-stamp: #{$indigo};
   }
 
   &.match_cancelled {
    --payout-stub: linear-gradient(180deg, #9a9db4, #82869f);
    --payout-stub-ink: #{$white};
-   --payout-money: #{alpha($poolInk, 0.7)};
+   --payout-money: #{textOpacity($poolInk, 0.7)};
    --payout-stamp: #6a6f95;
   }
 
@@ -3131,7 +3140,7 @@
    right: -8.75rem;
    top: calc(var(--rise-h) + 0.875rem);
    height: 12rem;
-   background: alpha($appText, 0.12);
+   background: textOpacity($appText, 0.12);
    mask:
     url("/pattern-cubes.svg") 50% 0 / 1.515625rem 2.625rem repeat,
     radial-gradient(60% 90% at 50% 0, #000 20%, transparent 75%);
@@ -3150,7 +3159,7 @@
    height: calc(var(--rise-h) + 3rem);
    margin-left: -10rem;
    clip-path: polygon(38% 0, 62% 0, 100% 100%, 0 100%);
-   background: linear-gradient(180deg, alpha($gold, 0), alpha($gold, 0.3));
+   background: linear-gradient(180deg, textOpacity($gold, 0), textOpacity($gold, 0.3));
    opacity: 0;
    transition: opacity 0.8s ease-out;
   }
@@ -3188,7 +3197,7 @@
     height: 3rem;
     background: radial-gradient(
      closest-side,
-     alpha($black, 0.35) 70%,
+     textOpacity($black, 0.35) 70%,
      transparent
     );
    }
@@ -3210,7 +3219,7 @@
     background: linear-gradient(
      90deg,
      transparent,
-     alpha($white, 0.75),
+     textOpacity($white, 0.75),
      transparent
     );
     transform: skewX(-18deg);
@@ -3281,7 +3290,7 @@
    border-radius: 50%;
    background: radial-gradient(
     closest-side,
-    alpha($poolInk, 0.45),
+    textOpacity($poolInk, 0.45),
     transparent
    );
    opacity: 0;
@@ -3308,7 +3317,7 @@
    background: linear-gradient(
     180deg,
     #020312 0 0.25rem,
-    #2a2e7a 0.25rem,
+    $indigoEdgeDark 0.25rem,
     #141640
    );
 
@@ -3319,7 +3328,7 @@
     right: 0;
     top: 0;
     height: 2px;
-    background: alpha($white, 0.25);
+    background: textOpacity($white, 0.25);
    }
 
    &::after {
@@ -3331,7 +3340,7 @@
     height: 0.75rem;
     background: radial-gradient(
      50% 100% at 50% 100%,
-     alpha($white, 0.18),
+     textOpacity($white, 0.18),
      transparent
     );
     pointer-events: none;
@@ -3341,16 +3350,15 @@
   &.lit .payout-slot::after {
    background: radial-gradient(
     50% 100% at 50% 100%,
-    alpha($gold, 0.6),
+    textOpacity($gold, 0.6),
     transparent
    );
   }
 
   &.lit .payout-slot::before {
-   background: linear-gradient(90deg, #8a6300, #ffe58a 50%, #8a6300);
+   background: linear-gradient(90deg, $goldDarkest, #ffe58a 50%, $goldDarkest);
   }
 
-  .payout-coin,
   .payout-spark {
    position: absolute;
    z-index: $z-raised;
@@ -3382,30 +3390,30 @@
     content: "";
     position: absolute;
     inset: 2px;
-    background: linear-gradient(180deg, #ffe27a, #f2a900);
+    background: linear-gradient(180deg, $goldLight, $goldMid);
     clip-path: inherit;
    }
   }
 
   :root[data-theme="light"] & {
    &::before {
-    background: alpha(#5b60a8, 0.07);
+    background: textOpacity($indigoEdge, 0.07);
    }
 
    .payout-floor {
-    background: alpha(#5b60a8, 0.2);
+    background: textOpacity($indigoEdge, 0.2);
    }
 
    .payout-paper {
-    box-shadow: inset 0 0 0 1px alpha(#5b60a8, 0.28);
+    box-shadow: inset 0 0 0 1px textOpacity($indigoEdge, 0.28);
    }
 
    .payout-beam {
     background: linear-gradient(
      180deg,
-     alpha(#ffc400, 0),
-     alpha(#ffc400, 0.1) 45%,
-     alpha(#f2a900, 0.24)
+     textOpacity($goldSolid, 0),
+     textOpacity($goldSolid, 0.1) 45%,
+     textOpacity($goldMid, 0.24)
     );
    }
 
@@ -3414,18 +3422,18 @@
     height: 3rem;
     background: radial-gradient(
      closest-side,
-     alpha(#5b60a8, 0.38) 75%,
+     textOpacity($indigoEdge, 0.38) 75%,
      transparent
     );
    }
 
    .payout-slot {
-    background: #5b60a8;
+    background: $indigoEdge;
 
     &::after {
      background: radial-gradient(
       50% 100% at 50% 100%,
-      alpha(#5b60a8, 0.3),
+      textOpacity($indigoEdge, 0.3),
       transparent
      );
     }
@@ -3434,7 +3442,7 @@
    &.lit .payout-slot::after {
     background: radial-gradient(
      50% 100% at 50% 100%,
-     alpha($gold, 0.6),
+     textOpacity($gold, 0.6),
      transparent
     );
    }
@@ -3568,7 +3576,7 @@
    }
 
    &.highlight {
-    border: 1.5px solid alpha($gold, 0.85);
+    border: 1.5px solid textOpacity($gold, 0.85);
    }
   }
 
@@ -3605,8 +3613,8 @@
   align-items: center;
   gap: $space-8;
   padding: 0.4375rem 0.875rem;
-  background: alpha($appText, 0.06);
-  border: 1px solid alpha($appText, 0.14);
+  background: textOpacity($appText, 0.06);
+  border: 1px solid textOpacity($appText, 0.14);
 
   svg {
    width: 1.125rem;
@@ -3629,7 +3637,7 @@
   height: 2.25rem;
   margin-left: 1rem;
   border-radius: 999px;
-  background: alpha($appText, 0.08);
+  background: textOpacity($appText, 0.08);
 
   a {
    display: flex;

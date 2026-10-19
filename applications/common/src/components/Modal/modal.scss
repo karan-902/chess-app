@@ -14,10 +14,18 @@
 
  .modal-title {
   font-family: $fontOutfitRegular;
-  font-size: $font18;
+  font-size: 18px;
   font-weight: 700;
   color: $appText;
   margin-bottom: 0.4rem;
+
+  @include from(phone) {
+   font-size: 19px;
+  }
+
+  @include from(tablet) {
+   font-size: 20px;
+  }
  }
 
  &.edit-profile-modal {

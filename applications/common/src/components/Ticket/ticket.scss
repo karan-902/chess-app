@@ -9,7 +9,7 @@
  max-width: 18.75rem;
  margin: 0 auto;
  padding-bottom: 0.875rem;
- background: linear-gradient(180deg, #fffdf6, #f1ecdf);
+ background: linear-gradient(180deg, $ticketPaperTop, $ticketPaperBottom);
  color: $poolInk;
  --perf-y: 50%;
  mask:
@@ -40,7 +40,7 @@
 
  .ticket-perf {
   margin: 0 1.25rem;
-  border-top: 1px dashed alpha($poolInk, 0.3);
+  border-top: 1px dashed textOpacity($poolInk, 0.3);
  }
 
  :root[data-theme="light"] & {
@@ -48,20 +48,20 @@
    radial-gradient(
      circle at 0 var(--perf-y),
      transparent 0.75rem,
-     alpha(#5b60a8, 0.35) 0.75rem,
-     alpha(#5b60a8, 0.35) calc(0.75rem + 1px),
+     textOpacity($indigoEdge, 0.35) 0.75rem,
+     textOpacity($indigoEdge, 0.35) calc(0.75rem + 1px),
      transparent calc(0.75rem + 1px)
     )
     no-repeat,
    radial-gradient(
      circle at 100% var(--perf-y),
      transparent 0.75rem,
-     alpha(#5b60a8, 0.35) 0.75rem,
-     alpha(#5b60a8, 0.35) calc(0.75rem + 1px),
+     textOpacity($indigoEdge, 0.35) 0.75rem,
+     textOpacity($indigoEdge, 0.35) calc(0.75rem + 1px),
      transparent calc(0.75rem + 1px)
     )
     no-repeat,
-   linear-gradient(180deg, #fffdf6, #f1ecdf);
+   linear-gradient(180deg, $ticketPaperTop, $ticketPaperBottom);
  }
 
  &.payout-paper {

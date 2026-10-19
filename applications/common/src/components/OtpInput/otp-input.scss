@@ -15,12 +15,16 @@
   justify-content: center;
   background: transparent;
   border: 0;
-  border-bottom: 1.5px solid alpha($appText, 0.22);
+  border-bottom: 1.5px solid textOpacity($appText, 0.22);
   border-radius: 0;
   font-family: $fontOutfitExtraBold;
-  font-size: $font24;
+  font-size: 24px;
   color: $appText;
   transition: border-color 0.15s ease;
+
+  @include from(phone) {
+   font-size: 26px;
+  }
 
   &.active {
    border-bottom-color: $gold;
@@ -34,11 +38,15 @@
   .otp-slot {
    max-width: 3.25rem;
    height: 4rem;
-   font-size: $font30;
-   border: 1px solid alpha($poolInk, 0.22);
+   font-size: 30px;
+   border: 1px solid textOpacity($poolInk, 0.22);
    background: $white;
    font-family: $fontOutfitBlack;
    color: $poolInk;
+
+   @include from(phone) {
+    font-size: 32px;
+   }
 
    &.active {
     border: 1.5px solid $gold;

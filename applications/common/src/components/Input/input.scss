@@ -12,37 +12,45 @@
   gap: 0.5rem;
   width: 100%;
   height: 3.375rem;
-  border-bottom: 1px solid alpha($appText, 0.22);
+  border-bottom: 1px solid textOpacity($appText, 0.22);
   font-family: $fontOutfitSemiBold;
-  font-size: max(#{$input-font-min}, #{$font18});
+  font-size: 18px;
   color: $appText;
   transition: border-color 0.15s ease;
 
-  > div {
+  @include from(phone) {
+   font-size: 19px;
+  }
+
+  @include from(tablet) {
+   font-size: 20px;
+  }
+
+  .MuiInputBase-root {
    flex: 1;
    min-width: 0;
    height: 100%;
-
-   > div {
-    height: 100%;
-    font: inherit !important;
-    letter-spacing: inherit !important;
-    color: inherit !important;
-   }
+   font: inherit;
+   letter-spacing: inherit;
+   color: inherit;
   }
 
   input {
+   box-sizing: border-box;
    height: 100%;
-   font-family: inherit !important;
-   font-size: inherit !important;
-   font-weight: inherit !important;
-   line-height: normal !important;
-   letter-spacing: inherit !important;
-   color: inherit !important;
+   padding: 0;
+   caret-color: $gold;
+   -webkit-text-fill-color: currentColor;
+   font-family: inherit;
+   font-size: inherit;
+   font-weight: inherit;
+   line-height: normal;
+   letter-spacing: inherit;
+   color: inherit;
    text-align: inherit;
 
    &::placeholder {
-    color: $appTextPlaceholder !important;
+    color: $appTextPlaceholder;
     opacity: 1;
    }
 
@@ -56,7 +64,7 @@
     caret-color: $gold;
     -webkit-box-shadow: none;
     box-shadow: none;
-    background-color: transparent !important;
+    background-color: transparent;
     background-clip: text;
     -webkit-background-clip: text;
     transition:
@@ -67,7 +75,7 @@
 
   @media (hover: hover) {
    &:hover {
-    border-color: alpha($appText, 0.45);
+    border-color: textOpacity($appText, 0.45);
    }
   }
 
@@ -93,7 +101,7 @@
  }
 
  .input-password-toggle {
-  color: alpha($appText, 0.7);
+  color: textOpacity($appText, 0.7);
 
   svg {
    width: 1.125rem;
@@ -106,17 +114,25 @@
   padding: 0.25rem 0;
   border: none;
   font-family: $fontOutfitBlack;
-  font-size: $font44;
+  font-size: 44px;
   line-height: 1.1;
   text-align: center;
 
+  @include from(phone) {
+   font-size: 48px;
+  }
+
   @include from-height(medium) {
    padding: 0.5rem 0;
-   font-size: $font56;
+   font-size: 56px;
+
+   @include from(phone) {
+    font-size: 60px;
+   }
   }
 
   input::placeholder {
-   color: alpha($appText, 0.35) !important;
+   color: textOpacity($appText, 0.35);
   }
 
   &:focus-within {
@@ -128,11 +144,15 @@
   height: auto;
   border: none;
   font-family: $fontOutfitBlack;
-  font-size: $font40;
+  font-size: 40px;
   line-height: 1.1;
   background: transparent;
   text-align: center;
   color: $appText;
+
+  @include from(phone) {
+   font-size: 44px;
+  }
 
   input {
    text-align: center;
@@ -141,8 +161,8 @@
   }
 
   input::placeholder {
-   color: alpha($appText, 0.3) !important;
-   -webkit-text-fill-color: alpha($appText, 0.3);
+   color: textOpacity($appText, 0.3);
+   -webkit-text-fill-color: textOpacity($appText, 0.3);
   }
 
   &:focus-within {
@@ -173,10 +193,14 @@
 
  &.match-id-input .input-row {
   height: 3.125rem;
-  border: 1px solid alpha($appText, 0.1);
+  border: 1px solid textOpacity($appText, 0.1);
   background: $appSurface;
   color: $appText;
-  font-size: $font14;
+  font-size: 14px;
+
+  @include from(phone) {
+   font-size: 15px;
+  }
 
   input {
    -webkit-text-fill-color: $appText;

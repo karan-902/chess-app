@@ -31,10 +31,10 @@
   width: 2.5rem;
   height: 2.5rem;
   padding: 0;
-  border: 1px solid alpha($appText, 0.16);
+  border: 1px solid textOpacity($appText, 0.16);
   border-radius: 50%;
   background: transparent;
-  color: alpha($appText, 0.8);
+  color: textOpacity($appText, 0.8);
   transition:
    color 0.15s ease,
    border-color 0.15s ease;
@@ -46,17 +46,17 @@
 
   &:hover:not(.Mui-disabled) {
    background: transparent;
-   border-color: alpha($appText, 0.32);
+   border-color: textOpacity($appText, 0.32);
    color: $appText;
   }
 
   &.live {
-   border-color: alpha($gold, 0.5);
+   border-color: textOpacity($gold, 0.5);
    color: $gold;
   }
 
   &.Mui-disabled {
-   color: alpha($appText, 0.8);
+   color: textOpacity($appText, 0.8);
    cursor: default;
   }
  }
@@ -65,9 +65,9 @@
   flex-shrink: 0;
   width: 2.5rem;
   height: 2.5rem;
-  border: 1px solid alpha($appText, 0.16);
+  border: 1px solid textOpacity($appText, 0.16);
   background: transparent;
-  color: alpha($appText, 0.8);
+  color: textOpacity($appText, 0.8);
 
   svg {
    width: 1rem;
@@ -76,7 +76,7 @@
 
   &.accept {
    border-color: transparent;
-   background: linear-gradient(180deg, #ffe27a, $gold);
+   background: linear-gradient(180deg, $goldLight, $gold);
    color: $primaryContrast;
    @include neo-edge($btnEdgeGold);
 
@@ -85,7 +85,7 @@
    }
 
    &:hover {
-    background: linear-gradient(180deg, #ffe27a, $primaryHover);
+    background: linear-gradient(180deg, $goldLight, $primaryHover);
    }
 
    &:active {
@@ -105,7 +105,7 @@
   min-width: 0;
   padding: 0;
   border-radius: 0%;
-  border: 1px solid alpha($appText, 0.18);
+  border: 1px solid textOpacity($appText, 0.18);
   background: $btnGhostBg;
   color: $appText;
 
@@ -133,13 +133,13 @@
   width: 1.75rem;
   height: 1.75rem;
   padding: 0;
-  color: alpha($appText, 0.55);
+  color: textOpacity($appText, 0.55);
   transition:
    color 0.15s ease,
    background-color 0.15s ease;
 
   &:hover {
-   background: alpha($appText, 0.12);
+   background: textOpacity($appText, 0.12);
   }
 
   svg {
@@ -191,7 +191,7 @@
   padding: 0;
   border-radius: 0;
   background: transparent;
-  color: alpha($appText, 0.7);
+  color: textOpacity($appText, 0.7);
 
   svg {
    width: 0.5625rem;
@@ -206,16 +206,22 @@
   }
 
   &:hover {
-   background: alpha($appText, 0.2);
+   background: textOpacity($appText, 0.2);
   }
  }
 
  &.appbar-menu-trigger {
   display: flex;
-  width: $font24;
-  height: $font24;
+  width: 24px;
+  height: 24px;
   padding: 0;
   color: $appText;
+
+  @include from(phone) {
+   width: 26px;
+   height: 26px;
+  }
+
   svg {
    width: 100%;
    height: 100%;
@@ -228,8 +234,8 @@
   z-index: $z-overlay;
   width: 2.75rem;
   height: 2.75rem;
-  border: 1px solid alpha($white, 0.28);
-  background: alpha($white, 0.1);
+  border: 1px solid textOpacity($white, 0.28);
+  background: textOpacity($white, 0.1);
   backdrop-filter: blur(12px);
   color: $white;
   transition: transform 0.12s cubic-bezier(0.22, 1, 0.36, 1);
@@ -249,7 +255,7 @@
   }
 
   &:hover:not(.Mui-disabled) {
-   background: alpha($white, 0.16);
+   background: textOpacity($white, 0.16);
   }
 
   &:active:not(.Mui-disabled) {
@@ -257,7 +263,7 @@
   }
 
   &.Mui-disabled {
-   color: alpha($white, 0.6);
+   color: textOpacity($white, 0.6);
   }
 
   :root[data-theme="light"] & {

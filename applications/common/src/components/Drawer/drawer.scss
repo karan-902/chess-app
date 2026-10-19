@@ -52,7 +52,7 @@
  }
 
  .MuiBackdrop-root {
-  background-color: alpha($black, 0.6);
+  background-color: textOpacity($black, 0.6);
  }
 
  &.game-over-sheet .MuiBackdrop-root {
@@ -64,7 +64,7 @@
   background:
    radial-gradient(
     8.75rem 8rem at 50% 4.0625rem,
-    alpha($gold, 0.3),
+    textOpacity($gold, 0.3),
     transparent
    ),
    $appSheetFill;
@@ -74,7 +74,7 @@
   background:
    radial-gradient(
     8.75rem 8rem at 50% 4.0625rem,
-    alpha($auraIndigo, 0.28),
+    textOpacity($auraIndigo, 0.28),
     transparent
    ),
    $appSheetFill;
