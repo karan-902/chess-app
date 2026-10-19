@@ -203,13 +203,22 @@ export const Wallet3dIcon = forwardRef<SVGSVGElement, ISvgIconProps>(
   const id = useSvgId();
   return (
    <SvgIcon ref={ref} viewBox="0 0 52 52" {...props}>
+    <ellipse
+     cx="27"
+     cy="45"
+     rx="17"
+     ry="3"
+     fill="#000000"
+     fillOpacity="0.35"
+     filter={`url(#${id}ground)`}
+    />
     <g transform="rotate(8 26 28)">
      <rect
       x="11"
       y="9"
       width="20"
       height="13"
-      rx="2.5"
+      rx="3"
       fill="#4a4fd8"
       transform="rotate(-6 21 15)"
      />
@@ -218,50 +227,102 @@ export const Wallet3dIcon = forwardRef<SVGSVGElement, ISvgIconProps>(
       y="6"
       width="22"
       height="16"
-      rx="2.5"
+      rx="3"
       fill={`url(#${id}note)`}
      />
-     <rect x="8" y="18" width="38" height="26" rx="7" fill="#8a6a1a" />
      <rect
       x="6"
       y="16"
       width="38"
-      height="26"
-      rx="7"
+      height="27"
+      rx="11"
       fill={`url(#${id}body)`}
+      filter={`url(#${id}clay)`}
      />
      <rect
-      x="9"
-      y="18"
-      width="31"
-      height="2"
-      rx="1"
-      fill="#ffffff"
-      fillOpacity="0.35"
-     />
-     <rect x="31" y="26" width="15" height="12" rx="4" fill="#9a7a1c" />
-     <rect
-      x="30"
-      y="25"
-      width="15"
-      height="11"
-      rx="4"
+      x="29"
+      y="24"
+      width="16"
+      height="12"
+      rx="6"
       fill={`url(#${id}flap)`}
+      filter={`url(#${id}flapShadow)`}
      />
-     <circle cx="38" cy="30.5" r="2.4" fill="#6b4f12" />
+     <circle cx="37.5" cy="30" r="2.4" fill="#8A5A00" />
     </g>
     <defs>
+     <filter id={`${id}ground`} x="-20%" y="-100%" width="140%" height="300%">
+      <feGaussianBlur stdDeviation="1.5" />
+     </filter>
+     <filter
+      id={`${id}clay`}
+      x="-10%"
+      y="-20%"
+      width="120%"
+      height="140%"
+      colorInterpolationFilters="sRGB"
+     >
+      <feColorMatrix
+       in="SourceAlpha"
+       type="matrix"
+       values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+       result="hardAlpha"
+      />
+      <feOffset dy="3" />
+      <feGaussianBlur stdDeviation="2" />
+      <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
+      <feColorMatrix
+       type="matrix"
+       values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.7 0"
+      />
+      <feBlend mode="normal" in2="SourceGraphic" result="highlight" />
+      <feColorMatrix
+       in="SourceAlpha"
+       type="matrix"
+       values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+       result="hardAlpha2"
+      />
+      <feOffset dy="-4" />
+      <feGaussianBlur stdDeviation="2.5" />
+      <feComposite in2="hardAlpha2" operator="arithmetic" k2="-1" k3="1" />
+      <feColorMatrix
+       type="matrix"
+       values="0 0 0 0 0.658824 0 0 0 0 0.435294 0 0 0 0 0 0 0 0 0.6 0"
+      />
+      <feBlend mode="normal" in2="highlight" />
+     </filter>
+     <filter
+      id={`${id}flapShadow`}
+      x="-30%"
+      y="-30%"
+      width="160%"
+      height="180%"
+      colorInterpolationFilters="sRGB"
+     >
+      <feColorMatrix
+       in="SourceAlpha"
+       type="matrix"
+       values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+      />
+      <feOffset dy="2" />
+      <feGaussianBlur stdDeviation="1.5" />
+      <feColorMatrix
+       type="matrix"
+       values="0 0 0 0 0.658824 0 0 0 0 0.435294 0 0 0 0 0 0 0 0 0.5 0"
+      />
+      <feBlend mode="normal" in="SourceGraphic" />
+     </filter>
      <linearGradient id={`${id}note`} x1="0" y1="0" x2="0" y2="1">
       <stop stopColor="#BFE8A8" />
-      <stop offset="1" stopColor="#8FD06A" />
+      <stop offset="1" stopColor="#7CC25A" />
      </linearGradient>
      <linearGradient id={`${id}body`} x1="0" y1="0" x2="0" y2="1">
-      <stop stopColor="#FFE07A" />
-      <stop offset="1" stopColor="#E8B33A" />
+      <stop stopColor="#FFE9A0" />
+      <stop offset="1" stopColor="#F5B800" />
      </linearGradient>
      <linearGradient id={`${id}flap`} x1="0" y1="0" x2="0" y2="1">
-      <stop stopColor="#F7D46A" />
-      <stop offset="1" stopColor="#E5AE2E" />
+      <stop stopColor="#FFF1B8" />
+      <stop offset="1" stopColor="#E5A900" />
      </linearGradient>
     </defs>
    </SvgIcon>

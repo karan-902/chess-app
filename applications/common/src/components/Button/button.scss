@@ -534,6 +534,35 @@
   }
  }
 
+ &.username-suggestion-btn {
+  --btn-pad: 0;
+  --btn-bg: transparent;
+  --btn-border: 0 solid transparent;
+  height: auto;
+  min-height: 0;
+  min-width: 0;
+  font-size: inherit;
+  color: $gold;
+
+  :root[data-theme="light"] & {
+   color: $appText;
+  }
+
+  &:hover:not(.disabled) {
+   --btn-bg: transparent;
+  }
+
+  .button-face > div,
+  .button-text {
+   font-family: $fontOutfitSemiBold;
+   font-size: inherit;
+   line-height: 1.5;
+   color: inherit;
+   text-decoration: underline;
+   text-underline-offset: 0.125rem;
+  }
+ }
+
  &.contained:not(.disabled, .wallet-withdraw-btn) .button-face {
   position: relative;
   overflow: hidden;

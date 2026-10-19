@@ -120,24 +120,30 @@
  }
 
  &.appbar-balance {
-  gap: 0.25rem;
+  gap: 6px;
   height: 100%;
   font-size: 14px;
   background: transparent;
   border: none;
-  padding: 0 0.875rem 0 0;
+  padding: 0 12px 0 0;
   border-radius: inherit !important;
   overflow: visible;
   cursor: pointer;
 
   @include from(phone) {
+   gap: 8px;
+   padding: 0 14px 0 0;
    font-size: 15px;
   }
 
   .MuiChip-icon {
    width: 2.625rem;
    height: 2.625rem;
-   margin: 0 0 0 -0.875rem;
+   margin: 0 0 0 -12px;
+
+   @include from(phone) {
+    margin: 0 0 0 -14px;
+   }
   }
   .MuiChip-label {
    padding: 0;

@@ -122,7 +122,12 @@ function EditProfileDrawer({
     customClass="edit-profile-form"
     onSubmit={formSubmitHandler(formik.handleSubmit)}
    >
-    <UsernameField formik={formik} inputRef={usernameInputRef} showHint />
+    <UsernameField
+     formik={formik}
+     inputRef={usernameInputRef}
+     showHint
+     hideClear
+    />
 
     <Button
      type="submit"

@@ -75,8 +75,14 @@
  }
 
  &.appbar-balance-skeleton {
-  width: 7rem;
-  height: 2rem;
+  width: 100px;
+  height: 2.25rem;
+  margin-left: 1rem;
+  border-radius: 999px;
+
+  @include from(phone) {
+   width: 106px;
+  }
  }
 
  .pool-card &.MuiSkeleton-root {

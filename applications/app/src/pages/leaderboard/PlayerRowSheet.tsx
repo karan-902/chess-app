@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import ResultSheet from "@gopvp/app/src/components/common/ResultSheet";
+import { STAT_ICONS } from "@gopvp/app/src/constants/icon";
 import { useGame } from "@gopvp/app/src/hooks/useGame";
 import {
  callAPIInterface,
@@ -56,14 +57,27 @@ export default function PlayerRowSheet({
    open={!!playerId}
    onClose={onClose}
    tone="gold"
+   hideGlow
    title={stats ? shortenUsername(stats.username) : undefined}
    amount={stats ? formatAmount(stats.gross_income) : undefined}
    tiles={
     stats && [
-     { label: scoreText, value: formatNumber(stats.score) },
-     { label: winsText, value: stats.wins },
-     { label: bestStreakText, value: stats.best_streak },
-     { label: currentStreakText, value: stats.current_streak },
+     {
+      label: scoreText,
+      value: formatNumber(stats.score),
+      icon: STAT_ICONS.score.icon,
+     },
+     { label: winsText, value: stats.wins, icon: STAT_ICONS.wins.icon },
+     {
+      label: bestStreakText,
+      value: stats.best_streak,
+      icon: STAT_ICONS.best_streak.icon,
+     },
+     {
+      label: currentStreakText,
+      value: stats.current_streak,
+      icon: STAT_ICONS.current_streak.icon,
+     },
     ]
    }
    skeletonTiles={4}

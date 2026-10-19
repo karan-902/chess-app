@@ -5,6 +5,25 @@
   width: 0.875rem;
   height: 0.875rem;
  }
+ &.username-refresh-btn {
+  position: relative;
+  width: 1.25rem;
+  height: 1.25rem;
+  padding: 0;
+  border: 1px solid textOpacity($appText, 0.18);
+  color: $appText;
+
+  svg {
+   width: 0.75rem;
+   height: 0.75rem;
+  }
+
+  &::after {
+   content: "";
+   position: absolute;
+   inset: -0.5rem;
+  }
+ }
  &.deposit-qr-back-btn {
   svg {
    width: 1rem;
