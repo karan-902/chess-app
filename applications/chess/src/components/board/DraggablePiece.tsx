@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useRef } from "react";
 import type { CSSProperties } from "react";
 import { useDraggable } from "@dnd-kit/core";
 import Box from "@gopvp/common/src/components/Box/Box";
-import PieceIcon from "@gopvp/chess/src/components/board/PieceIcon";
+import { PieceIcon } from "@gopvp/common/src/components/constants";
 import {
  PIECE_LAND_MS,
  PIECE_SHAKE_MS,

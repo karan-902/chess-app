@@ -20,9 +20,6 @@ export default function ChessPoolLabel({ pool }: IPoolLabelProps) {
     <Box customClass="pool-mode-icon">
      <CategoryIcon size="1em" strokeWidth={2} />
     </Box>
-    {/* <Text component="span" customClass="pool-mode-name">
-     {formatText(CATEGORY_LABELS[category])}
-    </Text> */}
    </Box>
    <CustomChip
     customClass="minute-chip"

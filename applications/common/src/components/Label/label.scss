@@ -6,28 +6,44 @@
 
  &.wallet-label,
  &.wallet-field-label {
-  font-size: $font14 !important;
+  font-size: 14px;
+
+  @include from(phone) {
+   font-size: 15px;
+  }
  }
  &.wallet-label {
   color: $appText !important;
   text-align: center;
  }
  &.match-id-label {
-  font-size: $font14 !important;
+  font-size: 14px;
+
+  @include from(phone) {
+   font-size: 15px;
+  }
  }
  .gopvp-signup-form & {
-  font-size: $font14 !important;
-  line-height: 1.25 !important;
+  font-size: 14px;
+  line-height: 1.25;
+
+  @include from(phone) {
+   font-size: 15px;
+  }
  }
 
  .common-input > &,
  .form-field > & {
   font-family: $fontOutfitBold !important;
-  font-size: $font11 !important;
-  line-height: 1.25 !important;
+  font-size: 12px;
+  line-height: 1.25;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: alpha($appText, 0.5) !important;
+  color: textOpacity($appText, 0.5) !important;
+
+  @include from(tablet) {
+   font-size: 13px;
+  }
  }
 
 }

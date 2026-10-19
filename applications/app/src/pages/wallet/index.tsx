@@ -94,6 +94,12 @@ function txRow(tx: ITransactionResponse, groupEdgeClass: string) {
        <Text customClass="row-title">
         {TRANSACTION_CODE_DESCRIPTIONS[tx.transaction_code]}
        </Text>
+       {isPending && (
+        <CustomChip
+         label={tx.status === "PROCESSING" ? processingText : pendingText}
+         customClass="tx-pending-chip"
+        />
+       )}
       </Box>
       <Text customClass="meta-text">{formatTime(tx.created)}</Text>
      </Box>
@@ -109,12 +115,6 @@ function txRow(tx: ITransactionResponse, groupEdgeClass: string) {
       {isDebit ? "-" : "+"}
       {formatAmount(Math.abs(tx.amount))}
      </Text>
-     {isPending && (
-      <CustomChip
-       label={tx.status === "PROCESSING" ? processingText : pendingText}
-       customClass="tx-pending-chip"
-      />
-     )}
     </Box>
    </Box>
   </Box>

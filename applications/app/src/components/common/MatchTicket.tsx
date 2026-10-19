@@ -2,10 +2,8 @@ import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import CustomAvatar from "@gopvp/common/src/components/Avatar/Avatar";
-import {
- RIVAL_MASK_PATH,
- HERO_SPARK_PATH,
-} from "@gopvp/app/src/constants/asset";
+import { SparkIcon } from "@gopvp/common/src/components/constants";
+import { RIVAL_MASK_PATH } from "@gopvp/app/src/constants/asset";
 import {
  matchTicketText,
  matchConfirmedText,
@@ -117,12 +115,7 @@ export default function MatchTicket({
    </Box>
    <Box customClass="match-slot" />
    {SPARKS.map((spark) => (
-    <img
-     key={spark}
-     className={`match-spark spark-${spark + 1}`}
-     src={HERO_SPARK_PATH}
-     alt=""
-    />
+    <SparkIcon key={spark} className={`match-spark spark-${spark + 1}`} />
    ))}
   </Box>
  );

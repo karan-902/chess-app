@@ -4,15 +4,9 @@ import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
 import { icons } from "@gopvp/common/src/components/images";
+import { TrophyArtIcon } from "@gopvp/common/src/components/constants";
+import { HERO_LOGO_PATH } from "@gopvp/app/src/constants/asset";
 import {
- HERO_LOGO_PATH,
- // HERO_COIN_PATH,
- // HERO_SPARK_PATH,
- TROPHY_ART_PATH,
-} from "@gopvp/app/src/constants/asset";
-import {
- // HERO_COIN_COUNT,
- // HERO_SPARK_COUNT,
  HERO_FLOOR,
  HERO_FLOOR_PATH_LEFT,
  HERO_FLOOR_PATH_RIGHT,
@@ -22,7 +16,8 @@ import type { IAuthLayoutProps } from "@gopvp/app/src/types/component";
 
 const floorRowY = Array.from(
  { length: HERO_FLOOR.rows + 1 },
- (_, row) => HERO_FLOOR.height * (row / HERO_FLOOR.rows) ** HERO_FLOOR.depthCurve,
+ (_, row) =>
+  HERO_FLOOR.height * (row / HERO_FLOOR.rows) ** HERO_FLOOR.depthCurve,
 );
 
 const floorX = (col: number, y: number) => {
@@ -111,19 +106,6 @@ export default function AuthLayout({
    <Box customClass="public-page-wrapper">
     <Box customClass="public-brand">
      <Box customClass="hero-stage">
-      {/* {Array.from({ length: HERO_SPARK_COUNT }, (_, i) => (
-       <img
-        key={`spark-${i}`}
-        className={`hero-spark s${i + 1}`}
-        src={HERO_SPARK_PATH}
-        alt=""
-       />
-      ))}
-      {Array.from({ length: HERO_COIN_COUNT }, (_, i) => (
-       <Box key={`coin-${i}`} customClass={`hero-coin c${i + 1}`}>
-        <img src={HERO_COIN_PATH} alt="" />
-       </Box>
-      ))} */}
       <Box customClass="hero-floor-layer">
        <Box customClass="hero-frame">
         <svg
@@ -187,7 +169,7 @@ export default function AuthLayout({
    {footerCard && (
     <Box customClass="auth-footer-bar">
      <Box customClass="auth-footer-trophy">
-      <img src={TROPHY_ART_PATH} alt="" />
+      <TrophyArtIcon />
      </Box>
      <Box customClass="auth-footer-copy">
       <Text customClass="auth-footer-title">{footerCard.title}</Text>

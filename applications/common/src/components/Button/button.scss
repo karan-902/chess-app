@@ -1,27 +1,31 @@
 @use "default.scss" as *;
 
-.common-button-ref {
- display: contents;
-}
-
 .common-button {
- display: inline-flex !important;
- align-items: stretch;
+ position: relative;
+ display: inline-flex;
+ align-items: stretch !important;
+ justify-content: normal !important;
+ width: fit-content;
  min-width: 0;
- height: auto;
+ height: 100%;
  min-height: 2.625rem;
- padding: 0 !important;
- border: 0 !important;
- background: transparent !important;
+ padding: 0;
+ border: 0;
+ background: transparent;
  color: $appText;
  font-family: $fontOutfitRegular;
  font-weight: 600;
  letter-spacing: 0;
  text-transform: none;
+ vertical-align: baseline !important;
+ overflow: hidden;
+ user-select: none;
+ -webkit-tap-highlight-color: transparent;
+ will-change: transform;
  cursor: pointer;
 
  &.full-width {
-  display: flex !important;
+  display: flex;
   width: 100%;
  }
 
@@ -31,19 +35,21 @@
  }
 
  .button-face {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex: 1;
   width: 100%;
   min-width: 0;
   box-sizing: border-box;
-  height: auto !important;
-  padding: var(--btn-pad, 0 1rem) !important;
-  border: var(--btn-border, 0 solid transparent) !important;
+  height: auto;
+  padding: var(--btn-pad, 0 1rem);
+  border: var(--btn-border, 0 solid transparent);
   border-radius: var(--btn-radius, 0);
-  background: var(--btn-bg, transparent) !important;
-  transition:
-   transform 0.12s ease-in-out,
-   background-color 0.15s ease,
-   border-color 0.15s ease;
+  background: var(--btn-bg, transparent);
+  transition: transform 0.12s ease-in-out;
 
   > div {
    display: flex;
@@ -52,33 +58,34 @@
    gap: var(--btn-gap, 0.5rem);
    width: 100%;
    min-width: 0;
+   font-size: 13px;
+   font-weight: 700;
+   line-height: 16px;
+   letter-spacing: 0.2px;
    color: inherit;
   }
  }
 
- .button-edge {
-  &.right {
-   background-color: var(--btn-edge-right, transparent) !important;
-  }
+ &:active .button-face {
+  transform: translate3d(3px, 3px, 0);
+ }
 
-  &.bottom {
-   background-color: var(--btn-edge-bottom, transparent) !important;
-  }
-
-  &.top,
-  &.left {
-   display: none;
-  }
+ &.disabled .button-face {
+  color: textOpacity($white, 0.5);
  }
 
  &.text:active .button-face {
-  transform: none !important;
+  transform: none;
  }
 
  .button-text {
-  font-family: $fontOutfitBold !important;
-  font-size: $font16;
+  font-family: $fontOutfitBold;
+  font-size: 16px;
   color: inherit;
+
+  @include from(phone) {
+   font-size: 17px;
+  }
  }
 
  .button-icon {
@@ -119,18 +126,14 @@
 
  &.contained {
   --btn-face-h: 3.25rem;
-  overflow: visible !important;
+  overflow: visible;
   height: calc(var(--btn-face-h) + 1.25rem);
-  padding-top: 0.5rem !important;
+  padding-top: 0.5rem;
   perspective: 26rem;
 
-  .button-edge {
-   display: none;
-  }
-
   .button-face {
-   height: var(--btn-face-h) !important;
-   margin: 0 !important;
+   height: var(--btn-face-h);
+   margin: 0;
    transform: rotateX(24deg);
    transform-origin: 50% 100%;
    animation: tilted-float 3.75s ease-in-out infinite;
@@ -157,7 +160,7 @@
    right: 0;
    top: calc(var(--btn-face-h) + 1rem);
    height: 0.625rem;
-   background: alpha($black, 0.9);
+   background: textOpacity($black, 0.9);
    clip-path: polygon(
     1.25rem 0,
     calc(100% - 1.25rem) 0,
@@ -169,14 +172,22 @@
    pointer-events: none;
 
    :root[data-theme="light"] & {
-    background: alpha(#0d0d0d, 0.22);
+    background: textOpacity(#0d0d0d, 0.22);
    }
   }
 
   .button-text {
-   font-family: $fontOutfitExtraBold !important;
-   font-size: $font18;
+   font-family: $fontOutfitExtraBold;
+   font-size: 18px;
    letter-spacing: 0.4px;
+
+   @include from(phone) {
+    font-size: 19px;
+   }
+
+   @include from(tablet) {
+    font-size: 20px;
+   }
   }
 
   &:active:not(.disabled) .button-face {
@@ -192,7 +203,7 @@
    --btn-edge: color-mix(in srgb, #{$appText} 26%, #{$appSheet});
 
    .button-face {
-    height: var(--btn-face-h) !important;
+    height: var(--btn-face-h);
    }
   }
 
@@ -216,7 +227,7 @@
  &.contained {
   --btn-bg: #{$btnGoldFill};
   --btn-edge: #{$btnEdgeGold};
-  color: $primaryContrast !important;
+  color: $primaryContrast;
 
   .button-spinner {
    color: $primaryContrast;
@@ -224,18 +235,14 @@
  }
 
  &.outlined {
-  --btn-bg: #1a1d55;
-  --btn-border: 1px solid #{alpha($appText, 0.24)};
+  --btn-bg: #{$indigoSurface};
+  --btn-border: 1px solid #{textOpacity($appText, 0.24)};
   height: 3.25rem;
-  color: $appText !important;
-
-  .button-edge {
-   display: none;
-  }
+  color: $appText;
 
   .button-face {
-   height: 100% !important;
-   margin: 0 !important;
+   height: 100%;
+   margin: 0;
   }
 
   .button-spinner {
@@ -245,7 +252,7 @@
   :root[data-theme="light"] & {
    --btn-bg: #{$white};
    --btn-border: 1px solid #0d0d0d;
-   color: #0d0d0d !important;
+   color: #0d0d0d;
   }
  }
 
@@ -253,28 +260,26 @@
   color: $appText;
 
   &:hover:not(.disabled) {
-   --btn-bg: #{alpha($primary, 0.08)};
+   --btn-bg: #{textOpacity($primary, 0.08)};
   }
  }
 
  &.disabled:not(.loading) {
-  --btn-bg: #{alpha($appText, 0.06)} !important;
-  --btn-border: 1px solid #{alpha($appText, 0.1)} !important;
-  --btn-edge-right: transparent !important;
-  --btn-edge-bottom: transparent !important;
+  --btn-bg: #{textOpacity($appText, 0.06)} !important;
+  --btn-border: 1px solid #{textOpacity($appText, 0.1)} !important;
 
   .button-face {
-   height: 100% !important;
-   margin: 0 !important;
+   height: 100%;
+   margin: 0;
   }
 
   .button-text {
-   font-family: $fontOutfitBold !important;
-   color: alpha($appText, 0.35);
+   font-family: $fontOutfitBold;
+   color: textOpacity($appText, 0.35);
   }
 
   .button-icon svg {
-   color: alpha($appText, 0.35);
+   color: textOpacity($appText, 0.35);
   }
  }
 
@@ -290,16 +295,20 @@
  &.filter-dropdown-btn {
   --btn-gap: 0.35rem;
   --btn-pad: 0.625rem 1rem;
-  --btn-border: 1px solid #{alpha($appText, 0.1)};
+  --btn-border: 1px solid #{textOpacity($appText, 0.1)};
   --btn-bg: transparent;
-  height: 2.625rem !important;
-  min-width: 6rem !important;
-  color: alpha($appText, 0.5);
+  height: 2.625rem;
+  min-width: 6rem;
+  color: textOpacity($appText, 0.5);
   border-radius: 5px;
 
   .button-text {
-   font-size: $font14;
+   font-size: 14px;
    letter-spacing: 0;
+
+   @include from(phone) {
+    font-size: 15px;
+   }
   }
 
   .button-icon.end svg {
@@ -310,7 +319,7 @@
   &.dropdown {
    --btn-gap: 0.125rem;
    --btn-pad: 0 0.59375rem 0 0.875rem;
-   min-width: 0 !important;
+   min-width: 0;
   }
 
   .pill-subtabs & {
@@ -321,15 +330,15 @@
    }
    --btn-radius: 999px;
    --btn-bg: #{$appSurface};
-   --btn-border: 1px solid #{alpha($white, 0.12)};
-   height: 36px !important;
-   min-height: 36px !important;
-   min-width: 0 !important;
+   --btn-border: 1px solid #{textOpacity(#{$white}, 0.12)};
+   height: 36px;
+   min-height: 36px;
+   min-width: 0;
    border-radius: 999px;
-   color: alpha($appText, 0.75);
+   color: textOpacity($appText, 0.75);
 
    .button-text {
-    font-family: $fontOutfitSemiBold !important;
+    font-family: $fontOutfitSemiBold;
     font-size: 14px;
 
     @include from(phone) {
@@ -338,7 +347,7 @@
    }
 
    &.active {
-    --btn-bg: #{$gold} !important;
+    --btn-bg: #{$gold};
     --btn-border: 1px solid #{$gold};
     color: $primaryContrast;
    }
@@ -346,11 +355,11 @@
    :root[data-theme="light"] & {
     --btn-bg: #{$appSurface};
     --btn-border: 1px solid #1f246b;
-    color: alpha($appText, 0.7);
+    color: textOpacity($appText, 0.7);
 
     &.active {
-     --btn-bg: #29308f !important;
-     --btn-border: 1px solid #29308f;
+     --btn-bg: #{$indigoDeep};
+     --btn-border: 1px solid #{$indigoDeep};
      color: $white;
     }
    }
@@ -358,26 +367,24 @@
 
   .deposit-amount-chips & {
    --btn-pad: 0 0.5rem;
-   height: 2.25rem !important;
+   height: 2.25rem;
    min-height: 2.25rem;
-   min-width: 0 !important;
+   min-width: 0;
   }
 
   &.active {
    --btn-bg: #{$gold} !important;
    --btn-border: 1px solid #{$gold};
-   --btn-edge-right: transparent;
    color: $primaryContrast;
 
    :root[data-theme="light"] & {
-    --btn-bg: #29308f !important;
-    --btn-border: 1px solid #29308f;
+    --btn-bg: #{$indigoDeep} !important;
+    --btn-border: 1px solid #{$indigoDeep};
     color: $white;
    }
-   --btn-edge-bottom: transparent;
 
    .button-face {
-    transform: none !important;
+    transform: none;
    }
 
    &.disabled {
@@ -402,10 +409,14 @@
   color: $appText;
 
   .button-text {
-   font-family: $fontOutfitMedium !important;
-   font-size: $font15;
+   font-family: $fontOutfitMedium;
+   font-size: 15px;
    letter-spacing: 0;
-   color: alpha($appText, 0.7);
+   color: textOpacity($appText, 0.7);
+
+   @include from(phone) {
+    font-size: 16px;
+   }
   }
 
   .button-icon.start svg {
@@ -424,17 +435,21 @@
   --btn-bg: transparent;
   align-self: center;
   min-height: 0;
-  color: alpha($appText, 0.7);
+  color: textOpacity($appText, 0.7);
 
   &:hover:not(.disabled) {
    --btn-bg: transparent;
   }
 
   .button-text {
-   font-family: $fontOutfitSemiBold !important;
-   font-size: $font14;
+   font-family: $fontOutfitSemiBold;
+   font-size: 14px;
    text-decoration: underline;
    text-underline-offset: 0.25rem;
+
+   @include from(phone) {
+    font-size: 15px;
+   }
   }
  }
 
@@ -456,9 +471,13 @@
   width: fit-content;
   height: auto;
   margin-bottom: 0.25rem;
-  color: alpha($appText, 0.4);
+  color: textOpacity($appText, 0.4);
   font-weight: 400;
-  font-size: $font14;
+  font-size: 14px;
+
+  @include from(phone) {
+   font-size: 15px;
+  }
 
   .button-icon.start svg {
    width: 1rem;
@@ -467,8 +486,12 @@
 
   &:hover:not(.disabled) {
    --btn-bg: transparent;
-   color: alpha($appText, 0.7) !important;
+   color: textOpacity($appText, 0.7);
   }
+ }
+
+ .auth-password-stage &.auth-submit-btn {
+  margin-top: 0.25rem;
  }
 
  .gopvp-signup-form &.auth-submit-btn {
@@ -495,11 +518,15 @@
   }
 
   .button-text {
-   font-family: $fontOutfitSemiBold !important;
-   font-size: $font13;
+   font-family: $fontOutfitSemiBold;
+   font-size: 13px;
    color: inherit;
    padding-bottom: 0.125rem;
    border-bottom: 1px solid currentColor;
+
+   @include from(phone) {
+    font-size: 14px;
+   }
   }
 
   .button-icon.start {
@@ -550,8 +577,12 @@
    display: inline-flex;
    align-items: center;
    gap: 0.5rem;
-   font-size: $font13;
+   font-size: 13px;
    color: inherit;
+
+   @include from(phone) {
+    font-size: 14px;
+   }
 
    &::after {
     @include long-arrow;
@@ -561,11 +592,9 @@
 
  &.auth-google-btn {
   --btn-gap: 0.75rem;
-  --btn-bg: #{$white} !important;
-  --btn-border: 1px solid #0d0d0d !important;
-  --btn-edge-right: #e0e0e0 !important;
-  --btn-edge-bottom: #8a8a8a !important;
-  color: #0d0d0d !important;
+  --btn-bg: #{$white};
+  --btn-border: 1px solid #0d0d0d;
+  color: #0d0d0d;
  }
 
  &.game-cta {
@@ -575,17 +604,17 @@
  }
 
  &.play-cta {
-  width: 100% !important;
+  width: 100%;
 
   .game-over-sheet & {
    margin-top: $space-20;
   }
 
   @include from(laptop) {
-   width: 320px !important;
+   width: 320px;
 
    .MuiDrawer-paper & {
-    width: 100% !important;
+    width: 100%;
    }
   }
  }
@@ -596,7 +625,7 @@
  }
 
  &.cancel-btn {
-  color: $paleRed !important;
+  color: $paleRed;
  }
 
  &.wallet-deposit-btn,
@@ -605,10 +634,10 @@
  }
 
  &.wallet-withdraw-btn {
-  --btn-bg: #{alpha($white, 0.08)};
-  --btn-border: 1px solid #{alpha($white, 0.22)};
-  --btn-edge: #2a2e7a;
-  color: #f4f7ff !important;
+  --btn-bg: #{textOpacity(#{$white}, 0.08)};
+  --btn-border: 1px solid #{textOpacity(#{$white}, 0.22)};
+  --btn-edge: #{$indigoEdgeDark};
+  color: #f4f7ff;
 
   .button-text {
    letter-spacing: 0.3px;
@@ -616,33 +645,37 @@
 
   :root[data-theme="light"] & {
    --btn-bg: #{$white};
-   --btn-border: 1.5px solid #bcc1e2;
-   --btn-edge: #5b60a8;
-   color: #12143a !important;
+   --btn-border: 1.5px solid #{$lightBorderStrong};
+   --btn-edge: #{$indigoEdge};
+   color: $lightText;
   }
  }
 
  &.tx-filter-chip {
   --btn-pad: 0.4375rem 1rem;
-  --btn-bg: #{alpha($appText, 0.03)};
-  --btn-border: 1px solid #{alpha($appText, 0.12)};
+  --btn-bg: #{textOpacity($appText, 0.03)};
+  --btn-border: 1px solid #{textOpacity($appText, 0.12)};
   flex-shrink: 0;
   min-height: 2.375rem;
   color: $appTextMuted;
   white-space: nowrap;
 
   .button-text {
-   font-family: $fontOutfitSemiBold !important;
-   font-size: $font14;
+   font-family: $fontOutfitSemiBold;
+   font-size: 14px;
+
+   @include from(phone) {
+    font-size: 15px;
+   }
   }
 
   &:hover:not(.disabled) {
-   --btn-border: 1px solid #{alpha($gold, 0.35)};
+   --btn-border: 1px solid #{textOpacity($gold, 0.35)};
   }
 
   &.active {
    --btn-border: 1.5px solid #{$gold};
-   --btn-bg: #{alpha($gold, 0.12)};
+   --btn-bg: #{textOpacity($gold, 0.12)};
    color: $appTabActive;
   }
 
@@ -675,7 +708,7 @@
    min-height: 3.25rem;
 
    .button-face {
-    transform: none !important;
+    transform: none;
    }
   }
 
@@ -696,7 +729,7 @@
  &.modal-submit-btn {
   margin-top: 0.5rem;
 
-  .deposit-speed-wrapper + .common-button-ref & {
+  .deposit-speed-wrapper + & {
    margin-top: -0.625rem;
   }
  }
@@ -736,7 +769,7 @@
   }
 
   &.offered {
-   color: alpha($appText, 0.45) !important;
+   color: textOpacity($appText, 0.45);
   }
  }
 
@@ -747,7 +780,11 @@
   min-height: 0;
 
   .button-text {
-   font-size: $font13;
+   font-size: 13px;
+
+   @include from(phone) {
+    font-size: 14px;
+   }
   }
 
   .button-icon.start svg {
@@ -787,12 +824,16 @@
    --btn-border: 0 solid transparent;
    --btn-bg: transparent;
    height: auto;
-   border-left: 1px solid $appCardBorder !important;
+   border-left: 1px solid $appCardBorder;
    color: $appBalance;
 
    .button-text {
-    font-size: $font14;
+    font-size: 14px;
     color: inherit;
+
+    @include from(phone) {
+     font-size: 15px;
+    }
    }
   }
  }

@@ -11,11 +11,11 @@
  padding: 0.25rem;
  border-radius: 999px;
  overflow: hidden;
- background: linear-gradient(180deg, alpha($white, 0.1), alpha($white, 0.03));
+ background: linear-gradient(180deg, textOpacity($white, 0.1), textOpacity($white, 0.03));
  box-shadow:
-  inset 0 1px 0 alpha($white, 0.25),
-  inset 0 -1px 0 alpha($black, 0.4),
-  inset 0 0 0 1px alpha($white, 0.08);
+  inset 0 1px 0 textOpacity($white, 0.25),
+  inset 0 -1px 0 textOpacity($black, 0.4),
+  inset 0 0 0 1px textOpacity($white, 0.08);
  user-select: none;
  touch-action: none;
 
@@ -24,7 +24,7 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(90deg, alpha($gold, 0), alpha($gold, 0.18));
+  background: linear-gradient(90deg, textOpacity($gold, 0), textOpacity($gold, 0.18));
   transform: translate3d(calc(-100% + var(--slide-offset) + 3.5rem), 0, 0);
   pointer-events: none;
  }
@@ -36,7 +36,7 @@
   background: linear-gradient(
    105deg,
    transparent 40%,
-   alpha($white, 0.12) 50%,
+   textOpacity($white, 0.12) 50%,
    transparent 60%
   );
   transform: translate3d(-100%, 0, 0);
@@ -46,11 +46,11 @@
  }
 
  :root[data-theme="light"] & {
-  background: alpha($appText, 0.05);
-  box-shadow: inset 0 0 0 1px alpha($appText, 0.14);
+  background: textOpacity($appText, 0.05);
+  box-shadow: inset 0 0 0 1px textOpacity($appText, 0.14);
 
   .slide-confirm-label {
-   color: alpha($appText, 0.7);
+   color: textOpacity($appText, 0.7);
   }
  }
 
@@ -62,10 +62,14 @@
   justify-content: center;
   padding-left: 3.5rem;
   font-family: $fontOutfitSemiBold;
-  font-size: $font15;
-  color: alpha($white, 0.7);
+  font-size: 15px;
+  color: textOpacity($white, 0.7);
   opacity: calc(1 - var(--slide-progress) * 1.5);
   pointer-events: none;
+
+  @include from(phone) {
+   font-size: 16px;
+  }
  }
 
  .slide-confirm-knob {
@@ -81,9 +85,9 @@
   border-radius: 50%;
   background: radial-gradient(circle at 35% 28%, #fff6cf, $gold 45%, #a87800);
   box-shadow:
-   inset 0 0 0 1px alpha($white, 0.4),
+   inset 0 0 0 1px textOpacity($white, 0.4),
    inset 0 -3px 4px rgba(90, 60, 0, 0.45),
-   0 4px 10px alpha($black, 0.5);
+   0 4px 10px textOpacity($black, 0.5);
   color: $primaryContrast;
   cursor: grab;
   transform: translate3d(var(--slide-offset), 0, 0);
@@ -127,7 +131,7 @@
  .slide-confirm-spinner {
   width: 1.375rem;
   height: 1.375rem;
-  border: 2.5px solid alpha($primaryContrast, 0.22);
+  border: 2.5px solid textOpacity($primaryContrast, 0.22);
   border-top-color: $primaryContrast;
   border-radius: 50%;
   animation: slide-confirm-spin 0.7s linear infinite;

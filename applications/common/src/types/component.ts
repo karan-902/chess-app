@@ -69,6 +69,20 @@ export interface IEmailValues {
  email: string;
 }
 
+export interface IInputScreenProps<
+ TValues extends { [K in keyof TValues]: string },
+> {
+ formik: FormikProps<TValues>;
+ name: keyof TValues & string;
+ type?: string;
+ label: ReactNode;
+ placeholder?: string;
+ submitText: ReactNode;
+ customClass?: string;
+ top?: ReactNode;
+ children?: ReactNode;
+}
+
 export interface IEmailScreenProps {
  formik: FormikProps<IEmailValues>;
  isGoogleProcessing: boolean;

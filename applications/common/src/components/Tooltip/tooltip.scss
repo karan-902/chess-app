@@ -6,11 +6,15 @@
   background: $backdropCenter !important;
   color: $tooltipText !important;
   font-family: $fontOutfitRegular;
-  font-size: $font12;
+  font-size: 12px;
   font-weight: 500;
   line-height: 1.4;
   padding: $space-8 $space-12;
   border-radius: 0;
+
+  @include from(phone) {
+   font-size: 13px;
+  }
  }
 
  .MuiTooltip-arrow {

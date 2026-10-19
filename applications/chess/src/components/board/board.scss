@@ -55,6 +55,10 @@ $pieceFill: 92%;
  justify-content: center;
  touch-action: none;
 
+ &.clickable {
+  cursor: pointer;
+ }
+
  &::after {
   content: "";
   position: absolute;
@@ -65,27 +69,27 @@ $pieceFill: 92%;
  }
 
  &.square-selected::after {
-  box-shadow: inset 0 0 0 3px alpha($gold, 0.65);
+  box-shadow: inset 0 0 0 3px textOpacity($gold, 0.65);
  }
 
  &.square-premove-from::after {
-  box-shadow: inset 0 0 0 3px alpha($premoveRed, 0.45);
+  box-shadow: inset 0 0 0 3px textOpacity($premoveRed, 0.45);
  }
 
  &.square-premove-queued::after {
-  box-shadow: inset 0 0 0 999px alpha($premoveRed, 0.5);
+  box-shadow: inset 0 0 0 999px textOpacity($premoveRed, 0.5);
  }
 
  &.square-selected-premove::after {
-  box-shadow: inset 0 0 0 3px alpha($premoveRed, 0.75);
+  box-shadow: inset 0 0 0 3px textOpacity($premoveRed, 0.75);
  }
 
  &.square-drag-hover::after {
-  box-shadow: inset 0 0 0 4px alpha($gold, 0.9);
+  box-shadow: inset 0 0 0 4px textOpacity($gold, 0.9);
  }
 
  &.square-drag-hover-premove::after {
-  box-shadow: inset 0 0 0 4px alpha($premoveRed, 0.9);
+  box-shadow: inset 0 0 0 4px textOpacity($premoveRed, 0.9);
  }
 
  &.square-selected,
@@ -166,7 +170,7 @@ $pieceFill: 92%;
  right: 0.125rem;
 }
 
-.chess-piece-svg {
+svg.chess-piece-svg {
  width: $pieceFill;
  height: $pieceFill;
  pointer-events: none;
@@ -183,7 +187,7 @@ $pieceFill: 92%;
  }
 }
 
-.gr-captured-icon {
+svg.gr-captured-icon {
  width: 1.375rem;
  height: 1.375rem;
  flex-shrink: 0;
@@ -197,14 +201,6 @@ $pieceFill: 92%;
    fill: #0b0c22;
   }
  }
-
- &.stacked {
-  margin-left: -1.05rem;
- }
-
- &.stack-end {
-  margin-right: $space-4;
- }
 }
 
 .legal-dot {
@@ -212,7 +208,7 @@ $pieceFill: 92%;
  width: 22%;
  height: 22%;
  border-radius: 50%;
- background: alpha($gold, 0.65);
+ background: textOpacity($gold, 0.65);
  pointer-events: none;
  z-index: $z-top;
 }
@@ -220,18 +216,18 @@ $pieceFill: 92%;
 .legal-capture-ring {
  position: absolute;
  inset: 0;
- border: 4px solid alpha($gold, 0.3);
+ border: 4px solid textOpacity($gold, 0.3);
  border-radius: 50%;
  pointer-events: none;
  z-index: $z-top;
 }
 
 .legal-dot-premove {
- background: alpha($premoveRed, 0.65);
+ background: textOpacity($premoveRed, 0.65);
 }
 
 .legal-capture-ring-premove {
- border-color: alpha($premoveRed, 0.35);
+ border-color: textOpacity($premoveRed, 0.35);
 }
 
 .water-drop-ripple {
@@ -302,7 +298,7 @@ $pieceFill: 92%;
  }
 
  &.stalemate {
-  background: radial-gradient(closest-side, alpha($gold, 0.9) 50%, transparent);
+  background: radial-gradient(closest-side, textOpacity($gold, 0.9) 50%, transparent);
   animation: piece-glow-pulse 0.9s ease-in-out infinite alternate;
  }
 }
@@ -379,11 +375,11 @@ $pieceFill: 92%;
  pointer-events: none;
 
  &.flash {
-  background: alpha($paleRed, 0.55);
+  background: textOpacity($paleRed, 0.55);
  }
 
  &.glow {
-  background: radial-gradient(closest-side, alpha($paleRed, 0.75), transparent);
+  background: radial-gradient(closest-side, textOpacity($paleRed, 0.75), transparent);
  }
 
  &.ring,
@@ -410,9 +406,9 @@ $pieceFill: 92%;
    background: linear-gradient(
     100deg,
     transparent,
-    alpha($gold, 0.22) 40%,
-    alpha($gold, 0.4) 50%,
-    alpha($gold, 0.22) 60%,
+    textOpacity($gold, 0.22) 40%,
+    textOpacity($gold, 0.4) 50%,
+    textOpacity($gold, 0.22) 60%,
     transparent
    );
    transform: skewX(-18deg);
@@ -443,7 +439,7 @@ $pieceFill: 92%;
  left: 0;
  width: 12.5%;
  height: 12.5%;
- background: alpha($paleRed, 0.55);
+ background: textOpacity($paleRed, 0.55);
  animation: board-fade-out 0.42s linear both;
  pointer-events: none;
 }
@@ -457,6 +453,15 @@ $pieceFill: 92%;
  box-sizing: border-box;
  animation: board-check-ring 0.75s cubic-bezier(0.25, 1, 0.5, 1) 2 both;
  pointer-events: none;
+}
+
+.board-annotations {
+ position: absolute;
+ inset: 0;
+ width: 100%;
+ height: 100%;
+ pointer-events: none;
+ z-index: $z-annotation;
 }
 
 .board-highlight {

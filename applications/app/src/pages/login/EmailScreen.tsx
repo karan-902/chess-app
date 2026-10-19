@@ -1,7 +1,7 @@
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
-import Input from "@gopvp/common/src/components/Input/Input";
 import Button from "@gopvp/common/src/components/Button/Button";
+import InputScreen from "@gopvp/common/src/components/InputScreen/InputScreen";
 import type { IEmailScreenProps } from "@gopvp/common/src/types/component";
 import {
  emailText,
@@ -10,7 +10,6 @@ import {
  continueWithGoogleText,
  nextText,
 } from "@gopvp/app/src/constants/message";
-import { formSubmitHandler } from "@gopvp/common/src/util/form";
 
 export default function EmailScreen({
  formik,
@@ -18,38 +17,15 @@ export default function EmailScreen({
  onGoogleLogin,
 }: IEmailScreenProps) {
  return (
-  <Box
+  <InputScreen
+   formik={formik}
+   name="email"
+   type="email"
+   label={emailText}
+   placeholder={enterEmailText}
+   submitText={nextText}
    customClass="gopvp-email-form"
-   component="form"
-   onSubmit={formSubmitHandler(formik.handleSubmit)}
   >
-   <Input
-    id="email"
-    name="email"
-    type="email"
-    label={emailText}
-    placeholder={enterEmailText}
-    value={formik.values.email}
-    onChange={formik.handleChange}
-    onBlur={formik.handleBlur}
-    disabled={formik.isSubmitting}
-    isError={formik.touched.email && !!formik.errors.email}
-    helperText={formik.errors.email}
-    customClass="form-input"
-    fullWidth
-   />
-
-   <Button
-    type="submit"
-    variant="contained"
-    fullWidth
-    customClass="auth-submit-btn"
-    disabled={!formik.dirty || formik.isSubmitting}
-    isLoading={formik.isSubmitting}
-   >
-    {nextText}
-   </Button>
-
    <Box customClass="auth-divider">
     <Text component="span">{orText}</Text>
    </Box>
@@ -67,6 +43,6 @@ export default function EmailScreen({
      {continueWithGoogleText}
     </Button>
    </Box>
-  </Box>
+  </InputScreen>
  );
 }

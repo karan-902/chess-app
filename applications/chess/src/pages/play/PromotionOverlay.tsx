@@ -1,7 +1,7 @@
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
-import PieceIcon from "@gopvp/chess/src/components/board/PieceIcon";
+import { PieceIcon } from "@gopvp/common/src/components/constants";
 import type { IPromotionOverlayProps } from "@gopvp/chess/src/types/component";
 import { promotePawnText } from "@gopvp/chess/src/constants/message";
 import { PROMOTION_PIECES } from "@gopvp/chess/src/constants/board";
