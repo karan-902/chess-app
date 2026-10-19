@@ -2,8 +2,8 @@
 
 .common-accordion {
  background: $appSurface;
- border: 1px solid $appCardBorder;
- border-radius: 10px;
+ border-radius: $radius-card;
+ @include neo-plunk;
  color: $appText;
 
  &::before {

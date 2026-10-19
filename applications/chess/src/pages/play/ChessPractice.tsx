@@ -6,6 +6,7 @@ import { startPvcGame } from "@gopvp/chess/src/redux/pvc/slice";
 import type { IGamePracticeProps } from "@gopvp/common/src/types/component";
 import type { Difficulty } from "@gopvp/chess/src/types/component";
 import type { GameCategory } from "@gopvp/chess/src/types/index";
+import { DRAWER_EXIT_MS } from "@gopvp/common/src/constants/limit";
 
 export default function ChessPractice({
  open,
@@ -13,21 +14,24 @@ export default function ChessPractice({
 }: IGamePracticeProps) {
  const navigate = useNavigate();
  const dispatch = useChessDispatch();
- const { playPath, username } = useGameContext();
+ const { playPath, username /* , startReveal */ } = useGameContext();
 
  const handlePlay = (difficulty: Difficulty, timeControl: GameCategory) => {
   const gameId = `pvc_${Date.now()}`;
+  // if (ticket) startReveal?.(ticket);
   onClose();
-  dispatch(
-   startPvcGame({
-    gameId,
-    difficulty,
-    category: timeControl,
-    color: Math.random() < 0.5 ? "w" : "b",
-    username,
-   }),
-  );
-  navigate(`${playPath}?practice_id=${gameId}`, { replace: true });
+  setTimeout(() => {
+   dispatch(
+    startPvcGame({
+     gameId,
+     difficulty,
+     category: timeControl,
+     color: Math.random() < 0.5 ? "w" : "b",
+     username,
+    }),
+   );
+   navigate(`${playPath}?practice_id=${gameId}`, { replace: true });
+  }, DRAWER_EXIT_MS);
  };
 
  return (

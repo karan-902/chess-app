@@ -312,6 +312,14 @@ export function useChessGame() {
   [simulatePremoves],
  );
 
+ const getPremovePieceCode = useCallback(
+  (square: string, priorMoves: PremoveEntry[] = []): string | null => {
+   const piece = simulatePremoves(priorMoves).get(square);
+   return piece ? `${piece.color}${piece.type.toUpperCase()}` : null;
+  },
+  [simulatePremoves],
+ );
+
  const getRandomMove = useCallback((): {
   from: string;
   to: string;
@@ -383,6 +391,7 @@ export function useChessGame() {
   getPieceColor,
   getPremoveMoves,
   getPremovePieceColor,
+  getPremovePieceCode,
   getAttackedSquares,
   getCapturedPieces,
   moveHistory,

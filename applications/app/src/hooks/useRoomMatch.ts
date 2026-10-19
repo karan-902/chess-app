@@ -1,12 +1,17 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import type { Socket } from "socket.io-client";
 import { getSocket } from "@gopvp/common/src/util/socket";
 import { useSocket } from "@gopvp/app/src/context/SocketContext";
 import { showAckErrorToast } from "@gopvp/common/src/util/api";
 import { buildMatchUrl } from "@gopvp/app/src/utils";
 import { useGame } from "@gopvp/app/src/hooks/useGame";
 import { useCountdown } from "@gopvp/common/src/hooks/useCountdown";
-import { useReduxSelector } from "@gopvp/app/src/redux/hooks";
+import {
+ useReduxSelector,
+ useReduxDispatch,
+} from "@gopvp/app/src/redux/hooks";
+import { setOpeningMatchId } from "@gopvp/app/src/redux/socketModals/slice";
 import { shortenUsername } from "@gopvp/common/src/util/format";
 import type {
  ICreateRoomResponse,
@@ -30,17 +35,22 @@ export function useRoomMatch(onRoomExpired?: () => void) {
  const [roomCode, setRoomCode] = useState<string | null>(null);
  const [players, setPlayers] = useState<IMatchPlayer[]>([]);
  const userId = useReduxSelector((state) => state.auth.session?.id);
+ const sessionUsername = useReduxSelector(
+  (state) => state.auth.session?.username ?? "",
+ );
  const [expiryAt, setExpiryAt] = useState<number | null>(null);
  const isRoomOpen =
   status === "waiting" || status === "ready" || status === "starting";
  const expiresInSeconds = useCountdown(isRoomOpen ? expiryAt : null);
  const roomRef = useRef<TRoomInfo | null>(null);
+ const pendingEmitRef = useRef<((socket: Socket) => void) | null>(null);
  const requestIdRef = useRef(0);
  const statusRef = useRef<RoomStatus>("idle");
  statusRef.current = status;
  const onRoomExpiredRef = useRef(onRoomExpired);
  onRoomExpiredRef.current = onRoomExpired;
  const navigate = useNavigate();
+ const dispatch = useReduxDispatch();
  const { game } = useGame();
  const { socket: ctxSocket } = useSocket();
 
@@ -50,7 +60,14 @@ export function useRoomMatch(onRoomExpired?: () => void) {
   setIsOwner(false);
   setRoomCode(null);
   roomRef.current = null;
+  pendingEmitRef.current = null;
  }, []);
+
+ const emitWhenConnected = (emit: (socket: Socket) => void) => {
+  const socket = getSocket();
+  if (socket?.connected) emit(socket);
+  else pendingEmitRef.current = emit;
+ };
 
  const enterRoom = (
   room: TRoomInfo,
@@ -66,74 +83,75 @@ export function useRoomMatch(onRoomExpired?: () => void) {
  const openMatch = useCallback(
   (matchId: string) => {
    if (!roomRef.current) return;
+   dispatch(setOpeningMatchId(matchId));
    setStatus("found");
    navigate(buildMatchUrl(game, matchId), { replace: true });
   },
-  [game, navigate],
+  [game, navigate, dispatch],
  );
 
  const createRoom = (bet: number, timeSeconds: number) => {
-  const socket = getSocket();
-  if (!socket) return;
   const requestId = requestIdRef.current;
   setStatus("creating");
-  socket.emit(
-   SOCKET_EVENTS.ROOM_CREATE,
-   { game, bet, time: timeSeconds * 1000 },
-   (err: ISocketAckError | null, data: ICreateRoomResponse) => {
-    if (requestId !== requestIdRef.current) {
-     if (!err)
-      socket.emit(
-       SOCKET_EVENTS.ROOM_CANCEL,
-       { room_code: data.room_code },
-       () => {},
-      );
-     return;
-    }
-    if (err) {
-     showAckErrorToast(err);
-     resetStatus();
-     return;
-    }
-    setExpiryAt(data.expiry);
-    enterRoom(
-     { code: data.room_code, bet: data.bet, time: data.time },
-     true,
-     "waiting",
-    );
-   },
+  emitWhenConnected((socket) =>
+   socket.emit(
+    SOCKET_EVENTS.ROOM_CREATE,
+    { game, bet, time: timeSeconds * 1000 },
+    (err: ISocketAckError | null, data: ICreateRoomResponse) => {
+     if (requestId !== requestIdRef.current) {
+      if (!err)
+       socket.emit(
+        SOCKET_EVENTS.ROOM_CANCEL,
+        { room_code: data.room_code },
+        () => {},
+       );
+      return;
+     }
+     if (err) {
+      showAckErrorToast(err);
+      resetStatus();
+      return;
+     }
+     setExpiryAt(data.expiry);
+     enterRoom(
+      { code: data.room_code, bet: data.bet, time: data.time },
+      true,
+      "waiting",
+     );
+    },
+   ),
   );
  };
 
  const joinRoom = (code: string) => {
-  const socket = getSocket();
-  if (!socket) return;
   const requestId = requestIdRef.current;
   setStatus("joining");
-  socket.emit(
-   SOCKET_EVENTS.ROOM_JOIN,
-   { room_code: code },
-   (err: ISocketAckError | null, data: IMatchmakingResponse) => {
-    if (requestId !== requestIdRef.current) {
-     if (!err)
-      socket.emit(SOCKET_EVENTS.ROOM_LEAVE, { room_code: code }, () => {});
-     return;
-    }
-    if (err) {
-     showAckErrorToast(err);
-     resetStatus();
-     return;
-    }
-    if (data.status === "MATCHED" && data.match_type === "ROOM") {
-     setPlayers(data.players);
-     setExpiryAt(data.expiry);
-     enterRoom(
-      { code: data.room_code, bet: data.bet, time: data.time },
-      false,
-      "ready",
-     );
-    }
-   },
+  emitWhenConnected((socket) =>
+   socket.emit(
+    SOCKET_EVENTS.ROOM_JOIN,
+    { room_code: code },
+    (err: ISocketAckError | null, data: IMatchmakingResponse) => {
+     if (requestId !== requestIdRef.current) {
+      if (!err)
+       socket.emit(SOCKET_EVENTS.ROOM_LEAVE, { room_code: code }, () => {});
+      return;
+     }
+     if (err) {
+      showAckErrorToast(err);
+      resetStatus();
+      return;
+     }
+     if (data.status === "MATCHED" && data.match_type === "ROOM") {
+      setPlayers(data.players);
+      setExpiryAt(data.expiry);
+      enterRoom(
+       { code: data.room_code, bet: data.bet, time: data.time },
+       false,
+       "ready",
+      );
+     }
+    },
+   ),
   );
  };
 
@@ -185,11 +203,20 @@ export function useRoomMatch(onRoomExpired?: () => void) {
    if (statusRef.current === "ready") setStatus("waiting");
   };
 
+  const onConnect = () => {
+   const emit = pendingEmitRef.current;
+   pendingEmitRef.current = null;
+   emit?.(socket);
+  };
+
   socket.on(SOCKET_EVENTS.MATCHED, onMatched);
   socket.on(SOCKET_EVENTS.MATCH_STARTED, onMatchStarted);
   socket.on(SOCKET_EVENTS.ROOM_LEFT, onRoomLeft);
+  socket.on(SOCKET_EVENTS.CONNECT, onConnect);
+  if (socket.connected) onConnect();
 
   return () => {
+   socket.off(SOCKET_EVENTS.CONNECT, onConnect);
    socket.off(SOCKET_EVENTS.MATCHED, onMatched);
    socket.off(SOCKET_EVENTS.MATCH_STARTED, onMatchStarted);
    socket.off(SOCKET_EVENTS.ROOM_LEFT, onRoomLeft);
@@ -205,11 +232,17 @@ export function useRoomMatch(onRoomExpired?: () => void) {
 
  return {
   status,
+  isRoomActive: isRoomOpen || status === "creating" || status === "joining",
   isOwner,
   roomCode,
   opponentName: shortenUsername(
    players.find((player) => player.id !== userId)?.username ?? "",
   ),
+  myName: shortenUsername(
+   players.find((player) => player.id === userId)?.username ?? sessionUsername,
+  ),
+  roomFee: roomRef.current?.bet ?? 0,
+  roomTimeMs: roomRef.current?.time ?? 0,
   expiresInSeconds: expiresInSeconds ?? 0,
   createRoom,
   joinRoom,

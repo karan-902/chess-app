@@ -6,7 +6,7 @@ import type { IWalletInfoNoteProps } from "@gopvp/app/src/types/component";
 export default function WalletInfoNote({ text }: IWalletInfoNoteProps) {
  return (
   <Box customClass="modal-info-box">
-   <Info size={16} strokeWidth={2} />
+   <Info size={18} strokeWidth={2} />
    <Text customClass="modal-info-text caption">{text}</Text>
   </Box>
  );

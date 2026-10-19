@@ -24,6 +24,7 @@ import {
  insufficientWithdrawableText,
  enterDestinationText,
  withdrawalCompletedText,
+ withdrawalProcessingText,
  enterAmountText,
 } from "@gopvp/app/src/constants/message";
 import {
@@ -32,7 +33,7 @@ import {
 } from "@gopvp/app/src/constants/limit";
 import { sanitizeAmountInput } from "@gopvp/app/src/utils";
 
-type Stage = "amount" | "success";
+type Stage = "amount" | "processing" | "success";
 
 export default function WithdrawSheet() {
  const dispatch = useReduxDispatch();
@@ -43,7 +44,11 @@ export default function WithdrawSheet() {
  );
  const open = openModal === "withdraw";
 
+ const lastTransaction = useReduxSelector(
+  (state) => state.wallet.lastTransaction,
+ );
  const [stage, setStage] = useState<Stage>("amount");
+ const [withdrawId, setWithdrawId] = useState<string | null>(null);
  const [amount, setAmount] = useState("");
 
  const [destination, setDestination] = useState("");
@@ -52,11 +57,21 @@ export default function WithdrawSheet() {
  useEffect(() => {
   if (open) return;
   setStage("amount");
+  setWithdrawId(null);
   setAmount("");
 
   setDestination("");
   setSubmitting(false);
  }, [open]);
+
+ useEffect(() => {
+  if (
+   stage === "processing" &&
+   lastTransaction?.id === withdrawId &&
+   lastTransaction?.status === "COMPLETED"
+  )
+   setStage("success");
+ }, [stage, withdrawId, lastTransaction]);
 
  useEffect(() => {
   if (!open) return;
@@ -96,9 +111,12 @@ export default function WithdrawSheet() {
   }
   setSubmitting(true);
   try {
-   await withdrawRequest(amountUsd, withdrawDestination);
-   refetch();
-   setStage("success");
+   const { status, withdraw_id } = await withdrawRequest(
+    amountUsd,
+    withdrawDestination,
+   );
+   setWithdrawId(withdraw_id);
+   setStage(status === "COMPLETED" ? "success" : "processing");
   } catch (err) {
    showApiErrorToast(err);
   } finally {
@@ -118,10 +136,11 @@ export default function WithdrawSheet() {
        id="withdraw-amount"
        type="text"
        inputMode="decimal"
+       autoComplete="off"
        label={enterAmountText}
        labelClassName="wallet-label"
        fullWidth
-       placeholder="0.00"
+       placeholder="0"
        customClass="amount-input-hero"
        value={amount}
        onChange={handleAmountChange}
@@ -136,6 +155,7 @@ export default function WithdrawSheet() {
        id="withdraw-destination"
        type="text"
        label={destinationText}
+       labelClassName="wallet-field-label"
        fullWidth
        customClass="wallet-input"
        placeholder={btcAddressOrInvoiceText}
@@ -157,6 +177,14 @@ export default function WithdrawSheet() {
       {requestWithdrawalText}
      </Button>
     </Box>
+   )}
+
+   {stage === "processing" && (
+    <WalletSuccessStage
+     amountUsd={amountUsd}
+     title={withdrawalProcessingText}
+     isProcessing
+    />
    )}
 
    {stage === "success" && (

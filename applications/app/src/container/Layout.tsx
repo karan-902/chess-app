@@ -19,6 +19,8 @@ import { GAME_PAGE_TITLES, PAGE_TITLES } from "@gopvp/app/src/constants/label";
 import { getGameFromPath, isGameSlug } from "@gopvp/app/src/utils";
 import { GAME_PAGES, ROUTES } from "@gopvp/app/src/constants/route";
 import { appNameText } from "@gopvp/app/src/constants/message";
+import { useFirebaseAuth } from "@gopvp/app/src/hooks/useFirebaseAuth";
+import { SCROLLBAR_HIDE_DELAY_MS } from "@gopvp/app/src/constants/limit";
 
 export default function Layout() {
  const location = useLocation();
@@ -35,6 +37,30 @@ export default function Layout() {
  const isGameLoading = !!gameSlug && details?.slug !== gameSlug;
 
  const isRegister = state?.startsWith("register") ?? false;
+
+ useFirebaseAuth();
+
+ useEffect(() => {
+  const root = document.documentElement;
+  let hideTimer: ReturnType<typeof setTimeout> | undefined;
+  const onScroll = () => {
+   root.classList.add("is-scrolling");
+   clearTimeout(hideTimer);
+   hideTimer = setTimeout(
+    () => root.classList.remove("is-scrolling"),
+    SCROLLBAR_HIDE_DELAY_MS,
+   );
+  };
+  document.addEventListener("scroll", onScroll, {
+   capture: true,
+   passive: true,
+  });
+  return () => {
+   document.removeEventListener("scroll", onScroll, { capture: true });
+   clearTimeout(hideTimer);
+   root.classList.remove("is-scrolling");
+  };
+ }, []);
 
  useEffect(() => {
   if (gameSlug && gameSlug !== requestedSlug)

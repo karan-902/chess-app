@@ -1,3 +1,5 @@
+import { formatAmount } from "@gopvp/common/src/util/format";
+
 export const rejoinMatchText = "Rejoin Match";
 export const matchStillLiveText = (opponentName: string) =>
  `Your match with ${opponentName} is still live. Reconnect now before it's forfeited.`;
@@ -29,11 +31,20 @@ export const passwordMinLengthText = "Password must be at least 8 characters";
 export const usernameMaxLengthText =
  "Username can't be longer than 10 characters.";
 export const countryRequiredText = "Country is required";
-export const welcomeBackText = "Welcome Back";
-export const jumpBackIntoGameText =
- "Enter your email to jump back into the game.";
-export const enterYourPasswordText = "Enter Your Password";
-export const nextMatchOneStepAwayText = "One step away from your next match.";
+export const welcomeBackText = "Welcome back,";
+export const championText = "champion";
+export const pickRivalWinCashText = "pick a rival, play 1v1 and win real cash";
+export const enterPasswordJumpInText = "enter your password and jump back in";
+export const joinTheWinnersText = "Join the winners";
+export const beatRealPlayersText = "beat real players 1v1 and win real cash";
+export const joinTheArenaText = "Join the Arena";
+export const gloryStartsHereText = "Glory starts here";
+export const beenHereBeforeText = "Been Here Before";
+export const yourWinsAreWaitingText = "Your wins are waiting";
+export const logInText = "Login";
+export const usernameHintText = (min: number, max: number) =>
+ `${min} to ${max} characters, letters and numbers`;
+export const earningsText = "Earnings";
 export const changeText = "Change";
 export const forgotYourPasswordText = "Forgot your password?";
 export const resetNowText = "Reset now";
@@ -41,12 +52,7 @@ export const nextText = "Next";
 export const loginText = "Login";
 export const verifyEmailToContinueText =
  "Please verify your email to continue.";
-export const noAccountPromptText = "Don't have an account?";
 export const signUpText = "Sign up";
-export const joinGopvpText = "Join GoPVP";
-export const skillBasedGamesText =
- "Skill-based 1v1 games against real players.";
-export const haveAccountPromptText = "Already have an account?";
 export const enterUsernameText = "Enter username";
 export const clearUsernameText = "Clear username";
 export const countryText = "Country";
@@ -67,28 +73,64 @@ export const approvalLinkInvalidText =
  "This approval link is no longer valid. Please try logging in again.";
 export const depositText = "Deposit";
 export const winText = "Win";
-export const entryFeeAmountText = (fee: string) => `Entry fee ${fee}`;
+export const entryText = "Entry";
 export const addFundsText = "Add funds";
 export const findOpponentText = "Find Opponent";
 export const opponentFoundText = "Opponent found!";
-export const findingOpponentText = "Finding opponent…";
-export const secondsLeftText = (seconds: number) => `${seconds}s left`;
-export const prizeText = "Prize";
+export const findingYourText = "Finding Your";
+export const rivalText = "Rival";
 export const cancelSearchText = "Cancel search";
+export const drawingYourRivalText = "Searching your rival...";
+export const checkingPlayersText = "checking players at your level";
+export const matchingSkillText = "matching your skill score";
+export const almostThereText = "almost there, hang tight";
+export const stillLookingText = "still looking, a few seconds left";
+export const rivalFoundText = "Rival found";
+export const rivalReadyText = (name: string) => `${name} is ready, good luck`;
+export const noRivalNowText = "No rival right now";
+export const nothingChargedText = (amount: string) =>
+ `No charge, your ${amount} is safe`;
+export const matchTicketText = "Match ticket";
+export const matchConfirmedText = "Match confirmed";
+export const noMatchFoundText = "No match found";
+export const noMatchText = "No match";
+export const noRivalText = "No rival";
+export const timeText = "Time";
+export const startingInText = "Starting in";
+export const tryAgainText = "Try again";
+export const pickAnotherBetText = "Pick another bet";
+export const poolMinutesText = (minutes: number) => `${minutes} min`;
+export const oneCardIsOpponentText = "one of these cards is your opponent";
+export const youreMatchedText = "You're matched";
+export const getSetText = "get set, your game is opening";
+export const matchedText = "Matched";
 export const noOpponentFoundText = "No opponent found. Please try again.";
+export const confirmYourText = "Confirm Your";
+export const matchText = "Match";
+export const tapToConfirmText = "Tap to confirm, rival in seconds,";
 export const confirmYourMatchText = "Confirm your match";
-export const matchedOnConfirmText =
- "You'll be matched with an opponent as soon as you confirm.";
+export const slideToPlayText = "slide to play, find a rival in seconds";
+export const swipeToFindRivalText = "swipe to find a rival";
+export const winItAllText = "win it all";
 export const playNowText = "Play now";
 export const tapPlayNowHintText = "Play now to choose a pool";
+export const wonText = "won";
+export const lostText = "lost";
+export const drawText = "draw";
+export const voidText = "void";
+export const firebaseConfigMissingText =
+ "Firebase config missing: set the VITE_FIREBASE_* env variables.";
 export const largestPrizesTipText =
  "Rapid and Classical pools pay out the largest prizes.";
-export const forFunText = "For fun";
-export const practiceText = "Practice";
+export const forFunText = "For Fun";
 export const freeToPlayText = "Free to play";
-export const friendlyText = "FRIENDLY";
+export const friendlyText = "Friendly";
 export const roomText = "Room";
+export const playAFriendText = "Play a friend";
 export const customFeeText = "Custom fee";
+export const pickYourBetText = "Pick your bet";
+export const moreWaysToPlayText = "More ways to play";
+export const winItWithdrawItText = "Win it, withdraw it";
 export const createRoomText = "Create Room";
 export const joinRoomText = "Join Room";
 export const feeAmountText = "Entry fee";
@@ -99,28 +141,39 @@ export const minText = "min";
 export const createText = "Create";
 export const roomCodeText = "Room code";
 export const pasteText = "Paste";
+export const pasteCodeText = "Paste code";
+export const privateRoomTicketText = "Room ticket";
 export const joinText = "Join";
-export const waitingForOpponentText = "Waiting for opponent";
+export const waitingForOpponentText = "Waiting for Opponent";
 export const shareCodeWithFriendText = "Share this code with your friend";
-export const opponentJoinedText = "Friend joined!";
+export const opponentJoinedText = "Opponent Joined";
+export const startWhenReadyText = "Start when you are ready";
 export const waitingForOwnerText = "Waiting for host to start";
 export const startText = "Start Match";
-export const leaveText = "Leave Room";
-export const depositsNotWithdrawableText = "Deposits aren't withdrawable.";
-export const depositingAmountText = (amount: number) => `Depositing $${amount}`;
-export const fastSecuredTransparentText = "Fast, Secured & Transparent";
+export const leaveText = "Leave";
+export const cancelRoomText = "Cancel Room";
+export const expiresText = "Expires in";
+export const codeText = "Code";
+export const depositsNotWithdrawableText = "Deposits aren't withdrawable";
+export const depositingText = "Depositing";
+export const instantPayViaText = "Instant pay via";
+export const lightningText = "Lightning";
+export const lightningInvoiceText = "Lightning invoice";
+export const expiresInLabelText = "Expires in";
+export const fastSecuredTransparentText = "Fast, Secure & Transparent";
 export const buyCryptoInstantlyText = "Buy crypto instantly with";
 export const enterAmountText = "Enter Amount";
 export const generateQrCodeText = "Generate QR Code";
 export const amountRequiredText = "Amount is required";
 export const maxDepositAmountText = (max: number) =>
- `Maximum deposit amount is $${max}.`;
+ `Maximum deposit amount is ${formatAmount(max)}`;
 export const btcOnlyWarningText =
  "Deposits must be in BTC only. Other currencies will be lost.";
 export const scanToDepositText =
  "Scan/copy with your crypto wallet to deposit instantly.";
 export const copyText = "Copy";
 export const copiedText = "Copied";
+export const copyCodeText = "Copy code";
 export const matchIdText = "Match ID";
 export const beatsYouText = (name: string) => `${name} beats you`;
 export const beatsText = (winner: string, loser: string) =>
@@ -130,22 +183,23 @@ export const qrExpiredText =
 export const paymentReceivedText = "Payment received!";
 export const withdrawText = "Withdraw";
 export const onlyWinningsWithdrawableText =
- "Only winnings and draw refunds are withdrawable.";
+ "Only winnings and draws are withdrawable";
 export const destinationText = "Destination";
 export const btcAddressOrInvoiceText = "Bitcoin address or Lightning invoice";
 export const requestWithdrawalText = "Withdraw";
 export const maxWithdrawalAmountText = (max: number) =>
- `Maximum withdrawal amount is $${max}.`;
+ `Maximum withdrawal amount is ${formatAmount(max)}`;
 export const insufficientWithdrawableText = "Insufficient withdrawable balance";
 export const enterDestinationText = "Enter a destination address";
 export const withdrawalCompletedText = "Withdrawal completed";
+export const withdrawalProcessingText = "Withdrawal processing";
 export const noRankedPlayersText = "No Ranked Players Yet";
 export const winToRankText = "Win a match to get your name on the board.";
 export const dashText = "–";
 export const dailyText = "Daily";
 export const weeklyText = "Weekly";
 export const monthlyText = "Monthly";
-export const allTimeText = "All Time";
+export const allTimeText = "All";
 export const topEarnersText = "Top Earners";
 export const mostWinsText = "Most Wins";
 export const totalEarningsText = "Total Earnings";
@@ -163,30 +217,38 @@ export const globalActivityEmptyText =
  "Global activity will show up here once matches start rolling in.";
 export const vsText = "VS";
 export const gameUnavailableText = "This game is currently unavailable.";
-export const pickAGameText = "Pick a game";
+export const pickYourText = "Pick Your";
+export const gameText = "Game";
+export const pickGameFaceRivalText = "Pick a game, face a rival,";
+export const cashOutText = "cash out";
+export const comingSoonText = "Coming soon";
+export const previousGameText = "Previous game";
+export const nextGameText = "Next game";
 export const bestStreakText = "Best Streak";
 export const currentStreakText = "Streak";
 
 export const poweredByText = "POWERED BY";
 export const totalBalanceText = "Total Balance";
-export const withdrawBalanceText = "Withdraw Balance";
+export const withdrawBalanceText = "Withdrawable";
 export const transactionsText = "Transactions";
+export const pendingText = "Pending";
+export const processingText = "Processing";
 export const noTransactionsYetText = "No Transactions Yet";
 export const transactionsEmptyText =
  "Your deposits, withdrawals, and match payouts will show up here.";
 export const profileText = "Profile";
 export const editProfileText = "Edit Profile";
+export const editText = "Edit";
 export const appearanceText = "Appearance";
 export const darkModeText = "Dark Mode";
 export const ratingsText = "Ratings";
 export const saveChangesText = "Save Changes";
-export const wherePlayingFromText = "Where Are You Playing From?";
-export const pickCountryToFinishText =
- "Pick your country to finish setting up.";
+export const wherePlayingFromText = "Where are you playing from?";
+export const pickCountryToFinishText = "pick your country to finish setting up";
 export const continueText = "Continue";
 export const selectCountryText = "Select country";
 export const walletText = "Wallet";
-export const logOutText = "Log Out";
+export const logOutText = "Logout";
 export const accountText = "Account";
 export const statusText = "Status";
 export const verifiedText = "Verified";

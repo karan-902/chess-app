@@ -7,10 +7,11 @@ import EmptyState from "@gopvp/app/src/components/common/EmptyState";
 import StatList from "@gopvp/app/src/components/common/StatList";
 import MatchRowSkeleton from "@gopvp/app/src/components/common/MatchRowSkeleton";
 import Button from "@gopvp/common/src/components/Button/Button";
+import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
 import { useGameHistory } from "@gopvp/app/src/hooks/useGameHistory";
 import { useReduxDispatch, useReduxSelector } from "@gopvp/app/src/redux/hooks";
 import { setMatchesSubtab } from "@gopvp/app/src/redux/game/slice";
-import { useGame } from "@gopvp/app/src/hooks/useGame";
+// import { useGame } from "@gopvp/app/src/hooks/useGame";
 import { formatAmount } from "@gopvp/common/src/util/format";
 import type { IMatchHistoryItem } from "@gopvp/common/src/types/response";
 import {
@@ -34,16 +35,14 @@ import { MATCHES_SUBTAB_OPTIONS } from "@gopvp/app/src/constants/option";
 import { MATCHES_SUBTAB_LABELS } from "@gopvp/app/src/constants/label";
 import { renderSkeletons } from "@gopvp/app/src/utils/skeleton";
 import { STAT_ICONS } from "@gopvp/app/src/constants/icon";
+import { Crown } from "@gopvp/common/src/components/images";
 import MatchList from "@gopvp/app/src/pages/history/MatchList";
 import MatchInfoSheet from "@gopvp/app/src/pages/history/MatchInfoSheet";
 
 export default function MyMatches() {
- const { gameLabel } = useGame();
+ // const { gameLabel } = useGame();
  const dispatch = useReduxDispatch();
  const subtab = useReduxSelector((state) => state.game.matchesSubtab);
- const currentUsername = useReduxSelector(
-  (state) => state.auth.session?.username,
- );
  const { items, loading, loadingMore, error, loadMore, stats, statsLoading } =
   useGameHistory(subtab === "global" ? "worldwide" : "own", subtab === "stats");
  const [selectedMatch, setSelectedMatch] =
@@ -52,7 +51,7 @@ export default function MyMatches() {
 
  return (
   <Box customClass="matches-page">
-   <Box customClass="filter-pill-row">
+   <Box customClass="filter-pill-row pill-subtabs">
     {MATCHES_SUBTAB_OPTIONS.map((tab) => (
      <Button
       key={tab}
@@ -82,7 +81,6 @@ export default function MyMatches() {
     ) : (
      <MatchList
       items={items}
-      currentUsername={currentUsername}
       loadingMore={loadingMore}
       loadMore={loadMore}
       onMatchClick={setSelectedMatch}
@@ -104,7 +102,6 @@ export default function MyMatches() {
     ) : (
      <MatchList
       items={items}
-      currentUsername={currentUsername}
       loadingMore={loadingMore}
       loadMore={loadMore}
       onMatchClick={setSelectedMatch}
@@ -113,21 +110,35 @@ export default function MyMatches() {
 
    {subtab === "stats" && (
     <Box customClass="matches-stats">
-     <Box customClass="matches-stats-head">
+     {/* <Box customClass="matches-stats-head">
       <Text component="h3" customClass="matches-stats-title">
        {gameLabel}
       </Text>
-     </Box>
+     </Box> */}
+     <Card customClass="score-hero">
+      <Box customClass="score-hero-icon">
+       {statsLoading ? (
+        <Skeleton variant="rectangular" customClass="icon" />
+       ) : (
+        <Crown strokeWidth={2} />
+       )}
+      </Box>
+      <Text component="span" customClass="score-hero-label">
+       {statsLoading ? <Skeleton customClass="text" width={60} /> : scoreText}
+      </Text>
+      <Text component="span" customClass="score-hero-val">
+       {statsLoading ? (
+        <Skeleton customClass="text" width={120} />
+       ) : (
+        Math.round(stats?.score ?? MATCHES_STATS_FALLBACK)
+       )}
+      </Text>
+     </Card>
      <StatList
       rows={
        statsLoading
         ? null
         : [
-           {
-            label: scoreText,
-            value: Math.round(stats?.score ?? MATCHES_STATS_FALLBACK),
-            ...STAT_ICONS.score,
-           },
            {
             label: currentStreakText,
             value: stats?.current_streak ?? MATCHES_STATS_FALLBACK,
@@ -147,6 +158,7 @@ export default function MyMatches() {
             label: totalEarningsText,
             value: formatAmount(stats?.gross_income ?? MATCHES_STATS_FALLBACK),
             ...STAT_ICONS.gross_income,
+            isPrize: true,
            },
           ]
       }

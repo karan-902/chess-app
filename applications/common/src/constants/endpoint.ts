@@ -5,6 +5,7 @@ export const ENDPOINTS = {
  SSO_REGISTER: "/auth/sso-register",
  VERIFY_USER: "/auth/verify-user",
  GENERATE_TOKEN: "/auth/generate-token",
+ FIREBASE_TOKEN: "/auth/firebase-token",
  LOGOUT: "/auth/logout",
  RANDOM_NAME: "/auth/random-name",
  COUNTRIES: "/auth/countries",
@@ -19,6 +20,16 @@ export const ENDPOINTS = {
  PAYMENT_REQUEST: "/wallet/payment-request",
  WITHDRAW: "/wallet/withdraw",
  TRANSACTIONS: "/wallet/transactions",
+} as const;
+
+export const FIRESTORE_COLLECTIONS = {
+ LIVE_WINS: "live_wins",
+ ACTIVE_GAMES: "active_games",
+ POOLS: "pools",
+ LEADERBOARDS: "leaderboards",
+ WALLETS: "wallets",
+ MATCH_RESULTS: "match_results",
+ MATCH_RESULT_PLAYERS: "players",
 } as const;
 
 export const OPEN_ENDPOINTS: string[] = [

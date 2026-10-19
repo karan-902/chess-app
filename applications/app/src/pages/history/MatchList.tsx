@@ -3,7 +3,10 @@ import VirtualList from "@gopvp/common/src/components/VirtualList/VirtualList";
 import MatchRowSkeleton from "@gopvp/app/src/components/common/MatchRowSkeleton";
 import { shortenUsername } from "@gopvp/common/src/util/format";
 import { MATCH_RESULT_OUTCOMES } from "@gopvp/common/src/constants/mapper";
-import { MATCH_ROW_HEADLINES } from "@gopvp/app/src/constants/mapper";
+import {
+ MATCH_ROW_HEADLINES,
+ // MATCH_ROW_TAGS,
+} from "@gopvp/app/src/constants/mapper";
 import type { IMatchHistoryItem } from "@gopvp/common/src/types/response";
 import type { IMatchListProps } from "@gopvp/common/src/types/component";
 import { getWorldMatchHeadline } from "@gopvp/app/src/utils";
@@ -11,7 +14,6 @@ import MatchRow from "@gopvp/app/src/pages/history/MatchRow";
 
 function matchRow(
  item: IMatchHistoryItem,
- currentUsername?: string,
  onMatchClick?: (match: IMatchHistoryItem) => void,
 ) {
  const onClick = onMatchClick && (() => onMatchClick(item));
@@ -19,7 +21,7 @@ function matchRow(
   return (
    <MatchRow
     outcome="win"
-    headline={getWorldMatchHeadline(item.winner, item.loser, currentUsername)}
+    headline={getWorldMatchHeadline(item.winner, item.loser)}
     amount={Math.abs(item.amount)}
     onClick={onClick}
    />
@@ -30,6 +32,7 @@ function matchRow(
   <MatchRow
    outcome={outcome}
    headline={MATCH_ROW_HEADLINES[outcome](shortenUsername(item.opponent))}
+   // resultTag={MATCH_ROW_TAGS[outcome]}
    amount={Math.abs(item.amount)}
    onClick={onClick}
   />
@@ -38,7 +41,6 @@ function matchRow(
 
 export default function MatchList({
  items,
- currentUsername,
  loadingMore,
  loadMore,
  onMatchClick,
@@ -48,7 +50,7 @@ export default function MatchList({
    <VirtualList<IMatchHistoryItem>
     data={items}
     computeItemKey={(_, item) => item.id}
-    itemContent={(_, item) => matchRow(item, currentUsername, onMatchClick)}
+    itemContent={(_, item) => matchRow(item, onMatchClick)}
     endReached={loadMore}
     components={{
      Footer: () => (loadingMore ? <MatchRowSkeleton /> : null),

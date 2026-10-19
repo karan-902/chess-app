@@ -2,34 +2,58 @@
 
 .common-skeleton {
  display: block;
- background: linear-gradient(
-  90deg,
-  alpha($appText, 0.05) 0%,
-  alpha($appText, 0.1) 50%,
-  alpha($appText, 0.05) 100%
- );
- background-size: 200% 100%;
- animation: skeleton-shimmer 1.4s ease-in-out infinite;
 
- &.text {
-  border-radius: 0.25rem / 0.42rem;
+ &.MuiSkeleton-root {
+  position: relative;
+  overflow: hidden;
+  background: alpha($appText, 0.05);
+  animation: none;
+
+  &::after {
+   content: "";
+   position: absolute;
+   inset: 0;
+   background: linear-gradient(
+    90deg,
+    transparent,
+    alpha($appText, 0.05) 50%,
+    transparent
+   );
+   transform: translate3d(-100%, 0, 0);
+   animation: skeleton-shimmer 1.4s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+   &::after {
+    animation: none;
+    opacity: 0;
+   }
+  }
+ }
+
+ &.icon {
+  width: 100%;
+  height: 100%;
  }
 
  .result-hero &,
- .result-tile & {
+ .stat-tile:is(.caption, .label-top, .compact) & {
   margin-inline: auto;
  }
+ &.select-option {
+  width: 100%;
+  height: 1.25rem;
+ }
+
  &.board-skeleton {
   width: auto;
   height: 100%;
   aspect-ratio: 1 / 1;
-  border-radius: 6px;
  }
 
  &.result-logo-skeleton {
   width: 6rem;
   height: 6rem;
-  border-radius: 14px;
  }
 
  &.match-id-label-skeleton {
@@ -38,44 +62,112 @@
 
  &.match-id-skeleton {
   width: 100%;
-  height: 2.75rem;
-  border-radius: 4px;
+  height: 3.125rem;
  }
 
  &.wallet-btn-skeleton {
   flex: 1;
-  border-radius: 4px;
  }
 
  &.username-suggestion-skeleton {
   width: 8rem;
   height: 1rem;
-  border-radius: 3px;
  }
 
  &.appbar-balance-skeleton {
   width: 7rem;
   height: 2rem;
-  border-radius: 4px;
  }
 
- &.pool-play-skeleton {
-  align-self: center;
-  width: min(150px, 100%);
-  height: $font24;
-  border-radius: 8px;
+ .pool-card &.MuiSkeleton-root {
+  background: alpha($poolInk, 0.06);
 
-  @include from(tablet) {
-   height: 26px;
+  &::after {
+   background: linear-gradient(
+    90deg,
+    transparent,
+    alpha($poolInk, 0.06) 50%,
+    transparent
+   );
   }
+ }
+
+ &.pool-art-skeleton {
+  grid-area: icon;
+  align-self: stretch;
+  width: 100%;
+  height: 100%;
+ }
+
+ &.pool-time-skeleton {
+  grid-area: time;
+  align-self: end;
+  width: 2.5rem;
+  height: 0.625rem;
+  margin-bottom: 0.25rem;
+ }
+
+ &.pool-win-skeleton {
+  grid-area: win;
+  align-self: start;
+  width: 6rem;
+  height: 1.375rem;
+ }
+
+ &.pool-entry-skeleton {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 4.5rem;
+  height: 1.25rem;
+ }
+
+ &.face-off-bar {
+  width: 3.25rem;
+  height: 0.75rem;
+
+  &.sub {
+   width: 4.5rem;
+   height: 0.5625rem;
+   margin-top: 7px;
+  }
+ }
+
+ &.result-vs-skeleton {
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+ }
+
+ &.profile-edit-skeleton {
+  width: 2.125rem;
+  height: 2.125rem;
+ }
+
+ &.profile-avatar-skeleton {
+  width: 6rem;
+  height: 6rem;
+ }
+
+ &.profile-flag-skeleton {
+  flex-shrink: 0;
+  width: 1.625rem;
+  height: 1.125rem;
+ }
+
+ &.profile-stat-icon-skeleton,
+ &.profile-row-icon-skeleton {
+  flex-shrink: 0;
+  width: 1.125rem;
+  height: 1.125rem;
  }
 }
 
 @keyframes skeleton-shimmer {
- 0% {
-  background-position: 200% 0;
+ from {
+  transform: translate3d(-100%, 0, 0);
  }
- 100% {
-  background-position: -200% 0;
+ to {
+  transform: translate3d(100%, 0, 0);
  }
 }

@@ -16,7 +16,7 @@ export default function SheetActions({
      type="button"
      variant="outlined"
      fullWidth
-     customClass="common-play cancel-btn"
+     customClass="cancel-btn"
      disabled={isCancelDisabled}
      onClick={onCancel}
     >

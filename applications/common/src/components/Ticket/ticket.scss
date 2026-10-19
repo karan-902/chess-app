@@ -1,0 +1,85 @@
+@use "default.scss" as *;
+
+.common-ticket {
+ --ticket-stub: #cfd3e0;
+ position: relative;
+ display: flex;
+ flex-direction: column;
+ width: 100%;
+ max-width: 18.75rem;
+ margin: 0 auto;
+ padding-bottom: 0.875rem;
+ background: linear-gradient(180deg, #fffdf6, #f1ecdf);
+ color: $poolInk;
+ --perf-y: 50%;
+ mask:
+  conic-gradient(from -45deg at bottom, #000 90deg, transparent 0) bottom /
+   1.25rem 0.75rem repeat-x,
+  linear-gradient(#000 0 0) top / 100% calc(100% - 0.75rem) no-repeat,
+  radial-gradient(circle at 0 var(--perf-y), #000 0.75rem, transparent 0)
+   no-repeat,
+  radial-gradient(circle at 100% var(--perf-y), #000 0.75rem, transparent 0)
+   no-repeat;
+ mask-composite: add, subtract, add, add;
+
+ .ticket-stub {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 2.375rem;
+  background: var(--ticket-stub);
+ }
+
+ .ticket-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 1rem 1.125rem;
+ }
+
+ .ticket-perf {
+  margin: 0 1.25rem;
+  border-top: 1px dashed alpha($poolInk, 0.3);
+ }
+
+ :root[data-theme="light"] & {
+  background:
+   radial-gradient(
+     circle at 0 var(--perf-y),
+     transparent 0.75rem,
+     alpha(#5b60a8, 0.35) 0.75rem,
+     alpha(#5b60a8, 0.35) calc(0.75rem + 1px),
+     transparent calc(0.75rem + 1px)
+    )
+    no-repeat,
+   radial-gradient(
+     circle at 100% var(--perf-y),
+     transparent 0.75rem,
+     alpha(#5b60a8, 0.35) 0.75rem,
+     alpha(#5b60a8, 0.35) calc(0.75rem + 1px),
+     transparent calc(0.75rem + 1px)
+    )
+    no-repeat,
+   linear-gradient(180deg, #fffdf6, #f1ecdf);
+ }
+
+ &.payout-paper {
+  --ticket-stub: var(--payout-stub);
+  max-width: none;
+  padding-bottom: 1.125rem;
+
+  .ticket-stub {
+   height: 1.875rem;
+  }
+
+  .ticket-body {
+   gap: 0.25rem;
+   padding: 0.75rem 0.875rem;
+  }
+
+  .ticket-perf {
+   margin: 0 1rem;
+  }
+ }
+}

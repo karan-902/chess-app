@@ -7,11 +7,16 @@ import type { IWalletSuccessStageProps } from "@gopvp/app/src/types/component";
 export default function WalletSuccessStage({
  amountUsd,
  title,
+ isProcessing = false,
 }: IWalletSuccessStageProps) {
  return (
   <Box customClass="modal-success-stage">
    <Box customClass="modal-success-icon">
-    <SuccessCheckmark />
+    {isProcessing ? (
+     <Box customClass="logo-loader" role="progressbar" />
+    ) : (
+     <SuccessCheckmark />
+    )}
    </Box>
    <Box customClass="deposit-success-amountWrapper">
     <Text customClass="modal-success-amount">{formatAmount(amountUsd)}</Text>

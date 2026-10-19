@@ -1,21 +1,27 @@
+@use "sass:list";
 @use "default.scss" as *;
 
 .common-card {
  position: relative;
- background: $appSurface;
- border: 1px solid $appCardBorder;
- border-radius: 14px;
+
+ &.MuiCard-root {
+  background: $appCard;
+  border-radius: $radius-card;
+  @include neo-plunk;
+ }
 
  &.clickable {
   cursor: pointer;
-  transition: border-color 0.15s ease;
+  transition:
+   border-color 0.15s ease,
+   background-color 0.15s ease;
 
   &:hover {
    border-color: alpha($gold, 0.35);
   }
 
   &:active {
-   transform: scale(0.99);
+   border-color: alpha($gold, 0.6);
   }
  }
 
@@ -24,50 +30,102 @@
   align-items: center;
   gap: 0.7rem;
   padding: 0.7rem 0.85rem;
-  border-radius: 5px;
+  border-radius: $radius-card;
  }
 
- &.bet-card {
-  padding: 0.9rem 0.6rem;
-  text-align: center;
-  width: 100%;
-  overflow: visible;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+ &.pool-card {
+  --pool-face: #{list.nth(list.nth($poolBlocks, 1), 1)};
+  --pool-ink: #{list.nth(list.nth($poolBlocks, 1), 2)};
+  @include neo-elevated($poolEdgeRight, $poolEdgeBottom);
+  display: grid;
+  grid-template-columns: 4.25rem 1fr auto;
+  grid-template-areas:
+   "icon time arrow"
+   "icon win arrow";
   align-items: center;
-  gap: 0.15rem;
-  background: $appSurface;
-  border-radius: 8px;
+  column-gap: 0.9375rem;
+  row-gap: 0;
+  min-height: 4.25rem;
+  padding: 0 1rem 0 0;
 
-  &.selected {
-   border-color: $gold;
-   background: alpha($gold, 0.08);
-   box-shadow: 0 0 0 1px alpha($gold, 0.25);
+  .minute-chip,
+  .pool-card-title {
+   align-self: end;
+  }
+
+  .pool-card-win,
+  .pool-card-sub {
+   align-self: start;
+  }
+  border: 0;
+  border-radius: 0;
+  color: $poolInk;
+  text-align: left;
+  cursor: pointer;
+  background: $poolInfoBg;
+
+  :root[data-theme="light"] & {
+   border: 1px solid $poolEdgeBottom;
+   border-width: 1px 0 0 1px;
+  }
+
+  @for $i from 1 through list.length($poolBlocks) {
+   $block: list.nth($poolBlocks, $i);
+
+   &.tone-#{$i} {
+    --pool-face: #{list.nth($block, 1)};
+    --pool-ink: #{list.nth($block, 2)};
+   }
+  }
+
+  &:focus-visible {
+   outline: 2px solid $gold;
+   outline-offset: 3px;
+  }
+
+  &.static {
+   cursor: default;
+
+   &:active {
+    transform: none;
+
+    &::before,
+    &::after {
+     opacity: 1;
+    }
+   }
   }
 
   &.insufficient {
-   .pool-win-amt,
-   .pool-entry-fee {
-    opacity: 0.6;
-   }
+   opacity: 0.6;
   }
- }
 
- .bet-card-icon {
-  line-height: 1;
-  color: $gold;
- }
+  &.more {
+   --pool-face: #{$poolInk};
+   --pool-ink: #{$white};
+   grid-template-columns: 3.5rem 1fr auto;
+   grid-template-areas:
+    "icon win arrow"
+    "icon time arrow";
+   min-height: 3.5rem;
+  }
 
- .bet-card-practice-title {
-  margin-bottom: 0.15rem;
+  .pool-card-arrow {
+   justify-self: end;
+   align-self: center;
+   grid-area: arrow;
+   width: 1.75rem;
+   height: 1.75rem;
+   stroke-width: 1.4;
+   color: alpha($poolInk, 0.9);
+  }
  }
 
  &.stat-list {
   overflow: hidden;
   flex: 1;
   min-height: 0;
-  border-radius: 0.85rem;
+  border-radius: $radius-card;
   box-shadow: none;
 
   &.match-row-list {
@@ -80,39 +138,96 @@
   }
  }
 
+ &.score-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-4;
+  padding: 1.375rem $space-16;
+  border: 1px solid alpha($gold, 0.7);
+  background: $appSurface;
+ }
+
  &.rules-card {
   display: flex;
   flex-direction: column;
-  gap: $space-8;
+  gap: $space-12;
   padding: $space-16;
   margin-bottom: $space-12;
-  border-radius: 0.85rem;
-  box-shadow: none;
+  border: 1px solid $appCardBorder;
+  border-radius: $radius-card;
+  background: $appSurface;
  }
 
  &.profile-id-card {
-  padding: 1.1rem 1rem;
-  margin-bottom: 1.1rem;
-  border-radius: 0.85rem;
+  padding: $space-16;
+  margin-bottom: $space-12;
+  border: 1px solid $appCardBorder;
+  border-radius: $radius-card;
+  background: $appSurface;
+  overflow: hidden;
+ }
+
+ &.profile-stats-card {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-bottom: $space-24;
+  border: 1px solid $appCardBorder;
+  border-radius: $radius-card;
+  background: $appSurface;
+ }
+
+ &.stat-list.profile-list {
+  border: 1px solid $appCardBorder;
+  background: $appSurface;
  }
 
  &.lb-row {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.9rem;
-  margin-bottom: 0.5rem;
-  border-radius: 0.6rem;
-  box-shadow: none;
+  gap: $space-12;
+  min-height: 3.25rem;
+  padding: 0.625rem 0.875rem;
+  margin-bottom: $space-12;
+  border: 1px solid $appCardBorder;
+  border-radius: $radius-card;
+  background: $appSurface;
   font-size: $font14;
   font-weight: 600;
 
   &.me {
-   border-color: $gold;
+   border: 1.5px solid alpha($gold, 0.85);
 
-   .lb-earnings {
-    color: $gold;
-   }
+   // .lb-earnings {
+   //  color: $gold;
+   // }
+  }
+ }
+
+ &.lb-podium-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: $space-4;
+  border-radius: 0;
+  background: $appPodiumFill;
+
+  &.first {
+   height: 6.25rem;
+   border-color: alpha($gold, 0.55);
+  }
+
+  &.second {
+   height: 4.375rem;
+  }
+
+  &.third {
+   height: 3.125rem;
+  }
+
+  &.me {
+   border: 1.5px solid alpha($gold, 0.9);
   }
  }
 
@@ -121,8 +236,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 200px;
-  height: 150px;
+  width: 12.5rem;
+  height: 9.375rem;
   background: transparent;
   gap: $space-12;
   border: none;

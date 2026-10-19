@@ -36,10 +36,7 @@ export interface IPlayerRowProps {
  clock: string;
  clockReady: boolean;
  lowTime: boolean;
- isReconnecting?: boolean;
  firstMoveSeconds?: number | null;
- hasPremoves?: boolean;
- onCancelPremoves?: () => void;
 }
 
 export interface IPromotionOverlayProps {
@@ -53,6 +50,9 @@ export interface IMoveListProps {
  fenHistory: string[];
  viewIndex: number | null;
  onJump: (index: number) => void;
+ premove?: { from: string; to: string; pieceCode: string | null } | null;
+ onCancelPremoves?: () => void;
+ status?: string | null;
 }
 
 export interface IReviewControlsProps extends IMoveListProps {
@@ -65,14 +65,16 @@ export interface IGameOverOverlayProps {
  gameEnded: IMatchResultResponse;
  outcome: MatchOutcome;
  isPvc: boolean;
+ myName: string;
  opponentName: string;
  onNewGame: () => void;
 }
 
+export type IPayoutTicketProps = Omit<IGameOverOverlayProps, "onNewGame">;
+
 export interface IResignSheetProps {
  open: boolean;
  isPvc: boolean;
- betAmount: number;
  onKeepPlaying: () => void;
  onResign: () => void;
 }
@@ -80,7 +82,11 @@ export interface IResignSheetProps {
 export interface IPracticeSheetProps {
  open: boolean;
  onClose: () => void;
- onPlay: (difficulty: Difficulty, timeControl: GameCategory) => void;
+ onPlay: (
+  difficulty: Difficulty,
+  timeControl: GameCategory,
+  ticket: HTMLElement | null,
+ ) => void;
 }
 
 export interface IDroppableSquareProps {
@@ -102,6 +108,8 @@ export interface IDraggablePieceProps {
  draggable: boolean;
  hidden?: boolean;
  instant?: boolean;
+ isCaptureMove?: boolean;
+ isInCheck?: boolean;
 }
 
 export interface IMatchLoaderProps {
@@ -131,4 +139,5 @@ export interface IChessBoardProps {
  premoveMoves?: { from: string; to: string }[];
  draggableColor?: "w" | "b";
  onEntranceEnd?: () => void;
+ holdEntrance?: boolean;
 }

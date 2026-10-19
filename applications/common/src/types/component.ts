@@ -4,6 +4,7 @@ import type { Socket } from "socket.io-client";
 import type {
  ILoginResponse,
  IMatchHistoryItem,
+ IMatchResultResponse,
  IPoolResponse,
 } from "@gopvp/common/src/types/response";
 
@@ -24,6 +25,24 @@ export interface IGameContext {
  userId?: string;
  username: string;
  socket: Socket | null;
+ subscribeMatchResult?: (
+  matchId: string,
+  onResult: (result: IMatchResultResponse) => void,
+ ) => () => void;
+ isRevealing?: boolean;
+ startReveal?: (ticket: HTMLElement) => void;
+}
+
+export interface ISplitRevealTicket {
+ node: HTMLElement;
+ rect: DOMRect;
+ tearY: number;
+}
+
+export interface ISplitRevealProps {
+ ticket: ISplitRevealTicket;
+ Surface: ComponentType;
+ onDone: () => void;
 }
 
 export interface IPoolLabelProps {
@@ -43,6 +62,7 @@ export interface IGameModule {
  logoSrc: string;
  Practice?: ComponentType<IGamePracticeProps>;
  Rules: ComponentType;
+ RevealSurface: ComponentType;
 }
 
 export interface IEmailValues {
@@ -51,7 +71,6 @@ export interface IEmailValues {
 
 export interface IEmailScreenProps {
  formik: FormikProps<IEmailValues>;
- error: string | null;
  isGoogleProcessing: boolean;
  onGoogleLogin: () => void;
 }
@@ -64,7 +83,6 @@ export interface IPasswordScreenProps {
  verifiedEmail: string;
  verifiedUsername: string;
  formik: FormikProps<IPasswordValues>;
- error: string | null;
  onChangeEmail: () => void;
 }
 
@@ -94,7 +112,6 @@ export interface IPlayerRowSheetProps {
 
 export interface IMatchListProps {
  items: IMatchHistoryItem[];
- currentUsername: string | undefined;
  loadingMore: boolean;
  loadMore: () => void;
  onMatchClick?: (match: IMatchHistoryItem) => void;
@@ -116,6 +133,21 @@ export interface IChipSelectProps<T extends string> {
  customClass?: string;
 }
 
+export interface ISlideToConfirmProps {
+ label: string;
+ onConfirm: () => void;
+ isLoading?: boolean;
+ disabled?: boolean;
+ customClass?: string;
+}
+
+export interface ITicketProps {
+ stub: ReactNode;
+ top: ReactNode;
+ bottom: ReactNode;
+ customClass?: string;
+}
+
 export interface ISheetActionsProps {
  children?: ReactNode;
  cancelLabel?: string;
@@ -123,9 +155,13 @@ export interface ISheetActionsProps {
  isCancelDisabled?: boolean;
 }
 
-export interface IDurationWheelProps {
- value: number;
- onChange: (value: number) => void;
+export interface IStatTileProps {
+ label: ReactNode;
+ value: ReactNode;
+ icon?: ReactNode;
+ layout?: "caption" | "label-top" | "icon-card" | "stake" | "compact";
+ customClass?: string;
+ valueClass?: string;
 }
 
 export interface IBetSheetProps {

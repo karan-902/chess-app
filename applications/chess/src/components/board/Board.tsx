@@ -12,7 +12,6 @@ import {
  restrictToParentElement,
  snapCenterToCursor,
 } from "@dnd-kit/modifiers";
-import { motion } from "motion/react";
 import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
 import PieceIcon from "@gopvp/chess/src/components/board/PieceIcon";
@@ -35,11 +34,20 @@ import {
  ANNOTATION_COLORS,
 } from "@gopvp/chess/src/constants/color";
 import {
- BOARD_ENTRANCE_WAVE_MS,
- BOARD_ENTRANCE_WAVE_COUNT,
+ BOARD_ENTRANCE_START_MS,
+ BOARD_ENTRANCE_RANK_MS,
  BOARD_ENTRANCE_LANDING_MS,
+ BOARD_NUDGE_MS,
+ BOARD_SWEEP_MS,
  PIECE_FILL_RATIO,
 } from "@gopvp/chess/src/constants/limit";
+import {
+ boardNudgeFrames,
+ boardSweepFrames,
+ entranceDelayMs,
+ pieceEntranceFrames,
+ prefersReducedMotion,
+} from "@gopvp/chess/src/utils";
 import DroppableSquare from "@gopvp/chess/src/components/board/DroppableSquare";
 import DraggablePiece from "@gopvp/chess/src/components/board/DraggablePiece";
 import type { IChessBoardProps } from "@gopvp/chess/src/types/component";
@@ -54,6 +62,18 @@ function colorKeyFromEvent(e: {
  if (e.altKey) return "alt";
  if (e.ctrlKey || e.metaKey) return "ctrl";
  return "plain";
+}
+
+function capturedSquareOf(
+ prevBoard: Record<string, string>,
+ move: { from: string; to: string },
+) {
+ const moving = prevBoard[move.from];
+ if (!moving) return null;
+ if (prevBoard[move.to] && prevBoard[move.to][0] !== moving[0]) return move.to;
+ if (moving[1] === "P" && move.from[0] !== move.to[0] && !prevBoard[move.to])
+  return `${move.to[0]}${move.from[1]}`;
+ return null;
 }
 
 type Arrow = { from: string; to: string; colorKey: string };
@@ -95,6 +115,7 @@ export default function Board({
  premoveMoves = [],
  draggableColor,
  onEntranceEnd,
+ holdEntrance = false,
 }: IChessBoardProps) {
  const gridRef = useRef<HTMLDivElement>(null);
  const [boardWidth, setBoardWidth] = useState(400);
@@ -102,29 +123,35 @@ export default function Board({
   square: string;
   code: string;
  } | null>(null);
- const [droppedSquare, setDroppedSquare] = useState<string | null>(null);
+ const [droppedMove, setDroppedMove] = useState<{
+  from: string;
+  to: string;
+ } | null>(null);
  const [arrows, setArrows] = useState<Arrow[]>([]);
  const [highlights, setHighlights] = useState<Highlight[]>([]);
  const annotateRef = useRef<{ square: string; colorKey: string } | null>(null);
- const [landings, setLandings] = useState<{ id: number; square: string }[]>([]);
- const [shimmerPhase, setShimmerPhase] = useState<
-  "idle" | "mounted" | "running"
- >("mounted");
+ const [landings, setLandings] = useState<
+  { id: number; square: string; isCapture: boolean }[]
+ >([]);
+ const [checkRings, setCheckRings] = useState<
+  { id: number; square: string }[]
+ >([]);
+ const [isSweeping, setIsSweeping] = useState(false);
+ const sweepRef = useRef<HTMLDivElement>(null);
  const [captures, setCaptures] = useState<
   { id: number; square: string; code: string }[]
  >([]);
  const captureIdRef = useRef(0);
  const prevBoardRef = useRef<Record<string, string>>({});
  const [entranceGhosts, setEntranceGhosts] = useState<
-  { square: string; code: string; wave: number }[] | null
+  { square: string; code: string }[] | null
  >(() =>
   Object.entries(boardFromFen(fen)).map(([square, code]) => ({
    square,
    code,
-   wave: Math.round(Math.abs(FILES.indexOf(square[0]) - 3.5) - 0.5),
   })),
  );
- const [landedWaves, setLandedWaves] = useState(0);
+ const ghostEls = useRef<Record<string, HTMLDivElement | null>>({});
  const landingIdRef = useRef(0);
  const prevLastMoveRef = useRef<{ from: string; to: string } | null>(null);
  const prevPremoveCountRef = useRef(0);
@@ -146,10 +173,15 @@ export default function Board({
    (!prev || prev.from !== lastMove.from || prev.to !== lastMove.to)
   ) {
    const id = ++landingIdRef.current;
-   setLandings((q) => [...q, { id, square: lastMove.to }]);
+   const isCapture = !!capturedSquareOf(prevBoardRef.current, lastMove);
+   setLandings((q) => [...q, { id, square: lastMove.to, isCapture }]);
   }
   prevLastMoveRef.current = lastMove ?? null;
-  setDroppedSquare((dropped) => (lastMove?.to === dropped ? dropped : null));
+  setDroppedMove((dropped) =>
+   lastMove?.to === dropped?.to && lastMove?.from === dropped?.from
+    ? dropped
+    : null,
+  );
  }, [lastMove]);
 
  useEffect(() => {
@@ -157,7 +189,7 @@ export default function Board({
    const last = premoveMoves[premoveMoves.length - 1];
    if (last) {
     const id = ++landingIdRef.current;
-    setLandings((q) => [...q, { id, square: last.to }]);
+    setLandings((q) => [...q, { id, square: last.to, isCapture: false }]);
    }
   }
   prevPremoveCountRef.current = premoveMoves.length;
@@ -175,74 +207,74 @@ export default function Board({
   return () => observer.disconnect();
  }, []);
 
- useEffect(() => {
-  if (!entranceGhosts) return;
-  const timers: ReturnType<typeof setTimeout>[] = [];
-  for (let w = 0; w < BOARD_ENTRANCE_WAVE_COUNT; w++) {
-   const launchAt = 150 + w * BOARD_ENTRANCE_WAVE_MS;
-   timers.push(setTimeout(() => setLandedWaves(w + 1), launchAt));
-   timers.push(
-    setTimeout(
-     () => playSound("move", 0.4),
-     launchAt + BOARD_ENTRANCE_LANDING_MS,
-    ),
-   );
-  }
-  timers.push(
-   setTimeout(
-    () => {
-     setEntranceGhosts(null);
-     onEntranceEnd?.();
-    },
-    150 +
-     BOARD_ENTRANCE_WAVE_COUNT * BOARD_ENTRANCE_WAVE_MS +
-     BOARD_ENTRANCE_LANDING_MS +
-     100,
-   ),
-  );
-  return () => timers.forEach(clearTimeout);
- }, [entranceGhosts, onEntranceEnd]);
-
- useEffect(() => {
-  const raf = requestAnimationFrame(() => {
-   requestAnimationFrame(() => setShimmerPhase("running"));
-  });
-  const timer = setTimeout(() => setShimmerPhase("idle"), 1400);
-  return () => {
-   cancelAnimationFrame(raf);
-   clearTimeout(timer);
-  };
- }, []);
-
  const ranks = flipped ? RANKS_FLIP : RANKS;
  const files = flipped ? FILES_FLIP : FILES;
  const board = useMemo(() => boardFromFen(fen), [fen]);
 
  useEffect(() => {
+  if (!entranceGhosts || holdEntrance) return;
+  const isReducedMotion = prefersReducedMotion();
+  const animations = entranceGhosts.map(({ square }) => {
+   const col = files.indexOf(square[0]);
+   const row = ranks.indexOf(square[1]);
+   return ghostEls.current[square]?.animate(
+    pieceEntranceFrames(0, (row >= 4 ? 9 : -2) - row, 0),
+    {
+     duration: isReducedMotion ? 0 : BOARD_ENTRANCE_LANDING_MS,
+     delay: isReducedMotion
+      ? 0
+      : BOARD_ENTRANCE_START_MS + entranceDelayMs(col, row),
+     fill: "forwards",
+    },
+   );
+  });
+  const landedAt = BOARD_ENTRANCE_START_MS + BOARD_ENTRANCE_LANDING_MS * 0.45;
+  const timers = [0, BOARD_ENTRANCE_RANK_MS].map((offset) =>
+   setTimeout(() => playSound("move", 0.4), landedAt + offset),
+  );
+  timers.push(
+   setTimeout(
+    () => {
+     setEntranceGhosts(null);
+     onEntranceEnd?.();
+     const sweep = sweepRef.current;
+     if (isReducedMotion || !sweep) return;
+     setIsSweeping(true);
+     sweep
+      .animate(boardSweepFrames(), BOARD_SWEEP_MS)
+      .finished.then(() => setIsSweeping(false), () => {});
+    },
+    BOARD_ENTRANCE_START_MS +
+     entranceDelayMs(0, 1) +
+     BOARD_ENTRANCE_LANDING_MS +
+     100,
+   ),
+  );
+  return () => {
+   timers.forEach(clearTimeout);
+   animations.forEach((animation) => animation?.cancel());
+  };
+ }, [entranceGhosts, onEntranceEnd, holdEntrance, files, ranks]);
+
+ useEffect(() => {
   if (!lastMove) return;
   const prevBoard = prevBoardRef.current;
-  const moving = prevBoard[lastMove.from];
-  if (!moving) return;
-
-  let capturedSquare: string | null = null;
-  if (prevBoard[lastMove.to] && prevBoard[lastMove.to][0] !== moving[0]) {
-   capturedSquare = lastMove.to;
-  } else if (
-   moving[1] === "P" &&
-   lastMove.from[0] !== lastMove.to[0] &&
-   !prevBoard[lastMove.to]
-  ) {
-   capturedSquare = `${lastMove.to[0]}${lastMove.from[1]}`;
-  }
-
-  if (capturedSquare && prevBoard[capturedSquare]) {
-   const id = ++captureIdRef.current;
-   setCaptures((q) => [
-    ...q,
-    { id, square: capturedSquare!, code: prevBoard[capturedSquare!] },
-   ]);
-  }
+  const capturedSquare = capturedSquareOf(prevBoard, lastMove);
+  if (!capturedSquare || !prevBoard[capturedSquare]) return;
+  const id = ++captureIdRef.current;
+  setCaptures((q) => [
+   ...q,
+   { id, square: capturedSquare, code: prevBoard[capturedSquare] },
+  ]);
+  if (!prefersReducedMotion())
+   gridRef.current?.animate(boardNudgeFrames(), BOARD_NUDGE_MS);
  }, [lastMove]);
+
+ useEffect(() => {
+  if (!checkSquare) return;
+  const id = ++landingIdRef.current;
+  setCheckRings((q) => [...q, { id, square: checkSquare }]);
+ }, [checkSquare]);
 
  useEffect(() => {
   prevBoardRef.current = board;
@@ -253,53 +285,52 @@ export default function Board({
  const epTarget = fen.split(" ")[3];
  const cellSize = boardWidth / 8;
  const pieceSize = cellSize * PIECE_FILL_RATIO;
+ const squareOffset = (square: string) => ({
+  left: `${files.indexOf(square[0]) * 12.5}%`,
+  top: `${ranks.indexOf(square[1]) * 12.5}%`,
+ });
+ const isLastMoveCapture =
+  !!lastMove && !!capturedSquareOf(prevBoardRef.current, lastMove);
 
- const expandedPremoveMoves = useMemo(() => {
-  const expanded: { from: string; to: string }[] = [];
+ const { premoveDisplaySquares, hiddenCaptureSquares } = useMemo(() => {
+  const originAt: Record<string, string> = {};
+  for (const square of Object.keys(board)) originAt[square] = square;
+  const displaySquares: Record<string, string> = {};
+  const capturingOrigins = new Set<string>();
+  const hidden = new Set<string>();
+  const shift = (from: string, to: string) => {
+   const origin = originAt[from];
+   if (!origin) return null;
+   const victim = originAt[to];
+   if (victim && board[victim][0] !== board[origin][0]) {
+    hidden.add(victim);
+    capturingOrigins.add(origin);
+   }
+   delete originAt[from];
+   originAt[to] = origin;
+   if (!capturingOrigins.has(origin)) displaySquares[origin] = to;
+   return origin;
+  };
   for (const m of premoveMoves) {
-   expanded.push(m);
-   const piece = board[m.from];
+   const origin = shift(m.from, m.to);
    const isCastle =
-    piece?.[1] === "K" &&
+    !!origin &&
+    board[origin][1] === "K" &&
     Math.abs(FILES.indexOf(m.to[0]) - FILES.indexOf(m.from[0])) === 2;
    if (isCastle) {
     const rank = m.from[1];
     const kingside = m.to[0] === "g";
-    expanded.push({
-     from: `${kingside ? "h" : "a"}${rank}`,
-     to: `${kingside ? "f" : "d"}${rank}`,
-    });
+    shift(`${kingside ? "h" : "a"}${rank}`, `${kingside ? "f" : "d"}${rank}`);
    }
   }
-  return expanded;
+  return {
+   premoveDisplaySquares: displaySquares,
+   hiddenCaptureSquares: hidden,
+  };
  }, [premoveMoves, board]);
 
- const resolveDisplaySquare = (square: string) => {
-  let current = square;
-  for (const m of expandedPremoveMoves) {
-   if (m.from !== current) continue;
-   if (board[m.to]) break;
-   current = m.to;
-  }
-  return current;
- };
-
- const hiddenCaptureSquares = useMemo(() => {
-  const hidden = new Set<string>();
-  for (const [square, code] of Object.entries(board)) {
-   let current = square;
-   for (const m of expandedPremoveMoves) {
-    if (m.from !== current) continue;
-    const occupant = board[m.to];
-    if (occupant) {
-     if (occupant[0] !== code[0]) hidden.add(m.to);
-     break;
-    }
-    current = m.to;
-   }
-  }
-  return hidden;
- }, [board, expandedPremoveMoves]);
+ const resolveDisplaySquare = (square: string) =>
+  premoveDisplaySquares[square] ?? square;
 
  const prevKeyMapRef = useRef<Record<string, string>>({});
  const pieceKeys: Record<string, string> = {};
@@ -360,7 +391,7 @@ export default function Board({
   const from = e.active.id as string;
   const to = e.over?.id as string | undefined;
   if (!to || to === from) return;
-  setDroppedSquare(to);
+  setDroppedMove({ from, to });
   onSquareClick?.(to);
  };
 
@@ -436,7 +467,7 @@ export default function Board({
   >
    <Box customClass="chess-board fit-board">
     <Box
-     customClass="chess-board-grid"
+     customClass={classNames("chess-board-grid", isSweeping && "sweeping")}
      ref={gridRef}
      onMouseDown={handleGridMouseDown}
      onMouseUp={handleGridMouseUp}
@@ -475,7 +506,6 @@ export default function Board({
          key={square}
          square={square}
          className={classNames("chess-board-square", {
-          "square-flash": isFlash,
           "square-selected": isSelected,
           "square-premove-from": premoveFromSquares.has(square),
           "square-premove-queued": premoveToSquares.has(square),
@@ -515,7 +545,16 @@ export default function Board({
            className={`legal-capture-ring${premoveMode ? " legal-capture-ring-premove" : ""}`}
           />
          )}
+         {isFlash && <span className="square-flash" />}
          {isAttacked && <span className="water-drop-ripple" />}
+         {(isCheck || isStalemate || isAttacked) && (
+          <span
+           className={classNames(
+            "piece-glow",
+            isCheck ? "check" : isStalemate ? "stalemate" : "danger",
+           )}
+          />
+         )}
         </DroppableSquare>
        );
       }),
@@ -529,7 +568,6 @@ export default function Board({
       const isAttacked =
        attackedSquares.includes(square) && square !== activeDrag?.square;
       const isCheck = square === checkSquare;
-      const isStalemate = square === stalemateSquare;
       return (
        <DraggablePiece
         key={pieceKeys[square]}
@@ -541,124 +579,84 @@ export default function Board({
          "piece-black": code[0] === "b",
          "piece-danger": isAttacked,
          "piece-in-check": isCheck,
-         "piece-in-stalemate": isStalemate,
          "piece-capture-pending": isCaptureTarget,
          "piece-premove-ghost": displaySquare !== square,
         })}
         onClick={() => onSquareClick?.(displaySquare)}
         draggable={!draggableColor || code[0] === draggableColor}
         hidden={!!entranceGhosts}
-        instant={displaySquare === droppedSquare}
+        instant={
+         displaySquare === droppedMove?.to &&
+         !(lastMove?.to === droppedMove.to && lastMove.from !== droppedMove.from)
+        }
+        isCaptureMove={isLastMoveCapture && square === lastMove?.to}
+        isInCheck={isCheck}
        />
       );
      })}
 
-     {landings.map(({ id, square }) => {
-      const col = files.indexOf(square[0]);
-      const row = ranks.indexOf(square[1]);
-      return (
-       <motion.div
-        key={id}
-        className="board-preview-ring"
-        initial={{
-         x: `${col * 100}%`,
-         y: `${row * 100}%`,
-         scale: 0.3,
-         opacity: 0.9,
-        }}
-        animate={{
-         x: `${col * 100}%`,
-         y: `${row * 100}%`,
-         scale: 1.15,
-         opacity: 0,
-        }}
-        transition={{
-         duration: 0.9,
-         ease: [0.16, 1, 0.3, 1],
-        }}
-        onAnimationComplete={() =>
-         setLandings((q) => q.filter((l) => l.id !== id))
-        }
+     {landings.map(({ id, square, isCapture }) => (
+      <Box
+       key={id}
+       customClass={classNames("board-preview-ring", isCapture && "danger")}
+       style={squareOffset(square)}
+       onAnimationEnd={() =>
+        setLandings((q) => q.filter((l) => l.id !== id))
+       }
+      />
+     ))}
+
+     {checkRings.map(({ id, square }) => (
+      <Box
+       key={id}
+       customClass="board-check-ring"
+       style={squareOffset(square)}
+       onAnimationEnd={() =>
+        setCheckRings((q) => q.filter((r) => r.id !== id))
+       }
+      />
+     ))}
+
+     {captures.flatMap(({ id, square, code }) => [
+      <Box
+       key={`${id}-flash`}
+       customClass="board-preview-flash"
+       style={squareOffset(square)}
+      />,
+      <Box
+       key={`${id}-piece`}
+       customClass="chess-piece-slot captured"
+       style={squareOffset(square)}
+       onAnimationEnd={() => setCaptures((q) => q.filter((c) => c.id !== id))}
+      >
+       <PieceIcon
+        code={code}
+        className={`chess-piece-svg${code[0] === "b" ? " piece-black" : ""}`}
        />
-      );
-     })}
+      </Box>,
+     ])}
 
-     {captures.flatMap(({ id, square, code }) => {
-      const col = files.indexOf(square[0]);
-      const row = ranks.indexOf(square[1]);
-      return [
-       <motion.div
-        key={`${id}-flash`}
-        className="board-preview-flash"
-        initial={{
-         x: `${col * 100}%`,
-         y: `${row * 100}%`,
-         opacity: 1,
-        }}
-        animate={{
-         x: `${col * 100}%`,
-         y: `${row * 100}%`,
-         opacity: 0,
-        }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
-       />,
-       <motion.div
-        key={`${id}-piece`}
-        className="chess-piece-slot"
-        initial={{
-         x: `${col * 100}%`,
-         y: `${row * 100}%`,
-         scale: 1,
-         rotate: 0,
-         opacity: 1,
-        }}
-        animate={{
-         x: `${col * 100}%`,
-         y: `${row * 100}%`,
-         scale: 1.35,
-         rotate: 12,
-         opacity: 0,
-        }}
-        transition={{ duration: 0.35, ease: "easeOut" }}
-        onAnimationComplete={() =>
-         setCaptures((q) => q.filter((c) => c.id !== id))
-        }
-       >
-        <PieceIcon
-         code={code}
-         className={`chess-piece-svg${code[0] === "b" ? " piece-black" : ""}`}
-        />
-       </motion.div>,
-      ];
-     })}
-
-     {entranceGhosts?.map(({ square, code, wave }) => {
-      const col = files.indexOf(square[0]);
+     {entranceGhosts?.map(({ square, code }) => {
       const targetRow = ranks.indexOf(square[1]);
       const offRow = targetRow >= 4 ? 9 : -2;
-      const landed = wave < landedWaves;
       return (
-       <motion.div
+       <Box
         key={square}
-        className="chess-piece-slot"
-        initial={{
-         x: `${col * 100}%`,
-         y: `${offRow * 100}%`,
+        ref={(el: HTMLDivElement | null) => {
+         ghostEls.current[square] = el;
         }}
-        animate={{
-         x: `${col * 100}%`,
-         y: `${(landed ? targetRow : offRow) * 100}%`,
-        }}
-        transition={{
-         duration: BOARD_ENTRANCE_LANDING_MS / 1000,
-         ease: [0.4, 0, 0.2, 1],
+        customClass="chess-piece-slot"
+        style={{
+         ...squareOffset(square),
+         transform: `translate3d(0, ${(offRow - targetRow) * 100}%, 0)`,
+         opacity: 0,
         }}
        >
         <PieceIcon
          code={code}
          className={`chess-piece-svg${code[0] === "b" ? " piece-black" : ""}`}
         />
-       </motion.div>
+       </Box>
       );
      })}
 
@@ -693,10 +691,9 @@ export default function Board({
         const col = files.indexOf(square[0]);
         const row = ranks.indexOf(square[1]);
         return (
-         <motion.rect
+         <rect
           key={`hl-${square}`}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.55 }}
+          className="board-highlight"
           x={col * 100}
           y={row * 100}
           width={100}
@@ -721,20 +718,10 @@ export default function Board({
         const x2 = x2raw - (dx / len) * shorten;
         const y2 = y2raw - (dy / len) * shorten;
         return (
-         <motion.line
+         <line
           key={`arrow-${from}-${to}`}
-          initial={{
-           pathLength: 0,
-           opacity: 0,
-          }}
-          animate={{
-           pathLength: 1,
-           opacity: 0.85,
-          }}
-          transition={{
-           duration: 0.18,
-           ease: "easeOut",
-          }}
+          className="board-arrow"
+          style={{ transformOrigin: `${x1}px ${y1}px` }}
           x1={x1}
           y1={y1}
           x2={x2}
@@ -749,14 +736,7 @@ export default function Board({
       </svg>
      )}
 
-     {shimmerPhase !== "idle" && (
-      <Box
-       customClass={classNames(
-        "board-preview-shimmer",
-        shimmerPhase === "running" && "run",
-       )}
-      />
-     )}
+     <Box ref={sweepRef} customClass="board-preview-fx sweep" />
     </Box>
    </Box>
    <DragOverlay dropAnimation={null}>

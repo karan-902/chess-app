@@ -9,6 +9,7 @@ import { setActiveGame } from "@gopvp/app/src/redux/socketModals/slice";
 import { showAckErrorToast } from "@gopvp/common/src/util/api";
 import { formatAmount, shortenUsername } from "@gopvp/common/src/util/format";
 import { buildMatchUrl, isGameSlug } from "@gopvp/app/src/utils";
+import { subscribeMatchResult } from "@gopvp/app/src/utils/matchResult";
 import { navigateTo } from "@gopvp/common/src/util/navigationService";
 import {
  rejoinMatchText,
@@ -38,50 +39,63 @@ export default function RejoinGameModal() {
  const dispatch = useReduxDispatch();
  const { socket } = useSocket();
  const activeGame = useReduxSelector((state) => state.socketModals.activeGame);
+ const userId = useReduxSelector((state) => state.auth.session?.id);
  const deviceHandoff = useReduxSelector(
   (state) => state.socketModals.deviceHandoff,
+ );
+ const openingMatchId = useReduxSelector(
+  (state) => state.socketModals.openingMatchId,
  );
  const [confirmingExit, setConfirmingExit] = useState(false);
  const [matchResult, setMatchResult] = useState<IMatchResultResponse | null>(
   null,
  );
- const activeMatchId = activeGame?.match_id;
+ const [lastActiveGame, setLastActiveGame] = useState(activeGame);
+ const lastMatchId = lastActiveGame?.match_id;
 
  useEffect(() => {
-  if (!socket || !activeMatchId) return;
-  const onGameEnd = (data: IMatchResultResponse) => {
-   if (data.id === activeMatchId) setMatchResult(data);
-  };
-  socket.on(SOCKET_EVENTS.GAME_END, onGameEnd);
-  return () => {
-   socket.off(SOCKET_EVENTS.GAME_END, onGameEnd);
-  };
- }, [socket, activeMatchId]);
+  if (activeGame) setLastActiveGame(activeGame);
+ }, [activeGame]);
 
- if (!activeGame || deviceHandoff !== null) {
+ useEffect(() => {
+  if (!lastMatchId) return;
+  return subscribeMatchResult(lastMatchId, userId, setMatchResult);
+ }, [lastMatchId, userId]);
+
+ const shownGame = activeGame ?? (matchResult ? lastActiveGame : null);
+
+ if (
+  !shownGame ||
+  deviceHandoff !== null ||
+  shownGame.match_id === openingMatchId
+ ) {
   return null;
  }
 
- const { opponent } = activeGame;
+ const { opponent } = shownGame;
  const opponentName = shortenUsername(opponent.username);
- const betAmount = formatAmount(activeGame.bet);
+ const betAmount = formatAmount(shownGame.bet);
+
+ const clearActiveGame = () => {
+  setConfirmingExit(false);
+  setLastActiveGame(null);
+  dispatch(setActiveGame(null));
+ };
 
  const handleForfeit = () => {
   socket?.emit(SOCKET_EVENTS.GAME_REJOIN_DECLINED, showAckErrorToast);
-  setConfirmingExit(false);
-  dispatch(setActiveGame(null));
+  clearActiveGame();
  };
 
  const handleCloseResult = () => {
   setMatchResult(null);
-  setConfirmingExit(false);
-  dispatch(setActiveGame(null));
+  clearActiveGame();
  };
 
  const handleRejoin = () => {
-  dispatch(setActiveGame(null));
-  if (isGameSlug(activeGame.game_slug)) {
-   navigateTo(buildMatchUrl(activeGame.game_slug, activeGame.match_id), {
+  clearActiveGame();
+  if (isGameSlug(shownGame.game_slug)) {
+   navigateTo(buildMatchUrl(shownGame.game_slug, shownGame.match_id), {
     replace: true,
    });
   }

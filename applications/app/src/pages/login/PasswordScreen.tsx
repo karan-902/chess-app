@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Input from "@gopvp/common/src/components/Input/Input";
@@ -9,6 +10,8 @@ import {
  enterPasswordText,
  changeText,
  loginText,
+ forgotYourPasswordText,
+ resetNowText,
 } from "@gopvp/app/src/constants/message";
 import { formSubmitHandler } from "@gopvp/common/src/util/form";
 
@@ -16,7 +19,6 @@ export default function PasswordScreen({
  verifiedEmail,
  verifiedUsername,
  formik,
- error,
  onChangeEmail,
 }: IPasswordScreenProps) {
  const initials = verifiedUsername
@@ -34,7 +36,7 @@ export default function PasswordScreen({
    onSubmit={formSubmitHandler(formik.handleSubmit)}
   >
    <Box customClass="auth-account-card">
-    <CustomAvatar letter={initials} customClass="md neutral" />
+    <CustomAvatar letter={initials} customClass="account" />
     <Box customClass="auth-account-info">
      <Text customClass="auth-account-name">{verifiedUsername}</Text>
      <Text customClass="auth-account-email">{verifiedEmail}</Text>
@@ -42,8 +44,8 @@ export default function PasswordScreen({
     <Button
      type="button"
      size="small"
-     variant="outlined"
-     startIcon="edit"
+     variant="text"
+     startIcon="pencil"
      customClass="auth-change-btn"
      onClick={onChangeEmail}
     >
@@ -61,10 +63,8 @@ export default function PasswordScreen({
     onChange={formik.handleChange}
     onBlur={formik.handleBlur}
     disabled={formik.isSubmitting}
-    isError={(formik.touched.password && !!formik.errors.password) || !!error}
-    helperText={
-     (formik.touched.password && formik.errors.password) || error || undefined
-    }
+    isError={formik.touched.password && !!formik.errors.password}
+    helperText={formik.errors.password}
     customClass="form-input"
     fullWidth
    />
@@ -74,8 +74,7 @@ export default function PasswordScreen({
      type="submit"
      variant="contained"
      fullWidth
-     endIcon="arrowForward"
-     customClass="auth-submit-btn auth-submit-btn-arrow"
+     customClass="auth-submit-btn"
      disabled={!formik.dirty || formik.isSubmitting}
      isLoading={formik.isSubmitting}
     >
@@ -83,12 +82,12 @@ export default function PasswordScreen({
     </Button>
    </Box>
 
-   {/* <Text customClass="auth-forgot-row">
-    {forgotYourPasswordText}{" "}
+   <Text customClass="auth-forgot-row">
+    {forgotYourPasswordText}
     <NavLink to="/forgot-password" className="auth-forgot-link">
      {resetNowText}
     </NavLink>
-   </Text> */}
+   </Text>
   </Box>
  );
 }

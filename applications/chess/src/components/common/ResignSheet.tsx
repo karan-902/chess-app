@@ -2,44 +2,46 @@ import CustomDrawer from "@gopvp/common/src/components/Drawer/Drawer";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
-import SheetActions from "@gopvp/common/src/components/SheetActions/SheetActions";
-import { formatAmount } from "@gopvp/common/src/util/format";
 import type { IResignSheetProps } from "@gopvp/chess/src/types/component";
 import {
- resignThisGameText,
- computerWinsPracticeText,
- opponentWinsEntryLostText,
+ giveUpThisGameText,
+ lossCantBeUndoneText,
+ computerWinsRoundText,
+ backToGameText,
+ endGameText,
  resignText,
 } from "@gopvp/chess/src/constants/message";
-import { keepPlayingText } from "@gopvp/common/src/constants/message";
 
 export default function ResignSheet({
  open,
  isPvc,
- betAmount,
  onKeepPlaying,
  onResign,
 }: IResignSheetProps) {
  return (
   <CustomDrawer anchor="bottom" open={open} onClose={onKeepPlaying}>
-   <Box customClass="matchmaking-searching">
-    <Text customClass="dialog-title">{resignThisGameText}</Text>
+   <Box customClass="resign-sheet">
+    <Text customClass="dialog-title">{giveUpThisGameText}</Text>
     <Text customClass="empty-state-desc description">
-     {isPvc
-      ? computerWinsPracticeText
-      : opponentWinsEntryLostText(formatAmount(betAmount))}
+     {isPvc ? computerWinsRoundText : lossCantBeUndoneText}
     </Text>
-    <SheetActions cancelLabel={resignText} onCancel={onResign}>
-     <Button
-      type="button"
-      variant="contained"
-      fullWidth
-      customClass="common-play"
-      onClick={onKeepPlaying}
-     >
-      {keepPlayingText}
-     </Button>
-    </SheetActions>
+    <Button
+     type="button"
+     variant="contained"
+     fullWidth
+     customClass="game-cta play-cta"
+     onClick={onKeepPlaying}
+    >
+     {backToGameText}
+    </Button>
+    <Button
+     type="button"
+     variant="text"
+     customClass="sheet-cancel-link"
+     onClick={onResign}
+    >
+     {isPvc ? endGameText : resignText}
+    </Button>
    </Box>
   </CustomDrawer>
  );

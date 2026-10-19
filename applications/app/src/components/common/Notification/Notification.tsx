@@ -1,22 +1,22 @@
-import { forwardRef, type ReactElement } from "react";
+import { forwardRef, type CSSProperties, type ReactElement } from "react";
 import { Snackbar, Slide, Portal } from "@mui/material";
 import type { TransitionProps } from "@mui/material/transitions";
 import classNames from "classnames";
 import { useReduxDispatch, useReduxSelector } from "@gopvp/app/src/redux/hooks";
 import { hideToast } from "@gopvp/app/src/redux/common/slice";
 import AlertMessage from "@gopvp/common/src/components/AlertMessage/AlertMessage";
+import { TOAST_AUTO_HIDE_MS } from "@gopvp/app/src/constants/limit";
 import type { INotificationProps } from "@gopvp/app/src/types/component";
+
+const getToastContainer = () =>
+ (document.querySelector(".app-root") ??
+  document.getElementById("root")) as HTMLElement;
 
 const SlideLeft = forwardRef<
  unknown,
  TransitionProps & { children: ReactElement }
 >((props, ref) => (
- <Slide
-  ref={ref}
-  {...props}
-  direction="left"
-  container={document.getElementById("root")}
- />
+ <Slide ref={ref} {...props} direction="left" container={getToastContainer} />
 ));
 
 export default function Notification({ customClass }: INotificationProps) {
@@ -33,28 +33,32 @@ export default function Notification({ customClass }: INotificationProps) {
   dispatch(hideToast());
  };
 
- const rootEl = document.getElementById("root");
-
  return (
-  <Portal container={rootEl}>
+  <Portal container={getToastContainer()}>
    <Snackbar
     anchorOrigin={{ vertical: "top", horizontal: "right" }}
     open={isToastOpen}
-    autoHideDuration={1500}
     onClose={closeNotification}
     slots={{ transition: SlideLeft }}
     sx={{
      position: "absolute",
      top: "1rem",
-     right: "1rem",
+     right: "10px",
      left: "auto",
     }}
    >
     <AlertMessage
+     key={toastMessage}
+     style={{ "--toast-duration": `${TOAST_AUTO_HIDE_MS}ms` } as CSSProperties}
      message={toastMessage}
      severity={toastVariant}
      variant="standard"
      className={classes}
+     customClass="toast"
+     onClose={() => dispatch(hideToast())}
+     onAnimationEnd={(event) => {
+      if (event.pseudoElement === "::after") dispatch(hideToast());
+     }}
     >
      {toastTitle && toastTitle}
     </AlertMessage>

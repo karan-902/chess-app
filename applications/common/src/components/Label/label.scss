@@ -4,16 +4,30 @@
  font-family: $fontOutfitSemiBold !important;
  color: $appText !important;
 
+ &.wallet-label,
+ &.wallet-field-label {
+  font-size: $font14 !important;
+ }
  &.wallet-label {
   color: $appText !important;
   text-align: center;
  }
- &.room-field-label {
-  text-align: left !important;
-
-  &.room-bet-label {
-   text-align: center !important;
-   width: 100%;
-  }
+ &.match-id-label {
+  font-size: $font14 !important;
  }
+ .gopvp-signup-form & {
+  font-size: $font14 !important;
+  line-height: 1.25 !important;
+ }
+
+ .common-input > &,
+ .form-field > & {
+  font-family: $fontOutfitBold !important;
+  font-size: $font11 !important;
+  line-height: 1.25 !important;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: alpha($appText, 0.5) !important;
+ }
+
 }

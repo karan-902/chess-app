@@ -1,37 +1,51 @@
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import Box from "@gopvp/common/src/components/Box/Box";
-import Text from "@gopvp/common/src/components/Text/Text";
+// import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
 import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
-import { icons } from "@gopvp/common/src/components/images";
+// import { icons } from "@gopvp/common/src/components/images";
 import BetSheet from "@gopvp/app/src/pages/play/BetSheet";
 import RoomSheet from "@gopvp/app/src/pages/play/RoomSheet";
 import PoolConfirmSheet from "@gopvp/app/src/pages/play/PoolConfirmSheet";
+import LiveWinsTicker from "@gopvp/app/src/pages/play/LiveWinsTicker";
 import { usePools } from "@gopvp/app/src/hooks/usePools";
 import { useMatchmaking } from "@gopvp/app/src/hooks/useMatchmaking";
 import { useRoomMatch } from "@gopvp/app/src/hooks/useRoomMatch";
 import { useWalletBalance } from "@gopvp/app/src/hooks/useWallet";
 import { useGame } from "@gopvp/app/src/hooks/useGame";
+import { useReduxDispatch } from "@gopvp/app/src/redux/hooks";
+import { setFindingMatch } from "@gopvp/app/src/redux/socketModals/slice";
 import type { IPoolResponse } from "@gopvp/common/src/types/response";
 import {
- tapPlayNowHintText,
+ // tapPlayNowHintText,
  playNowText,
 } from "@gopvp/app/src/constants/message";
 import { ROUTES } from "@gopvp/app/src/constants/route";
+import { poolTone } from "@gopvp/app/src/utils";
 
 export default function PlayPage() {
  const [sheetOpen, setSheetOpen] = useState(false);
  const [searchParams] = useSearchParams();
  const navigate = useNavigate();
+ const dispatch = useReduxDispatch();
  const {
   gamePath,
   gameModule: { Preview, PoolLabel, GameRoom, preloadGameRoom, Practice },
  } = useGame();
  const { pools, loading: poolsLoading } = usePools();
  const { usdValue, loading: balanceLoading } = useWalletBalance();
- const { status, queuedPool, secondsLeft, joinQueue, leaveQueue, resetStatus } =
-  useMatchmaking();
+ const {
+  status,
+  isSearching,
+  queuedPool,
+  opponentName: poolOpponentName,
+  secondsLeft,
+  joinQueue,
+  retryQueue,
+  leaveQueue,
+  resetStatus,
+ } = useMatchmaking();
  const gameId = searchParams.get("practice_id");
  const matchId = searchParams.get("match_id");
  const [confirmOpen, setConfirmOpen] = useState(false);
@@ -41,9 +55,13 @@ export default function PlayPage() {
 
  const {
   status: roomStatus,
+  isRoomActive,
   isOwner,
   roomCode,
   opponentName,
+  myName,
+  roomFee,
+  roomTimeMs,
   expiresInSeconds,
   createRoom,
   joinRoom,
@@ -54,6 +72,13 @@ export default function PlayPage() {
   setRoomOpen(false);
   navigate(gamePath, { replace: true });
  });
+
+ useEffect(() => {
+  dispatch(setFindingMatch(isSearching || isRoomActive));
+  return () => {
+   dispatch(setFindingMatch(false));
+  };
+ }, [isSearching, isRoomActive, dispatch]);
 
  useEffect(() => {
   if (status !== "found") return;
@@ -75,8 +100,9 @@ export default function PlayPage() {
  }, [roomStatus]);
 
  useEffect(() => {
-  if (status === "queued" || roomOpen) preloadGameRoom();
- }, [status, roomOpen, preloadGameRoom]);
+  if (status === "queued" || status === "revealing" || roomOpen || practiceOpen)
+   preloadGameRoom();
+ }, [status, roomOpen, practiceOpen, preloadGameRoom]);
 
  if (matchId || gameId) {
   return (
@@ -133,8 +159,14 @@ export default function PlayPage() {
 
  const handleConfirmClose = () => {
   if (status === "joining" || status === "queued") leaveQueue();
+  if (status === "timeout") resetStatus();
   setConfirmOpen(false);
   setConfirmPool(null);
+ };
+
+ const handlePickAnotherBet = () => {
+  resetStatus();
+  setSheetOpen(true);
  };
 
  return (
@@ -150,10 +182,11 @@ export default function PlayPage() {
    </Box>
 
    <Box customClass="cta-bottom">
-    <Text customClass="play-hint">
+    {/* <Text customClass="play-hint">
      {tapPlayNowHintText}
      <icons.chevronDown />
-    </Text>
+    </Text> */}
+    <LiveWinsTicker />
     <Button
      type="button"
      variant="contained"
@@ -196,6 +229,9 @@ export default function PlayPage() {
     isOwner={isOwner}
     roomCode={roomCode}
     opponentName={opponentName}
+    myName={myName}
+    roomFee={roomFee}
+    roomTimeMs={roomTimeMs}
     expiresInSeconds={expiresInSeconds}
     onCreateRoom={createRoom}
     onJoinRoom={joinRoom}
@@ -208,10 +244,15 @@ export default function PlayPage() {
     status={status}
     queuedPool={queuedPool}
     confirmPool={confirmPool}
+    opponentName={poolOpponentName}
+    confirmTone={poolTone(pools.findIndex((p) => p.id === confirmPool?.id))}
+    PoolLabel={PoolLabel}
     secondsLeft={secondsLeft}
     onLeaveQueue={leaveQueue}
     onConfirmJoin={handleConfirmJoin}
     onConfirmCancel={handleConfirmCancel}
+    onRetry={retryQueue}
+    onPickAnotherBet={handlePickAnotherBet}
    />
   </Box>
  );

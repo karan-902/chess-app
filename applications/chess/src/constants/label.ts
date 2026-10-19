@@ -12,7 +12,7 @@ export const CATEGORY_LABELS: Record<GameCategory, string> = {
  BULLET: "BULLET",
  BLITZ: "BLITZ",
  RAPID: "RAPID",
- CLASSICAL: "CLASSICAL",
+ CLASSICAL: "CLASSIC",
 };
 
 export const DIFFICULTY_LABELS: Record<Difficulty, string> = {

@@ -1,4 +1,5 @@
 @use "sass:map";
+@use "sass:math";
 
 :root {
  --color-red-100: oklch(93.6% 0.032 17.717);
@@ -76,19 +77,43 @@
 
 :root {
  color-scheme: dark;
- --app-bg: #090b14;
- --app-secondary: #171c2b;
- --app-surface: #111522;
- --app-sheet: #1a1f2e;
- --app-card-border: #2a3042;
- --app-line: #202638;
+ --app-bg: #090b20;
+ --app-secondary: #16194b;
+ --app-surface: #101337;
+ --app-sheet: #121540;
+ --app-card-border: #1f246b;
+ --app-line: #191d57;
  --app-frame: var(--color-black);
- --app-text: #f7f8fc;
- --app-text-muted: #a8afbf;
- --app-btn-bg: #171c2b;
- --app-btn-border: #3a435a;
- --app-border-hover: #3a435a;
- --app-text-placeholder: #6f778a;
+ --app-text: #f4f7ff;
+ --app-text-muted: #b9bce6;
+ --app-btn-bg: #16194b;
+ --app-btn-border: #29308f;
+ --app-border-hover: #29308f;
+ --app-text-placeholder: color-mix(in srgb, var(--app-text) 35%, transparent);
+ --app-prize: var(--gold);
+ --app-entry-fee: var(--app-text);
+ --btn-edge-gold: #8a6a00;
+ --btn-edge-red: #5e0a18;
+ --btn-red-fill: linear-gradient(180deg, #e8455c, #c81e3a 50%, #a3142c);
+ --btn-ghost-bg: color-mix(in srgb, #ffffff 8%, transparent);
+ --btn-ghost-border: color-mix(in srgb, #ffffff 20%, transparent);
+ --btn-ghost-edge: transparent;
+ --app-card: #1e1f33;
+ --app-sheet-fill: linear-gradient(180deg, #222668, #11143c);
+ // --app-row-fill: linear-gradient(90deg, #222668, #11143c);
+ --app-menu-fill: linear-gradient(180deg, #1c1d2e, #0c0c14);
+ --app-input-fill: linear-gradient(180deg, #222668, #11143c);
+ --app-podium-fill: linear-gradient(180deg, #2a2c48, #14152a);
+ --app-ticker: #1b1e3d;
+ --app-tab-active: var(--gold);
+ --app-glow: radial-gradient(
+  20rem 15.625rem at 50% 0%,
+  color-mix(in srgb, #4b4fd8 32%, transparent),
+  transparent
+ );
+ --app-balance: var(--gold);
+ --neo-outline: #3a3f74;
+ --neo-edge: #4b4fd8;
  --primary: #ffc400;
  --primary-hover: #ffd633;
  --primary-dark: #e5a900;
@@ -108,32 +133,53 @@
 
 :root[data-theme="light"] {
  color-scheme: light;
- --app-bg: #f5f7fb;
- --app-secondary: #f8f9fc;
+ --app-bg: #f3f4fc;
+ --app-secondary: #eceefa;
  --app-surface: #ffffff;
- --app-sheet: #eef1f6;
- --app-card-border: #dde2ec;
- --app-line: #dde2ec;
+ --app-sheet: #f7f8fe;
+ --app-card-border: #d7daf0;
+ --app-line: #e3e6f5;
  --app-frame: #dfe2e7;
- --app-text: #101522;
- --app-text-muted: #5e6678;
- --app-btn-bg: #f8f9fc;
- --app-btn-border: #c7cedc;
- --app-border-hover: #c7cedc;
- --app-text-placeholder: #9299a8;
- --primary: #f5b900;
- --primary-hover: #e5a900;
- --primary-dark: #e5a900;
+ --app-text: #12143a;
+ --app-text-muted: #555a86;
+ --app-btn-bg: #ffffff;
+ --app-btn-border: #bcc1e2;
+ --app-border-hover: #bcc1e2;
+ --app-text-placeholder: color-mix(in srgb, var(--app-text) 40%, transparent);
+ --app-prize: var(--greenish-teal);
+ --app-entry-fee: var(--app-text-muted);
+ --btn-edge-gold: #8a6a00;
+ --btn-edge-red: #8f1f2c;
+ --btn-red-fill: linear-gradient(180deg, #e8455c, #de3349 50%, #c81e3a);
+ --btn-ghost-bg: #ffffff;
+ --btn-ghost-border: #bcc1e2;
+ --btn-ghost-edge: #5b60a8;
+ --app-card: #ffffff;
+ --app-sheet-fill: linear-gradient(180deg, #ffffff, #eceefa);
+ // --app-row-fill: linear-gradient(90deg, #ffffff, #eceefa);
+ --app-sheet-card-border: #d3d7e1;
+ --app-sheet-card-edge: #6b7184;
+ --app-menu-fill: var(--app-surface);
+ --app-input-fill: #ffffff;
+ --app-podium-fill: linear-gradient(180deg, #ffffff, #eceefa);
+ --app-ticker: #ffffff;
+ --app-tab-active: var(--app-text);
+ --app-balance: var(--app-text);
+ --neo-outline: var(--app-card-border);
+ --neo-edge: var(--btn-ghost-edge);
+ --primary: #f2b200;
+ --primary-hover: #e0a200;
+ --primary-dark: #e0a200;
  --primary-contrast: #0b0d14;
- --secondary: #2868e8;
+ --secondary: #2862e0;
  --secondary-contrast: #ffffff;
- --warning: #ff9f1c;
- --error: #e5394f;
+ --warning: #d97f00;
+ --error: #de3349;
  --gold: var(--primary);
- --cyan: #2868e8;
+ --cyan: #2862e0;
  --pale-red: var(--error);
  --brink-pink: #e06a5a;
- --greenish-teal: #159957;
+ --greenish-teal: #0f7d4c;
  --backdrop-center: #1a1d22;
  --backdrop-edge: #000000;
 }
@@ -141,6 +187,7 @@
  @return color-mix(in srgb, #{$color} #{$opacity * 100%}, transparent);
 }
 $white: #fff;
+$auraIndigo: #787eff;
 $paleRed: var(--pale-red);
 $brinkPink: var(--brink-pink);
 $greenishTeal: var(--greenish-teal);
@@ -166,22 +213,68 @@ $medalGold: #c9a227;
 $medalSilver: #9aa0a6;
 $medalBronze: #b5651d;
 
-$font7: 7px;
-$font8: 8px;
-$font10: 10px;
-$font11: 11px;
-$font12: 12px;
-$font13: 13px;
-$font14: 14px;
-$font15: 15px;
-$font16: 16px;
-$font18: 18px;
-$font20: 20px;
-$font22: 22px;
-$font24: 24px;
-$font30: 30px;
-$font40: 40px;
-$font48: 48px;
+$text-steps: (
+ 7: (7px, 7px, 7px),
+ 8: (8px, 8px, 8px),
+ 9: (9px, 9px, 9px),
+ 10: (12px, 12px, 12px),
+ 11: (12px, 12px, 13px),
+ 12: (12px, 13px, 13px),
+ 13: (13px, 14px, 14px),
+ 14: (14px, 15px, 15px),
+ 15: (15px, 16px, 16px),
+ 16: (16px, 17px, 17px),
+ 17: (17px, 18px, 18px),
+ 18: (18px, 19px, 20px),
+ 20: (20px, 21px, 22px),
+ 22: (22px, 24px, 24px),
+ 24: (24px, 26px, 26px),
+ 26: (26px, 28px, 28px),
+ 28: (28px, 30px, 30px),
+ 30: (30px, 32px, 32px),
+ 34: (34px, 36px, 36px),
+ 36: (36px, 38px, 38px),
+ 38: (38px, 40px, 40px),
+ 40: (40px, 44px, 44px),
+ 42: (42px, 44px, 46px),
+ 44: (44px, 48px, 48px),
+ 48: (48px, 52px, 52px),
+ 52: (52px, 56px, 56px),
+ 56: (56px, 60px, 60px),
+);
+
+@function text-token($size) {
+ @return var(--font#{$size}, #{math.div($size, 16)}rem);
+}
+
+$font7: text-token(7);
+$font8: text-token(8);
+$font9: text-token(9);
+$font10: text-token(10);
+$font11: text-token(11);
+$font12: text-token(12);
+$font13: text-token(13);
+$font14: text-token(14);
+$font15: text-token(15);
+$font16: text-token(16);
+$font17: text-token(17);
+$font18: text-token(18);
+$font20: text-token(20);
+$font22: text-token(22);
+$font24: text-token(24);
+$font26: text-token(26);
+$font28: text-token(28);
+$font30: text-token(30);
+$font34: text-token(34);
+$font36: text-token(36);
+$font38: text-token(38);
+$font40: text-token(40);
+$font42: text-token(42);
+$font44: text-token(44);
+$font48: text-token(48);
+$font52: text-token(52);
+$font56: text-token(56);
+$input-font-min: 16px;
 
 $fontOutfitThin: "Outfit-Thin";
 $fontOutfitExtraLight: "Outfit-ExtraLight";
@@ -209,6 +302,139 @@ $backdropCenter: var(--backdrop-center);
 $backdropEdge: var(--backdrop-edge);
 $gold: var(--gold);
 $cyan: var(--cyan);
+$appPrize: var(--app-prize);
+$appEntryFee: var(--app-entry-fee);
+$btnEdgeGold: var(--btn-edge-gold);
+$btnEdgeRed: var(--btn-edge-red);
+$btnGhostBg: var(--btn-ghost-bg);
+$btnGhostEdge: var(--btn-ghost-edge);
+$btnGhostBorder: var(--btn-ghost-border);
+$appCard: var(--app-card);
+$appSheetFill: var(--app-sheet-fill);
+// $appRowFill: var(--app-row-fill);
+$poolBlocks: (
+ (#3bffad, #124d34),
+ (#ffcb45, #4d3d15),
+ (#ff7b9a, #4d1421),
+ (#c379ff, #33134d)
+);
+$poolInfoBg: #f7f7ff;
+$poolInk: #0d0d0d;
+$poolEdgeRight: #e0e0e0;
+$poolEdgeBottom: #8a8a8a;
+$appMenuFill: var(--app-menu-fill);
+$appInputFill: var(--app-input-fill);
+$appPodiumFill: var(--app-podium-fill);
+$appTicker: var(--app-ticker);
+$btnRedFill: var(--btn-red-fill);
+$btnGoldFill: linear-gradient(180deg, #ffe27a, #ffc400 50%, #e5a900);
+$slabEdgeGold: #b38600;
+$modeTintBullet: #3478ff;
+$modeTintBlitz: #ff9f1c;
+$modeTintRapid: #2ed47a;
+$modeTintClassical: #ffc400;
+$modeChipBullet: #2d58be;
+$modeChipBlitz: #d63a3a;
+$modeChipRapid: #15935a;
+$modeChipClassical: #7c4dd6;
+$appTabActive: var(--app-tab-active);
+$appGlow: var(--app-glow);
+$appBalance: var(--app-balance);
+$neoOutline: var(--neo-outline);
+$neoEdge: var(--neo-edge);
+$radius-card: 5px;
+
+@mixin neo-edge($color: $neoEdge, $x: 3px, $y: $x, $important: false) {
+ @if $important {
+  box-shadow: $x $y 0 $ycolor !important;
+ } @else {
+  box-shadow: $x $y 0 $color;
+ }
+}
+
+@mixin sheet-pattern(
+ $color: alpha($appText, 0.035),
+ $clear: radial-gradient(70% 40% at 50% 50%, transparent 55%, #000)
+) {
+ content: "";
+ position: absolute;
+ inset: 0;
+ z-index: -1;
+ background: $color;
+ mask:
+  url("/pattern-cubes.svg") 50% 0 / 1.515625rem 2.625rem repeat,
+  linear-gradient(180deg, transparent, #000 18%, #000 82%, transparent),
+  $clear;
+ mask-composite: intersect;
+ pointer-events: none;
+}
+
+@mixin long-arrow {
+ content: "";
+ width: 1.125rem;
+ height: 0.625rem;
+ background: currentColor;
+ mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 10' fill='none' stroke='black' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 5h16M12.5 1 17 5l-4.5 4'/%3E%3C/svg%3E")
+  center / contain no-repeat;
+}
+
+@mixin neo-plunk($edge: $neoEdge) {
+ border: 1px solid alpha($appText, 0.1);
+ box-shadow: none;
+}
+
+@mixin neo-elevated($right, $bottom, $depth: 3px) {
+ position: relative;
+ overflow: visible;
+ border-color: transparent;
+ box-shadow: none !important;
+ transition: transform 0.12s ease-in-out;
+
+ &::before,
+ &::after {
+  content: "";
+  position: absolute;
+  transform-origin: 0 0;
+  pointer-events: none;
+  transition: opacity 0.12s ease-in-out;
+ }
+
+ &::before {
+  top: -1px;
+  left: calc(100% + 1px);
+  width: $depth;
+  height: calc(100% + 2px);
+  background: $right;
+  transform: skewY(45deg);
+ }
+
+ &::after {
+  top: calc(100% + 1px);
+  left: -1px;
+  width: calc(100% + 2px);
+  height: $depth;
+  background: $bottom;
+  transform: skewX(45deg);
+ }
+
+ &:active:not(.Mui-disabled) {
+  transform: translate3d($depth, $depth, 0);
+
+  &::before,
+  &::after {
+   opacity: 0;
+  }
+ }
+
+ &.Mui-disabled::before,
+ &.Mui-disabled::after {
+  display: none;
+ }
+
+ @media (prefers-reduced-motion: reduce) {
+  transition: none;
+ }
+}
 
 $space-4: 0.25rem;
 $space-8: 0.5rem;
@@ -237,6 +463,20 @@ $breakpoints: (
   @error "Unknown breakpoint `#{$name}`. Available: #{map.keys($breakpoints)}";
  }
  @media (min-width: map.get($breakpoints, $name)) {
+  @content;
+ }
+}
+
+$height-breakpoints: (
+ medium: 640px,
+ tall: 760px,
+);
+
+@mixin from-height($name) {
+ @if not map.has-key($height-breakpoints, $name) {
+  @error "Unknown height breakpoint `#{$name}`. Available: #{map.keys($height-breakpoints)}";
+ }
+ @media (min-height: map.get($height-breakpoints, $name)) {
   @content;
  }
 }

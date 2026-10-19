@@ -32,7 +32,7 @@ export function CustomModal({
     paper: { className: classNames("common-modal", customClass) },
    }}
    disableScrollLock
-   container={() => document.querySelector(".app-shell") as HTMLElement}
+   container={() => document.querySelector(".app-root") as HTMLElement}
    {...props}
   >
    {title && <DialogTitle className="modal-title">{title}</DialogTitle>}

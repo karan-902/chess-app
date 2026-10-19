@@ -1,9 +1,7 @@
 @use "default.scss" as *;
 
 .common-app-bar {
- background: $appBg !important;
- backdrop-filter: blur(14px);
- -webkit-backdrop-filter: blur(14px);
+ background: transparent !important;
  box-shadow: none !important;
 
  .MuiToolbar-root {
@@ -20,5 +18,10 @@
   align-items: center;
   color: $gold;
   text-decoration: none;
+
+  img {
+   width: auto;
+   height: 2.875rem;
+  }
  }
 }

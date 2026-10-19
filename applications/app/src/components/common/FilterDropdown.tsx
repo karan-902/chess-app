@@ -23,7 +23,7 @@ export default function FilterDropdown<T extends string>({
   <>
    <Button
     type="button"
-    customClass="filter-dropdown-btn"
+    customClass="filter-dropdown-btn dropdown"
     endIcon={isOpen ? "chevronUp" : "chevronDown"}
     aria-haspopup="menu"
     aria-expanded={isOpen}

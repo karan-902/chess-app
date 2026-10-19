@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useBlocker } from "react-router-dom";
+import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import ChessBoard from "@gopvp/chess/src/components/board/Board";
@@ -38,12 +39,20 @@ import type { IGameRoomProps } from "@gopvp/chess/src/types/component";
 import {
  resignText,
  drawText,
- opponentOfferedDrawText,
+ drawOfferedText,
+ offersDrawText,
  acceptText,
  declineText,
  waitingForOpponentText,
+ winText,
+ isReconnectingText,
+ moveOfText,
+ startPositionText,
 } from "@gopvp/chess/src/constants/message";
+import { practiceText } from "@gopvp/common/src/constants/message";
+import { formatAmount } from "@gopvp/common/src/util/format";
 import Button from "@gopvp/common/src/components/Button/Button";
+import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
 import { icons } from "@gopvp/common/src/components/images";
 import ResignSheet from "@gopvp/chess/src/components/common/ResignSheet";
 
@@ -54,7 +63,7 @@ function pickBySide<T>(side: "w" | "b", whiteVal: T, blackVal: T): T {
 export default function GameRoom({ mode }: IGameRoomProps) {
  const navigate = useNavigate();
  const dispatch = useChessDispatch();
- const { playPath } = useGameContext();
+ const { playPath, isRevealing } = useGameContext();
 
  const {
   isPvc,
@@ -67,7 +76,7 @@ export default function GameRoom({ mode }: IGameRoomProps) {
   myScoreLabel,
   opponentName,
   opponentScoreLabel,
-  betAmount,
+  prize,
   isStarted,
  } = useGameRoomSetup(mode);
 
@@ -93,6 +102,7 @@ export default function GameRoom({ mode }: IGameRoomProps) {
   getCapturedPieces,
   getPremoveMoves,
   getPremovePieceColor,
+  getPremovePieceCode,
  } = useChessGame();
 
  const { viewIndex, isReviewing, displayFen, goBack, goForward, jumpTo } =
@@ -101,7 +111,7 @@ export default function GameRoom({ mode }: IGameRoomProps) {
  const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
  const [premoveFrom, setPremoveFrom] = useState<string | null>(null);
  const [premoveQueue, setPremoveQueue] = useState<
-  { from: string; to: string }[]
+  { from: string; to: string; capture?: string }[]
  >([]);
  const [flashSquare, setFlashSquare] = useState<string | null>(null);
  const [pendingPromotion, setPendingPromotion] = useState<{
@@ -161,8 +171,11 @@ export default function GameRoom({ mode }: IGameRoomProps) {
  }, [gameId]);
 
  useEffect(() => {
-  if (turn === playerSide) setPremoveFrom(null);
- }, [turn, playerSide]);
+  if (turn !== playerSide || !premoveFrom) return;
+  if (premoveQueue.length === 0 && getLegalMoves(premoveFrom).length > 0)
+   setSelectedSquare(premoveFrom);
+  setPremoveFrom(null);
+ }, [turn, playerSide, premoveFrom, premoveQueue.length, getLegalMoves]);
 
  const {
   whiteTimer,
@@ -219,6 +232,7 @@ export default function GameRoom({ mode }: IGameRoomProps) {
  const {
   clockReady,
   drawOffer,
+  isDrawOffered,
   isOpponentOffline,
   firstMoveSeconds,
   sendMove,
@@ -261,7 +275,11 @@ export default function GameRoom({ mode }: IGameRoomProps) {
   const timer = setTimeout(() => {
    const [next, ...rest] = premoveQueue;
    setPremoveQueue(rest);
-   const result = commitMoveRef.current(next.from, next.to);
+   const isTargetGone =
+    !!next.capture && getPremovePieceCode(next.to) !== next.capture;
+   const result = isTargetGone
+    ? null
+    : commitMoveRef.current(next.from, next.to);
    if (result) {
     navigator.vibrate?.(PREMOVE_FIRE_VIBRATE_MS);
    } else {
@@ -271,7 +289,7 @@ export default function GameRoom({ mode }: IGameRoomProps) {
    }
   });
   return () => clearTimeout(timer);
- }, [turn, gameEnded, playerSide, premoveQueue]);
+ }, [turn, gameEnded, playerSide, premoveQueue, getPremovePieceCode]);
 
  const handleSquareClick = (square: string) => {
   if (!isStarted || gameEnded || isReviewing || pendingPromotion) return;
@@ -279,7 +297,9 @@ export default function GameRoom({ mode }: IGameRoomProps) {
   if (turn !== playerSide) {
    if (premoveFrom) {
     if (premoveTargets.includes(square)) {
-     setPremoveQueue((q) => [...q, { from: premoveFrom, to: square }]);
+     const target = getPremovePieceCode(square, premoveQueue);
+     const capture = target && target[0] !== playerSide ? target : undefined;
+     setPremoveQueue((q) => [...q, { from: premoveFrom, to: square, capture }]);
      setPremoveFrom(null);
      playSound("move", PREMOVE_QUEUE_SOUND_VOLUME);
     } else {
@@ -360,6 +380,16 @@ export default function GameRoom({ mode }: IGameRoomProps) {
 
  return (
   <Box customClass="game-room">
+   <Box customClass="gr-win-counter">
+    <Text component="span" customClass="gr-win-label">
+     {isPvc ? practiceText : winText}
+    </Text>
+    {!isPvc && (
+     <Text component="span" customClass="gr-win-amount">
+      {formatAmount(prize)}
+     </Text>
+    )}
+   </Box>
    <PlayerRow
     variant="opponent"
     active={!myTurnActive}
@@ -371,11 +401,10 @@ export default function GameRoom({ mode }: IGameRoomProps) {
     clock={oppClock}
     clockReady={clockReady}
     lowTime={clockReady && oppTimeMs < CLOCK_LOW_TIME_MS}
-    isReconnecting={isOpponentOffline}
     firstMoveSeconds={myTurnActive ? null : firstMoveSeconds}
    />
 
-   <Box customClass="gr-board-wrap">
+   <Box customClass="gr-board-wrap" data-reveal-target>
     <ChessBoard
      fen={boardFen}
      selectedSquare={myTurnActive ? selectedSquare : premoveFrom}
@@ -391,7 +420,27 @@ export default function GameRoom({ mode }: IGameRoomProps) {
      lastMove={isReviewing ? null : lastMove}
      flipped={playerSide === "b"}
      onEntranceEnd={markBoardReady}
+     holdEntrance={isRevealing}
     />
+    {isOpponentOffline ? (
+     <Box customClass="gr-board-tag reconnecting">
+      <icons.wifiOff />
+      <Text component="span" customClass="gr-board-tag-text">
+       <b>{opponentName}</b> {isReconnectingText}
+      </Text>
+     </Box>
+    ) : (
+     isReviewing &&
+     viewIndex !== null && (
+      <Box customClass="gr-board-tag">
+       <Text component="span" customClass="gr-board-tag-text">
+        {viewIndex === 0
+         ? startPositionText
+         : moveOfText(viewIndex, fenHistory.length - 1)}
+       </Text>
+      </Box>
+     )
+    )}
     {pendingPromotion && (
      <PromotionOverlay
       playerSide={playerSide}
@@ -405,6 +454,16 @@ export default function GameRoom({ mode }: IGameRoomProps) {
     fenHistory={fenHistory}
     viewIndex={viewIndex}
     onJump={jumpTo}
+    premove={
+     !isReviewing && premoveQueue.length > 0
+      ? {
+         ...premoveQueue[0],
+         pieceCode: getPremovePieceCode(premoveQueue[0].from),
+        }
+      : null
+    }
+    onCancelPremoves={clearPremoves}
+    status={isStarted ? null : waitingForOpponentText}
     isReviewing={isReviewing}
     goBack={goBack}
     goForward={goForward}
@@ -420,66 +479,67 @@ export default function GameRoom({ mode }: IGameRoomProps) {
     clock={myClock}
     clockReady={clockReady}
     lowTime={clockReady && myTimeMs < CLOCK_LOW_TIME_MS}
-    hasPremoves={!isReviewing && premoveQueue.length > 0}
-    onCancelPremoves={clearPremoves}
     firstMoveSeconds={myTurnActive ? firstMoveSeconds : null}
    />
 
-   {!isStarted && (
-    <Box customClass="gr-draw-banner">
-     <Text component="span">{waitingForOpponentText}</Text>
-    </Box>
-   )}
-
-   {drawOffer && (
-    <Box customClass="gr-draw-banner gr-draw-offer">
-     <Box customClass="gr-draw-offer-text">
-      <icons.handshake />
-      <Text component="span" customClass="row-title">
-       {opponentOfferedDrawText}
-      </Text>
-     </Box>
-     <Box customClass="gr-draw-offer-actions">
-      <Button
-       variant="outlined"
-       customClass="gr-draw-btn common-play"
-       onClick={declineDraw}
-      >
-       {declineText}
-      </Button>
-      <Button
-       variant="contained"
-       customClass="common-play"
-       onClick={acceptDraw}
-      >
-       {acceptText}
-      </Button>
-     </Box>
-    </Box>
-   )}
-
    <Box customClass="gr-foot">
-    <Button
-     customClass="gr-resign-btn cancel-btn common-play"
-     onClick={() => setResignOpen(true)}
-    >
-     {resignText}
-    </Button>
-    {!isPvc && (
-     <Button
-      variant="outlined"
-      customClass="gr-draw-btn common-play"
-      onClick={offerDraw}
-     >
-      {drawText}
-     </Button>
+    {drawOffer ? (
+     <Box customClass="gr-draw-offer">
+      <Box customClass="gr-draw-offer-icon">
+       <icons.handshake />
+      </Box>
+      <Box customClass="gr-draw-offer-copy">
+       <Text component="span" customClass="gr-draw-offer-name">
+        {opponentName}
+       </Text>
+       <Text component="span" customClass="gr-draw-offer-text">
+        {offersDrawText}
+       </Text>
+      </Box>
+      <CustomIconButton
+       customClass="gr-draw-offer-btn decline"
+       onClick={declineDraw}
+       aria-label={declineText}
+       icon="x"
+      />
+      <CustomIconButton
+       customClass="gr-draw-offer-btn accept"
+       onClick={acceptDraw}
+       aria-label={acceptText}
+       icon="check"
+      />
+      <Box customClass="gr-draw-offer-timer" />
+     </Box>
+    ) : (
+     <>
+      {!isPvc && (
+       <Button
+        variant="text"
+        startIcon="handshake"
+        customClass={classNames(
+         "sheet-cancel-link gr-draw-btn",
+         isDrawOffered && "offered",
+        )}
+        disabled={isDrawOffered}
+        onClick={offerDraw}
+       >
+        {isDrawOffered ? drawOfferedText : drawText}
+       </Button>
+      )}
+      <Button
+       variant="text"
+       customClass="sheet-cancel-link gr-resign-btn"
+       onClick={() => setResignOpen(true)}
+      >
+       {resignText}
+      </Button>
+     </>
     )}
    </Box>
 
    <ResignSheet
     open={resignOpen || (blocker.state === "blocked" && !gameEnded)}
     isPvc={isPvc}
-    betAmount={betAmount}
     onKeepPlaying={handleKeepPlaying}
     onResign={handleResignConfirm}
    />
@@ -489,6 +549,7 @@ export default function GameRoom({ mode }: IGameRoomProps) {
      gameEnded={gameEnded}
      outcome={MATCH_RESULT_OUTCOMES[gameEnded.result]}
      isPvc={isPvc}
+     myName={myName}
      opponentName={opponentName}
      onNewGame={() => navigate(playPath, { replace: true })}
     />

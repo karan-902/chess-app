@@ -6,36 +6,47 @@ import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
 import Input from "@gopvp/common/src/components/Input/Input";
 import CopyButton from "@gopvp/app/src/components/common/CopyButton";
-import { speedLogo, qrLogo } from "@gopvp/common/src/components/images";
+import {
+ speedLogo,
+ qrLogo,
+ // Timer,
+ Zap,
+ icons,
+} from "@gopvp/common/src/components/images";
+import { formatAmount, formatMMSS } from "@gopvp/common/src/util/format";
 import WalletSheetShell from "@gopvp/app/src/components/common/WalletSheetShell";
 import WalletSuccessStage from "@gopvp/app/src/components/common/WalletSuccessStage";
 import WalletInfoNote from "@gopvp/app/src/components/common/WalletInfoNote";
 import { useWalletModal } from "@gopvp/app/src/context/WalletModalContext";
-import { useSocket } from "@gopvp/app/src/context/SocketContext";
+import { useReduxSelector } from "@gopvp/app/src/redux/hooks";
 import { paymentRequest } from "@gopvp/app/src/hooks/useWallet";
-import { getApiErrorResponse } from "@gopvp/common/src/util/api";
-import type {
- IPaymentRequestResponse,
- ITransactionCompletedEvent,
-} from "@gopvp/common/src/types/response";
+import { showApiErrorToast } from "@gopvp/common/src/util/api";
+import type { IPaymentRequestResponse } from "@gopvp/common/src/types/response";
 import {
  depositText,
- depositingAmountText,
+ depositingText,
+ instantPayViaText,
+ lightningText,
+ lightningInvoiceText,
+ expiresInLabelText,
  fastSecuredTransparentText,
  buyCryptoInstantlyText,
  enterAmountText,
  generateQrCodeText,
  amountRequiredText,
  maxDepositAmountText,
- btcOnlyWarningText,
- scanToDepositText,
- expiresInText,
+ // btcOnlyWarningText,
+ // scanToDepositText,
  qrExpiredText,
  paymentReceivedText,
  depositsNotWithdrawableText,
  speedText,
 } from "@gopvp/app/src/constants/message";
-import { MAX_DEPOSIT_USD } from "@gopvp/app/src/constants/limit";
+import {
+ MAX_DEPOSIT_USD,
+ MATCH_TIMER_LOW_SECONDS,
+} from "@gopvp/app/src/constants/limit";
+import { DEPOSIT_CHIP_AMOUNTS } from "@gopvp/app/src/constants/option";
 import { sanitizeAmountInput } from "@gopvp/app/src/utils";
 import { backText } from "@gopvp/common/src/constants/message";
 import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
@@ -43,20 +54,21 @@ import {
  QR_BACKGROUND_COLOR,
  QR_FOREGROUND_COLOR,
 } from "@gopvp/app/src/constants/color";
-import { SOCKET_EVENTS } from "@gopvp/common/src/constants/event";
 
 type Stage = "amount" | "qr" | "success";
 
-function formatCountdown(ms: number) {
- const totalSeconds = Math.max(0, Math.floor(ms / 1000));
- const minutes = Math.floor(totalSeconds / 60);
- const seconds = totalSeconds % 60;
- return `${minutes}:${seconds.toString().padStart(2, "0")}`;
-}
+// function formatCountdown(ms: number) {
+//  const totalSeconds = Math.max(0, Math.floor(ms / 1000));
+//  const minutes = Math.floor(totalSeconds / 60);
+//  const seconds = totalSeconds % 60;
+//  return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+// }
 
 export default function DepositSheet() {
  const { openModal, close } = useWalletModal();
- const { socket } = useSocket();
+ const lastTransaction = useReduxSelector(
+  (state) => state.wallet.lastTransaction,
+ );
  const open = openModal === "deposit";
 
  const [stage, setStage] = useState<Stage>("amount");
@@ -93,15 +105,13 @@ export default function DepositSheet() {
  }, [stage, payment]);
 
  useEffect(() => {
-  if (stage !== "qr" || !socket) return;
-  const onCompleted = (data: ITransactionCompletedEvent) => {
-   if (data.type === "DEPOSIT") setStage("success");
-  };
-  socket.on(SOCKET_EVENTS.TRANSACTION_COMPLETED, onCompleted);
-  return () => {
-   socket.off(SOCKET_EVENTS.TRANSACTION_COMPLETED, onCompleted);
-  };
- }, [stage, socket]);
+  if (
+   stage === "qr" &&
+   lastTransaction?.id === payment?.deposit_id &&
+   lastTransaction?.status === "COMPLETED"
+  )
+   setStage("success");
+ }, [stage, payment, lastTransaction]);
 
  const amountUsd = Number(amount);
  const isAmountInvalid = !amount || Number.isNaN(amountUsd);
@@ -124,7 +134,7 @@ export default function DepositSheet() {
    setExpired(false);
    setStage("qr");
   } catch (err) {
-   setAmountError(getApiErrorResponse(err)?.data?.message ?? "");
+   showApiErrorToast(err);
   } finally {
    setSubmitting(false);
   }
@@ -144,11 +154,12 @@ export default function DepositSheet() {
        id="deposit-amount"
        type="text"
        inputMode="decimal"
+       autoComplete="off"
        label={enterAmountText}
        labelClassName="wallet-label"
        fullWidth
        disabled={submitting}
-       placeholder="0.00"
+       placeholder="0"
        customClass="amount-input-hero"
        value={amount}
        onChange={(e) => {
@@ -158,6 +169,26 @@ export default function DepositSheet() {
        isError={!!amountError}
        helperText={amountError}
       />
+     </Box>
+     <Box customClass="tx-filter-chip-grid deposit-amount-chips">
+      {DEPOSIT_CHIP_AMOUNTS.map((chipAmount) => (
+       <Button
+        key={chipAmount}
+        type="button"
+        disabled={submitting}
+        customClass={classNames(
+         "filter-dropdown-btn",
+         amount === String(chipAmount) && "active",
+        )}
+        aria-pressed={amount === String(chipAmount)}
+        onClick={() => {
+         setAmount(String(chipAmount));
+         setAmountError("");
+        }}
+       >
+        {formatAmount(chipAmount)}
+       </Button>
+      ))}
      </Box>
      <Box customClass="deposit-speed-wrapper">
       <Box customClass="deposit-speed-badge">
@@ -193,13 +224,26 @@ export default function DepositSheet() {
        icon="arrowLeft"
       />
       <Text customClass="modal-heading value-heading">
-       {depositingAmountText(amountUsd)}
+       {depositingText}{" "}
+       <Text component="span" customClass="deposit-heading-amount">
+        {formatAmount(amountUsd)}
+       </Text>
       </Text>
      </Box>
 
-     <WalletInfoNote text={btcOnlyWarningText} />
+     {/* <WalletInfoNote text={btcOnlyWarningText} /> */}
 
-     <Text customClass="deposit-scan-hint caption">{scanToDepositText}</Text>
+     {/* <Text customClass="deposit-scan-hint caption">{scanToDepositText}</Text> */}
+
+     <Box customClass="deposit-lightning-row">
+      <Zap size={14} strokeWidth={2.4} />
+      <Text component="span" customClass="deposit-lightning-text">
+       {instantPayViaText}{" "}
+       <Text component="span" customClass="deposit-lightning-name">
+        {lightningText}
+       </Text>
+      </Text>
+     </Box>
 
      <Box customClass="deposit-qr-wrap">
       <QRCodeSVG
@@ -217,16 +261,49 @@ export default function DepositSheet() {
       />
      </Box>
 
+     {!expired && (
+      <Text
+       customClass={classNames(
+        "match-timer",
+        remainingMs / 1000 <= MATCH_TIMER_LOW_SECONDS && "low",
+       )}
+       aria-label={expiresInLabelText}
+      >
+       <icons.timer />
+       {formatMMSS(Math.floor(remainingMs / 1000))}
+      </Text>
+     )}
+
+     <Text customClass="deposit-invoice-label">{lightningInvoiceText}</Text>
      <Box customClass="deposit-address-row">
       <Text customClass="deposit-address">{address}</Text>
-      <CopyButton text={payment.payment_request} />
+      <CopyButton text={payment.payment_request} showLabel />
      </Box>
 
-     <Text
-      customClass={classNames("deposit-timer", "caption", expired && "expired")}
-     >
-      {expired ? qrExpiredText : expiresInText(formatCountdown(remainingMs))}
-     </Text>
+     {expired && (
+      <Text customClass="deposit-timer caption expired">{qrExpiredText}</Text>
+     )}
+     {/* {!expired && (
+      <>
+       <Box customClass="deposit-expiry-row">
+        <Timer size={16} strokeWidth={2.2} />
+        <Text component="span" customClass="deposit-expiry-label">
+         {expiresInLabelText}
+        </Text>
+        <Text component="span" customClass="deposit-expiry-time">
+         {formatCountdown(remainingMs)}
+        </Text>
+       </Box>
+       <Box customClass="deposit-expiry-track">
+        <Box
+         customClass="deposit-expiry-fill"
+         style={{
+          transform: `scaleX(${payment.ttl ? remainingMs / (payment.ttl * 1000) : 0})`,
+         }}
+        />
+       </Box>
+      </>
+     )} */}
     </Box>
    )}
 

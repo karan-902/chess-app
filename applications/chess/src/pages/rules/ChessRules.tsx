@@ -2,10 +2,21 @@ import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Card from "@gopvp/common/src/components/Card/Card";
 import Text from "@gopvp/common/src/components/Text/Text";
-import { Crown, Handshake, Timer } from "@gopvp/common/src/components/images";
+import {
+ Check,
+ Crown,
+ DollarSign,
+ Handshake,
+ Scale,
+ Timer,
+} from "@gopvp/common/src/components/images";
+import type { LucideIcon } from "@gopvp/common/src/components/images";
 import {
  howBettingWorksText,
- bettingExplainedText,
+ winnerTakeMostText,
+ equalBetText,
+ winnerTakesPotText,
+ withdrawableWinningsText,
  payoutsText,
  anyWinText,
  potMinusFeeText,
@@ -13,69 +24,104 @@ import {
  splitPotMinusFeeText,
  inactiveTooLongText,
  forfeitText,
- payoutExampleText,
+ exampleText,
+ examplePotText,
+ exampleWinnerText,
+ exampleDrawText,
  fairMatchingText,
- fairMatchingExplainedText,
- appVersionText,
+ matchedByScoreText,
+ evenBoardText,
  pieceSetCreditText,
 } from "@gopvp/chess/src/constants/message";
 
 const PAYOUT_ROWS = [
- { icon: Crown, tone: "gold", label: anyWinText, value: potMinusFeeText },
- {
-  icon: Handshake,
-  tone: "silver",
-  label: drawText,
-  value: splitPotMinusFeeText,
- },
+ { icon: Crown, label: anyWinText, value: potMinusFeeText },
+ { icon: Handshake, label: drawText, value: splitPotMinusFeeText },
  {
   icon: Timer,
-  tone: "bronze",
   label: inactiveTooLongText,
   value: forfeitText,
+  isLoss: true,
  },
 ];
 
 const RULE_SECTIONS: {
  title: string;
- body: string;
+ icon: LucideIcon;
+ bullets?: string[];
  rows?: typeof PAYOUT_ROWS;
+ example?: string[];
 }[] = [
- { title: howBettingWorksText, body: bettingExplainedText },
- { title: payoutsText, rows: PAYOUT_ROWS, body: payoutExampleText },
- { title: fairMatchingText, body: fairMatchingExplainedText },
+ {
+  title: howBettingWorksText,
+  icon: DollarSign,
+  bullets: [
+   winnerTakeMostText,
+   equalBetText,
+   winnerTakesPotText,
+   withdrawableWinningsText,
+  ],
+ },
+ {
+  title: payoutsText,
+  icon: Crown,
+  rows: PAYOUT_ROWS,
+  example: [examplePotText, exampleWinnerText, exampleDrawText],
+ },
+ {
+  title: fairMatchingText,
+  icon: Scale,
+  bullets: [matchedByScoreText, evenBoardText],
+ },
 ];
 
 export default function ChessRules() {
  return (
   <Box customClass="rules-page">
-   {RULE_SECTIONS.map(({ title, body, rows }) => (
+   {RULE_SECTIONS.map(({ title, icon: TitleIcon, bullets, rows, example }) => (
     <Card key={title} customClass="rules-card">
-     <Text component="h3" customClass="section-heading">
-      {title}
-     </Text>
-     {rows?.map(({ icon: Icon, tone, label, value }) => (
+     <Box customClass="rules-title-row">
+      <TitleIcon strokeWidth={2} />
+      <Text component="h3" customClass="rules-title">
+       {title}
+      </Text>
+     </Box>
+     {bullets?.map((bullet) => (
+      <Box key={bullet} customClass="rules-bullet">
+       <Check strokeWidth={2.5} />
+       <Text customClass="rules-text">{bullet}</Text>
+      </Box>
+     ))}
+     {rows?.map(({ icon: Icon, label, value, isLoss }) => (
       <Box key={label} customClass="stat-row">
        <Box customClass="stat-label">
-        <Icon className={classNames("stat-icon", tone)} strokeWidth={2} />
+        <Icon className="stat-icon" strokeWidth={2} />
         <Text component="span" customClass="stat-title">
          {label}
         </Text>
        </Box>
-       <Text component="span" customClass="stat-val">
+       <Text
+        component="span"
+        customClass={classNames("stat-val", isLoss && "neg")}
+       >
         {value}
        </Text>
       </Box>
      ))}
-     <Text customClass="rules-text">{body}</Text>
+     {example && (
+      <Box customClass="rules-example">
+       <Text customClass="rules-example-title">{exampleText}</Text>
+       {example.map((line) => (
+        <Text key={line} customClass="rules-text">
+         {line}
+        </Text>
+       ))}
+      </Box>
+     )}
     </Card>
    ))}
 
-   <Text customClass="rules-about">
-    {appVersionText}
-    <br />
-    {pieceSetCreditText}
-   </Text>
+   <Text customClass="rules-about">{pieceSetCreditText}</Text>
   </Box>
  );
 }

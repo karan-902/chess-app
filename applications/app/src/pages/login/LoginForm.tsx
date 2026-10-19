@@ -1,6 +1,6 @@
 import * as yup from "yup";
 import { useState, useEffect, useRef } from "react";
-import { NavLink, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 // import { useNavigate } from "react-router-dom";
 // import { ArrowLeft } from "lucide-react";
 import { useFormik } from "formik";
@@ -10,8 +10,9 @@ import { useGoogleAuth } from "@gopvp/app/src/hooks/useGoogleAuth";
 import SelectCountryScreen from "@gopvp/app/src/pages/select-country/SelectCountryScreen";
 import {
  callAPIInterface,
- getApiErrorResponse,
+ showApiErrorToast,
 } from "@gopvp/common/src/util/api";
+import { showToastMessage } from "@gopvp/common/src/util/injectStore";
 import type { IApiErrorInfo } from "@gopvp/common/src/types/response";
 import { useReduxDispatch } from "@gopvp/app/src/redux/hooks";
 import { login } from "@gopvp/app/src/redux/auth/thunk";
@@ -31,10 +32,11 @@ import {
  // approveSignInEmailedText,
  // backToLoginText,
  welcomeBackText,
- jumpBackIntoGameText,
- enterYourPasswordText,
- nextMatchOneStepAwayText,
- noAccountPromptText,
+ championText,
+ pickRivalWinCashText,
+ enterPasswordJumpInText,
+ joinTheArenaText,
+ gloryStartsHereText,
  signUpText,
  wherePlayingFromText,
  pickCountryToFinishText,
@@ -83,7 +85,6 @@ export default function LoginForm() {
  );
  const [verifiedEmail, setVerifiedEmail] = useState("");
  const [verifiedUsername, setVerifiedUsername] = useState("");
- const [error, setError] = useState<string | null>(null);
  // const devicePoll = useDeviceApprovalPoll();
 
  // const handleApproved = (res: ILoginResponse) => {
@@ -98,7 +99,6 @@ export default function LoginForm() {
   initialValues: { email: "" },
   validationSchema: emailSchema,
   onSubmit: async (values, { setSubmitting }) => {
-   setError(null);
    try {
     const res = await callAPIInterface<IVerifyUserResponse, IVerifyUserBody>(
      "POST",
@@ -112,7 +112,10 @@ export default function LoginForm() {
     }
 
     if (!res.is_verified) {
-     setError(verifyEmailToContinueText);
+     showToastMessage({
+      toastMessage: verifyEmailToContinueText,
+      toastVariant: "error",
+     });
      // dispatch(
      //  showToast({
      //   isToastOpen: true,
@@ -128,8 +131,7 @@ export default function LoginForm() {
     setVerifiedUsername(res.username);
     setStep("password");
    } catch (err) {
-    const response = getApiErrorResponse(err);
-    if (response) setError(response.data?.message ?? "");
+    showApiErrorToast(err);
    } finally {
     setSubmitting(false);
    }
@@ -156,7 +158,6 @@ export default function LoginForm() {
   initialValues: { password: "" },
   validationSchema: passwordSchema,
   onSubmit: async (values, { setSubmitting }) => {
-   setError(null);
    dispatch(showLoader({ text: signingInText }));
    try {
     const res = await dispatch(
@@ -170,7 +171,7 @@ export default function LoginForm() {
 
     if (!res.country) setStep("country");
    } catch (err) {
-    const { isNetworkError, message } = err as IApiErrorInfo;
+    const { isNetworkError, status, message } = err as IApiErrorInfo;
     // if (err?.type === "account_not_verified") {
     //  dispatch(
     //   showToast({
@@ -182,7 +183,8 @@ export default function LoginForm() {
     //  navigate(`/verify-email?email=${encodeURIComponent(verifiedEmail)}`);
     //  return;
     // }
-    if (!isNetworkError) setError(message ?? null);
+    if (!isNetworkError && status !== 429 && message)
+     showToastMessage({ toastMessage: message, toastVariant: "error" });
    } finally {
     setSubmitting(false);
     dispatch(hideLoader());
@@ -191,7 +193,6 @@ export default function LoginForm() {
  });
 
  const handleChangeEmail = () => {
-  setError(null);
   passwordFormik.resetForm();
   focusEmailRef.current = true;
   setStep("email");
@@ -210,18 +211,21 @@ export default function LoginForm() {
   );
  }
 
- const loginFooter = (
-  <>
-   {noAccountPromptText} <NavLink to={ROUTES.REGISTER}>{signUpText}</NavLink>
-  </>
- );
+ const loginFooter = {
+  title: joinTheArenaText,
+  tagline: gloryStartsHereText,
+  actionText: signUpText,
+  to: ROUTES.REGISTER,
+ };
 
  // if (step === "waiting-approval") {
  //  return (
  //   <AuthLayout
  //    title={welcomeBackText}
- //    subtitle={jumpBackIntoGameText}
- //    footer={loginFooter}
+ //    titleAccent={championText}
+ //    subtitle={logInFindRivalText}
+ //    subtitleAccent={takeThePrizeText}
+ //    footerCard={loginFooter}
  //   >
  //    <WaitingApprovalScreen onBack={handleBackFromApproval} />
  //   </AuthLayout>
@@ -231,14 +235,14 @@ export default function LoginForm() {
  if (step === "password") {
   return (
    <AuthLayout
-    title={enterYourPasswordText}
-    subtitle={nextMatchOneStepAwayText}
+    title={welcomeBackText}
+    titleAccent={verifiedUsername}
+    subtitle={enterPasswordJumpInText}
    >
     <PasswordScreen
      verifiedEmail={verifiedEmail}
      verifiedUsername={verifiedUsername}
      formik={passwordFormik}
-     error={error}
      onChangeEmail={handleChangeEmail}
     />
    </AuthLayout>
@@ -248,12 +252,12 @@ export default function LoginForm() {
  return (
   <AuthLayout
    title={welcomeBackText}
-   subtitle={jumpBackIntoGameText}
-   footer={loginFooter}
+   titleAccent={championText}
+   subtitle={pickRivalWinCashText}
+   footerCard={loginFooter}
   >
    <EmailScreen
     formik={emailFormik}
-    error={error}
     isGoogleProcessing={isProcessing}
     onGoogleLogin={() => googleLogin()}
    />

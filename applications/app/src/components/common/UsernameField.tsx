@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Input from "@gopvp/common/src/components/Input/Input";
+import Text from "@gopvp/common/src/components/Text/Text";
 import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
 import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
 import CustomMenu from "@gopvp/common/src/components/Menu/Menu";
@@ -14,8 +15,11 @@ import {
  usernameText,
  enterUsernameText,
  clearUsernameText,
+ usernameHintText,
 } from "@gopvp/app/src/constants/message";
 import {
+ USERNAME_MIN_LENGTH,
+ USERNAME_MAX_LENGTH,
  USERNAME_SUGGESTION_MAX_LENGTH,
  USERNAME_CHECK_DEBOUNCE_MS,
 } from "@gopvp/app/src/constants/limit";
@@ -26,6 +30,7 @@ export default function UsernameField<TValues extends { username: string }>({
  formik,
  inputRef,
  customClass,
+ showHint = false,
 }: IUsernameFieldProps<TValues>) {
  const { value, error, touched, initialValue } =
   formik.getFieldMeta<string>("username");
@@ -35,6 +40,7 @@ export default function UsernameField<TValues extends { username: string }>({
  const suggestionSelectedRef = useRef(false);
  const fieldRef = useRef<HTMLDivElement>(null);
  const menuPaperRef = useRef<HTMLDivElement | null>(null);
+ const hasError = (touched || !!value) && !!error;
 
  useEffect(() => {
   if (suggestionSelectedRef.current) {
@@ -102,8 +108,8 @@ export default function UsernameField<TValues extends { username: string }>({
      onChange={formik.handleChange}
      onBlur={formik.handleBlur}
      disabled={formik.isSubmitting}
-     isError={(touched || !!value) && !!error}
-     helperText={(touched || value) && error ? error : undefined}
+     isError={hasError}
+     helperText={hasError ? error : undefined}
      endIcon={
       value ? (
        <CustomIconButton
@@ -120,6 +126,11 @@ export default function UsernameField<TValues extends { username: string }>({
      customClass={customClass}
      fullWidth
     />
+    {showHint && !hasError && (
+     <Text customClass="field-hint">
+      {usernameHintText(USERNAME_MIN_LENGTH, USERNAME_MAX_LENGTH)}
+     </Text>
+    )}
    </Box>
 
    <CustomMenu

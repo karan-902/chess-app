@@ -11,18 +11,14 @@
   }
  }
  .MuiPaper-root {
-  box-shadow: 0 4px 7px 3px $menuShadow;
-  border: 1px solid $menuBorder;
-  border-radius: 4px;
+  @include neo-plunk;
+  border-radius: 5px;
   margin-top: $space-4;
  }
  &.filter-dropdown-menu {
   .MuiPaper-root {
    min-width: 11rem;
-   border: 1px solid $appCardBorder;
-   border-radius: 5px;
    background: $appBg;
-   box-shadow: 0 8px 24px rgba($black, 0.4);
   }
 
   .common-menu-item {

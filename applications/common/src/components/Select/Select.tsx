@@ -17,7 +17,9 @@ import { KeyboardArrowDownIcon } from "@gopvp/common/src/components/images";
 import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
 import AlertMessage from "@gopvp/common/src/components/AlertMessage/AlertMessage";
+import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
 import { noResultsText } from "@gopvp/common/src/constants/message";
+import { SELECT_SKELETON_ROWS } from "@gopvp/common/src/constants/limit";
 import "./select.scss";
 
 export interface ISelectOption {
@@ -29,6 +31,8 @@ interface ISelectProps {
  value: string;
  onChange: (value: string) => void;
  onBlur?: () => void;
+ onOpen?: () => void;
+ loading?: boolean;
  options: ISelectOption[];
  placeholder?: string;
  isError?: boolean;
@@ -41,6 +45,8 @@ export function CustomSelect({
  value,
  onChange,
  onBlur,
+ onOpen,
+ loading,
  options,
  placeholder = "Select…",
  isError,
@@ -71,6 +77,7 @@ export function CustomSelect({
   if (open || disabled) return;
   setActiveIndex(Math.max(0, options.findIndex((o) => o.value === value)));
   setOpen(true);
+  onOpen?.();
  };
 
  const closeMenu = () => {
@@ -163,8 +170,14 @@ export function CustomSelect({
     style={{ width: anchorRef.current?.offsetWidth }}
    >
     <Paper className="common-select-menu">
-     <MenuList id={listId} role="listbox" dense>
-      {visibleOptions.length === 0 ? (
+     <MenuList id={listId} role="listbox" dense aria-busy={loading}>
+      {loading ? (
+       Array.from({ length: SELECT_SKELETON_ROWS }, (_, index) => (
+        <MenuItem key={index} disabled>
+         <Skeleton variant="text" customClass="select-option" />
+        </MenuItem>
+       ))
+      ) : visibleOptions.length === 0 ? (
        <MenuItem disabled>{noResultsText}</MenuItem>
       ) : (
        visibleOptions.map((option, index) => (
@@ -191,7 +204,7 @@ export function CustomSelect({
    </Popper>
 
    {isError && helperText && (
-    <AlertMessage severity="error" message={helperText} />
+    <AlertMessage severity="error" message={helperText} inline />
    )}
   </Box>
  );

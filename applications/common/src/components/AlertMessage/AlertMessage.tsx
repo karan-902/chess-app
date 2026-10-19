@@ -4,6 +4,7 @@ import "./alert-message.scss";
 import { forwardRef } from "react";
 import {
  CheckCircleIcon,
+ CircleAlert,
  ErrorIcon,
  WarningIcon,
  InfoIcon,
@@ -20,16 +21,22 @@ interface IAlertProps extends AlertProps {
  severity: AlertColor;
  message?: string;
  customClass?: string;
+ inline?: boolean;
 }
 
 export const AlertMessage = forwardRef<HTMLDivElement, IAlertProps>(
- function AlertMessage({ customClass, message, ...props }, ref) {
+ function AlertMessage({ customClass, message, inline, ...props }, ref) {
   return (
    <Alert
     {...props}
     ref={ref}
     iconMapping={iconsForAlert}
-    className={classNames("common-alert-message", customClass)}
+    icon={inline ? <CircleAlert strokeWidth={2.2} /> : props.icon}
+    className={classNames(
+     "common-alert-message",
+     inline && "inline",
+     customClass,
+    )}
    >
     {message}
    </Alert>

@@ -1,5 +1,6 @@
-import { beatsYouText, beatsText } from "@gopvp/app/src/constants/message";
-import { youBeatText } from "@gopvp/common/src/constants/message";
+import type { KeyboardEvent } from "react";
+import { beatsText } from "@gopvp/app/src/constants/message";
+import { POOL_TONE_COUNT } from "@gopvp/app/src/constants/limit";
 import { shortenUsername } from "@gopvp/common/src/util/format";
 import { GAMES, type GameSlug } from "@gopvp/app/src/config/game";
 
@@ -20,13 +21,7 @@ export function buildMatchUrl(game: GameSlug, matchId: string): string {
  return `${getGamePath(game)}?match_id=${matchId}`;
 }
 
-export function getWorldMatchHeadline(
- winner: string,
- loser: string,
- currentUsername?: string,
-): string {
- if (winner === currentUsername) return youBeatText(shortenUsername(loser));
- if (loser === currentUsername) return beatsYouText(shortenUsername(winner));
+export function getWorldMatchHeadline(winner: string, loser: string): string {
  return beatsText(shortenUsername(winner), shortenUsername(loser));
 }
 
@@ -42,3 +37,17 @@ export function sanitizeAmountInput(value: string, max: number): string | null {
 
 export const endingBeforeQuery = (cursor: string | null) =>
  cursor ? `&ending_before=${encodeURIComponent(cursor)}` : "";
+
+export const poolTone = (index: number) =>
+ (Math.max(index, 0) % POOL_TONE_COUNT) + 1;
+
+export const pressProps =(action: () => void) => ({
+ role: "button",
+ tabIndex: 0,
+ onClick: action,
+ onKeyDown: (e: KeyboardEvent) => {
+  if (e.key !== "Enter" && e.key !== " ") return;
+  e.preventDefault();
+  action();
+ },
+});

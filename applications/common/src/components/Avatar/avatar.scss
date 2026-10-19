@@ -28,10 +28,139 @@
   font-size: $font14;
  }
 
- &.lg {
-  width: 4.5rem;
-  height: 4.5rem;
-  font-size: $font30;
+ &.header {
+  width: 2.25rem;
+  height: 2.25rem;
+  border: none;
+  background: $gold !important;
+  box-shadow: none;
+  font-family: $fontOutfitBlack;
+  font-size: $font18;
+  color: $poolInk;
+
+  :root[data-theme="light"] & {
+   background: linear-gradient(180deg, #222668, #11143c) !important;
+   color: $gold;
+  }
+
+  &.lg,
+  :root[data-theme="light"] &.lg {
+   border: 1px solid alpha($appText, 0.18);
+   background: $poolInk !important;
+   color: $gold;
+  }
+ }
+
+ &.ticket-me,
+ &.ticket-rival,
+ &.payout-rival {
+  width: 2.75rem;
+  height: 2.75rem;
   font-family: $fontOutfitExtraBold;
+  font-size: $font20;
+
+  .payout-paper & {
+   width: 2.25rem;
+   height: 2.25rem;
+   font-size: $font16;
+  }
+ }
+
+ &.payout-rival {
+  background-color: #ff7b9a !important;
+  color: $poolInk;
+
+  .practice & {
+   background-color: #3bffad !important;
+  }
+ }
+
+ &.ticket-me {
+  background-color: $poolInk !important;
+  color: $gold;
+ }
+
+ &.ticket-rival {
+  background-color: var(--pool-face) !important;
+  color: var(--pool-ink);
+  transform: rotateY(180deg);
+ }
+
+ &.gr-avatar {
+  flex-shrink: 0;
+  width: 2.625rem;
+  height: 2.625rem;
+  border: 1px solid alpha($appText, 0.14);
+  background: linear-gradient(180deg, #2a2e7a, #14174a) !important;
+  font-family: $fontOutfitBlack;
+  font-size: $font18;
+  color: alpha($appText, 0.85);
+
+  :root[data-theme="light"] & {
+   background: linear-gradient(180deg, #ffffff, #e3e6f5) !important;
+  }
+
+  .gr-row:not(.active) & {
+   opacity: 0.55;
+  }
+
+  .gr-row.active & {
+   border: 2px solid $gold;
+   color: $gold;
+
+   :root[data-theme="light"] & {
+    color: $appText;
+   }
+  }
+ }
+
+ &.face-off {
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 2px solid $primaryHover;
+  background: linear-gradient(180deg, #2d3290, #12153f) !important;
+  box-shadow: 0 0 12px alpha($gold, 0.45);
+  font-family: $fontOutfitBlack;
+  font-size: $font20;
+  color: $gold;
+ }
+
+ &.account {
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid alpha($appText, 0.18);
+  background: $poolInk !important;
+  box-shadow: none;
+  font-family: $fontOutfitBlack;
+  font-size: $font20;
+  color: $gold;
+ }
+
+ &.header.md {
+  width: 2.25rem;
+  height: 2.25rem;
+  box-shadow: none;
+  font-size: $font16;
+ }
+
+ &.lg {
+  width: 6rem;
+  height: 6rem;
+  font-size: $font40;
+  font-family: $fontOutfitBlack;
+
+  .profile-id-row & {
+   width: 3rem;
+   height: 3rem;
+   font-size: $font20;
+
+   @include from(phone) {
+    width: 3.5rem;
+    height: 3.5rem;
+    font-size: $font24;
+   }
+  }
  }
 }

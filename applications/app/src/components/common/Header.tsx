@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import classNames from "classnames";
-import { AccountBalanceWalletIcon } from "@gopvp/common/src/components/images";
+import { User, Wallet } from "@gopvp/common/src/components/images";
 import CustomAppBar from "@gopvp/common/src/components/AppBar/AppBar";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
@@ -25,8 +25,8 @@ import {
  goToPlayText,
 } from "@gopvp/app/src/constants/message";
 import { backText } from "@gopvp/common/src/constants/message";
-import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
 import { ROUTES } from "@gopvp/app/src/constants/route";
+import { WALLET_3D_PATH } from "@gopvp/app/src/constants/asset";
 
 export default function Header() {
  const { pathname } = useLocation();
@@ -44,6 +44,7 @@ export default function Header() {
  const session = useReduxSelector((state) => state.auth.session);
  const logout = useLogout();
  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+ const initial = session?.username?.charAt(0).toUpperCase() ?? "";
 
  const closeMenu = () => setAnchorEl(null);
 
@@ -56,7 +57,7 @@ export default function Header() {
      title={goToPlayText}
      onClick={() => dispatch(setActivePage("PLAY"))}
     >
-     <img src="/gopvp-logo.png" width="auto" height={54} alt="gopvp-logo" />
+     <img src="/gopvp-logo.png" alt="gopvp-logo" />
     </Link>
    }
    bottomSlot={
@@ -75,7 +76,7 @@ export default function Header() {
       <Button
        type="button"
        customClass="appbar-back-btn"
-       startIcon="arrowBack"
+       startIcon="moveLeft"
        onClick={goToPlay}
       >
        {backText}
@@ -85,30 +86,34 @@ export default function Header() {
    }
   >
    <Box customClass="appbar-right">
-    <NavLink to={ROUTES.WALLET} style={{ textDecoration: "none" }}>
-     {" "}
-     {loading ? (
-      <Skeleton variant="rounded" customClass="appbar-balance-skeleton" />
-     ) : (
-      <CustomChip
-       icon={<AccountBalanceWalletIcon />}
-       label={formatAmount(usdValue)}
-       customClass="appbar-balance"
-      />
-     )}
-    </NavLink>
+    {loading ? (
+     <Skeleton variant="rounded" customClass="appbar-balance-skeleton" />
+    ) : (
+     <Box customClass="appbar-wallet">
+      <NavLink to={ROUTES.WALLET}>
+       <CustomChip
+        icon={<img src={WALLET_3D_PATH} alt="" />}
+        label={formatAmount(usdValue)}
+        customClass="appbar-balance"
+       />
+      </NavLink>
+     </Box>
+    )}
 
     {session ? (
-     <CustomIconButton
+     <Box
+      component="button"
       customClass={classNames(
-       "appbar-menu-trigger",
+       "appbar-avatar-trigger",
        pathname === ROUTES.PROFILE && "active",
       )}
+      aria-label={profileText}
       onClick={(e) => setAnchorEl(e.currentTarget)}
-      icon="person"
-     />
+     >
+      <CustomAvatar letter={initial} customClass="header" />
+     </Box>
     ) : (
-     <Skeleton variant="circular" width={24} height={24} />
+     <Skeleton variant="circular" width={40} height={40} />
     )}
 
     <CustomPopover
@@ -120,16 +125,17 @@ export default function Header() {
      customClass="appbar-account-popover"
     >
      <Box customClass="appbar-dropdown-head">
-      <CustomAvatar
-       letter={session?.username?.charAt(0).toUpperCase() ?? ""}
-       customClass="sm primary"
-      />
+      <CustomAvatar letter={initial} customClass="header md" />
       <Box customClass="appbar-dropdown-id">
        <Text customClass="appbar-dropdown-name">
         {session?.username && shortenUsername(session.username)}
        </Text>
+       {session?.email && (
+        <Text customClass="appbar-dropdown-email">{session.email}</Text>
+       )}
       </Box>
      </Box>
+     <Box customClass="appbar-dropdown-sep" />
      <NavLink
       to={ROUTES.PROFILE}
       className={({ isActive }) =>
@@ -137,6 +143,7 @@ export default function Header() {
       }
       onClick={closeMenu}
      >
+      <User size={18} strokeWidth={2} />
       {profileText}
      </NavLink>
      <NavLink
@@ -146,11 +153,12 @@ export default function Header() {
       }
       onClick={closeMenu}
      >
+      <Wallet size={18} strokeWidth={2} />
       {walletText}
      </NavLink>
      <Button
       type="button"
-      sx={{ justifyContent: "flex-start" }}
+      startIcon="logOut"
       customClass="appbar-dropdown-item  danger"
       onClick={() => {
        closeMenu();

@@ -1,16 +1,11 @@
 @use "default.scss" as *;
 
 .common-icon-button {
- &.room-paste-btn svg {
-  width: $font18;
-  height: $font18;
- }
  &.username-clear-btn svg {
   width: 0.875rem;
   height: 0.875rem;
  }
- &.deposit-qr-back-btn,
- &.gr-review-btn {
+ &.deposit-qr-back-btn {
   svg {
    width: 1rem;
    height: 1rem;
@@ -32,39 +27,101 @@
  }
  &.gr-review-btn {
   display: flex;
-  width: 1.9rem;
-  height: 1.9rem;
-  border: 1px solid $appCardBorder;
-  background: $appSurface;
-  font-family: $fontOutfitExtraBold;
-  color: $appTextMuted;
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 1px solid alpha($appText, 0.16);
+  border-radius: 50%;
+  background: transparent;
+  color: alpha($appText, 0.8);
   transition:
    color 0.15s ease,
    border-color 0.15s ease;
 
+  svg {
+   width: 1.25rem;
+   height: 1.25rem;
+  }
+
   &:hover:not(.Mui-disabled) {
+   background: transparent;
+   border-color: alpha($appText, 0.32);
    color: $appText;
-   border-color: $appTextMuted;
+  }
+
+  &.live {
+   border-color: alpha($gold, 0.5);
+   color: $gold;
   }
 
   &.Mui-disabled {
-   opacity: 0.35;
-   cursor: not-allowed;
+   color: alpha($appText, 0.8);
+   cursor: default;
+  }
+ }
+
+ &.gr-draw-offer-btn {
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid alpha($appText, 0.16);
+  background: transparent;
+  color: alpha($appText, 0.8);
+
+  svg {
+   width: 1rem;
+   height: 1rem;
+  }
+
+  &.accept {
+   border-color: transparent;
+   background: linear-gradient(180deg, #ffe27a, $gold);
+   color: $primaryContrast;
+   @include neo-edge($btnEdgeGold);
+
+   svg {
+    stroke-width: 3;
+   }
+
+   &:hover {
+    background: linear-gradient(180deg, #ffe27a, $primaryHover);
+   }
+
+   &:active {
+    box-shadow: none;
+    transform: translate3d(3px, 3px, 0);
+   }
   }
  }
 
  &.drawer-close-icon {
   position: absolute;
-  top: 0.875rem;
-  right: 0.875rem;
+  top: 0.75rem;
+  right: 1.25rem;
   z-index: $z-raised;
-  width: 1.875rem;
-  height: 1.875rem;
+  width: 2rem;
+  height: 2rem;
   min-width: 0;
   padding: 0;
+  border-radius: 0%;
+  border: 1px solid alpha($appText, 0.18);
+  background: $btnGhostBg;
   color: $appText;
+
+  svg {
+   width: 1rem;
+   height: 1rem;
+  }
   &:hover:not(.Mui-disabled) {
    background: rgba(128, 128, 128, 0.3);
+  }
+
+  .bet-sheet &,
+  .room-sheet &,
+  .match-confirm-sheet &,
+  .practice-sheet & {
+   top: 1.75rem;
   }
  }
  &.modal-close-icon {
@@ -89,6 +146,21 @@
    width: 1.375rem;
    height: 1.375rem;
   }
+
+  .edit-profile-modal & {
+   top: 1.25rem;
+   right: 1.25rem;
+   width: 2rem;
+   height: 2rem;
+   border: 1px solid $appCardBorder;
+   background: $appSecondary;
+   color: $appText;
+
+   svg {
+    width: 1rem;
+    height: 1rem;
+   }
+  }
  }
  &.result-copy-btn {
   width: 2rem;
@@ -99,6 +171,42 @@
   svg {
    width: 1rem;
    height: 1rem;
+  }
+
+  .match-id-input & {
+   color: $appText;
+
+   svg {
+    width: 1.125rem;
+    height: 1.125rem;
+   }
+  }
+ }
+
+ &.gr-premove-cancel {
+  position: relative;
+  flex-shrink: 0;
+  width: 1.125rem;
+  height: 1.125rem;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  color: alpha($appText, 0.7);
+
+  svg {
+   width: 0.5625rem;
+   height: 0.5625rem;
+   stroke-width: 3;
+  }
+
+  &::after {
+   content: "";
+   position: absolute;
+   inset: -0.4375rem;
+  }
+
+  &:hover {
+   background: alpha($appText, 0.2);
   }
  }
 
@@ -111,6 +219,59 @@
   svg {
    width: 100%;
    height: 100%;
+  }
+ }
+
+ &.game-picker-nav {
+  position: absolute;
+  top: 9.125rem;
+  z-index: $z-overlay;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid alpha($white, 0.28);
+  background: alpha($white, 0.1);
+  backdrop-filter: blur(12px);
+  color: $white;
+  transition: transform 0.12s cubic-bezier(0.22, 1, 0.36, 1);
+
+  &.prev {
+   left: 0;
+  }
+
+  &.next {
+   right: 0;
+  }
+
+  svg {
+   width: 1.25rem;
+   height: 1.25rem;
+   stroke-width: 2.8;
+  }
+
+  &:hover:not(.Mui-disabled) {
+   background: alpha($white, 0.16);
+  }
+
+  &:active:not(.Mui-disabled) {
+   transform: scale(0.94);
+  }
+
+  &.Mui-disabled {
+   color: alpha($white, 0.6);
+  }
+
+  :root[data-theme="light"] & {
+   border-color: $appCardBorder;
+   background: $appSecondary;
+   color: $appText;
+
+   &.Mui-disabled {
+    color: $appTextMuted;
+   }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+   transition: none;
   }
  }
 }

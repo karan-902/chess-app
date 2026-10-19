@@ -1,19 +1,48 @@
 import { forwardRef, useEffect, useRef } from "react";
-import type { MutableRefObject } from "react";
-import { Button as MuiButton, CircularProgress } from "@mui/material";
-import type { ButtonProps } from "@mui/material";
+import type {
+ ButtonHTMLAttributes,
+ ComponentProps,
+ ComponentType,
+ MutableRefObject,
+} from "react";
+import { Button as NeoPopButtonBase } from "@cred/neopop-web/lib/components";
 import classNames from "classnames";
 import "./button.scss";
 import Text from "@gopvp/common/src/components/Text/Text";
 import { icons, type TIconName } from "@gopvp/common/src/components/images";
 
-interface IButtonProps extends Omit<ButtonProps, "startIcon" | "endIcon"> {
+type TButtonVariant = "contained" | "outlined" | "text";
+
+interface IButtonProps
+ extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "onClick"> {
+ variant?: TButtonVariant;
+ size?: "small" | "medium" | "large";
+ fullWidth?: boolean;
  customClass?: string;
  isLoading?: boolean;
  loaderOnDark?: boolean;
  startIcon?: TIconName;
  endIcon?: TIconName;
+ onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
+
+const NeoPopButton = NeoPopButtonBase as ComponentType<
+ ComponentProps<typeof NeoPopButtonBase> &
+  Pick<ButtonHTMLAttributes<HTMLButtonElement>, "type">
+>;
+
+const NEOPOP_KIND = {
+ contained: "elevated",
+ outlined: "elevated",
+ text: "flat",
+} as const;
+
+const TRANSPARENT_EDGES = {
+ top: "transparent",
+ left: "transparent",
+ right: "transparent",
+ bottom: "transparent",
+};
 
 export const Button = forwardRef<HTMLButtonElement, IButtonProps>(
  function Button(
@@ -26,12 +55,17 @@ export const Button = forwardRef<HTMLButtonElement, IButtonProps>(
    type,
    startIcon,
    endIcon,
+   variant = "text",
+   size = "medium",
+   fullWidth,
+   onClick,
    ...props
   },
   ref,
  ) {
   const buttonRef = useRef<HTMLButtonElement | null>(null);
-  const setRefs = (node: HTMLButtonElement | null) => {
+  const setRefs = (wrapper: HTMLSpanElement | null) => {
+   const node = (wrapper?.firstElementChild as HTMLButtonElement) ?? null;
    buttonRef.current = node;
    if (typeof ref === "function") ref(node);
    else if (ref)
@@ -55,33 +89,58 @@ export const Button = forwardRef<HTMLButtonElement, IButtonProps>(
     (scope as EventTarget).removeEventListener("keydown", onKeyDown);
   }, [type]);
 
-  const renderIcon = (name?: TIconName) => {
-   if (!name || isLoading) return undefined;
+  const renderIcon = (name: TIconName | undefined, side: "start" | "end") => {
+   if (!name || isLoading) return null;
    const Icon = icons[name];
-   return <Icon />;
+   return (
+    <span className={classNames("button-icon", side)}>
+     <Icon />
+    </span>
+   );
   };
 
+  const isDisabled = disabled || isLoading;
+
   return (
-   <MuiButton
-    ref={setRefs}
-    type={type}
-    {...props}
-    startIcon={renderIcon(startIcon)}
-    endIcon={renderIcon(endIcon)}
-    className={classNames("common-button", customClass, isLoading && "loading")}
-    disabled={disabled || isLoading}
-    aria-busy={isLoading || undefined}
-   >
-    {isLoading ? (
-     <CircularProgress
-      size={20}
-      color="inherit"
-      sx={loaderOnDark ? { color: "primary.contrastText" } : undefined}
-     />
-    ) : (
-     <Text customClass="button-text">{children}</Text>
-    )}
-   </MuiButton>
+   <span ref={setRefs} className="common-button-ref">
+    <NeoPopButton
+     {...props}
+     type={type}
+     kind={NEOPOP_KIND[variant]}
+     fullWidth={fullWidth}
+     disabled={isDisabled}
+     colorConfig={{
+      backgroundColor: "transparent",
+      color: "inherit",
+      edgeColors: TRANSPARENT_EDGES,
+      disabledColors: { color: "inherit", edgeColors: TRANSPARENT_EDGES },
+     }}
+     onClick={onClick as () => void}
+     className={classNames(
+      "common-button",
+      variant,
+      `size-${size}`,
+      customClass,
+      fullWidth && "full-width",
+      isDisabled && "disabled",
+      isLoading && "loading",
+     )}
+     aria-busy={isLoading || undefined}
+    >
+     {isLoading ? (
+      <span
+       className={classNames("button-spinner", loaderOnDark && "on-dark")}
+       role="progressbar"
+      />
+     ) : (
+      <>
+       {renderIcon(startIcon, "start")}
+       <Text customClass="button-text">{children}</Text>
+       {renderIcon(endIcon, "end")}
+      </>
+     )}
+    </NeoPopButton>
+   </span>
   );
  },
 );

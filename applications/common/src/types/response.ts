@@ -67,6 +67,10 @@ export type IGenerateTokenResponse = {
  refresh_token: string;
 };
 
+export type IFirebaseTokenResponse = {
+ token: string;
+};
+
 export type IRandomNameResponse = {
  usernames: string[];
 };
@@ -95,6 +99,7 @@ export type ITransactionResponse = {
  transaction_code: TransactionCode;
  amount: number;
  created: number;
+ status?: "PENDING" | "PROCESSING" | "COMPLETED";
 };
 
 export type IPaymentRequestResponse = {
@@ -115,9 +120,17 @@ export type IWithdrawResponse = IBalanceResponse & {
  created: number;
 };
 
-export type ITransactionCompletedEvent = {
+export type IWalletLastTransaction = {
+ id: string;
  type: "DEPOSIT" | "WITHDRAW";
+ status: "PROCESSING" | "COMPLETED";
  amount: number;
+ created: number;
+};
+
+export type IWalletDocResponse = IBalanceResponse & {
+ last_transaction: IWalletLastTransaction | null;
+ updated: number;
 };
 
 export type IPoolResponse = {
@@ -173,6 +186,7 @@ export type IStartMatchResponse =
 export type IPoolMatchedEvent = {
  matchId: string;
  firstMoveDeadlineMs: number;
+ players?: IMatchPlayer[];
 };
 
 export type IRoomMatchedEvent = {
@@ -259,21 +273,25 @@ export type IGameNotFoundResponse = {
  error: "not_found";
 };
 
-export type IActiveGameEvent = {
- match_id: string;
- game_slug: string;
-};
 
-export type IPoolUpdatedEvent = {
+export type IPoolsDocResponse = {
  game: string;
  stats: { games: number; players: number };
  pools: IPoolResponse[];
+ updated: number;
 };
 
 export type IGameStateBasePlayer = {
  user_id: string;
  username: string;
  score: number;
+};
+
+export type IActiveGameResponse = {
+ match_id: string;
+ game_slug: string;
+ bet: number;
+ opponent: IGameStateBasePlayer;
 };
 
 export type IGameStateBaseResponse = {
@@ -340,6 +358,12 @@ export type ILeaderboardWinsResponse = {
 export type ILeaderboardRowResponse =
  ILeaderboardEarningsResponse | ILeaderboardWinsResponse;
 
+export type ILeaderboardDocResponse = {
+ data: ILeaderboardRowResponse[];
+ period_start: number | null;
+ updated: number;
+};
+
 export type ILeaderboardPlayerResponse = {
  username: string;
  score: number;
@@ -347,4 +371,9 @@ export type ILeaderboardPlayerResponse = {
  best_streak: number;
  gross_income: number;
  wins: number;
+};
+
+export type ILiveWinsDocResponse = {
+ matches: IWorldMatchHistoryResponse[];
+ updated: number;
 };

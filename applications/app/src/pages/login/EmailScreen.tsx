@@ -14,7 +14,6 @@ import { formSubmitHandler } from "@gopvp/common/src/util/form";
 
 export default function EmailScreen({
  formik,
- error,
  isGoogleProcessing,
  onGoogleLogin,
 }: IEmailScreenProps) {
@@ -34,10 +33,8 @@ export default function EmailScreen({
     onChange={formik.handleChange}
     onBlur={formik.handleBlur}
     disabled={formik.isSubmitting}
-    isError={(formik.touched.email && !!formik.errors.email) || !!error}
-    helperText={
-     (formik.touched.email && formik.errors.email) || error || undefined
-    }
+    isError={formik.touched.email && !!formik.errors.email}
+    helperText={formik.errors.email}
     customClass="form-input"
     fullWidth
    />
@@ -46,8 +43,7 @@ export default function EmailScreen({
     type="submit"
     variant="contained"
     fullWidth
-    endIcon="arrowForward"
-    customClass="auth-submit-btn auth-submit-btn-arrow"
+    customClass="auth-submit-btn"
     disabled={!formik.dirty || formik.isSubmitting}
     isLoading={formik.isSubmitting}
    >

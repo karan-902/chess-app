@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
 import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
 import MoveList from "@gopvp/chess/src/pages/play/MoveList";
@@ -12,12 +13,17 @@ export default function ReviewControls({
  fenHistory,
  viewIndex,
  onJump,
+ premove,
+ onCancelPremoves,
+ status,
  isReviewing,
  goBack,
  goForward,
 }: IReviewControlsProps) {
  return (
-  <Box customClass="gr-review-controls">
+  <Box
+   customClass={classNames("gr-review-controls", isReviewing && "reviewing")}
+  >
    <CustomIconButton
     customClass="gr-review-btn"
     onClick={goBack}
@@ -30,9 +36,12 @@ export default function ReviewControls({
     fenHistory={fenHistory}
     viewIndex={viewIndex}
     onJump={onJump}
+    premove={premove}
+    onCancelPremoves={onCancelPremoves}
+    status={status}
    />
    <CustomIconButton
-    customClass="gr-review-btn"
+    customClass={classNames("gr-review-btn", isReviewing && "live")}
     onClick={goForward}
     disabled={!isReviewing}
     aria-label={nextMoveText}

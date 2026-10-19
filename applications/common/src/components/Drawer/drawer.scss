@@ -8,6 +8,8 @@
   flex-direction: column;
   gap: 0.15rem;
   overflow-y: auto;
+  border-radius: 0 !important;
+  box-shadow: none !important;
  }
 
  &.MuiDrawer-anchorRight .MuiDrawer-paper {
@@ -23,9 +25,34 @@
  &.MuiDrawer-anchorBottom .MuiDrawer-paper {
   width: 100%;
   max-height: 85%;
-  border-top: 1px solid $appLine;
-  border-radius: 0.875rem 0.875rem 0 0;
-  padding: 3.25rem 1rem 1.25rem;
+  background: $appSheetFill;
+  box-shadow: none !important;
+  overflow-x: hidden;
+  padding: 3.25rem 1.25rem 1.75rem;
+
+  :root[data-theme="light"] & {
+   --neo-outline: var(--app-sheet-card-border);
+   --neo-edge: var(--app-sheet-card-edge);
+  }
+
+  &::before {
+   content: "";
+   position: absolute;
+   top: 0.75rem;
+   left: 50%;
+   width: 2.75rem;
+   height: 5px;
+   background: $white;
+   transform: translateX(-50%);
+
+   :root[data-theme="light"] & {
+    background: $primaryContrast;
+   }
+  }
+ }
+
+ .MuiBackdrop-root {
+  background-color: alpha($black, 0.6);
  }
 
  &.game-over-sheet .MuiBackdrop-root {
@@ -33,22 +60,87 @@
   backdrop-filter: blur(6px);
  }
 
- @each $tone, $color in ("win": $greenishTeal, "loss": $paleRed, "gold": $gold)
- {
-  &.result-sheet.#{$tone} .MuiDrawer-paper {
-   background:
-    radial-gradient(
-     120% 55% at 50% 0%,
-     #{alpha($color, 0.25)},
-     transparent 70%
-    ),
-    $appSheet;
+ &.result-sheet.gold:not(.versus) .MuiDrawer-paper {
+  background:
+   radial-gradient(
+    8.75rem 8rem at 50% 4.0625rem,
+    alpha($gold, 0.3),
+    transparent
+   ),
+   $appSheetFill;
+ }
+
+ &.result-sheet.neutral .MuiDrawer-paper {
+  background:
+   radial-gradient(
+    8.75rem 8rem at 50% 4.0625rem,
+    alpha($auraIndigo, 0.28),
+    transparent
+   ),
+   $appSheetFill;
+ }
+
+ &.game-over-sheet.win .MuiDrawer-paper,
+ &.game-over-sheet.loss .MuiDrawer-paper {
+  background: $appSheetFill;
+ }
+
+ &.game-over-sheet .MuiDrawer-paper {
+  padding-top: 1.5rem;
+
+  .public-heading {
+   margin-top: 0;
   }
+ }
+
+ &.bet-sheet,
+ &.room-sheet,
+ &.match-confirm-sheet,
+ &.practice-sheet {
+  .MuiDrawer-paper {
+   max-height: 94%;
+   overflow-x: hidden;
+
+   > * {
+    flex-shrink: 0;
+   }
+  }
+ }
+
+ &.bet-sheet .MuiDrawer-paper,
+ &.room-sheet .MuiDrawer-paper,
+ &.match-confirm-sheet .MuiDrawer-paper,
+ &.practice-sheet .MuiDrawer-paper {
+  padding-top: 1.75rem;
+ }
+
+ &.room-sheet .MuiDrawer-paper {
+  padding-bottom: 1rem;
+
+  @include from-height(medium) {
+   padding-bottom: 1.75rem;
+  }
+ }
+
+ &.MuiDrawer-anchorBottom:not(.game-over-sheet) .MuiDrawer-paper::after {
+  @include sheet-pattern;
+ }
+
+ &.wallet-sheet .MuiDrawer-paper:has(.deposit-qr-stage)::after {
+  mask:
+   url("/pattern-cubes.svg") 50% 0 / 1.515625rem 2.625rem repeat,
+   radial-gradient(38% 16% at 0 0, #000 40%, transparent),
+   radial-gradient(38% 16% at 100% 0, #000 40%, transparent);
+  mask-composite: intersect, add;
  }
 
  &.wallet-sheet .MuiDrawer-paper {
   min-height: 24rem;
-  justify-content: center;
+  justify-content: safe center;
+ }
+
+ &.wallet-sheet .MuiDrawer-paper:has(.wallet-modal-layout) {
+  padding-top: 1.75rem;
  }
 
  &.wallet-sheet-success .MuiDrawer-paper {

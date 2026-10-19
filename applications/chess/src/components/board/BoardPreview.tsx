@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from "react";
-import classNames from "classnames";
+import { useEffect, useRef } from "react";
 import Box from "@gopvp/common/src/components/Box/Box";
 import PieceIcon from "@gopvp/chess/src/components/board/PieceIcon";
 import "./board.scss";
@@ -14,311 +13,273 @@ import {
  LIGHT_SQUARE_LABEL_COLOR,
  DARK_SQUARE_LABEL_COLOR,
 } from "@gopvp/chess/src/constants/color";
+import {
+ BOARD_ENTRANCE_LANDING_MS,
+ BOARD_NUDGE_MS,
+ BOARD_SWEEP_MS,
+ PIECE_LAND_MS,
+ PIECE_SHAKE_MS,
+} from "@gopvp/chess/src/constants/limit";
+import {
+ boardNudgeFrames,
+ boardSweepFrames,
+ easeOutQuart,
+ entranceDelayMs,
+ fxFrame,
+ lerp,
+ pieceEntranceFrames,
+ pieceFrame,
+ pieceLandFrames,
+ pieceMoveFrames,
+ pieceMoveMs,
+ pieceShakeFrames,
+ sampleFrames,
+} from "@gopvp/chess/src/utils";
 
-interface PieceData {
- code: string;
- col: number;
- row: number;
- noTransition?: boolean;
- captured?: boolean;
- inCheck?: boolean;
- breathing?: boolean;
+interface PieceState {
+ x: number;
+ y: number;
+ o: number;
 }
 
-interface RenderedPiece extends PieceData {
- id: string;
-}
+type FxName = "ring" | "flash" | "check" | "glow" | "sweep";
 
-interface OverlayItem {
- id: number;
- kind: "ghost" | "ring" | "flash" | "check-ring";
- col: number;
- row: number;
- code?: string;
- danger?: boolean;
- phase: "in" | "out";
-}
+const START_PIECES = FILES.flatMap((file, i) => [
+ {
+  id: `b${BACK_RANK_PIECES[i]}-${file}8`,
+  code: `b${BACK_RANK_PIECES[i]}`,
+  square: `${file}8`,
+ },
+ { id: `bP-${file}7`, code: "bP", square: `${file}7` },
+ { id: `wP-${file}2`, code: "wP", square: `${file}2` },
+ {
+  id: `w${BACK_RANK_PIECES[i]}-${file}1`,
+  code: `w${BACK_RANK_PIECES[i]}`,
+  square: `${file}1`,
+ },
+]);
 
-function squareToRC(square: string) {
- return { col: FILES.indexOf(square[0]), row: RANKS.indexOf(square[1]) };
-}
+const MOVES: [string, string, string?][] = [
+ ["e2", "e4"],
+ ["e7", "e5"],
+ ["d1", "h5"],
+ ["b8", "c6"],
+ ["f1", "c4"],
+ ["g8", "f6"],
+ ["h5", "f7", "e8"],
+];
 
-function startPosition() {
- const list: { id: string; code: string; square: string }[] = [];
- FILES.forEach((f, i) => {
-  list.push({
-   id: `b${BACK_RANK_PIECES[i]}-${f}8`,
-   code: `b${BACK_RANK_PIECES[i]}`,
-   square: `${f}8`,
-  });
-  list.push({ id: `bP-${f}7`, code: "bP", square: `${f}7` });
-  list.push({ id: `wP-${f}2`, code: "wP", square: `${f}2` });
-  list.push({
-   id: `w${BACK_RANK_PIECES[i]}-${f}1`,
-   code: `w${BACK_RANK_PIECES[i]}`,
-   square: `${f}1`,
-  });
- });
- return list;
-}
-
-function sleep(ms: number) {
- return new Promise<void>((resolve) => setTimeout(resolve, ms));
-}
+const squareOf = (square: string) => ({
+ x: FILES.indexOf(square[0]),
+ y: RANKS.indexOf(square[1]),
+});
 
 export default function BoardPreview() {
- const pieceDataRef = useRef<Record<string, PieceData>>({});
- const boardMapRef = useRef<Record<string, string>>({});
- const overlayIdRef = useRef(0);
- const cancelledRef = useRef(false);
- const [pieces, setPieces] = useState<RenderedPiece[]>([]);
- const [overlays, setOverlays] = useState<OverlayItem[]>([]);
- const [shimmerPhase, setShimmerPhase] = useState<
-  "idle" | "mounted" | "running"
- >("idle");
+ const rootRef = useRef<HTMLDivElement>(null);
+ const gridRef = useRef<HTMLDivElement>(null);
+ const pieceEls = useRef<Record<string, HTMLDivElement | null>>({});
+ const fxEls = useRef<Partial<Record<FxName, HTMLDivElement | null>>>({});
+ const isReducedMotion = window.matchMedia(
+  "(prefers-reduced-motion: reduce)",
+ ).matches;
 
  useEffect(() => {
-  cancelledRef.current = false;
+  if (isReducedMotion) return;
+  let cancelled = false;
+  let isVisible = true;
+  let isOnScreen = true;
+  const animations = new Set<Animation>();
+  const pieces: Record<string, PieceState> = {};
+  let board: Record<string, string> = {};
 
-  const render = () => {
-   setPieces(
-    Object.entries(pieceDataRef.current).map(([id, d]) => ({
-     id,
-     ...d,
-    })),
+  const animate = (
+   el: Element | null | undefined,
+   keyframes: Keyframe[],
+   duration: number,
+   delay = 0,
+  ) => {
+   if (cancelled || !el) return Promise.resolve();
+   const animation = el.animate(keyframes, { duration, delay, fill: "both" });
+   animations.add(animation);
+   if (!(isVisible && isOnScreen)) animation.pause();
+   return animation.finished.then(
+    () => {
+     animations.delete(animation);
+     if (cancelled) return;
+     if (keyframes.length) animation.commitStyles();
+     animation.cancel();
+    },
+    () => {},
    );
   };
 
-  const addOverlay = (item: Omit<OverlayItem, "id" | "phase">, ttl: number) => {
-   const id = ++overlayIdRef.current;
-   setOverlays((prev) => [...prev, { id, phase: "in", ...item }]);
-   requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-     if (cancelledRef.current) return;
-     setOverlays((prev) =>
-      prev.map((o) => (o.id === id ? { ...o, phase: "out" } : o)),
+  const wait = (ms: number) => animate(rootRef.current, [], ms);
+
+  const syncPlayback = () => {
+   const isActive = isVisible && isOnScreen;
+   animations.forEach((animation) =>
+    isActive ? animation.play() : animation.pause(),
+   );
+  };
+
+  const entrance = () => {
+   board = {};
+   return Promise.all(
+    START_PIECES.map(({ id, square }) => {
+     const { x, y } = squareOf(square);
+     pieces[id] = { x, y, o: 1 };
+     board[square] = id;
+     return animate(
+      pieceEls.current[id],
+      pieceEntranceFrames(x, id[0] === "w" ? 9 : -2, y),
+      BOARD_ENTRANCE_LANDING_MS,
+      entranceDelayMs(x, y),
      );
-    });
-   });
-   setTimeout(() => {
-    setOverlays((prev) => prev.filter((o) => o.id !== id));
-   }, ttl);
-  };
-
-  const cascadeEntrance = async () => {
-   pieceDataRef.current = {};
-   boardMapRef.current = {};
-   setOverlays([]);
-
-   const list = startPosition();
-   list.forEach(({ id, code, square }) => {
-    const { col } = squareToRC(square);
-    const isWhite = code[0] === "w";
-    pieceDataRef.current[id] = {
-     code,
-     col,
-     row: isWhite ? 9 : -2,
-     noTransition: true,
-    };
-    boardMapRef.current[square] = id;
-   });
-   render();
-
-   await sleep(60);
-   if (cancelledRef.current) return;
-
-   list
-    .slice()
-    .sort(
-     (a, b) =>
-      Math.abs(squareToRC(a.square).col - 3.5) -
-      Math.abs(squareToRC(b.square).col - 3.5),
-    )
-    .forEach(({ id, square }, i) => {
-     setTimeout(() => {
-      if (cancelledRef.current || !pieceDataRef.current[id]) return;
-      const { col, row } = squareToRC(square);
-      pieceDataRef.current[id] = {
-       ...pieceDataRef.current[id],
-       col,
-       row,
-       noTransition: false,
-      };
-      render();
-     }, i * 24);
-    });
-
-   await sleep(list.length * 24 + 900);
-  };
-
-  const idleShimmer = async () => {
-   setShimmerPhase("mounted");
-   requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-     if (!cancelledRef.current) setShimmerPhase("running");
-    });
-   });
-
-   Object.keys(pieceDataRef.current).forEach((id, i) => {
-    setTimeout(
-     () => {
-      if (cancelledRef.current || !pieceDataRef.current[id]) return;
-      pieceDataRef.current[id] = {
-       ...pieceDataRef.current[id],
-       breathing: true,
-      };
-      render();
-      setTimeout(() => {
-       if (cancelledRef.current || !pieceDataRef.current[id]) return;
-       pieceDataRef.current[id] = {
-        ...pieceDataRef.current[id],
-        breathing: false,
-       };
-       render();
-      }, 900);
-     },
-     (i % 8) * 40,
-    );
-   });
-
-   await sleep(1400);
-   if (!cancelledRef.current) setShimmerPhase("idle");
-  };
-
-  const animateCapture = async (
-   capturedId: string,
-   rc: { col: number; row: number },
-  ) => {
-   if (!pieceDataRef.current[capturedId]) return;
-   pieceDataRef.current[capturedId] = {
-    ...pieceDataRef.current[capturedId],
-    captured: true,
-   };
-   render();
-
-   addOverlay({ kind: "flash", col: rc.col, row: rc.row }, 450);
-
-   await sleep(350);
-   delete pieceDataRef.current[capturedId];
-   render();
-  };
-
-  const animateCheck = async (kingSquare: string) => {
-   const rc = squareToRC(kingSquare);
-   const kingId = boardMapRef.current[kingSquare];
-
-   addOverlay({ kind: "check-ring", col: rc.col, row: rc.row }, 1500);
-
-   if (kingId && pieceDataRef.current[kingId]) {
-    pieceDataRef.current[kingId] = {
-     ...pieceDataRef.current[kingId],
-     inCheck: true,
-    };
-    render();
-   }
-
-   await sleep(1500);
-   if (cancelledRef.current) return;
-
-   if (kingId && pieceDataRef.current[kingId]) {
-    pieceDataRef.current[kingId] = {
-     ...pieceDataRef.current[kingId],
-     inCheck: false,
-    };
-    render();
-   }
-  };
-
-  const playMove = async (
-   from: string,
-   to: string,
-   opts?: { capture?: boolean; check?: string },
-  ) => {
-   const fromRC = squareToRC(from);
-   const toRC = squareToRC(to);
-   const movingId = boardMapRef.current[from];
-   if (!movingId) return;
-   const movingData = pieceDataRef.current[movingId];
-
-   addOverlay(
-    { kind: "ghost", col: fromRC.col, row: fromRC.row, code: movingData.code },
-    620,
+    }),
    );
+  };
 
-   if (opts?.capture) {
-    const capturedId = boardMapRef.current[to];
-    if (capturedId) await animateCapture(capturedId, toRC);
-    if (cancelledRef.current) return;
-   }
+  const sweep = () =>
+   Promise.all([
+    ...Object.entries(pieces)
+     .filter(([, { o }]) => o > 0)
+     .map(([id, { x, y }]) =>
+      animate(
+       pieceEls.current[id],
+       sampleFrames((p) =>
+        pieceFrame(x, y, 1, 1 + 0.06 * Math.sin(Math.PI * p)),
+       ),
+       420,
+       x * 55,
+      ),
+     ),
+    animate(fxEls.current.sweep, boardSweepFrames(), BOARD_SWEEP_MS),
+   ]);
 
-   pieceDataRef.current[movingId] = {
-    ...pieceDataRef.current[movingId],
-    col: toRC.col,
-    row: toRC.row,
-   };
-   delete boardMapRef.current[from];
-   boardMapRef.current[to] = movingId;
-   render();
-
-   addOverlay(
-    { kind: "ring", col: toRC.col, row: toRC.row, danger: !!opts?.capture },
+  const ring = (x: number, y: number, isDanger: boolean) => {
+   fxEls.current.ring?.classList.toggle("danger", isDanger);
+   return animate(
+    fxEls.current.ring,
+    sampleFrames((p) =>
+     fxFrame(x, y, lerp(0.35, 1.25, easeOutQuart(p)), 0.9 * (1 - p)),
+    ),
     680,
    );
-   await sleep(620);
-   if (cancelledRef.current) return;
-
-   if (opts?.check) await animateCheck(opts.check);
   };
 
-  const runLoop = async () => {
-   while (!cancelledRef.current) {
-    await cascadeEntrance();
-    if (cancelledRef.current) return;
-    await idleShimmer();
-    if (cancelledRef.current) return;
+  const capture = (id: string, x: number, y: number) => {
+   pieces[id].o = 0;
+   return Promise.all([
+    animate(gridRef.current, boardNudgeFrames(), BOARD_NUDGE_MS),
+    animate(
+     fxEls.current.flash,
+     sampleFrames((p) => fxFrame(x, y, 1, 1 - p)),
+     420,
+    ),
+    animate(
+     pieceEls.current[id],
+     sampleFrames((p) => {
+      const scale = lerp(1, 1.35, easeOutQuart(p));
+      return pieceFrame(x, y, 1 - p, scale, scale, 14 * p);
+     }),
+     340,
+    ),
+   ]);
+  };
 
-    await playMove("e2", "e4");
-    await sleep(420);
-    await playMove("e7", "e5");
-    await sleep(420);
-    await playMove("d1", "h5");
-    await sleep(420);
-    await playMove("b8", "c6");
-    await sleep(420);
-    await playMove("f1", "c4");
-    await sleep(420);
-    await playMove("g8", "f6");
-    await sleep(500);
-    await playMove("h5", "f7", { capture: true, check: "e8" });
-    if (cancelledRef.current) return;
+  const check = async (square: string) => {
+   const { x, y } = squareOf(square);
+   const glowIn = animate(
+    fxEls.current.glow,
+    sampleFrames((p) => fxFrame(x, y, 1, p)),
+    220,
+   );
+   const shake = animate(
+    pieceEls.current[board[square]],
+    pieceShakeFrames(x, y),
+    PIECE_SHAKE_MS,
+   );
+   for (let i = 0; i < 2; i++) {
+    await animate(
+     fxEls.current.check,
+     sampleFrames((p) =>
+      fxFrame(x, y, lerp(0.6, 1.8, easeOutQuart(p)), 0.7 * (1 - p)),
+     ),
+     750,
+    );
+   }
+   await Promise.all([glowIn, shake]);
+   await animate(
+    fxEls.current.glow,
+    sampleFrames((p) => fxFrame(x, y, 1, 1 - p)),
+    320,
+   );
+  };
 
-    await idleShimmer();
-    await sleep(600);
+  const move = async (from: string, to: string, checkSquare?: string) => {
+   const id = board[from];
+   const el = pieceEls.current[id];
+   if (!id || !el) return;
+   const a = squareOf(from);
+   const b = squareOf(to);
+   const capturedId = board[to];
+   el.style.zIndex = "3";
+   await animate(
+    el,
+    pieceMoveFrames(a.x, a.y, b.x, b.y),
+    pieceMoveMs(a.x, a.y, b.x, b.y),
+   );
+   el.style.zIndex = "";
+   delete board[from];
+   board[to] = id;
+   pieces[id].x = b.x;
+   pieces[id].y = b.y;
+   const effects: Promise<unknown>[] = [
+    animate(el, pieceLandFrames(b.x, b.y, !!capturedId), PIECE_LAND_MS),
+    ring(b.x, b.y, !!capturedId),
+   ];
+   if (capturedId) effects.push(capture(capturedId, b.x, b.y));
+   await Promise.all(effects);
+   if (checkSquare) await check(checkSquare);
+  };
+
+  const run = async () => {
+   while (!cancelled) {
+    await entrance();
+    await sweep();
+    for (const [from, to, checkSquare] of MOVES) {
+     if (cancelled) return;
+     await move(from, to, checkSquare);
+     await wait(380);
+    }
+    await sweep();
+    await wait(700);
    }
   };
 
-  const start = () => {
-   if (!cancelledRef.current) runLoop();
+  const onVisibility = () => {
+   isVisible = document.visibilityState === "visible";
+   syncPlayback();
   };
-
-  let idleId: number | undefined;
-  let timeoutId: ReturnType<typeof setTimeout> | undefined;
-  if (typeof window.requestIdleCallback === "function") {
-   idleId = window.requestIdleCallback(start, { timeout: 1000 });
-  } else {
-   timeoutId = setTimeout(start, 200);
-  }
+  const observer = new IntersectionObserver(([entry]) => {
+   isOnScreen = entry.isIntersecting;
+   syncPlayback();
+  });
+  if (rootRef.current) observer.observe(rootRef.current);
+  document.addEventListener("visibilitychange", onVisibility);
+  run();
 
   return () => {
-   cancelledRef.current = true;
-   if (idleId !== undefined) window.cancelIdleCallback?.(idleId);
-   if (timeoutId !== undefined) clearTimeout(timeoutId);
+   cancelled = true;
+   animations.forEach((animation) => animation.cancel());
+   observer.disconnect();
+   document.removeEventListener("visibilitychange", onVisibility);
   };
- }, []);
+ }, [isReducedMotion]);
 
  return (
-  <Box customClass="chess-board fit-board">
-   <Box customClass="chess-board-grid">
+  <Box ref={rootRef} customClass="chess-board fit-board">
+   <Box ref={gridRef} customClass="chess-board-grid">
     {Array.from({ length: 8 }, (_, r) =>
      Array.from({ length: 8 }, (_, c) => {
       const isLight = (r + c) % 2 === 0;
@@ -349,89 +310,39 @@ export default function BoardPreview() {
     )}
 
     <Box customClass="board-preview-layer">
-     {pieces.map((p) => (
+     {(["flash", "glow", "ring", "check"] as const).map((name) => (
       <Box
-       key={p.id}
-       customClass={classNames(
-        "board-preview-piece",
-        p.captured && "captured",
-        p.inCheck && "in-check",
-        p.breathing && "breathing",
-       )}
-       style={
-        {
-         "--tx": `${p.col * 100}%`,
-         "--ty": `${p.row * 100}%`,
-         transform: "translate(var(--tx), var(--ty))",
-         transition: p.noTransition ? "none" : undefined,
-        } as React.CSSProperties
-       }
-      >
-       <PieceIcon code={p.code} className="board-preview-piece-svg" />
-      </Box>
+       key={name}
+       ref={(el: HTMLDivElement | null) => {
+        fxEls.current[name] = el;
+       }}
+       customClass={`board-preview-fx ${name}`}
+      />
      ))}
-
-     {overlays.map((o) => {
-      if (o.kind === "ghost") {
-       return (
-        <Box
-         key={o.id}
-         customClass="board-preview-ghost"
-         style={{
-          transform:
-           o.phase === "out"
-            ? `translate(${o.col * 100}%, calc(${o.row * 100}% - 6px)) scale(0.82)`
-            : `translate(${o.col * 100}%, ${o.row * 100}%)`,
-          opacity: o.phase === "out" ? 0 : 0.55,
-         }}
-        >
-         <PieceIcon code={o.code!} className="board-preview-piece-svg" />
-        </Box>
-       );
-      }
-      if (o.kind === "ring") {
-       return (
-        <Box
-         key={o.id}
-         customClass={classNames("board-preview-ring", o.danger && "danger")}
-         style={{
-          transform: `translate(${o.col * 100}%, ${o.row * 100}%) scale(${o.phase === "out" ? 1.15 : 0.3})`,
-          opacity: o.phase === "out" ? 0 : 0.9,
-         }}
-        />
-       );
-      }
-      if (o.kind === "flash") {
-       return (
-        <Box
-         key={o.id}
-         customClass="board-preview-flash"
-         style={{
-          transform: `translate(${o.col * 100}%, ${o.row * 100}%)`,
-          opacity: o.phase === "out" ? 0 : 1,
-         }}
-        />
-       );
-      }
+     {START_PIECES.map(({ id, code, square }) => {
+      const { x, y } = squareOf(square);
       return (
        <Box
-        key={o.id}
-        customClass="board-preview-check-ring"
-        style={{
-         transform: `translate(${o.col * 100}%, ${o.row * 100}%)`,
+        key={id}
+        ref={(el: HTMLDivElement | null) => {
+         pieceEls.current[id] = el;
         }}
-       />
+        customClass="board-preview-piece"
+        style={{
+         transform: `translate3d(${x * 100}%, ${y * 100}%, 0)`,
+         opacity: isReducedMotion ? 1 : 0,
+        }}
+       >
+        <PieceIcon code={code} className="board-preview-piece-svg" />
+       </Box>
       );
      })}
-
-     {shimmerPhase !== "idle" && (
-      <Box
-       customClass={classNames(
-        "board-preview-shimmer",
-        shimmerPhase === "running" && "run",
-       )}
-      />
-     )}
+     <Box
+      ref={(el: HTMLDivElement | null) => {
+       fxEls.current.sweep = el;
+      }}
+      customClass="board-preview-fx sweep"
+     />
     </Box>
    </Box>
   </Box>
