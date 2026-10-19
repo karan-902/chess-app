@@ -26,7 +26,7 @@ import {
 } from "@gopvp/app/src/constants/message";
 import { backText } from "@gopvp/common/src/constants/message";
 import { ROUTES } from "@gopvp/app/src/constants/route";
-import { WALLET_3D_PATH } from "@gopvp/app/src/constants/asset";
+import { Wallet3dIcon } from "@gopvp/common/src/components/constants";
 
 export default function Header() {
  const { pathname } = useLocation();
@@ -92,7 +92,7 @@ export default function Header() {
      <Box customClass="appbar-wallet">
       <NavLink to={ROUTES.WALLET}>
        <CustomChip
-        icon={<img src={WALLET_3D_PATH} alt="" />}
+        icon={<Wallet3dIcon />}
         label={formatAmount(usdValue)}
         customClass="appbar-balance"
        />

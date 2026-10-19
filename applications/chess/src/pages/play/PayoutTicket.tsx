@@ -17,7 +17,7 @@ import {
  cancelledText,
  vsText,
 } from "@gopvp/chess/src/constants/message";
-import { COIN_PATH } from "@gopvp/chess/src/constants/asset";
+import { CoinStarIcon } from "@gopvp/common/src/components/constants";
 import {
  PAYOUT_TIMING,
  PAYOUT_COIN_COUNT,
@@ -70,7 +70,7 @@ export default function PayoutTicket({
  const stageRef = useRef<HTMLDivElement>(null);
  const slotRef = useRef<HTMLDivElement>(null);
  const amountRef = useRef<HTMLSpanElement>(null);
- const coinRefs = useRef<(HTMLImageElement | null)[]>([]);
+ const coinRefs = useRef<(SVGSVGElement | null)[]>([]);
  const sparkRefs = useRef<(HTMLDivElement | null)[]>([]);
  const scoreChange = Math.round(gameEnded.score_change);
  const amount = gameEnded.amount;
@@ -284,14 +284,12 @@ export default function PayoutTicket({
    <Box ref={slotRef} customClass="payout-slot" />
    {hasCoins &&
     COINS.map((coin, i) => (
-     <img
+     <CoinStarIcon
       key={i}
-      ref={(el) => {
+      ref={(el: SVGSVGElement | null) => {
        coinRefs.current[i] = el;
       }}
       className="payout-coin"
-      src={COIN_PATH}
-      alt=""
       style={{ width: coin.size, height: coin.size }}
      />
     ))}

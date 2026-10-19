@@ -14,7 +14,7 @@ import {
 } from "@dnd-kit/modifiers";
 import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
-import PieceIcon from "@gopvp/chess/src/components/board/PieceIcon";
+import { PieceIcon } from "@gopvp/common/src/components/constants";
 import { playSound } from "@gopvp/chess/src/lib/sounds";
 import "./board.scss";
 import {
@@ -505,7 +505,7 @@ export default function Board({
         <DroppableSquare
          key={square}
          square={square}
-         className={classNames("chess-board-square", {
+         className={classNames("chess-board-square clickable", {
           "square-selected": isSelected,
           "square-premove-from": premoveFromSquares.has(square),
           "square-premove-queued": premoveToSquares.has(square),
@@ -514,7 +514,6 @@ export default function Board({
          style={{
           backgroundColor: bg,
           background: squareBg,
-          cursor: "pointer",
          }}
          onClick={() => onSquareClick?.(square)}
          premoveMode={premoveMode}
@@ -661,17 +660,7 @@ export default function Board({
      })}
 
      {(highlights.length > 0 || arrows.length > 0) && (
-      <svg
-       viewBox="0 0 800 800"
-       style={{
-        position: "absolute",
-        inset: 0,
-        width: "100%",
-        height: "100%",
-        pointerEvents: "none",
-        zIndex: 4,
-       }}
-      >
+      <svg className="board-annotations" viewBox="0 0 800 800">
        <defs>
         {Object.entries(ANNOTATION_COLORS).map(([key, color]) => (
          <marker

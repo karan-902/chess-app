@@ -4,7 +4,7 @@ import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import CustomChip from "@gopvp/common/src/components/Chip/Chip";
 import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
-import PieceIcon from "@gopvp/chess/src/components/board/PieceIcon";
+import { PieceIcon } from "@gopvp/common/src/components/constants";
 import type { IMoveListProps } from "@gopvp/chess/src/types/component";
 import {
  cancelPremovesText,

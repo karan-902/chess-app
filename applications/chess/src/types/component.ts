@@ -116,13 +116,6 @@ export interface IMatchLoaderProps {
  matchId: string;
 }
 
-export interface IPieceIconProps {
- code: string;
- className?: string;
- style?: React.CSSProperties;
- onPointerDown?: (e: React.PointerEvent<SVGSVGElement>) => void;
-}
-
 export interface IChessBoardProps {
  fen: string;
  selectedSquare?: string | null;

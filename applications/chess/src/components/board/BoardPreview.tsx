@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import Box from "@gopvp/common/src/components/Box/Box";
-import PieceIcon from "@gopvp/chess/src/components/board/PieceIcon";
+import { PieceIcon } from "@gopvp/common/src/components/constants";
 import "./board.scss";
 import {
  FILES,

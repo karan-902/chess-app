@@ -14,7 +14,3 @@ export const ANNOTATION_COLORS: Record<string, string> = {
  alt: "#1a5fd6",
  ctrl: "#e8a33d",
 };
-
-export const PIECE_DARK_COLOR = "#000";
-export const PIECE_LIGHT_COLOR = "#fff";
-export const PIECE_DARK_DETAIL_COLOR = "#ececec";
