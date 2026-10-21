@@ -279,7 +279,7 @@ export default function BoardPreview() {
 
  return (
   <Box ref={rootRef} customClass="chess-board fit-board">
-   <Box ref={gridRef} customClass="chess-board-grid board-preview-grid">
+   <Box ref={gridRef} customClass="chess-board-grid">
     {Array.from({ length: 8 }, (_, r) =>
      Array.from({ length: 8 }, (_, c) => {
       const isLight = (r + c) % 2 === 0;

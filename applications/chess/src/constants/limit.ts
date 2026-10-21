@@ -17,6 +17,7 @@ export const BOARD_NUDGE_MS = 200;
 export const BOARD_MOTION_FRAME_SAMPLES = 30;
 export const PIECE_MOVE_BASE_MS = 420;
 export const PIECE_MOVE_PER_SQUARE_MS = 40;
+export const OPPONENT_MOVE_DURATION_SCALE = 1.6;
 export const PIECE_LAND_MS = 240;
 export const PIECE_SHAKE_MS = 450;
 export const PIECE_FILL_RATIO = 0.92;

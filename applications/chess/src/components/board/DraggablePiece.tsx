@@ -4,6 +4,7 @@ import { useDraggable } from "@dnd-kit/core";
 import Box from "@gopvp/common/src/components/Box/Box";
 import { PieceIcon } from "@gopvp/common/src/components/constants";
 import {
+ OPPONENT_MOVE_DURATION_SCALE,
  PIECE_LAND_MS,
  PIECE_SHAKE_MS,
 } from "@gopvp/chess/src/constants/limit";
@@ -54,7 +55,8 @@ export default function DraggablePiece({
   el.classList.add("moving");
   const move = el.animate(
    pieceMoveFrames(from.col, from.row, col, row),
-   pieceMoveMs(from.col, from.row, col, row),
+   pieceMoveMs(from.col, from.row, col, row) *
+    (draggable ? 1 : OPPONENT_MOVE_DURATION_SCALE),
   );
   moveRef.current = move;
   move.finished.then(
@@ -64,7 +66,7 @@ export default function DraggablePiece({
    },
    () => el.classList.remove("moving"),
   );
- }, [col, row, instant, isCaptureMove]);
+ }, [col, row, instant, isCaptureMove, draggable]);
 
  useEffect(() => {
   if (isInCheck && !prefersReducedMotion())
