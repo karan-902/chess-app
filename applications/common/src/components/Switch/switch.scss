@@ -63,7 +63,7 @@
   }
  }
 
- @media (prefers-reduced-motion: reduce) {
+ @include reduced-motion {
   &::before,
   .switch-thumb {
    transition: none;

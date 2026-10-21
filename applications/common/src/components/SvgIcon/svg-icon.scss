@@ -62,7 +62,7 @@
     }
    }
 
-   @media (prefers-reduced-motion: reduce) {
+   @include reduced-motion {
     opacity: 1;
     transform: none;
    }

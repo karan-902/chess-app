@@ -13,8 +13,8 @@ import {
  pieceMoveFrames,
  pieceMoveMs,
  pieceShakeFrames,
- prefersReducedMotion,
 } from "@gopvp/chess/src/utils";
+import { shouldReduceMotion } from "@gopvp/common/src/util/motion";
 import type { IDraggablePieceProps } from "@gopvp/chess/src/types/component";
 
 export default function DraggablePiece({
@@ -43,7 +43,7 @@ export default function DraggablePiece({
   const el = slotRef.current;
   const from = positionRef.current;
   positionRef.current = { col, row };
-  if (!el || (from.col === col && from.row === row) || prefersReducedMotion())
+  if (!el || (from.col === col && from.row === row) || shouldReduceMotion())
    return;
   moveRef.current?.cancel();
   const land = () =>
@@ -69,7 +69,7 @@ export default function DraggablePiece({
  }, [col, row, instant, isCaptureMove, draggable]);
 
  useEffect(() => {
-  if (isInCheck && !prefersReducedMotion())
+  if (isInCheck && !shouldReduceMotion())
    slotRef.current?.animate(pieceShakeFrames(col, row), PIECE_SHAKE_MS);
  }, [isInCheck, col, row]);
 

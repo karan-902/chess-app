@@ -1,3 +1,4 @@
+export const LOW_END_DEVICE_MEMORY_GB = 4;
 export const DRAWER_ENTER_MS = 420;
 export const DRAWER_EXIT_MS = 260;
 export const DRAWER_ENTER_EASING = "cubic-bezier(0.22, 1, 0.36, 1)";

@@ -23,7 +23,7 @@
    animation: skeleton-shimmer 1.4s ease-in-out infinite;
   }
 
-  @media (prefers-reduced-motion: reduce) {
+  @include reduced-motion {
    &::after {
     animation: none;
     opacity: 0;

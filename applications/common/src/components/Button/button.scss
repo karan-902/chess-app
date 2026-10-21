@@ -111,7 +111,7 @@
    color: $primaryContrast;
   }
 
-  @media (prefers-reduced-motion: reduce) {
+  @include reduced-motion {
    animation-duration: 1.6s;
   }
  }

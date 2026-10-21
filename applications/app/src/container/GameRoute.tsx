@@ -16,6 +16,7 @@ import { setActivePage } from "@gopvp/app/src/redux/game/slice";
 import { getGamePath, isGameSlug } from "@gopvp/app/src/utils";
 import { subscribeMatchResult } from "@gopvp/app/src/utils/matchResult";
 import type { IMatchResultResponse } from "@gopvp/common/src/types/response";
+import { shouldReduceMotion } from "@gopvp/common/src/util/motion";
 
 const GAME_PAGE_COMPONENTS: Record<GamePage, () => React.ReactNode> = {
  PLAY: PlayPage,
@@ -41,7 +42,7 @@ export default function GameRoute() {
   null,
  );
  const startReveal = useCallback((ticket: HTMLElement) => {
-  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (shouldReduceMotion()) return;
   const rect = ticket.getBoundingClientRect();
   const tearLine = ticket
    .querySelector("[data-tear-line]")

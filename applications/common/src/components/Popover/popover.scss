@@ -24,7 +24,7 @@
    gap: 2px;
    animation: popover-in 0.14s ease-out;
 
-   @media (prefers-reduced-motion: reduce) {
+   @include reduced-motion {
     animation: none;
    }
 
@@ -123,7 +123,7 @@
     transform: scale(0.98);
    }
 
-   @media (prefers-reduced-motion: reduce) {
+   @include reduced-motion {
     transition: none;
 
     &:active {

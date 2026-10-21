@@ -112,7 +112,7 @@
  box-shadow: 0 0.75rem 1.5rem textOpacity($black, 0.45);
  animation: select-menu-in 0.14s ease-out;
 
- @media (prefers-reduced-motion: reduce) {
+ @include reduced-motion {
   animation: none;
  }
 

@@ -35,6 +35,7 @@ import {
  pieceShakeFrames,
  sampleFrames,
 } from "@gopvp/chess/src/utils";
+import { shouldReduceMotion } from "@gopvp/common/src/util/motion";
 
 interface PieceState {
  x: number;
@@ -79,9 +80,7 @@ export default function BoardPreview() {
  const gridRef = useRef<HTMLDivElement>(null);
  const pieceEls = useRef<Record<string, HTMLDivElement | null>>({});
  const fxEls = useRef<Partial<Record<FxName, HTMLDivElement | null>>>({});
- const isReducedMotion = window.matchMedia(
-  "(prefers-reduced-motion: reduce)",
- ).matches;
+ const isReducedMotion = shouldReduceMotion();
 
  useEffect(() => {
   if (isReducedMotion) return;
