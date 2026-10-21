@@ -1291,7 +1291,6 @@
   background: $appSurface;
   border: 1px solid textOpacity($gold, 0.3);
   border-radius: $radius-card;
-  @include neo-edge;
  }
 
  &.stake-ticket-col {
@@ -1334,13 +1333,11 @@
   border-radius: $radius-card;
   border: 1.2px solid textOpacity($gold, 0.6);
   background: linear-gradient(90deg, textOpacity($gold, 0.2), textOpacity($gold, 0.04));
-  @include neo-edge;
 
   &.rival {
    padding: 0 $space-12 0 1.875rem !important;
    border-color: textOpacity($appText, 0.12);
    background: textOpacity($appText, 0.04);
-   box-shadow: none;
   }
  }
 

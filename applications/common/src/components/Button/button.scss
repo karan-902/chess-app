@@ -82,6 +82,7 @@
   font-family: $fontOutfitBold;
   font-size: 16px;
   color: inherit;
+  white-space: nowrap;
 
   @include from(phone) {
    font-size: 17px;
@@ -136,44 +137,6 @@
    margin: 0;
    transform: rotateX(24deg);
    transform-origin: 50% 100%;
-   animation: tilted-float 3.75s ease-in-out infinite;
-  }
-
-  &::after {
-   content: "";
-   position: absolute;
-   left: 0;
-   right: 0;
-   top: calc(var(--btn-face-h) + 0.5rem);
-   height: 0.5rem;
-   background: var(--btn-edge);
-   clip-path: polygon(0 0, 100% 0, calc(100% - 0.5rem) 100%, 0.5rem 100%);
-   transform-origin: 50% 100%;
-   animation: tilted-edge 3.75s ease-in-out infinite;
-   pointer-events: none;
-  }
-
-  &::before {
-   content: "";
-   position: absolute;
-   left: 0;
-   right: 0;
-   top: calc(var(--btn-face-h) + 1rem);
-   height: 0.625rem;
-   background: textOpacity($black, 0.9);
-   clip-path: polygon(
-    1.25rem 0,
-    calc(100% - 1.25rem) 0,
-    calc(100% - 0.875rem) 100%,
-    0.875rem 100%
-   );
-   transform-origin: 50% 0;
-   animation: tilted-shadow 3.75s ease-in-out infinite;
-   pointer-events: none;
-
-   :root[data-theme="light"] & {
-    background: textOpacity(#0d0d0d, 0.22);
-   }
   }
 
   .button-text {
@@ -194,39 +157,17 @@
    transform: rotateX(24deg) translate3d(0, 0.375rem, 0) !important;
   }
 
-  &:active:not(.disabled)::after {
-   transform: scaleY(0.31) !important;
-  }
-
   &.disabled:not(.loading) {
    --btn-bg: color-mix(in srgb, #{$appText} 12%, #{$appSheet}) !important;
-   --btn-edge: color-mix(in srgb, #{$appText} 26%, #{$appSheet});
 
    .button-face {
     height: var(--btn-face-h);
-   }
-  }
-
-  &.disabled .button-face,
-  &.disabled::before,
-  &.disabled::after,
-  &.loading .button-face,
-  &.loading::after {
-   animation: none;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-   .button-face,
-   &::before,
-   &::after {
-    animation: none;
    }
   }
  }
 
  &.contained {
   --btn-bg: #{$btnGoldFill};
-  --btn-edge: #{$btnEdgeGold};
   color: $primaryContrast;
 
   .button-spinner {
@@ -571,40 +512,6 @@
   }
  }
 
- &.contained:not(.disabled, .wallet-withdraw-btn) .button-face {
-  position: relative;
-  overflow: hidden;
-
-  > div {
-   position: relative;
-   z-index: 1;
-  }
-
-  &::after {
-   content: "";
-   position: absolute;
-   inset: 0;
-   background: linear-gradient(
-     90deg,
-     var(--btn-shine, rgba(255, 248, 229, 0.5)) 0 20px,
-     transparent 20px 25px,
-     var(--btn-shine, rgba(255, 248, 229, 0.5)) 25px 35px,
-     transparent 35px
-    )
-    no-repeat;
-   transform: translate3d(-4rem, 0, 0) skewX(-21deg);
-   animation: button-shimmer 3.5s 0.6s linear infinite;
-   pointer-events: none;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-   &::after {
-    animation: none;
-    opacity: 0;
-   }
-  }
- }
-
  &.auth-footer-btn {
   --btn-pad: 0 0.875rem;
   height: 2.375rem;
@@ -673,7 +580,6 @@
  &.wallet-withdraw-btn {
   --btn-bg: #{textOpacity(#{$white}, 0.08)};
   --btn-border: 1px solid #{textOpacity(#{$white}, 0.22)};
-  --btn-edge: #{$indigoEdgeDark};
   color: #f4f7ff;
 
   .button-text {
@@ -683,7 +589,6 @@
   :root[data-theme="light"] & {
    --btn-bg: #{$white};
    --btn-border: 1.5px solid #{$lightBorderStrong};
-   --btn-edge: #{$indigoEdge};
    color: $lightText;
   }
  }
@@ -884,51 +789,6 @@
   &:hover:not(.disabled) {
    --btn-border: 1px solid #{$gold};
   }
- }
-}
-
-@keyframes tilted-float {
- 0%,
- 80%,
- 100% {
-  transform: rotateX(24deg) translate3d(0, 0, 0);
- }
- 40% {
-  transform: rotateX(24deg) translate3d(0, -0.3125rem, 0);
- }
-}
-
-@keyframes tilted-edge {
- 0%,
- 80%,
- 100% {
-  transform: translate3d(0, 0, 0);
- }
- 40% {
-  transform: translate3d(0, -0.285rem, 0);
- }
-}
-
-@keyframes tilted-shadow {
- 0%,
- 80%,
- 100% {
-  opacity: 1;
-  transform: scaleX(1);
- }
- 40% {
-  opacity: 0.6;
-  transform: scaleX(0.94);
- }
-}
-
-@keyframes button-shimmer {
- 0% {
-  transform: translate3d(-4rem, 0, 0) skewX(-21deg);
- }
- 43%,
- 100% {
-  transform: translate3d(calc(100% + 3rem), 0, 0) skewX(-21deg);
  }
 }
 

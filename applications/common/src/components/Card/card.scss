@@ -36,7 +36,6 @@
  &.pool-card {
   --pool-face: #{list.nth(list.nth($poolBlocks, 1), 1)};
   --pool-ink: #{list.nth(list.nth($poolBlocks, 1), 2)};
-  @include neo-elevated($poolEdgeRight, $poolEdgeBottom);
   display: grid;
   grid-template-columns: 4.25rem 1fr auto;
   grid-template-areas:
@@ -63,10 +62,18 @@
   text-align: left;
   cursor: pointer;
   background: $poolInfoBg;
+  transition: transform 0.12s ease-in-out;
 
   :root[data-theme="light"] & {
    border: 1px solid $poolEdgeBottom;
-   border-width: 1px 0 0 1px;
+  }
+
+  &:active {
+   transform: translate3d(2px, 2px, 0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+   transition: none;
   }
 
   @for $i from 1 through list.length($poolBlocks) {
@@ -88,11 +95,6 @@
 
    &:active {
     transform: none;
-
-    &::before,
-    &::after {
-     opacity: 1;
-    }
    }
   }
 
