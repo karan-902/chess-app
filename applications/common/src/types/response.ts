@@ -126,7 +126,7 @@ export type IWithdrawResponse = IBalanceResponse & {
 export type IWalletLastTransaction = {
  id: string;
  type: "DEPOSIT" | "WITHDRAW";
- status: "PROCESSING" | "COMPLETED";
+ status: "PROCESSING" | "COMPLETED" | "FAILED";
  amount: number;
  created: number;
 };

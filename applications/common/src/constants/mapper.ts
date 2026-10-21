@@ -8,6 +8,8 @@ import {
 
 export const ERROR_TYPES = {
  POOL_JOIN_IN_PROGRESS: "pool_join_in_progress",
+ AMOUNT_BELOW_MINIMUM: "amount_below_minimum",
+ DAILY_WITHDRAW_LIMIT_REACHED: "daily_withdraw_limit_reached",
 } as const;
 
 export const MATCH_RESULT_OUTCOMES: Record<MatchResult, MatchOutcome> = {
