@@ -307,8 +307,8 @@
     color: textOpacity($appText, 0.7);
 
     &.active {
-     --btn-bg: #{$indigoDeep};
-     --btn-border: 1px solid #{$indigoDeep};
+     --btn-bg: #{$navyBadge};
+     --btn-border: 1px solid #{$navyBadgeTop};
      color: $white;
     }
    }
@@ -327,8 +327,8 @@
    color: $primaryContrast;
 
    :root[data-theme="light"] & {
-    --btn-bg: #{$indigoDeep} !important;
-    --btn-border: 1px solid #{$indigoDeep};
+    --btn-bg: #{$navyBadge} !important;
+    --btn-border: 1px solid #{$navyBadgeTop};
     color: $white;
    }
 
