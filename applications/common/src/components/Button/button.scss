@@ -309,7 +309,7 @@
     &.active {
      --btn-bg: #{$navyBadge};
      --btn-border: 1px solid #{$navyBadgeTop};
-     color: $white;
+     color: $gold;
     }
    }
   }
@@ -329,7 +329,7 @@
    :root[data-theme="light"] & {
     --btn-bg: #{$navyBadge} !important;
     --btn-border: 1px solid #{$navyBadgeTop};
-    color: $white;
+    color: $gold;
    }
 
    .button-face {
@@ -343,7 +343,7 @@
      color: $primaryContrast;
 
      :root[data-theme="light"] & {
-      color: $white;
+      color: $gold;
      }
     }
    }
