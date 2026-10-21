@@ -46,8 +46,8 @@ import {
  boardSweepFrames,
  entranceDelayMs,
  pieceEntranceFrames,
- prefersReducedMotion,
 } from "@gopvp/chess/src/utils";
+import { shouldReduceMotion } from "@gopvp/common/src/util/motion";
 import DroppableSquare from "@gopvp/chess/src/components/board/DroppableSquare";
 import DraggablePiece from "@gopvp/chess/src/components/board/DraggablePiece";
 import type { IChessBoardProps } from "@gopvp/chess/src/types/component";
@@ -213,7 +213,7 @@ function Board({
 
  useEffect(() => {
   if (!entranceGhosts || holdEntrance) return;
-  const isReducedMotion = prefersReducedMotion();
+  const isReducedMotion = shouldReduceMotion();
   const animations = entranceGhosts.map(({ square }) => {
    const col = files.indexOf(square[0]);
    const row = ranks.indexOf(square[1]);
@@ -269,7 +269,7 @@ function Board({
    ...q,
    { id, square: capturedSquare, code: prevBoard[capturedSquare] },
   ]);
-  if (!prefersReducedMotion())
+  if (!shouldReduceMotion())
    gridRef.current?.animate(boardNudgeFrames(), BOARD_NUDGE_MS);
  }, [lastMove]);
 

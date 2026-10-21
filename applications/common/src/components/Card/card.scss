@@ -72,7 +72,7 @@
    transform: translate3d(2px, 2px, 0);
   }
 
-  @media (prefers-reduced-motion: reduce) {
+  @include reduced-motion {
    transition: none;
   }
 

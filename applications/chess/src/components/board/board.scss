@@ -542,7 +542,7 @@ svg.gr-captured-icon {
  }
 }
 
-@media (prefers-reduced-motion: reduce) {
+@include reduced-motion {
  .board-preview-ring,
  .board-preview-flash,
  .board-check-ring,

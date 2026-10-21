@@ -19,8 +19,6 @@ export const smoothStep = (value: number) => {
  return p * p * (3 - 2 * p);
 };
 export const easeOutCubic = (value: number) => 1 - (1 - clamp01(value)) ** 3;
-export const prefersReducedMotion = () =>
- window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 export const easeOutQuart = (p: number) => 1 - (1 - p) ** 4;
 export const easeOutBack = (p: number) =>
  1 + 2.2 * (p - 1) ** 3 + 1.2 * (p - 1) ** 2;

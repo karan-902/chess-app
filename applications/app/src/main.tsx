@@ -13,9 +13,12 @@ import {
 } from "@gopvp/app/src/context/ThemeContext";
 import { getMuiTheme } from "@gopvp/common/src/theme";
 import { googleClientId } from "@gopvp/common/src/constants/env";
+import { isLowEndDevice } from "@gopvp/common/src/util/motion";
 
 import "./styles/main.scss";
 import App from "@gopvp/app/src/App.tsx";
+
+document.documentElement.classList.toggle("reduce-motion", isLowEndDevice());
 
 function Root() {
  const { mode } = useAppTheme();

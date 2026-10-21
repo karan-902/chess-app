@@ -5,6 +5,22 @@
  @return color-mix(in srgb, $color $visiblePercent, transparent);
 }
 
+@mixin reduced-motion {
+ @media (prefers-reduced-motion: reduce) {
+  @content;
+ }
+
+ @if & {
+  :root.reduce-motion & {
+   @content;
+  }
+ } @else {
+  :root.reduce-motion {
+   @content;
+  }
+ }
+}
+
 @mixin sheet-pattern(
  $color: textOpacity(var(--app-text), 0.035),
  $clear: radial-gradient(70% 40% at 50% 50%, transparent 55%, #000)
