@@ -207,7 +207,8 @@
   }
  }
 
- &.form-input {
+ &.form-input,
+ .username-field & {
   position: relative;
  }
  &.form-input .input-row {

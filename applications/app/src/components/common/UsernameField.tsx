@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Input from "@gopvp/common/src/components/Input/Input";
 import Text from "@gopvp/common/src/components/Text/Text";
@@ -125,39 +124,40 @@ export default function UsernameField<TValues extends { username: string }>({
     customClass={customClass}
     fullWidth
    />
-   {showHint && !hasError && (
-    <Text customClass="field-hint">
-     {usernameHintText(USERNAME_MIN_LENGTH, USERNAME_MAX_LENGTH)}
-    </Text>
-   )}
-   {showSuggestion && (loadingSuggestions || suggestions.length > 0) && (
-    <Text
-     component="div"
-     customClass={classNames("username-suggestion", hasError && "beside-error")}
-    >
-     {!hasError && suggestionText}
-     {loadingSuggestions ? (
-      <Skeleton variant="rounded" customClass="username-suggestion-skeleton" />
-     ) : (
-      <Button
+   <Box customClass="username-message-slot">
+    {showHint && !hasError && (
+     <Text customClass="field-hint">
+      {usernameHintText(USERNAME_MIN_LENGTH, USERNAME_MAX_LENGTH)}
+     </Text>
+    )}
+   </Box>
+   <Text component="div" customClass="username-suggestion">
+    {showSuggestion && (loadingSuggestions || suggestions.length > 0) && (
+     <>
+      {suggestionText}
+      {loadingSuggestions ? (
+       <Skeleton variant="rounded" customClass="username-suggestion-skeleton" />
+      ) : (
+       <Button
+        type="button"
+        variant="text"
+        customClass="username-suggestion-btn"
+        onClick={() => selectUsername(suggestions[suggestionIndex])}
+       >
+        {suggestions[suggestionIndex]}
+       </Button>
+      )}
+      <CustomIconButton
        type="button"
-       variant="text"
-       customClass="username-suggestion-btn"
-       onClick={() => selectUsername(suggestions[suggestionIndex])}
-      >
-       {suggestions[suggestionIndex]}
-      </Button>
-     )}
-     <CustomIconButton
-      type="button"
-      customClass="username-refresh-btn"
-      aria-label={newSuggestionText}
-      onClick={showNextSuggestion}
-      disabled={loadingSuggestions}
-      icon="rotateCw"
-     />
-    </Text>
-   )}
+       customClass="username-refresh-btn"
+       aria-label={newSuggestionText}
+       onClick={showNextSuggestion}
+       disabled={loadingSuggestions}
+       icon="rotateCw"
+      />
+     </>
+    )}
+   </Text>
   </Box>
  );
 }

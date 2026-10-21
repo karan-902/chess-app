@@ -57,6 +57,7 @@
   }
 
   .common-input.form-input > &,
+  .username-field .common-input > &,
   .form-field .common-select > & {
    position: absolute;
    top: 100%;

@@ -73,7 +73,7 @@ export default function EmailFormScreen({
    component="form"
    onSubmit={formSubmitHandler(formik.handleSubmit)}
   >
-   <UsernameField formik={formik} customClass="form-input" />
+   <UsernameField formik={formik} customClass="form-input" showHint />
 
    <Input
     id="email"
