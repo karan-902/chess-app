@@ -103,7 +103,7 @@ export function showApiErrorToast(err: unknown) {
  showToastMessage({ toastMessage, toastVariant: "error" });
 }
 
-export function showAckErrorToast(err: ISocketAckError | null) {
+export function showAckErrorToast(err: Pick<ISocketAckError, "errors"> | null) {
  const toastMessage = err?.errors[0]?.message;
  if (!toastMessage) return;
  showToastMessage({ toastMessage, toastVariant: "error" });

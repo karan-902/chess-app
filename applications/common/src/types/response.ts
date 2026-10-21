@@ -15,6 +15,8 @@ export type ISocketAckError = {
  errors: { message: string; type: string }[];
 };
 
+export type IPoolRemovedEvent = Pick<ISocketAckError, "errors">;
+
 export type IApiErrorResponse = {
  message?: string;
  type?: string;

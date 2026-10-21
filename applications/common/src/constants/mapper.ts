@@ -6,6 +6,10 @@ import {
  betReturnedText,
 } from "@gopvp/common/src/constants/message";
 
+export const ERROR_TYPES = {
+ POOL_JOIN_IN_PROGRESS: "pool_join_in_progress",
+} as const;
+
 export const MATCH_RESULT_OUTCOMES: Record<MatchResult, MatchOutcome> = {
  WON: "win",
  BET: "loss",
