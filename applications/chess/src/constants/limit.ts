@@ -34,13 +34,14 @@ export const PAYOUT_TIMING: Record<
    | "sparks"
    | "stamp"
    | "glare"
+   | "shake"
    | "end",
    number
   >
  >
 > = {
  win: { rise: 0.35, burst: 1.3, count: 1.4, countDur: 0.85, sparks: 1.96, stamp: 2.35, glare: 2.75, end: 3.4 },
- loss: { rise: 0.35, count: 1.3, countDur: 0.6, stamp: 2.1, end: 2.6 },
+ loss: { rise: 0.35, count: 1.3, countDur: 0.6, shake: 1.9, stamp: 2.1, end: 2.6 },
  draw: { rise: 0.35, count: 1.4, countDur: 0.8, glare: 2.3, stamp: 2.35, end: 3.4 },
  quick: { rise: 0.35, stamp: 1.45, sparks: 1.67, glare: 1.95, end: 2.8 },
 };

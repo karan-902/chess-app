@@ -166,6 +166,7 @@ export default function PayoutTicket({
    fire("rise", timing.rise, t, () => stage.classList.add("rising"));
    fire("stamp", timing.stamp, t, () => stage.classList.add("stamped"));
    fire("glare", timing.glare, t, () => stage.classList.add("glare"));
+   fire("shake", timing.shake, t, () => stage.classList.add("shaking"));
 
    if (timing.count !== undefined && timing.countDur && t >= timing.count)
     paintCount(
