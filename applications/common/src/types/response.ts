@@ -15,6 +15,8 @@ export type ISocketAckError = {
  errors: { message: string; type: string }[];
 };
 
+export type IPoolRemovedEvent = Pick<ISocketAckError, "errors">;
+
 export type IApiErrorResponse = {
  message?: string;
  type?: string;
@@ -124,7 +126,7 @@ export type IWithdrawResponse = IBalanceResponse & {
 export type IWalletLastTransaction = {
  id: string;
  type: "DEPOSIT" | "WITHDRAW";
- status: "PROCESSING" | "COMPLETED";
+ status: "PROCESSING" | "COMPLETED" | "FAILED";
  amount: number;
  created: number;
 };

@@ -189,7 +189,7 @@ export const withdrawText = "Withdraw";
 export const onlyWinningsWithdrawableText =
  "Only winnings and draws are withdrawable";
 export const destinationText = "Destination";
-export const btcAddressOrInvoiceText = "Bitcoin address or Lightning invoice";
+export const lightningAddressText = "Lightning address";
 export const requestWithdrawalText = "Withdraw";
 export const maxWithdrawalAmountText = (max: number) =>
  `Maximum withdrawal amount is ${formatAmount(max)}`;
@@ -197,6 +197,7 @@ export const insufficientWithdrawableText = "Insufficient withdrawable balance";
 export const enterDestinationText = "Enter a destination address";
 export const withdrawalCompletedText = "Withdrawal completed";
 export const withdrawalProcessingText = "Withdrawal processing";
+export const withdrawalFailedText = "Withdrawal failed, amount returned";
 export const noRankedPlayersText = "No Ranked Players Yet";
 export const winToRankText = "Win a match to get your name on the board.";
 export const dashText = "–";

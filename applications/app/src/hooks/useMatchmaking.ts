@@ -21,10 +21,12 @@ import type {
  IPoolResponse,
  IMatchmakingResponse,
  IPoolMatchedEvent,
+ IPoolRemovedEvent,
  IMatchPlayer,
  ISocketAckError,
 } from "@gopvp/common/src/types/response";
 import { SOCKET_EVENTS } from "@gopvp/common/src/constants/event";
+import { ERROR_TYPES } from "@gopvp/common/src/constants/mapper";
 
 export type MatchmakingStatus =
  | "idle"
@@ -98,6 +100,7 @@ export function useMatchmaking() {
     (err: ISocketAckError | null, data: IMatchmakingResponse) => {
      if (!poolRef.current) return;
      if (err) {
+      if (err.errors[0]?.type === ERROR_TYPES.POOL_JOIN_IN_PROGRESS) return;
       showAckErrorToast(err);
       resetStatus();
       return;
@@ -146,6 +149,11 @@ export function useMatchmaking() {
    // );
   };
 
+  const onPoolRemoved = (data: IPoolRemovedEvent) => {
+   showAckErrorToast(data);
+   resetStatus();
+  };
+
   const onReconnect = () => {
    joinPendingRef.current = false;
    if (!poolRef.current) return;
@@ -155,6 +163,7 @@ export function useMatchmaking() {
 
   socket.on(SOCKET_EVENTS.MATCHED, onMatched);
   socket.on(SOCKET_EVENTS.POOL_TIMEOUT, onPoolTimeout);
+  socket.on(SOCKET_EVENTS.POOL_REMOVED, onPoolRemoved);
   socket.on(SOCKET_EVENTS.CONNECT, onReconnect);
   if (socket.connected && joinPendingRef.current) onReconnect();
   // socket.on("queue_joined", onQueueJoined);
@@ -166,9 +175,10 @@ export function useMatchmaking() {
   return () => {
    socket.off(SOCKET_EVENTS.MATCHED, onMatched);
    socket.off(SOCKET_EVENTS.POOL_TIMEOUT, onPoolTimeout);
+   socket.off(SOCKET_EVENTS.POOL_REMOVED, onPoolRemoved);
    socket.off(SOCKET_EVENTS.CONNECT, onReconnect);
   };
- }, [ctxSocket, openMatch, emitPoolJoin, markTimedOut]);
+ }, [ctxSocket, openMatch, emitPoolJoin, markTimedOut, resetStatus]);
 
  useEffect(() => {
   if (secondsLeft !== 0 || (status !== "queued" && status !== "joining")) return;
