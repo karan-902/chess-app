@@ -140,8 +140,6 @@ export type IPoolResponse = {
  prize: number;
  time: number;
  players: number;
- active: number;
- hot: boolean;
 };
 
 export type IMatchPlayer = {
@@ -273,7 +271,6 @@ export type IGameNotFoundResponse = {
 
 export type IPoolsDocResponse = {
  game: string;
- stats: { games: number; players: number };
  pools: IPoolResponse[];
  updated: number;
 };
@@ -324,10 +321,6 @@ export type IDisconnectEvent = {
 
 export type IOpponentStatusEvent = {
  userId: string;
-};
-
-export type IEndUpdateEvent = {
- score: number;
 };
 
 export type IProfileResponse = {
