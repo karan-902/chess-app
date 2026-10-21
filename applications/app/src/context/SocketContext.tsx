@@ -17,14 +17,11 @@ import {
  getNewestAccessToken,
  LOGOUT_ERROR_TYPES,
 } from "@gopvp/common/src/util/api";
-import { showToastMessage } from "@gopvp/common/src/util/injectStore";
 import { getGameFromPath } from "@gopvp/app/src/utils";
 import sessionService from "@gopvp/common/src/util/sessionService";
 import { router } from "@gopvp/app/src/routes/router";
-import { navigateTo } from "@gopvp/common/src/util/navigationService";
 import RejoinGameModal from "@gopvp/app/src/components/common/RejoinGameModal";
 import { subscribeActiveGame } from "@gopvp/app/src/utils/matchResult";
-import { ROUTES } from "@gopvp/app/src/constants/route";
 import { SOCKET_EVENTS } from "@gopvp/common/src/constants/event";
 
 interface ISocketContext {
@@ -92,10 +89,8 @@ export function SocketProvider({ children }: PropsWithChildren) {
    invalidTokenRetriedRef.current = false;
   };
 
-  const onSessionTerminated = async () => {
-   disconnectSocket();
-   await sessionService.deleteSession();
-   navigateTo(ROUTES.LOGIN, { replace: true });
+  const onDisconnect = (reason: Socket.DisconnectReason) => {
+   if (reason === "io server disconnect") sock.connect();
   };
 
   const reconnectWithToken = async (getToken: () => Promise<string>) => {
@@ -130,20 +125,18 @@ export function SocketProvider({ children }: PropsWithChildren) {
    }
 
    if (errorType === "invalid_token" || LOGOUT_ERROR_TYPES.has(errorType)) {
-    if (errorType.startsWith("account_"))
-     showToastMessage({ toastMessage: err.message, toastVariant: "error" });
-    onSessionTerminated();
+    sessionService.endSession();
    }
   };
 
   sock.on(SOCKET_EVENTS.CONNECT, onConnect);
   sock.on(SOCKET_EVENTS.CONNECT_ERROR, onConnectError);
-  sock.on(SOCKET_EVENTS.SESSION_REPLACED, onSessionTerminated);
+  sock.on(SOCKET_EVENTS.DISCONNECT, onDisconnect);
 
   return () => {
    sock.off(SOCKET_EVENTS.CONNECT, onConnect);
    sock.off(SOCKET_EVENTS.CONNECT_ERROR, onConnectError);
-   sock.off(SOCKET_EVENTS.SESSION_REPLACED, onSessionTerminated);
+   sock.off(SOCKET_EVENTS.DISCONNECT, onDisconnect);
   };
  }, [isLoggedIn, session?.access_token, isGameReady, isSocketNeeded, dispatch]);
 

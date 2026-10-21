@@ -97,6 +97,7 @@ export function showApiErrorToast(err: unknown) {
  const isAlreadyToasted =
   !response ||
   response.status === 429 ||
+  response.status === 401 ||
   LOGOUT_ERROR_TYPES.has(response.data?.type ?? "");
  const toastMessage = response?.data?.message;
  if (isAlreadyToasted || !toastMessage) return;
@@ -180,9 +181,10 @@ export const callAPIInterface = async <
     });
     return retryRes.data;
    } catch (retryErr) {
-    const retryStatus = getApiErrorResponse(retryErr)?.status;
-    if (!isAxiosError(retryErr) || retryStatus === 401)
-     await sessionService.deleteSession();
+    const retryResponse = getApiErrorResponse(retryErr);
+    if (!isAxiosError(retryErr) || retryResponse?.status === 401) {
+     await sessionService.endSession();
+    }
     throw retryErr;
    }
   }
@@ -191,13 +193,7 @@ export const callAPIInterface = async <
    LOGOUT_ERROR_TYPES.has(errorType ?? "") &&
    (path === ENDPOINTS.GENERATE_TOKEN || !OPEN_ENDPOINTS.includes(path))
   ) {
-   if (errorData?.message) {
-    showToastMessage({
-     toastMessage: errorData.message,
-     toastVariant: "error",
-    });
-   }
-   await sessionService.deleteSession();
+   await sessionService.endSession();
    throw err;
   }
 

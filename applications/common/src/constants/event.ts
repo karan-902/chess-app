@@ -1,7 +1,7 @@
 export const SOCKET_EVENTS = {
  CONNECT: "connect",
  CONNECT_ERROR: "connect_error",
- SESSION_REPLACED: "session_replaced",
+ DISCONNECT: "disconnect",
  DEVICE_APPROVED: "device_approved",
  GAME_STATE: "game_state",
  GAME_REJOIN_DECLINED: "game_rejoin_declined",
