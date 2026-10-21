@@ -54,8 +54,12 @@ export interface IGamePracticeProps {
  onClose: () => void;
 }
 
+export interface IGamePreviewProps {
+ isPaused?: boolean;
+}
+
 export interface IGameModule {
- Preview: ComponentType;
+ Preview: ComponentType<IGamePreviewProps>;
  PoolLabel: ComponentType<IPoolLabelProps>;
  GameRoom: ComponentType;
  preloadGameRoom: () => Promise<unknown>;

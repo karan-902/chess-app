@@ -177,7 +177,9 @@ export default function PlayPage() {
      <Suspense
       fallback={<Skeleton variant="rounded" customClass="board-skeleton" />}
      >
-      <Preview />
+      <Preview
+       isPaused={sheetOpen || confirmOpen || practiceOpen || roomOpen}
+      />
      </Suspense>
     </Box>
    </Box>

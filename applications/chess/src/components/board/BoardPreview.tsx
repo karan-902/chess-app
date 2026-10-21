@@ -35,7 +35,7 @@ import {
  pieceShakeFrames,
  sampleFrames,
 } from "@gopvp/chess/src/utils";
-import { shouldReduceMotion } from "@gopvp/common/src/util/motion";
+import type { IGamePreviewProps } from "@gopvp/common/src/types/component";
 
 interface PieceState {
  x: number;
@@ -75,21 +75,27 @@ const squareOf = (square: string) => ({
  y: RANKS.indexOf(square[1]),
 });
 
-export default function BoardPreview() {
+export default function BoardPreview({ isPaused = false }: IGamePreviewProps) {
  const rootRef = useRef<HTMLDivElement>(null);
  const gridRef = useRef<HTMLDivElement>(null);
  const pieceEls = useRef<Record<string, HTMLDivElement | null>>({});
  const fxEls = useRef<Partial<Record<FxName, HTMLDivElement | null>>>({});
- const isReducedMotion = shouldReduceMotion();
+ const isPausedRef = useRef(isPaused);
+ const syncPlaybackRef = useRef<() => void>(undefined);
 
  useEffect(() => {
-  if (isReducedMotion) return;
+  isPausedRef.current = isPaused;
+  syncPlaybackRef.current?.();
+ }, [isPaused]);
+
+ useEffect(() => {
   let cancelled = false;
   let isVisible = true;
   let isOnScreen = true;
   const animations = new Set<Animation>();
   const pieces: Record<string, PieceState> = {};
   let board: Record<string, string> = {};
+  const isActive = () => isVisible && isOnScreen && !isPausedRef.current;
 
   const animate = (
    el: Element | null | undefined,
@@ -100,7 +106,7 @@ export default function BoardPreview() {
    if (cancelled || !el) return Promise.resolve();
    const animation = el.animate(keyframes, { duration, delay, fill: "both" });
    animations.add(animation);
-   if (!(isVisible && isOnScreen)) animation.pause();
+   if (!isActive()) animation.pause();
    return animation.finished.then(
     () => {
      animations.delete(animation);
@@ -114,12 +120,11 @@ export default function BoardPreview() {
 
   const wait = (ms: number) => animate(rootRef.current, [], ms);
 
-  const syncPlayback = () => {
-   const isActive = isVisible && isOnScreen;
+  const syncPlayback = () =>
    animations.forEach((animation) =>
-    isActive ? animation.play() : animation.pause(),
+    isActive() ? animation.play() : animation.pause(),
    );
-  };
+  syncPlaybackRef.current = syncPlayback;
 
   const entrance = () => {
    board = {};
@@ -270,11 +275,12 @@ export default function BoardPreview() {
 
   return () => {
    cancelled = true;
+   syncPlaybackRef.current = undefined;
    animations.forEach((animation) => animation.cancel());
    observer.disconnect();
    document.removeEventListener("visibilitychange", onVisibility);
   };
- }, [isReducedMotion]);
+ }, []);
 
  return (
   <Box ref={rootRef} customClass="chess-board fit-board">
@@ -329,7 +335,7 @@ export default function BoardPreview() {
         customClass="board-preview-piece"
         style={{
          transform: `translate3d(${x * 100}%, ${y * 100}%, 0)`,
-         opacity: isReducedMotion ? 1 : 0,
+         opacity: 0,
         }}
        >
         <PieceIcon code={code} className="board-preview-piece-svg" />

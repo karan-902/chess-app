@@ -1001,6 +1001,10 @@
     transform: none;
    }
 
+   .ticket-mask.mask-1 {
+    opacity: 1;
+   }
+
    &.found .ticket-flipper {
     transform: rotateY(180deg);
    }
