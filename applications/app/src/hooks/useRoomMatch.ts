@@ -177,14 +177,18 @@ export function useRoomMatch(onRoomExpired?: () => void) {
  const cancelRoom = () => {
   const socket = getSocket();
   const room = roomRef.current;
-  if (socket && room) {
-   socket.emit(
-    isOwner ? SOCKET_EVENTS.ROOM_CANCEL : SOCKET_EVENTS.ROOM_LEAVE,
-    { room_code: room.code },
-    () => {},
-   );
+  if (!socket?.connected || !room) {
+   resetStatus();
+   return;
   }
-  resetStatus();
+  socket.emit(
+   isOwner ? SOCKET_EVENTS.ROOM_CANCEL : SOCKET_EVENTS.ROOM_LEAVE,
+   { room_code: room.code },
+   (err: ISocketAckError | null) => {
+    if (err) showAckErrorToast(err);
+    else resetStatus();
+   },
+  );
  };
 
  useEffect(() => {
@@ -192,7 +196,8 @@ export function useRoomMatch(onRoomExpired?: () => void) {
   if (!socket) return;
 
   const onMatched = (data: IRoomMatchedEvent) => {
-   if (data.matchType !== "ROOM" || statusRef.current !== "waiting") return;
+   if (data.matchType !== "ROOM" || data.roomCode !== roomRef.current?.code)
+    return;
    setPlayers(data.players);
    setStatus("ready");
   };
