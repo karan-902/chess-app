@@ -174,6 +174,17 @@
    }
   }
 
+  .hero-lit-tile {
+   position: absolute;
+   inset: 0;
+   opacity: 0.35;
+   animation: hero-path-walk linear infinite;
+
+   @media (prefers-reduced-motion: reduce) {
+    animation: none;
+   }
+  }
+
   .hero-logo {
    left: 24.4%;
    top: 31.5%;
@@ -2392,11 +2403,16 @@
   aspect-ratio: 1438 / 731;
   isolation: isolate;
 
+  overflow: hidden;
+
   &::before,
-  &::after {
+  .logo-loader-band::after {
    content: "";
    position: absolute;
-   inset: 0;
+   top: 0;
+   left: 0;
+   width: 10rem;
+   height: 100%;
    background: url("/gopvp-logo.png") center / contain no-repeat;
   }
 
@@ -2404,18 +2420,20 @@
    filter: grayscale(1) brightness(0.38);
   }
 
-  &::after {
-   $shimmer-band: linear-gradient(
-     110deg,
-     transparent 37%,
-     $white 50%,
-     transparent 63%
-    )
-    0 center / 220% 100% no-repeat;
+  .logo-loader-band {
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 3rem;
+   height: 100%;
+   overflow: hidden;
+   -webkit-mask-image: linear-gradient(90deg, transparent, #000 40%, #000 60%, transparent);
+   mask-image: linear-gradient(90deg, transparent, #000 40%, #000 60%, transparent);
+   animation: logo-loader-band 1.8s linear infinite;
 
-   -webkit-mask: $shimmer-band;
-   mask: $shimmer-band;
-   animation: logo-loader-shimmer 1.8s linear infinite;
+   &::after {
+    animation: logo-loader-band-logo 1.8s linear infinite;
+   }
   }
 
   :root[data-theme="light"] &::before {
@@ -2427,7 +2445,7 @@
     filter: none;
    }
 
-   &::after {
+   .logo-loader-band {
     display: none;
    }
   }
@@ -2576,6 +2594,16 @@
  &.game-room {
   position: relative;
   isolation: isolate;
+
+  &.ended {
+   .water-drop-ripple,
+   .piece-danger,
+   .piece-in-check,
+   .piece-glow {
+    animation-play-state: paused !important;
+   }
+  }
+
   display: flex;
   flex-direction: column;
   justify-content: safe center;
@@ -2778,7 +2806,6 @@
   align-items: center;
   justify-content: center;
   background: rgba(16, 15, 12, 0.82);
-  backdrop-filter: blur(4px);
   z-index: $z-top;
  }
 
@@ -3693,14 +3720,33 @@
  }
 }
 
-@keyframes logo-loader-shimmer {
+@keyframes logo-loader-band {
  from {
-  -webkit-mask-position: 125% center;
-  mask-position: 125% center;
+  transform: translate3d(-3rem, 0, 0);
  }
  to {
-  -webkit-mask-position: -25% center;
-  mask-position: -25% center;
+  transform: translate3d(10rem, 0, 0);
+ }
+}
+
+@keyframes logo-loader-band-logo {
+ from {
+  transform: translate3d(3rem, 0, 0);
+ }
+ to {
+  transform: translate3d(-10rem, 0, 0);
+ }
+}
+
+@keyframes hero-path-walk {
+ 0%,
+ 35.33%,
+ 64.67%,
+ 100% {
+  opacity: 0.35;
+ }
+ 50% {
+  opacity: 1;
  }
 }
 
