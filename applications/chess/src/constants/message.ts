@@ -2,7 +2,6 @@ export const resignText = "Resign";
 export const drawText = "Draw";
 export const computerText = "Computer";
 export const isReconnectingText = "is reconnecting";
-export const firstMoveText = (seconds: number) => `${seconds}s to move`;
 export const winText = "Win";
 export const noMovesYetText = "No moves yet";
 export const moveOfText = (move: number, total: number) =>

@@ -55,7 +55,7 @@
   }
 
   :root[data-theme="light"] & {
-   background: linear-gradient(180deg, #222668, #11143c) !important;
+   background: $navyBadge !important;
    color: $gold;
   }
 

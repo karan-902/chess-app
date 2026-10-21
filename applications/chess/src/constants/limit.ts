@@ -1,6 +1,5 @@
 export const COMPUTER_MOVE_MIN_DELAY_MS = 2500;
 export const COMPUTER_MOVE_MAX_DELAY_MS = 4500;
-export const FIRST_MOVE_URGENT_SECONDS = 10;
 export const CLOCK_LOW_TIME_MS = 20000;
 export const PREMOVE_QUEUE_SOUND_VOLUME = 0.25;
 export const PREMOVE_FIRE_VIBRATE_MS = 10;

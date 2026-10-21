@@ -234,7 +234,6 @@ export default function GameRoom({ mode }: IGameRoomProps) {
   drawOffer,
   isDrawOffered,
   isOpponentOffline,
-  firstMoveSeconds,
   sendMove,
   resign,
   offerDraw,
@@ -401,7 +400,6 @@ export default function GameRoom({ mode }: IGameRoomProps) {
     clock={oppClock}
     clockReady={clockReady}
     lowTime={clockReady && oppTimeMs < CLOCK_LOW_TIME_MS}
-    firstMoveSeconds={myTurnActive ? null : firstMoveSeconds}
    />
 
    <Box customClass="gr-board-wrap" data-reveal-target>
@@ -479,7 +477,6 @@ export default function GameRoom({ mode }: IGameRoomProps) {
     clock={myClock}
     clockReady={clockReady}
     lowTime={clockReady && myTimeMs < CLOCK_LOW_TIME_MS}
-    firstMoveSeconds={myTurnActive ? firstMoveSeconds : null}
    />
 
    <Box customClass="gr-foot">

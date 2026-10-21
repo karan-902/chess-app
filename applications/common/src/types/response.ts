@@ -140,8 +140,6 @@ export type IPoolResponse = {
  prize: number;
  time: number;
  players: number;
- active: number;
- hot: boolean;
 };
 
 export type IMatchPlayer = {
@@ -163,7 +161,6 @@ export type IMatchmakingResponse =
     match_type: "POOL";
     match_id: string;
     players: IMatchPlayer[];
-    first_move_deadline_ms: number;
    }
  | {
     status: "MATCHED";
@@ -181,12 +178,10 @@ export type IStartMatchResponse =
     status: "MATCHED";
     match_id: string;
     players: IMatchPlayer[];
-    first_move_deadline_ms: number;
    };
 
 export type IPoolMatchedEvent = {
  matchId: string;
- firstMoveDeadlineMs: number;
  players?: IMatchPlayer[];
 };
 
@@ -201,7 +196,6 @@ export type IRoomMatchedEvent = {
 export type IMatchStartedEvent = {
  matchId: string;
  players: IMatchPlayer[];
- firstMoveDeadlineMs: number;
 };
 
 export type IRoomLeftEvent = {
@@ -277,7 +271,6 @@ export type IGameNotFoundResponse = {
 
 export type IPoolsDocResponse = {
  game: string;
- stats: { games: number; players: number };
  pools: IPoolResponse[];
  updated: number;
 };
@@ -328,10 +321,6 @@ export type IDisconnectEvent = {
 
 export type IOpponentStatusEvent = {
  userId: string;
-};
-
-export type IEndUpdateEvent = {
- score: number;
 };
 
 export type IProfileResponse = {

@@ -36,7 +36,6 @@ export interface IPlayerRowProps {
  clock: string;
  clockReady: boolean;
  lowTime: boolean;
- firstMoveSeconds?: number | null;
 }
 
 export interface IPromotionOverlayProps {

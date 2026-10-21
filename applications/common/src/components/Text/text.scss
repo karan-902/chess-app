@@ -2509,20 +2509,6 @@
   margin-left: 0.15rem;
  }
 
- &.gr-first-move {
-  flex-shrink: 0;
-  white-space: nowrap;
-  font-family: $fontOutfitExtraBold;
-  font-size: 12px;
-  letter-spacing: 1.2px;
-  text-transform: uppercase;
-  color: $warning;
-
-  &.urgent {
-   color: $paleRed;
-  }
- }
-
  &.gr-clock {
   display: flex;
   align-items: center;
