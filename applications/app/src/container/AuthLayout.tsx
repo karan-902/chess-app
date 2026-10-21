@@ -1,4 +1,3 @@
-import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
@@ -60,17 +59,19 @@ const heroFloorTiles = Array.from(
  },
 );
 
-const heroPathTiles = heroFloorTiles.flatMap(({ path, fade, step }) =>
- step === undefined ? [] : [{ path, fade, step }],
-);
-
-const pathWalkOpacity = (step: number, fade: number, head: number) =>
- fade *
- (HERO_PATH_WALK.restOpacity +
-  (1 - HERO_PATH_WALK.restOpacity) *
-   Math.max(0, 1 - Math.abs(step - head) / HERO_PATH_WALK.pulseWidth));
-
 const walkSteps = HERO_FLOOR_PATH_LEFT.length + HERO_PATH_WALK.leadSteps * 2;
+
+const heroPathTiles = heroFloorTiles.flatMap(({ path, fade, step }) =>
+ step === undefined
+  ? []
+  : [
+     {
+      path,
+      fade,
+      delay: `${((step + HERO_PATH_WALK.leadSteps) / walkSteps - 1.5) * HERO_PATH_WALK.periodSeconds}s`,
+     },
+    ],
+);
 
 export default function AuthLayout({
  title,
@@ -82,24 +83,6 @@ export default function AuthLayout({
  children,
 }: IAuthLayoutProps) {
  const navigate = useNavigate();
- const pathTileRefs = useRef<(SVGPathElement | null)[]>([]);
-
- useEffect(() => {
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  const start = performance.now();
-  let frameId = 0;
-  const walk = (now: number) => {
-   const cycle = ((now - start) / 1000 / HERO_PATH_WALK.periodSeconds) % 1;
-   const head = cycle * walkSteps - HERO_PATH_WALK.leadSteps;
-   heroPathTiles.forEach(({ step, fade }, index) => {
-    const tile = pathTileRefs.current[index];
-    if (tile) tile.style.opacity = String(pathWalkOpacity(step, fade, head));
-   });
-   frameId = requestAnimationFrame(walk);
-  };
-  frameId = requestAnimationFrame(walk);
-  return () => cancelAnimationFrame(frameId);
- }, []);
 
  return (
   <Box customClass="public-page">
@@ -122,18 +105,22 @@ export default function AuthLayout({
            opacity={fade}
           />
          ))}
-         {heroPathTiles.map(({ path, fade }, index) => (
-          <path
-           key={`lit-${path}`}
-           ref={(tile) => {
-            pathTileRefs.current[index] = tile;
-           }}
-           d={path}
-           className="lit"
-           style={{ opacity: fade * HERO_PATH_WALK.restOpacity }}
-          />
-         ))}
         </svg>
+        {heroPathTiles.map(({ path, fade, delay }) => (
+         <svg
+          key={path}
+          className="hero-floor hero-lit-tile"
+          viewBox={`0 0 ${HERO_FLOOR.width} ${HERO_FLOOR.height}`}
+          preserveAspectRatio="none"
+          style={{
+           animationDuration: `${HERO_PATH_WALK.periodSeconds}s`,
+           animationDelay: delay,
+          }}
+          aria-hidden
+         >
+          <path d={path} className="lit" opacity={fade} />
+         </svg>
+        ))}
        </Box>
       </Box>
       <Box customClass="hero-frame">

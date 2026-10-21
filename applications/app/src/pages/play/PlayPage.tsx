@@ -1,6 +1,7 @@
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import Box from "@gopvp/common/src/components/Box/Box";
+import LogoLoader from "@gopvp/common/src/components/LogoLoader/LogoLoader";
 // import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
 import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
@@ -109,7 +110,7 @@ export default function PlayPage() {
    <Suspense
     fallback={
      <Box customClass="modal-loader game-loader">
-      <Box customClass="logo-loader" role="progressbar" />
+      <LogoLoader role="progressbar" />
      </Box>
     }
    >

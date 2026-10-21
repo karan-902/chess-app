@@ -379,7 +379,7 @@ export default function GameRoom({ mode }: IGameRoomProps) {
  const myTurnActive = turn === playerSide;
 
  return (
-  <Box customClass="game-room">
+  <Box customClass={classNames("game-room", gameEnded && "ended")}>
    <Box customClass="gr-win-counter">
     <Text component="span" customClass="gr-win-label">
      {isPvc ? practiceText : winText}

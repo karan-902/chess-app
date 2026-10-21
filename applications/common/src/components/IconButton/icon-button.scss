@@ -255,7 +255,6 @@
   height: 2.75rem;
   border: 1px solid textOpacity($white, 0.28);
   background: textOpacity($white, 0.1);
-  backdrop-filter: blur(12px);
   color: $white;
   transition: transform 0.12s cubic-bezier(0.22, 1, 0.36, 1);
 

@@ -1,4 +1,5 @@
 import Box from "@gopvp/common/src/components/Box/Box";
+import LogoLoader from "@gopvp/common/src/components/LogoLoader/LogoLoader";
 import Text from "@gopvp/common/src/components/Text/Text";
 import SuccessCheckmark from "@gopvp/common/src/components/SuccessCheckmark/SuccessCheckmark";
 import { formatAmount } from "@gopvp/common/src/util/format";
@@ -13,7 +14,7 @@ export default function WalletSuccessStage({
   <Box customClass="modal-success-stage">
    <Box customClass="modal-success-icon">
     {isProcessing ? (
-     <Box customClass="logo-loader" role="progressbar" />
+     <LogoLoader role="progressbar" />
     ) : (
      <SuccessCheckmark />
     )}
