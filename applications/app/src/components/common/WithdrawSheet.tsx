@@ -41,7 +41,10 @@ import { sanitizeAmountInput } from "@gopvp/app/src/utils";
 type Stage = "amount" | "processing" | "success";
 
 const AMOUNT_ERROR_TYPES: string[] = [
+ ERROR_TYPES.AMOUNT_REQUIRED,
+ ERROR_TYPES.INVALID_AMOUNT,
  ERROR_TYPES.AMOUNT_BELOW_MINIMUM,
+ ERROR_TYPES.AMOUNT_ABOVE_MAXIMUM,
  ERROR_TYPES.DAILY_WITHDRAW_LIMIT_REACHED,
 ];
 

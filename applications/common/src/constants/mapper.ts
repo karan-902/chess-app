@@ -9,7 +9,10 @@ import {
 export const ERROR_TYPES = {
  POOL_JOIN_IN_PROGRESS: "pool_join_in_progress",
  MATCH_NOT_FOUND: "match_not_found",
+ AMOUNT_REQUIRED: "amount_required",
+ INVALID_AMOUNT: "invalid_amount",
  AMOUNT_BELOW_MINIMUM: "amount_below_minimum",
+ AMOUNT_ABOVE_MAXIMUM: "amount_above_maximum",
  DAILY_WITHDRAW_LIMIT_REACHED: "daily_withdraw_limit_reached",
 } as const;
 
