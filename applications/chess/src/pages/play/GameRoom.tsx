@@ -251,7 +251,10 @@ export default function GameRoom({ mode }: IGameRoomProps) {
   setGameEnded,
  });
 
- const legalMoves = selectedSquare ? getLegalMoves(selectedSquare) : [];
+ const legalMoves = useMemo(
+  () => (fen && selectedSquare ? getLegalMoves(selectedSquare) : []),
+  [selectedSquare, getLegalMoves, fen],
+ );
  const premoveTargets = useMemo(
   () =>
    premoveFrom ? getPremoveMoves(premoveFrom, playerSide, premoveQueue) : [],
@@ -332,10 +335,19 @@ export default function GameRoom({ mode }: IGameRoomProps) {
   setSelectedSquare(hasOwnPiece ? square : null);
  };
 
- const clearPremoves = () => {
+ const handleSquareClickRef = useRef(handleSquareClick);
+ useEffect(() => {
+  handleSquareClickRef.current = handleSquareClick;
+ });
+ const onBoardSquareClick = useCallback(
+  (square: string) => handleSquareClickRef.current(square),
+  [],
+ );
+
+ const clearPremoves = useCallback(() => {
   setPremoveQueue([]);
   setPremoveFrom(null);
- };
+ }, []);
 
  const handlePromotionSelect = (piece: string) => {
   if (!pendingPromotion) return;
@@ -413,7 +425,7 @@ export default function GameRoom({ mode }: IGameRoomProps) {
      checkSquare={checkSquare}
      stalemateSquare={stalemateSquare}
      flashSquare={flashSquare}
-     onSquareClick={handleSquareClick}
+     onSquareClick={onBoardSquareClick}
      onSquareRightClick={clearPremoves}
      lastMove={isReviewing ? null : lastMove}
      flipped={playerSide === "b"}

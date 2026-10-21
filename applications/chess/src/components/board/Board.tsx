@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useMemo } from "react";
+import { memo, useRef, useState, useEffect, useMemo } from "react";
 import {
  DndContext,
  DragOverlay,
@@ -99,7 +99,7 @@ function boardFromFen(fen: string): Record<string, string> {
  return board;
 }
 
-export default function Board({
+function Board({
  fen,
  selectedSquare,
  legalMoves = [],
@@ -237,12 +237,15 @@ export default function Board({
     () => {
      setEntranceGhosts(null);
      onEntranceEnd?.();
-     const sweep = sweepRef.current;
-     if (isReducedMotion || !sweep) return;
-     setIsSweeping(true);
-     sweep
-      .animate(boardSweepFrames(), BOARD_SWEEP_MS)
-      .finished.then(() => setIsSweeping(false), () => {});
+     if (isReducedMotion) return;
+     requestAnimationFrame(() => {
+      const sweep = sweepRef.current;
+      if (!sweep) return;
+      setIsSweeping(true);
+      sweep
+       .animate(boardSweepFrames(), BOARD_SWEEP_MS)
+       .finished.then(() => setIsSweeping(false), () => {});
+     });
     },
     BOARD_ENTRANCE_START_MS +
      entranceDelayMs(0, 1) +
@@ -740,3 +743,5 @@ export default function Board({
   </DndContext>
  );
 }
+
+export default memo(Board);

@@ -45,6 +45,7 @@ $pieceFill: 92%;
  border: 1px solid $appCardBorder;
  background: $appCardBorder;
  touch-action: none;
+ will-change: transform;
 }
 
 .chess-board-square {
@@ -120,6 +121,7 @@ $pieceFill: 92%;
  touch-action: none;
  z-index: $z-overlay;
  outline: none;
+ will-change: transform;
 
  &:focus-visible {
   outline: 2px solid $gold;
@@ -177,6 +179,7 @@ svg.chess-piece-svg {
  position: relative;
  z-index: $z-overlay;
  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.4));
+ will-change: transform;
 
  &.piece-capture-pending {
   opacity: 0.4;
@@ -339,10 +342,6 @@ svg.gr-captured-icon {
  to {
   transform: scale(1.08);
  }
-}
-
-.board-preview-grid {
- will-change: transform;
 }
 
 .board-preview-layer {
