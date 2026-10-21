@@ -163,7 +163,6 @@ export type IMatchmakingResponse =
     match_type: "POOL";
     match_id: string;
     players: IMatchPlayer[];
-    first_move_deadline_ms: number;
    }
  | {
     status: "MATCHED";
@@ -181,12 +180,10 @@ export type IStartMatchResponse =
     status: "MATCHED";
     match_id: string;
     players: IMatchPlayer[];
-    first_move_deadline_ms: number;
    };
 
 export type IPoolMatchedEvent = {
  matchId: string;
- firstMoveDeadlineMs: number;
  players?: IMatchPlayer[];
 };
 
@@ -201,7 +198,6 @@ export type IRoomMatchedEvent = {
 export type IMatchStartedEvent = {
  matchId: string;
  players: IMatchPlayer[];
- firstMoveDeadlineMs: number;
 };
 
 export type IRoomLeftEvent = {

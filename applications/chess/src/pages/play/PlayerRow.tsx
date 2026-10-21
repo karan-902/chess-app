@@ -5,8 +5,6 @@ import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
 import CustomAvatar from "@gopvp/common/src/components/Avatar/Avatar";
 import { PieceIcon } from "@gopvp/common/src/components/constants";
 import type { IPlayerRowProps } from "@gopvp/chess/src/types/component";
-import { FIRST_MOVE_URGENT_SECONDS } from "@gopvp/chess/src/constants/limit";
-import { firstMoveText } from "@gopvp/chess/src/constants/message";
 
 function capturedCode(type: string, color: "w" | "b") {
  return `${color}${type.toUpperCase()}`;
@@ -23,7 +21,6 @@ export default function PlayerRow({
  clock,
  clockReady,
  lowTime,
- firstMoveSeconds,
 }: IPlayerRowProps) {
  return (
   <Box
@@ -43,17 +40,6 @@ export default function PlayerRow({
      {scoreLabel && (
       <Text component="span" customClass="gr-score-label">
        {scoreLabel}
-      </Text>
-     )}
-     {typeof firstMoveSeconds === "number" && (
-      <Text
-       component="span"
-       customClass={classNames(
-        "gr-first-move",
-        firstMoveSeconds <= FIRST_MOVE_URGENT_SECONDS && "urgent",
-       )}
-      >
-       {firstMoveText(firstMoveSeconds)}
       </Text>
      )}
     </Box>
