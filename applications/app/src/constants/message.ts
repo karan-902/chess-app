@@ -74,6 +74,7 @@ export const linkExpiredText = "Link expired";
 export const approvalLinkInvalidText =
  "This approval link is no longer valid. Please try logging in again.";
 export const depositText = "Deposit";
+export const speedDepositNoteText = "GoPVP deposit";
 export const winText = "Win";
 export const entryText = "Entry";
 export const addFundsText = "Add funds";
