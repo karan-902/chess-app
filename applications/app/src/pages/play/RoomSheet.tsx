@@ -185,12 +185,12 @@ export default function RoomSheet({
        <Text customClass="dialog-title">{waitingForOpponentText}</Text>
        <Text customClass="description">{shareCodeWithFriendText}</Text>
       </Box>
-      <Text customClass="match-timer" aria-label={expiresText}>
-       <icons.timer />
-       {formatMMSS(expiresInSeconds)}
-      </Text>
      </Box>
      {roomTicket}
+     <Text customClass="match-timer" aria-label={expiresText}>
+      <icons.timer />
+      {formatMMSS(expiresInSeconds)}
+     </Text>
      <Box customClass="room-actions">
       <Text
        component="button"

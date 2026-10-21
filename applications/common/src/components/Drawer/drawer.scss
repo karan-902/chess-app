@@ -140,6 +140,8 @@
  }
 
  &.wallet-sheet .MuiDrawer-paper:has(.wallet-modal-layout) {
+  min-height: 0;
+  justify-content: flex-start;
   padding-top: 1.75rem;
  }
 

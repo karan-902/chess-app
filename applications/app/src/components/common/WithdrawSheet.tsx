@@ -128,7 +128,7 @@ export default function WithdrawSheet() {
   <WalletSheetShell open={open} isSuccess={stage === "success"} onClose={close}>
    {stage === "amount" && (
     <Box customClass="wallet-modal-layout">
-     <Text customClass="modal-heading value-heading">{withdrawText}</Text>
+     <Text customClass="sheet-title dialog-title">{withdrawText}</Text>
      {/* <WalletInfoNote text={onlyWinningsWithdrawableText} /> */}
 
      <Box customClass="hero-input-wrapper">

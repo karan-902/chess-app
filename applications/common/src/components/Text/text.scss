@@ -899,6 +899,11 @@
   font-size: 14px;
   color: $appText;
 
+  .match-sheet > &,
+  .room-options > & {
+   align-self: center;
+  }
+
   @include from(phone) {
    font-size: 15px;
   }

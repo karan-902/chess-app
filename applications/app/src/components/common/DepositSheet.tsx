@@ -36,6 +36,7 @@ import {
  buyCryptoInstantlyText,
  enterAmountText,
  generateQrCodeText,
+ payText,
  amountRequiredText,
  maxDepositAmountText,
  // btcOnlyWarningText,
@@ -180,7 +181,7 @@ export default function DepositSheet() {
   <WalletSheetShell open={open} isSuccess={stage === "success"} onClose={close}>
    {stage === "amount" && (
     <Box customClass="wallet-modal-layout">
-     <Text customClass="modal-heading value-heading">{depositText}</Text>
+     <Text customClass="sheet-title dialog-title">{depositText}</Text>
      <WalletInfoNote text={depositsNotWithdrawableText} />
 
      <Box customClass="hero-input-wrapper">
@@ -243,7 +244,7 @@ export default function DepositSheet() {
       isLoading={submitting}
       disabled={isAmountInvalid}
      >
-      {speedAccountId ? depositText : generateQrCodeText}
+      {speedAccountId ? payText : generateQrCodeText}
      </Button>
     </Box>
    )}
