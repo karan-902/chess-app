@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import classNames from "classnames";
 import CustomDrawer from "@gopvp/common/src/components/Drawer/Drawer";
 import Box from "@gopvp/common/src/components/Box/Box";
+import LogoLoader from "@gopvp/common/src/components/LogoLoader/LogoLoader";
 import { useSheetReady } from "@gopvp/app/src/hooks/useSheetReady";
 import { WALLET_SUCCESS_CLOSE_MS } from "@gopvp/app/src/constants/limit";
 import type { IWalletSheetShellProps } from "@gopvp/app/src/types/component";
@@ -33,7 +34,7 @@ export default function WalletSheetShell({
     children
    ) : (
     <Box customClass="modal-loader">
-     <Box customClass="logo-loader" role="progressbar" />
+     <LogoLoader role="progressbar" />
     </Box>
    )}
   </CustomDrawer>

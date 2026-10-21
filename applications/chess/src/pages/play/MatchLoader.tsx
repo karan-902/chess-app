@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import Box from "@gopvp/common/src/components/Box/Box";
+import LogoLoader from "@gopvp/common/src/components/LogoLoader/LogoLoader";
 import { useGameContext } from "@gopvp/common/src/contexts/GameContext";
 import GameRoomGuard from "@gopvp/chess/src/pages/play/GameRoomGuard";
 import {
@@ -36,7 +37,7 @@ export default function MatchLoader({ matchId }: IMatchLoaderProps) {
  if (loadedMatchId !== matchId) {
   return (
    <Box customClass="modal-loader game-loader">
-    <Box customClass="logo-loader" role="progressbar" />
+    <LogoLoader role="progressbar" />
    </Box>
   );
  }

@@ -83,8 +83,6 @@ export const HERO_FLOOR_PATH_RIGHT = [
  "0-7",
 ];
 export const HERO_PATH_WALK = {
- restOpacity: 0.35,
  periodSeconds: 2.6,
- pulseWidth: 2.2,
  leadSteps: 2,
 };

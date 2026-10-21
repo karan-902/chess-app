@@ -74,6 +74,7 @@ export const linkExpiredText = "Link expired";
 export const approvalLinkInvalidText =
  "This approval link is no longer valid. Please try logging in again.";
 export const depositText = "Deposit";
+export const speedDepositNoteText = "GoPVP deposit";
 export const winText = "Win";
 export const entryText = "Entry";
 export const addFundsText = "Add funds";
@@ -166,6 +167,7 @@ export const fastSecuredTransparentText = "Fast, Secure & Transparent";
 export const buyCryptoInstantlyText = "Buy crypto instantly with";
 export const enterAmountText = "Enter Amount";
 export const generateQrCodeText = "Generate QR Code";
+export const payText = "Pay";
 export const amountRequiredText = "Amount is required";
 export const maxDepositAmountText = (max: number) =>
  `Maximum deposit amount is ${formatAmount(max)}`;

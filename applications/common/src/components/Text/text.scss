@@ -899,6 +899,11 @@
   font-size: 14px;
   color: $appText;
 
+  .match-sheet > &,
+  .room-options > & {
+   align-self: center;
+  }
+
   @include from(phone) {
    font-size: 15px;
   }
@@ -1056,6 +1061,14 @@
   font-size: 14px;
   letter-spacing: 1.5px;
   color: textOpacity($poolInk, 0.75);
+  .shaking & {
+   animation: payout-shake 0.36s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+
+   @media (prefers-reduced-motion: reduce) {
+    animation: none;
+   }
+  }
+
 
   @include from(phone) {
    font-size: 15px;
@@ -2655,6 +2668,25 @@
  }
  40% {
   opacity: 0.5;
+@keyframes payout-shake {
+ 0%,
+ 100% {
+  transform: translate3d(0, 0, 0);
+ }
+ 20% {
+  transform: translate3d(-0.375rem, 0, 0);
+ }
+ 40% {
+  transform: translate3d(0.3125rem, 0, 0);
+ }
+ 60% {
+  transform: translate3d(-0.1875rem, 0, 0);
+ }
+ 80% {
+  transform: translate3d(0.125rem, 0, 0);
+ }
+}
+
  }
  100% {
   opacity: 0.85;

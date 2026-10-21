@@ -55,10 +55,6 @@
   background-color: textOpacity($black, 0.6);
  }
 
- &.game-over-sheet .MuiBackdrop-root {
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
- }
 
  &.result-sheet.gold:not(.versus) .MuiDrawer-paper {
   background:
@@ -144,6 +140,8 @@
  }
 
  &.wallet-sheet .MuiDrawer-paper:has(.wallet-modal-layout) {
+  min-height: 0;
+  justify-content: flex-start;
   padding-top: 1.75rem;
  }
 

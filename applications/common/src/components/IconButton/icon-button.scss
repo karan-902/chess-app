@@ -97,7 +97,6 @@
    border-color: transparent;
    background: linear-gradient(180deg, $goldLight, $gold);
    color: $primaryContrast;
-   @include neo-edge($btnEdgeGold);
 
    svg {
     stroke-width: 3;
@@ -139,7 +138,8 @@
   .bet-sheet &,
   .room-sheet &,
   .match-confirm-sheet &,
-  .practice-sheet & {
+  .practice-sheet &,
+  .wallet-sheet & {
    top: 1.75rem;
   }
  }
@@ -171,6 +171,7 @@
    right: 1.25rem;
    width: 2rem;
    height: 2rem;
+   border-radius: 0;
    border: 1px solid $appCardBorder;
    background: $appSecondary;
    color: $appText;
@@ -255,7 +256,6 @@
   height: 2.75rem;
   border: 1px solid textOpacity($white, 0.28);
   background: textOpacity($white, 0.1);
-  backdrop-filter: blur(12px);
   color: $white;
   transition: transform 0.12s cubic-bezier(0.22, 1, 0.36, 1);
 

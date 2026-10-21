@@ -123,16 +123,6 @@ export default function PoolConfirmSheet({
         </Text>
        ))} */}
       </Box>
-      <Text
-       customClass={classNames(
-        "match-timer",
-        isLowTime && "low",
-        (isRevealed || isTimeout) && "settled",
-       )}
-      >
-       <icons.timer />
-       {formatMMSS(isTimeout ? 0 : secondsLeft)}
-      </Text>
      </Box>
      {/* <MatchDeck isRevealed={isRevealed} opponentName={opponentName} /> */}
      <MatchTicket
@@ -149,6 +139,16 @@ export default function PoolConfirmSheet({
       myName={myName}
       opponentName={opponentName}
      />
+     <Text
+      customClass={classNames(
+       "match-timer",
+       isLowTime && "low",
+       (isRevealed || isTimeout) && "settled",
+      )}
+     >
+      <icons.timer />
+      {formatMMSS(isTimeout ? 0 : secondsLeft)}
+     </Text>
      {/* <PoolCard pool={queuedPool} PoolLabel={PoolLabel} tone={confirmTone} /> */}
      {isTimeout ? (
       <Box customClass="match-retry">

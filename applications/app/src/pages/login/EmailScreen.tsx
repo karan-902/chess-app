@@ -34,7 +34,7 @@ export default function EmailScreen({
     <Button
      type="button"
      startIcon="google"
-     variant="outlined"
+     variant="contained"
      fullWidth
      customClass="auth-google-btn"
      onClick={onGoogleLogin}

@@ -341,6 +341,10 @@ svg.gr-captured-icon {
  }
 }
 
+.board-preview-grid {
+ will-change: transform;
+}
+
 .board-preview-layer {
  position: absolute;
  inset: 0;
@@ -357,6 +361,7 @@ svg.gr-captured-icon {
  align-items: center;
  justify-content: center;
  z-index: $z-overlay;
+ will-change: transform, opacity;
 
  .board-preview-piece-svg {
   width: $pieceFill;
@@ -373,6 +378,7 @@ svg.gr-captured-icon {
  height: 12.5%;
  opacity: 0;
  pointer-events: none;
+ will-change: transform, opacity;
 
  &.flash {
   background: textOpacity($paleRed, 0.55);

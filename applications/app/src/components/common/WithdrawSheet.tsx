@@ -7,7 +7,7 @@ import Button from "@gopvp/common/src/components/Button/Button";
 import Input from "@gopvp/common/src/components/Input/Input";
 import WalletSheetShell from "@gopvp/app/src/components/common/WalletSheetShell";
 import WalletSuccessStage from "@gopvp/app/src/components/common/WalletSuccessStage";
-import WalletInfoNote from "@gopvp/app/src/components/common/WalletInfoNote";
+// import WalletInfoNote from "@gopvp/app/src/components/common/WalletInfoNote";
 import { useWalletModal } from "@gopvp/app/src/context/WalletModalContext";
 import {
  useWalletBalance,
@@ -16,10 +16,10 @@ import {
 import { showApiErrorToast } from "@gopvp/common/src/util/api";
 import {
  withdrawText,
- onlyWinningsWithdrawableText,
- destinationText,
- btcAddressOrInvoiceText,
- requestWithdrawalText,
+ // onlyWinningsWithdrawableText,
+ // destinationText,
+ // btcAddressOrInvoiceText,
+ // requestWithdrawalText,
  maxWithdrawalAmountText,
  insufficientWithdrawableText,
  enterDestinationText,
@@ -51,7 +51,7 @@ export default function WithdrawSheet() {
  const [withdrawId, setWithdrawId] = useState<string | null>(null);
  const [amount, setAmount] = useState("");
 
- const [destination, setDestination] = useState("");
+ // const [destination, setDestination] = useState("");
  const [submitting, setSubmitting] = useState(false);
 
  useEffect(() => {
@@ -60,7 +60,7 @@ export default function WithdrawSheet() {
   setWithdrawId(null);
   setAmount("");
 
-  setDestination("");
+  // setDestination("");
   setSubmitting(false);
  }, [open]);
 
@@ -89,7 +89,7 @@ export default function WithdrawSheet() {
     : amountUsd > MAX_WITHDRAW_USD
       ? maxWithdrawalAmountText(MAX_WITHDRAW_USD)
       : undefined;
- const withdrawDestination = (speedLightningAddress || destination).trim();
+ const withdrawDestination = (speedLightningAddress ?? "").trim();
  const canSubmit =
   hasWithdrawable && amount !== "" && !amountError && withdrawDestination !== "";
 
@@ -128,8 +128,8 @@ export default function WithdrawSheet() {
   <WalletSheetShell open={open} isSuccess={stage === "success"} onClose={close}>
    {stage === "amount" && (
     <Box customClass="wallet-modal-layout">
-     <Text customClass="modal-heading value-heading">{withdrawText}</Text>
-     <WalletInfoNote text={onlyWinningsWithdrawableText} />
+     <Text customClass="sheet-title dialog-title">{withdrawText}</Text>
+     {/* <WalletInfoNote text={onlyWinningsWithdrawableText} /> */}
 
      <Box customClass="hero-input-wrapper">
       <Input
@@ -150,7 +150,7 @@ export default function WithdrawSheet() {
       />
      </Box>
 
-     {!speedLightningAddress && (
+     {/* {!speedLightningAddress && (
       <Input
        id="withdraw-destination"
        type="text"
@@ -163,7 +163,7 @@ export default function WithdrawSheet() {
        onChange={(e) => setDestination(e.target.value)}
        disabled={submitting || !hasWithdrawable}
       />
-     )}
+     )} */}
 
      <Button
       type="submit"
@@ -174,7 +174,7 @@ export default function WithdrawSheet() {
       isLoading={submitting}
       disabled={!canSubmit || submitting}
      >
-      {requestWithdrawalText}
+      {withdrawText}
      </Button>
     </Box>
    )}

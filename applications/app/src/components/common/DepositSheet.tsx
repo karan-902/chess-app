@@ -22,8 +22,11 @@ import { useReduxSelector } from "@gopvp/app/src/redux/hooks";
 import { paymentRequest } from "@gopvp/app/src/hooks/useWallet";
 import { showApiErrorToast } from "@gopvp/common/src/util/api";
 import type { IPaymentRequestResponse } from "@gopvp/common/src/types/response";
+import type { ISpeedPaymentRequestBody } from "@gopvp/common/src/types/payload";
+import { SPEED_PAYMENT_REQUEST } from "@gopvp/app/src/config/speedWallet";
 import {
  depositText,
+ speedDepositNoteText,
  depositingText,
  instantPayViaText,
  lightningText,
@@ -33,6 +36,7 @@ import {
  buyCryptoInstantlyText,
  enterAmountText,
  generateQrCodeText,
+ payText,
  amountRequiredText,
  maxDepositAmountText,
  // btcOnlyWarningText,
@@ -57,6 +61,21 @@ import {
 
 type Stage = "amount" | "qr" | "success";
 
+type SpeedBridgeHandler = { postMessage: (data: string) => void };
+type SpeedWalletWindow = Window & {
+ Android?: SpeedBridgeHandler;
+ webkit?: { messageHandlers?: { iosInterface?: SpeedBridgeHandler } };
+};
+
+function postToSpeedWallet(request: ISpeedPaymentRequestBody) {
+ const data = JSON.stringify(request);
+ const speedWindow = window as SpeedWalletWindow;
+ const iosHandler = speedWindow.webkit?.messageHandlers?.iosInterface;
+ if (speedWindow.Android) speedWindow.Android.postMessage(data);
+ else if (iosHandler) iosHandler.postMessage(data);
+ else window.parent.postMessage(data, "*");
+}
+
 // function formatCountdown(ms: number) {
 //  const totalSeconds = Math.max(0, Math.floor(ms / 1000));
 //  const minutes = Math.floor(totalSeconds / 60);
@@ -69,6 +88,7 @@ export default function DepositSheet() {
  const lastTransaction = useReduxSelector(
   (state) => state.wallet.lastTransaction,
  );
+ const speedAccountId = useReduxSelector((state) => state.speed.acct);
  const open = openModal === "deposit";
 
  const [stage, setStage] = useState<Stage>("amount");
@@ -130,6 +150,21 @@ export default function DepositSheet() {
 
   try {
    const res = await paymentRequest(amountUsd);
+   if (speedAccountId) {
+    postToSpeedWallet({
+     version: SPEED_PAYMENT_REQUEST.version,
+     account_id: speedAccountId,
+     data: {
+      amount: amountUsd,
+      currency: SPEED_PAYMENT_REQUEST.currency,
+      target_currency: SPEED_PAYMENT_REQUEST.targetCurrency,
+      deposit_address: res.payment_request,
+      note: speedDepositNoteText,
+     },
+    });
+    close();
+    return;
+   }
    setPayment(res);
    setExpired(false);
    setStage("qr");
@@ -146,7 +181,7 @@ export default function DepositSheet() {
   <WalletSheetShell open={open} isSuccess={stage === "success"} onClose={close}>
    {stage === "amount" && (
     <Box customClass="wallet-modal-layout">
-     <Text customClass="modal-heading value-heading">{depositText}</Text>
+     <Text customClass="sheet-title dialog-title">{depositText}</Text>
      <WalletInfoNote text={depositsNotWithdrawableText} />
 
      <Box customClass="hero-input-wrapper">
@@ -209,7 +244,7 @@ export default function DepositSheet() {
       isLoading={submitting}
       disabled={isAmountInvalid}
      >
-      {generateQrCodeText}
+      {speedAccountId ? payText : generateQrCodeText}
      </Button>
     </Box>
    )}
