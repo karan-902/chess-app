@@ -58,13 +58,6 @@
    background: $navyBadge !important;
    color: $gold;
   }
-
-  &.lg,
-  :root[data-theme="light"] &.lg {
-   border: 1px solid textOpacity($appText, 0.18);
-   background: $poolInk !important;
-   color: $gold;
-  }
  }
 
  &.ticket-me,
