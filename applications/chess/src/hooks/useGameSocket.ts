@@ -37,6 +37,7 @@ import {
 } from "@gopvp/chess/src/utils/storage";
 import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
 import { SOCKET_EVENTS } from "@gopvp/common/src/constants/event";
+import { ERROR_TYPES } from "@gopvp/common/src/constants/mapper";
 import { GAME_EVENTS } from "@gopvp/chess/src/constants/event";
 import { MATCH_END_FALLBACK_MS } from "@gopvp/chess/src/constants/limit";
 
@@ -242,6 +243,11 @@ export function useGameSocket({
  }, [socket, isPvc, matchId, applyServerFen, syncClock, resync, dispatch]);
 
  const handleMoveAck = (err: ISocketAckError | null, data: IMoveResponse) => {
+  if (err?.errors[0]?.type === ERROR_TYPES.MATCH_NOT_FOUND) {
+   showBackdropLoader();
+   setIsAwaitingResult(true);
+   return;
+  }
   if (err) {
    showAckErrorToast(err);
    resync();
