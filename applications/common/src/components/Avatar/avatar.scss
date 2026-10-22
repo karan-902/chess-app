@@ -53,11 +53,6 @@
   @include from(tablet) {
    font-size: 20px;
   }
-
-  :root[data-theme="light"] & {
-   background: $navyBadge !important;
-   color: $gold;
-  }
  }
 
  &.ticket-me,

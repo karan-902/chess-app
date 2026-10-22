@@ -307,9 +307,9 @@
     color: textOpacity($appText, 0.7);
 
     &.active {
-     --btn-bg: #{$navyBadge};
-     --btn-border: 1px solid #{$navyBadgeTop};
-     color: $gold;
+     --btn-bg: #{$gold};
+     --btn-border: 1px solid #{$gold};
+     color: $primaryContrast;
     }
    }
   }
@@ -326,12 +326,6 @@
    --btn-border: 1px solid #{$gold};
    color: $primaryContrast;
 
-   :root[data-theme="light"] & {
-    --btn-bg: #{$navyBadge} !important;
-    --btn-border: 1px solid #{$navyBadgeTop};
-    color: $gold;
-   }
-
    .button-face {
     transform: none;
    }
@@ -341,10 +335,6 @@
 
     .button-text {
      color: $primaryContrast;
-
-     :root[data-theme="light"] & {
-      color: $gold;
-     }
     }
    }
   }
