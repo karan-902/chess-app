@@ -10,7 +10,7 @@ interface IWalletState {
  withdrawableUsd: number;
  lastTransaction: IWalletLastTransaction | null;
  loading: boolean;
- version: number;
+ modified: number;
 }
 
 const initialState: IWalletState = {
@@ -18,16 +18,16 @@ const initialState: IWalletState = {
  withdrawableUsd: 0,
  lastTransaction: null,
  loading: true,
- version: 0,
+ modified: 0,
 };
 
 const isOlder = (state: IWalletState, balance: IBalanceResponse) =>
- (balance.version ?? 0) < state.version;
+ (balance.modified ?? 0) < state.modified;
 
 const applyBalance = (state: IWalletState, balance: IBalanceResponse) => {
  state.balanceUsd = balance.total_balance;
  state.withdrawableUsd = balance.withdraw_balance;
- state.version = balance.version ?? 0;
+ state.modified = balance.modified ?? 0;
 };
 
 const walletSlice = createSlice({
