@@ -91,14 +91,13 @@
   }
  }
 
- &.ticket-me {
+ &.ticket-me,
+ &.ticket-rival {
   background-color: $poolInk !important;
   color: $gold;
  }
 
  &.ticket-rival {
-  background-color: var(--pool-face) !important;
-  color: var(--pool-ink);
   transform: rotateY(180deg);
  }
 

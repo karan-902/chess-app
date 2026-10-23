@@ -165,7 +165,6 @@ export interface IMatchTicketProps {
  status: MatchmakingStatus;
  title?: string;
  stats: IMatchTicketStat[];
- tone: number;
  myName: string;
  opponentName: string;
 }

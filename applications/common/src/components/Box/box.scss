@@ -617,26 +617,19 @@
    transform: scale(1.22);
   }
 
-  @for $i from 1 through list.length($poolBlocks) {
-   &.tone-#{$i} {
-    --pool-face: #{list.nth(list.nth($poolBlocks, $i), 1)};
-    --pool-ink: #{list.nth(list.nth($poolBlocks, $i), 2)};
-   }
-  }
-
   .match-beam {
    position: absolute;
    left: 50%;
    top: 0;
-   width: 11.8125rem;
-   height: 16.375rem;
-   margin-left: -5.90625rem;
+   width: 17.5rem;
+   height: 16.125rem;
+   margin-left: -8.75rem;
    background: linear-gradient(
     180deg,
     textOpacity($gold, 0),
-    textOpacity($gold, 0.28)
+    textOpacity($gold, 0.3)
    );
-   clip-path: polygon(25% 0, 75% 0, 100% 100%, 0 100%);
+   clip-path: polygon(38% 0, 62% 0, 100% 100%, 0 100%);
    opacity: 0;
    transition: opacity 0.8s ease-out;
 
@@ -712,17 +705,32 @@
   .match-ticket-wrap {
    position: absolute;
    left: 4.21875rem;
-   top: 2.5rem;
+   top: 3.25rem;
    width: 12.5rem;
-   height: 12.5rem;
+   height: 11rem;
    isolation: isolate;
    transform: translateY(15rem);
-   filter: drop-shadow(0 1rem 0.875rem textOpacity($black, 0.45))
-    drop-shadow(0 0.1875rem 0.1875rem textOpacity($black, 0.3));
 
    :root[data-theme="light"] & {
     filter: drop-shadow(0 0 0.5px textOpacity($indigoEdge, 0.9));
    }
+
+   &::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 1rem 0 -1rem;
+    background: radial-gradient(
+     closest-side,
+     textOpacity($black, 0.35) 70%,
+     transparent
+    );
+    transition: opacity 0.3s ease-out 1.4s;
+   }
+  }
+
+  &.lost .match-ticket-wrap::before {
+   opacity: 0;
   }
 
   &.searching .match-ticket-wrap,
@@ -742,51 +750,51 @@
    background: linear-gradient(180deg, $ticketPaperTop, $ticketPaperBottom);
    color: $poolInk;
    mask:
-    radial-gradient(circle at 0 9.9375rem, transparent 0.5rem, #000 0.5rem),
-    radial-gradient(circle at 100% 9.9375rem, transparent 0.5rem, #000 0.5rem);
+    radial-gradient(circle at 0 6.5rem, transparent 0.5rem, #000 0.5rem),
+    radial-gradient(circle at 100% 6.5rem, transparent 0.5rem, #000 0.5rem);
    mask-composite: intersect;
    clip-path: polygon(
     0% 0%,
     100% 0%,
     98.86% 100%,
-    95.45% 96%,
+    95.45% 95.65%,
     92.05% 100%,
-    88.64% 96%,
+    88.64% 95.65%,
     85.23% 100%,
-    81.82% 96%,
+    81.82% 95.65%,
     78.41% 100%,
-    75% 96%,
+    75% 95.65%,
     71.59% 100%,
-    68.18% 96%,
+    68.18% 95.65%,
     64.77% 100%,
-    61.36% 96%,
+    61.36% 95.65%,
     57.95% 100%,
-    54.55% 96%,
+    54.55% 95.65%,
     51.14% 100%,
-    47.73% 96%,
+    47.73% 95.65%,
     44.32% 100%,
-    40.91% 96%,
+    40.91% 95.65%,
     37.5% 100%,
-    34.09% 96%,
+    34.09% 95.65%,
     30.68% 100%,
-    27.27% 96%,
+    27.27% 95.65%,
     23.86% 100%,
-    20.45% 96%,
+    20.45% 95.65%,
     17.05% 100%,
-    13.64% 96%,
+    13.64% 95.65%,
     10.23% 100%,
-    6.82% 96%,
+    6.82% 95.65%,
     3.41% 100%,
-    0% 96%
+    0% 95.65%
    );
 
    &.top {
-    transform-origin: 18% 9.9375rem;
+    transform-origin: 18% 50%;
    }
 
    &.bottom {
     visibility: hidden;
-    transform-origin: 82% 9.9375rem;
+    transform-origin: 82% 50%;
    }
   }
 
@@ -926,10 +934,9 @@
    position: absolute;
    z-index: 1;
    top: 6.875rem;
-   left: 0.75rem;
-   right: 0.75rem;
+   left: 0.25rem;
+   right: 0.25rem;
    display: flex;
-   border-top: 1px solid textOpacity($poolInk, 0.12);
   }
 
   .ticket-stat {
@@ -946,29 +953,10 @@
   .ticket-perf {
    position: absolute;
    z-index: 1;
-   top: 9.9375rem;
+   top: 6.5rem;
    left: 0.75rem;
    right: 0.75rem;
    border-top: 1px dashed textOpacity($poolInk, 0.3);
-  }
-
-  .ticket-barcode {
-   position: absolute;
-   z-index: 1;
-   top: 10.4375rem;
-   left: 1.375rem;
-   right: 1.375rem;
-   height: 1.1875rem;
-   background: repeating-linear-gradient(
-    90deg,
-    $poolInk 0 1.6px,
-    transparent 1.6px 4.4px,
-    $poolInk 4.4px 7.2px,
-    transparent 7.2px 8.8px,
-    $poolInk 8.8px 10.4px,
-    transparent 10.4px 13.2px
-   );
-   opacity: 0.85;
   }
 
   .ticket-glare {
@@ -4018,94 +4006,94 @@
  clip-path: polygon(
   0% 0%,
   100% 0%,
-  99.43% 80.57%,
-  95.45% 78.42%,
-  91.48% 80.57%,
-  87.5% 77.7%,
-  83.52% 81.29%,
-  79.55% 77.7%,
-  75.57% 80.57%,
-  71.59% 78.42%,
-  67.61% 80.57%,
-  63.64% 77.7%,
-  59.66% 81.29%,
-  55.68% 77.7%,
-  51.7% 80.57%,
-  47.73% 78.42%,
-  43.75% 80.57%,
-  39.77% 77.7%,
-  35.8% 81.29%,
-  31.82% 77.7%,
-  27.84% 80.57%,
-  23.86% 78.42%,
-  19.89% 80.57%,
-  15.91% 77.7%,
-  11.93% 81.29%,
-  7.95% 77.7%,
-  3.98% 80.57%,
-  0% 78.42%
+  99.43% 58.15%,
+  95.45% 55.71%,
+  91.48% 58.15%,
+  87.5% 54.89%,
+  83.52% 58.97%,
+  79.55% 54.89%,
+  75.57% 58.15%,
+  71.59% 55.71%,
+  67.61% 58.15%,
+  63.64% 54.89%,
+  59.66% 58.97%,
+  55.68% 54.89%,
+  51.7% 58.15%,
+  47.73% 55.71%,
+  43.75% 58.15%,
+  39.77% 54.89%,
+  35.8% 58.97%,
+  31.82% 54.89%,
+  27.84% 58.15%,
+  23.86% 55.71%,
+  19.89% 58.15%,
+  15.91% 54.89%,
+  11.93% 58.97%,
+  7.95% 54.89%,
+  3.98% 58.15%,
+  0% 55.71%
  );
 }
 
 %match-tear-bottom-cut {
  visibility: visible;
  clip-path: polygon(
-  0% 78.42%,
-  3.98% 80.57%,
-  7.95% 77.7%,
-  11.93% 81.29%,
-  15.91% 77.7%,
-  19.89% 80.57%,
-  23.86% 78.42%,
-  27.84% 80.57%,
-  31.82% 77.7%,
-  35.8% 81.29%,
-  39.77% 77.7%,
-  43.75% 80.57%,
-  47.73% 78.42%,
-  51.7% 80.57%,
-  55.68% 77.7%,
-  59.66% 81.29%,
-  63.64% 77.7%,
-  67.61% 80.57%,
-  71.59% 78.42%,
-  75.57% 80.57%,
-  79.55% 77.7%,
-  83.52% 81.29%,
-  87.5% 77.7%,
-  91.48% 80.57%,
-  95.45% 78.42%,
-  99.43% 80.57%,
+  0% 55.71%,
+  3.98% 58.15%,
+  7.95% 54.89%,
+  11.93% 58.97%,
+  15.91% 54.89%,
+  19.89% 58.15%,
+  23.86% 55.71%,
+  27.84% 58.15%,
+  31.82% 54.89%,
+  35.8% 58.97%,
+  39.77% 54.89%,
+  43.75% 58.15%,
+  47.73% 55.71%,
+  51.7% 58.15%,
+  55.68% 54.89%,
+  59.66% 58.97%,
+  63.64% 54.89%,
+  67.61% 58.15%,
+  71.59% 55.71%,
+  75.57% 58.15%,
+  79.55% 54.89%,
+  83.52% 58.97%,
+  87.5% 54.89%,
+  91.48% 58.15%,
+  95.45% 55.71%,
+  99.43% 58.15%,
   98.86% 100%,
-  95.45% 96%,
+  95.45% 95.65%,
   92.05% 100%,
-  88.64% 96%,
+  88.64% 95.65%,
   85.23% 100%,
-  81.82% 96%,
+  81.82% 95.65%,
   78.41% 100%,
-  75% 96%,
+  75% 95.65%,
   71.59% 100%,
-  68.18% 96%,
+  68.18% 95.65%,
   64.77% 100%,
-  61.36% 96%,
+  61.36% 95.65%,
   57.95% 100%,
-  54.55% 96%,
+  54.55% 95.65%,
   51.14% 100%,
-  47.73% 96%,
+  47.73% 95.65%,
   44.32% 100%,
-  40.91% 96%,
+  40.91% 95.65%,
   37.5% 100%,
-  34.09% 96%,
+  34.09% 95.65%,
   30.68% 100%,
-  27.27% 96%,
+  27.27% 95.65%,
   23.86% 100%,
-  20.45% 96%,
+  20.45% 95.65%,
   17.05% 100%,
-  13.64% 96%,
+  13.64% 95.65%,
   10.23% 100%,
-  6.82% 96%,
+  6.82% 95.65%,
   3.41% 100%,
-  0% 96%
+  0% 95.65%
  );
 }
 

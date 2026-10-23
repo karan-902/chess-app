@@ -86,7 +86,6 @@ export default function RoomSheet({
     { label: timeText, value: roomMinutesLabel },
     { label: codeText, value: roomCode ?? "" },
    ]}
-   tone={1}
    myName={myName}
    opponentName={opponentName}
   />

@@ -27,6 +27,12 @@
   height: auto;
   opacity: 0;
   transform: scale(0);
+  color: $goldSolid;
+
+  :root[data-theme="light"] & {
+   color: $goldDark;
+   filter: drop-shadow(0 0 0.5px $goldDarkest);
+  }
 
   &.spark-1 {
    left: 16.25rem;
