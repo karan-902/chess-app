@@ -110,7 +110,8 @@
  &.bet-sheet .MuiDrawer-paper,
  &.room-sheet .MuiDrawer-paper,
  &.match-confirm-sheet .MuiDrawer-paper,
- &.practice-sheet .MuiDrawer-paper {
+ &.practice-sheet .MuiDrawer-paper,
+ &.rejoin-sheet .MuiDrawer-paper {
   padding-top: 1.75rem;
  }
 

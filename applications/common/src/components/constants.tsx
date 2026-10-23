@@ -41,11 +41,8 @@ export const GoogleIcon = forwardRef<SVGSVGElement, ISvgIconProps>(
 export const SparkIcon = forwardRef<SVGSVGElement, ISvgIconProps>(
  function SparkIcon(props, ref) {
   return (
-   <SvgIcon ref={ref} viewBox="0 0 20 20" {...props}>
-    <path
-     d="M10 0C11 7 13 9 20 10 13 11 11 13 10 20 9 13 7 11 0 10 7 9 9 7 10 0Z"
-     fill="#fff6d6"
-    />
+   <SvgIcon ref={ref} viewBox="0 0 16 16" {...props}>
+    <path d="M8 0Q9 7 16 8Q9 9 8 16Q7 9 0 8Q7 7 8 0Z" fill="#ffc400" />
    </SvgIcon>
   );
  },

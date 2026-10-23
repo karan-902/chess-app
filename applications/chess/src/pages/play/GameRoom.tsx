@@ -46,6 +46,7 @@ import {
  waitingForOpponentText,
  winText,
  isReconnectingText,
+ reconnectedText,
  moveOfText,
  startPositionText,
 } from "@gopvp/chess/src/constants/message";
@@ -233,7 +234,7 @@ export default function GameRoom({ mode }: IGameRoomProps) {
   clockReady,
   drawOffer,
   isDrawOffered,
-  isOpponentOffline,
+  opponentStatus,
   sendMove,
   resign,
   offerDraw,
@@ -432,11 +433,17 @@ export default function GameRoom({ mode }: IGameRoomProps) {
      onEntranceEnd={markBoardReady}
      holdEntrance={isRevealing}
     />
-    {isOpponentOffline ? (
-     <Box customClass="gr-board-tag reconnecting">
-      <icons.wifiOff />
+    {opponentStatus ? (
+     <Box
+      customClass={classNames(
+       "gr-board-tag",
+       opponentStatus === "offline" ? "reconnecting" : "reconnected",
+      )}
+     >
+      {opponentStatus === "offline" ? <icons.wifiOff /> : <icons.wifi />}
       <Text component="span" customClass="gr-board-tag-text">
-       <b>{opponentName}</b> {isReconnectingText}
+       <b>{opponentName}</b>{" "}
+       {opponentStatus === "offline" ? isReconnectingText : reconnectedText}
       </Text>
      </Box>
     ) : (
