@@ -4,6 +4,8 @@ export const isLowEndDevice = () =>
  ((navigator as Navigator & { deviceMemory?: number }).deviceMemory ??
   Infinity) <= LOW_END_DEVICE_MEMORY_GB;
 
-export const shouldReduceMotion = () =>
- isLowEndDevice() ||
+export const prefersReducedMotion = () =>
  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+export const shouldReduceMotion = () =>
+ isLowEndDevice() || prefersReducedMotion();

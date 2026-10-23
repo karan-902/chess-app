@@ -125,7 +125,7 @@ export type IWithdrawResponse = IBalanceResponse & {
 
 export type IWalletLastTransaction = {
  id: string;
- type: "DEPOSIT" | "WITHDRAW";
+ type: "DEPOSIT" | "WITHDRAW" | "BET" | "WON" | "DRAW" | "MATCH_CANCELLED";
  status: "PROCESSING" | "COMPLETED" | "FAILED";
  amount: number;
  created: number;
@@ -288,6 +288,7 @@ export type IActiveGameResponse = {
  game_slug: string;
  bet: number;
  opponent: IGameStateBasePlayer;
+ forfeit_at?: number;
 };
 
 export type IGameStateBaseResponse = {

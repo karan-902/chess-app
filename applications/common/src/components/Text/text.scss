@@ -2449,6 +2449,10 @@
    color: $warning;
   }
 
+  .reconnected & {
+   color: $greenishTeal;
+  }
+
   b {
    font-family: $fontOutfitBold;
    font-weight: 400;

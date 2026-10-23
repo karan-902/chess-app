@@ -68,10 +68,9 @@ export default function MatchTicket({
       <Box customClass="ticket-flipper">
        <Box customClass="ticket-masks">
         {MASK_LAYERS.map((layer) => (
-         <Box key={layer} customClass={`ticket-mask mask-${layer + 1}`}>
-          <img src={RIVAL_MASK_PATH} alt="" />
-         </Box>
+         <Box key={layer} customClass={`ticket-mask mask-${layer + 1}`} />
         ))}
+        <img src={RIVAL_MASK_PATH} alt="" className="ticket-mask-img" />
        </Box>
        <Box customClass="ticket-empty-seat" />
        <CustomAvatar
@@ -96,6 +95,7 @@ export default function MatchTicket({
     ))}
    </Box>
    <Box customClass="ticket-perf" />
+   <Box customClass="ticket-barcode" />
    <Box customClass="ticket-glare" />
    <Box customClass="ticket-dim" />
    <Text component="span" customClass="ticket-void">

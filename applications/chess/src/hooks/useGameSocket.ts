@@ -39,7 +39,10 @@ import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
 import { SOCKET_EVENTS } from "@gopvp/common/src/constants/event";
 import { ERROR_TYPES } from "@gopvp/common/src/constants/mapper";
 import { GAME_EVENTS } from "@gopvp/chess/src/constants/event";
-import { MATCH_END_FALLBACK_MS } from "@gopvp/chess/src/constants/limit";
+import {
+ MATCH_END_FALLBACK_MS,
+ OPPONENT_RECONNECTED_SHOW_MS,
+} from "@gopvp/chess/src/constants/limit";
 
 interface IProps {
  isPvc: boolean;
@@ -73,7 +76,18 @@ export function useGameSocket({
  const [clockReady, setClockReady] = useState(isPvc);
  const [drawOffer, setDrawOffer] = useState<IDrawOfferEvent | null>(null);
  const [isDrawOffered, setIsDrawOffered] = useState(false);
- const [isOpponentOffline, setIsOpponentOffline] = useState(false);
+ const [opponentStatus, setOpponentStatus] = useState<
+  "offline" | "reconnected" | null
+ >(null);
+
+ useEffect(() => {
+  if (opponentStatus !== "reconnected") return;
+  const timer = setTimeout(
+   () => setOpponentStatus(null),
+   OPPONENT_RECONNECTED_SHOW_MS,
+  );
+  return () => clearTimeout(timer);
+ }, [opponentStatus]);
 
  const applyResult = useCallback(
   (result: IMatchResultResponse) => {
@@ -214,8 +228,11 @@ export function useGameSocket({
     toastVariant: "info",
    });
   };
-  const onOpponentOffline = () => setIsOpponentOffline(true);
-  const onOpponentOnline = () => setIsOpponentOffline(false);
+  const onOpponentOffline = () => setOpponentStatus("offline");
+  const onOpponentOnline = () =>
+   setOpponentStatus((status) =>
+    status === "offline" ? "reconnected" : status,
+   );
 
   socket.on(SOCKET_EVENTS.CONNECT, onReconnect);
   socket.on(GAME_EVENTS.START, onStart);
@@ -306,7 +323,7 @@ export function useGameSocket({
   clockReady,
   drawOffer,
   isDrawOffered,
-  isOpponentOffline,
+  opponentStatus,
   sendMove,
   resign,
   offerDraw,
