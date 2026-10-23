@@ -57,7 +57,8 @@ export function useWallet() {
   (state) => state.wallet.lastTransaction,
  );
  const lastTransactionKey =
-  lastTransaction && `${lastTransaction.id}:${lastTransaction.status}`;
+  lastTransaction &&
+  `${lastTransaction.id}:${lastTransaction.type}:${lastTransaction.status}`;
  const seenTransactionKeyRef = useRef(lastTransactionKey);
  const {
   usdValue,

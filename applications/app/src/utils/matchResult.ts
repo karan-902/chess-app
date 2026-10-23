@@ -24,6 +24,7 @@ function subscribeUserDoc<TData>(
   const [collection, ...rest] = pathSegments;
   unsubscribeDoc = onSnapshot(
    doc(firestore, collection, ...rest),
+   { includeMetadataChanges: skipCache },
    (snapshot) => {
     if (skipCache && snapshot.metadata.fromCache) return;
     onData(snapshot.exists() ? (snapshot.data() as TData) : null);
