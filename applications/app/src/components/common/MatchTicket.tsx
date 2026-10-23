@@ -95,7 +95,6 @@ export default function MatchTicket({
     ))}
    </Box>
    <Box customClass="ticket-perf" />
-   <Box customClass="ticket-barcode" />
    <Box customClass="ticket-glare" />
    <Box customClass="ticket-dim" />
    <Text component="span" customClass="ticket-void">
