@@ -42,7 +42,7 @@ export const SparkIcon = forwardRef<SVGSVGElement, ISvgIconProps>(
  function SparkIcon(props, ref) {
   return (
    <SvgIcon ref={ref} viewBox="0 0 16 16" {...props}>
-    <path d="M8 0Q9 7 16 8Q9 9 8 16Q7 9 0 8Q7 7 8 0Z" fill="#ffc400" />
+    <path d="M8 0Q9 7 16 8Q9 9 8 16Q7 9 0 8Q7 7 8 0Z" fill="currentColor" />
    </SvgIcon>
   );
  },
