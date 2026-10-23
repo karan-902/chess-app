@@ -13,6 +13,7 @@ function subscribeUserDoc<TData>(
  userId: string | undefined,
  pathSegments: string[],
  onData: (data: TData | null) => void,
+ skipCache = false,
 ): () => void {
  if (!firebaseProjectId || !userId) return () => {};
  let unsubscribeDoc = () => {};
@@ -23,7 +24,10 @@ function subscribeUserDoc<TData>(
   const [collection, ...rest] = pathSegments;
   unsubscribeDoc = onSnapshot(
    doc(firestore, collection, ...rest),
-   (snapshot) => onData(snapshot.exists() ? (snapshot.data() as TData) : null),
+   (snapshot) => {
+    if (skipCache && snapshot.metadata.fromCache) return;
+    onData(snapshot.exists() ? (snapshot.data() as TData) : null);
+   },
    (err) => console.error(err),
   );
  });
@@ -73,5 +77,6 @@ export function subscribeWallet(
   (wallet) => {
    if (wallet) onWallet(wallet);
   },
+  true,
  );
 }
