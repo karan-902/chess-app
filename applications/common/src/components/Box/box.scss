@@ -617,13 +617,6 @@
    transform: scale(1.22);
   }
 
-  @for $i from 1 through list.length($poolBlocks) {
-   &.tone-#{$i} {
-    --pool-face: #{list.nth(list.nth($poolBlocks, $i), 1)};
-    --pool-ink: #{list.nth(list.nth($poolBlocks, $i), 2)};
-   }
-  }
-
   .match-beam {
    position: absolute;
    left: 50%;

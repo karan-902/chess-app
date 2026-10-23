@@ -27,7 +27,6 @@ export default function MatchTicket({
  status,
  title = matchTicketText,
  stats,
- tone,
  myName,
  opponentName,
 }: IMatchTicketProps) {
@@ -104,7 +103,7 @@ export default function MatchTicket({
  );
 
  return (
-  <Box customClass={classNames("match-ticket", `tone-${tone}`, phase)}>
+  <Box customClass={classNames("match-ticket", phase)}>
    <Box customClass="match-beam" />
    <Box customClass="match-rise">
     <Box customClass="match-ticket-wrap">

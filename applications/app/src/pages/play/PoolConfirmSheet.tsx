@@ -135,7 +135,6 @@ export default function PoolConfirmSheet({
        { label: entryText, value: formatAmount(queuedPool.bet) },
        { label: winText, value: formatAmount(queuedPool.prize), isWin: true },
       ]}
-      tone={confirmTone}
       myName={myName}
       opponentName={opponentName}
      />
