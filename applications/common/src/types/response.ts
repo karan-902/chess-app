@@ -94,7 +94,7 @@ export type IGameResponse = {
 export type IBalanceResponse = {
  total_balance: number;
  withdraw_balance: number;
- version: number;
+ modified: number;
 };
 
 export type ITransactionResponse = {
