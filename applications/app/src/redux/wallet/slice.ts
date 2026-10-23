@@ -10,6 +10,7 @@ interface IWalletState {
  withdrawableUsd: number;
  lastTransaction: IWalletLastTransaction | null;
  loading: boolean;
+ version: number;
 }
 
 const initialState: IWalletState = {
@@ -17,6 +18,16 @@ const initialState: IWalletState = {
  withdrawableUsd: 0,
  lastTransaction: null,
  loading: true,
+ version: 0,
+};
+
+const isOlder = (state: IWalletState, balance: IBalanceResponse) =>
+ (balance.version ?? 0) < state.version;
+
+const applyBalance = (state: IWalletState, balance: IBalanceResponse) => {
+ state.balanceUsd = balance.total_balance;
+ state.withdrawableUsd = balance.withdraw_balance;
+ state.version = balance.version ?? 0;
 };
 
 const walletSlice = createSlice({
@@ -24,15 +35,15 @@ const walletSlice = createSlice({
  initialState,
  reducers: {
   setWalletBalance: (state, action: PayloadAction<IBalanceResponse>) => {
-   state.balanceUsd = action.payload.total_balance;
-   state.withdrawableUsd = action.payload.withdraw_balance;
    state.loading = false;
+   if (isOlder(state, action.payload)) return;
+   applyBalance(state, action.payload);
   },
   setWalletDoc: (state, action: PayloadAction<IWalletDocResponse>) => {
-   state.balanceUsd = action.payload.total_balance;
-   state.withdrawableUsd = action.payload.withdraw_balance;
-   state.lastTransaction = action.payload.last_transaction;
    state.loading = false;
+   if (isOlder(state, action.payload)) return;
+   applyBalance(state, action.payload);
+   state.lastTransaction = action.payload.last_transaction;
   },
   setWalletLoading: (state, action: PayloadAction<boolean>) => {
    state.loading = action.payload;
