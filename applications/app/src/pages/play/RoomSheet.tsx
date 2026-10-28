@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
+import Spinner from "@gopvp/common/src/components/Spinner/Spinner";
 import CustomDrawer from "@gopvp/common/src/components/Drawer/Drawer";
 import Input from "@gopvp/common/src/components/Input/Input";
 import MatchTicket from "@gopvp/app/src/components/common/MatchTicket";
@@ -44,7 +45,9 @@ import {
  MAX_AMOUNT_DIGITS,
  MS_PER_MINUTE,
  ROOM_CODE_LENGTH,
+ ROOM_WAIT_SPIN_MS,
 } from "@gopvp/app/src/constants/limit";
+import { SPINNER_REDUCED_MS } from "@gopvp/common/src/constants/limit";
 import { icons } from "@gopvp/common/src/components/images";
 import {
  ROOM_TABS,
@@ -152,7 +155,14 @@ export default function RoomSheet({
       {isOwner && <Text customClass="description">{startWhenReadyText}</Text>}
      </Box>
      {roomTicket}
-     {!isOwner && <Box customClass="room-wait-spinner" aria-hidden />}
+     {!isOwner && (
+      <Spinner
+       customClass="room-wait-spinner"
+       periodMs={ROOM_WAIT_SPIN_MS}
+       reducedPeriodMs={SPINNER_REDUCED_MS}
+       aria-hidden
+      />
+     )}
      <Box customClass="room-actions">
       {isOwner && (
        <Button

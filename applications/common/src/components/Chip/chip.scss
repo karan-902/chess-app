@@ -200,4 +200,38 @@
    }
   }
  }
+
+ &.admin-status {
+  height: auto;
+  padding: 2px $space-8;
+  border-radius: 999px;
+  background: $appSheet;
+  color: $appTextMuted;
+  font-family: $fontOutfitSemiBold;
+  font-size: 0.75rem;
+
+  .MuiChip-label {
+   padding: 0;
+  }
+
+  &.green {
+   background: textOpacity($greenishTeal, 0.12);
+   color: $greenishTeal;
+  }
+
+  &.red {
+   background: textOpacity($error, 0.1);
+   color: $error;
+  }
+
+  &.amber {
+   background: textOpacity($warning, 0.12);
+   color: $warning;
+  }
+
+  &.gold {
+   background: textOpacity($gold, 0.18);
+   color: $appText;
+  }
+ }
 }

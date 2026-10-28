@@ -6,6 +6,7 @@ export const PREMOVE_FIRE_VIBRATE_MS = 10;
 export const COMPUTER_FALLBACK_MOVE_MS = 8000;
 export const MATCH_END_FALLBACK_MS = 5000;
 export const OPPONENT_RECONNECTED_SHOW_MS = 2500;
+export const MOVE_STATUS_SPIN_MS = 800;
 // export const BOARD_ENTRANCE_WAVE_MS = 160;
 // export const BOARD_ENTRANCE_WAVE_COUNT = 4;
 // export const BOARD_ENTRANCE_LANDING_MS = 600;

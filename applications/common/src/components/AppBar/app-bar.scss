@@ -23,4 +23,14 @@
    height: 2.875rem;
   }
  }
+
+ &.admin-topbar {
+  border-bottom: 1px solid $appLine;
+  color: $appText;
+
+  .MuiToolbar-root {
+   flex-wrap: wrap;
+   padding: $space-16 $space-24;
+  }
+ }
 }

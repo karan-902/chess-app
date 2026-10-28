@@ -1,4 +1,4 @@
-import type { ComponentType, ReactNode } from "react";
+import type { CanvasHTMLAttributes, ComponentType, ReactNode } from "react";
 import type { FormikProps } from "formik";
 import type { Socket } from "socket.io-client";
 import type {
@@ -157,6 +157,27 @@ export interface ISlideToConfirmProps {
  isLoading?: boolean;
  disabled?: boolean;
  customClass?: string;
+}
+
+export interface ICanvasFrame {
+ elapsed: number;
+ width: number;
+ height: number;
+ style: CSSStyleDeclaration;
+ isReducedMotion: boolean;
+}
+
+export interface ICanvasAnimationProps extends Omit<
+ CanvasHTMLAttributes<HTMLCanvasElement>,
+ "className"
+> {
+ draw: (ctx: CanvasRenderingContext2D, frame: ICanvasFrame) => boolean;
+ customClass?: string;
+}
+
+export interface ISpinnerProps extends Omit<ICanvasAnimationProps, "draw"> {
+ periodMs: number;
+ reducedPeriodMs?: number;
 }
 
 export interface ITicketProps {

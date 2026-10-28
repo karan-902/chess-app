@@ -2,11 +2,13 @@ import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import CustomAvatar from "@gopvp/common/src/components/Avatar/Avatar";
 import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
+import Spinner from "@gopvp/common/src/components/Spinner/Spinner";
 import { icons } from "@gopvp/common/src/components/images";
 import { useReduxSelector } from "@gopvp/app/src/redux/hooks";
 import { shortenUsername } from "@gopvp/common/src/util/format";
 import { youText } from "@gopvp/common/src/constants/message";
 import { vsText } from "@gopvp/app/src/constants/message";
+import { FACE_OFF_SPIN_MS } from "@gopvp/app/src/constants/limit";
 import type { IFaceOffProps } from "@gopvp/app/src/types/component";
 
 export default function FaceOff({ opponentName }: IFaceOffProps) {
@@ -42,6 +44,7 @@ export default function FaceOff({ opponentName }: IFaceOffProps) {
      <>
       <Box customClass="face-off-searching">
        <icons.userRound />
+       <Spinner customClass="face-off-ring" periodMs={FACE_OFF_SPIN_MS} />
       </Box>
       <Box customClass="face-off-info">
        <Skeleton variant="rounded" customClass="face-off-bar" />

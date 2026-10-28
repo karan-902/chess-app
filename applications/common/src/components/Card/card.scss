@@ -267,4 +267,38 @@
   border: none;
   box-shadow: none;
  }
+
+ &.admin-panel {
+  display: flex;
+  flex-direction: column;
+  gap: $space-12;
+  padding: $space-20;
+  border: 1px solid $appLine;
+  border-radius: $radius-card;
+  background: $white;
+ }
+
+ &.admin-auth-card {
+  display: flex;
+  flex-direction: column;
+  gap: $space-24;
+  width: 100%;
+  max-width: 27rem;
+  box-sizing: border-box;
+  padding: 2rem $space-24;
+  border: 1px solid $appLine;
+  border-radius: 4px;
+  background: $white;
+  box-shadow: 0 1.5rem 3.75rem textOpacity($primaryContrast, 0.25);
+
+  @include from(tablet) {
+   padding: 2.5rem 2.25rem;
+  }
+
+  form {
+   display: flex;
+   flex-direction: column;
+   gap: $space-16;
+  }
+ }
 }

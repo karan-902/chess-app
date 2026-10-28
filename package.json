@@ -6,6 +6,8 @@
  "scripts": {
   "app": "vite applications/app",
   "app:build": "vite build applications/app",
+  "admin": "vite applications/admin",
+  "admin:build": "vite build applications/admin",
   "build": "npm run app:build",
   "storybook": "storybook dev -p 6006 -c applications/common/.storybook",
   "build-storybook": "storybook build -c applications/common/.storybook -o storybook-static",

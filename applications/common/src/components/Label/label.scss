@@ -46,4 +46,13 @@
   }
  }
 
+
+ &.admin-input-label {
+  margin: 0;
+  font-family: $fontOutfitMedium !important;
+  font-size: 0.9rem !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  color: $appText !important;
+ }
 }

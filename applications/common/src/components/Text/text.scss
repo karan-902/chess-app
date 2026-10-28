@@ -2615,6 +2615,30 @@
    font-size: 15px;
   }
  }
+
+ &.admin-page-title {
+  margin: 0;
+  font-family: $fontOutfitSemiBold;
+  font-size: 1.65rem;
+ }
+
+ &.admin-panel-title {
+  margin: 0;
+  font-family: $fontOutfitSemiBold;
+  font-size: 1.15rem;
+ }
+
+ &.admin-kpi-value {
+  font-family: $fontOutfitSemiBold;
+  font-size: 1.85rem;
+ }
+
+ &.admin-nav-label {
+  padding: 0 $space-12 $space-4;
+  font-family: $fontOutfitSemiBold;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+ }
 }
 
 @keyframes live-win-in {

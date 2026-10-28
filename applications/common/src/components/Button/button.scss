@@ -98,24 +98,6 @@
   }
  }
 
- .button-spinner {
-  width: 1.375rem;
-  height: 1.375rem;
-  border: 2.5px solid color-mix(in srgb, currentColor 22%, transparent);
-  border-top-color: currentColor;
-  border-radius: 50%;
-  animation: button-spin 0.75s linear infinite;
-  will-change: transform;
-
-  &.on-dark {
-   color: $primaryContrast;
-  }
-
-  @include reduced-motion {
-   animation-duration: 1.6s;
-  }
- }
-
  &.size-small {
   min-height: 2rem;
  }
@@ -779,10 +761,100 @@
    --btn-border: 1px solid #{$gold};
   }
  }
-}
 
-@keyframes button-spin {
- to {
-  transform: rotate(360deg);
+ &.admin-btn {
+  --btn-pad: 0 #{$space-16};
+  --btn-radius: 10px;
+  --btn-border: 1px solid #{$appCardBorder};
+  --btn-bg: #{$white};
+  --btn-gap: #{$space-8};
+  height: auto;
+  color: $appText;
+
+  .button-face {
+   min-height: 2.5rem;
+   margin: 0;
+  }
+
+  .button-text {
+   display: flex;
+   align-items: center;
+   gap: $space-8;
+   font-family: $fontOutfitSemiBold;
+   font-size: 0.875rem;
+  }
+
+  &:active .button-face {
+   transform: none;
+  }
+
+  &:hover:not(.disabled) {
+   --btn-bg: #{$appSheet};
+  }
+
+  &.primary {
+   --btn-bg: #{$primary};
+   --btn-border: 1px solid #{$primary};
+   color: $primaryContrast;
+
+   &:hover:not(.disabled) {
+    --btn-bg: #{$primaryHover};
+   }
+  }
+
+  &.danger {
+   --btn-border: 1px solid #{textOpacity($error, 0.35)};
+   color: $error;
+  }
+
+  &.size-small {
+   .button-face {
+    min-height: 2.25rem;
+   }
+
+   .button-text {
+    font-size: 0.8125rem;
+   }
+  }
+ }
+
+ &.admin-nav-item {
+  --btn-pad: 0 #{$space-12};
+  --btn-radius: 10px;
+  --btn-justify: flex-start;
+  height: auto;
+  color: $appTextMuted;
+
+  .button-face {
+   min-height: 2.75rem;
+   margin: 0;
+  }
+
+  .button-text {
+   display: flex;
+   align-items: center;
+   gap: $space-12;
+   font-family: $fontOutfitMedium;
+   font-size: 0.95rem;
+  }
+
+  &:hover:not(.disabled) {
+   --btn-bg: #{$appSheet};
+   color: $appText;
+  }
+
+  &.active {
+   --btn-bg: #{$appSheet};
+   color: $appText;
+
+   .button-text {
+    font-family: $fontOutfitSemiBold;
+   }
+  }
+
+  &.disabled:not(.loading) {
+   --btn-bg: transparent !important;
+   --btn-border: 0 solid transparent !important;
+  }
  }
 }

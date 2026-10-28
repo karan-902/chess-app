@@ -1,8 +1,12 @@
 import { useEffect, useRef } from "react";
 import type { PointerEvent } from "react";
 import classNames from "classnames";
+import Spinner from "@gopvp/common/src/components/Spinner/Spinner";
 import { icons } from "@gopvp/common/src/components/images";
-import { SLIDE_CONFIRM_THRESHOLD } from "@gopvp/common/src/constants/limit";
+import {
+ SLIDE_CONFIRM_SPIN_MS,
+ SLIDE_CONFIRM_THRESHOLD,
+} from "@gopvp/common/src/constants/limit";
 import type { ISlideToConfirmProps } from "@gopvp/common/src/types/component";
 import "./slide-to-confirm.scss";
 
@@ -103,7 +107,11 @@ export function SlideToConfirm({
     }}
    >
     {isLoading ? (
-     <span className="slide-confirm-spinner" />
+     <Spinner
+      customClass="slide-confirm-spinner"
+      periodMs={SLIDE_CONFIRM_SPIN_MS}
+      reducedPeriodMs={SLIDE_CONFIRM_SPIN_MS}
+     />
     ) : (
      <icons.moveRight />
     )}

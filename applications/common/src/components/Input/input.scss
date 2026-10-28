@@ -55,11 +55,11 @@
    }
 
    &:where(
-     :-webkit-autofill,
-     :-webkit-autofill:hover,
-     :-webkit-autofill:focus,
-     :autofill
-    ) {
+    :-webkit-autofill,
+    :-webkit-autofill:hover,
+    :-webkit-autofill:focus,
+    :autofill
+   ) {
     -webkit-text-fill-color: $appText;
     caret-color: $gold;
     -webkit-box-shadow: none;
@@ -220,6 +220,26 @@
 
   .gopvp-signup-form & {
    height: 2.75rem;
+  }
+ }
+
+ &.admin-input {
+  gap: $space-4;
+
+  .input-row {
+   height: 3rem;
+   padding: 8px;
+   box-sizing: border-box;
+   border: 1px solid $appCardBorder;
+   border-radius: 3px;
+   background: $white;
+   font-family: $fontOutfitRegular;
+   font-size: max(1rem, 16px);
+   transition: border-color 0.15s ease;
+
+   &:focus-within {
+    outline: 1px solid #0a193e;
+   }
   }
  }
 }
