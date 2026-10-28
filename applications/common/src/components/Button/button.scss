@@ -98,6 +98,24 @@
   }
  }
 
+ .button-spinner {
+  width: 1.375rem;
+  height: 1.375rem;
+  border: 2.5px solid color-mix(in srgb, currentColor 22%, transparent);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: button-spin 0.75s linear infinite;
+  will-change: transform;
+
+  &.on-dark {
+   color: $primaryContrast;
+  }
+
+  @include reduced-motion {
+   animation-duration: 1.6s;
+  }
+ }
+
  &.size-small {
   min-height: 2rem;
  }
@@ -856,5 +874,11 @@
    --btn-bg: transparent !important;
    --btn-border: 0 solid transparent !important;
   }
+ }
+}
+
+@keyframes button-spin {
+ to {
+  transform: rotate(360deg);
  }
 }

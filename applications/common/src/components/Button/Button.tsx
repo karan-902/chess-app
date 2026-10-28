@@ -4,12 +4,7 @@ import { ButtonBase } from "@mui/material";
 import classNames from "classnames";
 import "./button.scss";
 import Text from "@gopvp/common/src/components/Text/Text";
-import Spinner from "@gopvp/common/src/components/Spinner/Spinner";
 import { icons, type TIconName } from "@gopvp/common/src/components/images";
-import {
- BUTTON_SPIN_MS,
- SPINNER_REDUCED_MS,
-} from "@gopvp/common/src/constants/limit";
 
 type TButtonVariant = "contained" | "outlined" | "text";
 
@@ -100,10 +95,8 @@ export const Button = forwardRef<HTMLButtonElement, IButtonProps>(
     <div className="button-face">
      <div className="button-content">
       {isLoading ? (
-       <Spinner
-        customClass={classNames("button-spinner", loaderOnDark && "on-dark")}
-        periodMs={BUTTON_SPIN_MS}
-        reducedPeriodMs={SPINNER_REDUCED_MS}
+       <span
+        className={classNames("button-spinner", loaderOnDark && "on-dark")}
         role="progressbar"
        />
       ) : (

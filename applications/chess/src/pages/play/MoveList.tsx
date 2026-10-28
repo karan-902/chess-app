@@ -4,7 +4,6 @@ import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import CustomChip from "@gopvp/common/src/components/Chip/Chip";
 import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
-import Spinner from "@gopvp/common/src/components/Spinner/Spinner";
 import { PieceIcon } from "@gopvp/common/src/components/constants";
 import type { IMoveListProps } from "@gopvp/chess/src/types/component";
 import {
@@ -12,7 +11,6 @@ import {
  premoveRouteText,
  noMovesYetText,
 } from "@gopvp/chess/src/constants/message";
-import { MOVE_STATUS_SPIN_MS } from "@gopvp/chess/src/constants/limit";
 
 export default function MoveList({
  moveHistory,
@@ -44,9 +42,7 @@ export default function MoveList({
  if (status || (moveHistory.length === 0 && !premove))
   return (
    <Box customClass="gr-move-strip empty">
-    {status && (
-     <Spinner customClass="gr-move-spinner" periodMs={MOVE_STATUS_SPIN_MS} />
-    )}
+    {status && <Box customClass="gr-move-spinner" />}
     <Text component="span" customClass="gr-move-empty">
      {status ?? noMovesYetText}
     </Text>

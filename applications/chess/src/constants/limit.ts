@@ -6,7 +6,6 @@ export const PREMOVE_FIRE_VIBRATE_MS = 10;
 export const COMPUTER_FALLBACK_MOVE_MS = 8000;
 export const MATCH_END_FALLBACK_MS = 5000;
 export const OPPONENT_RECONNECTED_SHOW_MS = 2500;
-export const MOVE_STATUS_SPIN_MS = 800;
 // export const BOARD_ENTRANCE_WAVE_MS = 160;
 // export const BOARD_ENTRANCE_WAVE_COUNT = 4;
 // export const BOARD_ENTRANCE_LANDING_MS = 600;
@@ -23,6 +22,9 @@ export const OPPONENT_MOVE_DURATION_SCALE = 1.6;
 export const PIECE_LAND_MS = 240;
 export const PIECE_SHAKE_MS = 450;
 export const PIECE_FILL_RATIO = 0.92;
+export const PIECE_SPRITE_PAD_RATIO = 0.25;
+export const PIECE_SHADOW_PX = 2;
+export const BOARD_LABEL_INSET_REM = 0.125;
 export const PAYOUT_COIN_COUNT = 7;
 export const PAYOUT_SPARK_COUNT = 8;
 export const PAYOUT_TIMING: Record<

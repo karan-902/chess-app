@@ -172,12 +172,8 @@ export interface ICanvasAnimationProps extends Omit<
  "className"
 > {
  draw: (ctx: CanvasRenderingContext2D, frame: ICanvasFrame) => boolean;
+ isPaused?: boolean;
  customClass?: string;
-}
-
-export interface ISpinnerProps extends Omit<ICanvasAnimationProps, "draw"> {
- periodMs: number;
- reducedPeriodMs?: number;
 }
 
 export interface ITicketProps {
