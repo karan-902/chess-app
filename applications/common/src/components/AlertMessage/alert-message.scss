@@ -70,6 +70,14 @@
     font-size: 13px !important;
    }
   }
+
+  .common-input.form-input > & {
+   color: $minimalError;
+
+   .MuiAlert-icon {
+    color: $minimalError !important;
+   }
+  }
  }
 
  &.MuiAlert-standard.MuiAlert-colorSuccess {

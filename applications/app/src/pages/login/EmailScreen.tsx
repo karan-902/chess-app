@@ -1,14 +1,19 @@
+import { NavLink } from "react-router-dom";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
+import Input from "@gopvp/common/src/components/Input/Input";
 import Button from "@gopvp/common/src/components/Button/Button";
-import InputScreen from "@gopvp/common/src/components/InputScreen/InputScreen";
+import { formSubmitHandler } from "@gopvp/common/src/util/form";
 import type { IEmailScreenProps } from "@gopvp/common/src/types/component";
 import {
  emailText,
  enterEmailText,
+ passwordText,
+ enterPasswordText,
+ forgotPasswordText,
+ continueText,
  orText,
  continueWithGoogleText,
- nextText,
 } from "@gopvp/app/src/constants/message";
 
 export default function EmailScreen({
@@ -17,15 +22,60 @@ export default function EmailScreen({
  onGoogleLogin,
 }: IEmailScreenProps) {
  return (
-  <InputScreen
-   formik={formik}
-   name="email"
-   type="email"
-   label={emailText}
-   placeholder={enterEmailText}
-   submitText={nextText}
+  <Box
    customClass="gopvp-email-form"
+   component="form"
+   onSubmit={formSubmitHandler(formik.handleSubmit)}
   >
+   <Input
+    id="email"
+    name="email"
+    type="email"
+    label={emailText}
+    placeholder={enterEmailText}
+    value={formik.values.email}
+    onChange={formik.handleChange}
+    onBlur={formik.handleBlur}
+    disabled={formik.isSubmitting}
+    isError={formik.touched.email && !!formik.errors.email}
+    helperText={formik.errors.email}
+    customClass="form-input"
+    fullWidth
+   />
+
+   <Input
+    id="password"
+    name="password"
+    type="password"
+    label={passwordText}
+    placeholder={enterPasswordText}
+    value={formik.values.password}
+    onChange={formik.handleChange}
+    onBlur={formik.handleBlur}
+    disabled={formik.isSubmitting}
+    isError={formik.touched.password && !!formik.errors.password}
+    helperText={formik.errors.password}
+    customClass="form-input"
+    fullWidth
+   />
+
+   <Text customClass="auth-forgot-row">
+    <NavLink to="/forgot-password" className="auth-link">
+     {forgotPasswordText}
+    </NavLink>
+   </Text>
+
+   <Button
+    type="submit"
+    variant="contained"
+    fullWidth
+    customClass="auth-submit-btn"
+    disabled={!formik.dirty || formik.isSubmitting}
+    isLoading={formik.isSubmitting}
+   >
+    {continueText}
+   </Button>
+
    <Box customClass="auth-divider">
     <Text component="span">{orText}</Text>
    </Box>
@@ -43,6 +93,6 @@ export default function EmailScreen({
      {continueWithGoogleText}
     </Button>
    </Box>
-  </InputScreen>
+  </Box>
  );
 }

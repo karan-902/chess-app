@@ -1,5 +1,6 @@
 import * as yup from "yup";
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
+// import { useEffect, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 // import { useNavigate } from "react-router-dom";
 // import { ArrowLeft } from "lucide-react";
@@ -17,13 +18,14 @@ import type { IApiErrorInfo } from "@gopvp/common/src/types/response";
 import { useReduxDispatch } from "@gopvp/app/src/redux/hooks";
 import { login } from "@gopvp/app/src/redux/auth/thunk";
 import { showLoader, hideLoader } from "@gopvp/app/src/redux/common/slice";
-import type { IVerifyUserBody } from "@gopvp/common/src/types/payload";
+import type {
+ ILoginBody,
+ IVerifyUserBody,
+} from "@gopvp/common/src/types/payload";
 import type { IVerifyUserResponse } from "@gopvp/common/src/types/response";
 // import type { ILoginResponse } from "@gopvp/common/src/types/response";
-import type {
- IPasswordValues,
- LoginStep,
-} from "@gopvp/common/src/types/component";
+// import type { IPasswordValues } from "@gopvp/common/src/types/component";
+import type { LoginStep } from "@gopvp/common/src/types/component";
 import {
  // forgotYourPasswordText,
  // resetNowText,
@@ -32,11 +34,8 @@ import {
  // approveSignInEmailedText,
  // backToLoginText,
  welcomeBackText,
- championText,
- pickRivalWinCashText,
- enterPasswordJumpInText,
- joinTheArenaText,
- gloryStartsHereText,
+ rivalsWaitingText,
+ noAccountText,
  signUpText,
  wherePlayingFromText,
  pickCountryToFinishText,
@@ -46,11 +45,11 @@ import { ROUTES } from "@gopvp/app/src/constants/route";
 import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
 import { emailRule, passwordRule } from "@gopvp/app/src/utils/validation";
 import EmailScreen from "@gopvp/app/src/pages/login/EmailScreen";
-import PasswordScreen from "@gopvp/app/src/pages/login/PasswordScreen";
+// import PasswordScreen from "@gopvp/app/src/pages/login/PasswordScreen";
 
-const emailSchema = yup.object({ email: emailRule });
+const loginSchema = yup.object({ email: emailRule, password: passwordRule });
 
-const passwordSchema = yup.object({ password: passwordRule });
+// const passwordSchema = yup.object({ password: passwordRule });
 
 // function WaitingApprovalScreen({ onBack }: IWaitingApprovalScreenProps) {
 //  return (
@@ -83,8 +82,8 @@ export default function LoginForm() {
  const [step, setStep] = useState<LoginStep>(
   searchParams.get("step") === "country" ? "country" : "email",
  );
- const [verifiedEmail, setVerifiedEmail] = useState("");
- const [verifiedUsername, setVerifiedUsername] = useState("");
+ // const [verifiedEmail, setVerifiedEmail] = useState("");
+ // const [verifiedUsername, setVerifiedUsername] = useState("");
  // const devicePoll = useDeviceApprovalPoll();
 
  // const handleApproved = (res: ILoginResponse) => {
@@ -95,15 +94,15 @@ export default function LoginForm() {
  //  navigate(res.skill_level === null ? "/skill-level" : "/play");
  // };
 
- const emailFormik = useFormik({
-  initialValues: { email: "" },
-  validationSchema: emailSchema,
-  onSubmit: async (values, { setSubmitting }) => {
+ const loginFormik = useFormik<ILoginBody>({
+  initialValues: { email: "", password: "" },
+  validationSchema: loginSchema,
+  onSubmit: async ({ email, password }, { setSubmitting }) => {
    try {
     const res = await callAPIInterface<IVerifyUserResponse, IVerifyUserBody>(
      "POST",
      ENDPOINTS.VERIFY_USER,
-     { email: values.email },
+     { email },
     );
 
     if (res.signup_method === "GOOGLE") {
@@ -127,62 +126,20 @@ export default function LoginForm() {
      return;
     }
 
-    setVerifiedEmail(values.email);
-    setVerifiedUsername(res.username);
-    setStep("password");
+    // setVerifiedEmail(values.email);
+    // setVerifiedUsername(res.username);
+    // setStep("password");
    } catch (err) {
     showApiErrorToast(err);
-   } finally {
-    setSubmitting(false);
+    return;
    }
-  },
- });
 
- const { googleLogin, isProcessing } = useGoogleAuth(emailFormik.values.email);
-
- // useEffect(() => {
- //  if (!pendingApprovalToken) return;
- //  setStep("waiting-approval");
- //  devicePoll.start(pendingApprovalToken, handleApproved);
- // }, [pendingApprovalToken]);
-
- const focusEmailRef = useRef(false);
-
- useEffect(() => {
-  if (step !== "email" || !focusEmailRef.current) return;
-  document.getElementById("email")?.focus();
-  focusEmailRef.current = false;
- }, [step]);
-
- const passwordFormik = useFormik<IPasswordValues>({
-  initialValues: { password: "" },
-  validationSchema: passwordSchema,
-  onSubmit: async (values, { setSubmitting }) => {
    dispatch(showLoader({ text: signingInText }));
    try {
-    const res = await dispatch(
-     login({ email: verifiedEmail, password: values.password }),
-    ).unwrap();
-    // if ("status" in res) {
-    //  setStep("waiting-approval");
-    //  devicePoll.start(res.approval_token, handleApproved);
-    //  return;
-    // }
-
+    const res = await dispatch(login({ email, password })).unwrap();
     if (!res.country) setStep("country");
    } catch (err) {
     const { isNetworkError, status, message } = err as IApiErrorInfo;
-    // if (err?.type === "account_not_verified") {
-    //  dispatch(
-    //   showToast({
-    //    isToastOpen: true,
-    //    toastMessage: verifyEmailToContinueText,
-    //    toastVariant: "error",
-    //   }),
-    //  );
-    //  navigate(`/verify-email?email=${encodeURIComponent(verifiedEmail)}`);
-    //  return;
-    // }
     if (!isNetworkError && status !== 429 && message)
      showToastMessage({ toastMessage: message, toastVariant: "error" });
    } finally {
@@ -192,11 +149,65 @@ export default function LoginForm() {
   },
  });
 
- const handleChangeEmail = () => {
-  passwordFormik.resetForm();
-  focusEmailRef.current = true;
-  setStep("email");
- };
+ const { googleLogin, isProcessing } = useGoogleAuth(loginFormik.values.email);
+
+ // useEffect(() => {
+ //  if (!pendingApprovalToken) return;
+ //  setStep("waiting-approval");
+ //  devicePoll.start(pendingApprovalToken, handleApproved);
+ // }, [pendingApprovalToken]);
+
+ // const focusEmailRef = useRef(false);
+ //
+ // useEffect(() => {
+ //  if (step !== "email" || !focusEmailRef.current) return;
+ //  document.getElementById("email")?.focus();
+ //  focusEmailRef.current = false;
+ // }, [step]);
+ //
+ // const passwordFormik = useFormik<IPasswordValues>({
+ //  initialValues: { password: "" },
+ //  validationSchema: passwordSchema,
+ //  onSubmit: async (values, { setSubmitting }) => {
+ //   dispatch(showLoader({ text: signingInText }));
+ //   try {
+ //    const res = await dispatch(
+ //     login({ email: verifiedEmail, password: values.password }),
+ //    ).unwrap();
+ //    // if ("status" in res) {
+ //    //  setStep("waiting-approval");
+ //    //  devicePoll.start(res.approval_token, handleApproved);
+ //    //  return;
+ //    // }
+ //
+ //    if (!res.country) setStep("country");
+ //   } catch (err) {
+ //    const { isNetworkError, status, message } = err as IApiErrorInfo;
+ //    // if (err?.type === "account_not_verified") {
+ //    //  dispatch(
+ //    //   showToast({
+ //    //    isToastOpen: true,
+ //    //    toastMessage: verifyEmailToContinueText,
+ //    //    toastVariant: "error",
+ //    //   }),
+ //    //  );
+ //    //  navigate(`/verify-email?email=${encodeURIComponent(verifiedEmail)}`);
+ //    //  return;
+ //    // }
+ //    if (!isNetworkError && status !== 429 && message)
+ //     showToastMessage({ toastMessage: message, toastVariant: "error" });
+ //   } finally {
+ //    setSubmitting(false);
+ //    dispatch(hideLoader());
+ //   }
+ //  },
+ // });
+ //
+ // const handleChangeEmail = () => {
+ //  passwordFormik.resetForm();
+ //  focusEmailRef.current = true;
+ //  setStep("email");
+ // };
 
  // const handleBackFromApproval = () => {
  //  devicePoll.stop();
@@ -212,8 +223,7 @@ export default function LoginForm() {
  }
 
  const loginFooter = {
-  title: joinTheArenaText,
-  tagline: gloryStartsHereText,
+  title: noAccountText,
   actionText: signUpText,
   to: ROUTES.REGISTER,
  };
@@ -232,32 +242,27 @@ export default function LoginForm() {
  //  );
  // }
 
- if (step === "password") {
-  return (
-   <AuthLayout
-    title={welcomeBackText}
-    titleAccent={verifiedUsername}
-    subtitle={enterPasswordJumpInText}
-   >
-    <PasswordScreen
-     verifiedEmail={verifiedEmail}
-     verifiedUsername={verifiedUsername}
-     formik={passwordFormik}
-     onChangeEmail={handleChangeEmail}
-    />
-   </AuthLayout>
-  );
- }
+ // if (step === "password") {
+ //  return (
+ //   <AuthLayout title={welcomeBackText} subtitle={rivalsWaitingText}>
+ //    <PasswordScreen
+ //     verifiedEmail={verifiedEmail}
+ //     verifiedUsername={verifiedUsername}
+ //     formik={passwordFormik}
+ //     onChangeEmail={handleChangeEmail}
+ //    />
+ //   </AuthLayout>
+ //  );
+ // }
 
  return (
   <AuthLayout
    title={welcomeBackText}
-   titleAccent={championText}
-   subtitle={pickRivalWinCashText}
+   subtitle={rivalsWaitingText}
    footerCard={loginFooter}
   >
    <EmailScreen
-    formik={emailFormik}
+    formik={loginFormik}
     isGoogleProcessing={isProcessing}
     onGoogleLogin={() => googleLogin()}
    />

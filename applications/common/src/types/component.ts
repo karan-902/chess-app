@@ -7,6 +7,7 @@ import type {
  IMatchResultResponse,
  IPoolResponse,
 } from "@gopvp/common/src/types/response";
+import type { ILoginBody } from "@gopvp/common/src/types/payload";
 
 export type LoginStep = "email" | "password" | "country"; // | "waiting-approval"
 export type ApproveDeviceStatus = "confirm" | "approved" | "invalid";
@@ -69,10 +70,6 @@ export interface IGameModule {
  RevealSurface: ComponentType;
 }
 
-export interface IEmailValues {
- email: string;
-}
-
 export interface IInputScreenProps<
  TValues extends { [K in keyof TValues]: string },
 > {
@@ -88,7 +85,7 @@ export interface IInputScreenProps<
 }
 
 export interface IEmailScreenProps {
- formik: FormikProps<IEmailValues>;
+ formik: FormikProps<ILoginBody>;
  isGoogleProcessing: boolean;
  onGoogleLogin: () => void;
 }

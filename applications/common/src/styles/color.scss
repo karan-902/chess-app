@@ -43,6 +43,28 @@
  --brink-pink: #e06a5a;
  --greenish-teal: #2ed47a;
  --backdrop-center: #2a2b2c;
+ --minimal-bg: #0d0d0d;
+ --minimal-card-bg: #171717;
+ --minimal-surface-elevated: #1c1c1c;
+ --minimal-input-bg: #181818;
+ --minimal-input-bg-disabled: #141414;
+ --minimal-input-border: #2a2a2a;
+ --minimal-input-border-hover: #414141;
+ --minimal-border-focus: #777777;
+ --minimal-border-subtle: #262626;
+ --minimal-border-strong: #3a3a3a;
+ --minimal-text-primary: #ffffff;
+ --minimal-text-secondary: #a3a3a3;
+ --minimal-text-tertiary: #737373;
+ --minimal-text-inverse: #0d0d0d;
+ --minimal-btn-primary-bg: #ffffff;
+ --minimal-btn-primary-hover: #e8e8e8;
+ --minimal-btn-secondary-bg: #1c1c1c;
+ --minimal-btn-secondary-border: #333333;
+ --minimal-btn-secondary-hover: #262626;
+ --minimal-btn-tertiary-hover: #1a1a1a;
+ --minimal-btn-disabled-bg: #292929;
+ --minimal-error: #ef4444;
 }
 
 :root[data-theme="light"] {
@@ -131,6 +153,29 @@ $warning: var(--warning);
 $error: var(--error);
 $appPrize: var(--app-prize);
 $appEntryFee: var(--app-entry-fee);
+
+$minimalBg: var(--minimal-bg);
+$minimalCardBg: var(--minimal-card-bg);
+$minimalSurfaceElevated: var(--minimal-surface-elevated);
+$minimalInputBg: var(--minimal-input-bg);
+$minimalInputBgDisabled: var(--minimal-input-bg-disabled);
+$minimalInputBorder: var(--minimal-input-border);
+$minimalInputBorderHover: var(--minimal-input-border-hover);
+$minimalBorderFocus: var(--minimal-border-focus);
+$minimalBorderSubtle: var(--minimal-border-subtle);
+$minimalBorderStrong: var(--minimal-border-strong);
+$minimalTextPrimary: var(--minimal-text-primary);
+$minimalTextSecondary: var(--minimal-text-secondary);
+$minimalTextTertiary: var(--minimal-text-tertiary);
+$minimalTextInverse: var(--minimal-text-inverse);
+$minimalBtnPrimaryBg: var(--minimal-btn-primary-bg);
+$minimalBtnPrimaryHover: var(--minimal-btn-primary-hover);
+$minimalBtnSecondaryBg: var(--minimal-btn-secondary-bg);
+$minimalBtnSecondaryBorder: var(--minimal-btn-secondary-border);
+$minimalBtnSecondaryHover: var(--minimal-btn-secondary-hover);
+$minimalBtnTertiaryHover: var(--minimal-btn-tertiary-hover);
+$minimalBtnDisabledBg: var(--minimal-btn-disabled-bg);
+$minimalError: var(--minimal-error);
 
 $white: #fff;
 $black: #000000;

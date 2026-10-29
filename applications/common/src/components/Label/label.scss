@@ -46,6 +46,17 @@
   }
  }
 
+ .common-input.form-input > & {
+  font-family: $fontOutfitSemiBold !important;
+  font-size: 15px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: $minimalTextPrimary !important;
+
+  @include from(phone) {
+   font-size: 16px;
+  }
+ }
 
  &.admin-input-label {
   margin: 0;

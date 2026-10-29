@@ -31,16 +31,12 @@ export const passwordMinLengthText = "Password must be at least 8 characters";
 export const usernameMaxLengthText =
  "Username can't be longer than 10 characters.";
 export const countryRequiredText = "Country is required";
-export const welcomeBackText = "Welcome back,";
-export const championText = "champion";
-export const pickRivalWinCashText = "pick a rival, play 1v1 and win real cash";
-export const enterPasswordJumpInText = "enter your password and jump back in";
+export const welcomeBackText = "Welcome back";
+export const rivalsWaitingText = "Your rivals are waiting, step back in";
 export const joinTheWinnersText = "Join the winners";
 export const beatRealPlayersText = "beat real players 1v1 and win real cash";
-export const joinTheArenaText = "Join the Arena";
-export const gloryStartsHereText = "Glory starts here";
+export const noAccountText = "Don't have an account?";
 export const beenHereBeforeText = "Been Here Before";
-export const yourWinsAreWaitingText = "Your wins are waiting";
 export const logInText = "Login";
 export const usernameHintText = (min: number, max: number) =>
  `${min} to ${max} characters, letters and numbers`;
@@ -48,8 +44,8 @@ export const earningsText = "Earnings";
 export const changeText = "Change";
 export const forgotYourPasswordText = "Forgot your password?";
 export const resetNowText = "Reset now";
-export const nextText = "Next";
 export const loginText = "Login";
+export const forgotPasswordText = "Forgot password?";
 export const verifyEmailToContinueText =
  "Please verify your email to continue.";
 export const signUpText = "Sign up";

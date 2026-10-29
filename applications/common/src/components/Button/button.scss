@@ -429,8 +429,70 @@
   }
  }
 
- .auth-password-stage &.auth-submit-btn {
-  margin-top: 0.25rem;
+ &.auth-submit-btn,
+ &.auth-google-btn {
+  --btn-face-h: 3.125rem;
+  --btn-radius: #{$radius-minimal};
+  height: var(--btn-face-h);
+  padding-top: 0;
+  perspective: none;
+  transition: transform 0.12s ease-out;
+
+  .button-face {
+   transform: none;
+   transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+  }
+
+  .button-text {
+   font-family: $fontOutfitSemiBold;
+   font-size: 16px;
+   letter-spacing: 0;
+
+   @include from(phone) {
+    font-size: 17px;
+   }
+  }
+
+  &:hover:not(.disabled) {
+   opacity: 1;
+  }
+
+  &:active:not(.disabled) {
+   transform: scale(0.98);
+
+   .button-face {
+    transform: none !important;
+   }
+  }
+
+  &:focus-visible {
+   outline-color: $minimalBorderFocus;
+  }
+
+  &.disabled:not(.loading) {
+   --btn-bg: #{$minimalBtnDisabledBg} !important;
+   --btn-border: 0 solid transparent !important;
+
+   .button-text {
+    font-family: $fontOutfitSemiBold;
+    color: $minimalTextTertiary;
+   }
+  }
+
+  @include reduced-motion {
+   transition: none;
+  }
+ }
+
+ &.auth-submit-btn {
+  --btn-bg: #{$minimalBtnPrimaryBg};
+  color: $minimalTextInverse;
+
+  &:hover:not(.disabled) {
+   --btn-bg: #{$minimalBtnPrimaryHover};
+  }
  }
 
  .gopvp-signup-form &.auth-submit-btn {
@@ -443,27 +505,31 @@
 
  &.auth-change-btn {
   --btn-gap: 0.375rem;
-  --btn-pad: 0.5rem 0;
+  --btn-pad: 0.5rem 0.75rem;
+  --btn-radius: 10px;
   --btn-bg: transparent;
   --btn-border: 0 solid transparent;
   flex-shrink: 0;
   height: auto;
   min-height: 0;
-  color: $appText;
+  color: $minimalTextSecondary;
+
+  .button-face {
+   transition: background-color 0.15s ease;
+  }
 
   &:hover:not(.disabled) {
-   --btn-bg: transparent;
+   --btn-bg: #{$minimalBtnTertiaryHover};
+   opacity: 1;
   }
 
   .button-text {
    font-family: $fontOutfitSemiBold;
-   font-size: 13px;
+   font-size: 14px;
    color: inherit;
-   padding-bottom: 0.125rem;
-   border-bottom: 1px solid currentColor;
 
    @include from(phone) {
-    font-size: 14px;
+    font-size: 15px;
    }
   }
 
@@ -501,33 +567,15 @@
   }
  }
 
- &.auth-footer-btn {
-  --btn-pad: 0 0.875rem;
-  height: 2.375rem;
-  flex-shrink: 0;
-
-  .button-text {
-   display: inline-flex;
-   align-items: center;
-   gap: 0.5rem;
-   font-size: 13px;
-   color: inherit;
-
-   @include from(phone) {
-    font-size: 14px;
-   }
-
-   &::after {
-    @include long-arrow;
-   }
-  }
- }
-
  &.auth-google-btn {
   --btn-gap: 0.75rem;
-  --btn-bg: #{$white};
-  --btn-border: 1px solid #0d0d0d;
-  color: #0d0d0d;
+  --btn-bg: #{$minimalBtnSecondaryBg};
+  --btn-border: 1px solid #{$minimalBtnSecondaryBorder};
+  color: $minimalTextPrimary;
+
+  &:hover:not(.disabled) {
+   --btn-bg: #{$minimalBtnSecondaryHover};
+  }
  }
 
  &.game-cta {

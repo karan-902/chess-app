@@ -211,15 +211,77 @@
  .username-field & {
   position: relative;
  }
- &.form-input .input-row {
-  height: 2.75rem;
+ &.form-input {
+  .input-row {
+   box-sizing: border-box;
+   height: 3.125rem;
+   padding: 0 1rem;
+   border: 1px solid $minimalInputBorder;
+   border-radius: $radius-minimal;
+   background: $minimalInputBg;
+   font-family: $fontOutfitMedium;
+   font-size: 16px;
+   color: $minimalTextPrimary;
+   transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
 
-  @include from-height(tall) {
-   height: 3rem;
+   @include from(phone) {
+    font-size: 17px;
+   }
+
+   .gopvp-signup-form & {
+    height: 2.75rem;
+   }
+
+   input {
+    caret-color: $minimalTextPrimary;
+
+    &::placeholder {
+     font-family: $fontOutfitRegular;
+     color: $minimalTextTertiary;
+    }
+
+    &:where(
+     :-webkit-autofill,
+     :-webkit-autofill:hover,
+     :-webkit-autofill:focus,
+     :autofill
+    ) {
+     -webkit-text-fill-color: $minimalTextPrimary;
+     caret-color: $minimalTextPrimary;
+    }
+   }
+
+   @media (hover: hover) {
+    &:hover {
+     border-color: $minimalInputBorderHover;
+    }
+   }
+
+   &:focus-within {
+    border: 1px solid $minimalBorderFocus;
+   }
   }
 
-  .gopvp-signup-form & {
-   height: 2.75rem;
+  &.error .input-row,
+  &.error .input-row:focus-within {
+   border: 1px solid $minimalError;
+  }
+
+  &.disabled .input-row {
+   opacity: 1;
+   background: $minimalInputBgDisabled;
+   color: $minimalTextTertiary;
+  }
+
+  .input-password-toggle {
+   color: $minimalTextSecondary;
+
+   svg {
+    width: 1.375rem;
+    height: 1.375rem;
+   }
   }
  }
 

@@ -296,7 +296,7 @@
   display: block;
   font-family: $fontOutfitBold;
   font-size: 17px;
-  color: $appText;
+  color: $minimalTextPrimary;
 
   @include from(phone) {
    font-size: 18px;
@@ -307,73 +307,67 @@
   display: block;
   font-family: $fontOutfitMedium;
   font-size: 14px;
-  color: $appText;
+  color: $minimalTextSecondary;
 
   @include from(phone) {
    font-size: 15px;
   }
  }
 
- &.auth-footer-title {
-  font-family: $fontOutfitBlack;
-  font-size: 16px;
-  line-height: 1.375;
+ &.auth-title {
+  font-family: $fontOutfitBold;
+  font-size: 28px;
+  line-height: 1.25;
   letter-spacing: -0.4px;
-  color: $appText;
+  white-space: normal;
+  color: $minimalTextPrimary;
 
   @include from(phone) {
-   font-size: 17px;
+   font-size: 30px;
   }
  }
 
- &.auth-footer-tagline {
+ &.auth-subtitle {
+  font-size: 15px;
+  line-height: 1.5;
+  white-space: normal;
+  color: $minimalTextSecondary;
+
+  @include from(phone) {
+   font-size: 16px;
+  }
+ }
+
+ &.auth-forgot-row,
+ &.auth-footer-row {
   display: flex;
   align-items: center;
-  gap: 0.3125rem;
-  font-family: $fontOutfitBold;
-  font-size: 12px;
-  line-height: 1.33;
-  letter-spacing: 1.6px;
-  text-transform: uppercase;
-  color: $gold;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  font-family: $fontOutfitMedium;
+  font-size: 14px;
+  color: $minimalTextPrimary;
 
-  svg {
-   flex-shrink: 0;
-   width: 0.5625rem;
-   height: 0.5625rem;
-   fill: $gold;
-   stroke: $gold;
+  @include from(phone) {
+   font-size: 15px;
   }
 
-  :root[data-theme="light"] & {
-   color: $appTextMuted;
+  .auth-link {
+   font-family: $fontOutfitSemiBold;
+   color: inherit;
+   text-decoration: underline;
+   text-underline-offset: 0.25rem;
   }
  }
 
  &.auth-forgot-row {
-  display: flex;
-  align-items: center;
+  justify-content: flex-end;
+  margin-top: -0.25rem;
+ }
+
+ &.auth-footer-row {
   justify-content: center;
-  gap: 0.375rem;
-  margin-top: -0.75rem;
-  font-family: $fontOutfitMedium;
-  font-size: 14px;
-  color: textOpacity($appText, 0.55);
-
-  @include from(phone) {
-   font-size: 15px;
-  }
-
-  .auth-forgot-link {
-   max-width: none;
-   align-self: auto;
-   font-family: $fontOutfitSemiBold;
-   font-size: inherit;
-   color: $appText;
-   text-decoration: underline;
-   text-underline-offset: 0.25rem;
-   text-decoration-color: textOpacity($appText, 0.4);
-  }
+  flex-shrink: 0;
  }
 
  &.public-title,

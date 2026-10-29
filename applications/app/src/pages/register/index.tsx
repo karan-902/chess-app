@@ -4,7 +4,6 @@ import {
  joinTheWinnersText,
  beatRealPlayersText,
  beenHereBeforeText,
- yourWinsAreWaitingText,
  logInText,
 } from "@gopvp/app/src/constants/message";
 import { ROUTES } from "@gopvp/app/src/constants/route";
@@ -16,7 +15,6 @@ export default function Register() {
    subtitle={beatRealPlayersText}
    footerCard={{
     title: beenHereBeforeText,
-    tagline: yourWinsAreWaitingText,
     actionText: logInText,
     to: ROUTES.LOGIN,
    }}

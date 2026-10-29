@@ -12,8 +12,6 @@ import {
  Copy,
  Crown,
  DollarSign,
- Eye,
- EyeOff,
  FileText,
  Filter,
  Flame,
@@ -50,6 +48,7 @@ import {
  X,
  Zap,
 } from "lucide-react";
+import { Eye, EyeOff } from "@untitledui/icons";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
