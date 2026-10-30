@@ -961,6 +961,7 @@
   --mode-color: #{$gold};
   --mode-tint: #{$modeTintClassical};
   --mode-chip-bg: #{$modeChipClassical};
+  --mode-minimal: #{$minimalGold};
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -970,18 +971,21 @@
    --mode-color: #{$cyan};
    --mode-tint: #{$modeTintBullet};
    --mode-chip-bg: #{$modeChipBullet};
+   --mode-minimal: #{$minimalInfo};
   }
 
   &.blitz {
    --mode-color: #{$warning};
    --mode-tint: #{$modeTintBlitz};
    --mode-chip-bg: #{$modeChipBlitz};
+   --mode-minimal: #{$minimalWarning};
   }
 
   &.rapid {
    --mode-color: #{$greenishTeal};
    --mode-tint: #{$modeTintRapid};
    --mode-chip-bg: #{$modeChipRapid};
+   --mode-minimal: #{$minimalSuccess};
   }
 
   .pool-card & {
@@ -1017,48 +1021,41 @@
 
   .pool-card & {
    grid-area: icon;
-   align-self: stretch;
-   width: 100%;
-   height: 100%;
-   font-size: 34px;
-   background: var(--pool-face);
-   color: var(--pool-ink);
-
-   @include from(phone) {
-    font-size: 36px;
-   }
+   width: 2.75rem;
+   height: 2.75rem;
+   border: 1px solid $minimalBorderStrong;
+   border-radius: 10px;
+   font-size: 20px;
+   background: $minimalBorderSubtle;
+   color: $minimalTextPrimary;
 
    svg {
     width: 1em;
     height: 1em;
-    stroke-width: 1.8;
+    stroke-width: 2;
    }
   }
 
-  .pool-card.more & {
-   font-size: 26px;
-
-   @include from(phone) {
-    font-size: 28px;
-   }
+  .pool-card .pool-meta & {
+   color: var(--mode-minimal);
   }
  }
 
  &.pool-card-live {
   position: absolute;
-  left: 4.25rem;
+  left: 0;
   right: 0;
   bottom: 0;
-  height: 3px;
+  height: 2px;
   overflow: hidden;
-  background: textOpacity($payoutWin, 0.25);
+  background: textOpacity($minimalSuccess, 0.2);
 
   &::after {
    content: "";
    position: absolute;
    inset: 0;
    width: 25%;
-   background: $payoutWin;
+   background: $minimalSuccess;
    animation: pool-live-sweep 1.6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
 
    @include reduced-motion {

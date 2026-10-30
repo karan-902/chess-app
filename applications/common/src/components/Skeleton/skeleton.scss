@@ -86,13 +86,13 @@
  }
 
  .pool-card &.MuiSkeleton-root {
-  background: textOpacity($poolInk, 0.06);
+  background: textOpacity($minimalTextPrimary, 0.06);
 
   &::after {
    background: linear-gradient(
     90deg,
     transparent,
-    textOpacity($poolInk, 0.06) 50%,
+    textOpacity($minimalTextPrimary, 0.06) 50%,
     transparent
    );
   }
@@ -100,9 +100,9 @@
 
  &.pool-art-skeleton {
   grid-area: icon;
-  align-self: stretch;
-  width: 100%;
-  height: 100%;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 10px;
  }
 
  &.pool-time-skeleton {
@@ -126,6 +126,7 @@
   right: 0;
   width: 4.5rem;
   height: 1.25rem;
+  border-bottom-left-radius: 8px;
  }
 
  &.face-off-bar {

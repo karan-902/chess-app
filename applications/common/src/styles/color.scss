@@ -68,6 +68,7 @@
  --minimal-error: #ef4444;
  --minimal-warning: #f59e0b;
  --minimal-success: #22c55e;
+ --minimal-info: #3b82f6;
 }
 
 :root[data-theme="light"] {
@@ -182,6 +183,7 @@ $minimalBtnDisabledBg: var(--minimal-btn-disabled-bg);
 $minimalError: var(--minimal-error);
 $minimalWarning: var(--minimal-warning);
 $minimalSuccess: var(--minimal-success);
+$minimalInfo: var(--minimal-info);
 
 $white: #fff;
 $black: #000000;

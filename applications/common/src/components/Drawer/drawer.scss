@@ -123,8 +123,22 @@
   }
  }
 
- &.MuiDrawer-anchorBottom:not(.game-over-sheet) .MuiDrawer-paper::after {
+ &.MuiDrawer-anchorBottom:not(.game-over-sheet, .bet-sheet)
+  .MuiDrawer-paper::after {
   @include sheet-pattern;
+ }
+
+ &.bet-sheet .MuiDrawer-paper {
+  border-top: 1px solid $minimalBorderSubtle;
+  border-radius: 16px 16px 0 0 !important;
+  background: $minimalCardBg;
+
+  &::before {
+   width: 2.5rem;
+   height: 4px;
+   border-radius: 999px;
+   background: $minimalBorderStrong !important;
+  }
  }
 
  &.wallet-sheet .MuiDrawer-paper:has(.deposit-qr-stage)::after {

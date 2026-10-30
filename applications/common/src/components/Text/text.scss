@@ -137,6 +137,11 @@
    color: $appTabActive;
   }
 
+  .bet-sheet & {
+   font-family: $fontOutfitSemiBold;
+   color: $minimalTextPrimary;
+  }
+
   &.mm-title {
    font-size: 24px;
 
@@ -812,7 +817,7 @@
   font-size: 20px;
   line-height: 1.15;
   white-space: nowrap;
-  color: textOpacity($poolInk, 0.9);
+  color: $minimalTextPrimary;
 
   @include from(phone) {
    font-size: 21px;
@@ -1296,13 +1301,17 @@
   align-items: center;
   gap: 0.25rem;
   padding: 0.25rem 0.625rem;
-  background: var(--pool-face);
-  font-family: $fontOutfitBold;
+  border-bottom-left-radius: 8px;
+  background: $minimalBorderSubtle;
+  font-family: $fontOutfitSemiBold;
   font-size: 12px;
   line-height: 1.2;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--pool-ink);
+  color: $minimalTextPrimary;
+
+  span {
+   font-family: $fontOutfitMedium;
+   color: $minimalTextSecondary;
+  }
 
   @include from(phone) {
    font-size: 13px;
@@ -1317,11 +1326,11 @@
   font-size: 13px;
   line-height: 1.25;
   white-space: nowrap;
-  color: $payoutWin;
+  color: $minimalSuccess;
 
   span {
    font-family: $fontOutfitBold;
-   color: $poolInk;
+   color: $minimalTextPrimary;
   }
 
   @include from(phone) {
@@ -1331,13 +1340,13 @@
 
  &.pool-card-title {
   grid-area: win;
-  font-family: $fontOutfitBold;
-  font-size: 17px;
+  font-family: $fontOutfitSemiBold;
+  font-size: 16px;
   line-height: 1.2;
-  color: textOpacity($poolInk, 0.9);
+  color: $minimalTextPrimary;
 
   @include from(phone) {
-   font-size: 18px;
+   font-size: 17px;
   }
  }
 
@@ -1345,7 +1354,7 @@
   grid-area: time;
   font-family: $fontOutfitRegular;
   font-size: 12px;
-  color: textOpacity($poolInk, 0.5);
+  color: $minimalTextSecondary;
 
   @include from(phone) {
    font-size: 13px;
@@ -1354,9 +1363,9 @@
 
  &.pool-card-add {
   grid-area: arrow;
-  font-family: $fontOutfitBold;
+  font-family: $fontOutfitSemiBold;
   font-size: 12px;
-  color: $poolInk;
+  color: $minimalGold;
   text-decoration: underline;
   text-underline-offset: 0.25rem;
 
@@ -1368,11 +1377,13 @@
  &.bet-section-label {
   display: block;
   margin: 1.25rem 0 0.625rem;
-  font-family: $fontOutfitBold;
-  font-size: 12px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: textOpacity($appText, 0.5);
+  font-family: $fontOutfitSemiBold;
+  font-size: 14px;
+  color: $minimalTextSecondary;
+
+  @include from(phone) {
+   font-size: 15px;
+  }
  }
 
  &.bet-sheet-footer {
@@ -1382,7 +1393,7 @@
   margin-top: 1rem;
   font-family: $fontOutfitMedium;
   font-size: 13px;
-  color: textOpacity($appText, 0.7);
+  color: $minimalTextSecondary;
 
   @include from(phone) {
    font-size: 14px;

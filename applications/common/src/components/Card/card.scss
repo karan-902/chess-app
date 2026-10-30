@@ -1,4 +1,3 @@
-@use "sass:list";
 @use "default.scss" as *;
 
 .common-card {
@@ -34,18 +33,16 @@
  }
 
  &.pool-card {
-  --pool-face: #{list.nth(list.nth($poolBlocks, 1), 1)};
-  --pool-ink: #{list.nth(list.nth($poolBlocks, 1), 2)};
   display: grid;
-  grid-template-columns: 4.25rem 1fr auto;
+  grid-template-columns: 2.75rem 1fr auto;
   grid-template-areas:
    "icon time arrow"
    "icon win arrow";
   align-items: center;
-  column-gap: 0.9375rem;
-  row-gap: 0;
-  min-height: 4.25rem;
-  padding: 0 1rem 0 0;
+  column-gap: 0.875rem;
+  row-gap: 0.125rem;
+  min-height: 4.5rem;
+  padding: 0.75rem 1rem;
 
   .minute-chip,
   .pool-card-title {
@@ -56,38 +53,34 @@
   .pool-card-sub {
    align-self: start;
   }
-  border: 0;
-  border-radius: 0;
-  color: $poolInk;
+  border: 1px solid $minimalBorderSubtle;
+  border-radius: $radius-minimal;
+  background: $minimalSurfaceElevated;
+  box-shadow: none;
+  color: $minimalTextPrimary;
   text-align: left;
   cursor: pointer;
-  background: $poolInfoBg;
-  transition: transform 0.12s ease-in-out;
+  transition:
+   border-color 0.15s ease,
+   transform 0.12s ease-out;
 
-  :root[data-theme="light"] & {
-   border: 1px solid $poolEdgeBottom;
+  @media (hover: hover) {
+   &:hover:not(.static) {
+    border-color: $minimalBorderStrong;
+   }
   }
 
   &:active {
-   transform: translate3d(2px, 2px, 0);
+   transform: scale(0.98);
   }
 
   @include reduced-motion {
    transition: none;
   }
 
-  @for $i from 1 through list.length($poolBlocks) {
-   $block: list.nth($poolBlocks, $i);
-
-   &.tone-#{$i} {
-    --pool-face: #{list.nth($block, 1)};
-    --pool-ink: #{list.nth($block, 2)};
-   }
-  }
-
   &:focus-visible {
-   outline: 2px solid $gold;
-   outline-offset: 3px;
+   outline: 2px solid $minimalBorderFocus;
+   outline-offset: 2px;
   }
 
   &.static {
@@ -99,7 +92,7 @@
   }
 
   &.insufficient {
-   opacity: 0.6;
+   opacity: 0.5;
   }
 
   &.waiting {
@@ -121,23 +114,20 @@
   }
 
   &.more {
-   --pool-face: #{$poolInk};
-   --pool-ink: #{$white};
-   grid-template-columns: 3.5rem 1fr auto;
    grid-template-areas:
     "icon win arrow"
     "icon time arrow";
-   min-height: 3.5rem;
+   min-height: 4rem;
   }
 
   .pool-card-arrow {
    justify-self: end;
    align-self: center;
    grid-area: arrow;
-   width: 1.75rem;
-   height: 1.75rem;
-   stroke-width: 1.4;
-   color: textOpacity($poolInk, 0.9);
+   width: 1.25rem;
+   height: 1.25rem;
+   stroke-width: 2;
+   color: $minimalTextTertiary;
   }
  }
 

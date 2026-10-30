@@ -44,11 +44,14 @@
 
    .MuiChip-label {
     padding: 0;
-    font-family: $fontOutfitBold;
+    font-family: $fontOutfitMedium;
     font-size: 12px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: textOpacity($poolInk, 0.7);
+    letter-spacing: 0;
+    color: $minimalTextSecondary;
+
+    @include from(phone) {
+     font-size: 13px;
+    }
    }
   }
  }

@@ -147,6 +147,17 @@
   .wallet-sheet & {
    top: 1.75rem;
   }
+
+  .bet-sheet & {
+   border-color: $minimalBorderStrong;
+   border-radius: 10px;
+   background: transparent;
+   color: $minimalTextSecondary;
+
+   &:hover:not(.Mui-disabled) {
+    background: textOpacity($minimalTextPrimary, 0.06);
+   }
+  }
  }
  &.modal-close-icon {
   position: absolute;
