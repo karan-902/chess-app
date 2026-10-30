@@ -390,12 +390,11 @@ const drawTicket = (
   if (chip && stats.length === 2) {
    const valueBaseline = 9.75;
    ctx.textBaseline = "alphabetic";
-   const [fromWidth, toWidth] = stats.map(({ label, value, isWin }, i) => {
-    const size = isWin ? 1.23 : 1;
+   const [fromWidth, toWidth] = stats.map(({ label, value }, i) => {
     const labelText = label.toUpperCase();
     setFont(boldFont, 0.67);
     const labelWidth = spacedWidth(labelText, 0.056);
-    setFont(heavyFont, size);
+    setFont(heavyFont, 1);
     const blockWidth = Math.max(labelWidth, measure(value));
     const center = i
      ? WRAP.width - 0.95 - blockWidth / 2
@@ -404,7 +403,7 @@ const drawTicket = (
     fillSpaced(value, center, valueBaseline, 0);
     setFont(boldFont, 0.67);
     ctx.fillStyle = css("--ticket-muted");
-    fillSpaced(labelText, center, valueBaseline - size * 0.82 - 0.25, 0.056);
+    fillSpaced(labelText, center, valueBaseline - 1.07, 0.056);
     return blockWidth;
    });
    ctx.textBaseline = "middle";

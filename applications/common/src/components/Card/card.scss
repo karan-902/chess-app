@@ -170,9 +170,9 @@
   gap: $space-12;
   padding: $space-16;
   margin-bottom: $space-12;
-  border: 1px solid $appCardBorder;
-  border-radius: $radius-card;
-  background: $appSurface;
+  border: 1px solid $minimalBorderSubtle;
+  border-radius: $radius-minimal;
+  background: $minimalCardBg;
  }
 
  &.profile-id-card {

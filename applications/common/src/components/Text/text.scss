@@ -1597,6 +1597,7 @@
   .rules-card & {
    font-family: $fontOutfitSemiBold;
    font-size: 14px;
+   color: $minimalTextPrimary;
 
    @include from(phone) {
     font-size: 15px;
@@ -1605,6 +1606,10 @@
 
   &.neg {
    color: $paleRed;
+  }
+
+  .rules-card &.neg {
+   color: $minimalError;
   }
  }
  &.score-hero-label {
@@ -1648,7 +1653,7 @@
   }
 
   .rules-card & {
-   color: $appText;
+   color: $minimalTextSecondary;
   }
  }
 
@@ -2235,9 +2240,9 @@
  }
 
  &.rules-title {
-  font-family: $fontOutfitBold;
+  font-family: $fontOutfitSemiBold;
   font-size: 20px;
-  color: textOpacity($appText, 0.9);
+  color: $minimalTextPrimary;
 
   @include from(phone) {
    font-size: 21px;
@@ -2253,7 +2258,7 @@
   font-family: $fontOutfitRegular;
   font-size: 14px;
   line-height: 1.45;
-  color: textOpacity($appText, 0.7);
+  color: $minimalTextSecondary;
   white-space: normal;
   overflow: visible;
 
@@ -2265,7 +2270,7 @@
  &.rules-example-title {
   font-family: $fontOutfitSemiBold;
   font-size: 13px;
-  color: $appTabActive;
+  color: $minimalGold;
 
   @include from(phone) {
    font-size: 14px;
@@ -2280,7 +2285,7 @@
   font-size: 12px;
   line-height: 1.6;
   white-space: normal;
-  color: textOpacity($appText, 0.5);
+  color: $minimalTextTertiary;
 
   @include from(phone) {
    font-size: 13px;
