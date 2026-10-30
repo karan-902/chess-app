@@ -56,7 +56,6 @@
  }
 
  &.ticket-me,
- &.ticket-rival,
  &.payout-rival {
   width: 2.75rem;
   height: 2.75rem;
@@ -91,14 +90,9 @@
   }
  }
 
- &.ticket-me,
- &.ticket-rival {
+ &.ticket-me {
   background-color: $poolInk !important;
   color: $gold;
- }
-
- &.ticket-rival {
-  transform: rotateY(180deg);
  }
 
  &.gr-avatar {

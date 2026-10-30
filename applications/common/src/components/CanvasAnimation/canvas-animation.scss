@@ -1,3 +1,4 @@
+@use "sass:list";
 @use "default.scss" as *;
 
 .common-canvas-animation {
@@ -9,6 +10,34 @@
   inset: 0;
   width: 100%;
   height: 100%;
+ }
+
+ &.match-ticket-canvas {
+  --ticket-paper-top: #{$minimalPaper};
+  --ticket-paper-bottom: #{$minimalPaperShade};
+  --ticket-ink: #{$minimalTextInverse};
+  --ticket-muted: #{$minimalTextTertiary};
+  --ticket-gold: #{$minimalGold};
+  --ticket-danger: #{$minimalError};
+  --ticket-slot: #{$minimalBorderStrong};
+  --ticket-stub: #{list.nth(list.nth($poolBlocks, 1), 1)};
+  --ticket-stub-ink: #{list.nth(list.nth($poolBlocks, 1), 2)};
+  --ticket-confirmed: #{$goldSolid};
+  --ticket-void-stub: #c9ccd8;
+  --ticket-mask-1: #{$goldSolid};
+  --ticket-mask-2: #{$poolPink};
+  --ticket-mask-3: #{list.nth(list.nth($poolBlocks, 4), 1)};
+  --ticket-mask-4: #{$poolGreen};
+  --ticket-heavy-font: #{$fontOutfitExtraBold};
+  align-self: center;
+  width: calc(20.9375rem * 1.12);
+  height: calc(18.75rem * 1.12);
+  font-family: $fontOutfitBold;
+
+  @include from-height(tall) {
+   width: calc(20.9375rem * 1.22);
+   height: calc(18.75rem * 1.22);
+  }
  }
 
  &.board-preview-canvas {

@@ -915,6 +915,22 @@
    align-self: center;
   }
 
+  .match-confirm-sheet & {
+   border-color: $minimalBorderStrong;
+   border-radius: 999px;
+   font-family: $fontOutfitSemiBold;
+   color: $minimalTextPrimary;
+
+   svg {
+    color: $minimalTextSecondary;
+   }
+
+   &.low,
+   &.low svg {
+    color: $minimalError;
+   }
+  }
+
   .deposit-qr-stage & {
    align-self: center;
    margin-bottom: $space-16;
@@ -977,9 +993,9 @@
 
  &.match-starting {
   align-self: center;
-  font-family: $fontOutfitBold;
+  font-family: $fontOutfitSemiBold;
   font-size: 15px;
-  color: $greenishTeal;
+  color: $minimalSuccess;
 
   @include from(phone) {
    font-size: 16px;
@@ -1003,52 +1019,6 @@
      animation-name: match-count-last;
     }
    }
-  }
- }
-
- &.ticket-stub-label {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  font-family: $fontOutfitBold;
-  font-size: 13px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  transition:
-   opacity 0.3s,
-   transform 0.3s;
-
-  @include from(phone) {
-   font-size: 14px;
-  }
-
-  &.confirmed {
-   opacity: 0;
-   transform: translateY(0.5rem);
-   background: $gold;
-   color: $poolInk;
-  }
-
-  &.none {
-   opacity: 0;
-   background: #c9ccd8;
-   color: $poolInk;
-  }
-
-  .match-ticket.found &.confirmed {
-   opacity: 1;
-   transform: none;
-  }
-
-  .match-ticket.found &.pending,
-  .match-ticket.lost &.pending {
-   opacity: 0;
-  }
-
-  .match-ticket.lost &.none {
-   opacity: 1;
-   transition-delay: 0.3s;
   }
  }
 
@@ -1242,70 +1212,6 @@
 
    @include from(phone) {
     font-size: 15px;
-   }
-  }
- }
-
- &.ticket-stat-label {
-  display: block;
-  font-family: $fontOutfitBold;
-  font-size: 12px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: #5c5a52;
-
-  @include from(tablet) {
-   font-size: 13px;
-  }
- }
-
- &.ticket-stat-value {
-  display: block;
-  margin-top: 0.125rem;
-  font-family: $fontOutfitExtraBold;
-  font-size: 13px;
-  line-height: 1.2;
-  text-transform: uppercase;
-  color: $poolInk;
-
-  @include from(phone) {
-   font-size: 14px;
-  }
-
-  .ticket-stat.win & {
-   color: var(--pool-ink);
-  }
- }
-
- &.ticket-void {
-  position: absolute;
-  z-index: 3;
-  left: 1.625rem;
-  top: 5.5rem;
-  padding: 0.3125rem 0.75rem;
-  overflow: visible;
-  border: 3px solid $stampRed;
-  font-family: $fontOutfitExtraBold;
-  font-size: 17px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: $stampRed;
-  opacity: 0;
-  transform: rotate(-14deg) scale(1.8);
-  pointer-events: none;
-
-  @include from(phone) {
-   font-size: 18px;
-  }
-
-  .match-ticket.lost & {
-   animation: match-void-thud 0.35s cubic-bezier(0.3, 1.4, 0.5, 1) 0.6s forwards;
-  }
-
-  @include reduced-motion {
-   .match-ticket.lost & {
-    opacity: 0.9;
-    transform: rotate(-14deg);
    }
   }
  }

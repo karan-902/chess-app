@@ -164,6 +164,7 @@ export interface IMatchTicketStat {
 export interface IMatchTicketProps {
  status: MatchmakingStatus;
  title?: string;
+ chip?: string;
  stats: IMatchTicketStat[];
  myName: string;
  opponentName: string;

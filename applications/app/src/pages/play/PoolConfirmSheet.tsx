@@ -32,7 +32,6 @@ import {
  startingInText,
  tryAgainText,
  pickAnotherBetText,
- timeText,
  entryText,
  winText,
  poolMinutesText,
@@ -127,11 +126,8 @@ export default function PoolConfirmSheet({
      {/* <MatchDeck isRevealed={isRevealed} opponentName={opponentName} /> */}
      <MatchTicket
       status={status}
+      chip={poolMinutesText(Math.round(queuedPool.time / MS_PER_MINUTE))}
       stats={[
-       {
-        label: timeText,
-        value: poolMinutesText(Math.round(queuedPool.time / MS_PER_MINUTE)),
-       },
        { label: entryText, value: formatAmount(queuedPool.bet) },
        { label: winText, value: formatAmount(queuedPool.prize), isWin: true },
       ]}

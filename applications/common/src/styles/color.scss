@@ -69,6 +69,8 @@
  --minimal-warning: #f59e0b;
  --minimal-success: #22c55e;
  --minimal-info: #3b82f6;
+ --minimal-paper: #ffffff;
+ --minimal-paper-shade: #ededed;
 }
 
 :root[data-theme="light"] {
@@ -184,6 +186,8 @@ $minimalError: var(--minimal-error);
 $minimalWarning: var(--minimal-warning);
 $minimalSuccess: var(--minimal-success);
 $minimalInfo: var(--minimal-info);
+$minimalPaper: var(--minimal-paper);
+$minimalPaperShade: var(--minimal-paper-shade);
 
 $white: #fff;
 $black: #000000;
@@ -247,5 +251,4 @@ $poolPink: #ff7b9a;
 
 $payoutWin: #0b8a50;
 $payoutLoss: #d33a3a;
-$stampRed: #e5484d;
 $capsuleBlack: #08090d;

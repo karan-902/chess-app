@@ -12,7 +12,6 @@ export const PASSWORD_STRENGTH_LEVELS = 4;
 export const MATCHES_STATS_FALLBACK = 0;
 export const POOL_TIMEOUT_SECONDS = 30;
 export const MATCH_REVEAL_MS = 3000;
-export const MATCH_SPARK_COUNT = 4;
 export const MATCH_COUNTDOWN_STEPS = [3, 2, 1];
 export const MATCH_TIMER_LOW_SECONDS = 10;
 export const MATCH_DECK_GAP_PX = 104;

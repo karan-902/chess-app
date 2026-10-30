@@ -29,7 +29,7 @@ export const queenText = "Queen";
 export const rookText = "Rook";
 export const bishopText = "Bishop";
 export const knightText = "Knight";
-export const minutesText = (minutes: number) => `${minutes} min`;
+export const minutesText = (minutes: number) => `${minutes} MIN`;
 export const modeText = "Mode";
 export const pickLevelSetClockText = "Pick a level, set the clock,";
 export const playFreeText = "play free";

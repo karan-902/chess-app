@@ -392,21 +392,11 @@
   }
 
   .match-confirm-sheet & {
-   --btn-pad: 0.5rem 1rem;
-   --btn-radius: 10px;
-   color: $minimalTextSecondary;
-
-   .button-face {
-    transition: background-color 0.15s ease;
-   }
-
-   .button-text {
-    text-decoration: none;
-   }
+   color: $minimalGold;
+   transition: color 0.15s ease;
 
    &:hover:not(.disabled) {
-    --btn-bg: #{$minimalBtnTertiaryHover};
-    color: $minimalTextPrimary;
+    color: $minimalBtnPrimaryHover;
    }
   }
  }
@@ -450,7 +440,8 @@
 
  &.auth-submit-btn,
  &.auth-google-btn,
- .cta-bottom &.play-cta {
+ .cta-bottom &.play-cta,
+ .match-retry &.play-cta {
   --btn-face-h: 3.125rem;
   --btn-radius: #{$radius-minimal};
   height: var(--btn-face-h);
@@ -507,7 +498,8 @@
  }
 
  &.auth-submit-btn,
- .cta-bottom &.play-cta {
+ .cta-bottom &.play-cta,
+ .match-retry &.play-cta {
   --btn-bg: #{$minimalBtnPrimaryBg};
   color: $minimalTextInverse;
 
