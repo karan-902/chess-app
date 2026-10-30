@@ -137,7 +137,8 @@
    color: $appTabActive;
   }
 
-  .bet-sheet & {
+  .bet-sheet &,
+  .practice-sheet & {
    font-family: $fontOutfitSemiBold;
    color: $minimalTextPrimary;
   }
@@ -179,6 +180,16 @@
 
   @include from(phone) {
    font-size: 14px;
+  }
+
+  .practice-sheet & {
+   font-size: 15px;
+   letter-spacing: 0;
+   color: $minimalTextPrimary;
+
+   @include from(phone) {
+    font-size: 16px;
+   }
   }
  }
 
@@ -969,7 +980,8 @@
   }
  }
 
- .match-confirm-sheet &.public-subtitle {
+ .match-confirm-sheet &.public-subtitle,
+ .practice-sheet &.public-subtitle {
   color: $minimalTextSecondary;
  }
 
@@ -1355,6 +1367,15 @@
 
   .segment.gold-bar .segment-btn.active & {
    color: #0d0d0d;
+  }
+
+  .practice-sheet .segment.gold-bar & {
+   font-family: $fontOutfitBold;
+   color: $minimalTextSecondary;
+  }
+
+  .practice-sheet .segment.gold-bar .segment-btn.active & {
+   color: $minimalTextInverse;
   }
 
   .segment.category-select & {

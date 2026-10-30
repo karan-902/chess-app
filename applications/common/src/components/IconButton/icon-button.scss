@@ -149,7 +149,8 @@
   }
 
   .bet-sheet &,
-  .match-confirm-sheet & {
+  .match-confirm-sheet &,
+  .practice-sheet & {
    border-color: $minimalBorderStrong;
    border-radius: 10px;
    background: transparent;

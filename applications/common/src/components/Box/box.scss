@@ -1049,6 +1049,20 @@
     width: auto;
    }
   }
+
+  .practice-sheet &.gold-bar {
+   padding: 4px;
+   border-color: $minimalBorderStrong;
+   border-radius: $radius-minimal;
+   background: $minimalSurfaceElevated;
+
+   > .segment-thumb {
+    top: 4px;
+    bottom: 4px;
+    border-radius: 8px;
+    background: $minimalGold;
+   }
+  }
  }
 
  &.segment-thumb {

@@ -441,7 +441,8 @@
  &.auth-submit-btn,
  &.auth-google-btn,
  .cta-bottom &.play-cta,
- .match-retry &.play-cta {
+ .match-retry &.play-cta,
+ .practice-sheet &.play-cta {
   --btn-face-h: 3.125rem;
   --btn-radius: #{$radius-minimal};
   height: var(--btn-face-h);
@@ -499,7 +500,8 @@
 
  &.auth-submit-btn,
  .cta-bottom &.play-cta,
- .match-retry &.play-cta {
+ .match-retry &.play-cta,
+ .practice-sheet &.play-cta {
   --btn-bg: #{$minimalBtnPrimaryBg};
   color: $minimalTextInverse;
 
