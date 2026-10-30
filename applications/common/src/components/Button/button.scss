@@ -314,6 +314,18 @@
    }
   }
 
+  :root .matches-page .pill-subtabs & {
+   --btn-bg: #{$minimalCardBg};
+   --btn-border: 1px solid #{$minimalBorderSubtle};
+   color: $minimalTextSecondary;
+
+   &.active {
+    --btn-bg: #{$minimalGold};
+    --btn-border: 1px solid #{$minimalGold};
+    color: $minimalTextInverse;
+   }
+  }
+
   .deposit-amount-chips & {
    --btn-pad: 0 0.5rem;
    height: 2.25rem;

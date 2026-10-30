@@ -329,6 +329,18 @@
   &.neutral {
    color: $appTextMuted;
   }
+
+  .matches-page & {
+   font-family: $fontOutfitBold;
+
+   &.pos {
+    color: $minimalSuccess;
+   }
+
+   &.neg {
+    color: $minimalError;
+   }
+  }
  }
 
  &.auth-account-name {
@@ -1492,6 +1504,11 @@
    font-size: 16px;
   }
   color: textOpacity($appText, 0.9);
+
+  .matches-page & {
+   font-family: $fontOutfitSemiBold;
+   color: $minimalTextPrimary;
+  }
  }
 
  &.match-row-tag {
@@ -1520,6 +1537,11 @@
   @include from(phone) {
    font-size: 17px;
   }
+
+  .matches-page & {
+   font-family: $fontOutfitSemiBold;
+   color: $minimalTextPrimary;
+  }
  }
 
  &.empty-state-desc {
@@ -1532,6 +1554,10 @@
 
   @include from(phone) {
    font-size: 14px;
+  }
+
+  .matches-page & {
+   color: $minimalTextSecondary;
   }
  }
  &.matches-stats-title {
@@ -1587,6 +1613,10 @@
   @include from(phone) {
    font-size: 14px;
   }
+
+  .matches-page & {
+   color: $minimalTextSecondary;
+  }
  }
 
  &.score-hero-val {
@@ -1597,6 +1627,11 @@
 
   @include from(phone) {
    font-size: 60px;
+  }
+
+  .matches-page & {
+   font-family: $fontOutfitExtraBold;
+   color: $minimalTextPrimary;
   }
  }
 
@@ -2059,6 +2094,11 @@
     font-size: 13px;
    }
   }
+
+  .matches-page .result-tiles & {
+   font-family: $fontOutfitSemiBold;
+   color: $minimalTextSecondary;
+  }
  }
 
  &.stat-tile-value {
@@ -2085,6 +2125,14 @@
 
    @include from(phone) {
     font-size: 32px;
+   }
+  }
+
+  .matches-page .result-tiles & {
+   color: $minimalTextPrimary;
+
+   &.prize {
+    color: $minimalSuccess;
    }
   }
 
