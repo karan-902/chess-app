@@ -9,13 +9,10 @@
  width: 100%;
  height: 3.75rem;
  padding: 0.25rem;
- border-radius: 999px;
+ border: 1px solid $minimalBorderStrong;
+ border-radius: $radius-minimal;
  overflow: hidden;
- background: linear-gradient(180deg, textOpacity($white, 0.1), textOpacity($white, 0.03));
- box-shadow:
-  inset 0 1px 0 textOpacity($white, 0.25),
-  inset 0 -1px 0 textOpacity($black, 0.4),
-  inset 0 0 0 1px textOpacity($white, 0.08);
+ background: $minimalSurfaceElevated;
  user-select: none;
  touch-action: none;
 
@@ -24,7 +21,11 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(90deg, textOpacity($gold, 0), textOpacity($gold, 0.18));
+  background: linear-gradient(
+   90deg,
+   textOpacity($minimalGold, 0),
+   textOpacity($minimalGold, 0.16)
+  );
   transform: translate3d(calc(-100% + var(--slide-offset) + 3.5rem), 0, 0);
   pointer-events: none;
  }
@@ -36,22 +37,13 @@
   background: linear-gradient(
    105deg,
    transparent 40%,
-   textOpacity($white, 0.12) 50%,
+   textOpacity($minimalTextPrimary, 0.06) 50%,
    transparent 60%
   );
   transform: translate3d(-100%, 0, 0);
   opacity: calc(1 - var(--slide-progress) * 2);
   animation: slide-confirm-sheen 3.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   pointer-events: none;
- }
-
- :root[data-theme="light"] & {
-  background: textOpacity($appText, 0.05);
-  box-shadow: inset 0 0 0 1px textOpacity($appText, 0.14);
-
-  .slide-confirm-label {
-   color: textOpacity($appText, 0.7);
-  }
  }
 
  .slide-confirm-label {
@@ -63,7 +55,7 @@
   padding-left: 3.5rem;
   font-family: $fontOutfitSemiBold;
   font-size: 15px;
-  color: textOpacity($white, 0.7);
+  color: $minimalTextSecondary;
   opacity: calc(1 - var(--slide-progress) * 1.5);
   pointer-events: none;
 
@@ -82,20 +74,16 @@
   height: 100%;
   padding: 0;
   border: 0;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 28%, #fff6cf, $gold 45%, #a87800);
-  box-shadow:
-   inset 0 0 0 1px textOpacity($white, 0.4),
-   inset 0 -3px 4px rgba(90, 60, 0, 0.45),
-   0 4px 10px textOpacity($black, 0.5);
-  color: $primaryContrast;
+  border-radius: 8px;
+  background: $minimalGold;
+  color: $minimalTextInverse;
   cursor: grab;
   transform: translate3d(var(--slide-offset), 0, 0);
 
   svg {
    width: 1.375rem;
    height: 1.375rem;
-   stroke-width: 1.6;
+   stroke-width: 2;
   }
 
   &:active {
@@ -104,10 +92,8 @@
   }
 
   &:focus-visible {
-   outline: none;
-   box-shadow:
-    0 0 0 2px $white,
-    inset 0 -3px 4px rgba(90, 60, 0, 0.45);
+   outline: 2px solid $minimalTextPrimary;
+   outline-offset: 2px;
   }
  }
 
@@ -131,8 +117,8 @@
  .slide-confirm-spinner {
   width: 1.375rem;
   height: 1.375rem;
-  border: 2.5px solid textOpacity($primaryContrast, 0.22);
-  border-top-color: $primaryContrast;
+  border: 2.5px solid textOpacity($minimalTextInverse, 0.22);
+  border-top-color: $minimalTextInverse;
   border-radius: 50%;
   animation: slide-confirm-spin 0.7s linear infinite;
  }

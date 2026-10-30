@@ -940,6 +940,23 @@
   color: $appText;
  }
 
+ .common-drawer.match-confirm-sheet &.public-title {
+  background: none;
+  font-family: $fontOutfitSemiBold;
+  font-size: 22px;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: $minimalTextPrimary;
+
+  @include from(phone) {
+   font-size: 24px;
+  }
+ }
+
+ .match-confirm-sheet &.public-subtitle {
+  color: $minimalTextSecondary;
+ }
+
  &.match-status-lines {
   display: grid;
 

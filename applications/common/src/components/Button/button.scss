@@ -390,6 +390,25 @@
     font-size: 15px;
    }
   }
+
+  .match-confirm-sheet & {
+   --btn-pad: 0.5rem 1rem;
+   --btn-radius: 10px;
+   color: $minimalTextSecondary;
+
+   .button-face {
+    transition: background-color 0.15s ease;
+   }
+
+   .button-text {
+    text-decoration: none;
+   }
+
+   &:hover:not(.disabled) {
+    --btn-bg: #{$minimalBtnTertiaryHover};
+    color: $minimalTextPrimary;
+   }
+  }
  }
 
  &.appbar-dropdown-item {

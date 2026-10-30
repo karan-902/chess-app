@@ -123,12 +123,17 @@
   }
  }
 
- &.MuiDrawer-anchorBottom:not(.game-over-sheet, .bet-sheet)
+ &.MuiDrawer-anchorBottom:not(
+   .game-over-sheet,
+   .bet-sheet,
+   .match-confirm-sheet
+  )
   .MuiDrawer-paper::after {
   @include sheet-pattern;
  }
 
- &.bet-sheet .MuiDrawer-paper {
+ &.bet-sheet .MuiDrawer-paper,
+ &.match-confirm-sheet .MuiDrawer-paper {
   border-top: 1px solid $minimalBorderSubtle;
   border-radius: 16px 16px 0 0 !important;
   background: $minimalCardBg;

@@ -148,7 +148,8 @@
    top: 1.75rem;
   }
 
-  .bet-sheet & {
+  .bet-sheet &,
+  .match-confirm-sheet & {
    border-color: $minimalBorderStrong;
    border-radius: 10px;
    background: transparent;
