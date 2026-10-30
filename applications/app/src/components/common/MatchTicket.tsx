@@ -370,12 +370,13 @@ const drawTicket = (
    setFont(boldFont, 0.67);
    const chipWidth = 1.73 + spacedWidth(chipText, 0.056);
    const chipLeft = (WRAP.width - chipWidth) / 2;
+   const chipY = NOTCH.y + 0.85;
    ctx.fillStyle = ink;
    ctx.beginPath();
-   ctx.roundRect(chipLeft, NOTCH.y - 0.5, chipWidth, 1, 0.5);
+   ctx.roundRect(chipLeft, chipY - 0.5, chipWidth, 1, 0.5);
    ctx.fill();
    ctx.save();
-   ctx.translate(chipLeft + 0.45, NOTCH.y - 0.305);
+   ctx.translate(chipLeft + 0.45, chipY - 0.305);
    ctx.scale(0.61 / 24, 0.61 / 24);
    ctx.strokeStyle = paperTop;
    ctx.lineWidth = 2.5;
@@ -383,7 +384,7 @@ const drawTicket = (
    ctx.stroke(timerShape);
    ctx.restore();
    ctx.fillStyle = paperTop;
-   fillSpaced(chipText, chipLeft + 1.28, NOTCH.y + 0.03, 0.056, 0);
+   fillSpaced(chipText, chipLeft + 1.28, chipY + 0.03, 0.056, 0);
   }
 
   if (chip && stats.length === 2) {
@@ -391,21 +392,20 @@ const drawTicket = (
    ctx.textBaseline = "alphabetic";
    const [fromWidth, toWidth] = stats.map(({ label, value, isWin }, i) => {
     const size = isWin ? 1.23 : 1;
-    const x = i ? WRAP.width - 0.95 : 0.95;
+    const labelText = label.toUpperCase();
+    setFont(boldFont, 0.67);
+    const labelWidth = spacedWidth(labelText, 0.056);
+    setFont(heavyFont, size);
+    const blockWidth = Math.max(labelWidth, measure(value));
+    const center = i
+     ? WRAP.width - 0.95 - blockWidth / 2
+     : 0.95 + blockWidth / 2;
+    ctx.fillStyle = ink;
+    fillSpaced(value, center, valueBaseline, 0);
     setFont(boldFont, 0.67);
     ctx.fillStyle = css("--ticket-muted");
-    fillSpaced(
-     label.toUpperCase(),
-     x,
-     valueBaseline - size * 0.82 - 0.25,
-     0.056,
-     i,
-    );
-    const labelWidth = spacedWidth(label.toUpperCase(), 0.056);
-    setFont(heavyFont, size);
-    ctx.fillStyle = ink;
-    fillSpaced(value, x, valueBaseline, 0, i);
-    return Math.max(labelWidth, measure(value));
+    fillSpaced(labelText, center, valueBaseline - size * 0.82 - 0.25, 0.056);
+    return blockWidth;
    });
    ctx.textBaseline = "middle";
    const trackY = valueBaseline - 0.35;

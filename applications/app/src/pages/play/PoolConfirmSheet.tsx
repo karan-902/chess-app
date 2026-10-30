@@ -134,16 +134,18 @@ export default function PoolConfirmSheet({
       myName={myName}
       opponentName={opponentName}
      />
-     <Text
-      customClass={classNames(
-       "match-timer",
-       isLowTime && "low",
-       (isRevealed || isTimeout) && "settled",
-      )}
-     >
-      <icons.timer />
-      {formatMMSS(isTimeout ? 0 : secondsLeft)}
-     </Text>
+     {!isRevealed && (
+      <Text
+       customClass={classNames(
+        "match-timer",
+        isLowTime && "low",
+        isTimeout && "settled",
+       )}
+      >
+       <icons.timer />
+       {formatMMSS(isTimeout ? 0 : secondsLeft)}
+      </Text>
+     )}
      {/* <PoolCard pool={queuedPool} PoolLabel={PoolLabel} tone={confirmTone} /> */}
      {isTimeout ? (
       <Box customClass="match-retry">
@@ -166,14 +168,20 @@ export default function PoolConfirmSheet({
        </Button>
       </Box>
      ) : isRevealed ? (
-      <Text customClass="match-starting" aria-live="polite">
-       {startingInText}{" "}
-       <span className="match-countdown">
-        {MATCH_COUNTDOWN_STEPS.map((step) => (
-         <b key={step}>{step}</b>
-        ))}
-       </span>
-      </Text>
+      <Box customClass="match-starting" aria-live="polite">
+       <Text component="span" customClass="match-starting-label">
+        {startingInText}
+       </Text>
+       <Box customClass="match-countdown-ring">
+        <span className="ring-half right" />
+        <span className="ring-half left" />
+        <span className="match-countdown">
+         {MATCH_COUNTDOWN_STEPS.map((step) => (
+          <b key={step}>{step}</b>
+         ))}
+        </span>
+       </Box>
+      </Box>
      ) : (
       <Button
        type="button"
