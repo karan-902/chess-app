@@ -391,7 +391,8 @@
    }
   }
 
-  .match-confirm-sheet & {
+  .match-confirm-sheet &,
+  .room-sheet & {
    color: $minimalGold;
    transition: color 0.15s ease;
 
@@ -442,7 +443,8 @@
  &.auth-google-btn,
  .cta-bottom &.play-cta,
  .match-retry &.play-cta,
- .practice-sheet &.play-cta {
+ .practice-sheet &.play-cta,
+ .room-sheet &.contained {
   --btn-face-h: 3.125rem;
   --btn-radius: #{$radius-minimal};
   height: var(--btn-face-h);
@@ -501,7 +503,8 @@
  &.auth-submit-btn,
  .cta-bottom &.play-cta,
  .match-retry &.play-cta,
- .practice-sheet &.play-cta {
+ .practice-sheet &.play-cta,
+ .room-sheet &.contained {
   --btn-bg: #{$minimalBtnPrimaryBg};
   color: $minimalTextInverse;
 
@@ -795,11 +798,7 @@
  &.room-paste-btn {
   --btn-pad: #{$space-4} 0;
   align-self: center;
-  color: $gold;
-
-  :root[data-theme="light"] & {
-   color: #9a6f00;
-  }
+  color: $minimalGold;
 
   .button-text {
    padding-bottom: 0.125rem;

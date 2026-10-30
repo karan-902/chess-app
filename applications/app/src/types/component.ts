@@ -109,6 +109,7 @@ export interface IRoomSheetProps {
  opponentName: string;
  myName: string;
  roomFee: number;
+ roomWin: number;
  roomTimeMs: number;
  expiresInSeconds: number;
  onCreateRoom: (betUsd: number, durationSeconds: number) => void;

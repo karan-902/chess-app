@@ -23,6 +23,7 @@ import {
  playNowText,
 } from "@gopvp/app/src/constants/message";
 import { ROUTES } from "@gopvp/app/src/constants/route";
+import { PLAYERS_PER_MATCH } from "@gopvp/app/src/constants/limit";
 import { poolTone } from "@gopvp/app/src/utils";
 
 export default function PlayPage() {
@@ -62,6 +63,7 @@ export default function PlayPage() {
   opponentName,
   myName,
   roomFee,
+  roomWin,
   roomTimeMs,
   expiresInSeconds,
   createRoom,
@@ -73,6 +75,11 @@ export default function PlayPage() {
   setRoomOpen(false);
   navigate(gamePath, { replace: true });
  });
+ const [pricedPool] = pools;
+ const roomWinAmount =
+  roomWin ??
+  roomFee *
+   (pricedPool ? pricedPool.prize / pricedPool.bet : PLAYERS_PER_MATCH);
 
  useEffect(() => {
   dispatch(setFindingMatch(isSearching || isRoomActive));
@@ -234,6 +241,7 @@ export default function PlayPage() {
     opponentName={opponentName}
     myName={myName}
     roomFee={roomFee}
+    roomWin={roomWinAmount}
     roomTimeMs={roomTimeMs}
     expiresInSeconds={expiresInSeconds}
     onCreateRoom={createRoom}

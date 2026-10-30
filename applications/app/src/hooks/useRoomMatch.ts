@@ -27,7 +27,7 @@ import { SOCKET_EVENTS } from "@gopvp/common/src/constants/event";
 export type RoomStatus =
  "idle" | "creating" | "waiting" | "joining" | "ready" | "starting" | "found";
 
-type TRoomInfo = { code: string; bet: number; time: number };
+type TRoomInfo = { code: string; bet: number; time: number; win?: number };
 
 export function useRoomMatch(onRoomExpired?: () => void) {
  const [status, setStatus] = useState<RoomStatus>("idle");
@@ -114,7 +114,12 @@ export function useRoomMatch(onRoomExpired?: () => void) {
      }
      setExpiryAt(data.expiry);
      enterRoom(
-      { code: data.room_code, bet: data.bet, time: data.time },
+      {
+       code: data.room_code,
+       bet: data.bet,
+       time: data.time,
+       win: data.win_amount,
+      },
       true,
       "waiting",
      );
@@ -145,7 +150,12 @@ export function useRoomMatch(onRoomExpired?: () => void) {
       setPlayers(data.players);
       setExpiryAt(data.expiry);
       enterRoom(
-       { code: data.room_code, bet: data.bet, time: data.time },
+       {
+        code: data.room_code,
+        bet: data.bet,
+        time: data.time,
+        win: data.win_amount,
+       },
        false,
        "ready",
       );
@@ -247,6 +257,7 @@ export function useRoomMatch(onRoomExpired?: () => void) {
    players.find((player) => player.id === userId)?.username ?? sessionUsername,
   ),
   roomFee: roomRef.current?.bet ?? 0,
+  roomWin: roomRef.current?.win,
   roomTimeMs: roomRef.current?.time ?? 0,
   expiresInSeconds: expiresInSeconds ?? 0,
   createRoom,

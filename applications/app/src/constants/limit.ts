@@ -33,6 +33,7 @@ export const LEADERBOARD_PODIUM_SIZE = 3;
 export const TRANSACTIONS_SKELETON_ROWS = 12;
 export const POOL_SKELETON_ROWS = 4;
 export const POOL_TONE_COUNT = 4;
+export const PLAYERS_PER_MATCH = 2;
 export const WALLET_SUCCESS_CLOSE_MS = 2800;
 export const COPIED_FEEDBACK_MS = 1500;
 export const TOAST_AUTO_HIDE_MS = 2400;

@@ -32,8 +32,7 @@ import {
  cancelRoomText,
  expiresText,
  entryText,
- timeText,
- codeText,
+ winText,
  minText,
  roomText,
  privateRoomTicketText,
@@ -63,6 +62,7 @@ export default function RoomSheet({
  opponentName,
  myName,
  roomFee,
+ roomWin,
  roomTimeMs,
  expiresInSeconds,
  onCreateRoom,
@@ -81,10 +81,10 @@ export default function RoomSheet({
   <MatchTicket
    status={roomStatus === "waiting" ? "queued" : "found"}
    title={privateRoomTicketText}
+   chip={roomMinutesLabel}
    stats={[
     { label: entryText, value: formatAmount(roomFee) },
-    { label: timeText, value: roomMinutesLabel },
-    { label: codeText, value: roomCode ?? "" },
+    { label: winText, value: formatAmount(roomWin), isWin: true },
    ]}
    myName={myName}
    opponentName={opponentName}

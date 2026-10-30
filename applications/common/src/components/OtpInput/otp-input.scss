@@ -38,19 +38,24 @@
   .otp-slot {
    max-width: 3.25rem;
    height: 4rem;
-   font-size: 30px;
-   border: 1px solid textOpacity($poolInk, 0.22);
-   background: $white;
-   font-family: $fontOutfitBlack;
-   color: $poolInk;
+   font-size: 26px;
+   border: 1px solid $minimalInputBorder;
+   border-radius: 10px;
+   background: $minimalInputBg;
+   font-family: $fontOutfitBold;
+   color: $minimalTextPrimary;
 
    @include from(phone) {
-    font-size: 32px;
+    font-size: 28px;
    }
 
    &.active {
-    border: 1.5px solid $gold;
+    border: 1px solid $minimalBorderFocus;
    }
+  }
+
+  .otp-slot-caret {
+   background: $minimalGold;
   }
  }
 

@@ -29,6 +29,7 @@ export default function Preview() {
     opponentName={isJoined ? "Ace4402" : ""}
     myName="Tycoon9131"
     roomFee={12}
+    roomWin={21.6}
     roomTimeMs={600000}
     expiresInSeconds={0}
     onCreateRoom={noop}

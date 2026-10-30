@@ -150,7 +150,8 @@
 
   .bet-sheet &,
   .match-confirm-sheet &,
-  .practice-sheet & {
+  .practice-sheet &,
+  .room-sheet & {
    border-color: $minimalBorderStrong;
    border-radius: 10px;
    background: transparent;

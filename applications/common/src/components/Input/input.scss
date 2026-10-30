@@ -143,12 +143,12 @@
  &.room-fee-input .input-row {
   height: auto;
   border: none;
-  font-family: $fontOutfitBlack;
+  font-family: $fontOutfitExtraBold;
   font-size: 40px;
   line-height: 1.1;
   background: transparent;
   text-align: center;
-  color: $appText;
+  color: $minimalTextPrimary;
 
   @include from(phone) {
    font-size: 44px;
@@ -156,13 +156,13 @@
 
   input {
    text-align: center;
-   caret-color: $gold;
-   -webkit-text-fill-color: $appText;
+   caret-color: $minimalGold;
+   -webkit-text-fill-color: $minimalTextPrimary;
   }
 
   input::placeholder {
-   color: textOpacity($appText, 0.3);
-   -webkit-text-fill-color: textOpacity($appText, 0.3);
+   color: textOpacity($minimalTextPrimary, 0.3);
+   -webkit-text-fill-color: textOpacity($minimalTextPrimary, 0.3);
   }
 
   &:focus-within {

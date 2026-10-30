@@ -155,6 +155,7 @@ export type ICreateRoomResponse = {
  bet: number;
  time: number;
  expiry: number;
+ win_amount?: number;
 };
 
 export type IMatchmakingResponse =
@@ -173,6 +174,7 @@ export type IMatchmakingResponse =
     bet: number;
     time: number;
     expiry: number;
+    win_amount?: number;
    };
 
 export type IStartMatchResponse =

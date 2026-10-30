@@ -1050,7 +1050,8 @@
    }
   }
 
-  .practice-sheet &.gold-bar {
+  .practice-sheet &.gold-bar,
+  .room-sheet &.gold-bar {
    padding: 4px;
    border-color: $minimalBorderStrong;
    border-radius: $radius-minimal;
@@ -1580,9 +1581,9 @@
    height: 1px;
    background: linear-gradient(
     90deg,
-    textOpacity($gold, 0),
-    $gold,
-    textOpacity($gold, 0)
+    textOpacity($minimalBorderStrong, 0),
+    $minimalBorderStrong,
+    textOpacity($minimalBorderStrong, 0)
    );
   }
 
@@ -1592,18 +1593,6 @@
 
   &::after {
    bottom: 0;
-  }
-
-  :root[data-theme="light"] & {
-   &::before,
-   &::after {
-    background: linear-gradient(
-     90deg,
-     textOpacity($goldDark, 0),
-     $goldDark,
-     textOpacity($goldDark, 0)
-    );
-   }
   }
  }
 
@@ -1617,8 +1606,8 @@
   align-self: center;
   width: 1.5rem;
   height: 1.5rem;
-  border: 2.5px solid textOpacity($appText, 0.2);
-  border-top-color: $appText;
+  border: 2.5px solid $minimalBorderStrong;
+  border-top-color: $minimalGold;
   border-radius: 50%;
   animation: room-wait-spin 0.8s linear infinite;
 

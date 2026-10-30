@@ -127,7 +127,8 @@
    .game-over-sheet,
    .bet-sheet,
    .match-confirm-sheet,
-   .practice-sheet
+   .practice-sheet,
+   .room-sheet
   )
   .MuiDrawer-paper::after {
   @include sheet-pattern;
@@ -135,7 +136,8 @@
 
  &.bet-sheet .MuiDrawer-paper,
  &.match-confirm-sheet .MuiDrawer-paper,
- &.practice-sheet .MuiDrawer-paper {
+ &.practice-sheet .MuiDrawer-paper,
+ &.room-sheet .MuiDrawer-paper {
   border-top: 1px solid $minimalBorderSubtle;
   border-radius: 16px 16px 0 0 !important;
   background: $minimalCardBg;
