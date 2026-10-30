@@ -48,7 +48,12 @@ import {
  X,
  Zap,
 } from "lucide-react";
-import { Eye, EyeOff } from "@untitledui/icons";
+import {
+ ChevronDown as KeyboardArrowDownIcon,
+ Eye,
+ EyeOff,
+ InfoCircle,
+} from "@untitledui/icons";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
@@ -62,7 +67,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import ErrorIcon from "@mui/icons-material/Error";
 import HandshakeIcon from "@mui/icons-material/Handshake";
 import InfoIcon from "@mui/icons-material/Info";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import PersonIcon from "@mui/icons-material/Person";
 import ScheduleIcon from "@mui/icons-material/Schedule";
 import WarningIcon from "@mui/icons-material/Warning";
@@ -162,6 +166,7 @@ export {
  HandshakeIcon,
  Inbox,
  Info,
+ InfoCircle,
  InfoIcon,
  KeyboardArrowDownIcon,
  LayoutDashboard,

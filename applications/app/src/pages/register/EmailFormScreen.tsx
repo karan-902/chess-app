@@ -1,7 +1,10 @@
 import * as yup from "yup";
 import { useFormik } from "formik";
+import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Input from "@gopvp/common/src/components/Input/Input";
+import Text from "@gopvp/common/src/components/Text/Text";
+import { InfoCircle } from "@gopvp/common/src/components/images";
 import Button from "@gopvp/common/src/components/Button/Button";
 import {
  callAPIInterface,
@@ -14,8 +17,14 @@ import {
  enterEmailText,
  passwordText,
  enterPasswordText,
+ passwordStrengthText,
+ passwordHintText,
  registerText,
 } from "@gopvp/app/src/constants/message";
+import {
+ PASSWORD_MIN_LENGTH,
+ PASSWORD_STRENGTH_LEVELS,
+} from "@gopvp/app/src/constants/limit";
 import type { IEmailFormScreenProps } from "@gopvp/common/src/types/component";
 import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
 import { formSubmitHandler } from "@gopvp/common/src/util/form";
@@ -66,6 +75,17 @@ export default function EmailFormScreen({
    }
   },
  });
+ const { password } = formik.values;
+ const hasPasswordError = formik.touched.password && !!formik.errors.password;
+ const passwordScore =
+  password.length < PASSWORD_MIN_LENGTH
+   ? 1
+   : 1 +
+     [
+      /[a-z]/.test(password) && /[A-Z]/.test(password),
+      /\d/.test(password),
+      /[^A-Za-z\d]/.test(password),
+     ].filter(Boolean).length;
 
  return (
   <Box
@@ -91,21 +111,52 @@ export default function EmailFormScreen({
     fullWidth
    />
 
-   <Input
-    id="password"
-    name="password"
-    type="password"
-    label={passwordText}
-    placeholder={enterPasswordText}
-    value={formik.values.password}
-    onChange={formik.handleChange}
-    onBlur={formik.handleBlur}
-    disabled={formik.isSubmitting}
-    isError={formik.touched.password && !!formik.errors.password}
-    helperText={formik.errors.password}
-    customClass="form-input"
-    fullWidth
-   />
+   <Box customClass="password-field">
+    <Input
+     id="password"
+     name="password"
+     type="password"
+     label={
+      <>
+       {passwordText}
+       <Text component="span" customClass="field-hint">
+        <InfoCircle aria-hidden />
+        {passwordHintText(PASSWORD_MIN_LENGTH)}
+       </Text>
+      </>
+     }
+     placeholder={enterPasswordText}
+     value={password}
+     onChange={formik.handleChange}
+     onBlur={formik.handleBlur}
+     disabled={formik.isSubmitting}
+     isError={hasPasswordError}
+     helperText={formik.errors.password}
+     customClass="form-input"
+     fullWidth
+    />
+    {password && (
+     <Box
+      customClass={classNames(
+       "password-strength",
+       `level-${passwordScore}`,
+       hasPasswordError && "hidden",
+      )}
+      role="meter"
+      aria-label={passwordStrengthText}
+      aria-valuemin={1}
+      aria-valuemax={PASSWORD_STRENGTH_LEVELS}
+      aria-valuenow={passwordScore}
+     >
+      {Array.from({ length: PASSWORD_STRENGTH_LEVELS }, (_, index) => (
+       <span
+        key={index}
+        className={classNames("strength-bar", index < passwordScore && "filled")}
+       />
+      ))}
+     </Box>
+    )}
+   </Box>
 
    <CountrySelect formik={formik} />
 

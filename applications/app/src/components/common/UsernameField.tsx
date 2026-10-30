@@ -5,6 +5,7 @@ import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
 import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
 import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
+import { InfoCircle } from "@gopvp/common/src/components/images";
 import {
  callAPIInterface,
  showApiErrorToast,
@@ -100,7 +101,17 @@ export default function UsernameField<TValues extends { username: string }>({
     id="username"
     name="username"
     ref={inputRef}
-    label={usernameText}
+    label={
+     <>
+      {usernameText}
+      {showHint && (
+       <Text component="span" customClass="field-hint">
+        <InfoCircle aria-hidden />
+        {usernameHintText(USERNAME_MIN_LENGTH, USERNAME_MAX_LENGTH)}
+       </Text>
+      )}
+     </>
+    }
     placeholder={enterUsernameText}
     value={value}
     onChange={formik.handleChange}
@@ -124,39 +135,37 @@ export default function UsernameField<TValues extends { username: string }>({
     customClass={customClass}
     fullWidth
    />
-   <Box customClass="username-message-slot">
-    {showHint && !hasError && (
-     <Text customClass="field-hint">
-      {usernameHintText(USERNAME_MIN_LENGTH, USERNAME_MAX_LENGTH)}
-     </Text>
-    )}
-   </Box>
    <Text component="div" customClass="username-suggestion">
-    {showSuggestion && (loadingSuggestions || suggestions.length > 0) && (
-     <>
-      {suggestionText}
-      {loadingSuggestions ? (
-       <Skeleton variant="rounded" customClass="username-suggestion-skeleton" />
-      ) : (
-       <Button
+    {!hasError &&
+     showSuggestion &&
+     (loadingSuggestions || suggestions.length > 0) && (
+      <>
+       {suggestionText}
+       {loadingSuggestions ? (
+        <Skeleton
+         variant="rounded"
+         customClass="username-suggestion-skeleton"
+        />
+       ) : (
+        <Button
+         type="button"
+         variant="text"
+         customClass="username-suggestion-btn"
+         onClick={() => selectUsername(suggestions[suggestionIndex])}
+        >
+         {suggestions[suggestionIndex]}
+        </Button>
+       )}
+       <CustomIconButton
         type="button"
-        variant="text"
-        customClass="username-suggestion-btn"
-        onClick={() => selectUsername(suggestions[suggestionIndex])}
-       >
-        {suggestions[suggestionIndex]}
-       </Button>
-      )}
-      <CustomIconButton
-       type="button"
-       customClass="username-refresh-btn"
-       aria-label={newSuggestionText}
-       onClick={showNextSuggestion}
-       disabled={loadingSuggestions}
-       icon="rotateCw"
-      />
-     </>
-    )}
+        customClass="username-refresh-btn"
+        aria-label={newSuggestionText}
+        onClick={showNextSuggestion}
+        disabled={loadingSuggestions}
+        icon="rotateCw"
+       />
+      </>
+     )}
    </Text>
   </Box>
  );

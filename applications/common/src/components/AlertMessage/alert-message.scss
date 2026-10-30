@@ -71,7 +71,8 @@
    }
   }
 
-  .common-input.form-input > & {
+  .common-input.form-input > &,
+  .form-field .common-select > & {
    color: $minimalError;
 
    .MuiAlert-icon {

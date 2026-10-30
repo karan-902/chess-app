@@ -204,9 +204,12 @@
  }
 
  &.field-hint {
-  display: block;
-  margin-top: 0.25rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
   line-height: 1.25;
+  letter-spacing: 0;
+  text-transform: none;
   font-family: $fontOutfitMedium;
   font-size: 12px;
   color: $appTextMuted;
@@ -214,6 +217,16 @@
   @include from(phone) {
    font-size: 13px;
   }
+
+  svg {
+   flex-shrink: 0;
+   width: 0.875rem;
+   height: 0.875rem;
+  }
+ }
+
+ .gopvp-signup-form &:is(.username-suggestion, .field-hint) {
+  color: $minimalTextSecondary;
  }
 
  &.value-heading {
@@ -368,6 +381,7 @@
  &.auth-footer-row {
   justify-content: center;
   flex-shrink: 0;
+  margin-top: auto;
  }
 
  &.public-title,

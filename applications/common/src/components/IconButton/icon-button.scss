@@ -13,6 +13,11 @@
   border: 1px solid textOpacity($appText, 0.18);
   color: $appText;
 
+  .gopvp-signup-form & {
+   border-color: $minimalBorderStrong;
+   color: $minimalTextSecondary;
+  }
+
   svg {
    width: 0.75rem;
    height: 0.75rem;

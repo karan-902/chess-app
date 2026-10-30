@@ -8,6 +8,7 @@ export const USERNAME_MIN_LENGTH = 3;
 export const USERNAME_MAX_LENGTH = 10;
 export const USERNAME_SUGGESTION_MAX_LENGTH = 8;
 export const PASSWORD_MIN_LENGTH = 8;
+export const PASSWORD_STRENGTH_LEVELS = 4;
 export const MATCHES_STATS_FALLBACK = 0;
 export const POOL_TIMEOUT_SECONDS = 30;
 export const MATCH_REVEAL_MS = 3000;

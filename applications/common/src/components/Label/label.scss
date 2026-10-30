@@ -32,8 +32,7 @@
   }
  }
 
- .common-input > &,
- .form-field > & {
+ .common-input > & {
   font-family: $fontOutfitBold !important;
   font-size: 12px;
   line-height: 1.25;
@@ -46,7 +45,8 @@
   }
  }
 
- .common-input.form-input > & {
+ .common-input.form-input > &,
+ .form-field > & {
   font-family: $fontOutfitSemiBold !important;
   font-size: 15px;
   letter-spacing: 0;
@@ -56,6 +56,13 @@
   @include from(phone) {
    font-size: 16px;
   }
+ }
+
+ .username-field .common-input > &,
+ .password-field .common-input > & {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
  }
 
  &.admin-input-label {

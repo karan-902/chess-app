@@ -22,6 +22,7 @@ export const emailText = "Email";
 export const enterEmailText = "Enter your email";
 export const passwordText = "Password";
 export const enterPasswordText = "Enter password";
+export const passwordStrengthText = "Password strength";
 export const orText = "or";
 export const continueWithGoogleText = "Continue with Google";
 export const emailRequiredText = "Email is required";
@@ -36,10 +37,12 @@ export const rivalsWaitingText = "Your rivals are waiting, step back in";
 export const joinTheWinnersText = "Join the winners";
 export const beatRealPlayersText = "beat real players 1v1 and win real cash";
 export const noAccountText = "Don't have an account?";
-export const beenHereBeforeText = "Been Here Before";
+export const alreadyHaveAnAccount = "Already have an account?";
 export const logInText = "Login";
 export const usernameHintText = (min: number, max: number) =>
- `${min} to ${max} characters, letters and numbers`;
+ `${min} to ${max} letters or numbers`;
+export const passwordHintText = (min: number) =>
+ `Min ${min}, mix A-Z, 0-9, symbols`;
 export const earningsText = "Earnings";
 export const changeText = "Change";
 export const forgotYourPasswordText = "Forgot your password?";

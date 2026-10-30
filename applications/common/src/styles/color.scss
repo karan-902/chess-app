@@ -57,7 +57,7 @@
  --minimal-text-secondary: #a3a3a3;
  --minimal-text-tertiary: #737373;
  --minimal-text-inverse: #0d0d0d;
- --minimal-gold: #fec220;
+ --minimal-gold: #ffca28;
  --minimal-btn-primary-bg: var(--minimal-gold);
  --minimal-btn-primary-hover: color-mix(in srgb, var(--minimal-gold) 91%, #000);
  --minimal-btn-secondary-bg: #ffffff;
@@ -66,6 +66,8 @@
  --minimal-btn-tertiary-hover: #1a1a1a;
  --minimal-btn-disabled-bg: #292929;
  --minimal-error: #ef4444;
+ --minimal-warning: #f59e0b;
+ --minimal-success: #22c55e;
 }
 
 :root[data-theme="light"] {
@@ -178,6 +180,8 @@ $minimalBtnSecondaryHover: var(--minimal-btn-secondary-hover);
 $minimalBtnTertiaryHover: var(--minimal-btn-tertiary-hover);
 $minimalBtnDisabledBg: var(--minimal-btn-disabled-bg);
 $minimalError: var(--minimal-error);
+$minimalWarning: var(--minimal-warning);
+$minimalSuccess: var(--minimal-success);
 
 $white: #fff;
 $black: #000000;
