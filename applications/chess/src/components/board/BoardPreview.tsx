@@ -18,6 +18,7 @@ import {
 } from "@gopvp/chess/src/constants/color";
 import {
  BOARD_ENTRANCE_LANDING_MS,
+ BOARD_FRAME_PX,
  BOARD_LABEL_INSET_REM,
  BOARD_NUDGE_MS,
  BOARD_SWEEP_MS,
@@ -294,7 +295,7 @@ const drawPreview: ICanvasAnimationProps["draw"] = (
  { elapsed, width, style },
 ) => {
  const t = elapsed % TIMELINE.loopMs;
- const square = width / 8;
+ const square = (width - BOARD_FRAME_PX * 2) / 8;
  const dpr = window.devicePixelRatio;
  const edge = (i: number) => Math.round(i * square * dpr) / dpr;
  const gold = style.getPropertyValue("--preview-gold").trim();
@@ -341,8 +342,15 @@ const drawPreview: ICanvasAnimationProps["draw"] = (
 
  ctx.fillStyle = style.getPropertyValue("--preview-edge").trim();
  ctx.fillRect(0, 0, width, width);
+ ctx.save();
+ ctx.beginPath();
+ ctx.rect(BOARD_FRAME_PX, BOARD_FRAME_PX, square * 8, square * 8);
+ ctx.clip();
  const nudge = segmentAt(TIMELINE.nudgeTrack, t);
- ctx.translate(0, nudge ? nudge.at(progressOf(nudge, t)) : 0);
+ ctx.translate(
+  BOARD_FRAME_PX,
+  BOARD_FRAME_PX + (nudge ? nudge.at(progressOf(nudge, t)) : 0),
+ );
 
  for (let r = 0; r < 8; r++)
   for (let c = 0; c < 8; c++) {
@@ -424,6 +432,7 @@ const drawPreview: ICanvasAnimationProps["draw"] = (
  FILES.forEach((file, c) => drawLabel(file, c, 7, true));
 
  if (raised) drawPiece(...raised);
+ ctx.restore();
  return true;
 };
 

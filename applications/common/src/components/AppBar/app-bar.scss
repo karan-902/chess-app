@@ -24,6 +24,10 @@
   }
  }
 
+ &.app-header {
+  background: $minimalBg !important;
+ }
+
  &.admin-topbar {
   border-bottom: 1px solid $appLine;
   color: $appText;

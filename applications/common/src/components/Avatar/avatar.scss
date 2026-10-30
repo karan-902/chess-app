@@ -177,6 +177,14 @@
   }
  }
 
+ .app-header &.header,
+ .appbar-account-popover &.header {
+  border: 1px solid $minimalBorderStrong;
+  background: $minimalSurfaceElevated !important;
+  font-family: $fontOutfitSemiBold;
+  color: $minimalTextPrimary;
+ }
+
  &.header.md {
   width: 2.25rem;
   height: 2.25rem;

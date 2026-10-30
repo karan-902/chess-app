@@ -264,6 +264,7 @@
   flex-direction: column;
   height: 100%;
   padding: 1.1rem;
+  background: $minimalBg;
  }
 
  &.play-body {
@@ -291,35 +292,11 @@
  }
 
  &.cta-bottom {
-  position: relative;
-  isolation: isolate;
   padding-top: 1.1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: $space-8;
-
-  &::before {
-   content: "";
-   position: absolute;
-   bottom: -1.1rem;
-   left: 50%;
-   z-index: -1;
-   width: min(26.625rem, calc(100% + 2.2rem));
-   height: 7rem;
-   background: radial-gradient(
-    closest-side,
-    textOpacity($gold, 0.35),
-    transparent
-   );
-   transform: translateX(-50%);
-   pointer-events: none;
-
-   :root[data-theme="light"] & {
-    height: 3rem;
-    opacity: 0.6;
-   }
-  }
  }
 
  &.live-wins-ticker {
@@ -336,14 +313,13 @@
   display: inline-flex;
   align-items: center;
   gap: $space-8;
-  max-width: calc(100% - 3px);
+  max-width: 100%;
   min-width: 0;
   height: 2.25rem;
   padding: 0.25rem $space-12 0.25rem 0.25rem;
-  margin-bottom: 3px;
-  background: $appTicker;
-  @include neo-plunk;
-  box-shadow: 3px 3px 0 $neoEdge;
+  border: 1px solid $minimalBorderSubtle;
+  border-radius: 999px;
+  background: $minimalCardBg;
   animation: live-win-in 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 
   &.leaving {
@@ -366,8 +342,9 @@
   flex-shrink: 0;
   width: 1.625rem;
   height: 1.625rem;
-  background: $gold;
-  color: $primaryContrast;
+  border-radius: 50%;
+  background: textOpacity($minimalGold, 0.14);
+  color: $minimalGold;
 
   svg {
    width: 0.9375rem;
@@ -3527,7 +3504,7 @@
   height: 2.25rem;
   margin-left: 1rem;
   border-radius: 999px;
-  background: textOpacity($appText, 0.08);
+  background: textOpacity($minimalTextPrimary, 0.08);
 
   a {
    display: flex;
@@ -3536,7 +3513,7 @@
    border-radius: inherit;
 
    &:focus-visible {
-    outline: 2px solid $gold;
+    outline: 2px solid $minimalBorderFocus;
     outline-offset: 2px;
    }
   }
@@ -3551,7 +3528,7 @@
   cursor: pointer;
 
   &:focus-visible {
-   outline: 2px solid $gold;
+   outline: 2px solid $minimalBorderFocus;
    outline-offset: 2px;
   }
  }

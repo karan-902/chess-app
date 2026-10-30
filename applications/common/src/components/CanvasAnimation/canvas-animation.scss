@@ -12,13 +12,11 @@
  }
 
  &.board-preview-canvas {
-  --preview-edge: #{$appCardBorder};
-  --preview-gold: #{$gold};
-  --preview-danger: #{$paleRed};
-  box-sizing: border-box;
+  --preview-edge: #{$minimalBorderStrong};
+  --preview-gold: #{$minimalGold};
+  --preview-danger: #{$minimalError};
   width: 100%;
   height: 100%;
-  border: 1px solid $appCardBorder;
   font-family: $fontOutfitExtraBold;
   font-size: 10px;
 

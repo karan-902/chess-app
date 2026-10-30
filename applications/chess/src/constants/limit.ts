@@ -25,6 +25,7 @@ export const PIECE_FILL_RATIO = 0.92;
 export const PIECE_SPRITE_PAD_RATIO = 0.25;
 export const PIECE_SHADOW_PX = 2;
 export const BOARD_LABEL_INSET_REM = 0.125;
+export const BOARD_FRAME_PX = 1;
 export const PAYOUT_COIN_COUNT = 7;
 export const PAYOUT_SPARK_COUNT = 8;
 export const PAYOUT_TIMING: Record<

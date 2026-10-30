@@ -35,20 +35,26 @@
 
  &.appbar-nav-tabs {
   padding: 0 0.75rem;
-  border-bottom: 1px solid textOpacity($appText, 0.08);
+  border-bottom: 1px solid $minimalBorderSubtle;
   flex-shrink: 0;
 
   .MuiTabs-indicator {
    height: 2px;
+   background: $minimalGold;
    transition-duration: 0.25s;
+  }
+
+  .common-tab {
+   color: $minimalTextSecondary;
+   transition: color 0.15s ease;
+
+   &.Mui-selected {
+    color: $minimalTextPrimary;
+   }
   }
 
   @include from(tablet) {
    padding: 0 1rem;
-  }
-
-  :root[data-theme="light"] & .common-tab.Mui-selected {
-   font-family: $fontOutfitBold;
   }
  }
 }

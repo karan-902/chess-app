@@ -150,7 +150,7 @@
    font-family: $fontOutfitBold;
    font-size: 16px;
    line-height: normal;
-   color: $appText;
+   color: $minimalTextPrimary;
 
    @include from(phone) {
     font-size: 17px;

@@ -430,7 +430,8 @@
  }
 
  &.auth-submit-btn,
- &.auth-google-btn {
+ &.auth-google-btn,
+ .cta-bottom &.play-cta {
   --btn-face-h: 3.125rem;
   --btn-radius: #{$radius-minimal};
   height: var(--btn-face-h);
@@ -486,7 +487,8 @@
   }
  }
 
- &.auth-submit-btn {
+ &.auth-submit-btn,
+ .cta-bottom &.play-cta {
   --btn-bg: #{$minimalBtnPrimaryBg};
   color: $minimalTextInverse;
 

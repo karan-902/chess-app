@@ -50,6 +50,7 @@ export default function Header() {
 
  return (
   <CustomAppBar
+   customClass="app-header"
    brand={
     <Link
      to={gamePath || "/"}
