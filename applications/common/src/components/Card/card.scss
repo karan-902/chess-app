@@ -205,18 +205,27 @@
   min-height: 3.25rem;
   padding: 0.625rem 0.875rem;
   margin-bottom: $space-12;
-  border: 1px solid $appCardBorder;
-  border-radius: $radius-card;
-  background: $appSurface;
+  border: 1px solid $minimalBorderSubtle;
+  border-radius: $radius-minimal;
+  background: $minimalCardBg;
   font-size: 14px;
   font-weight: 600;
+  color: $minimalTextPrimary;
+  transition: border-color 0.15s ease;
 
   @include from(phone) {
    font-size: 15px;
   }
 
-  &.me {
-   border: 1.5px solid textOpacity($gold, 0.85);
+  @media (hover: hover) {
+   &.clickable:hover {
+    border-color: $minimalBorderStrong;
+   }
+  }
+
+  &.me,
+  &.me:hover {
+   border-color: $minimalGold;
 
    // .lb-earnings {
    //  color: $gold;
@@ -230,12 +239,14 @@
   justify-content: center;
   width: 100%;
   margin-top: $space-4;
-  border-radius: 0;
-  background: $appPodiumFill;
+  border: 1px solid $minimalBorderSubtle;
+  border-bottom: 0;
+  border-radius: $radius-minimal $radius-minimal 0 0;
+  background: $minimalCardBg;
 
   &.first {
    height: 6.25rem;
-   border-color: textOpacity($gold, 0.55);
+   border-color: textOpacity($minimalGold, 0.55);
   }
 
   &.second {
@@ -247,7 +258,7 @@
   }
 
   &.me {
-   border: 1.5px solid textOpacity($gold, 0.9);
+   border-color: $minimalGold;
   }
  }
 

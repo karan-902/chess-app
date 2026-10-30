@@ -1538,7 +1538,8 @@
    font-size: 17px;
   }
 
-  .matches-page & {
+  .matches-page &,
+  .leaderboard-page & {
    font-family: $fontOutfitSemiBold;
    color: $minimalTextPrimary;
   }
@@ -1556,7 +1557,8 @@
    font-size: 14px;
   }
 
-  .matches-page & {
+  .matches-page &,
+  .leaderboard-page & {
    color: $minimalTextSecondary;
   }
  }
@@ -1657,7 +1659,7 @@
   font-family: $fontOutfitBold;
   font-size: 12px;
   line-height: 1;
-  color: textOpacity($appText, 0.5);
+  color: $minimalTextTertiary;
 
   @include from(phone) {
    font-size: 13px;
@@ -1703,11 +1705,11 @@
   @include from(phone) {
    font-size: 16px;
   }
-  color: textOpacity($appText, 0.9);
+  color: $minimalTextPrimary;
  }
 
  &.lb-earnings {
-  color: $greenishTeal;
+  color: $minimalSuccess;
  }
 
  &.lb-podium-name {
@@ -1715,9 +1717,9 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-family: $fontOutfitBold;
+  font-family: $fontOutfitSemiBold;
   font-size: 13px;
-  color: textOpacity($appText, 0.9);
+  color: $minimalTextPrimary;
 
   @include from(phone) {
    font-size: 14px;
@@ -1744,7 +1746,7 @@
 
   .first & {
    font-size: 40px;
-   color: $appTabActive;
+   color: $minimalGold;
 
    @include from(phone) {
     font-size: 44px;

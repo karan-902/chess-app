@@ -18,7 +18,9 @@
  &.filter-dropdown-menu {
   .MuiPaper-root {
    min-width: 11rem;
-   background: $appBg;
+   border: 1px solid $minimalBorderStrong;
+   border-radius: $radius-minimal;
+   background: $minimalSurfaceElevated;
   }
 
   .common-menu-item {
@@ -29,17 +31,30 @@
    padding: 12px;
    font-family: $fontOutfitSemiBold !important;
    font-size: 14px;
-   color: $appText;
+   color: $minimalTextPrimary;
 
    @include from(phone) {
     padding: 13px;
     font-size: 15px;
    }
 
+   &:hover {
+    background: textOpacity($minimalTextPrimary, 0.06);
+   }
+
    &.Mui-selected,
    &.Mui-selected:hover {
     background: transparent;
    }
+
+   svg {
+    color: $minimalGold;
+   }
+  }
+
+  .MuiButtonBase-root.Mui-focusVisible {
+   background: textOpacity($minimalTextPrimary, 0.06);
+   color: $minimalTextPrimary;
   }
  }
 }

@@ -29,12 +29,12 @@
 
  &.lb-you-tag .MuiBadge-badge {
   padding: 0.125rem $space-8;
-  border-radius: 0;
-  background: linear-gradient(180deg, $goldLight, #e5a900);
-  font-family: $fontOutfitExtraBold;
+  border-radius: 999px;
+  background: $minimalGold;
+  font-family: $fontOutfitBold;
   font-size: 12px;
   letter-spacing: 0;
-  color: $primaryContrast;
+  color: $minimalTextInverse;
  }
 
  &.result-vs .MuiBadge-badge {

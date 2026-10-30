@@ -314,7 +314,8 @@
    }
   }
 
-  :root .matches-page .pill-subtabs & {
+  :root .matches-page .pill-subtabs &,
+  :root .leaderboard-page .pill-subtabs & {
    --btn-bg: #{$minimalCardBg};
    --btn-border: 1px solid #{$minimalBorderSubtle};
    color: $minimalTextSecondary;

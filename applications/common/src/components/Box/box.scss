@@ -1100,7 +1100,8 @@
    height: 100%;
   }
 
-  .matches-page & {
+  .matches-page &,
+  .leaderboard-page & {
    color: $minimalTextTertiary;
   }
  }
@@ -1237,7 +1238,9 @@
  }
 
  &.leaderboard-page {
+  min-height: 100%;
   padding: 1.1rem;
+  background: $minimalBg;
  }
 
  &.lb-podium {
@@ -1262,8 +1265,8 @@
    width: 1.625rem;
    height: 1.625rem;
    margin-bottom: $space-4;
-   color: $gold;
-   fill: $gold;
+   color: $minimalGold;
+   fill: $minimalGold;
   }
 
   &.first {
