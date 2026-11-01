@@ -56,16 +56,6 @@
  }
 
 
- &.result-sheet.gold:not(.versus) .MuiDrawer-paper {
-  background:
-   radial-gradient(
-    8.75rem 8rem at 50% 4.0625rem,
-    textOpacity($gold, 0.3),
-    transparent
-   ),
-   $appSheetFill;
- }
-
  &.result-sheet.neutral .MuiDrawer-paper {
   background:
    radial-gradient(
@@ -74,10 +64,6 @@
     transparent
    ),
    $appSheetFill;
- }
-
- &.result-sheet.no-glow:not(.versus) .MuiDrawer-paper {
-  background: $appSheetFill;
  }
 
  &.game-over-sheet.win .MuiDrawer-paper,
@@ -128,7 +114,10 @@
    .bet-sheet,
    .match-confirm-sheet,
    .practice-sheet,
-   .room-sheet
+   .room-sheet,
+   .result-sheet,
+   .wallet-sheet,
+   :has(.resign-sheet)
   )
   .MuiDrawer-paper::after {
   @include sheet-pattern;
@@ -137,7 +126,11 @@
  &.bet-sheet .MuiDrawer-paper,
  &.match-confirm-sheet .MuiDrawer-paper,
  &.practice-sheet .MuiDrawer-paper,
- &.room-sheet .MuiDrawer-paper {
+ &.room-sheet .MuiDrawer-paper,
+ &.result-sheet:not(.game-over-sheet) .MuiDrawer-paper,
+ &.wallet-sheet .MuiDrawer-paper,
+ &:has(.resign-sheet) .MuiDrawer-paper,
+ &.game-over-sheet.loss .MuiDrawer-paper {
   border-top: 1px solid $minimalBorderSubtle;
   border-radius: 16px 16px 0 0 !important;
   background: $minimalCardBg;
@@ -148,14 +141,6 @@
    border-radius: 999px;
    background: $minimalBorderStrong !important;
   }
- }
-
- &.wallet-sheet .MuiDrawer-paper:has(.deposit-qr-stage)::after {
-  mask:
-   url("/pattern-cubes.svg") 50% 0 / 1.515625rem 2.625rem repeat,
-   radial-gradient(38% 16% at 0 0, #000 40%, transparent),
-   radial-gradient(38% 16% at 100% 0, #000 40%, transparent);
-  mask-composite: intersect, add;
  }
 
  &.wallet-sheet .MuiDrawer-paper {

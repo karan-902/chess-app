@@ -17,6 +17,21 @@
   overscroll-behavior-y: none;
   scrollbar-gutter: stable both-edges;
   -webkit-overflow-scrolling: touch;
+
+  &:has(
+    :is(
+     .play-page,
+     .matches-page,
+     .leaderboard-page,
+     .rules-page,
+     .wallet-page,
+     .profile-page,
+     .game-room,
+     .game-loader
+    )
+   ) {
+   background: $minimalBg;
+  }
  }
 
  &.appbar-dropdown-sep {
@@ -1167,6 +1182,7 @@
   .profile-list & {
    gap: $space-12;
    padding: 0.875rem $space-16;
+   border-bottom-color: $minimalBorderSubtle;
   }
  }
 
@@ -1311,10 +1327,13 @@
   flex-direction: column;
   min-height: 100%;
   padding: 1.1rem;
+  background: $minimalBg;
  }
 
  &.profile-page {
+  min-height: 100%;
   padding: 1.1rem;
+  background: $minimalBg;
  }
 
  &.profile-hero {
@@ -1380,7 +1399,7 @@
   gap: 0.125rem;
   min-width: 0;
   padding: 0.875rem $space-8;
-  border-left: 1px solid textOpacity($appText, 0.08);
+  border-left: 1px solid $minimalBorderSubtle;
 
   &:first-child {
    border-left: none;
@@ -1399,7 +1418,7 @@
   align-items: center;
   gap: $space-12;
   flex-shrink: 0;
-  color: $gold;
+  color: $minimalGold;
  }
 
  &.profile-name-row {
@@ -1424,34 +1443,29 @@
  }
 
  &.wallet-hero-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin-bottom: 1.5rem;
-  padding: $space-16;
-  border: 1px solid $appCardBorder;
-  border-radius: $radius-card;
-  background: $appSurface;
+  padding-top: 1rem;
+  text-align: center;
  }
 
  &.wallet-hero {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: $space-8 0 $space-20;
-
-  .wallet-hero-card & {
-   align-items: flex-start;
-   min-width: 0;
-   padding: 0 0 $space-12;
-  }
+  gap: 0.5rem;
+  max-width: 100%;
+  min-width: 0;
  }
 
  &.wallet-withdrawable-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: $space-12;
-  margin-bottom: $space-20;
-  padding-top: $space-12;
-  border-top: 1px solid textOpacity($appText, 0.08);
+  justify-content: center;
+  gap: 0.375rem;
+  margin: 0.5rem 0 1.25rem;
  }
 
  &.wallet-hero-label {
@@ -1479,7 +1493,8 @@
 
  &.wallet-btn-row {
   display: flex;
-  gap: $space-12;
+  justify-content: center;
+  gap: 0.625rem;
   margin-bottom: 1.75rem;
 
   .wallet-hero-card & {
@@ -1516,17 +1531,13 @@
  }
 
  &.wallet-tx-group {
-  padding: $space-8 0 $space-12;
- }
-
- &.wallet-tx-item {
-  padding-bottom: $space-12;
+  padding: 1.25rem 0 0.375rem;
  }
 
  &.wallet-tx-info {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 0.75rem;
   min-width: 0;
  }
 
@@ -1535,15 +1546,27 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
   border-radius: 50%;
-  color: $greenishTeal;
+  background: $minimalCardBg;
+  color: $minimalSuccess;
+
+  svg {
+   width: 1.125rem;
+   height: 1.125rem;
+  }
 
   .wallet-tx-item.neg & {
-   color: $paleRed;
+   color: $minimalError;
   }
 
   .wallet-tx-item.pending & {
-   color: $warning;
+   color: $minimalTextSecondary;
+  }
+
+  .wallet-tx-item.loading & {
+   background: transparent;
   }
  }
 
@@ -1927,10 +1950,8 @@
   justify-content: space-between;
   gap: $space-12;
   min-height: 3.25rem;
-  padding: 0.625rem 0.875rem;
-  background: $appSurface;
-  border: 1px solid $appCardBorder;
-  border-radius: $radius-card;
+  padding: 0.6875rem 0;
+  border-bottom: 1px solid $minimalBorderSubtle;
  }
 
  &.wallet-modal-layout,
@@ -2018,10 +2039,10 @@
   width: 100%;
   min-height: 2.25rem;
   padding: 0.3125rem 0.75rem 0.3125rem 0.625rem;
-  background: textOpacity($appText, 0.05);
-  border: 1px solid textOpacity($appText, 0.12);
-  border-radius: $radius-card;
-  color: $gold;
+  background: $minimalSurfaceElevated;
+  border: 1px solid $minimalBorderSubtle;
+  border-radius: 10px;
+  color: $minimalGold;
 
   svg {
    flex-shrink: 0;
@@ -2041,7 +2062,7 @@
   align-items: center;
   gap: 0.375rem;
   font-size: 14px;
-  color: $gold;
+  color: $minimalGold;
 
   @include from(phone) {
    font-size: 15px;
@@ -2052,10 +2073,6 @@
    color: inherit;
    font-size: inherit;
   }
-
-  :root[data-theme="light"] & {
-   color: $appText;
-  }
  }
 
  &.deposit-lightning-row {
@@ -2063,7 +2080,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.375rem;
-  color: $gold;
+  color: $minimalGold;
  }
 
  &.deposit-qr-wrap {
@@ -2071,7 +2088,7 @@
   width: min(18.125rem, 100%);
   margin: $space-16 0;
   overflow: hidden;
-  border-radius: $radius-card;
+  border-radius: $radius-minimal;
   line-height: 0;
 
   svg {
@@ -2084,8 +2101,9 @@
   display: flex;
   align-items: center;
   gap: $space-12;
-  border: 1px solid textOpacity($appText, 0.12);
-  background: $appSurface;
+  border: 1px solid $minimalInputBorder;
+  border-radius: $radius-minimal;
+  background: $minimalInputBg;
   padding: $space-4 0.875rem;
   min-height: 3rem;
   margin: 0.375rem 0 $space-16;
@@ -2141,40 +2159,8 @@
   justify-content: safe center;
   height: 100%;
   padding: $space-16;
-  background:
-   radial-gradient(
-    30rem 28rem at 50% 38%,
-    textOpacity($indigo, 0.32),
-    transparent 70%
-   ),
-   $appSurface;
+  background: $minimalBg;
   overflow-y: auto;
-
-  &::before {
-   @include sheet-pattern(
-    $clear: linear-gradient(
-      90deg,
-      #000,
-      transparent $space-16,
-      transparent calc(100% - #{$space-16}),
-      #000
-     )
-   );
-  }
-
-  :root[data-theme="light"] & {
-   background:
-    radial-gradient(
-     30rem 28rem at 50% 38%,
-     textOpacity($indigoEdge, 0.16),
-     transparent 70%
-    ),
-    $appBg;
-
-   &::before {
-    background: textOpacity($indigoEdge, 0.07);
-   }
-  }
  }
 
  &.gr-win-counter {
@@ -2194,30 +2180,23 @@
   flex-shrink: 0;
   position: relative;
   padding: 0.375rem 0.375rem 0.375rem 0.625rem;
-  border: 1px solid textOpacity($appText, 0.16);
-  background:
-   linear-gradient(textOpacity($appText, 0.05), textOpacity($appText, 0.05)),
-   $appSurface;
+  border: 1px solid $minimalBorderSubtle;
+  border-radius: $radius-minimal;
+  background: $minimalCardBg;
 
   &::after {
    content: "";
    position: absolute;
    inset: -1px;
-   border: 1px solid $gold;
-   box-shadow: 0 0 0.875rem textOpacity($gold, 0.22);
+   border: 1px solid $minimalGold;
+   border-radius: inherit;
    opacity: 0;
    transition: opacity 0.25s ease;
    pointer-events: none;
   }
 
-  &.active {
-   background:
-    linear-gradient(textOpacity($gold, 0.08), textOpacity($gold, 0.08)),
-    $appSurface;
-
-   &::after {
-    opacity: 1;
-   }
+  &.active::after {
+   opacity: 1;
   }
 
   &.opp {
@@ -2260,47 +2239,19 @@
   padding: 0.25rem;
   container-type: size;
 
-  &::before,
-  &::after {
+  &::before {
    content: "";
    position: absolute;
    top: 0;
    left: 50%;
+   z-index: -1;
    box-sizing: border-box;
    width: calc(min(100cqw, 100cqh) + 0.5rem);
    aspect-ratio: 1 / 1;
+   border: 1px solid $minimalBorderStrong;
+   background: $minimalCardBg;
    transform: translateX(-50%);
    pointer-events: none;
-  }
-
-  &::before {
-   z-index: -1;
-   border: 1px solid textOpacity($gold, 0.12);
-   border-top-color: textOpacity($goldLight, 0.95);
-   border-radius: 0;
-   background: linear-gradient(180deg, #3a3f9a, $indigoNight 50%, #0a0c26);
-   box-shadow:
-    0 1.125rem 1.875rem -0.375rem rgba(0, 0, 0, 0.55),
-    0 0 2.75rem textOpacity($indigo, 0.35);
-  }
-
-  &::after {
-   z-index: $z-raised;
-   border: 0.25rem solid transparent;
-   background: linear-gradient(
-     122deg,
-     transparent 22%,
-     textOpacity($white, 0.09) 32%,
-     transparent 42%
-    )
-    padding-box;
-  }
-
-  :root[data-theme="light"] &::before {
-   border-color: $lightBorderStrong;
-   border-top-color: $gold;
-   background: linear-gradient(180deg, $white, $lightRaised 55%, #dfe2f5);
-   box-shadow: 0 0.875rem 1.625rem -0.375rem textOpacity($lightText, 0.18);
   }
  }
 
@@ -2313,31 +2264,20 @@
   align-items: center;
   gap: 0.375rem;
   padding: 0.375rem 0.75rem;
-  border: 1px solid textOpacity($appText, 0.2);
-  background: linear-gradient(180deg, #23276a, #121540);
+  border: 1px solid $minimalBorderStrong;
+  border-radius: 999px;
+  background: $minimalSurfaceElevated;
   white-space: nowrap;
   transform: translate(-50%, -50%);
 
   svg {
    width: 0.875rem;
    height: 0.875rem;
-   color: $warning;
+   color: $minimalWarning;
   }
 
-  &.reconnecting {
-   border-color: textOpacity($warning, 0.5);
-  }
-
-  &.reconnected {
-   border-color: textOpacity($greenishTeal, 0.5);
-
-   svg {
-    color: $greenishTeal;
-   }
-  }
-
-  :root[data-theme="light"] & {
-   background: $appSurface;
+  &.reconnected svg {
+   color: $minimalSuccess;
   }
  }
 
@@ -2347,7 +2287,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(16, 15, 12, 0.82);
+  background: textOpacity($minimalBg, 0.82);
   z-index: $z-top;
  }
 
@@ -2357,9 +2297,9 @@
   align-items: center;
   gap: 0.75rem;
   padding: 1rem;
-  border: 1px solid textOpacity($appText, 0.1);
-  border-top-color: textOpacity($gold, 0.6);
-  background: $appSheet;
+  border: 1px solid $minimalBorderSubtle;
+  border-radius: $radius-minimal;
+  background: $minimalCardBg;
  }
 
  &.gr-promotion-options {
@@ -2374,7 +2314,6 @@
   max-width: 100%;
   height: 1.5rem;
   margin-top: 0.3rem;
-  overflow: hidden;
 
   &:empty {
    display: none;
@@ -2417,12 +2356,9 @@
   min-height: 3.5rem;
   padding: 0 0.5rem 0 0.625rem;
   overflow: hidden;
-  border: 1px solid textOpacity($gold, 0.5);
-  background: linear-gradient(
-   90deg,
-   textOpacity($gold, 0.12),
-   textOpacity($gold, 0.03)
-  );
+  border: 1px solid $minimalGold;
+  border-radius: $radius-minimal;
+  background: $minimalCardBg;
   animation: draw-offer-in 0.3s ease-out;
 
   @include reduced-motion {
@@ -2444,8 +2380,9 @@
   flex-shrink: 0;
   width: 2.25rem;
   height: 2.25rem;
-  background: textOpacity($gold, 0.14);
-  color: $gold;
+  border-radius: 10px;
+  background: $minimalSurfaceElevated;
+  color: $minimalGold;
 
   svg {
    width: 1.25rem;
@@ -2459,7 +2396,7 @@
   right: 0;
   bottom: 0;
   height: 2px;
-  background: $gold;
+  background: $minimalGold;
   transform-origin: left center;
   animation: draw-offer-timer 15s linear forwards;
 
@@ -2477,7 +2414,7 @@
   flex-shrink: 0;
 
   &.reviewing .gr-move-strip {
-   border-bottom-color: textOpacity($gold, 0.6);
+   border-bottom-color: $minimalGold;
   }
  }
 
@@ -2488,7 +2425,7 @@
   min-width: 0;
   height: 2.5rem;
   padding: 0 0.25rem;
-  border-bottom: 1px solid textOpacity($appText, 0.12);
+  border-bottom: 1px solid $minimalBorderSubtle;
   overflow-x: auto;
   white-space: nowrap;
   scrollbar-width: none;
@@ -2505,14 +2442,10 @@
    flex: 0 0 1.75rem;
    align-self: stretch;
    margin-right: -1.75rem;
-   background: linear-gradient(90deg, $appSurface, transparent);
+   background: linear-gradient(90deg, $minimalBg, transparent);
    opacity: 0;
    pointer-events: none;
    transition: opacity 0.2s ease;
-
-   :root[data-theme="light"] & {
-    background: linear-gradient(90deg, $appBg, transparent);
-   }
   }
 
   &.scrolled::before {
@@ -2529,8 +2462,8 @@
   flex-shrink: 0;
   width: 0.875rem;
   height: 0.875rem;
-  border: 2px solid textOpacity($appText, 0.2);
-  border-top-color: $gold;
+  border: 2px solid $minimalBorderStrong;
+  border-top-color: $minimalGold;
   border-radius: 50%;
   animation: gr-move-spin 0.8s linear infinite;
 
@@ -2547,7 +2480,8 @@
   height: 2rem;
   margin: 0 0.5rem;
   padding: 0.1875rem 0.3125rem 0.1875rem 0.375rem;
-  border: 1px solid textOpacity($appText, 0.22);
+  border: 1px solid $minimalBorderStrong;
+  border-radius: 8px;
  }
 
  &.gr-move-pair {
@@ -2675,10 +2609,24 @@
   margin-top: 0.75rem;
 
   &.loss {
-   --payout-stub: linear-gradient(180deg, #9a9fc6, #7e83ad);
-   --payout-stub-ink: #{$white};
-   --payout-money: #{$payoutLoss};
-   --payout-stamp: #{$payoutLoss};
+   --payout-stub: #{$minimalBorderStrong};
+   --payout-stub-ink: #{$minimalTextPrimary};
+   --payout-money: #{$minimalError};
+   --payout-stamp: #{$minimalError};
+
+   &::before,
+   .payout-floor,
+   .payout-slot::after {
+    display: none;
+   }
+
+   .payout-slot {
+    background: $minimalSurfaceElevated;
+
+    &::before {
+     background: $minimalBorderStrong;
+    }
+   }
   }
 
   &.draw {
@@ -2972,7 +2920,7 @@
    }
   }
 
-  :root[data-theme="light"] & {
+  :root[data-theme="light"] &:not(.loss) {
    &::before {
     background: textOpacity($indigoEdge, 0.07);
    }
@@ -3067,7 +3015,7 @@
    color: $gold;
   }
 
-  .matches-page .result-tiles .label-top & > svg {
+  :is(.matches-page, .result-sheet) .result-tiles .label-top & > svg {
    color: $minimalGold;
   }
 
@@ -3100,6 +3048,10 @@
     width: 0.75rem;
     height: 0.75rem;
     color: $appText;
+
+    .result-sheet & {
+     color: $minimalTextSecondary;
+    }
    }
   }
  }
@@ -3165,10 +3117,18 @@
     border: 1.5px solid textOpacity($gold, 0.85);
    }
 
-   .matches-page .result-tiles & {
+   :is(.matches-page, .result-sheet) .result-tiles & {
     border: 1px solid $minimalBorderSubtle;
     border-radius: $radius-minimal;
     background: $minimalCardBg;
+
+    &.highlight {
+     border-color: $minimalGold;
+    }
+   }
+
+   .result-sheet .result-tiles & {
+    background: $minimalSurfaceElevated;
    }
   }
 
@@ -3205,15 +3165,15 @@
   align-items: center;
   gap: $space-8;
   padding: 0.4375rem 0.875rem;
-  background: textOpacity($appText, 0.06);
-  border: 1px solid textOpacity($appText, 0.14);
+  border: 1px solid $minimalBorderSubtle;
+  border-radius: 999px;
 
   svg {
    width: 1.125rem;
    height: 1.125rem;
    flex-shrink: 0;
    stroke-width: 2.25;
-   color: $gold;
+   color: $minimalGold;
   }
  }
 

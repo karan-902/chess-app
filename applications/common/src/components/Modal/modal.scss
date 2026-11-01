@@ -32,5 +32,8 @@
   max-width: 21.875rem;
   gap: 1.125rem;
   padding: 1.25rem;
+  border: 1px solid $minimalBorderSubtle;
+  border-radius: 16px !important;
+  background: $minimalCardBg !important;
  }
 }

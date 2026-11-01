@@ -66,7 +66,7 @@
 
   .MuiChip-label {
    font-size: 14px;
-   color: textOpacity($appText, 0.75);
+   color: $minimalTextSecondary;
    padding: 0.3125rem 0.4375rem;
    overflow: visible;
    text-overflow: unset;
@@ -89,7 +89,7 @@
 
   @media (hover: hover) {
    &.MuiChip-clickable:hover {
-    background: $appBtnBg;
+    background: $minimalBtnTertiaryHover;
    }
   }
 
@@ -101,11 +101,7 @@
 
    .MuiChip-label {
     font-family: $fontOutfitBold;
-    color: $goldLight;
-
-    :root[data-theme="light"] & {
-     color: $appText;
-    }
+    color: $minimalGold;
    }
 
    &::after {
@@ -116,8 +112,7 @@
     width: 1.125rem;
     height: 2px;
     margin-left: -0.5625rem;
-    background: $gold;
-    box-shadow: 0 0 0.375rem textOpacity($gold, 0.8);
+    background: $minimalGold;
    }
   }
  }
@@ -186,15 +181,16 @@
 
  &.tx-pending-chip {
   height: auto;
-  padding: $space-4 $space-8;
-  border-radius: 0;
-  border: 1px solid textOpacity($warning, 0.5);
+  padding: 0.1875rem $space-8;
+  border-radius: 999px !important;
+  border: 1px solid $minimalBorderStrong;
   background: transparent;
-  color: $warning;
+  color: $minimalTextSecondary;
 
   .MuiChip-label {
    padding: 0;
-   color: $warning;
+   font-family: $fontOutfitBold;
+   color: $minimalTextSecondary;
    font-size: 12px;
    line-height: 1;
 

@@ -148,7 +148,9 @@
 
   .bet-sheet &,
   .practice-sheet &,
-  .room-sheet & {
+  .room-sheet &,
+  .wallet-sheet &,
+  .resign-sheet & {
    font-family: $fontOutfitSemiBold;
    color: $minimalTextPrimary;
   }
@@ -209,6 +211,7 @@
   min-height: 2rem;
   padding-right: 2.5rem;
   font-size: 22px;
+  color: $minimalTextPrimary;
 
   @include from(phone) {
    font-size: 24px;
@@ -251,14 +254,14 @@
   }
  }
 
- .gopvp-signup-form &:is(.username-suggestion, .field-hint) {
+ :is(.gopvp-signup-form, .edit-profile-form) &:is(.username-suggestion, .field-hint) {
   color: $minimalTextSecondary;
  }
 
  &.value-heading {
   font-family: $fontOutfitExtraBold;
   font-size: 16px;
-  color: $appText;
+  color: $minimalTextPrimary;
 
   @include from(phone) {
    font-size: 17px;
@@ -269,7 +272,7 @@
   display: block;
   font-family: $fontOutfitExtraBold;
   font-size: 24px;
-  color: $appText;
+  color: $minimalTextPrimary;
 
   @include from(phone) {
    font-size: 26px;
@@ -330,7 +333,8 @@
    color: $appTextMuted;
   }
 
-  .matches-page & {
+  .matches-page &,
+  .wallet-page & {
    font-family: $fontOutfitBold;
 
    &.pos {
@@ -339,6 +343,10 @@
 
    &.neg {
     color: $minimalError;
+   }
+
+   &.neutral {
+    color: $minimalTextSecondary;
    }
   }
  }
@@ -949,7 +957,8 @@
   }
 
   .match-confirm-sheet &,
-  .room-sheet & {
+  .room-sheet &,
+  .deposit-qr-stage & {
    border-color: $minimalBorderStrong;
    border-radius: 999px;
    font-family: $fontOutfitSemiBold;
@@ -998,6 +1007,10 @@
  .result-sheet:not(.win) &.public-title {
   background: none;
   color: $appText;
+ }
+
+ .game-over-sheet.loss &.public-title {
+  color: $minimalTextPrimary;
  }
 
  .common-drawer.match-confirm-sheet &.public-title {
@@ -1134,6 +1147,10 @@
    inset: 2px;
    border: 1px solid var(--payout-stamp);
    border-radius: 2px;
+  }
+
+  .payout-stage.loss & {
+   background: textOpacity($minimalPaper, 0.85);
   }
 
   .practice & {
@@ -1539,7 +1556,8 @@
   }
 
   .matches-page &,
-  .leaderboard-page & {
+  .leaderboard-page &,
+  .wallet-page & {
    font-family: $fontOutfitSemiBold;
    color: $minimalTextPrimary;
   }
@@ -1558,7 +1576,9 @@
   }
 
   .matches-page &,
-  .leaderboard-page & {
+  .leaderboard-page &,
+  .wallet-page &,
+  .resign-sheet & {
    color: $minimalTextSecondary;
   }
  }
@@ -1765,25 +1785,42 @@
 
  &.wallet-hero-lbl {
   font-family: $fontOutfitBold;
-  font-size: 15px;
-  color: textOpacity($appText, 0.85);
-
-  @include from(phone) {
-   font-size: 16px;
-  }
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: $minimalTextTertiary;
  }
 
  &.wallet-hero-amount {
   max-width: 100%;
-  margin-top: 0.25rem;
+  padding-right: 0.05em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-family: $fontOutfitBlack;
-  font-size: 52px;
-  line-height: 1.1;
+  font-size: 76px;
+  line-height: 1;
   letter-spacing: -0.02em;
-  color: $appBalance;
+  color: $minimalTextPrimary;
 
   @include from(phone) {
-   font-size: 56px;
+   font-size: 84px;
+  }
+
+  &.medium {
+   font-size: 60px;
+
+   @include from(phone) {
+    font-size: 68px;
+   }
+  }
+
+  &.small {
+   font-size: 48px;
+
+   @include from(phone) {
+    font-size: 54px;
+   }
   }
  }
 
@@ -1813,9 +1850,9 @@
  .wallet-withdrawable-row &.wallet-withdrawable-lbl {
   padding: 0;
   border: none;
-  font-family: $fontOutfitBold;
+  font-family: $fontOutfitSemiBold;
   font-size: 15px;
-  color: textOpacity($appText, 0.85);
+  color: $minimalTextSecondary;
 
   @include from(phone) {
    font-size: 16px;
@@ -1824,12 +1861,12 @@
 
  .wallet-withdrawable-row &.wallet-withdrawable-val {
   padding: 0;
-  font-family: $fontOutfitBlack;
-  font-size: 22px;
-  letter-spacing: -0.01em;
+  font-family: $fontOutfitBold;
+  font-size: 15px;
+  color: $minimalSuccess;
 
   @include from(phone) {
-   font-size: 24px;
+   font-size: 16px;
   }
  }
 
@@ -1843,14 +1880,12 @@
   }
 
   .wallet-tx-title-row & {
-   font-size: 20px;
+   font-family: $fontOutfitBold;
+   font-size: 18px;
+   color: $minimalTextPrimary;
 
    @include from(phone) {
-    font-size: 21px;
-   }
-
-   @include from(tablet) {
-    font-size: 22px;
+    font-size: 19px;
    }
   }
  }
@@ -1858,6 +1893,7 @@
  .wallet-tx-row &.row-title {
   font-family: $fontOutfitSemiBold;
   font-size: 15px;
+  color: $minimalTextPrimary;
 
   @include from(phone) {
    font-size: 16px;
@@ -1867,6 +1903,7 @@
  .wallet-tx-row &.meta-text {
   font-family: $fontOutfitMedium;
   font-size: 12px;
+  color: $minimalTextTertiary;
 
   @include from(phone) {
    font-size: 13px;
@@ -1877,7 +1914,7 @@
   display: block;
   font-family: $fontOutfitBlack;
   font-size: 22px;
-  color: textOpacity($appText, 0.9);
+  color: $minimalTextPrimary;
 
   @include from(phone) {
    font-size: 24px;
@@ -1897,7 +1934,7 @@
   text-overflow: ellipsis;
   font-family: $fontOutfitMedium;
   font-size: 13px;
-  color: textOpacity($appText, 0.5);
+  color: $minimalTextSecondary;
  }
 
  &.profile-stat-val {
@@ -1906,7 +1943,7 @@
   text-overflow: ellipsis;
   font-family: $fontOutfitBlack;
   font-size: 18px;
-  color: textOpacity($appText, 0.9);
+  color: $minimalTextPrimary;
 
   @include from(phone) {
    font-size: 20px;
@@ -1916,7 +1953,7 @@
  &.profile-stat-label {
   font-family: $fontOutfitMedium;
   font-size: 12px;
-  color: textOpacity($appText, 0.5);
+  color: $minimalTextTertiary;
 
   @include from(phone) {
    font-size: 13px;
@@ -1936,7 +1973,7 @@
  .profile-list &.stat-title {
   font-family: $fontOutfitSemiBold;
   font-size: 15px;
-  color: textOpacity($appText, 0.9);
+  color: $minimalTextPrimary;
 
   @include from(phone) {
    font-size: 16px;
@@ -1944,8 +1981,9 @@
  }
 
  .profile-list &.stat-val {
-  font-family: $fontOutfitExtraBold;
+  font-family: $fontOutfitSemiBold;
   font-size: 15px;
+  color: $minimalTextSecondary;
 
   @include from(phone) {
    font-size: 16px;
@@ -1998,7 +2036,7 @@
  &.result-time {
   font-family: $fontOutfitSemiBold;
   font-size: 13px;
-  color: $appText;
+  color: $minimalTextSecondary;
 
   @include from(phone) {
    font-size: 14px;
@@ -2026,11 +2064,11 @@
   .result-sheet.win &,
   .result-sheet.gold &,
   .result-sheet.neutral & {
-   color: $greenishTeal;
+   color: $minimalSuccess;
   }
 
   .result-sheet.loss & {
-   color: $paleRed;
+   color: $minimalError;
   }
  }
 
@@ -2102,7 +2140,7 @@
    }
   }
 
-  .matches-page .result-tiles & {
+  :is(.matches-page, .result-sheet) .result-tiles & {
    font-family: $fontOutfitSemiBold;
    color: $minimalTextSecondary;
   }
@@ -2135,7 +2173,7 @@
    }
   }
 
-  .matches-page .result-tiles & {
+  :is(.matches-page, .result-sheet) .result-tiles & {
    color: $minimalTextPrimary;
 
    &.prize {
@@ -2226,16 +2264,12 @@
   display: block;
   font-family: $fontOutfitBold;
   font-size: 12px;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: textOpacity($appText, 0.5);
+  color: $minimalTextTertiary;
 
   @include from(phone) {
    font-size: 13px;
-  }
-
-  &.wallet-tx-group-label {
-   font-family: $fontOutfitExtraBold;
   }
  }
 
@@ -2310,18 +2344,19 @@
  &.deposit-tagline {
   display: block;
   font-family: $fontOutfitRegular;
+  color: $minimalTextTertiary;
  }
 
  &.deposit-heading-amount,
  &.deposit-lightning-name {
   font: inherit;
-  color: $appBalance;
+  color: $minimalGold;
  }
 
  &.deposit-lightning-text {
   font-family: $fontOutfitMedium;
   font-size: 14px;
-  color: $appText;
+  color: $minimalTextSecondary;
 
   @include from(phone) {
    font-size: 15px;
@@ -2336,7 +2371,7 @@
   display: block;
   font-family: $fontOutfitSemiBold;
   font-size: 12px;
-  color: $appTextMuted;
+  color: $minimalTextSecondary;
 
   @include from(phone) {
    font-size: 13px;
@@ -2368,6 +2403,7 @@
   flex: 1;
   font-size: 13px;
   line-height: 1.3;
+  color: $minimalTextSecondary;
   white-space: normal;
   overflow: visible;
 
@@ -2386,7 +2422,7 @@
   min-width: 0;
   font-family: $fontOutfitSemiBold;
   font-size: 14px;
-  color: $appText;
+  color: $minimalTextPrimary;
 
   @include from(phone) {
    font-size: 15px;
@@ -2398,7 +2434,7 @@
   text-align: center;
 
   &.expired {
-   color: $paleRed;
+   color: $minimalError;
   }
  }
 
@@ -2412,7 +2448,7 @@
   font-size: 16px;
   font-weight: 400;
   letter-spacing: 0.01em;
-  color: textOpacity($appText, 0.9);
+  color: $minimalTextPrimary;
 
   @include from(phone) {
    font-size: 17px;
@@ -2426,11 +2462,12 @@
  &.gr-score-label {
   flex-shrink: 0;
   padding: 0.125rem 0.375rem;
-  background: textOpacity($appText, 0.08);
+  border: 1px solid $minimalBorderStrong;
+  border-radius: 6px;
   font-family: $fontOutfitBold;
   font-size: 12px;
   letter-spacing: 1px;
-  color: textOpacity($appText, 0.7);
+  color: $minimalTextSecondary;
  }
 
  &.gr-win-label,
@@ -2445,45 +2482,45 @@
  }
 
  &.gr-win-label {
-  color: textOpacity($appText, 0.6);
+  color: $minimalTextSecondary;
 
   &:only-child {
-   color: $appText;
+   color: $minimalTextPrimary;
   }
  }
 
  &.gr-win-amount {
-  color: $appPrize;
+  color: $minimalSuccess;
  }
 
  &.gr-board-tag-text {
   font-family: $fontOutfitSemiBold;
   font-size: 12px;
-  color: textOpacity($appText, 0.9);
+  color: $minimalTextPrimary;
 
   @include from(phone) {
    font-size: 13px;
   }
 
   .reconnecting & {
-   color: $warning;
+   color: $minimalWarning;
   }
 
   .reconnected & {
-   color: $greenishTeal;
+   color: $minimalSuccess;
   }
 
   b {
    font-family: $fontOutfitBold;
    font-weight: 400;
-   color: textOpacity($appText, 0.92);
+   color: $minimalTextPrimary;
   }
  }
 
  &.gr-move-empty {
   font-family: $fontOutfitSemiBold;
   font-size: 13px;
-  color: textOpacity($appText, 0.55);
+  color: $minimalTextTertiary;
 
   @include from(phone) {
    font-size: 14px;
@@ -2496,21 +2533,17 @@
   white-space: nowrap;
   font-family: $fontOutfitBold;
   font-size: 14px;
-  color: $gold;
+  color: $minimalGold;
 
   @include from(phone) {
    font-size: 15px;
-  }
-
-  :root[data-theme="light"] & {
-   color: $appText;
   }
  }
 
  &.gr-draw-offer-text {
   font-family: $fontOutfitMedium;
   font-size: 12px;
-  color: textOpacity($appText, 0.6);
+  color: $minimalTextSecondary;
 
   @include from(phone) {
    font-size: 13px;
@@ -2522,7 +2555,7 @@
   font-size: 12px;
   line-height: 1.25;
   white-space: nowrap;
-  color: textOpacity($appText, 0.85);
+  color: $minimalTextPrimary;
 
   @include from(phone) {
    font-size: 13px;
@@ -2546,7 +2579,7 @@
   font-family: $fontOutfitExtraBold;
   font-size: 26px;
   font-weight: 400;
-  color: textOpacity($appText, 0.75);
+  color: $minimalTextSecondary;
   letter-spacing: -0.01em;
   transition: color 0.25s ease;
 
@@ -2555,28 +2588,24 @@
   }
 
   .gr-row.active & {
-   color: $gold;
-
-   :root[data-theme="light"] & {
-    color: $appText;
-   }
+   color: $minimalGold;
   }
 
   &.low,
   .gr-row.active &.low {
-   color: $paleRed;
+   color: $minimalError;
   }
 
   .common-skeleton.MuiSkeleton-root {
    height: 0.875rem;
-   background: textOpacity($appText, 0.16);
+   background: $minimalBorderStrong;
    transform: none;
 
    &::after {
     background: linear-gradient(
      90deg,
      transparent,
-     textOpacity($appText, 0.22) 50%,
+     textOpacity($minimalTextPrimary, 0.12) 50%,
      transparent
     );
    }
@@ -2591,13 +2620,14 @@
    font-size: 11px;
   }
   letter-spacing: 1px;
-  color: textOpacity($appText, 0.4);
+  color: $minimalTextTertiary;
   margin-right: 0.25rem;
  }
 
  &.gr-promotion-label {
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  color: $minimalTextSecondary;
  }
 
  &.appbar-dropdown-name {

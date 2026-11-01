@@ -57,7 +57,6 @@ export default function PlayerRowSheet({
    open={!!playerId}
    onClose={onClose}
    tone="gold"
-   hideGlow
    title={stats ? shortenUsername(stats.username) : undefined}
    amount={stats ? formatAmount(stats.gross_income) : undefined}
    tiles={

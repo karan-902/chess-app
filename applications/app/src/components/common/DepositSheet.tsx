@@ -10,7 +10,7 @@ import {
  speedLogo,
  qrLogo,
  // Timer,
- Zap,
+ // Zap,
  icons,
 } from "@gopvp/common/src/components/images";
 import { formatAmount, formatMMSS } from "@gopvp/common/src/util/format";
@@ -28,8 +28,8 @@ import {
  depositText,
  speedDepositNoteText,
  depositingText,
- instantPayViaText,
- lightningText,
+ // instantPayViaText,
+ // lightningText,
  lightningInvoiceText,
  expiresInLabelText,
  fastSecuredTransparentText,
@@ -270,7 +270,7 @@ export default function DepositSheet() {
 
      {/* <Text customClass="deposit-scan-hint caption">{scanToDepositText}</Text> */}
 
-     <Box customClass="deposit-lightning-row">
+     {/* <Box customClass="deposit-lightning-row">
       <Zap size={14} strokeWidth={2.4} />
       <Text component="span" customClass="deposit-lightning-text">
        {instantPayViaText}{" "}
@@ -278,7 +278,7 @@ export default function DepositSheet() {
         {lightningText}
        </Text>
       </Text>
-     </Box>
+     </Box> */}
 
      <Box customClass="deposit-qr-wrap">
       <QRCodeSVG

@@ -99,11 +99,11 @@
   flex-shrink: 0;
   width: 2.625rem;
   height: 2.625rem;
-  border: 1px solid textOpacity($appText, 0.14);
-  background: linear-gradient(180deg, $indigoEdgeDark, $indigoNight) !important;
+  border: 1px solid $minimalBorderStrong;
+  background: $minimalSurfaceElevated !important;
   font-family: $fontOutfitBlack;
   font-size: 18px;
-  color: textOpacity($appText, 0.85);
+  color: $minimalTextPrimary;
 
   @include from(phone) {
    font-size: 19px;
@@ -113,21 +113,13 @@
    font-size: 20px;
   }
 
-  :root[data-theme="light"] & {
-   background: linear-gradient(180deg, $white, #e3e6f5) !important;
-  }
-
   .gr-row:not(.active) & {
    opacity: 0.55;
   }
 
   .gr-row.active & {
-   border: 2px solid $gold;
-   color: $gold;
-
-   :root[data-theme="light"] & {
-    color: $appText;
-   }
+   border: 2px solid $minimalGold;
+   color: $minimalGold;
   }
  }
 

@@ -117,6 +117,7 @@
   font-size: 44px;
   line-height: 1.1;
   text-align: center;
+  color: $minimalTextPrimary;
 
   @include from(phone) {
    font-size: 48px;
@@ -131,8 +132,12 @@
    }
   }
 
+  input {
+   caret-color: $minimalGold;
+  }
+
   input::placeholder {
-   color: textOpacity($appText, 0.35);
+   color: textOpacity($minimalTextPrimary, 0.3);
   }
 
   &:focus-within {
@@ -172,7 +177,7 @@
 
  &.amount-input-hero.error .input-row {
   border: none;
-  color: $paleRed;
+  color: $minimalError;
  }
 
  &.match-id-input {
@@ -193,9 +198,10 @@
 
  &.match-id-input .input-row {
   height: 3.125rem;
-  border: 1px solid textOpacity($appText, 0.1);
-  background: $appSurface;
-  color: $appText;
+  border: 1px solid $minimalInputBorder;
+  border-radius: $radius-minimal;
+  background: $minimalInputBg;
+  color: $minimalTextPrimary;
   font-size: 14px;
 
   @include from(phone) {
@@ -203,7 +209,7 @@
   }
 
   input {
-   -webkit-text-fill-color: $appText;
+   -webkit-text-fill-color: $minimalTextPrimary;
   }
  }
 

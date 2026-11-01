@@ -63,6 +63,19 @@
   }
  }
 
+ :root &.square-toggle {
+  background: $minimalBorderStrong;
+  box-shadow: none;
+
+  &::before {
+   background: $minimalGold;
+  }
+
+  &:has(input:focus-visible) {
+   outline-color: $minimalGold;
+  }
+ }
+
  @include reduced-motion {
   &::before,
   .switch-thumb {

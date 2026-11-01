@@ -36,6 +36,7 @@ export const TRANSACTION_CODE_DESCRIPTIONS: Record<TransactionCode, string> = {
  WON: "Won",
  REFUND: "Refund",
  WITHDRAW_REVERSAL: "Refund",
+ PROMO: "Bonus",
 };
 
 export const GAME_PAGE_TITLES: Record<string, string> = {

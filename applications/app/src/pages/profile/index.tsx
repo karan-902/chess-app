@@ -125,6 +125,7 @@ function EditProfileDrawer({
     <UsernameField
      formik={formik}
      inputRef={usernameInputRef}
+     customClass="form-input"
      showHint
      hideClear
     />

@@ -26,8 +26,8 @@ $pieceFill: 92%;
  aspect-ratio: 1 / 1;
  border-radius: 0;
  overflow: hidden;
- border: 1px solid $appCardBorder;
- background: $appCardBorder;
+ border: 1px solid $minimalBorderStrong;
+ background: $minimalBorderStrong;
  touch-action: none;
 
  canvas {
@@ -42,8 +42,8 @@ $pieceFill: 92%;
  grid-template-columns: repeat(8, 1fr);
  border-radius: 0;
  overflow: hidden;
- border: 1px solid $appCardBorder;
- background: $appCardBorder;
+ border: 1px solid $minimalBorderStrong;
+ background: $minimalBorderStrong;
  touch-action: none;
  will-change: transform;
 }
@@ -194,16 +194,15 @@ svg.gr-captured-icon {
  width: 1.5rem;
  height: 1.5rem;
  flex-shrink: 0;
+}
 
- :root:not([data-theme="light"]) &.dark-piece {
-  [stroke="#000"] {
-   stroke: #c9cbe6;
-  }
-
-  [fill="#000"] {
-   fill: #0b0c22;
-  }
- }
+svg:is(.gr-captured-icon, .gr-premove-piece).dark-piece {
+ filter: drop-shadow(1px 0 0 $minimalTextPrimary)
+  drop-shadow(-1px 0 0 $minimalTextPrimary)
+  drop-shadow(0 1px 0 $minimalTextPrimary)
+  drop-shadow(0 -1px 0 $minimalTextPrimary)
+  drop-shadow(0.7px 0.7px 0 $minimalTextPrimary)
+  drop-shadow(-0.7px -0.7px 0 $minimalTextPrimary);
 }
 
 .legal-dot {

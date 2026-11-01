@@ -35,7 +35,11 @@ import {
  yesterdayText,
  speedText,
 } from "@gopvp/app/src/constants/message";
-import { TRANSACTIONS_SKELETON_ROWS } from "@gopvp/app/src/constants/limit";
+import {
+ TRANSACTIONS_SKELETON_ROWS,
+ WALLET_BALANCE_MEDIUM_CHARS,
+ WALLET_BALANCE_SMALL_CHARS,
+} from "@gopvp/app/src/constants/limit";
 import { renderSkeletons } from "@gopvp/app/src/utils/skeleton";
 
 function dayLabel(ms: number): string {
@@ -149,6 +153,7 @@ export default function Wallet() {
   () => buildTimelineEntries(transactions),
   [transactions],
  );
+ const balanceText = formatAmount(usdValue);
 
  return (
   <Box customClass="wallet-page">
@@ -159,11 +164,18 @@ export default function Wallet() {
        {totalBalanceText}
       </Text>
      </Box>
-     <Text customClass="wallet-hero-amount">
+     <Text
+      customClass={classNames(
+       "wallet-hero-amount",
+       balanceText.length > WALLET_BALANCE_SMALL_CHARS
+        ? "small"
+        : balanceText.length > WALLET_BALANCE_MEDIUM_CHARS && "medium",
+      )}
+     >
       {balanceLoading ? (
        <Skeleton customClass="text" width={160} />
       ) : (
-       formatAmount(usdValue)
+       balanceText
       )}
      </Text>
      {/* <Box customClass="wallet-hero-underline" /> */}

@@ -22,8 +22,8 @@ import {
  withdrawText,
  withdrawalFailedText,
  // onlyWinningsWithdrawableText,
- // destinationText,
- // lightningAddressText,
+ destinationText,
+ lightningAddressText,
  // requestWithdrawalText,
  maxWithdrawalAmountText,
  insufficientWithdrawableText,
@@ -65,7 +65,7 @@ export default function WithdrawSheet() {
  const [amount, setAmount] = useState("");
  const [amountApiError, setAmountApiError] = useState("");
 
- // const [destination, setDestination] = useState("");
+ const [destination, setDestination] = useState("");
  const [submitting, setSubmitting] = useState(false);
 
  useEffect(() => {
@@ -75,7 +75,7 @@ export default function WithdrawSheet() {
   setAmount("");
   setAmountApiError("");
 
-  // setDestination("");
+  setDestination("");
   setSubmitting(false);
  }, [open]);
 
@@ -111,7 +111,7 @@ export default function WithdrawSheet() {
      : amountUsd > MAX_WITHDRAW_USD
        ? maxWithdrawalAmountText(MAX_WITHDRAW_USD)
        : undefined);
- const withdrawDestination = (speedLightningAddress ?? "").trim();
+ const withdrawDestination = (speedLightningAddress || destination).trim();
  const canSubmit =
   hasWithdrawable && amount !== "" && !amountError && withdrawDestination !== "";
 
@@ -177,20 +177,20 @@ export default function WithdrawSheet() {
       />
      </Box>
 
-     {/* {!speedLightningAddress && (
+     {!speedLightningAddress && (
       <Input
        id="withdraw-destination"
        type="text"
        label={destinationText}
        labelClassName="wallet-field-label"
        fullWidth
-       customClass="wallet-input"
+       customClass="form-input"
        placeholder={lightningAddressText}
        value={destination}
        onChange={(e) => setDestination(e.target.value)}
        disabled={submitting || !hasWithdrawable}
       />
-     )} */}
+     )}
 
      <Button
       type="submit"

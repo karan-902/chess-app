@@ -89,7 +89,6 @@ export interface IResultSheetProps {
  skeletonTiles: number;
  tileIcon?: TIconName;
  versus?: boolean;
- hideGlow?: boolean;
  children?: ReactNode;
 }
 

@@ -45,6 +45,10 @@
   }
  }
 
+ :is(.match-id-input, .amount-input-hero) > & {
+  color: $minimalTextTertiary !important;
+ }
+
  .common-input.form-input > &,
  .form-field > & {
   font-family: $fontOutfitSemiBold !important;

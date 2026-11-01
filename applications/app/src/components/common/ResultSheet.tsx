@@ -22,7 +22,6 @@ export default function ResultSheet({
  skeletonTiles,
  tileIcon,
  versus = false,
- hideGlow = false,
  children,
 }: IResultSheetProps) {
  const {
@@ -36,12 +35,7 @@ export default function ResultSheet({
    anchor="bottom"
    open={open}
    onClose={onClose}
-   customClass={classNames(
-    "result-sheet",
-    tone,
-    versus && "versus",
-    hideGlow && "no-glow",
-   )}
+   customClass={classNames("result-sheet", tone, versus && "versus")}
   >
    <Box customClass="result-hero">
     {isLoading ? (

@@ -13,7 +13,7 @@
   border: 1px solid textOpacity($appText, 0.18);
   color: $appText;
 
-  .gopvp-signup-form & {
+  :is(.gopvp-signup-form, .edit-profile-form) & {
    border-color: $minimalBorderStrong;
    color: $minimalTextSecondary;
   }
@@ -55,10 +55,10 @@
   width: 2.5rem;
   height: 2.5rem;
   padding: 0;
-  border: 1px solid textOpacity($appText, 0.16);
-  border-radius: 50%;
+  border: 1px solid $minimalBorderStrong;
+  border-radius: 10px;
   background: transparent;
-  color: textOpacity($appText, 0.8);
+  color: $minimalTextSecondary;
   transition:
    color 0.15s ease,
    border-color 0.15s ease;
@@ -70,17 +70,17 @@
 
   &:hover:not(.Mui-disabled) {
    background: transparent;
-   border-color: textOpacity($appText, 0.32);
-   color: $appText;
+   border-color: $minimalTextTertiary;
+   color: $minimalTextPrimary;
   }
 
   &.live {
-   border-color: textOpacity($gold, 0.5);
-   color: $gold;
+   border-color: $minimalGold;
+   color: $minimalGold;
   }
 
   &.Mui-disabled {
-   color: textOpacity($appText, 0.8);
+   color: $minimalTextTertiary;
    cursor: default;
   }
  }
@@ -89,9 +89,10 @@
   flex-shrink: 0;
   width: 2.5rem;
   height: 2.5rem;
-  border: 1px solid textOpacity($appText, 0.16);
+  border: 1px solid $minimalBorderStrong;
+  border-radius: 10px;
   background: transparent;
-  color: textOpacity($appText, 0.8);
+  color: $minimalTextSecondary;
 
   svg {
    width: 1rem;
@@ -100,20 +101,19 @@
 
   &.accept {
    border-color: transparent;
-   background: linear-gradient(180deg, $goldLight, $gold);
-   color: $primaryContrast;
+   background: $minimalBtnPrimaryBg;
+   color: $minimalTextInverse;
 
    svg {
     stroke-width: 3;
    }
 
    &:hover {
-    background: linear-gradient(180deg, $goldLight, $primaryHover);
+    background: $minimalBtnPrimaryHover;
    }
 
    &:active {
-    box-shadow: none;
-    transform: translate3d(3px, 3px, 0);
+    transform: scale(0.96);
    }
   }
  }
@@ -151,7 +151,11 @@
   .bet-sheet &,
   .match-confirm-sheet &,
   .practice-sheet &,
-  .room-sheet & {
+  .room-sheet &,
+  .result-sheet:not(.game-over-sheet) &,
+  .wallet-sheet &,
+  .common-drawer:has(.resign-sheet) &,
+  .game-over-sheet.loss & {
    border-color: $minimalBorderStrong;
    border-radius: 10px;
    background: transparent;
@@ -190,10 +194,14 @@
    right: 1.25rem;
    width: 2rem;
    height: 2rem;
-   border-radius: 0;
-   border: 1px solid $appCardBorder;
-   background: $appSecondary;
-   color: $appText;
+   border-radius: 10px;
+   border: 1px solid $minimalBorderStrong;
+   background: transparent;
+   color: $minimalTextSecondary;
+
+   &:hover {
+    background: textOpacity($minimalTextPrimary, 0.06);
+   }
 
    svg {
     width: 1rem;
@@ -213,7 +221,7 @@
   }
 
   .match-id-input & {
-   color: $appText;
+   color: $minimalTextSecondary;
 
    svg {
     width: 1.125rem;
@@ -228,9 +236,9 @@
   width: 1.125rem;
   height: 1.125rem;
   padding: 0;
-  border-radius: 0;
+  border-radius: 4px;
   background: transparent;
-  color: textOpacity($appText, 0.7);
+  color: $minimalTextSecondary;
 
   svg {
    width: 0.5625rem;
@@ -245,7 +253,7 @@
   }
 
   &:hover {
-   background: textOpacity($appText, 0.2);
+   background: textOpacity($minimalTextPrimary, 0.12);
   }
  }
 

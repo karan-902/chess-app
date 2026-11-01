@@ -91,7 +91,13 @@ export default function MoveList({
    {premove && (
     <Box customClass="gr-premove">
      {premove.pieceCode && (
-      <PieceIcon code={premove.pieceCode} className="gr-premove-piece" />
+      <PieceIcon
+       code={premove.pieceCode}
+       className={classNames(
+        "gr-premove-piece",
+        premove.pieceCode.startsWith("b") && "dark-piece",
+       )}
+      />
      )}
      <Text component="span" customClass="gr-premove-route">
       {premoveRouteText(premove.from, premove.to)}
