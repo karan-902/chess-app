@@ -127,13 +127,12 @@ const withAlpha = (
 
 const drawTicket = (
  ctx: CanvasRenderingContext2D,
- { elapsed: t, width, style, isReducedMotion }: ICanvasFrame,
+ { elapsed: t, width, style }: ICanvasFrame,
  { phase, foundAt, title, myName, rivalName, chip, stats }: ITicketScene,
 ) => {
  if (phase !== "found") foundAt.current = null;
  else foundAt.current ??= t;
  const sinceFound = foundAt.current === null ? 0 : t - foundAt.current;
- const isMoving = !isReducedMotion;
  const isFound = phase === "found";
  const isLost = phase === "lost";
  const scale = width / BOX_WIDTH;
@@ -191,13 +190,9 @@ const drawTicket = (
   ctx.textAlign = "left";
  };
 
- const beamOpacity = isLost
-  ? isMoving
-    ? 1 - EASE_OUT(progress(t, 0, 800))
-    : 0
-  : 1;
+ const beamOpacity = isLost ? 1 - EASE_OUT(progress(t, 0, 800)) : 1;
  const slotGlow =
-  phase === "searching" && isMoving
+  phase === "searching"
    ? keyframes(
       (t % 1000) / 1000,
       [
@@ -208,76 +203,55 @@ const drawTicket = (
       EASE_IN_OUT,
      )[0]
    : 0;
- const riseY =
-  isLost || !isMoving ? 0 : 15 * (1 - RISE_EASE(progress(t, 300, 1800)));
- const [popY, popScale] =
-  isFound && isMoving
-   ? keyframes(
-      progress(sinceFound, 400, 700),
-      [
-       [0, 0, 1],
-       [0.4, -0.5, 1.03],
-       [1, 0, 1],
-      ],
-      POP_EASE,
-     )
-   : [0, 1];
- const [tugX, tugTurn] =
-  isLost && isMoving
-   ? keyframes(
-      progress(t, 1200, 320),
-      [
-       [0, 0, 0],
-       [0.3, -0.125, -0.6],
-       [0.65, 0.125, 0.6],
-       [1, 0, 0],
-      ],
-      EASE_IN_OUT,
-     )
-   : [0, 0];
- const shadowOpacity = isLost
-  ? isMoving
-    ? 1 - EASE(progress(t, 1400, 300))
-    : 0
-  : 1;
+ const riseY = isLost ? 0 : 15 * (1 - RISE_EASE(progress(t, 300, 1800)));
+ const [popY, popScale] = isFound
+  ? keyframes(
+     progress(sinceFound, 400, 700),
+     [
+      [0, 0, 1],
+      [0.4, -0.5, 1.03],
+      [1, 0, 1],
+     ],
+     POP_EASE,
+    )
+  : [0, 1];
+ const [tugX, tugTurn] = isLost
+  ? keyframes(
+     progress(t, 1200, 320),
+     [
+      [0, 0, 0],
+      [0.3, -0.125, -0.6],
+      [0.65, 0.125, 0.6],
+      [1, 0, 0],
+     ],
+     EASE_IN_OUT,
+    )
+  : [0, 0];
+ const shadowOpacity = isLost ? 1 - EASE(progress(t, 1400, 300)) : 1;
  const [flipAngle, flipScale] = isFound
-  ? isMoving
-    ? keyframes(
-       progress(sinceFound, 0, 750),
-       [
-        [0, 0, 1],
-        [0.5, 90, 1.14],
-        [1, 180, 1],
-       ],
-       FLIP_EASE,
-      )
-    : [180, 1]
+  ? keyframes(
+     progress(sinceFound, 0, 750),
+     [
+      [0, 0, 1],
+      [0.5, 90, 1.14],
+      [1, 180, 1],
+     ],
+     FLIP_EASE,
+    )
   : [0, 1];
  const maskIndex =
-  phase === "searching" && isMoving
-   ? Math.floor(t / 700) % maskColors.length
-   : 0;
- const masksOpacity = isLost
-  ? isMoving
-    ? 1 - 0.4 * EASE_OUT(progress(t, 0, 400))
-    : 0.6
-  : 1;
+  phase === "searching" ? Math.floor(t / 700) % maskColors.length : 0;
+ const masksOpacity = isLost ? 1 - 0.4 * EASE_OUT(progress(t, 0, 400)) : 1;
  const pendingOpacity =
   phase === "searching"
    ? 1
-   : isMoving
-     ? 1 - EASE(progress(isFound ? sinceFound : t, 0, 300))
-     : 0;
- const confirmedShow = isFound
-  ? isMoving
-    ? EASE(progress(sinceFound, 0, 300))
-    : 1
-  : 0;
- const voidStubShow = isLost ? (isMoving ? EASE(progress(t, 300, 300)) : 1) : 0;
- const dimOpacity = isLost ? (isMoving ? EASE(progress(t, 300, 400)) : 1) : 0;
- const stampThud = isMoving ? THUD_EASE(progress(t, 600, 350)) : 1;
- const tear = isMoving ? TEAR_EASE(progress(t, 1500, 800)) : 0;
- const torn = isMoving ? 1 - 0.15 * EASE_OUT(progress(t, 2200, 500)) : 1;
+   : 1 - EASE(progress(isFound ? sinceFound : t, 0, 300));
+ const confirmedShow = isFound ? EASE(progress(sinceFound, 0, 300)) : 0;
+ const voidStubShow = isLost ? EASE(progress(t, 300, 300)) : 0;
+ const dimOpacity = isLost ? EASE(progress(t, 300, 400)) : 0;
+ const stampThud = THUD_EASE(progress(t, 600, 350));
+ const tear = TEAR_EASE(progress(t, 1500, 800));
+ const torn = 1 - 0.15 * EASE_OUT(progress(t, 2200, 500));
 
  const drawContent = () => {
   ctx.fillStyle = css("--ticket-stub");
@@ -568,17 +542,15 @@ const drawTicket = (
 
  if (isFound)
   SPARKS.forEach(({ x, y, size, delay }) => {
-   const [grow, spin, opacity] = isMoving
-    ? keyframes(
-       progress(sinceFound, delay, 700),
-       [
-        [0, 0, 0, 0],
-        [0.6, 1.3, 45, 1],
-        [1, 1, 90, 1],
-       ],
-       SPARK_EASE,
-      )
-    : [1, 0, 1];
+   const [grow, spin, opacity] = keyframes(
+    progress(sinceFound, delay, 700),
+    [
+     [0, 0, 0, 0],
+     [0.6, 1.3, 45, 1],
+     [1, 1, 90, 1],
+    ],
+    SPARK_EASE,
+   );
    if (opacity <= 0) return;
    ctx.save();
    ctx.translate(x + size / 2, y + size / 2);
@@ -598,9 +570,7 @@ const drawTicket = (
   : isLost
     ? t < 2700
     : true;
- return (
-  (isMoving && isSettling) || phase === "searching" || !maskImage.naturalWidth
- );
+ return isSettling || phase === "searching" || !maskImage.naturalWidth;
 };
 
 export default function MatchTicket({

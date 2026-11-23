@@ -17,6 +17,7 @@ import { useReduxDispatch, useReduxSelector } from "@gopvp/app/src/redux/hooks";
 import { setActivePage } from "@gopvp/app/src/redux/game/slice";
 import { formatAmount, shortenUsername } from "@gopvp/common/src/util/format";
 import { getGameFromPath, getGamePath } from "@gopvp/app/src/utils";
+import { GAMES } from "@gopvp/app/src/config/game";
 import { NAV_ITEMS } from "@gopvp/app/src/constants/option";
 import { BRAND_LOGO_PATH } from "@gopvp/app/src/constants/asset";
 import {
@@ -59,7 +60,10 @@ export default function Header() {
      title={goToPlayText}
      onClick={() => dispatch(setActivePage("PLAY"))}
     >
-     <img src={BRAND_LOGO_PATH} alt={goToPlayText} />
+     <img
+      src={enteredGame ? GAMES[enteredGame].module.logoSrc : BRAND_LOGO_PATH}
+      alt={goToPlayText}
+     />
     </Link>
    }
    bottomSlot={

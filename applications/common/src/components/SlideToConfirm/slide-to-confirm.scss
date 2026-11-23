@@ -122,18 +122,6 @@
   border-radius: 50%;
   animation: slide-confirm-spin 0.7s linear infinite;
  }
-
- @include reduced-motion {
-  &::after {
-   animation: none;
-  }
-
-  &.returning .slide-confirm-knob,
-  &.returning::before,
-  &.returning .slide-confirm-label {
-   transition: none;
-  }
- }
 }
 
 @keyframes slide-confirm-spin {

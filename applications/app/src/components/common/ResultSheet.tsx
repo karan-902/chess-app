@@ -9,6 +9,8 @@ import StatTile from "@gopvp/common/src/components/StatTile/StatTile";
 import { icons } from "@gopvp/common/src/components/images";
 import { vsText } from "@gopvp/app/src/constants/message";
 import { BRAND_LOGO_PATH } from "@gopvp/app/src/constants/asset";
+import { GAMES } from "@gopvp/app/src/config/game";
+import { useReduxSelector } from "@gopvp/app/src/redux/hooks";
 import type { IResultSheetProps } from "@gopvp/app/src/types/component";
 
 export default function ResultSheet({
@@ -26,6 +28,7 @@ export default function ResultSheet({
 }: IResultSheetProps) {
  const TileIcon = tileIcon && icons[tileIcon];
  const isLoading = !tiles;
+ const enteredGame = useReduxSelector((state) => state.game.enteredGame);
 
  return (
   <CustomDrawer
@@ -38,7 +41,10 @@ export default function ResultSheet({
     {isLoading ? (
      <Skeleton variant="circular" customClass="result-logo-skeleton" />
     ) : (
-     <img src={BRAND_LOGO_PATH} alt="" />
+     <img
+      src={enteredGame ? GAMES[enteredGame].module.logoSrc : BRAND_LOGO_PATH}
+      alt=""
+     />
     )}
     <Text customClass="result-title">
      {isLoading ? <Skeleton customClass="text" width={140} /> : title}

@@ -5,7 +5,7 @@ import Button from "@gopvp/common/src/components/Button/Button";
 import CustomDrawer from "@gopvp/common/src/components/Drawer/Drawer";
 import { MATCH_OUTCOME_SUBTITLES } from "@gopvp/common/src/constants/mapper";
 import { backText, chessText } from "@gopvp/common/src/constants/message";
-import { GAME_LOGO_PATH } from "@gopvp/chess/src/constants/asset";
+import { GAME_ICON_PATH } from "@gopvp/chess/src/constants/asset";
 import PayoutTicket from "@gopvp/chess/src/pages/play/PayoutTicket";
 import type { IGameOverOverlayProps } from "@gopvp/chess/src/types/component";
 
@@ -24,7 +24,7 @@ export default function GameOverOverlay({
    customClass={classNames("result-sheet game-over-sheet", tone)}
   >
    <Box customClass="public-heading">
-    <img className="payout-logo" src={GAME_LOGO_PATH} alt={chessText} />
+    <img className="payout-logo" src={GAME_ICON_PATH} alt={chessText} />
     <Text component="h2" customClass="public-title">
      {MATCH_OUTCOME_SUBTITLES[outcome](opponentName)}
     </Text>

@@ -1,5 +1,6 @@
 export const STOCKFISH_WORKER_PATH = "/stockfish/stockfish-18-lite-single.js";
 export const GAME_LOGO_PATH = "/gopvp-chess.webp";
+export const GAME_ICON_PATH = "/gopvp-chess-app-icon.webp";
 
 export const SOUND_FILES = {
  move: "/sounds/move.wav",

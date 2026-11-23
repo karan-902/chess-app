@@ -161,7 +161,6 @@ export interface ICanvasFrame {
  width: number;
  height: number;
  style: CSSStyleDeclaration;
- isReducedMotion: boolean;
 }
 
 export interface ICanvasAnimationProps extends Omit<

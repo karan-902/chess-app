@@ -634,10 +634,6 @@
    height: 1rem;
    color: $gold;
   }
-
-  @include reduced-motion {
-   animation: none;
-  }
  }
 
  &.live-win-name {
@@ -1085,10 +1081,6 @@
 
   .shaking & {
    animation: payout-shake 0.36s cubic-bezier(0.36, 0.07, 0.19, 0.97);
-
-   @include reduced-motion {
-    animation: none;
-   }
   }
 
   > span {
@@ -1177,14 +1169,6 @@
    animation:
     payout-slam 0.3s cubic-bezier(0.5, 0, 0.75, 0) forwards,
     payout-squash 0.22s ease-out 0.3s;
-  }
-
-  @include reduced-motion {
-   .stamped & {
-    animation: none;
-    opacity: 0.85;
-    transform: rotate(-11deg);
-   }
   }
  }
 
@@ -1340,11 +1324,6 @@
    background: currentColor;
    animation: pool-live-pulse 1.4s ease-in-out infinite;
   }
-
-  @include reduced-motion {
-   animation: none;
-   opacity: 0;
-  }
  }
 
  &.pool-card-claim {
@@ -1358,11 +1337,6 @@
    flex-shrink: 0;
    width: 16px;
    height: 16px;
-  }
-
-  @include reduced-motion {
-   animation: none;
-   opacity: 1;
   }
  }
 

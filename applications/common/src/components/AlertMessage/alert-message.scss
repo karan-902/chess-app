@@ -197,21 +197,6 @@
   &:hover::after {
    animation-play-state: paused;
   }
-
-  @include reduced-motion {
-   &::after {
-    animation-name: toast-hold;
-   }
-  }
- }
-}
-
-@keyframes toast-hold {
- from {
-  transform: scaleX(1);
- }
- to {
-  transform: scaleX(1);
  }
 }
 

@@ -179,6 +179,24 @@
   }
  }
 
+ &.tx-processing-chip {
+  flex-shrink: 0;
+  height: auto;
+  padding: 2px 8px;
+  background: textOpacity($textPrimary, 0.06);
+  color: $textSecondary;
+  font-family: $fontOutfitSemiBold;
+  font-size: 12px;
+
+  @include from(phone) {
+   font-size: 13px;
+  }
+
+  .MuiChip-label {
+   padding: 0;
+  }
+ }
+
  &.admin-role {
   flex-shrink: 0;
   height: auto;

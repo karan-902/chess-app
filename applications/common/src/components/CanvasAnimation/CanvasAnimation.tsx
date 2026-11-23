@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 import classNames from "classnames";
-import { shouldReduceMotion } from "@gopvp/common/src/util/motion";
 import { CANVAS_MAX_FRAME_MS } from "@gopvp/common/src/constants/limit";
 import type { ICanvasAnimationProps } from "@gopvp/common/src/types/component";
 import "./canvas-animation.scss";
@@ -20,7 +19,6 @@ export default function CanvasAnimation({
   const ctx = canvas?.getContext("2d");
   if (!canvas || !ctx) return;
   const style = getComputedStyle(canvas);
-  const isReducedMotion = shouldReduceMotion();
   let lastNow = performance.now();
   let elapsed = 0;
   let isOnScreen = true;
@@ -32,7 +30,7 @@ export default function CanvasAnimation({
    const dpr = window.devicePixelRatio;
    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
    ctx.clearRect(0, 0, width, height);
-   const frameData = { elapsed, width, height, style, isReducedMotion };
+   const frameData = { elapsed, width, height, style };
    return latest.current.draw(ctx, frameData);
   };
 

@@ -35,12 +35,9 @@ export function CustomDrawer({
 }: IDrawerProps) {
  const [paper, setPaper] = useState<HTMLDivElement | null>(null);
  const isEnteredRef = useRef(false);
- const isReducedMotion = window.matchMedia(
-  "(prefers-reduced-motion: reduce)",
- ).matches;
 
  useEffect(() => {
-  if (!open || anchor !== "bottom" || !paper || isReducedMotion) return;
+  if (!open || anchor !== "bottom" || !paper) return;
   let lastHeight = paper.offsetHeight;
   let glide: Animation | null = null;
   const observer = new ResizeObserver(() => {
@@ -59,7 +56,7 @@ export function CustomDrawer({
   });
   observer.observe(paper);
   return () => observer.disconnect();
- }, [open, anchor, paper, isReducedMotion]);
+ }, [open, anchor, paper]);
 
  return (
   <MuiDrawer
@@ -71,9 +68,7 @@ export function CustomDrawer({
    disableAutoFocus
    disableRestoreFocus={disableRestoreFocus}
    container={() => document.querySelector(".app-root") as HTMLElement}
-   transitionDuration={
-    isReducedMotion ? 0 : { enter: DRAWER_ENTER_MS, exit: DRAWER_EXIT_MS }
-   }
+   transitionDuration={{ enter: DRAWER_ENTER_MS, exit: DRAWER_EXIT_MS }}
    slotProps={{
     paper: { ref: setPaper },
     transition: {

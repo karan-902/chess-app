@@ -1,10 +1,10 @@
 import { useMemo } from "react";
 import dayjs from "dayjs";
 import classNames from "classnames";
-import { CircularProgress } from "@mui/material";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
+import CustomChip from "@gopvp/common/src/components/Chip/Chip";
 import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
 import VirtualList from "@gopvp/common/src/components/VirtualList/VirtualList";
 import EmptyState from "@gopvp/app/src/components/common/EmptyState";
@@ -98,12 +98,7 @@ function txRow(tx: ITransactionResponse, groupEdgeClass: string) {
         {TRANSACTION_CODE_DESCRIPTIONS[tx.transaction_code]}
        </Text>
        {isPending && (
-        <CircularProgress
-         size={14}
-         color="inherit"
-         aria-label={processingText}
-         className="tx-pending-loader"
-        />
+        <CustomChip label={processingText} customClass="tx-processing-chip" />
        )}
       </Box>
       <Text customClass="meta-text">{formatTime(tx.created)}</Text>

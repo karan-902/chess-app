@@ -24,7 +24,6 @@ import {
  PAYOUT_SPARK_COUNT,
 } from "@gopvp/chess/src/constants/limit";
 import { clamp01, easeOutCubic } from "@gopvp/chess/src/utils/index";
-import { shouldReduceMotion } from "@gopvp/common/src/util/motion";
 import type { IPayoutTicketProps } from "@gopvp/chess/src/types/component";
 
 const STAMPS = {
@@ -118,12 +117,6 @@ export default function PayoutTicket({
   measure();
   let isActive = true;
   document.fonts.ready.then(() => isActive && measure());
-  if (shouldReduceMotion()) {
-   stage.classList.add("rising", "stamped");
-   return () => {
-    isActive = false;
-   };
-  }
 
   const center = (el: HTMLElement) => {
    let x = el.offsetWidth / 2;

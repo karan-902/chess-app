@@ -12,7 +12,6 @@ import {
  MATCH_DECK_PAUSE_MS,
 } from "@gopvp/app/src/constants/limit";
 import type { IMatchDeckProps } from "@gopvp/app/src/types/component";
-import { shouldReduceMotion } from "@gopvp/common/src/util/motion";
 
 const START_SLOTS = [-1, 0, 1];
 const SLOT_PAIRS = [
@@ -37,7 +36,6 @@ export default function MatchDeck({ isRevealed, opponentName }: IMatchDeckProps)
    });
    return;
   }
-  if (shouldReduceMotion()) return;
   let isActive = true;
   let swapMs = MATCH_DECK_SWAP_MS;
 

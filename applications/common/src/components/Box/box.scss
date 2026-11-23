@@ -187,21 +187,11 @@
    &.filled::after {
     transform: none;
    }
-
-   @include reduced-motion {
-    &::after {
-     transition: none;
-    }
-   }
   }
  }
 
  &.auth-password-stage {
   animation: auth-password-enter 0.3s ease-out;
-
-  @include reduced-motion {
-   animation: none;
-  }
  }
 
  &.auth-account-card {
@@ -340,14 +330,6 @@
 
   &.leaving {
    animation: live-win-out 0.6s cubic-bezier(0.64, 0, 0.78, 0) forwards;
-  }
-
-  @include reduced-motion {
-   animation: none;
-
-   &.leaving {
-    animation: none;
-   }
   }
  }
 
@@ -635,13 +617,6 @@
     background: linear-gradient(180deg, $goldLight, $gold);
    }
   }
-
-  @include reduced-motion {
-   .match-card,
-   .match-card-inner {
-    transition: none;
-   }
-  }
  }
 
  &.bet-grid {
@@ -769,11 +744,6 @@
    width: 25%;
    background: $success;
    animation: pool-live-sweep 1.6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
-
-   @include reduced-motion {
-    animation: none;
-    width: 100%;
-   }
   }
  }
 
@@ -928,12 +898,6 @@
    border-top-color: $gold;
    animation: face-off-spin 1.1s linear infinite;
   }
-
-  @include reduced-motion {
-   &::after {
-    animation: none;
-   }
-  }
  }
 
  &.mm-radar {
@@ -1002,16 +966,6 @@
    width: 6.25rem;
    height: 1.875rem;
    object-fit: contain;
-  }
-
-  @include reduced-motion {
-   &::before {
-    animation: none;
-   }
-
-   .mm-radar-head {
-    transition: none;
-   }
   }
  }
 
@@ -1586,11 +1540,6 @@
   display: flex;
   align-items: center;
   gap: 8px;
-
-  .tx-pending-loader {
-   flex-shrink: 0;
-   color: $textSecondary;
-  }
  }
 
  &.room-options {
@@ -1660,10 +1609,6 @@
   border-top-color: $gold;
   border-radius: 50%;
   animation: room-wait-spin 0.8s linear infinite;
-
-  @include reduced-motion {
-   animation-duration: 1.6s;
-  }
  }
  &.match-row-item {
   padding-bottom: 12px;
@@ -1976,12 +1921,6 @@
    background: url("/gopvp-logo.png") center / contain no-repeat;
    filter: grayscale(1) brightness(0.38);
   }
-
-  @include reduced-motion {
-   &::before {
-    filter: none;
-   }
-  }
  }
 
  &.deposit-qr-stage {
@@ -2112,10 +2051,6 @@
   background: $gold;
   transform-origin: left center;
   transition: transform 1s linear;
-
-  @include reduced-motion {
-   transition: none;
-  }
  }
 
  &.flex {
@@ -2343,10 +2278,6 @@
   border-radius: 12px;
   background: $cardBg;
   animation: draw-offer-in 0.3s ease-out;
-
-  @include reduced-motion {
-   animation: none;
-  }
  }
 
  &.gr-draw-offer-copy {
@@ -2382,10 +2313,6 @@
   background: $gold;
   transform-origin: left center;
   animation: draw-offer-timer 15s linear forwards;
-
-  @include reduced-motion {
-   animation: none;
-  }
  }
 
  &.gr-review-controls {
@@ -2449,10 +2376,6 @@
   border-top-color: $gold;
   border-radius: 50%;
   animation: gr-move-spin 0.8s linear infinite;
-
-  @include reduced-motion {
-   animation: none;
-  }
  }
 
  &.gr-premove {
@@ -2904,19 +2827,6 @@
     inset: 2px;
     background: linear-gradient(180deg, $goldLight, $goldMid);
     clip-path: inherit;
-   }
-  }
-
-  @include reduced-motion {
-   .payout-ticket,
-   .payout-beam {
-    transition: none !important;
-   }
-
-   .payout-ticket,
-   .payout-paper::after,
-   .payout-stamp-shadow {
-    animation: none !important;
    }
   }
  }
@@ -3595,10 +3505,6 @@
   > svg {
    flex-shrink: 0;
    transition: transform 0.2s ease-out;
-
-   @include reduced-motion {
-    transition: none;
-   }
   }
 
   &:hover,

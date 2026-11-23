@@ -495,24 +495,3 @@ svg:is(.gr-captured-icon, .gr-premove-piece).dark-piece {
   transform: scale(0.6);
  }
 }
-
-@include reduced-motion {
- .board-preview-ring,
- .board-preview-flash,
- .board-check-ring,
- .chess-piece-slot.captured {
-  animation-duration: 1ms !important;
- }
-
- .board-highlight,
- .board-arrow,
- .piece-glow,
- .square-flash {
-  animation: none;
- }
-
- .piece-danger,
- .piece-in-check {
-  animation: none !important;
- }
-}

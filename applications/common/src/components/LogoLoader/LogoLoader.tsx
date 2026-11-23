@@ -13,9 +13,8 @@ logoImage.src = LOGO_PATH;
 
 const drawBand: ICanvasAnimationProps["draw"] = (
  ctx,
- { elapsed, width, height, isReducedMotion },
+ { elapsed, width, height },
 ) => {
- if (isReducedMotion) return false;
  if (!logoImage.naturalWidth) return true;
  const bandWidth = width * LOGO_LOADER_BAND_RATIO;
  const sweep = (elapsed % LOGO_LOADER_SWEEP_MS) / LOGO_LOADER_SWEEP_MS;

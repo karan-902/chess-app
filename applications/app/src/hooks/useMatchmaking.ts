@@ -12,7 +12,6 @@ import { showAckErrorToast } from "@gopvp/common/src/util/api";
 import { buildMatchUrl } from "@gopvp/app/src/utils";
 import { useGame } from "@gopvp/app/src/hooks/useGame";
 import { useCountdown } from "@gopvp/common/src/hooks/useCountdown";
-import { shouldReduceMotion } from "@gopvp/common/src/util/motion";
 import {
  POOL_TIMEOUT_SECONDS,
  MATCH_REVEAL_MS,
@@ -82,11 +81,10 @@ export function useMatchmaking() {
    setQueueDeadlineAt(null);
    setOpponentName(players?.find((p) => p.id !== myId)?.username ?? "");
    setStatus("revealing");
-   const delay = shouldReduceMotion() ? 0 : MATCH_REVEAL_MS;
    revealTimerRef.current = setTimeout(() => {
     setStatus("found");
     navigate(buildMatchUrl(game, matchId), { replace: true });
-   }, delay);
+   }, MATCH_REVEAL_MS);
   },
   [game, navigate, myId, dispatch],
  );

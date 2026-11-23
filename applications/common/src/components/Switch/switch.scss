@@ -71,11 +71,4 @@
    outline-color: $gold;
   }
  }
-
- @include reduced-motion {
-  &::before,
-  .switch-thumb {
-   transition: none;
-  }
- }
 }

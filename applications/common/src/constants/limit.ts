@@ -1,4 +1,3 @@
-export const LOW_END_DEVICE_MEMORY_GB = 4;
 export const COMPACT_AMOUNT_FROM = 1000;
 export const DRAWER_ENTER_MS = 420;
 export const DRAWER_EXIT_MS = 260;

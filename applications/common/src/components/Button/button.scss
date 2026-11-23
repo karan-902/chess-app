@@ -110,10 +110,6 @@
   &.on-dark {
    color: $textInverse;
   }
-
-  @include reduced-motion {
-   animation-duration: 1.6s;
-  }
  }
 
  &.size-small {
@@ -513,10 +509,6 @@
     font-family: $fontOutfitSemiBold;
     color: $textTertiary;
    }
-  }
-
-  @include reduced-motion {
-   transition: none;
   }
  }
 

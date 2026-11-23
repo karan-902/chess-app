@@ -316,9 +316,5 @@
    border-color: $borderSubtle;
    color: $textTertiary;
   }
-
-  @include reduced-motion {
-   transition: none;
-  }
  }
 }
