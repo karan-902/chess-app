@@ -4,5 +4,5 @@ export const PVC_RESULTS: Record<MatchOutcome, MatchResult> = {
  win: "WON",
  loss: "BET",
  draw: "DRAW",
- match_cancelled: "MATCH_CANCELLED",
+ match_cancelled: "CANCEL",
 };

@@ -2,7 +2,7 @@
 
 .common-drawer {
  .MuiDrawer-paper {
-  background: $appSheet;
+  background: $cardBg;
   padding: 0.6rem;
   display: flex;
   flex-direction: column;
@@ -14,26 +14,21 @@
 
  &.MuiDrawer-anchorRight .MuiDrawer-paper {
   width: min(78%, 300px);
-  border-left: 1px solid $appCardBorder;
+  border-left: 1px solid $borderSubtle;
  }
 
  &.MuiDrawer-anchorLeft .MuiDrawer-paper {
   width: min(78%, 300px);
-  border-right: 1px solid $appCardBorder;
+  border-right: 1px solid $borderSubtle;
  }
 
  &.MuiDrawer-anchorBottom .MuiDrawer-paper {
   width: 100%;
   max-height: 85%;
-  background: $appSheetFill;
+  background: $cardBg;
   box-shadow: none !important;
   overflow-x: hidden;
   padding: 3.25rem 1.25rem 1.75rem;
-
-  :root[data-theme="light"] & {
-   --neo-outline: var(--app-sheet-card-border);
-   --neo-edge: var(--app-sheet-card-edge);
-  }
 
   &::before {
    content: "";
@@ -44,10 +39,6 @@
    height: 5px;
    background: $white;
    transform: translateX(-50%);
-
-   :root[data-theme="light"] & {
-    background: $primaryContrast;
-   }
   }
  }
 
@@ -57,18 +48,12 @@
 
 
  &.result-sheet.neutral .MuiDrawer-paper {
-  background:
-   radial-gradient(
-    8.75rem 8rem at 50% 4.0625rem,
-    textOpacity($auraIndigo, 0.28),
-    transparent
-   ),
-   $appSheetFill;
+  background: $cardBg;
  }
 
  &.game-over-sheet.win .MuiDrawer-paper,
  &.game-over-sheet.loss .MuiDrawer-paper {
-  background: $appSheetFill;
+  background: $cardBg;
  }
 
  &.game-over-sheet .MuiDrawer-paper {
@@ -130,16 +115,17 @@
  &.result-sheet:not(.game-over-sheet) .MuiDrawer-paper,
  &.wallet-sheet .MuiDrawer-paper,
  &:has(.resign-sheet) .MuiDrawer-paper,
- &.game-over-sheet.loss .MuiDrawer-paper {
-  border-top: 1px solid $minimalBorderSubtle;
+ &.game-over-sheet.loss .MuiDrawer-paper,
+ &.game-over-sheet:has(.payout-stage.draw) .MuiDrawer-paper {
+  border-top: 1px solid $borderSubtle;
   border-radius: 16px 16px 0 0 !important;
-  background: $minimalCardBg;
+  background: $cardBg;
 
   &::before {
    width: 2.5rem;
    height: 4px;
    border-radius: 999px;
-   background: $minimalBorderStrong !important;
+   background: $borderStrong !important;
   }
  }
 
@@ -154,7 +140,7 @@
   padding-top: 1.75rem;
  }
 
- &.wallet-sheet-success .MuiDrawer-paper {
+ &.wallet-sheet .MuiDrawer-paper:has(.modal-success-stage) {
   min-height: 0;
  }
 }

@@ -12,10 +12,10 @@
   gap: 0.5rem;
   width: 100%;
   height: 3.375rem;
-  border-bottom: 1px solid textOpacity($appText, 0.22);
+  border-bottom: 1px solid textOpacity($textPrimary, 0.22);
   font-family: $fontOutfitSemiBold;
   font-size: 18px;
-  color: $appText;
+  color: $textPrimary;
   transition: border-color 0.15s ease;
 
   @include from(phone) {
@@ -50,7 +50,7 @@
    text-align: inherit;
 
    &::placeholder {
-    color: $appTextPlaceholder;
+    color: $textTertiary;
     opacity: 1;
    }
 
@@ -60,7 +60,7 @@
     :-webkit-autofill:focus,
     :autofill
    ) {
-    -webkit-text-fill-color: $appText;
+    -webkit-text-fill-color: $textPrimary;
     caret-color: $gold;
     -webkit-box-shadow: none;
     box-shadow: none;
@@ -75,7 +75,7 @@
 
   @media (hover: hover) {
    &:hover {
-    border-color: textOpacity($appText, 0.45);
+    border-color: textOpacity($textPrimary, 0.45);
    }
   }
 
@@ -86,7 +86,7 @@
 
  &.error .input-row,
  &.error .input-row:focus-within {
-  border-bottom: 1.5px solid $paleRed;
+  border-bottom: 1.5px solid $error;
  }
 
  &.disabled .input-row {
@@ -97,11 +97,11 @@
   display: inline-flex;
   flex-shrink: 0;
   align-items: center;
-  color: $appText;
+  color: $textPrimary;
  }
 
  .input-password-toggle {
-  color: textOpacity($appText, 0.7);
+  color: textOpacity($textPrimary, 0.7);
   padding: 0;
   svg {
    width: 1.125rem;
@@ -117,7 +117,7 @@
   font-size: 44px;
   line-height: 1.1;
   text-align: center;
-  color: $minimalTextPrimary;
+  color: $textPrimary;
 
   @include from(phone) {
    font-size: 48px;
@@ -133,11 +133,11 @@
   }
 
   input {
-   caret-color: $minimalGold;
+   caret-color: $gold;
   }
 
   input::placeholder {
-   color: textOpacity($minimalTextPrimary, 0.3);
+   color: textOpacity($textPrimary, 0.3);
   }
 
   &:focus-within {
@@ -153,7 +153,7 @@
   line-height: 1.1;
   background: transparent;
   text-align: center;
-  color: $minimalTextPrimary;
+  color: $textPrimary;
 
   @include from(phone) {
    font-size: 44px;
@@ -161,13 +161,13 @@
 
   input {
    text-align: center;
-   caret-color: $minimalGold;
-   -webkit-text-fill-color: $minimalTextPrimary;
+   caret-color: $gold;
+   -webkit-text-fill-color: $textPrimary;
   }
 
   input::placeholder {
-   color: textOpacity($minimalTextPrimary, 0.3);
-   -webkit-text-fill-color: textOpacity($minimalTextPrimary, 0.3);
+   color: textOpacity($textPrimary, 0.3);
+   -webkit-text-fill-color: textOpacity($textPrimary, 0.3);
   }
 
   &:focus-within {
@@ -177,17 +177,17 @@
 
  &.amount-input-hero.error .input-row {
   border: none;
-  color: $minimalError;
+  color: $error;
  }
 
  &.match-id-input {
   .input-row {
    padding: 0 0.875rem;
-   background: $appSecondary;
-   color: $appTextMuted;
+   background: $surfaceElevated;
+   color: $textSecondary;
 
    input {
-    -webkit-text-fill-color: $appTextMuted;
+    -webkit-text-fill-color: $textSecondary;
    }
   }
 
@@ -198,10 +198,10 @@
 
  &.match-id-input .input-row {
   height: 3.125rem;
-  border: 1px solid $minimalInputBorder;
-  border-radius: $radius-minimal;
-  background: $minimalInputBg;
-  color: $minimalTextPrimary;
+  border: 1px solid $inputBorder;
+  border-radius: 12px;
+  background: $inputBg;
+  color: $textPrimary;
   font-size: 14px;
 
   @include from(phone) {
@@ -209,7 +209,7 @@
   }
 
   input {
-   -webkit-text-fill-color: $minimalTextPrimary;
+   -webkit-text-fill-color: $textPrimary;
   }
  }
 
@@ -222,12 +222,12 @@
    box-sizing: border-box;
    height: 3.125rem;
    padding: 0 1rem;
-   border: 1px solid $minimalInputBorder;
-   border-radius: $radius-minimal;
-   background: $minimalInputBg;
+   border: 1px solid $inputBorder;
+   border-radius: 12px;
+   background: $inputBg;
    font-family: $fontOutfitMedium;
    font-size: 16px;
-   color: $minimalTextPrimary;
+   color: $textPrimary;
    transition:
     border-color 0.15s ease,
     background-color 0.15s ease;
@@ -241,11 +241,11 @@
    }
 
    input {
-    caret-color: $minimalTextPrimary;
+    caret-color: $textPrimary;
 
     &::placeholder {
      font-family: $fontOutfitRegular;
-     color: $minimalTextTertiary;
+     color: $textTertiary;
     }
 
     &:where(
@@ -254,59 +254,39 @@
      :-webkit-autofill:focus,
      :autofill
     ) {
-     -webkit-text-fill-color: $minimalTextPrimary;
-     caret-color: $minimalTextPrimary;
+     -webkit-text-fill-color: $textPrimary;
+     caret-color: $textPrimary;
     }
    }
 
    @media (hover: hover) {
     &:hover {
-     border-color: $minimalInputBorderHover;
+     border-color: $inputBorderHover;
     }
    }
 
    &:focus-within {
-    border: 1px solid $minimalBorderFocus;
+    border: 1px solid $borderFocus;
    }
   }
 
   &.error .input-row,
   &.error .input-row:focus-within {
-   border: 1px solid $minimalError;
+   border: 1px solid $error;
   }
 
   &.disabled .input-row {
    opacity: 1;
-   background: $minimalInputBgDisabled;
-   color: $minimalTextTertiary;
+   background: $inputBgDisabled;
+   color: $textTertiary;
   }
 
   .input-password-toggle {
-   color: $minimalTextSecondary;
+   color: $textSecondary;
 
    svg {
     width: 1.375rem;
     height: 1.375rem;
-   }
-  }
- }
-
- &.admin-input {
-  gap: $space-4;
-
-  .input-row {
-   height: 3rem;
-   padding: 8px;
-   box-sizing: border-box;
-   border: 1px solid $appCardBorder;
-   border-radius: 3px;
-   background: $white;
-   font-family: $fontOutfitRegular;
-   font-size: max(1rem, 16px);
-   transition: border-color 0.15s ease;
-
-   &:focus-within {
-    outline: 1px solid #0a193e;
    }
   }
  }

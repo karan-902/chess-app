@@ -128,11 +128,19 @@ export function CustomSelect({
     placeholder={placeholder}
     disabled={disabled}
     error={isError}
-    onFocus={openMenu}
+    onFocus={(e) => {
+     e.target.select();
+     openMenu();
+    }}
     onClick={openMenu}
     onBlur={handleBlur}
     onKeyDown={handleKeyDown}
     onChange={(e) => {
+     const nextSearch = e.target.value.trim().toLowerCase();
+     const hasMatch = options.some((option) =>
+      option.label.toLowerCase().includes(nextSearch),
+     );
+     if (!hasMatch) return;
      setQuery(e.target.value);
      setActiveIndex(0);
      setOpen(true);

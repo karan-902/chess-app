@@ -13,14 +13,14 @@
  .MuiPaper-root {
   @include neo-plunk;
   border-radius: 5px;
-  margin-top: $space-4;
+  margin-top: 4px;
  }
  &.filter-dropdown-menu {
   .MuiPaper-root {
    min-width: 11rem;
-   border: 1px solid $minimalBorderStrong;
-   border-radius: $radius-minimal;
-   background: $minimalSurfaceElevated;
+   border: 1px solid $borderStrong;
+   border-radius: 12px;
+   background: $surfaceElevated;
   }
 
   .common-menu-item {
@@ -31,7 +31,7 @@
    padding: 12px;
    font-family: $fontOutfitSemiBold !important;
    font-size: 14px;
-   color: $minimalTextPrimary;
+   color: $textPrimary;
 
    @include from(phone) {
     padding: 13px;
@@ -39,7 +39,7 @@
    }
 
    &:hover {
-    background: textOpacity($minimalTextPrimary, 0.06);
+    background: textOpacity($textPrimary, 0.06);
    }
 
    &.Mui-selected,
@@ -48,13 +48,13 @@
    }
 
    svg {
-    color: $minimalGold;
+    color: $gold;
    }
   }
 
   .MuiButtonBase-root.Mui-focusVisible {
-   background: textOpacity($minimalTextPrimary, 0.06);
-   color: $minimalTextPrimary;
+   background: textOpacity($textPrimary, 0.06);
+   color: $textPrimary;
   }
  }
 }

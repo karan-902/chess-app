@@ -8,7 +8,7 @@ import {
  // Flame,
  Globe,
  // Mail,
- Moon,
+ // Moon,
  SquarePen,
  // Star,
  // Trophy,
@@ -17,7 +17,7 @@ import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Card from "@gopvp/common/src/components/Card/Card";
 import Button from "@gopvp/common/src/components/Button/Button";
-import CustomSwitch from "@gopvp/common/src/components/Switch/Switch";
+// import CustomSwitch from "@gopvp/common/src/components/Switch/Switch";
 // import CustomChip from "@gopvp/common/src/components/Chip/Chip";
 import CustomAvatar from "@gopvp/common/src/components/Avatar/Avatar";
 import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
@@ -26,14 +26,16 @@ import ProfileSkeleton from "@gopvp/app/src/components/common/ProfileSkeleton";
 import UsernameField from "@gopvp/app/src/components/common/UsernameField";
 import { useReduxSelector, useReduxDispatch } from "@gopvp/app/src/redux/hooks";
 import sessionService from "@gopvp/common/src/util/sessionService";
-import { useAppTheme } from "@gopvp/app/src/context/ThemeContext";
+// import { useAppTheme } from "@gopvp/app/src/context/ThemeContext";
 import { useGameHistory } from "@gopvp/app/src/hooks/useGameHistory";
 import {
  callAPIInterface,
+ getApiErrorResponse,
  showApiErrorToast,
 } from "@gopvp/common/src/util/api";
+import { ERROR_TYPES } from "@gopvp/common/src/constants/mapper";
 import {
- formatAmount,
+ formatCompactAmount,
  formatNumber,
  shortenUsername,
 } from "@gopvp/common/src/util/format";
@@ -48,8 +50,8 @@ import {
  editText,
  // ratingsText,
  saveChangesText,
- appearanceText,
- darkModeText,
+ // appearanceText,
+ // darkModeText,
  accountText,
  // emailText,
  countryText,
@@ -88,7 +90,7 @@ function EditProfileDrawer({
   },
   enableReinitialize: true,
   validationSchema: profileEditSchema,
-  onSubmit: async (values, { setSubmitting }) => {
+  onSubmit: async (values, { setSubmitting, setStatus }) => {
    try {
     const updated = await callAPIInterface<
      IProfileResponse,
@@ -97,7 +99,9 @@ function EditProfileDrawer({
     await sessionService.updateSession<ILoginResponse>(updated);
     onClose();
    } catch (err) {
-    showApiErrorToast(err);
+    if (getApiErrorResponse(err)?.data?.type === ERROR_TYPES.USERNAME_TAKEN)
+     setStatus({ takenUsername: values.username.trim() });
+    else showApiErrorToast(err);
    } finally {
     setSubmitting(false);
    }
@@ -148,7 +152,7 @@ function EditProfileDrawer({
 export default function Profile() {
  const session = useReduxSelector((state) => state.auth.session);
  const dispatch = useReduxDispatch();
- const { mode, toggleTheme } = useAppTheme();
+ // const { mode, toggleTheme } = useAppTheme();
  const [editOpen, setEditOpen] = useState(false);
  const [loading, setLoading] = useState(true);
 
@@ -180,7 +184,7 @@ export default function Profile() {
   { label: winsText, value: formatNumber(stats?.wins ?? MATCHES_STATS_FALLBACK) },
   {
    label: earningsText,
-   value: formatAmount(stats?.gross_income ?? MATCHES_STATS_FALLBACK),
+   value: formatCompactAmount(stats?.gross_income ?? MATCHES_STATS_FALLBACK),
   },
  ];
 
@@ -366,7 +370,7 @@ export default function Profile() {
     <ProfileSkeleton />
    )}
 
-   <Text
+   {/* <Text
     component="h3"
     customClass="subsection-heading profile-section-heading"
    >
@@ -386,7 +390,7 @@ export default function Profile() {
       customClass="square-toggle"
      />
     </Box>
-   </Card>
+   </Card> */}
 
    {/* <Text component="h3" customClass="subsection-heading section-heading">
     {ratingsText}

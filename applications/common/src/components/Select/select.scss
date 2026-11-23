@@ -4,16 +4,26 @@
  position: relative;
  width: 100%;
 
+ &.admin-filter {
+  @include from(tablet) {
+   width: 280px;
+  }
+
+  .MuiInputBase-root {
+   height: 42px;
+  }
+ }
+
  .MuiInputBase-root {
   box-sizing: border-box;
   height: 3.125rem;
   padding: 0 1rem;
-  background: $minimalInputBg;
-  border-radius: $radius-minimal;
+  background: $inputBg;
+  border-radius: 12px;
   box-shadow: none;
   font-family: $fontOutfitMedium;
   font-size: 16px;
-  color: $minimalTextPrimary;
+  color: $textPrimary;
 
   @include from(phone) {
    font-size: 17px;
@@ -26,43 +36,43 @@
   .MuiInputBase-input {
    height: 100%;
    padding: 0;
-   caret-color: $minimalTextPrimary;
+   caret-color: $textPrimary;
   }
 
   .MuiOutlinedInput-notchedOutline {
-   border: 1px solid $minimalInputBorder;
-   border-radius: $radius-minimal;
+   border: 1px solid $inputBorder;
+   border-radius: 12px;
    transition: border-color 0.15s ease;
   }
 
   @media (hover: hover) {
    &:hover:not(.Mui-focused):not(.Mui-error):not(.Mui-disabled)
     .MuiOutlinedInput-notchedOutline {
-    border-color: $minimalInputBorderHover;
+    border-color: $inputBorderHover;
    }
   }
 
   &.Mui-focused .MuiOutlinedInput-notchedOutline {
    border-width: 1px;
-   border-color: $minimalBorderFocus;
+   border-color: $borderFocus;
   }
 
   &.Mui-error .MuiOutlinedInput-notchedOutline {
-   border-color: $minimalError;
+   border-color: $error;
   }
 
   &.Mui-disabled {
-   background: $minimalInputBgDisabled;
+   background: $inputBgDisabled;
 
    .MuiInputBase-input {
-    -webkit-text-fill-color: $minimalTextTertiary;
+    -webkit-text-fill-color: $textTertiary;
    }
   }
  }
 
  input::placeholder {
   font-family: $fontOutfitRegular;
-  color: $minimalTextTertiary;
+  color: $textTertiary;
   opacity: 1;
  }
 
@@ -70,7 +80,7 @@
   flex-shrink: 0;
   width: 1.25rem;
   height: 1.25rem;
-  color: $minimalTextSecondary;
+  color: $textSecondary;
   cursor: pointer;
   transition: transform 0.2s ease;
 
@@ -81,7 +91,7 @@
 }
 
 .common-select-popper {
- z-index: $z-dropdown;
+ z-index: 1400;
 }
 
 .common-select-menu.MuiPaper-root {
@@ -94,8 +104,8 @@
   display: none;
  }
  border-radius: 8px;
- background: $minimalSurfaceElevated;
- border: 1px solid $minimalBorderStrong;
+ background: $surfaceElevated;
+ border: 1px solid $borderStrong;
  box-shadow: 0 0.75rem 1.5rem textOpacity($black, 0.45);
  animation: select-menu-in 0.14s ease-out;
 
@@ -113,27 +123,27 @@
   padding: 0 1rem;
   font-family: $fontOutfitMedium;
   font-size: 16px;
-  color: $minimalTextSecondary;
+  color: $textSecondary;
 
   @include from(phone) {
    font-size: 17px;
   }
 
   & + .MuiMenuItem-root {
-   border-top: 1px solid $minimalBorderSubtle;
+   border-top: 1px solid $borderSubtle;
   }
 
   &:hover,
   &.active {
-   background: textOpacity($minimalTextPrimary, 0.06);
-   color: $minimalTextPrimary;
+   background: textOpacity($textPrimary, 0.06);
+   color: $textPrimary;
   }
 
   &.Mui-selected,
   &.Mui-selected:hover,
   &.Mui-selected.active {
-   background: textOpacity($minimalGold, 0.08);
-   color: $minimalGold;
+   background: textOpacity($gold, 0.08);
+   color: $gold;
    font-family: $fontOutfitSemiBold;
 
    &::before {
@@ -143,13 +153,13 @@
     bottom: 0;
     left: 0;
     width: 3px;
-    background: $minimalGold;
+    background: $gold;
    }
   }
 
   &.Mui-disabled {
    opacity: 1;
-   color: $minimalTextTertiary;
+   color: $textTertiary;
   }
  }
 }

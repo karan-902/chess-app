@@ -3,8 +3,6 @@ import { formatAmount } from "@gopvp/common/src/util/format";
 export const rejoinMatchText = "Rejoin Match";
 export const matchStillLiveText = (opponentName: string) =>
  `Your match with ${opponentName} is still live. Reconnect now before it's forfeited.`;
-export const feeText = "Fee";
-export const opponentText = "Opponent";
 export const rejoinNowText = "Rejoin Now";
 export const exitText = "Exit";
 export const forfeitGameText = "Forfeit the game?";
@@ -28,7 +26,14 @@ export const continueWithGoogleText = "Continue with Google";
 export const emailRequiredText = "Email is required";
 export const enterValidEmailText = "Enter a valid email";
 export const passwordRequiredText = "Password is required";
-export const passwordMinLengthText = "Password must be at least 8 characters";
+export const weakPasswordText =
+ "Use 8+ characters with upper and lower case, a number and a symbol";
+export const passwordTooLongText = (max: number) =>
+ `Password must be ${max} characters or fewer`;
+export const passwordWeakText = "Weak";
+export const passwordFairText = "Fair";
+export const passwordAlmostText = "Almost there";
+export const passwordStrongText = "Very Strong";
 export const usernameMaxLengthText =
  "Username can't be longer than 10 characters.";
 export const countryRequiredText = "Country is required";
@@ -56,6 +61,8 @@ export const enterUsernameText = "Enter username";
 export const clearUsernameText = "Clear username";
 export const suggestionText = "Suggestion:";
 export const newSuggestionText = "New suggestion";
+export const usernameTakenText = "Username already taken.";
+export const tryText = "Try:";
 export const countryText = "Country";
 export const registerText = "Register";
 export const newDeviceDetectedText = "New device detected";
@@ -179,8 +186,6 @@ export const matchIdText = "Match ID";
 export const beatsYouText = (name: string) => `${name} beats you`;
 export const beatsText = (winner: string, loser: string) =>
  `${winner} beats ${loser}`;
-export const qrExpiredText =
- "This QR has expired — go back and generate a new one.";
 export const paymentReceivedText = "Payment received!";
 export const withdrawText = "Withdraw";
 export const onlyWinningsWithdrawableText =
@@ -193,7 +198,6 @@ export const maxWithdrawalAmountText = (max: number) =>
 export const insufficientWithdrawableText = "Insufficient withdrawable balance";
 export const enterDestinationText = "Enter a destination address";
 export const withdrawalCompletedText = "Withdrawal completed";
-export const withdrawalProcessingText = "Withdrawal processing";
 export const withdrawalFailedText = "Withdrawal failed, amount returned";
 export const noRankedPlayersText = "No Ranked Players Yet";
 export const winToRankText = "Win a match to get your name on the board.";
@@ -234,7 +238,6 @@ export const poweredByText = "POWERED BY";
 export const totalBalanceText = "Total Balance";
 export const withdrawBalanceText = "Withdrawable";
 export const transactionsText = "Transactions";
-export const pendingText = "Pending";
 export const processingText = "Processing";
 export const noTransactionsYetText = "No Transactions Yet";
 export const transactionsEmptyText =
@@ -248,7 +251,7 @@ export const ratingsText = "Ratings";
 export const saveChangesText = "Save Changes";
 export const wherePlayingFromText = "Where are you playing from?";
 export const pickCountryToFinishText = "pick your country to finish setting up";
-export const continueText = "Continue";
+export const nextText = "Next";
 export const selectCountryText = "Select country";
 export const walletText = "Wallet";
 export const logOutText = "Logout";

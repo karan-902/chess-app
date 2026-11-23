@@ -13,13 +13,13 @@
  }
 
  &.match-ticket-canvas {
-  --ticket-paper-top: #{$minimalPaper};
-  --ticket-paper-bottom: #{$minimalPaperShade};
-  --ticket-ink: #{$minimalTextInverse};
-  --ticket-muted: #{$minimalTextTertiary};
-  --ticket-gold: #{$minimalGold};
-  --ticket-danger: #{$minimalError};
-  --ticket-slot: #{$minimalBorderStrong};
+  --ticket-paper-top: #{$paper};
+  --ticket-paper-bottom: #{$paperShade};
+  --ticket-ink: #{$textInverse};
+  --ticket-muted: #{$textTertiary};
+  --ticket-gold: #{$gold};
+  --ticket-danger: #{$error};
+  --ticket-slot: #{$borderStrong};
   --ticket-stub: #{list.nth(list.nth($poolBlocks, 1), 1)};
   --ticket-stub-ink: #{list.nth(list.nth($poolBlocks, 1), 2)};
   --ticket-confirmed: #{$goldSolid};
@@ -41,9 +41,9 @@
  }
 
  &.board-preview-canvas {
-  --preview-edge: #{$minimalBorderStrong};
-  --preview-gold: #{$minimalGold};
-  --preview-danger: #{$minimalError};
+  --preview-edge: #{$borderStrong};
+  --preview-gold: #{$gold};
+  --preview-danger: #{$error};
   width: 100%;
   height: 100%;
   font-family: $fontOutfitExtraBold;

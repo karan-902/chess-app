@@ -26,8 +26,8 @@ $pieceFill: 92%;
  aspect-ratio: 1 / 1;
  border-radius: 0;
  overflow: hidden;
- border: 1px solid $minimalBorderStrong;
- background: $minimalBorderStrong;
+ border: 1px solid $borderStrong;
+ background: $borderStrong;
  touch-action: none;
 
  canvas {
@@ -42,8 +42,8 @@ $pieceFill: 92%;
  grid-template-columns: repeat(8, 1fr);
  border-radius: 0;
  overflow: hidden;
- border: 1px solid $minimalBorderStrong;
- background: $minimalBorderStrong;
+ border: 1px solid $borderStrong;
+ background: $borderStrong;
  touch-action: none;
  will-change: transform;
 }
@@ -119,7 +119,7 @@ $pieceFill: 92%;
  align-items: center;
  justify-content: center;
  touch-action: none;
- z-index: $z-overlay;
+ z-index: 2;
  outline: none;
  will-change: transform;
 
@@ -133,7 +133,7 @@ $pieceFill: 92%;
  }
 
  &.moving {
-  z-index: $z-top;
+  z-index: 3;
  }
 
  &.captured {
@@ -152,7 +152,7 @@ $pieceFill: 92%;
  font-size: 10px;
  line-height: 1;
  pointer-events: none;
- z-index: $z-top;
+ z-index: 3;
 
  @include from(tablet) {
   font-size: 12px;
@@ -177,7 +177,7 @@ svg.chess-piece-svg {
  height: $pieceFill;
  pointer-events: none;
  position: relative;
- z-index: $z-overlay;
+ z-index: 2;
  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.4));
  will-change: transform;
 
@@ -197,12 +197,12 @@ svg.gr-captured-icon {
 }
 
 svg:is(.gr-captured-icon, .gr-premove-piece).dark-piece {
- filter: drop-shadow(1px 0 0 $minimalTextPrimary)
-  drop-shadow(-1px 0 0 $minimalTextPrimary)
-  drop-shadow(0 1px 0 $minimalTextPrimary)
-  drop-shadow(0 -1px 0 $minimalTextPrimary)
-  drop-shadow(0.7px 0.7px 0 $minimalTextPrimary)
-  drop-shadow(-0.7px -0.7px 0 $minimalTextPrimary);
+ filter: drop-shadow(1px 0 0 $textPrimary)
+  drop-shadow(-1px 0 0 $textPrimary)
+  drop-shadow(0 1px 0 $textPrimary)
+  drop-shadow(0 -1px 0 $textPrimary)
+  drop-shadow(0.7px 0.7px 0 $textPrimary)
+  drop-shadow(-0.7px -0.7px 0 $textPrimary);
 }
 
 .legal-dot {
@@ -212,7 +212,7 @@ svg:is(.gr-captured-icon, .gr-premove-piece).dark-piece {
  border-radius: 50%;
  background: textOpacity($gold, 0.65);
  pointer-events: none;
- z-index: $z-top;
+ z-index: 3;
 }
 
 .legal-capture-ring {
@@ -221,7 +221,7 @@ svg:is(.gr-captured-icon, .gr-premove-piece).dark-piece {
  border: 4px solid textOpacity($gold, 0.3);
  border-radius: 50%;
  pointer-events: none;
- z-index: $z-top;
+ z-index: 3;
 }
 
 .legal-dot-premove {
@@ -238,7 +238,7 @@ svg:is(.gr-captured-icon, .gr-premove-piece).dark-piece {
  border-radius: 50%;
  background: rgba(220, 50, 50, 0.25);
  pointer-events: none;
- z-index: $z-top;
+ z-index: 3;
  animation: chess-water-ripple 1.4s ease-out infinite;
 }
 
@@ -354,7 +354,7 @@ svg:is(.gr-captured-icon, .gr-premove-piece).dark-piece {
  will-change: transform, opacity;
 
  &.sweep {
-  z-index: $z-overlay;
+  z-index: 2;
   height: 100%;
   overflow: visible;
 
@@ -388,7 +388,7 @@ svg:is(.gr-captured-icon, .gr-premove-piece).dark-piece {
  pointer-events: none;
 
  &.danger {
-  border-color: $paleRed;
+  border-color: $error;
  }
 }
 
@@ -398,7 +398,7 @@ svg:is(.gr-captured-icon, .gr-premove-piece).dark-piece {
  left: 0;
  width: 12.5%;
  height: 12.5%;
- background: textOpacity($paleRed, 0.55);
+ background: textOpacity($error, 0.55);
  animation: board-fade-out 0.42s linear both;
  pointer-events: none;
 }
@@ -408,7 +408,7 @@ svg:is(.gr-captured-icon, .gr-premove-piece).dark-piece {
  width: 12.5%;
  height: 12.5%;
  border-radius: 50%;
- border: 2px solid $paleRed;
+ border: 2px solid $error;
  box-sizing: border-box;
  animation: board-check-ring 0.75s cubic-bezier(0.25, 1, 0.5, 1) 2 both;
  pointer-events: none;
@@ -420,7 +420,7 @@ svg:is(.gr-captured-icon, .gr-premove-piece).dark-piece {
  width: 100%;
  height: 100%;
  pointer-events: none;
- z-index: $z-annotation;
+ z-index: 4;
 }
 
 .board-highlight {

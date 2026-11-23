@@ -2,7 +2,7 @@
 
 .common-label {
  font-family: $fontOutfitSemiBold !important;
- color: $appText !important;
+ color: $textPrimary !important;
 
  &.wallet-label,
  &.wallet-field-label {
@@ -13,7 +13,7 @@
   }
  }
  &.wallet-label {
-  color: $appText !important;
+  color: $textPrimary !important;
   text-align: center;
  }
  &.match-id-label {
@@ -38,7 +38,7 @@
   line-height: 1.25;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: textOpacity($appText, 0.5) !important;
+  color: textOpacity($textPrimary, 0.5) !important;
 
   @include from(tablet) {
    font-size: 13px;
@@ -46,7 +46,7 @@
  }
 
  :is(.match-id-input, .amount-input-hero) > & {
-  color: $minimalTextTertiary !important;
+  color: $textTertiary !important;
  }
 
  .common-input.form-input > &,
@@ -55,7 +55,7 @@
   font-size: 15px;
   letter-spacing: 0;
   text-transform: none;
-  color: $minimalTextPrimary !important;
+  color: $textPrimary !important;
 
   @include from(phone) {
    font-size: 16px;
@@ -67,14 +67,5 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
- }
-
- &.admin-input-label {
-  margin: 0;
-  font-family: $fontOutfitMedium !important;
-  font-size: 0.9rem !important;
-  letter-spacing: 0 !important;
-  text-transform: none !important;
-  color: $appText !important;
  }
 }

@@ -18,6 +18,7 @@ import { setActivePage } from "@gopvp/app/src/redux/game/slice";
 import { formatAmount, shortenUsername } from "@gopvp/common/src/util/format";
 import { getGameFromPath, getGamePath } from "@gopvp/app/src/utils";
 import { NAV_ITEMS } from "@gopvp/app/src/constants/option";
+import { BRAND_LOGO_PATH } from "@gopvp/app/src/constants/asset";
 import {
  profileText,
  logOutText,
@@ -58,7 +59,7 @@ export default function Header() {
      title={goToPlayText}
      onClick={() => dispatch(setActivePage("PLAY"))}
     >
-     <img src="/gopvp-logo.png" alt="gopvp-logo" />
+     <img src={BRAND_LOGO_PATH} alt={goToPlayText} />
     </Link>
    }
    bottomSlot={

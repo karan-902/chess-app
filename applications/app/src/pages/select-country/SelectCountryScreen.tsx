@@ -16,7 +16,7 @@ import type {
 import type { ISelectCountryScreenProps } from "@gopvp/common/src/types/component";
 import {
  wherePlayingFromText,
- continueText,
+ nextText,
 } from "@gopvp/app/src/constants/message";
 import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
 import { formSubmitHandler } from "@gopvp/common/src/util/form";
@@ -72,7 +72,7 @@ export default function SelectCountryScreen({
     disabled={!formik.values.country || formik.isSubmitting}
     isLoading={formik.isSubmitting}
    >
-    {continueText}
+    {nextText}
    </Button>
   </Box>
  );

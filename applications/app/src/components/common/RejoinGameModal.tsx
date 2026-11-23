@@ -3,8 +3,8 @@ import CustomDrawer from "@gopvp/common/src/components/Drawer/Drawer";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
-import SheetActions from "@gopvp/common/src/components/SheetActions/SheetActions";
 import { icons } from "@gopvp/common/src/components/images";
+import MatchTicket from "@gopvp/app/src/components/common/MatchTicket";
 import { useCountdown } from "@gopvp/common/src/hooks/useCountdown";
 import { useSocket } from "@gopvp/app/src/context/SocketContext";
 import { useReduxSelector, useReduxDispatch } from "@gopvp/app/src/redux/hooks";
@@ -21,8 +21,6 @@ import { navigateTo } from "@gopvp/common/src/util/navigationService";
 import {
  rejoinMatchText,
  matchStillLiveText,
- feeText,
- opponentText,
  rejoinNowText,
  exitText,
  forfeitGameText,
@@ -30,11 +28,15 @@ import {
  forfeitAndExitText,
  matchOverText,
  amountText,
+ entryText,
+ winText,
+ poolMinutesText,
 } from "@gopvp/app/src/constants/message";
 import {
  keepPlayingText,
  closeText,
 } from "@gopvp/common/src/constants/message";
+import { MS_PER_MINUTE } from "@gopvp/app/src/constants/limit";
 import {
  MATCH_RESULT_OUTCOMES,
  MATCH_OUTCOME_SUBTITLES,
@@ -47,6 +49,9 @@ export default function RejoinGameModal() {
  const { socket } = useSocket();
  const activeGame = useReduxSelector((state) => state.socketModals.activeGame);
  const userId = useReduxSelector((state) => state.auth.session?.id);
+ const myName = shortenUsername(
+  useReduxSelector((state) => state.auth.session?.username ?? ""),
+ );
  const deviceHandoff = useReduxSelector(
   (state) => state.socketModals.deviceHandoff,
  );
@@ -84,8 +89,7 @@ export default function RejoinGameModal() {
   return null;
  }
 
- const { opponent } = shownGame;
- const opponentName = shortenUsername(opponent.username);
+ const opponentName = shortenUsername(shownGame.opponent.username);
  const betAmount = formatAmount(shownGame.bet);
 
  const clearActiveGame = () => {
@@ -113,20 +117,32 @@ export default function RejoinGameModal() {
   }
  };
 
- const renderHead = (title: string, description: string) => (
-  <Box customClass="match-head">
-   <Box customClass="room-heading">
-    <Text customClass="dialog-title">{title}</Text>
-    <Text customClass="description">{description}</Text>
-   </Box>
-   {forfeitSeconds !== null && !matchResult && (
-    <Text customClass="match-timer low">
-     <icons.timer />
-     {formatMMSS(forfeitSeconds)}
-    </Text>
-   )}
-  </Box>
- );
+ const sheet = matchResult
+  ? {
+     title: matchOverText,
+     description: MATCH_OUTCOME_SUBTITLES[
+      MATCH_RESULT_OUTCOMES[matchResult.result]
+     ](opponentName),
+     primaryLabel: closeText,
+     onPrimary: handleCloseResult,
+    }
+  : confirmingExit
+    ? {
+       title: forfeitGameText,
+       description: leavingForfeitsText(betAmount),
+       primaryLabel: keepPlayingText,
+       onPrimary: () => setConfirmingExit(false),
+       secondaryLabel: forfeitAndExitText,
+       onSecondary: handleForfeit,
+      }
+    : {
+       title: rejoinMatchText,
+       description: matchStillLiveText(opponentName),
+       primaryLabel: rejoinNowText,
+       onPrimary: handleRejoin,
+       secondaryLabel: exitText,
+       onSecondary: () => setConfirmingExit(true),
+      };
 
  return (
   <CustomDrawer
@@ -134,75 +150,61 @@ export default function RejoinGameModal() {
    open
    onClose={() => {}}
    hideCloseIcon
-   customClass="rejoin-sheet"
+   customClass="match-confirm-sheet rejoin-sheet"
   >
-   {matchResult ? (
-    <>
-     {renderHead(
-      matchOverText,
-      MATCH_OUTCOME_SUBTITLES[MATCH_RESULT_OUTCOMES[matchResult.result]](
-       opponentName,
-      ),
-     )}
-     <Box customClass="stat-row">
-      <Text component="span" customClass="stat-title">
-       {amountText}
-      </Text>
-      <Text component="span" customClass="stat-val">
-       {`${matchResult.amount > 0 ? "+" : ""}${formatAmount(matchResult.amount)}`}
-      </Text>
-     </Box>
-     <SheetActions>
-      <Button variant="contained" fullWidth onClick={handleCloseResult}>
-       {closeText}
-      </Button>
-     </SheetActions>
-    </>
-   ) : confirmingExit ? (
-    <>
-     {renderHead(forfeitGameText, leavingForfeitsText(betAmount))}
-     <SheetActions
-      cancelLabel={forfeitAndExitText}
-      onCancel={handleForfeit}
+   <Box customClass="pool-confirm-slide match-sheet">
+    <Box customClass="public-heading">
+     <Text component="h2" customClass="public-title" aria-live="polite">
+      {sheet.title}
+     </Text>
+     <Text customClass="page-subtitle public-subtitle">
+      {sheet.description}
+     </Text>
+    </Box>
+    <MatchTicket
+     status="found"
+     chip={poolMinutesText(Math.round(shownGame.time / MS_PER_MINUTE))}
+     stats={[
+      { label: entryText, value: betAmount },
+      matchResult
+       ? {
+          label: amountText,
+          value: `${matchResult.amount > 0 ? "+" : ""}${formatAmount(matchResult.amount)}`,
+          isWin: matchResult.amount > 0,
+         }
+       : { label: winText, value: formatAmount(shownGame.prize), isWin: true },
+     ]}
+     myName={myName}
+     opponentName={opponentName}
+    />
+    {forfeitSeconds !== null && !matchResult && (
+     <Text customClass="match-timer low">
+      <icons.timer />
+      {formatMMSS(forfeitSeconds)}
+     </Text>
+    )}
+    <Box customClass="match-retry">
+     <Button
+      type="button"
+      variant="contained"
+      fullWidth
+      customClass="game-cta play-cta"
+      onClick={sheet.onPrimary}
      >
+      {sheet.primaryLabel}
+     </Button>
+     {sheet.secondaryLabel && (
       <Button
-       variant="contained"
-       fullWidth
-       onClick={() => setConfirmingExit(false)}
+       type="button"
+       variant="text"
+       customClass="sheet-cancel-link"
+       onClick={sheet.onSecondary}
       >
-       {keepPlayingText}
+       {sheet.secondaryLabel}
       </Button>
-     </SheetActions>
-    </>
-   ) : (
-    <>
-     {renderHead(rejoinMatchText, matchStillLiveText(opponentName))}
-     <Box customClass="stat-row">
-      <Text component="span" customClass="stat-title">
-       {opponentText}
-      </Text>
-      <Text component="span" customClass="stat-val">
-       {opponentName} ({Math.round(opponent.score)})
-      </Text>
-     </Box>
-     <Box customClass="stat-row">
-      <Text component="span" customClass="stat-title">
-       {feeText}
-      </Text>
-      <Text component="span" customClass="stat-val">
-       {betAmount}
-      </Text>
-     </Box>
-     <SheetActions
-      cancelLabel={exitText}
-      onCancel={() => setConfirmingExit(true)}
-     >
-      <Button variant="contained" fullWidth onClick={handleRejoin}>
-       {rejoinNowText}
-      </Button>
-     </SheetActions>
-    </>
-   )}
+     )}
+    </Box>
+   </Box>
   </CustomDrawer>
  );
 }

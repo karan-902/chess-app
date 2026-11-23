@@ -22,7 +22,7 @@
 }
 
 @mixin sheet-pattern(
- $color: textOpacity(var(--app-text), 0.035),
+ $color: textOpacity(var(--text-primary), 0.035),
  $clear: radial-gradient(70% 40% at 50% 50%, transparent 55%, #000)
 ) {
  content: "";
@@ -47,8 +47,8 @@
   center / contain no-repeat;
 }
 
-@mixin neo-plunk($edge: var(--neo-edge)) {
- border: 1px solid textOpacity(var(--app-text), 0.1);
+@mixin neo-plunk($edge: var(--border-strong)) {
+ border: 1px solid textOpacity(var(--text-primary), 0.1);
  box-shadow: none;
 }
 

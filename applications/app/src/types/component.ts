@@ -23,7 +23,6 @@ export interface IWalletSheetShellProps {
 export interface IWalletSuccessStageProps {
  amountUsd: number;
  title: string;
- isProcessing?: boolean;
 }
 
 export interface IWalletInfoNoteProps {

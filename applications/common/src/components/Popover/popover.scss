@@ -2,8 +2,8 @@
 
 .common-popover {
  .MuiPopover-paper {
-  background: $appSurface;
-  border: 1px solid $appCardBorder;
+  background: $cardBg;
+  border: 1px solid $borderSubtle;
  }
  &.appbar-account-popover {
   .MuiPopover-paper {
@@ -15,9 +15,9 @@
    margin-top: 0.5rem;
    transform: none !important;
    transition: none !important;
-   border-radius: $radius-minimal;
-   background: $minimalSurfaceElevated;
-   border: 1px solid $minimalBorderStrong;
+   border-radius: 12px;
+   background: $surfaceElevated;
+   border: 1px solid $borderStrong;
    box-shadow: none;
    display: flex;
    flex-direction: column;
@@ -51,7 +51,7 @@
    white-space: nowrap;
    font-family: $fontOutfitSemiBold;
    font-size: 14px;
-   color: $minimalTextPrimary;
+   color: $textPrimary;
    transition:
     transform 0.12s ease-in-out,
     background-color 0.12s ease-in-out;
@@ -64,7 +64,7 @@
     width: 18px;
     height: 18px;
     flex-shrink: 0;
-    color: $minimalTextSecondary;
+    color: $textSecondary;
 
     @include from(phone) {
      width: 20px;
@@ -103,11 +103,11 @@
 
    &:hover,
    &.active {
-    background: textOpacity($minimalTextPrimary, 0.06) !important;
+    background: textOpacity($textPrimary, 0.06) !important;
    }
 
    &.active svg {
-    color: $minimalTextPrimary;
+    color: $textPrimary;
    }
 
    &:active {

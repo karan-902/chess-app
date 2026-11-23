@@ -9,6 +9,8 @@ export const entryFeeText = "Entry";
 export const youText = "You";
 export const closeText = "Close";
 export const noResultsText = "No results";
+export const showPasswordText = "Show password";
+export const hidePasswordText = "Hide password";
 export const chessText = "Chess";
 export const youBeatText = (name: string) => `You beat ${name}`;
 export const youLostToText = (name: string) => `You lost to ${name}`;

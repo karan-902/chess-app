@@ -50,7 +50,7 @@ import {
  moveOfText,
  startPositionText,
 } from "@gopvp/chess/src/constants/message";
-import { practiceText } from "@gopvp/common/src/constants/message";
+import { practiceText, cancelText } from "@gopvp/common/src/constants/message";
 import { formatAmount } from "@gopvp/common/src/util/format";
 import Button from "@gopvp/common/src/components/Button/Button";
 import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
@@ -545,9 +545,9 @@ export default function GameRoom({ mode }: IGameRoomProps) {
       <Button
        variant="text"
        customClass="sheet-cancel-link gr-resign-btn"
-       onClick={() => setResignOpen(true)}
+       onClick={isStarted ? () => setResignOpen(true) : resign}
       >
-       {resignText}
+       {isStarted ? resignText : cancelText}
       </Button>
      </>
     )}

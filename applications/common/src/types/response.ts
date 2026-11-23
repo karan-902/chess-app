@@ -35,13 +35,6 @@ export type IListResponse<T> = {
  page_id: string | null;
 };
 
-export type IVerifyUserResponse = {
- email: string;
- username: string;
- signup_method: SignupMethod;
- is_verified: boolean;
-};
-
 export type IRegisterResponse = {
  id: string;
  username: string;
@@ -76,6 +69,7 @@ export type IFirebaseTokenResponse = {
 
 export type IRandomNameResponse = {
  usernames: string[];
+ is_available: boolean;
 };
 
 export type ICountriesResponse = {
@@ -290,6 +284,8 @@ export type IActiveGameResponse = {
  match_id: string;
  game_slug: string;
  bet: number;
+ prize: number;
+ time: number;
  opponent: IGameStateBasePlayer;
  forfeit_at?: number;
 };

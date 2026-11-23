@@ -1,10 +1,14 @@
-import { forwardRef, useEffect, useRef } from "react";
+import { forwardRef, useEffect, useRef, useSyncExternalStore } from "react";
 import type { ButtonHTMLAttributes, MutableRefObject } from "react";
 import { ButtonBase } from "@mui/material";
 import classNames from "classnames";
 import "./button.scss";
 import Text from "@gopvp/common/src/components/Text/Text";
 import { icons, type TIconName } from "@gopvp/common/src/components/images";
+import {
+ getIsApiPending,
+ subscribeApiPending,
+} from "@gopvp/common/src/util/api";
 
 type TButtonVariant = "contained" | "outlined" | "text";
 
@@ -73,13 +77,17 @@ export const Button = forwardRef<HTMLButtonElement, IButtonProps>(
   };
 
   const isDisabled = disabled || isLoading;
+  const isApiPending = useSyncExternalStore(
+   subscribeApiPending,
+   getIsApiPending,
+  );
 
   return (
    <ButtonBase
     {...props}
     ref={setRefs}
     type={type}
-    disabled={isDisabled}
+    disabled={isDisabled || isApiPending}
     disableRipple
     className={classNames(
      "common-button",

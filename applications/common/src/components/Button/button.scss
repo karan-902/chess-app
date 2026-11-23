@@ -12,7 +12,7 @@
  padding: 0;
  border: 0;
  background: transparent;
- color: $appText;
+ color: $textPrimary;
  font-family: $fontOutfitRegular;
  font-weight: 600;
  letter-spacing: 0;
@@ -108,7 +108,7 @@
   will-change: transform;
 
   &.on-dark {
-   color: $primaryContrast;
+   color: $textInverse;
   }
 
   @include reduced-motion {
@@ -157,7 +157,7 @@
   }
 
   &.disabled:not(.loading) {
-   --btn-bg: color-mix(in srgb, #{$appText} 12%, #{$appSheet}) !important;
+   --btn-bg: color-mix(in srgb, #{$textPrimary} 12%, #{$cardBg}) !important;
 
    .button-face {
     height: var(--btn-face-h);
@@ -166,19 +166,19 @@
  }
 
  &.contained {
-  --btn-bg: #{$btnGoldFill};
-  color: $primaryContrast;
+  --btn-bg: #{$gold};
+  color: $textInverse;
 
   .button-spinner {
-   color: $primaryContrast;
+   color: $textInverse;
   }
  }
 
  &.outlined {
-  --btn-bg: #{$indigoSurface};
-  --btn-border: 1px solid #{textOpacity($appText, 0.24)};
+  --btn-bg: #{$surfaceElevated};
+  --btn-border: 1px solid #{textOpacity($textPrimary, 0.24)};
   height: 3.25rem;
-  color: $appText;
+  color: $textPrimary;
   transition: transform 0.12s ease-in-out;
 
   .button-face {
@@ -195,27 +195,21 @@
   }
 
   .button-spinner {
-   color: $appText;
-  }
-
-  :root[data-theme="light"] & {
-   --btn-bg: #{$white};
-   --btn-border: 1px solid #0d0d0d;
-   color: #0d0d0d;
+   color: $textPrimary;
   }
  }
 
  &.text {
-  color: $appText;
+  color: $textPrimary;
 
   &:hover:not(.disabled) {
-   --btn-bg: #{textOpacity($primary, 0.08)};
+   --btn-bg: #{textOpacity($gold, 0.08)};
   }
  }
 
  &.disabled:not(.loading) {
-  --btn-bg: #{textOpacity($appText, 0.06)} !important;
-  --btn-border: 1px solid #{textOpacity($appText, 0.1)} !important;
+  --btn-bg: #{textOpacity($textPrimary, 0.06)} !important;
+  --btn-border: 1px solid #{textOpacity($textPrimary, 0.1)} !important;
 
   .button-face {
    height: 100%;
@@ -224,11 +218,11 @@
 
   .button-text {
    font-family: $fontOutfitBold;
-   color: textOpacity($appText, 0.35);
+   color: textOpacity($textPrimary, 0.35);
   }
 
   .button-icon svg {
-   color: textOpacity($appText, 0.35);
+   color: textOpacity($textPrimary, 0.35);
   }
  }
 
@@ -244,11 +238,11 @@
  &.filter-dropdown-btn {
   --btn-gap: 0.35rem;
   --btn-pad: 0.625rem 1rem;
-  --btn-border: 1px solid #{textOpacity($appText, 0.1)};
+  --btn-border: 1px solid #{textOpacity($textPrimary, 0.1)};
   --btn-bg: transparent;
   height: 2.625rem;
   min-width: 6rem;
-  color: textOpacity($appText, 0.5);
+  color: textOpacity($textPrimary, 0.5);
   border-radius: 5px;
 
   .button-text {
@@ -278,13 +272,13 @@
     --btn-pad: 0 16px;
    }
    --btn-radius: 999px;
-   --btn-bg: #{$appSurface};
+   --btn-bg: #{$cardBg};
    --btn-border: 1px solid #{textOpacity(#{$white}, 0.12)};
    height: 36px;
    min-height: 36px;
    min-width: 0;
    border-radius: 999px;
-   color: textOpacity($appText, 0.75);
+   color: textOpacity($textPrimary, 0.75);
 
    .button-text {
     font-family: $fontOutfitSemiBold;
@@ -298,32 +292,20 @@
    &.active {
     --btn-bg: #{$gold};
     --btn-border: 1px solid #{$gold};
-    color: $primaryContrast;
-   }
-
-   :root[data-theme="light"] & {
-    --btn-bg: #{$appSurface};
-    --btn-border: 1px solid #1f246b;
-    color: textOpacity($appText, 0.7);
-
-    &.active {
-     --btn-bg: #{$gold};
-     --btn-border: 1px solid #{$gold};
-     color: $primaryContrast;
-    }
+    color: $textInverse;
    }
   }
 
   :root .matches-page .pill-subtabs &,
   :root .leaderboard-page .pill-subtabs & {
-   --btn-bg: #{$minimalCardBg};
-   --btn-border: 1px solid #{$minimalBorderSubtle};
-   color: $minimalTextSecondary;
+   --btn-bg: #{$cardBg};
+   --btn-border: 1px solid #{$borderSubtle};
+   color: $textSecondary;
 
    &.active {
-    --btn-bg: #{$minimalGold};
-    --btn-border: 1px solid #{$minimalGold};
-    color: $minimalTextInverse;
+    --btn-bg: #{$gold};
+    --btn-border: 1px solid #{$gold};
+    color: $textInverse;
    }
   }
 
@@ -336,22 +318,22 @@
 
   :root .deposit-amount-chips & {
    --btn-radius: 10px;
-   --btn-bg: #{$minimalSurfaceElevated};
-   --btn-border: 1px solid #{$minimalBorderSubtle};
+   --btn-bg: #{$surfaceElevated};
+   --btn-border: 1px solid #{$borderSubtle};
    border-radius: 10px;
-   color: $minimalTextSecondary;
+   color: $textSecondary;
 
    &.active {
-    --btn-bg: #{$minimalGold} !important;
-    --btn-border: 1px solid #{$minimalGold};
-    color: $minimalTextInverse;
+    --btn-bg: #{$gold} !important;
+    --btn-border: 1px solid #{$gold};
+    color: $textInverse;
    }
   }
 
   &.active {
    --btn-bg: #{$gold} !important;
    --btn-border: 1px solid #{$gold};
-   color: $primaryContrast;
+   color: $textInverse;
 
    .button-face {
     transform: none;
@@ -361,7 +343,7 @@
     opacity: 0.6;
 
     .button-text {
-     color: $primaryContrast;
+     color: $textInverse;
     }
    }
   }
@@ -372,13 +354,13 @@
   --btn-pad: 0.75rem 1.25rem;
   align-self: flex-start;
   min-height: 0;
-  color: $appText;
+  color: $textPrimary;
 
   .button-text {
    font-family: $fontOutfitMedium;
    font-size: 15px;
    letter-spacing: 0;
-   color: textOpacity($appText, 0.7);
+   color: textOpacity($textPrimary, 0.7);
 
    @include from(phone) {
     font-size: 16px;
@@ -401,7 +383,7 @@
   --btn-bg: transparent;
   align-self: center;
   min-height: 0;
-  color: textOpacity($appText, 0.7);
+  color: textOpacity($textPrimary, 0.7);
 
   &:hover:not(.disabled) {
    --btn-bg: transparent;
@@ -423,11 +405,11 @@
   .profile-id-row &,
   .game-room &,
   .resign-sheet & {
-   color: $minimalGold;
+   color: $gold;
    transition: color 0.15s ease;
 
    &:hover:not(.disabled) {
-    color: $minimalBtnPrimaryHover;
+    color: $btnPrimaryHover;
    }
   }
  }
@@ -450,7 +432,7 @@
   width: fit-content;
   height: auto;
   margin-bottom: 0.25rem;
-  color: textOpacity($appText, 0.4);
+  color: textOpacity($textPrimary, 0.4);
   font-weight: 400;
   font-size: 14px;
 
@@ -465,7 +447,7 @@
 
   &:hover:not(.disabled) {
    --btn-bg: transparent;
-   color: textOpacity($appText, 0.7);
+   color: textOpacity($textPrimary, 0.7);
   }
  }
 
@@ -476,13 +458,15 @@
  .practice-sheet &.play-cta,
  .resign-sheet &.play-cta,
  .game-over-sheet.loss &.play-cta,
+ .game-over-sheet:has(.payout-stage.draw) &.play-cta,
  .room-sheet &.contained,
+ &.game-picker-cta,
  &.wallet-deposit-btn,
  &.wallet-withdraw-btn,
  &.profile-save-btn,
  &.modal-submit-btn {
   --btn-face-h: 3.125rem;
-  --btn-radius: #{$radius-minimal};
+  --btn-radius: 12px;
   height: var(--btn-face-h);
   padding-top: 0;
   perspective: none;
@@ -518,16 +502,16 @@
   }
 
   &:focus-visible {
-   outline-color: $minimalBorderFocus;
+   outline-color: $borderFocus;
   }
 
   &.disabled:not(.loading) {
-   --btn-bg: #{$minimalBtnDisabledBg} !important;
+   --btn-bg: #{$btnDisabledBg} !important;
    --btn-border: 0 solid transparent !important;
 
    .button-text {
     font-family: $fontOutfitSemiBold;
-    color: $minimalTextTertiary;
+    color: $textTertiary;
    }
   }
 
@@ -542,15 +526,17 @@
  .practice-sheet &.play-cta,
  .resign-sheet &.play-cta,
  .game-over-sheet.loss &.play-cta,
+ .game-over-sheet:has(.payout-stage.draw) &.play-cta,
  .room-sheet &.contained,
+ &.game-picker-cta,
  &.wallet-deposit-btn,
  &.profile-save-btn,
  &.modal-submit-btn {
-  --btn-bg: #{$minimalBtnPrimaryBg};
-  color: $minimalTextInverse;
+  --btn-bg: #{$btnPrimaryBg};
+  color: $textInverse;
 
   &:hover:not(.disabled) {
-   --btn-bg: #{$minimalBtnPrimaryHover};
+   --btn-bg: #{$btnPrimaryHover};
   }
  }
 
@@ -572,14 +558,14 @@
   flex-shrink: 0;
   height: auto;
   min-height: 0;
-  color: $minimalTextSecondary;
+  color: $textSecondary;
 
   .button-face {
    transition: background-color 0.15s ease;
   }
 
   &:hover:not(.disabled) {
-   --btn-bg: #{$minimalBtnTertiaryHover};
+   --btn-bg: #{$btnTertiaryHover};
    opacity: 1;
   }
 
@@ -608,12 +594,8 @@
   font-size: inherit;
   color: $gold;
 
-  :root[data-theme="light"] & {
-   color: $appText;
-  }
-
   :root :is(.gopvp-signup-form, .edit-profile-form) & {
-   color: $minimalGold;
+   color: $gold;
   }
 
   &:hover:not(.disabled) {
@@ -634,12 +616,12 @@
  &.auth-google-btn,
  &.wallet-withdraw-btn {
   --btn-gap: 0.75rem;
-  --btn-bg: #{$minimalBtnSecondaryBg};
-  --btn-border: 1px solid #{$minimalBtnSecondaryBorder};
-  color: $minimalTextInverse;
+  --btn-bg: #{$btnSecondaryBg};
+  --btn-border: 1px solid #{$btnSecondaryBorder};
+  color: $textInverse;
 
   &:hover:not(.disabled) {
-   --btn-bg: #{$minimalBtnSecondaryHover};
+   --btn-bg: #{$btnSecondaryHover};
   }
  }
 
@@ -653,7 +635,7 @@
   width: 100%;
 
   .game-over-sheet & {
-   margin-top: $space-20;
+   margin-top: 20px;
   }
 
   @include from(laptop) {
@@ -671,7 +653,7 @@
  }
 
  &.cancel-btn {
-  color: $paleRed;
+  color: $error;
  }
 
  &.wallet-deposit-btn,
@@ -682,11 +664,11 @@
 
  &.tx-filter-chip {
   --btn-pad: 0.4375rem 1rem;
-  --btn-bg: #{textOpacity($appText, 0.03)};
-  --btn-border: 1px solid #{textOpacity($appText, 0.12)};
+  --btn-bg: #{textOpacity($textPrimary, 0.03)};
+  --btn-border: 1px solid #{textOpacity($textPrimary, 0.12)};
   flex-shrink: 0;
   min-height: 2.375rem;
-  color: $appTextMuted;
+  color: $textSecondary;
   white-space: nowrap;
 
   .button-text {
@@ -705,7 +687,7 @@
   &.active {
    --btn-border: 1.5px solid #{$gold};
    --btn-bg: #{textOpacity($gold, 0.12)};
-   color: $appTabActive;
+   color: $gold;
   }
 
   .deposit-amount-chips & {
@@ -717,10 +699,10 @@
  &.segment-btn {
   --btn-pad: 0.4rem 0.3rem;
   position: relative;
-  z-index: $z-raised;
+  z-index: 1;
   flex: 1 1 0;
   font-family: $fontOutfitExtraBold;
-  color: $appTextMuted;
+  color: $textSecondary;
   transition: color 0.2s ease;
 
   .button-face > div {
@@ -766,7 +748,7 @@
  &.profile-edit-icon-btn {
   --btn-pad: 0.25rem 0;
   position: relative;
-  z-index: $z-raised;
+  z-index: 1;
   height: 44px;
 
   .button-text {
@@ -798,7 +780,7 @@
   }
 
   &.offered {
-   color: $minimalTextTertiary;
+   color: $textTertiary;
   }
  }
 
@@ -823,9 +805,9 @@
  }
 
  &.room-paste-btn {
-  --btn-pad: #{$space-4} 0;
+  --btn-pad: 4px 0;
   align-self: center;
-  color: $minimalGold;
+  color: $gold;
 
   .button-text {
    padding-bottom: 0.125rem;
@@ -838,19 +820,19 @@
  }
 
  &.copy-label-btn {
-  --btn-pad: 0 #{$space-12};
-  --btn-border: 1px solid #{$appCardBorder};
-  --btn-bg: #{$appSecondary};
+  --btn-pad: 0 12px;
+  --btn-border: 1px solid #{$borderSubtle};
+  --btn-bg: #{$surfaceElevated};
   height: 2.5rem;
-  color: $appText;
+  color: $textPrimary;
 
   .deposit-address-row & {
-   --btn-pad: 0 0 0 #{$space-12};
+   --btn-pad: 0 0 0 12px;
    --btn-border: 0 solid transparent;
    --btn-bg: transparent;
    height: auto;
-   border-left: 1px solid $minimalInputBorder;
-   color: $minimalGold;
+   border-left: 1px solid $inputBorder;
+   color: $gold;
 
    .button-text {
     font-size: 14px;
@@ -866,23 +848,24 @@
  &.gr-promotion-btn {
   --btn-pad: 0;
   --btn-radius: 10px;
-  --btn-border: 1px solid #{$minimalBorderStrong};
+  --btn-border: 1px solid #{$borderStrong};
   width: 3.5rem;
   height: 3.5rem;
 
   &:hover:not(.disabled) {
-   --btn-border: 1px solid #{$minimalGold};
+   --btn-border: 1px solid #{$gold};
   }
  }
 
  &.admin-btn {
-  --btn-pad: 0 #{$space-16};
+  --btn-pad: 0 12px;
   --btn-radius: 10px;
-  --btn-border: 1px solid #{$appCardBorder};
-  --btn-bg: #{$white};
-  --btn-gap: #{$space-8};
+  --btn-border: 1px solid transparent;
+  --btn-bg: transparent;
+  --btn-gap: 8px;
   height: auto;
-  color: $appText;
+  color: $textSecondary;
+  transition: color 0.15s ease;
 
   .button-face {
    min-height: 2.5rem;
@@ -892,7 +875,7 @@
   .button-text {
    display: flex;
    align-items: center;
-   gap: $space-8;
+   gap: 8px;
    font-family: $fontOutfitSemiBold;
    font-size: 0.875rem;
   }
@@ -902,22 +885,39 @@
   }
 
   &:hover:not(.disabled) {
-   --btn-bg: #{$appSheet};
+   --btn-bg: #{$btnTertiaryHover};
+   color: $textPrimary;
   }
 
   &.primary {
-   --btn-bg: #{$primary};
-   --btn-border: 1px solid #{$primary};
-   color: $primaryContrast;
+   --btn-bg: #{$gold};
+   --btn-border: 1px solid #{$gold};
+   color: $textInverse;
 
    &:hover:not(.disabled) {
-    --btn-bg: #{$primaryHover};
+    --btn-bg: #{$btnPrimaryHover};
    }
   }
 
   &.danger {
    --btn-border: 1px solid #{textOpacity($error, 0.35)};
    color: $error;
+  }
+
+  &.secondary {
+   --btn-border: 1px solid #{$borderStrong};
+   align-self: flex-start;
+   color: $textPrimary;
+  }
+
+  &.admin-back-btn {
+   --btn-pad: 0 10px 0 6px;
+   align-self: flex-start;
+   margin-left: -6px;
+  }
+
+  &.admin-load-more {
+   align-self: center;
   }
 
   &.size-small {
@@ -932,42 +932,58 @@
  }
 
  &.admin-nav-item {
-  --btn-pad: 0 #{$space-12};
-  --btn-radius: 10px;
+  --btn-pad: 0 12px;
+  --btn-radius: 8px;
   --btn-justify: flex-start;
+  flex-shrink: 0;
   height: auto;
-  color: $appTextMuted;
+  color: $textSecondary;
+  transition: color 0.15s ease;
 
   .button-face {
-   min-height: 2.75rem;
+   min-height: 40px;
    margin: 0;
   }
 
   .button-text {
    display: flex;
    align-items: center;
-   gap: $space-12;
+   gap: 10px;
    font-family: $fontOutfitMedium;
-   font-size: 0.95rem;
+   font-size: 14px;
+
+   svg {
+    flex-shrink: 0;
+    color: $textTertiary;
+   }
   }
 
   &:hover:not(.disabled) {
-   --btn-bg: #{$appSheet};
-   color: $appText;
+   --btn-bg: #{$btnTertiaryHover};
+   color: $textPrimary;
   }
 
   &.active {
-   --btn-bg: #{$appSheet};
-   color: $appText;
+   --btn-bg: #{$surfaceElevated};
+   color: $textPrimary;
 
    .button-text {
     font-family: $fontOutfitSemiBold;
+
+    svg {
+     color: $gold;
+    }
    }
   }
 
   &.disabled:not(.loading) {
    --btn-bg: transparent !important;
    --btn-border: 0 solid transparent !important;
+   color: $textTertiary;
+  }
+
+  @include from(laptop) {
+   width: 100%;
   }
  }
 }

@@ -15,7 +15,18 @@ import {
  myResultsText,
  myStatsText,
  worldwideText,
+ passwordWeakText,
+ passwordFairText,
+ passwordAlmostText,
+ passwordStrongText,
 } from "@gopvp/app/src/constants/message";
+
+export const PASSWORD_STRENGTH_LABELS: Record<number, string> = {
+ 1: passwordWeakText,
+ 2: passwordFairText,
+ 3: passwordAlmostText,
+ 4: passwordStrongText,
+};
 
 export const LEADERBOARD_SCOPE_LABELS: Record<LeaderboardScope, string> = {
  daily: dailyText,
@@ -37,6 +48,7 @@ export const TRANSACTION_CODE_DESCRIPTIONS: Record<TransactionCode, string> = {
  REFUND: "Refund",
  WITHDRAW_REVERSAL: "Refund",
  PROMO: "Bonus",
+ ADJUSTMENT: "Adjustment",
 };
 
 export const GAME_PAGE_TITLES: Record<string, string> = {

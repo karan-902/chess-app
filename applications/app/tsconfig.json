@@ -23,5 +23,5 @@
   },
   "types": ["node"]
  },
- "include": ["src", "../common/src", "../chess/src", "vite.config.ts"]
+ "include": ["src", "e2e", "../common/src", "../chess/src", "vite.config.ts"]
 }

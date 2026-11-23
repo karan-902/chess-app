@@ -41,7 +41,6 @@ import {
  maxDepositAmountText,
  // btcOnlyWarningText,
  // scanToDepositText,
- qrExpiredText,
  paymentReceivedText,
  depositsNotWithdrawableText,
  speedText,
@@ -97,7 +96,6 @@ export default function DepositSheet() {
  const [submitting, setSubmitting] = useState(false);
  const [payment, setPayment] = useState<IPaymentRequestResponse | null>(null);
  const [remainingMs, setRemainingMs] = useState(0);
- const [expired, setExpired] = useState(false);
 
  useEffect(() => {
   if (open) return;
@@ -106,7 +104,6 @@ export default function DepositSheet() {
   setAmountError("");
   setSubmitting(false);
   setPayment(null);
-  setExpired(false);
  }, [open]);
 
  useEffect(() => {
@@ -116,7 +113,7 @@ export default function DepositSheet() {
   const tick = () => {
    const left = deadline - Date.now();
    setRemainingMs(Math.max(0, left));
-   if (left <= 0) setExpired(true);
+   if (left <= 0) setStage("amount");
   };
 
   tick();
@@ -126,8 +123,9 @@ export default function DepositSheet() {
 
  useEffect(() => {
   if (
-   stage === "qr" &&
-   lastTransaction?.id === payment?.deposit_id &&
+   stage !== "success" &&
+   payment &&
+   lastTransaction?.id === payment.deposit_id &&
    lastTransaction?.status === "COMPLETED"
   )
    setStage("success");
@@ -166,7 +164,6 @@ export default function DepositSheet() {
     return;
    }
    setPayment(res);
-   setExpired(false);
    setStage("qr");
   } catch (err) {
    showApiErrorToast(err);
@@ -296,18 +293,16 @@ export default function DepositSheet() {
       />
      </Box>
 
-     {!expired && (
-      <Text
-       customClass={classNames(
-        "match-timer",
-        remainingMs / 1000 <= MATCH_TIMER_LOW_SECONDS && "low",
-       )}
-       aria-label={expiresInLabelText}
-      >
-       <icons.timer />
-       {formatMMSS(Math.floor(remainingMs / 1000))}
-      </Text>
-     )}
+     <Text
+      customClass={classNames(
+       "match-timer",
+       remainingMs / 1000 <= MATCH_TIMER_LOW_SECONDS && "low",
+      )}
+      aria-label={expiresInLabelText}
+     >
+      <icons.timer />
+      {formatMMSS(Math.floor(remainingMs / 1000))}
+     </Text>
 
      <Text customClass="deposit-invoice-label">{lightningInvoiceText}</Text>
      <Box customClass="deposit-address-row">
@@ -315,9 +310,6 @@ export default function DepositSheet() {
       <CopyButton text={payment.payment_request} showLabel />
      </Box>
 
-     {expired && (
-      <Text customClass="deposit-timer caption expired">{qrExpiredText}</Text>
-     )}
      {/* {!expired && (
       <>
        <Box customClass="deposit-expiry-row">

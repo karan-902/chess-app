@@ -7,6 +7,10 @@ import CustomLabel from "@gopvp/common/src/components/Label/Label";
 import AlertMessage from "@gopvp/common/src/components/AlertMessage/AlertMessage";
 import "./input.scss";
 import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
+import {
+ hidePasswordText,
+ showPasswordText,
+} from "@gopvp/common/src/constants/message";
 
 interface IInputProps
  extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
@@ -71,6 +75,7 @@ export const Input = forwardRef<HTMLInputElement, IInputProps>(
         type="button"
         disableRipple
         customClass="input-password-toggle"
+        aria-label={showPassword ? hidePasswordText : showPasswordText}
         onClick={() => setShowPassword((p) => !p)}
         tabIndex={-1}
         icon={showPassword ? "eyeOff" : "eye"}

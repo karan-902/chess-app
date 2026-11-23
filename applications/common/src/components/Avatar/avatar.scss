@@ -10,9 +10,9 @@
  }
 
  &.neutral {
-  background: textOpacity($appText, 0.05);
-  border: 1px solid textOpacity($appText, 0.1);
-  color: textOpacity($appText, 0.5);
+  background: textOpacity($textPrimary, 0.05);
+  border: 1px solid textOpacity($textPrimary, 0.1);
+  color: textOpacity($textPrimary, 0.5);
  }
 
  &.sm {
@@ -99,11 +99,11 @@
   flex-shrink: 0;
   width: 2.625rem;
   height: 2.625rem;
-  border: 1px solid $minimalBorderStrong;
-  background: $minimalSurfaceElevated !important;
+  border: 1px solid $borderStrong;
+  background: $surfaceElevated !important;
   font-family: $fontOutfitBlack;
   font-size: 18px;
-  color: $minimalTextPrimary;
+  color: $textPrimary;
 
   @include from(phone) {
    font-size: 19px;
@@ -118,8 +118,8 @@
   }
 
   .gr-row.active & {
-   border: 2px solid $minimalGold;
-   color: $minimalGold;
+   border: 2px solid $gold;
+   color: $gold;
   }
  }
 
@@ -127,8 +127,8 @@
   flex-shrink: 0;
   width: 2.75rem;
   height: 2.75rem;
-  border: 2px solid $primaryHover;
-  background: linear-gradient(180deg, $indigoFaceTop, $indigoFaceBottom) !important;
+  border: 2px solid $btnPrimaryHover;
+  background: linear-gradient(180deg, $surfaceElevated, $cardBg) !important;
   box-shadow: 0 0 12px textOpacity($gold, 0.45);
   font-family: $fontOutfitBlack;
   font-size: 20px;
@@ -147,7 +147,7 @@
   flex-shrink: 0;
   width: 2.75rem;
   height: 2.75rem;
-  border: 1px solid textOpacity($appText, 0.18);
+  border: 1px solid textOpacity($textPrimary, 0.18);
   background: $poolInk !important;
   box-shadow: none;
   font-family: $fontOutfitBlack;
@@ -165,10 +165,10 @@
 
  .app-header &.header,
  .appbar-account-popover &.header {
-  border: 1px solid $minimalBorderStrong;
-  background: $minimalSurfaceElevated !important;
+  border: 1px solid $borderStrong;
+  background: $surfaceElevated !important;
   font-family: $fontOutfitSemiBold;
-  color: $minimalTextPrimary;
+  color: $textPrimary;
  }
 
  &.header.md {

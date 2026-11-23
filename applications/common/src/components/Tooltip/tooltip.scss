@@ -3,13 +3,13 @@
 .common-tooltip {
  margin: 7px 8px;
  .tooltip-content {
-  background: $backdropCenter !important;
+  background: $bg !important;
   color: $tooltipText !important;
   font-family: $fontOutfitRegular;
   font-size: 12px;
   font-weight: 500;
   line-height: 1.4;
-  padding: $space-8 $space-12;
+  padding: 8px 12px;
   border-radius: 0;
 
   @include from(phone) {
@@ -18,6 +18,6 @@
  }
 
  .MuiTooltip-arrow {
-  color: $backdropCenter;
+  color: $bg;
  }
 }

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { CircularProgress } from "@mui/material";
 import { useReduxDispatch, useReduxSelector } from "@gopvp/app/src/redux/hooks";
 import { showToast } from "@gopvp/app/src/redux/common/slice";
 import Box from "@gopvp/common/src/components/Box/Box";
@@ -29,12 +30,12 @@ import {
  insufficientWithdrawableText,
  enterDestinationText,
  withdrawalCompletedText,
- withdrawalProcessingText,
  enterAmountText,
 } from "@gopvp/app/src/constants/message";
 import {
  MAX_WITHDRAW_USD,
  MAX_AMOUNT_INPUT_USD,
+ WALLET_LOADER_SIZE,
 } from "@gopvp/app/src/constants/limit";
 import { sanitizeAmountInput } from "@gopvp/app/src/utils";
 
@@ -207,11 +208,11 @@ export default function WithdrawSheet() {
    )}
 
    {stage === "processing" && (
-    <WalletSuccessStage
-     amountUsd={amountUsd}
-     title={withdrawalProcessingText}
-     isProcessing
-    />
+    <Box customClass="modal-success-stage">
+     <Box customClass="modal-success-icon">
+      <CircularProgress size={WALLET_LOADER_SIZE} />
+     </Box>
+    </Box>
    )}
 
    {stage === "success" && (

@@ -8,7 +8,7 @@
   justify-content: center;
   width: 100%;
   height: 100dvh;
-  background: $appBg;
+  background: $bg;
  }
 
  &.app-content {
@@ -19,25 +19,25 @@
   -webkit-overflow-scrolling: touch;
 
   &:has(
-    :is(
-     .play-page,
-     .matches-page,
-     .leaderboard-page,
-     .rules-page,
-     .wallet-page,
-     .profile-page,
-     .game-room,
-     .game-loader
-    )
-   ) {
-   background: $minimalBg;
+   :is(
+    .play-page,
+    .matches-page,
+    .leaderboard-page,
+    .rules-page,
+    .wallet-page,
+    .profile-page,
+    .game-room,
+    .game-loader
+   )
+  ) {
+   background: $bg;
   }
  }
 
  &.appbar-dropdown-sep {
   height: 1px;
   margin: 0 0.375rem 0.25rem;
-  background: textOpacity($appText, 0.08);
+  background: textOpacity($textPrimary, 0.08);
  }
 
  &.public-page {
@@ -47,7 +47,7 @@
   overflow-y: auto;
   padding: 1.25rem 1.25rem calc(1.25rem + env(safe-area-inset-bottom));
   gap: 1.25rem;
-  background: $minimalBg;
+  background: $bg;
 
   @include from-height(tall) {
    padding-top: 3.5rem;
@@ -83,6 +83,7 @@
   .payout-logo {
    width: 2.75rem;
    height: 2.75rem;
+   border-radius: 50%;
    object-fit: cover;
   }
 
@@ -97,7 +98,7 @@
   justify-content: center;
   gap: 0.4rem;
   margin-bottom: 1rem;
-  color: textOpacity($appText, 0.4);
+  color: textOpacity($textPrimary, 0.4);
   font-size: 12px;
 
   @include from(phone) {
@@ -144,20 +145,21 @@
   left: 0;
   right: 0;
   display: flex;
+  align-items: center;
   gap: 0.25rem;
   margin-top: 0.375rem;
 
   &.level-1 {
-   color: $minimalError;
+   color: $error;
   }
 
-  &.level-2 {
-   color: $minimalWarning;
+  &.level-2,
+  &.level-3 {
+   color: $warning;
   }
 
-  &.level-3,
   &.level-4 {
-   color: $minimalSuccess;
+   color: $success;
   }
 
   &.hidden {
@@ -170,7 +172,7 @@
    height: 0.25rem;
    overflow: hidden;
    border-radius: 2px;
-   background: $minimalBorderStrong;
+   background: $borderStrong;
 
    &::after {
     content: "";
@@ -207,14 +209,14 @@
   align-items: center;
   gap: 0.75rem;
   padding: 1rem;
-  background: $minimalCardBg;
-  border: 1px solid $minimalBorderSubtle;
-  border-radius: $radius-minimal;
+  background: $cardBg;
+  border: 1px solid $borderSubtle;
+  border-radius: 12px;
 
   .common-avatar {
-   border-color: $minimalBorderStrong;
-   background: $minimalSurfaceElevated !important;
-   color: $minimalTextPrimary;
+   border-color: $borderStrong;
+   background: $surfaceElevated !important;
+   color: $textPrimary;
   }
  }
 
@@ -243,7 +245,7 @@
  &.social-stack {
   display: flex;
   flex-direction: column;
-  gap: $space-16;
+  gap: 16px;
   width: 100%;
  }
  &.auth-divider {
@@ -257,7 +259,7 @@
    font-size: 14px;
    letter-spacing: 0.5px;
    line-height: 1.5;
-   color: $minimalTextPrimary;
+   color: $textPrimary;
 
    @include from(phone) {
     font-size: 15px;
@@ -269,7 +271,7 @@
    content: "";
    flex: 1;
    height: 1px;
-   background: $minimalBorderStrong;
+   background: $borderStrong;
   }
  }
 
@@ -278,7 +280,7 @@
   flex-direction: column;
   height: 100%;
   padding: 1.1rem;
-  background: $minimalBg;
+  background: $bg;
  }
 
  &.play-body {
@@ -310,7 +312,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: $space-8;
+  gap: 8px;
  }
 
  &.live-wins-ticker {
@@ -326,14 +328,14 @@
  &.live-win-card {
   display: inline-flex;
   align-items: center;
-  gap: $space-8;
+  gap: 8px;
   max-width: 100%;
   min-width: 0;
   height: 2.25rem;
-  padding: 0.25rem $space-12 0.25rem 0.25rem;
-  border: 1px solid $minimalBorderSubtle;
+  padding: 0.25rem 12px 0.25rem 0.25rem;
+  border: 1px solid $borderSubtle;
   border-radius: 999px;
-  background: $minimalCardBg;
+  background: $cardBg;
   animation: live-win-in 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 
   &.leaving {
@@ -357,8 +359,8 @@
   width: 1.625rem;
   height: 1.625rem;
   border-radius: 50%;
-  background: textOpacity($minimalGold, 0.14);
-  color: $minimalGold;
+  background: textOpacity($gold, 0.14);
+  color: $gold;
 
   svg {
    width: 0.9375rem;
@@ -429,7 +431,7 @@
    content: "";
    position: absolute;
    inset: 0;
-   border: 0.25rem solid $minimalBorderStrong;
+   border: 0.25rem solid $borderStrong;
    border-radius: 50%;
   }
 
@@ -457,8 +459,8 @@
 
     &::before {
      left: -100%;
-     border-top-color: $minimalGold;
-     border-right-color: $minimalGold;
+     border-top-color: $gold;
+     border-right-color: $gold;
      animation-name: match-ring-right;
     }
    }
@@ -468,8 +470,8 @@
 
     &::before {
      left: 0;
-     border-bottom-color: $minimalGold;
-     border-left-color: $minimalGold;
+     border-bottom-color: $gold;
+     border-left-color: $gold;
      animation-name: match-ring-left;
     }
    }
@@ -481,7 +483,7 @@
    font-family: $fontOutfitExtraBold;
    font-size: 26px;
    line-height: 1;
-   color: $minimalTextPrimary;
+   color: $textPrimary;
 
    @include from(phone) {
     font-size: 28px;
@@ -519,7 +521,7 @@
  &.practice-fields {
   display: flex;
   flex-direction: column;
-  gap: $space-16;
+  gap: 16px;
  }
 
  &.match-deck {
@@ -610,7 +612,7 @@
       transparent 6px,
       $goldLight 6px,
       $gold 50%,
-      $primaryDark calc(100% - 6px),
+      $btnPrimaryHover calc(100% - 6px),
       transparent calc(100% - 6px)
      );
    }
@@ -664,31 +666,31 @@
   --mode-color: #{$gold};
   --mode-tint: #{$modeTintClassical};
   --mode-chip-bg: #{$modeChipClassical};
-  --mode-minimal: #{$minimalGold};
+  --mode-minimal: #{$gold};
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: $space-4;
+  gap: 4px;
 
   &.bullet {
-   --mode-color: #{$cyan};
+   --mode-color: #{$info};
    --mode-tint: #{$modeTintBullet};
    --mode-chip-bg: #{$modeChipBullet};
-   --mode-minimal: #{$minimalInfo};
+   --mode-minimal: #{$info};
   }
 
   &.blitz {
    --mode-color: #{$warning};
    --mode-tint: #{$modeTintBlitz};
    --mode-chip-bg: #{$modeChipBlitz};
-   --mode-minimal: #{$minimalWarning};
+   --mode-minimal: #{$warning};
   }
 
   &.rapid {
-   --mode-color: #{$greenishTeal};
+   --mode-color: #{$success};
    --mode-tint: #{$modeTintRapid};
    --mode-chip-bg: #{$modeChipRapid};
-   --mode-minimal: #{$minimalSuccess};
+   --mode-minimal: #{$success};
   }
 
   .pool-card & {
@@ -726,11 +728,11 @@
    grid-area: icon;
    width: 2.75rem;
    height: 2.75rem;
-   border: 1px solid $minimalBorderStrong;
+   border: 1px solid $borderStrong;
    border-radius: 10px;
    font-size: 20px;
-   background: $minimalBorderSubtle;
-   color: $minimalTextPrimary;
+   background: $borderSubtle;
+   color: $textPrimary;
 
    svg {
     width: 1em;
@@ -744,6 +746,13 @@
   }
  }
 
+ &.pool-card-action {
+  grid-area: arrow;
+  display: grid;
+  align-items: center;
+  justify-items: end;
+ }
+
  &.pool-card-live {
   position: absolute;
   left: 0;
@@ -751,14 +760,14 @@
   bottom: 0;
   height: 2px;
   overflow: hidden;
-  background: textOpacity($minimalSuccess, 0.2);
+  background: textOpacity($success, 0.2);
 
   &::after {
    content: "";
    position: absolute;
    inset: 0;
    width: 25%;
-   background: $minimalSuccess;
+   background: $success;
    animation: pool-live-sweep 1.6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
 
    @include reduced-motion {
@@ -772,7 +781,7 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: $space-4;
+  gap: 4px;
  }
 
  &.resign-sheet {
@@ -790,19 +799,19 @@
 
   &.practice-options {
    padding: 0.25rem 0 0;
-   gap: $space-16;
+   gap: 16px;
   }
  }
 
  &.practice-field {
   display: flex;
   flex-direction: column;
-  gap: $space-8;
+  gap: 8px;
   width: 100%;
  }
 
  &.pool-confirm {
-  gap: $space-16;
+  gap: 16px;
 
   .dialog-title + .sheet-subtitle {
    margin-top: -0.25rem;
@@ -819,7 +828,7 @@
 
   .pool-confirm & {
    margin-top: 0;
-   gap: $space-12;
+   gap: 12px;
   }
  }
 
@@ -827,9 +836,9 @@
   display: flex;
   align-items: center;
   width: 100%;
-  background: $appSurface;
+  background: $cardBg;
   border: 1px solid textOpacity($gold, 0.3);
-  border-radius: $radius-card;
+  border-radius: 5px;
  }
 
  &.stake-ticket-col {
@@ -838,7 +847,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: $space-4;
+  gap: 4px;
   min-width: 0;
   padding: 0.875rem 0;
 
@@ -868,8 +877,8 @@
   gap: 0.625rem;
   min-width: 0;
   height: 6rem;
-  padding: 0 $space-12 0 $space-12 !important;
-  border-radius: $radius-card;
+  padding: 0 12px 0 12px !important;
+  border-radius: 5px;
   border: 1.2px solid textOpacity($gold, 0.6);
   background: linear-gradient(
    90deg,
@@ -878,9 +887,9 @@
   );
 
   &.rival {
-   padding: 0 $space-12 0 1.875rem !important;
-   border-color: textOpacity($appText, 0.12);
-   background: textOpacity($appText, 0.04);
+   padding: 0 12px 0 1.875rem !important;
+   border-color: textOpacity($textPrimary, 0.12);
+   background: textOpacity($textPrimary, 0.04);
   }
  }
 
@@ -902,8 +911,8 @@
   width: 2.75rem;
   height: 2.75rem;
   border-radius: 50%;
-  background: textOpacity($appText, 0.08);
-  color: $appTextMuted;
+  background: textOpacity($textPrimary, 0.08);
+  color: $textSecondary;
 
   svg {
    width: 1.25rem;
@@ -983,7 +992,7 @@
     height: 0.625rem;
     margin-left: -0.3125rem;
     border-radius: 50%;
-    background: $primaryHover;
+    background: $btnPrimaryHover;
     box-shadow: 0 0 8px $gold;
    }
   }
@@ -1009,8 +1018,8 @@
  &.preview-page {
   display: flex;
   flex-direction: column;
-  gap: $space-8;
-  padding: $space-16;
+  gap: 8px;
+  padding: 16px;
  }
 
  &.matches-page {
@@ -1019,7 +1028,7 @@
   min-height: 100%;
   gap: 1rem;
   padding: 1.1rem;
-  background: $minimalBg;
+  background: $bg;
  }
 
  &.segment {
@@ -1027,9 +1036,9 @@
   display: flex;
   width: 100%;
   gap: 0.25rem;
-  background: $appSurface;
+  background: $cardBg;
   @include neo-plunk;
-  border-radius: $radius-card;
+  border-radius: 5px;
   padding: 0.25rem;
 
   &.compact {
@@ -1049,7 +1058,7 @@
   &.gold-bar {
    gap: 0;
    padding: 3px;
-   border: 1px solid textOpacity($appText, 0.2);
+   border: 1px solid textOpacity($textPrimary, 0.2);
    background: transparent;
    box-shadow: none;
 
@@ -1069,15 +1078,15 @@
   .practice-sheet &.gold-bar,
   .room-sheet &.gold-bar {
    padding: 4px;
-   border-color: $minimalBorderStrong;
-   border-radius: $radius-minimal;
-   background: $minimalSurfaceElevated;
+   border-color: $borderStrong;
+   border-radius: 12px;
+   background: $surfaceElevated;
 
    > .segment-thumb {
     top: 4px;
     bottom: 4px;
     border-radius: 8px;
-    background: $minimalGold;
+    background: $gold;
    }
   }
  }
@@ -1090,7 +1099,7 @@
   border: 1px solid textOpacity(#fff1b8, 0.8);
   background: $gold;
   transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: $z-base;
+  z-index: 0;
  }
 
  &.matches-empty {
@@ -1098,8 +1107,8 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: $space-8;
-  padding: 1.75rem $space-16 $space-24;
+  gap: 8px;
+  padding: 1.75rem 16px 24px;
  }
 
  &.empty-state-icon {
@@ -1108,7 +1117,6 @@
   justify-content: center;
   width: 2.25rem;
   height: 2.25rem;
-  color: $gold;
 
   svg {
    width: 100%;
@@ -1117,14 +1125,14 @@
 
   .matches-page &,
   .leaderboard-page & {
-   color: $minimalTextTertiary;
+   color: $textTertiary;
   }
  }
 
  &.matches-stats {
   display: flex;
   flex-direction: column;
-  gap: $space-12;
+  gap: 12px;
  }
 
  &.score-hero-icon {
@@ -1142,14 +1150,14 @@
   }
 
   .matches-page & {
-   color: $minimalGold;
+   color: $gold;
   }
  }
 
  &.score-hero-icon {
   width: 2.75rem;
   height: 2.75rem;
-  margin-bottom: $space-8;
+  margin-bottom: 8px;
 
   svg {
    width: 1.875rem;
@@ -1167,66 +1175,66 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
-  padding: $space-12 $space-16;
-  border-bottom: 1px solid $appLine;
+  padding: 12px 16px;
+  border-bottom: 1px solid $borderSubtle;
 
   &:last-child {
    border-bottom: none;
   }
 
   .rules-card & {
-   padding: $space-8 0;
-   border-bottom: 1px solid $minimalBorderSubtle;
+   padding: 8px 0;
+   border-bottom: 1px solid $borderSubtle;
   }
 
   .profile-list & {
-   gap: $space-12;
-   padding: 0.875rem $space-16;
-   border-bottom-color: $minimalBorderSubtle;
+   gap: 12px;
+   padding: 0.875rem 16px;
+   border-bottom-color: $borderSubtle;
   }
  }
 
  &.rules-title-row {
   display: flex;
   align-items: center;
-  gap: $space-8;
+  gap: 8px;
 
   svg {
    width: 1.25rem;
    height: 1.25rem;
    flex-shrink: 0;
-   color: $minimalGold;
+   color: $gold;
   }
  }
 
  &.rules-bullet {
   display: flex;
   align-items: flex-start;
-  gap: $space-8;
+  gap: 8px;
 
   svg {
    width: 1rem;
    height: 1rem;
    margin-top: 0.125rem;
    flex-shrink: 0;
-   color: $minimalGold;
+   color: $gold;
   }
  }
 
  &.rules-example {
   display: flex;
   flex-direction: column;
-  gap: $space-4;
-  padding: $space-12 0.875rem;
-  border: 1px solid textOpacity($minimalGold, 0.4);
+  gap: 4px;
+  padding: 12px 0.875rem;
+  border: 1px solid textOpacity($gold, 0.4);
   border-radius: 10px;
-  background: textOpacity($minimalGold, 0.06);
+  background: textOpacity($gold, 0.06);
  }
 
  &.stat-label {
   display: flex;
   align-items: center;
-  gap: $space-8;
+  gap: 8px;
   min-width: 0;
 
   .stat-icon {
@@ -1237,7 +1245,7 @@
    .rules-card & {
     width: 1.125rem;
     height: 1.125rem;
-    color: $minimalGold;
+    color: $gold;
    }
 
    &.gold {
@@ -1257,22 +1265,22 @@
  &.leaderboard-page {
   min-height: 100%;
   padding: 1.1rem;
-  background: $minimalBg;
+  background: $bg;
  }
 
  &.lb-podium {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: end;
-  gap: $space-8;
-  margin-bottom: $space-16;
+  gap: 8px;
+  margin-bottom: 16px;
  }
 
  &.lb-podium-col {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: $space-4;
+  gap: 4px;
   grid-row: 1;
   min-width: 0;
   cursor: pointer;
@@ -1281,9 +1289,9 @@
   > svg {
    width: 1.625rem;
    height: 1.625rem;
-   margin-bottom: $space-4;
-   color: $minimalGold;
-   fill: $minimalGold;
+   margin-bottom: 4px;
+   color: $gold;
+   fill: $gold;
   }
 
   &.first {
@@ -1319,7 +1327,7 @@
   flex-direction: column;
   min-height: 100%;
   padding: 1.1rem;
-  background: $minimalBg;
+  background: $bg;
  }
 
  &.wallet-page {
@@ -1327,26 +1335,26 @@
   flex-direction: column;
   min-height: 100%;
   padding: 1.1rem;
-  background: $minimalBg;
+  background: $bg;
  }
 
  &.profile-page {
   min-height: 100%;
   padding: 1.1rem;
-  background: $minimalBg;
+  background: $bg;
  }
 
  &.profile-hero {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: $space-8;
+  gap: 8px;
  }
 
  &.profile-id-top {
   display: flex;
   justify-content: flex-end;
-  margin-bottom: -$space-12;
+  margin-bottom: -12px;
  }
 
  &.profile-avatar-wrap {
@@ -1361,16 +1369,16 @@
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  padding: 0.1875rem 0.625rem 0.1875rem $space-8;
-  border: 2px solid $primaryContrast;
+  padding: 0.1875rem 0.625rem 0.1875rem 8px;
+  border: 2px solid $textInverse;
   border-radius: 999px;
   background: linear-gradient(
    180deg,
-   $primaryHover,
-   $primary 50%,
-   $primaryDark
+   $btnPrimaryHover,
+   $gold 50%,
+   $btnPrimaryHover
   );
-  color: $primaryContrast;
+  color: $textInverse;
   transform: translateX(-50%);
 
   svg {
@@ -1381,7 +1389,7 @@
  &.profile-id-row {
   display: flex;
   align-items: center;
-  gap: $space-12;
+  gap: 12px;
  }
 
  &.profile-id-text {
@@ -1398,8 +1406,8 @@
   align-items: center;
   gap: 0.125rem;
   min-width: 0;
-  padding: 0.875rem $space-8;
-  border-left: 1px solid $minimalBorderSubtle;
+  padding: 0.875rem 8px;
+  border-left: 1px solid $borderSubtle;
 
   &:first-child {
    border-left: none;
@@ -1409,22 +1417,22 @@
  &.profile-stats-strip {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: $space-8;
-  margin: $space-16 0;
+  gap: 8px;
+  margin: 16px 0;
  }
 
  &.profile-row-label {
   display: flex;
   align-items: center;
-  gap: $space-12;
+  gap: 12px;
   flex-shrink: 0;
-  color: $minimalGold;
+  color: $gold;
  }
 
  &.profile-name-row {
   display: flex;
   align-items: center;
-  gap: $space-8;
+  gap: 8px;
   min-width: 0;
 
   img {
@@ -1478,7 +1486,7 @@
  &.wallet-hero-underline {
   width: 5rem;
   height: 2px;
-  margin: $space-8 0 $space-16;
+  margin: 8px 0 16px;
   border-radius: 999px;
   background: linear-gradient(90deg, transparent, $gold, transparent);
  }
@@ -1486,9 +1494,9 @@
  &.wallet-withdrawable-pill {
   display: flex;
   align-items: center;
-  padding: $space-8 0.875rem;
-  border: 1px solid textOpacity($greenishTeal, 0.45);
-  background: textOpacity($greenishTeal, 0.12);
+  padding: 8px 0.875rem;
+  border: 1px solid textOpacity($success, 0.45);
+  background: textOpacity($success, 0.12);
  }
 
  &.wallet-btn-row {
@@ -1549,8 +1557,8 @@
   width: 2.25rem;
   height: 2.25rem;
   border-radius: 50%;
-  background: $minimalCardBg;
-  color: $minimalSuccess;
+  background: $cardBg;
+  color: $success;
 
   svg {
    width: 1.125rem;
@@ -1558,11 +1566,11 @@
   }
 
   .wallet-tx-item.neg & {
-   color: $minimalError;
+   color: $error;
   }
 
   .wallet-tx-item.pending & {
-   color: $minimalTextSecondary;
+   color: $textSecondary;
   }
 
   .wallet-tx-item.loading & {
@@ -1577,7 +1585,12 @@
  &.wallet-tx-title {
   display: flex;
   align-items: center;
-  gap: $space-8;
+  gap: 8px;
+
+  .tx-pending-loader {
+   flex-shrink: 0;
+   color: $textSecondary;
+  }
  }
 
  &.room-options {
@@ -1585,13 +1598,13 @@
   flex-direction: column;
   align-items: normal;
   text-align: left;
-  gap: $space-12;
+  gap: 12px;
  }
 
  &.room-heading {
   display: flex;
   flex-direction: column;
-  gap: $space-4;
+  gap: 4px;
  }
 
  &.room-form {
@@ -1618,9 +1631,9 @@
    height: 1px;
    background: linear-gradient(
     90deg,
-    textOpacity($minimalBorderStrong, 0),
-    $minimalBorderStrong,
-    textOpacity($minimalBorderStrong, 0)
+    textOpacity($borderStrong, 0),
+    $borderStrong,
+    textOpacity($borderStrong, 0)
    );
   }
 
@@ -1636,15 +1649,15 @@
  &.room-actions {
   display: flex;
   flex-direction: column;
-  gap: $space-8;
+  gap: 8px;
  }
 
  &.room-wait-spinner {
   align-self: center;
   width: 1.5rem;
   height: 1.5rem;
-  border: 2.5px solid $minimalBorderStrong;
-  border-top-color: $minimalGold;
+  border: 2.5px solid $borderStrong;
+  border-top-color: $gold;
   border-radius: 50%;
   animation: room-wait-spin 0.8s linear infinite;
 
@@ -1653,7 +1666,7 @@
   }
  }
  &.match-row-item {
-  padding-bottom: $space-12;
+  padding-bottom: 12px;
  }
  &.match-row {
   display: flex;
@@ -1662,11 +1675,11 @@
   min-height: 3.25rem;
   align-items: center;
   justify-content: space-between;
-  gap: $space-12;
+  gap: 12px;
   padding: 0.625rem 0.875rem;
-  background: $appSurface;
-  border: 1px solid $appCardBorder;
-  border-radius: $radius-card;
+  background: $cardBg;
+  border: 1px solid $borderSubtle;
+  border-radius: 5px;
 
   &.clickable {
    cursor: pointer;
@@ -1677,7 +1690,7 @@
    //
    //  &::after {
    //   @include long-arrow;
-   //   color: textOpacity($appText, 0.5);
+   //   color: textOpacity($textPrimary, 0.5);
    //  }
    // }
   }
@@ -1687,27 +1700,27 @@
   }
 
   &.win .match-row-amt {
-   color: $greenishTeal;
+   color: $success;
   }
 
   &.loss .match-row-amt {
-   color: $paleRed;
+   color: $error;
   }
 
   &.draw .match-row-amt {
    font-family: $fontOutfitExtraBold;
-   color: $appTextMuted;
+   color: $textSecondary;
   }
 
   .matches-page & {
-   border-color: $minimalBorderSubtle;
-   border-radius: $radius-minimal;
-   background: $minimalCardBg;
+   border-color: $borderSubtle;
+   border-radius: 12px;
+   background: $cardBg;
    transition: border-color 0.15s ease;
 
    @media (hover: hover) {
     &.clickable:hover {
-     border-color: $minimalBorderStrong;
+     border-color: $borderStrong;
     }
    }
   }
@@ -1721,14 +1734,7 @@
   min-height: 100%;
   padding: 1rem 1rem 2.25rem;
   overflow: hidden;
-  background:
-   radial-gradient(
-     60% 22% at 50% 0%,
-     #{textOpacity($indigo, 0.32)},
-     transparent
-    )
-    no-repeat,
-   $appBg;
+  background: $bg;
  }
 
  &.game-picker-heading {
@@ -1758,12 +1764,11 @@
    position: absolute;
    top: 3rem;
    left: 50%;
-   z-index: $z-raised;
+   z-index: 1;
    width: 15rem;
    height: 15rem;
    object-fit: contain;
    transform: translateX(-50%);
-   filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.55));
   }
  }
 
@@ -1773,14 +1778,8 @@
   left: 50%;
   width: 18.75rem;
   height: 18.75rem;
-  border: 1.5px solid textOpacity($gold, 0.12);
+  border: 1px solid $borderSubtle;
   border-radius: 50%;
-  background: radial-gradient(
-   circle,
-   #{textOpacity($gold, 0.35)} 0,
-   #{textOpacity($gold, 0.12)} 30%,
-   transparent 50%
-  );
   transform: translateX(-50%);
 
   &::before,
@@ -1792,12 +1791,12 @@
 
   &::before {
    inset: 1.875rem;
-   border: 1.5px solid textOpacity($gold, 0.22);
+   border: 1px solid $borderSubtle;
   }
 
   &::after {
    inset: 3.75rem;
-   border: 1.5px solid textOpacity($gold, 0.35);
+   border: 1px solid $borderStrong;
   }
  }
 
@@ -1807,12 +1806,9 @@
   left: 50%;
   width: 15.75rem;
   height: 3rem;
-  border: 2.5px solid transparent;
+  border: 1px solid $borderStrong;
   border-radius: 50%;
-  background:
-   linear-gradient(180deg, $indigoFaceTop, #0e1033) padding-box,
-   linear-gradient(180deg, $goldLight, $gold 55%, $primaryDark) border-box;
-  box-shadow: 0 4px 0 $btnEdgeGold;
+  background: $cardBg;
   transform: translateX(-50%);
 
   &::before {
@@ -1822,16 +1818,10 @@
    left: 50%;
    width: 11.25rem;
    height: 1.8125rem;
-   border: 1px solid textOpacity($goldLight, 0.6);
+   border: 1px solid $borderSubtle;
    border-radius: 50%;
-   background: textOpacity($gold, 0.15);
+   background: $surfaceElevated;
    transform: translateX(-50%);
-  }
-
-  :root[data-theme="light"] & {
-   background:
-    linear-gradient($appSurface, $appSurface) padding-box,
-    linear-gradient(180deg, $goldLight, $gold 55%, $primaryDark) border-box;
   }
  }
 
@@ -1843,12 +1833,10 @@
   justify-content: center;
   width: 8.125rem;
   height: 11.875rem;
-  border: 1px solid textOpacity(#6870f0, 0.4);
-  border-radius: $radius-card;
-  background: linear-gradient(180deg, #262a7a, $indigoFaceBottom);
-  color: #a9ade0;
-  opacity: 0.45;
-  filter: blur(2px);
+  border: 1px solid $borderSubtle;
+  border-radius: 12px;
+  background: $cardBg;
+  color: $textTertiary;
 
   &.prev {
    left: -5.75rem;
@@ -1862,18 +1850,14 @@
    width: 1.75rem;
    height: 1.75rem;
   }
-
-  :root[data-theme="light"] & {
-   background: $appSurface;
-  }
  }
 
  &.game-picker-sparkles {
   position: absolute;
   inset: 0;
-  z-index: $z-raised;
+  z-index: 1;
   pointer-events: none;
-  color: $goldLight;
+  color: $textTertiary;
 
   svg {
    position: absolute;
@@ -1948,10 +1932,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: $space-12;
+  gap: 12px;
   min-height: 3.25rem;
   padding: 0.6875rem 0;
-  border-bottom: 1px solid $minimalBorderSubtle;
+  border-bottom: 1px solid $borderSubtle;
  }
 
  &.wallet-modal-layout,
@@ -1961,7 +1945,7 @@
   flex-direction: column;
  }
  &.wallet-modal-layout {
-  gap: $space-12;
+  gap: 12px;
  }
  &.modal-loader {
   display: flex;
@@ -1993,10 +1977,6 @@
    filter: grayscale(1) brightness(0.38);
   }
 
-  :root[data-theme="light"] &::before {
-   filter: grayscale(1) brightness(0.88);
-  }
-
   @include reduced-motion {
    &::before {
     filter: none;
@@ -2021,7 +2001,10 @@
   margin: -2rem auto -1rem;
  }
  &.deposit-success-amountWrapper {
-  margin-top: -2.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: -2.25rem;
  }
 
  &.deposit-qr-header {
@@ -2035,14 +2018,14 @@
  &.modal-info-box {
   display: flex;
   align-items: center;
-  gap: $space-8;
+  gap: 8px;
   width: 100%;
   min-height: 2.25rem;
   padding: 0.3125rem 0.75rem 0.3125rem 0.625rem;
-  background: $minimalSurfaceElevated;
-  border: 1px solid $minimalBorderSubtle;
+  background: $surfaceElevated;
+  border: 1px solid $borderSubtle;
   border-radius: 10px;
-  color: $minimalGold;
+  color: $gold;
 
   svg {
    flex-shrink: 0;
@@ -2062,7 +2045,7 @@
   align-items: center;
   gap: 0.375rem;
   font-size: 14px;
-  color: $minimalGold;
+  color: $gold;
 
   @include from(phone) {
    font-size: 15px;
@@ -2080,15 +2063,15 @@
   align-items: center;
   justify-content: center;
   gap: 0.375rem;
-  color: $minimalGold;
+  color: $gold;
  }
 
  &.deposit-qr-wrap {
   align-self: center;
   width: min(18.125rem, 100%);
-  margin: $space-16 0;
+  margin: 16px 0;
   overflow: hidden;
-  border-radius: $radius-minimal;
+  border-radius: 12px;
   line-height: 0;
 
   svg {
@@ -2100,13 +2083,13 @@
  &.deposit-address-row {
   display: flex;
   align-items: center;
-  gap: $space-12;
-  border: 1px solid $minimalInputBorder;
-  border-radius: $radius-minimal;
-  background: $minimalInputBg;
-  padding: $space-4 0.875rem;
+  gap: 12px;
+  border: 1px solid $inputBorder;
+  border-radius: 12px;
+  background: $inputBg;
+  padding: 4px 0.875rem;
   min-height: 3rem;
-  margin: 0.375rem 0 $space-16;
+  margin: 0.375rem 0 16px;
  }
 
  &.deposit-expiry-row {
@@ -2118,9 +2101,9 @@
 
  &.deposit-expiry-track {
   height: 3px;
-  margin-top: $space-8;
+  margin-top: 8px;
   overflow: hidden;
-  background: $appLine;
+  background: $borderSubtle;
  }
 
  &.deposit-expiry-fill {
@@ -2158,8 +2141,8 @@
   flex-direction: column;
   justify-content: safe center;
   height: 100%;
-  padding: $space-16;
-  background: $minimalBg;
+  padding: 16px;
+  background: $bg;
   overflow-y: auto;
  }
 
@@ -2176,19 +2159,19 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: $space-12;
+  gap: 12px;
   flex-shrink: 0;
   position: relative;
   padding: 0.375rem 0.375rem 0.375rem 0.625rem;
-  border: 1px solid $minimalBorderSubtle;
-  border-radius: $radius-minimal;
-  background: $minimalCardBg;
+  border: 1px solid $borderSubtle;
+  border-radius: 12px;
+  background: $cardBg;
 
   &::after {
    content: "";
    position: absolute;
    inset: -1px;
-   border: 1px solid $minimalGold;
+   border: 1px solid $gold;
    border-radius: inherit;
    opacity: 0;
    transition: opacity 0.25s ease;
@@ -2223,7 +2206,7 @@
  &.gr-name-line {
   display: flex;
   align-items: center;
-  gap: $space-8;
+  gap: 8px;
   max-width: 100%;
   min-width: 0;
  }
@@ -2248,8 +2231,8 @@
    box-sizing: border-box;
    width: calc(min(100cqw, 100cqh) + 0.5rem);
    aspect-ratio: 1 / 1;
-   border: 1px solid $minimalBorderStrong;
-   background: $minimalCardBg;
+   border: 1px solid $borderStrong;
+   background: $cardBg;
    transform: translateX(-50%);
    pointer-events: none;
   }
@@ -2259,25 +2242,25 @@
   position: absolute;
   top: 0;
   left: 50%;
-  z-index: $z-top;
+  z-index: 3;
   display: flex;
   align-items: center;
   gap: 0.375rem;
   padding: 0.375rem 0.75rem;
-  border: 1px solid $minimalBorderStrong;
+  border: 1px solid $borderStrong;
   border-radius: 999px;
-  background: $minimalSurfaceElevated;
+  background: $surfaceElevated;
   white-space: nowrap;
   transform: translate(-50%, -50%);
 
   svg {
    width: 0.875rem;
    height: 0.875rem;
-   color: $minimalWarning;
+   color: $warning;
   }
 
   &.reconnected svg {
-   color: $minimalSuccess;
+   color: $success;
   }
  }
 
@@ -2287,8 +2270,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: textOpacity($minimalBg, 0.82);
-  z-index: $z-top;
+  background: textOpacity($bg, 0.82);
+  z-index: 3;
  }
 
  &.gr-promotion-card {
@@ -2297,9 +2280,9 @@
   align-items: center;
   gap: 0.75rem;
   padding: 1rem;
-  border: 1px solid $minimalBorderSubtle;
-  border-radius: $radius-minimal;
-  background: $minimalCardBg;
+  border: 1px solid $borderSubtle;
+  border-radius: 12px;
+  background: $cardBg;
  }
 
  &.gr-promotion-options {
@@ -2356,9 +2339,9 @@
   min-height: 3.5rem;
   padding: 0 0.5rem 0 0.625rem;
   overflow: hidden;
-  border: 1px solid $minimalGold;
-  border-radius: $radius-minimal;
-  background: $minimalCardBg;
+  border: 1px solid $gold;
+  border-radius: 12px;
+  background: $cardBg;
   animation: draw-offer-in 0.3s ease-out;
 
   @include reduced-motion {
@@ -2381,8 +2364,8 @@
   width: 2.25rem;
   height: 2.25rem;
   border-radius: 10px;
-  background: $minimalSurfaceElevated;
-  color: $minimalGold;
+  background: $surfaceElevated;
+  color: $gold;
 
   svg {
    width: 1.25rem;
@@ -2396,7 +2379,7 @@
   right: 0;
   bottom: 0;
   height: 2px;
-  background: $minimalGold;
+  background: $gold;
   transform-origin: left center;
   animation: draw-offer-timer 15s linear forwards;
 
@@ -2414,7 +2397,7 @@
   flex-shrink: 0;
 
   &.reviewing .gr-move-strip {
-   border-bottom-color: $minimalGold;
+   border-bottom-color: $gold;
   }
  }
 
@@ -2425,7 +2408,7 @@
   min-width: 0;
   height: 2.5rem;
   padding: 0 0.25rem;
-  border-bottom: 1px solid $minimalBorderSubtle;
+  border-bottom: 1px solid $borderSubtle;
   overflow-x: auto;
   white-space: nowrap;
   scrollbar-width: none;
@@ -2438,11 +2421,11 @@
    content: "";
    position: sticky;
    left: -0.25rem;
-   z-index: $z-raised;
+   z-index: 1;
    flex: 0 0 1.75rem;
    align-self: stretch;
    margin-right: -1.75rem;
-   background: linear-gradient(90deg, $minimalBg, transparent);
+   background: linear-gradient(90deg, $bg, transparent);
    opacity: 0;
    pointer-events: none;
    transition: opacity 0.2s ease;
@@ -2462,8 +2445,8 @@
   flex-shrink: 0;
   width: 0.875rem;
   height: 0.875rem;
-  border: 2px solid $minimalBorderStrong;
-  border-top-color: $minimalGold;
+  border: 2px solid $borderStrong;
+  border-top-color: $gold;
   border-radius: 50%;
   animation: gr-move-spin 0.8s linear infinite;
 
@@ -2480,7 +2463,7 @@
   height: 2rem;
   margin: 0 0.5rem;
   padding: 0.1875rem 0.3125rem 0.1875rem 0.375rem;
-  border: 1px solid $minimalBorderStrong;
+  border: 1px solid $borderStrong;
   border-radius: 8px;
  }
 
@@ -2510,30 +2493,31 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: $space-8;
-  margin-bottom: $space-20;
+  gap: 8px;
+  margin-bottom: 20px;
   text-align: center;
 
   img {
    width: 6rem;
    height: 6rem;
    object-fit: cover;
+   border-radius: 50%;
   }
  }
 
  &.result-tiles {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: $space-12;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
 
   &.single {
-   grid-template-columns: 1fr;
+   grid-template-columns: minmax(0, 1fr);
   }
 
   &.versus {
    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
    align-items: center;
-   gap: $space-8;
+   gap: 8px;
   }
  }
 
@@ -2547,7 +2531,7 @@
   .split-reveal-backdrop {
    position: absolute;
    inset: 0;
-   background: $appBg;
+   background: $bg;
    opacity: 0;
   }
 
@@ -2609,11 +2593,14 @@
   margin-top: 0.75rem;
 
   &.loss {
-   --payout-stub: #{$minimalBorderStrong};
-   --payout-stub-ink: #{$minimalTextPrimary};
-   --payout-money: #{$minimalError};
-   --payout-stamp: #{$minimalError};
+   --payout-stub: #{$borderStrong};
+   --payout-stub-ink: #{$textPrimary};
+   --payout-money: #{$error};
+   --payout-stamp: #{$error};
+  }
 
+  &.loss,
+  &.draw {
    &::before,
    .payout-floor,
    .payout-slot::after {
@@ -2621,25 +2608,25 @@
    }
 
    .payout-slot {
-    background: $minimalSurfaceElevated;
+    background: $surfaceElevated;
 
     &::before {
-     background: $minimalBorderStrong;
+     background: $borderStrong;
     }
    }
   }
 
   &.draw {
-   --payout-stub: linear-gradient(180deg, #8f94ff, #6a70f0);
+   --payout-stub: #{$info};
    --payout-stub-ink: #{$white};
-   --payout-stamp: #{$indigo};
+   --payout-stamp: #{$info};
   }
 
   &.match_cancelled {
-   --payout-stub: linear-gradient(180deg, #9a9db4, #82869f);
+   --payout-stub: #{$textTertiary};
    --payout-stub-ink: #{$white};
    --payout-money: #{textOpacity($poolInk, 0.7)};
-   --payout-stamp: #6a6f95;
+   --payout-stamp: #{$textTertiary};
   }
 
   &.practice {
@@ -2661,7 +2648,7 @@
    right: -8.75rem;
    top: calc(var(--rise-h) + 0.875rem);
    height: 12rem;
-   background: textOpacity($appText, 0.12);
+   background: textOpacity($textPrimary, 0.12);
    mask:
     url("/pattern-cubes.svg") 50% 0 / 1.515625rem 2.625rem repeat,
     radial-gradient(60% 90% at 50% 0, #000 20%, transparent 75%);
@@ -2842,7 +2829,7 @@
    background: linear-gradient(
     180deg,
     #020312 0 0.25rem,
-    $indigoEdgeDark 0.25rem,
+    $borderSubtle 0.25rem,
     #141640
    );
 
@@ -2886,7 +2873,7 @@
 
   .payout-spark {
    position: absolute;
-   z-index: $z-raised;
+   z-index: 1;
    left: 0;
    top: 0;
    opacity: 0;
@@ -2920,59 +2907,6 @@
    }
   }
 
-  :root[data-theme="light"] &:not(.loss) {
-   &::before {
-    background: textOpacity($indigoEdge, 0.07);
-   }
-
-   .payout-floor {
-    background: textOpacity($indigoEdge, 0.2);
-   }
-
-   .payout-paper {
-    box-shadow: inset 0 0 0 1px textOpacity($indigoEdge, 0.28);
-   }
-
-   .payout-beam {
-    background: linear-gradient(
-     180deg,
-     textOpacity($goldSolid, 0),
-     textOpacity($goldSolid, 0.1) 45%,
-     textOpacity($goldMid, 0.24)
-    );
-   }
-
-   .payout-ticket::before {
-    inset: auto 1rem -0.75rem;
-    height: 3rem;
-    background: radial-gradient(
-     closest-side,
-     textOpacity($indigoEdge, 0.38) 75%,
-     transparent
-    );
-   }
-
-   .payout-slot {
-    background: $indigoEdge;
-
-    &::after {
-     background: radial-gradient(
-      50% 100% at 50% 100%,
-      textOpacity($indigoEdge, 0.3),
-      transparent
-     );
-    }
-   }
-
-   &.lit .payout-slot::after {
-    background: radial-gradient(
-     50% 100% at 50% 100%,
-     textOpacity($gold, 0.6),
-     transparent
-    );
-   }
-  }
-
   @include reduced-motion {
    .payout-ticket,
    .payout-beam {
@@ -2990,16 +2924,16 @@
  &.room-players {
   display: flex;
   align-items: center;
-  gap: $space-12;
+  gap: 12px;
   width: 100%;
-  margin: $space-8 0;
+  margin: 8px 0;
  }
 
  &.stat-tile-label {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: $space-4;
+  gap: 4px;
   max-width: 100%;
   min-width: 0;
 
@@ -3007,7 +2941,7 @@
    width: 1.125rem;
    height: 1.125rem;
    flex-shrink: 0;
-   color: $appTextMuted;
+   color: $textSecondary;
   }
 
   .result-tiles:not(.versus) .label-top & > svg {
@@ -3016,7 +2950,7 @@
   }
 
   :is(.matches-page, .result-sheet) .result-tiles .label-top & > svg {
-   color: $minimalGold;
+   color: $gold;
   }
 
   .icon-card & {
@@ -3047,10 +2981,10 @@
    > svg {
     width: 0.75rem;
     height: 0.75rem;
-    color: $appText;
+    color: $textPrimary;
 
     .result-sheet & {
-     color: $minimalTextSecondary;
+     color: $textSecondary;
     }
    }
   }
@@ -3058,8 +2992,8 @@
 
  &.stat-tile {
   width: 100%;
-  padding: $space-16;
-  background: $appCard;
+  padding: 16px;
+  background: $cardBg;
   @include neo-plunk;
   text-align: center;
 
@@ -3069,8 +3003,8 @@
    gap: 0.625rem;
    min-width: 0;
    padding: 0.875rem;
-   border: 1px solid $appCardBorder;
-   background: $appSurface;
+   border: 1px solid $borderSubtle;
+   background: $cardBg;
    text-align: left;
   }
 
@@ -3080,7 +3014,7 @@
    align-items: center;
    gap: 0.25rem;
    min-width: 0;
-   padding: 0.875rem $space-8;
+   padding: 0.875rem 8px;
   }
 
   &.stake {
@@ -3104,12 +3038,12 @@
    display: flex;
    flex-direction: column;
    align-items: center;
-   gap: $space-8;
+   gap: 8px;
    min-width: 0;
 
    .result-tiles & {
-    gap: $space-4;
-    padding: 0.875rem $space-12;
+    gap: 4px;
+    padding: 0.875rem 12px;
     background: transparent;
    }
 
@@ -3118,17 +3052,17 @@
    }
 
    :is(.matches-page, .result-sheet) .result-tiles & {
-    border: 1px solid $minimalBorderSubtle;
-    border-radius: $radius-minimal;
-    background: $minimalCardBg;
+    border: 1px solid $borderSubtle;
+    border-radius: 12px;
+    background: $cardBg;
 
     &.highlight {
-     border-color: $minimalGold;
+     border-color: $gold;
     }
    }
 
    .result-sheet .result-tiles & {
-    background: $minimalSurfaceElevated;
+    background: $surfaceElevated;
    }
   }
 
@@ -3137,13 +3071,13 @@
    flex: 1;
    flex-direction: column;
    align-items: center;
-   gap: $space-8;
+   gap: 8px;
    min-width: 0;
 
    svg {
     width: 1.5rem;
     height: 1.5rem;
-    color: $appTextMuted;
+    color: $textSecondary;
    }
   }
  }
@@ -3152,20 +3086,20 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: $space-8;
-  margin-top: $space-20;
+  gap: 8px;
+  margin-top: 20px;
 
   .result-sheet.versus & {
-   gap: $space-16;
+   gap: 16px;
   }
  }
 
  &.result-time-pill {
   display: inline-flex;
   align-items: center;
-  gap: $space-8;
+  gap: 8px;
   padding: 0.4375rem 0.875rem;
-  border: 1px solid $minimalBorderSubtle;
+  border: 1px solid $borderSubtle;
   border-radius: 999px;
 
   svg {
@@ -3173,7 +3107,7 @@
    height: 1.125rem;
    flex-shrink: 0;
    stroke-width: 2.25;
-   color: $minimalGold;
+   color: $gold;
   }
  }
 
@@ -3189,7 +3123,7 @@
   height: 2.25rem;
   margin-left: 1rem;
   border-radius: 999px;
-  background: textOpacity($minimalTextPrimary, 0.08);
+  background: textOpacity($textPrimary, 0.08);
 
   a {
    display: flex;
@@ -3198,7 +3132,7 @@
    border-radius: inherit;
 
    &:focus-visible {
-    outline: 2px solid $minimalBorderFocus;
+    outline: 2px solid $borderFocus;
     outline-offset: 2px;
    }
   }
@@ -3213,7 +3147,7 @@
   cursor: pointer;
 
   &:focus-visible {
-   outline: 2px solid $minimalBorderFocus;
+   outline: 2px solid $borderFocus;
    outline-offset: 2px;
   }
  }
@@ -3240,46 +3174,86 @@
 
  &.admin-shell {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   min-height: 100vh;
-  background: $white;
+  background: $bg;
+
+  @include from(laptop) {
+   flex-direction: row;
+  }
  }
 
  &.admin-sidebar {
-  flex: 1 1 15.5rem;
   display: flex;
   flex-direction: column;
-  gap: $space-20;
-  padding: $space-20 $space-16;
-  border-bottom: 1px solid $appLine;
+  gap: 12px;
+  min-width: 0;
+  padding: 16px 16px 12px;
+  border-bottom: 1px solid $borderSubtle;
 
   @include from(laptop) {
-   max-width: 17rem;
+   position: sticky;
+   top: 0;
+   flex: 0 0 240px;
+   height: 100vh;
+   box-sizing: border-box;
+   gap: 28px;
+   padding: 20px 12px;
    border-bottom: 0;
-   border-right: 1px solid $appLine;
+   border-right: 1px solid $borderSubtle;
+   overflow-y: auto;
   }
  }
 
  &.admin-brand {
   display: flex;
   align-items: center;
-  gap: $space-8;
-  padding: $space-4 $space-8;
+  gap: 10px;
+  padding: 0 4px;
 
   img {
    width: auto;
-   height: 1.9rem;
+   height: 40px;
+  }
+
+  @include from(laptop) {
+   padding: 4px 12px;
+  }
+ }
+
+ &.admin-nav {
+  display: flex;
+  gap: 4px;
+  margin: 0 -16px;
+  padding: 0 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+   display: none;
+  }
+
+  @include from(laptop) {
+   flex-direction: column;
+   gap: 24px;
+   margin: 0;
+   padding: 0;
+   overflow: visible;
   }
  }
 
  &.admin-nav-group {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  gap: 4px;
+
+  @include from(laptop) {
+   flex-direction: column;
+   gap: 2px;
+  }
  }
 
  &.admin-main {
-  flex: 999 1 35rem;
+  flex: 1;
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -3288,85 +3262,407 @@
  &.admin-content {
   display: flex;
   flex-direction: column;
-  gap: $space-24;
+  gap: 28px;
   width: 100%;
-  max-width: 80rem;
   box-sizing: border-box;
-  padding: $space-24;
+  padding: 20px 16px 32px;
+
+  @include from(tablet) {
+   gap: 32px;
+   padding: 28px 24px 40px;
+  }
+
+  @include from(laptop) {
+   padding: 32px 32px 48px;
+  }
  }
 
  &.admin-page-head {
   display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: $space-12;
+  flex-direction: column;
+  gap: 4px;
+
+  &.centered {
+   align-items: center;
+   text-align: center;
+  }
  }
 
- &.admin-kpis {
+ &.admin-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+ }
+
+ &.admin-stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(13.5rem, 1fr));
-  gap: $space-16;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+
+  @include from(phone) {
+   grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include from(laptop) {
+   grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  &.three-col {
+   @include from(tablet) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+   }
+  }
+ }
+
+ &.admin-toolbar,
+ &.admin-detail-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 16px;
+ }
+
+ &.admin-detail-top {
+  align-items: flex-end;
+ }
+
+ &.admin-title-row,
+ &.admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+ }
+
+ &.admin-table-head {
+  display: none;
+
+  @include from(tablet) {
+   display: grid;
+   grid-template-columns: var(--admin-table-cols);
+   gap: 16px;
+   padding: 12px 20px;
+   border-bottom: 1px solid $borderSubtle;
+  }
+ }
+
+ &.admin-table-skeleton,
+ &.admin-modal-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+ }
+
+ &.admin-table-skeleton {
+  padding: 16px;
+  border-bottom: 1px solid $borderSubtle;
+
+  @include from(tablet) {
+   padding: 16px 20px;
+  }
+ }
+
+ &.admin-detail-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: 12px;
+
+  @include from(tablet) {
+   grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+ }
+
+ &.admin-field-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  min-width: 0;
+  text-align: right;
+
+  @include from(tablet) {
+   align-items: flex-start;
+   text-align: left;
+  }
+ }
+
+ &.admin-detail-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+ }
+
+ &.admin-fields {
+  display: flex;
+  flex-direction: column;
+
+  @include from(tablet) {
+   display: grid;
+   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+   gap: 16px 24px;
+  }
+ }
+
+ &.admin-field {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-top: 1px solid $borderSubtle;
+
+  &:first-child {
+   border-top: 0;
+   padding-top: 0;
+  }
+
+  @include from(tablet) {
+   flex-direction: column;
+   align-items: flex-start;
+   justify-content: flex-start;
+   gap: 4px;
+   padding: 0;
+   border-top: 0;
+  }
+ }
+
+ &.admin-stat-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+
+  @include from(tablet) {
+   gap: 10px;
+  }
+ }
+
+ &.admin-stat-icon {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: $surfaceElevated;
+  color: $textSecondary;
+
+  @include from(tablet) {
+   width: 32px;
+   height: 32px;
+  }
+
+  &.danger {
+   color: $error;
+  }
+
+  &.warning {
+   color: $warning;
+  }
+
+  &.success {
+   color: $success;
+  }
+ }
+
+ &.admin-totals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+ }
+
+ &.admin-hero-icon,
+ &.admin-strip-icon {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+ }
+
+ &.admin-hero-icon {
+  margin-bottom: 4px;
+  background: $gold;
+  color: $textInverse;
+ }
+
+ &.admin-strip-icon {
+  background: $surfaceElevated;
+  color: $textSecondary;
+ }
+
+ &.admin-strip-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 16px 12px;
+  background: $cardBg;
+  text-align: center;
+
+  @include from(tablet) {
+   padding: 24px 16px;
+  }
+ }
+
+ &.admin-flows {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+
+  @include from(tablet) {
+   grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+ }
+
+ &.admin-flow-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+ }
+
+ &.admin-recent {
+  display: flex;
+  flex-direction: column;
+  padding-top: 16px;
+  border-top: 1px solid $borderSubtle;
+ }
+
+ &.admin-recent-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 52px;
+  padding: 8px 0;
+  border-bottom: 1px solid $borderSubtle;
+
+  &:last-child {
+   border-bottom: 0;
+   padding-bottom: 0;
+  }
+ }
+
+ &.admin-recent-side {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+
+  &.end {
+   flex-shrink: 0;
+   align-items: flex-end;
+   text-align: right;
+  }
+ }
+
+ &.admin-error {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid $borderSubtle;
+  border-radius: 12px;
+  background: $cardBg;
+
+  svg {
+   flex-shrink: 0;
+   color: $error;
+  }
  }
 
  &.admin-me {
   display: flex;
   align-items: center;
-  gap: $space-12;
+  gap: 10px;
+  min-width: 0;
+  padding: 6px 10px 6px 6px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: $textSecondary;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+
+  > svg {
+   flex-shrink: 0;
+   transition: transform 0.2s ease-out;
+
+   @include reduced-motion {
+    transition: none;
+   }
+  }
+
+  &:hover,
+  &[aria-expanded="true"] {
+   background: $btnTertiaryHover;
+  }
+
+  &[aria-expanded="true"] > svg {
+   transform: rotate(180deg);
+  }
+
+  &:focus-visible {
+   outline: 2px solid $gold;
+   outline-offset: 2px;
+  }
  }
 
  &.admin-avatar {
   display: grid;
+  flex-shrink: 0;
   place-items: center;
-  width: 2.4rem;
-  height: 2.4rem;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   background: $gold;
-  color: $primaryContrast;
-  font-family: $fontOutfitBold;
+  color: $textInverse;
+  font-family: $fontOutfitSemiBold;
+  font-size: 14px;
  }
 
  &.admin-auth {
-  display: grid;
-  place-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
   min-height: 100vh;
+  min-height: 100dvh;
   box-sizing: border-box;
-  padding: $space-24 $space-16;
-  background:
-   radial-gradient(
-     40rem 30rem at 50% 0%,
-     textOpacity($indigo, 0.32),
-     transparent
-    )
-    no-repeat,
-   $appDarkBg;
+  padding: 32px 20px;
+  background: $bg;
  }
 
  &.admin-auth-brand {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: $space-8;
+  justify-content: center;
+  gap: 10px;
 
   img {
    width: auto;
-   height: 2.75rem;
+   height: 40px;
   }
  }
 
- &.admin-auth-head {
-  display: flex;
-  flex-direction: column;
-  gap: $space-4;
-  text-align: center;
- }
-
- &.admin-placeholder {
-  padding: $space-16;
-  border: 1px dashed $appCardBorder;
-  border-radius: $radius-card;
-  color: $appTextMuted;
-  font-size: 0.9rem;
+ &.admin-auth-icon {
+  display: grid;
+  align-self: center;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: $surfaceElevated;
+  color: $warning;
  }
 }
 

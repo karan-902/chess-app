@@ -9,9 +9,10 @@ export type TransactionCode =
  | "WON"
  | "REFUND"
  | "WITHDRAW_REVERSAL"
- | "PROMO";
+ | "PROMO"
+ | "ADJUSTMENT";
 
-export type MatchResult = "WON" | "BET" | "DRAW" | "MATCH_CANCELLED";
+export type MatchResult = "WON" | "BET" | "DRAW" | "CANCEL";
 export type MatchOutcome = "win" | "loss" | "draw" | "match_cancelled";
 
 export type GamePage = "PLAY" | "MATCHES" | "LEADERBOARD" | "RULES";

@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import dayjs from "dayjs";
 import classNames from "classnames";
+import { CircularProgress } from "@mui/material";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
@@ -10,7 +11,6 @@ import EmptyState from "@gopvp/app/src/components/common/EmptyState";
 import TxItemSkeleton from "@gopvp/app/src/components/common/TxItemSkeleton";
 import { useWallet } from "@gopvp/app/src/hooks/useWallet";
 import { useWalletModal } from "@gopvp/app/src/context/WalletModalContext";
-import CustomChip from "@gopvp/common/src/components/Chip/Chip";
 import {
  speedLogo,
  CallMadeIcon,
@@ -24,7 +24,6 @@ import {
  totalBalanceText,
  withdrawBalanceText,
  transactionsText,
- pendingText,
  processingText,
  noTransactionsYetText,
  transactionsEmptyText,
@@ -99,9 +98,11 @@ function txRow(tx: ITransactionResponse, groupEdgeClass: string) {
         {TRANSACTION_CODE_DESCRIPTIONS[tx.transaction_code]}
        </Text>
        {isPending && (
-        <CustomChip
-         label={tx.status === "PROCESSING" ? processingText : pendingText}
-         customClass="tx-pending-chip"
+        <CircularProgress
+         size={14}
+         color="inherit"
+         aria-label={processingText}
+         className="tx-pending-loader"
         />
        )}
       </Box>

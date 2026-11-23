@@ -8,8 +8,10 @@ import { InfoCircle } from "@gopvp/common/src/components/images";
 import Button from "@gopvp/common/src/components/Button/Button";
 import {
  callAPIInterface,
+ getApiErrorResponse,
  showApiErrorToast,
 } from "@gopvp/common/src/util/api";
+import { ERROR_TYPES } from "@gopvp/common/src/constants/mapper";
 import type { IRegisterBody } from "@gopvp/common/src/types/payload";
 import type { IRegisterResponse } from "@gopvp/common/src/types/response";
 import {
@@ -28,7 +30,9 @@ import {
 import type { IEmailFormScreenProps } from "@gopvp/common/src/types/component";
 import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
 import { formSubmitHandler } from "@gopvp/common/src/util/form";
+import { PASSWORD_STRENGTH_LABELS } from "@gopvp/app/src/constants/label";
 import {
+ PASSWORD_CHAR_PATTERNS,
  countryRule,
  emailRule,
  newPasswordRule,
@@ -55,7 +59,7 @@ export default function EmailFormScreen({
    country: "",
   },
   validationSchema: registerSchema,
-  onSubmit: async (values, { setSubmitting }) => {
+  onSubmit: async (values, { setSubmitting, setStatus }) => {
    try {
     const response = await callAPIInterface<IRegisterResponse, IRegisterBody>(
      "POST",
@@ -69,7 +73,9 @@ export default function EmailFormScreen({
     );
     onRegistered(values.email, values.password, response.message);
    } catch (err) {
-    showApiErrorToast(err);
+    if (getApiErrorResponse(err)?.data?.type === ERROR_TYPES.USERNAME_TAKEN)
+     setStatus({ takenUsername: values.username.trim() });
+    else showApiErrorToast(err);
    } finally {
     setSubmitting(false);
    }
@@ -77,15 +83,17 @@ export default function EmailFormScreen({
  });
  const { password } = formik.values;
  const hasPasswordError = formik.touched.password && !!formik.errors.password;
+ const { lower, upper, digit, symbol } = PASSWORD_CHAR_PATTERNS;
  const passwordScore =
   password.length < PASSWORD_MIN_LENGTH
    ? 1
    : 1 +
      [
-      /[a-z]/.test(password) && /[A-Z]/.test(password),
-      /\d/.test(password),
-      /[^A-Za-z\d]/.test(password),
+      lower.test(password) && upper.test(password),
+      digit.test(password),
+      symbol.test(password),
      ].filter(Boolean).length;
+ const passwordStrengthLabel = PASSWORD_STRENGTH_LABELS[passwordScore];
 
  return (
   <Box
@@ -147,6 +155,7 @@ export default function EmailFormScreen({
       aria-valuemin={1}
       aria-valuemax={PASSWORD_STRENGTH_LEVELS}
       aria-valuenow={passwordScore}
+      aria-valuetext={passwordStrengthLabel}
      >
       {Array.from({ length: PASSWORD_STRENGTH_LEVELS }, (_, index) => (
        <span
@@ -154,6 +163,9 @@ export default function EmailFormScreen({
         className={classNames("strength-bar", index < passwordScore && "filled")}
        />
       ))}
+      <Text component="span" customClass="password-strength-label">
+       {passwordStrengthLabel}
+      </Text>
      </Box>
     )}
    </Box>

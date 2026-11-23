@@ -14,13 +14,14 @@ export const ERROR_TYPES = {
  AMOUNT_BELOW_MINIMUM: "amount_below_minimum",
  AMOUNT_ABOVE_MAXIMUM: "amount_above_maximum",
  DAILY_WITHDRAW_LIMIT_REACHED: "daily_withdraw_limit_reached",
+ USERNAME_TAKEN: "username_taken",
 } as const;
 
 export const MATCH_RESULT_OUTCOMES: Record<MatchResult, MatchOutcome> = {
  WON: "win",
  BET: "loss",
  DRAW: "draw",
- MATCH_CANCELLED: "match_cancelled",
+ CANCEL: "match_cancelled",
 };
 
 export const MATCH_OUTCOME_SUBTITLES: Record<

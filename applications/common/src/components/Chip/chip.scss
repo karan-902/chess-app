@@ -11,12 +11,12 @@
  }
 
  &.MuiChip-outlined {
-  border-color: $appCardBorder;
+  border-color: $borderSubtle;
  }
 
  &.MuiChip-filled {
-  background: $appSecondary;
-  color: $appText;
+  background: $surfaceElevated;
+  color: $textPrimary;
  }
 
  &.minute-chip {
@@ -47,7 +47,7 @@
     font-family: $fontOutfitMedium;
     font-size: 12px;
     letter-spacing: 0;
-    color: $minimalTextSecondary;
+    color: $textSecondary;
 
     @include from(phone) {
      font-size: 13px;
@@ -66,7 +66,7 @@
 
   .MuiChip-label {
    font-size: 14px;
-   color: $minimalTextSecondary;
+   color: $textSecondary;
    padding: 0.3125rem 0.4375rem;
    overflow: visible;
    text-overflow: unset;
@@ -89,7 +89,7 @@
 
   @media (hover: hover) {
    &.MuiChip-clickable:hover {
-    background: $minimalBtnTertiaryHover;
+    background: $btnTertiaryHover;
    }
   }
 
@@ -101,7 +101,7 @@
 
    .MuiChip-label {
     font-family: $fontOutfitBold;
-    color: $minimalGold;
+    color: $gold;
    }
 
    &::after {
@@ -112,7 +112,7 @@
     width: 1.125rem;
     height: 2px;
     margin-left: -0.5625rem;
-    background: $minimalGold;
+    background: $gold;
    }
   }
  }
@@ -148,7 +148,7 @@
    font-family: $fontOutfitBold;
    font-size: 16px;
    line-height: normal;
-   color: $minimalTextPrimary;
+   color: $textPrimary;
 
    @include from(phone) {
     font-size: 17px;
@@ -157,9 +157,9 @@
  }
 
  &.verified-chip {
-  padding: 0.15rem $space-4;
-  background: textOpacity($greenishTeal, 0.12);
-  color: $greenishTeal;
+  padding: 0.15rem 4px;
+  background: textOpacity($success, 0.12);
+  color: $success;
   font-size: 12px;
 
   @include from(phone) {
@@ -169,43 +169,50 @@
   .MuiChip-icon {
    width: 1rem;
    height: 1rem;
-   margin: 0 0 0 $space-4;
+   margin: 0 0 0 4px;
    color: inherit;
   }
 
   &.pending {
-   background: textOpacity($appText, 0.06);
-   color: $appTextMuted;
+   background: textOpacity($textPrimary, 0.06);
+   color: $textSecondary;
   }
  }
 
- &.tx-pending-chip {
+ &.admin-role {
+  flex-shrink: 0;
   height: auto;
-  padding: 0.1875rem $space-8;
-  border-radius: 999px !important;
-  border: 1px solid $minimalBorderStrong;
-  background: transparent;
-  color: $minimalTextSecondary;
+  margin-left: auto;
+  padding: 5px 10px 5px 8px;
+  gap: 6px;
+  border-radius: 6px !important;
+  background: color-mix(in srgb, #{$success} 72%, #000);
+  color: $white;
+
+  .MuiChip-icon {
+   margin: 0;
+   color: inherit;
+  }
 
   .MuiChip-label {
    padding: 0;
-   font-family: $fontOutfitBold;
-   color: $minimalTextSecondary;
-   font-size: 12px;
-   line-height: 1;
+   font-size: 13px;
+   line-height: 1.2;
+  }
 
-   @include from(tablet) {
-    font-size: 13px;
+  @include from(tablet) {
+   .MuiChip-label {
+    font-size: 14px;
    }
   }
  }
 
  &.admin-status {
   height: auto;
-  padding: 2px $space-8;
-  border-radius: 999px;
-  background: $appSheet;
-  color: $appTextMuted;
+  padding: 2px 8px;
+  border-radius: 6px !important;
+  background: $surfaceElevated;
+  color: $textSecondary;
   font-family: $fontOutfitSemiBold;
   font-size: 0.75rem;
 
@@ -214,8 +221,8 @@
   }
 
   &.green {
-   background: textOpacity($greenishTeal, 0.12);
-   color: $greenishTeal;
+   background: textOpacity($success, 0.12);
+   color: $success;
   }
 
   &.red {
@@ -226,11 +233,6 @@
   &.amber {
    background: textOpacity($warning, 0.12);
    color: $warning;
-  }
-
-  &.gold {
-   background: textOpacity($gold, 0.18);
-   color: $appText;
   }
  }
 }

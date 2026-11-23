@@ -4,6 +4,7 @@ import {
  ADMIN_API_STATUS,
  ADMIN_ENDPOINTS,
 } from "@gopvp/admin/src/constants/endpoint";
+import { ADMIN_SESSION_END_TYPES } from "@gopvp/admin/src/constants/mapper";
 import { ROUTES } from "@gopvp/admin/src/constants/route";
 import { somethingWentWrongText } from "@gopvp/admin/src/constants/message";
 import {
@@ -12,7 +13,7 @@ import {
 } from "@gopvp/admin/src/utils/session";
 import type { TApiErrorBody } from "@gopvp/admin/src/types";
 
-let refreshPromise: Promise<string> | null = null;
+let refreshPromise: Promise<unknown> | null = null;
 
 const send = <TResponse, TPayload>(
  method: Method,
@@ -31,15 +32,12 @@ const send = <TResponse, TPayload>(
   })
   .then((response) => response.data);
 
-const refreshAccessToken = () => {
- (async () => {
-  try {
-   return await send("POST", ADMIN_ENDPOINTS.GENERATE_TOKEN);
-  } finally {
+const refreshAccessToken = () =>
+ (refreshPromise ??= send("POST", ADMIN_ENDPOINTS.GENERATE_TOKEN).finally(
+  () => {
    refreshPromise = null;
-  }
- })();
-};
+  },
+ ));
 
 export const getApiErrorMessage = (error: unknown) =>
  (isAxiosError<TApiErrorBody>(error) &&
@@ -63,6 +61,10 @@ export async function adminApiCall<TResponse, TPayload = undefined>(
   const errorType =
    isAxiosError<TApiErrorBody>(error) &&
    error.response?.data?.errors?.[0]?.type;
+  if (session && errorType && ADMIN_SESSION_END_TYPES.has(errorType)) {
+   endAdminSession();
+   throw error;
+  }
   if (!session || errorType !== ADMIN_API_STATUS.TOKEN_EXPIRED) throw error;
   try {
    await refreshAccessToken();

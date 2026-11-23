@@ -2,7 +2,7 @@
 
 .common-otp-input {
  display: flex;
- gap: $space-8;
+ gap: 8px;
  justify-content: center;
 
  .otp-slot {
@@ -15,11 +15,11 @@
   justify-content: center;
   background: transparent;
   border: 0;
-  border-bottom: 1.5px solid textOpacity($appText, 0.22);
+  border-bottom: 1.5px solid textOpacity($textPrimary, 0.22);
   border-radius: 0;
   font-family: $fontOutfitExtraBold;
   font-size: 24px;
-  color: $appText;
+  color: $textPrimary;
   transition: border-color 0.15s ease;
 
   @include from(phone) {
@@ -31,7 +31,8 @@
   }
  }
 
- &.room-code-otp {
+ &.room-code-otp,
+ &.admin-otp {
   align-self: stretch;
   gap: 0.5rem;
 
@@ -39,23 +40,23 @@
    max-width: 3.25rem;
    height: 4rem;
    font-size: 26px;
-   border: 1px solid $minimalInputBorder;
+   border: 1px solid $inputBorder;
    border-radius: 10px;
-   background: $minimalInputBg;
+   background: $inputBg;
    font-family: $fontOutfitBold;
-   color: $minimalTextPrimary;
+   color: $textPrimary;
 
    @include from(phone) {
     font-size: 28px;
    }
 
    &.active {
-    border: 1px solid $minimalBorderFocus;
+    border: 1px solid $borderFocus;
    }
   }
 
   .otp-slot-caret {
-   background: $minimalGold;
+   background: $gold;
   }
  }
 

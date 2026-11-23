@@ -44,14 +44,18 @@ export default function PoolCard({
    </Text>
    {hasOpponentWaiting && (
     <>
-     <Text customClass="pool-card-status">
-      {opponentReadyText}
-      <span>{claimMatchText}</span>
-     </Text>
-     <Box customClass="pool-card-live" />
+     <Box customClass="pool-card-action">
+      <Text customClass="pool-card-status">{opponentReadyText}</Text>
+      <Text customClass="pool-card-claim">
+       {claimMatchText}
+       <icons.moveRight />
+      </Text>
+     </Box>
+     {/* <Box customClass="pool-card-live" /> */}
     </>
    )}
    {onPress &&
+    !hasOpponentWaiting &&
     (isInsufficient ? (
      <Text customClass="pool-card-add">{addFundsText}</Text>
     ) : (

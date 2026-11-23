@@ -7,6 +7,7 @@ import Text from "@gopvp/common/src/components/Text/Text";
 import Input from "@gopvp/common/src/components/Input/Input";
 import Button from "@gopvp/common/src/components/Button/Button";
 import OTPInput from "@gopvp/common/src/components/OtpInput/OtpInput";
+import { ShieldTick } from "@gopvp/common/src/components/images";
 import { getDeviceFingerprint } from "@gopvp/common/src/util/api";
 import {
  ADMIN_API_STATUS,
@@ -23,6 +24,8 @@ import {
  checkEmailText,
  codeSentToText,
  emailText,
+ enterEmailText,
+ enterPasswordText,
  passwordText,
  signInText,
  verifyText,
@@ -46,9 +49,7 @@ export default function Login() {
  const showToast = useToast();
  const [searchParams, setSearchParams] = useSearchParams();
  const ticket = searchParams.get("ticket") ?? "";
- const [step, setStep] = useState<TLoginStep>(
-  ticket ? "otp" : "credentials"
- );
+ const [step, setStep] = useState<TLoginStep>(ticket ? "otp" : "credentials");
  const [email, setEmail] = useState("");
  const [password, setPassword] = useState("");
  const [otp, setOtp] = useState("");
@@ -121,11 +122,11 @@ export default function Login() {
 
     {step === "credentials" && (
      <>
-      <Box customClass="admin-auth-head">
+      <Box customClass="admin-page-head centered">
        <Text component="h1" customClass="admin-page-title">
         {adminSignInText}
        </Text>
-       <Text customClass="color-muted">{adminSignInHintText}</Text>
+       <Text customClass="admin-page-hint">{adminSignInHintText}</Text>
       </Box>
       <form onSubmit={handleCredentials}>
        <Input
@@ -133,10 +134,12 @@ export default function Login() {
         type="email"
         autoComplete="username"
         label={emailText}
-        customClass="admin-input"
-        labelClassName="admin-input-label"
+        placeholder={enterEmailText}
+        customClass="form-input"
         value={email}
         onChange={(event) => setEmail(event.target.value)}
+        disabled={isLoading}
+        autoFocus
         required
         fullWidth
        />
@@ -145,18 +148,21 @@ export default function Login() {
         type="password"
         autoComplete="current-password"
         label={passwordText}
-        customClass="admin-input"
-        labelClassName="admin-input-label"
+        placeholder={enterPasswordText}
+        customClass="form-input"
         value={password}
         onChange={(event) => setPassword(event.target.value)}
+        disabled={isLoading}
         required
         fullWidth
        />
        <Button
         type="submit"
-        customClass="admin-btn primary"
+        variant="contained"
+        customClass="auth-submit-btn"
         fullWidth
         isLoading={isLoading}
+        disabled={!email || !password}
        >
         {signInText}
        </Button>
@@ -166,17 +172,23 @@ export default function Login() {
 
     {step === "otp" && (
      <>
-      <Box customClass="admin-auth-head">
+      <Box customClass="admin-page-head centered">
        <Text component="h1" customClass="admin-page-title">
         {checkEmailText}
        </Text>
-       <Text customClass="color-muted">{codeSentToText(email)}</Text>
+       <Text customClass="admin-page-hint">{codeSentToText(email)}</Text>
       </Box>
       <form onSubmit={handleOtp}>
-       <OTPInput length={ADMIN_OTP_LENGTH} value={otp} onChange={setOtp} />
+       <OTPInput
+        length={ADMIN_OTP_LENGTH}
+        value={otp}
+        onChange={setOtp}
+        customClass="admin-otp"
+       />
        <Button
         type="submit"
-        customClass="admin-btn primary"
+        variant="contained"
+        customClass="auth-submit-btn"
         fullWidth
         isLoading={isLoading}
         disabled={otp.length !== ADMIN_OTP_LENGTH}
@@ -192,11 +204,14 @@ export default function Login() {
 
     {step === "pending" && (
      <>
-      <Box customClass="admin-auth-head">
+      <Box customClass="admin-auth-icon" aria-hidden>
+       <ShieldTick size={24} />
+      </Box>
+      <Box customClass="admin-page-head centered">
        <Text component="h1" customClass="admin-page-title">
         {waitingApprovalText}
        </Text>
-       <Text customClass="color-muted">{waitingApprovalHintText}</Text>
+       <Text customClass="admin-page-hint">{waitingApprovalHintText}</Text>
       </Box>
       <Button customClass="admin-btn" fullWidth onClick={resetToCredentials}>
        {backToSignInText}

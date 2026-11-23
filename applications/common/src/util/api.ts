@@ -99,8 +99,8 @@ export function showApiErrorToast(err: unknown) {
   response.status === 429 ||
   response.status === 401 ||
   LOGOUT_ERROR_TYPES.has(response.data?.type ?? "");
- const toastMessage = response?.data?.message;
- if (isAlreadyToasted || !toastMessage) return;
+ const toastMessage = response?.data?.message || somethingWentWrongText;
+ if (isAlreadyToasted) return;
  showToastMessage({ toastMessage, toastVariant: "error" });
 }
 
@@ -134,10 +134,7 @@ async function getHeaders<TPayload = undefined>(
  };
 }
 
-export const callAPIInterface = async <
- TResponse = unknown,
- TPayload = undefined,
->(
+const requestAPI = async <TResponse = unknown, TPayload = undefined>(
  method: Method,
  path: string,
  data?: TPayload,
@@ -205,5 +202,36 @@ export const callAPIInterface = async <
   }
 
   throw err;
+ }
+};
+
+let pendingApiCount = 0;
+const pendingApiListeners = new Set<() => void>();
+
+export const subscribeApiPending = (listener: () => void) => {
+ pendingApiListeners.add(listener);
+ return () => pendingApiListeners.delete(listener);
+};
+
+export const getIsApiPending = () => pendingApiCount > 0;
+
+const changePendingApiCount = (delta: number) => {
+ pendingApiCount += delta;
+ pendingApiListeners.forEach((listener) => listener());
+};
+
+export const callAPIInterface = async <
+ TResponse = unknown,
+ TPayload = undefined,
+>(
+ method: Method,
+ path: string,
+ data?: TPayload,
+): Promise<TResponse> => {
+ changePendingApiCount(1);
+ try {
+  return await requestAPI<TResponse, TPayload>(method, path, data);
+ } finally {
+  changePendingApiCount(-1);
  }
 };

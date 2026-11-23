@@ -6,7 +6,7 @@ import { ToastProvider } from "@gopvp/admin/src/context/ToastContext";
 import "./styles/main.scss";
 
 createRoot(document.getElementById("root")!).render(
- <MuiThemeProvider theme={getMuiTheme("light")}>
+ <MuiThemeProvider theme={getMuiTheme("dark")}>
   <CssBaseline />
   <ToastProvider>
    <App />

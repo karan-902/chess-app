@@ -1,16 +1,31 @@
 import dayjs from "dayjs";
-import duration from "dayjs/plugin/duration";
+import duration from "dayjs/plugin/duration.js";
+import utc from "dayjs/plugin/utc.js";
 import { justNowText, timeAgoText } from "@gopvp/common/src/constants/message";
+import { COMPACT_AMOUNT_FROM } from "@gopvp/common/src/constants/limit";
 
 dayjs.extend(duration);
+dayjs.extend(utc);
 
 const currencyFormatter = new Intl.NumberFormat("en-US", {
  style: "currency",
  currency: "USD",
 });
 
+const compactCurrencyFormatter = new Intl.NumberFormat("en-US", {
+ style: "currency",
+ currency: "USD",
+ notation: "compact",
+});
+
 export function formatAmount(amount: number): string {
  return currencyFormatter.format(amount).replace(/\.00$/, "");
+}
+
+export function formatCompactAmount(amount: number): string {
+ return Math.abs(amount) < COMPACT_AMOUNT_FROM
+  ? formatAmount(amount)
+  : compactCurrencyFormatter.format(amount);
 }
 
 export function formatTime(date: number | Date): string {
@@ -19,6 +34,10 @@ export function formatTime(date: number | Date): string {
 
 export function formatDateTime(date: number | Date): string {
  return dayjs(date).format("D MMM YYYY, hh:mm A");
+}
+
+export function formatUtcDateTime(date: number | Date): string {
+ return dayjs.utc(date).format("D MMM YYYY, hh:mm A");
 }
 
 export function formatNumber(value: number): string {

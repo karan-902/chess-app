@@ -5,6 +5,7 @@ import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
 import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
 import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
+import AlertMessage from "@gopvp/common/src/components/AlertMessage/AlertMessage";
 import { InfoCircle } from "@gopvp/common/src/components/images";
 import {
  callAPIInterface,
@@ -18,11 +19,12 @@ import {
  usernameHintText,
  suggestionText,
  newSuggestionText,
+ usernameTakenText,
+ tryText,
 } from "@gopvp/app/src/constants/message";
 import {
  USERNAME_MIN_LENGTH,
  USERNAME_MAX_LENGTH,
- USERNAME_SUGGESTION_MAX_LENGTH,
  USERNAME_CHECK_DEBOUNCE_MS,
 } from "@gopvp/app/src/constants/limit";
 import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
@@ -41,9 +43,12 @@ export default function UsernameField<TValues extends { username: string }>({
  const [suggestionIndex, setSuggestionIndex] = useState(0);
  const [loadingSuggestions, setLoadingSuggestions] = useState(false);
  const [showSuggestion, setShowSuggestion] = useState(false);
+ const [takenUsername, setTakenUsername] = useState("");
  const suggestionSelectedRef = useRef(false);
  const hasError = (touched || !!value) && !!error;
  const trimmed = value.trim();
+ const isTaken = !!trimmed && takenUsername === trimmed;
+ const takenOnSubmit: string | undefined = formik.status?.takenUsername;
 
  const fetchSuggestions = useCallback(async (username: string) => {
   setLoadingSuggestions(true);
@@ -57,6 +62,7 @@ export default function UsernameField<TValues extends { username: string }>({
    );
    setSuggestions(res.usernames);
    setSuggestionIndex(0);
+   setTakenUsername(res.is_available ? "" : username);
   } catch (err) {
    setShowSuggestion(false);
    showApiErrorToast(err);
@@ -72,7 +78,7 @@ export default function UsernameField<TValues extends { username: string }>({
   }
   if (
    (trimmed && trimmed === initialValue) ||
-   trimmed.length > USERNAME_SUGGESTION_MAX_LENGTH
+   trimmed.length > USERNAME_MAX_LENGTH
   ) {
    setShowSuggestion(false);
    return;
@@ -83,6 +89,10 @@ export default function UsernameField<TValues extends { username: string }>({
   );
   return () => clearTimeout(timer);
  }, [trimmed, initialValue, fetchSuggestions]);
+
+ useEffect(() => {
+  if (takenOnSubmit) fetchSuggestions(takenOnSubmit);
+ }, [takenOnSubmit, fetchSuggestions]);
 
  const selectUsername = (name: string) => {
   suggestionSelectedRef.current = true;
@@ -117,7 +127,7 @@ export default function UsernameField<TValues extends { username: string }>({
     onChange={formik.handleChange}
     onBlur={formik.handleBlur}
     disabled={formik.isSubmitting}
-    isError={hasError}
+    isError={hasError || isTaken}
     helperText={hasError ? error : undefined}
     endIcon={
      value && !hideClear ? (
@@ -140,7 +150,15 @@ export default function UsernameField<TValues extends { username: string }>({
      showSuggestion &&
      (loadingSuggestions || suggestions.length > 0) && (
       <>
-       {suggestionText}
+       {isTaken && (
+        <AlertMessage
+         severity="error"
+         message={usernameTakenText}
+         inline
+         customClass="username-taken"
+        />
+       )}
+       {isTaken ? tryText : suggestionText}
        {loadingSuggestions ? (
         <Skeleton
          variant="rounded"

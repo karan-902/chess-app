@@ -15,10 +15,6 @@ export type ISpeedPaymentRequestBody = {
  };
 };
 
-export type IVerifyUserBody = {
- email: string;
-};
-
 export type IRegisterBody = {
  username: string;
  email: string;

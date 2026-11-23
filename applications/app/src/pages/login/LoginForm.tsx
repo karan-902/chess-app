@@ -9,27 +9,19 @@ import AuthLayout from "@gopvp/app/src/container/AuthLayout";
 import { useGoogleAuth } from "@gopvp/app/src/hooks/useGoogleAuth";
 // import { useDeviceApprovalPoll } from "@gopvp/app/src/hooks/useDeviceApprovalPoll";
 import SelectCountryScreen from "@gopvp/app/src/pages/select-country/SelectCountryScreen";
-import {
- callAPIInterface,
- showApiErrorToast,
-} from "@gopvp/common/src/util/api";
 import { showToastMessage } from "@gopvp/common/src/util/injectStore";
 import type { IApiErrorInfo } from "@gopvp/common/src/types/response";
 import { useReduxDispatch } from "@gopvp/app/src/redux/hooks";
 import { login } from "@gopvp/app/src/redux/auth/thunk";
 import { showLoader, hideLoader } from "@gopvp/app/src/redux/common/slice";
-import type {
- ILoginBody,
- IVerifyUserBody,
-} from "@gopvp/common/src/types/payload";
-import type { IVerifyUserResponse } from "@gopvp/common/src/types/response";
+import type { ILoginBody } from "@gopvp/common/src/types/payload";
 // import type { ILoginResponse } from "@gopvp/common/src/types/response";
 // import type { IPasswordValues } from "@gopvp/common/src/types/component";
 import type { LoginStep } from "@gopvp/common/src/types/component";
 import {
  // forgotYourPasswordText,
  // resetNowText,
- verifyEmailToContinueText,
+ // verifyEmailToContinueText,
  // newDeviceDetectedText,
  // approveSignInEmailedText,
  // backToLoginText,
@@ -42,7 +34,6 @@ import {
  signingInText,
 } from "@gopvp/app/src/constants/message";
 import { ROUTES } from "@gopvp/app/src/constants/route";
-import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
 import { emailRule, passwordRule } from "@gopvp/app/src/utils/validation";
 import EmailScreen from "@gopvp/app/src/pages/login/EmailScreen";
 // import PasswordScreen from "@gopvp/app/src/pages/login/PasswordScreen";
@@ -98,42 +89,6 @@ export default function LoginForm() {
   initialValues: { email: "", password: "" },
   validationSchema: loginSchema,
   onSubmit: async ({ email, password }, { setSubmitting }) => {
-   try {
-    const res = await callAPIInterface<IVerifyUserResponse, IVerifyUserBody>(
-     "POST",
-     ENDPOINTS.VERIFY_USER,
-     { email },
-    );
-
-    if (res.signup_method === "GOOGLE") {
-     googleLogin();
-     return;
-    }
-
-    if (!res.is_verified) {
-     showToastMessage({
-      toastMessage: verifyEmailToContinueText,
-      toastVariant: "error",
-     });
-     // dispatch(
-     //  showToast({
-     //   isToastOpen: true,
-     //   toastMessage: verifyEmailToContinueText,
-     //   toastVariant: "error",
-     //  }),
-     // );
-     // navigate(`/verify-email?email=${encodeURIComponent(values.email)}`);
-     return;
-    }
-
-    // setVerifiedEmail(values.email);
-    // setVerifiedUsername(res.username);
-    // setStep("password");
-   } catch (err) {
-    showApiErrorToast(err);
-    return;
-   }
-
    dispatch(showLoader({ text: signingInText }));
    try {
     const res = await dispatch(login({ email, password })).unwrap();

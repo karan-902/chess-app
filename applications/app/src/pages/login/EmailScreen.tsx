@@ -11,7 +11,7 @@ import {
  passwordText,
  enterPasswordText,
  forgotPasswordText,
- continueText,
+ nextText,
  orText,
  continueWithGoogleText,
 } from "@gopvp/app/src/constants/message";
@@ -73,7 +73,7 @@ export default function EmailScreen({
     disabled={!formik.dirty || formik.isSubmitting}
     isLoading={formik.isSubmitting}
    >
-    {continueText}
+    {nextText}
    </Button>
 
    <Box customClass="auth-divider">

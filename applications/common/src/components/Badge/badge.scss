@@ -13,8 +13,8 @@
   font-family: $fontOutfitExtraBold;
   font-size: 12px;
   letter-spacing: 0.04em;
-  color: $appTextMuted;
-  background: textOpacity($appText, 0.06);
+  color: $textSecondary;
+  background: textOpacity($textPrimary, 0.06);
   border-radius: 0;
   padding: 0.05rem 0.3rem;
 
@@ -28,13 +28,13 @@
  }
 
  &.lb-you-tag .MuiBadge-badge {
-  padding: 0.125rem $space-8;
+  padding: 0.125rem 8px;
   border-radius: 999px;
-  background: $minimalGold;
+  background: $gold;
   font-family: $fontOutfitBold;
   font-size: 12px;
   letter-spacing: 0;
-  color: $minimalTextInverse;
+  color: $textInverse;
  }
 
  &.result-vs .MuiBadge-badge {
@@ -45,12 +45,12 @@
   height: 2.25rem;
   padding: 0;
   border-radius: 50%;
-  border: 3px solid $minimalCardBg;
-  background: $minimalGold;
+  border: 3px solid $cardBg;
+  background: $gold;
   font-family: $fontOutfitBlack;
   font-size: 12px;
   letter-spacing: 0;
-  color: $minimalTextInverse;
+  color: $textInverse;
 
   @include from(phone) {
    font-size: 13px;
