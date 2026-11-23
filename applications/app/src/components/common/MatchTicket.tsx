@@ -18,6 +18,7 @@ import type {
 import type {
  ICanvasAnimationProps,
  ICanvasFrame,
+ ISplitRevealTicket,
 } from "@gopvp/common/src/types/component";
 
 type TPhase = "searching" | "found" | "lost";
@@ -41,7 +42,7 @@ const SEAT_RADIUS = 1.375;
 const SEAT_Y = 3.5;
 const SLOT = { x: 3.875, y: 16.125, width: 13.1875, height: 0.625 };
 const SPARKS = [
- { x: 16.25, y: 3.75, size: 1, delay: 500 },
+ { x: 13.9375, y: 5.25, size: 1, delay: 500 },
  { x: 3.5, y: 6, size: 0.6875, delay: 580 },
  { x: 17.25, y: 10.625, size: 0.5625, delay: 660 },
  { x: 2.5, y: 12.5, size: 0.625, delay: 740 },
@@ -571,6 +572,42 @@ const drawTicket = (
     ? t < 2700
     : true;
  return isSettling || phase === "searching" || !maskImage.naturalWidth;
+};
+
+export const snapshotMatchTicket = (): ISplitRevealTicket | null => {
+ const canvas = document.querySelector<HTMLCanvasElement>(
+  ".match-ticket-canvas",
+ );
+ const box = canvas?.getBoundingClientRect();
+ if (!canvas || !box?.width) return null;
+ const unit = box.width / BOX_WIDTH;
+ const pixel = canvas.width / box.width;
+ const paper = document.createElement("canvas");
+ paper.width = Math.round(WRAP.width * unit * pixel);
+ paper.height = Math.round(WRAP.height * unit * pixel);
+ paper
+  .getContext("2d")
+  ?.drawImage(
+   canvas,
+   WRAP.x * unit * pixel,
+   WRAP.y * unit * pixel,
+   paper.width,
+   paper.height,
+   0,
+   0,
+   paper.width,
+   paper.height,
+  );
+ return {
+  node: paper,
+  rect: new DOMRect(
+   box.left + WRAP.x * unit,
+   box.top + WRAP.y * unit,
+   WRAP.width * unit,
+   WRAP.height * unit,
+  ),
+  tearY: NOTCH.y * unit,
+ };
 };
 
 export default function MatchTicket({

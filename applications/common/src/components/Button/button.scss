@@ -401,11 +401,11 @@
   .profile-id-row &,
   .game-room &,
   .resign-sheet & {
-   color: $gold;
+   color: $accentText;
    transition: color 0.15s ease;
 
    &:hover:not(.disabled) {
-    color: $btnPrimaryHover;
+    color: color-mix(in srgb, #{$accentText} 91%, #000);
    }
   }
  }
@@ -525,7 +525,7 @@
  &.profile-save-btn,
  &.modal-submit-btn {
   --btn-bg: #{$btnPrimaryBg};
-  color: $textInverse;
+  color: $btnPrimaryText;
 
   &:hover:not(.disabled) {
    --btn-bg: #{$btnPrimaryHover};

@@ -7,6 +7,8 @@ import { showAckErrorToast } from "@gopvp/common/src/util/api";
 import { buildMatchUrl } from "@gopvp/app/src/utils";
 import { useGame } from "@gopvp/app/src/hooks/useGame";
 import { useCountdown } from "@gopvp/common/src/hooks/useCountdown";
+import { useGameContext } from "@gopvp/common/src/contexts/GameContext";
+import { snapshotMatchTicket } from "@gopvp/app/src/components/common/MatchTicket";
 import {
  useReduxSelector,
  useReduxDispatch,
@@ -53,6 +55,7 @@ export function useRoomMatch(onRoomExpired?: () => void) {
  const dispatch = useReduxDispatch();
  const { game } = useGame();
  const { socket: ctxSocket } = useSocket();
+ const { startReveal } = useGameContext();
 
  const resetStatus = useCallback(() => {
   requestIdRef.current++;
@@ -83,11 +86,13 @@ export function useRoomMatch(onRoomExpired?: () => void) {
  const openMatch = useCallback(
   (matchId: string) => {
    if (!roomRef.current) return;
+   const ticket = snapshotMatchTicket();
+   if (ticket) startReveal?.(ticket);
    dispatch(setOpeningMatchId(matchId));
    setStatus("found");
    navigate(buildMatchUrl(game, matchId), { replace: true });
   },
-  [game, navigate, dispatch],
+  [game, navigate, dispatch, startReveal],
  );
 
  const createRoom = (bet: number, timeSeconds: number) => {

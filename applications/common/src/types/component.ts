@@ -31,7 +31,7 @@ export interface IGameContext {
   onResult: (result: IMatchResultResponse) => void,
  ) => () => void;
  isRevealing?: boolean;
- startReveal?: (ticket: HTMLElement) => void;
+ startReveal?: (ticket: ISplitRevealTicket) => void;
 }
 
 export interface ISplitRevealTicket {

@@ -17,8 +17,10 @@
  --text-tertiary: #737373;
  --text-inverse: #0d0d0d;
  --gold: #ffca28;
+ --accent-text: var(--gold);
  --btn-primary-bg: var(--gold);
  --btn-primary-hover: color-mix(in srgb, var(--gold) 91%, #000);
+ --btn-primary-text: #0d0d0d;
  --btn-secondary-bg: #ffffff;
  --btn-secondary-border: #333333;
  --btn-secondary-hover: #e8e8e8;
@@ -49,6 +51,7 @@
  --text-tertiary: #737373;
  --text-inverse: #ffffff;
  --gold: #ffca28;
+ --accent-text: var(--text-primary);
  --btn-primary-bg: var(--gold);
  --btn-primary-hover: color-mix(in srgb, var(--gold) 91%, #000);
  --btn-secondary-bg: #171717;
@@ -79,8 +82,10 @@ $textSecondary: var(--text-secondary);
 $textTertiary: var(--text-tertiary);
 $textInverse: var(--text-inverse);
 $gold: var(--gold);
+$accentText: var(--accent-text);
 $btnPrimaryBg: var(--btn-primary-bg);
 $btnPrimaryHover: var(--btn-primary-hover);
+$btnPrimaryText: var(--btn-primary-text);
 $btnSecondaryBg: var(--btn-secondary-bg);
 $btnSecondaryBorder: var(--btn-secondary-border);
 $btnSecondaryHover: var(--btn-secondary-hover);
@@ -134,6 +139,7 @@ $goldDarkest: #8a6300;
 
 $ticketPaperTop: #fffdf6;
 $ticketPaperBottom: #f1ecdf;
+$ticketSlot: #7c4dd6;
 
 $poolGreen: #3bffad;
 $poolPink: #ff7b9a;

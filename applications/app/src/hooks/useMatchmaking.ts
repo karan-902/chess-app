@@ -12,6 +12,8 @@ import { showAckErrorToast } from "@gopvp/common/src/util/api";
 import { buildMatchUrl } from "@gopvp/app/src/utils";
 import { useGame } from "@gopvp/app/src/hooks/useGame";
 import { useCountdown } from "@gopvp/common/src/hooks/useCountdown";
+import { useGameContext } from "@gopvp/common/src/contexts/GameContext";
+import { snapshotMatchTicket } from "@gopvp/app/src/components/common/MatchTicket";
 import {
  POOL_TIMEOUT_SECONDS,
  MATCH_REVEAL_MS,
@@ -49,6 +51,7 @@ export function useMatchmaking() {
  const navigate = useNavigate();
  const { game } = useGame();
  const { socket: ctxSocket } = useSocket();
+ const { startReveal } = useGameContext();
  const dispatch = useReduxDispatch();
 
  const resetStatus = useCallback(() => {
@@ -82,11 +85,13 @@ export function useMatchmaking() {
    setOpponentName(players?.find((p) => p.id !== myId)?.username ?? "");
    setStatus("revealing");
    revealTimerRef.current = setTimeout(() => {
+    const ticket = snapshotMatchTicket();
+    if (ticket) startReveal?.(ticket);
     setStatus("found");
     navigate(buildMatchUrl(game, matchId), { replace: true });
    }, MATCH_REVEAL_MS);
   },
-  [game, navigate, myId, dispatch],
+  [game, navigate, myId, dispatch, startReveal],
  );
 
  const emitPoolJoin = useCallback(

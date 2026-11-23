@@ -6,10 +6,7 @@ import {
  type PropsWithChildren,
 } from "react";
 import type { ThemeMode } from "@gopvp/common/src/types/component";
-import {
- // readStorage,
- writeStorage,
-} from "@gopvp/common/src/util/storage";
+import { readStorage, writeStorage } from "@gopvp/common/src/util/storage";
 import { THEME_STORAGE_KEY } from "@gopvp/app/src/constants/storageKey";
 
 interface IThemeContext {
@@ -22,14 +19,14 @@ const ThemeContext = createContext<IThemeContext>({
  toggleTheme: () => {},
 });
 
-// function loadInitialMode(): ThemeMode {
-//  return readStorage(localStorage, THEME_STORAGE_KEY) === "light"
-//   ? "light"
-//   : "dark";
-// }
+function loadInitialMode(): ThemeMode {
+ return readStorage(localStorage, THEME_STORAGE_KEY) === "light"
+  ? "light"
+  : "dark";
+}
 
 export function AppThemeProvider({ children }: PropsWithChildren) {
- const [mode, setMode] = useState<ThemeMode>("dark");
+ const [mode, setMode] = useState<ThemeMode>(loadInitialMode);
 
  useEffect(() => {
   document.documentElement.setAttribute("data-theme", mode);

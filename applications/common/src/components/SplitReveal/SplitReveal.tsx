@@ -76,8 +76,11 @@ export default function SplitReveal({
   if (!backdrop || !ticketEl || !top || !bottom || !leak || !surface) return;
   let isCancelled = false;
 
+  const copy = node.cloneNode(true) as HTMLElement;
+  if (node instanceof HTMLCanvasElement)
+   (copy as HTMLCanvasElement).getContext("2d")?.drawImage(node, 0, 0);
   top.replaceChildren(node);
-  bottom.replaceChildren(node.cloneNode(true));
+  bottom.replaceChildren(copy);
   const edge = tearEdge(rect.width, tearY);
   top.style.clipPath = `polygon(0 0, ${rect.width}px 0, ${[...edge].reverse().join(",")})`;
   bottom.style.clipPath = `polygon(${edge.join(",")}, ${rect.width}px ${rect.height}px, 0 ${rect.height}px)`;
@@ -179,19 +182,13 @@ export default function SplitReveal({
     surface,
     [
      {
-      transform: `translate(${dx}px, ${dy}px) perspective(50rem) rotateX(38deg) scale(0.3)`,
-      easing: "cubic-bezier(0.2, 0.7, 0.5, 0.95)",
-     },
-     {
-      transform: `translate(${dx}px, ${dy}px) perspective(50rem) rotateX(24deg) scale(0.46)`,
-      offset: 0.4,
-      easing: "cubic-bezier(0.4, 0.15, 0.2, 1)",
+      transform: `translate(${dx}px, ${dy}px) perspective(50rem) rotateX(24deg) scale(0.36)`,
      },
      {
       transform: "translate(0, 0) perspective(50rem) rotateX(0deg) scale(1)",
      },
     ],
-    { duration: SETTLE_MS },
+    { duration: SETTLE_MS, easing: EASE_OUT },
    )
     .finished.then(() => navigator.vibrate?.(SPLIT_REVEAL_LAND_VIBRATE_MS))
     .catch(() => {});
@@ -256,6 +253,9 @@ export default function SplitReveal({
  return createPortal(
   <Box customClass="split-reveal" aria-hidden onPointerDown={skip}>
    <Box ref={backdropRef} customClass="split-reveal-backdrop" />
+   <Box ref={surfaceRef} customClass="split-reveal-surface">
+    <Surface />
+   </Box>
    <Box
     ref={ticketRef}
     customClass="split-reveal-ticket"
@@ -274,9 +274,6 @@ export default function SplitReveal({
       sx={{ left: `${left}%`, top: tearY }}
      />
     ))}
-   </Box>
-   <Box ref={surfaceRef} customClass="split-reveal-surface">
-    <Surface />
    </Box>
   </Box>,
   document.body,

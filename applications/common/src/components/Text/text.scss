@@ -2262,6 +2262,10 @@
   @include from(phone) {
    font-size: 13px;
   }
+
+  &.wallet-tx-group-label {
+   color: $textPrimary;
+  }
  }
 
  &.rules-title {

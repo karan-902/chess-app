@@ -15,11 +15,11 @@
  &.match-ticket-canvas {
   --ticket-paper-top: #{$paper};
   --ticket-paper-bottom: #{$paperShade};
-  --ticket-ink: #{$textInverse};
+  --ticket-ink: #{$poolInk};
   --ticket-muted: #{$textTertiary};
   --ticket-gold: #{$gold};
   --ticket-danger: #{$error};
-  --ticket-slot: #{$borderStrong};
+  --ticket-slot: #{$ticketSlot};
   --ticket-stub: #{list.nth(list.nth($poolBlocks, 1), 1)};
   --ticket-stub-ink: #{list.nth(list.nth($poolBlocks, 1), 2)};
   --ticket-confirmed: #{$goldSolid};

@@ -40,17 +40,6 @@ export default function GameRoute() {
  const [revealTicket, setRevealTicket] = useState<ISplitRevealTicket | null>(
   null,
  );
- const startReveal = useCallback((ticket: HTMLElement) => {
-  const rect = ticket.getBoundingClientRect();
-  const tearLine = ticket
-   .querySelector("[data-tear-line]")
-   ?.getBoundingClientRect();
-  setRevealTicket({
-   node: ticket.cloneNode(true) as HTMLElement,
-   rect,
-   tearY: tearLine ? tearLine.top - rect.top : rect.height / 2,
-  });
- }, []);
  const finishReveal = useCallback(() => setRevealTicket(null), []);
  const gameContext = useMemo(
   () => ({
@@ -63,9 +52,9 @@ export default function GameRoute() {
     onResult: (result: IMatchResultResponse) => void,
    ) => subscribeMatchResult(matchId, userId, onResult),
    isRevealing: !!revealTicket,
-   startReveal,
+   startReveal: setRevealTicket,
   }),
-  [playPath, userId, username, socket, revealTicket, startReveal],
+  [playPath, userId, username, socket, revealTicket],
  );
 
  useEffect(() => {
