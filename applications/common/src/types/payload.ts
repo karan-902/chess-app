@@ -3,8 +3,16 @@ import type {
  LeaderboardSort,
 } from "@gopvp/common/src/types/index";
 
-export type IVerifyUserBody = {
- email: string;
+export type ISpeedPaymentRequestBody = {
+ version: string;
+ account_id: string;
+ data: {
+  amount: number;
+  currency: string;
+  target_currency: string;
+  deposit_address: string;
+  note?: string;
+ };
 };
 
 export type IRegisterBody = {

@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useMemo } from "react";
+import { memo, useRef, useState, useEffect, useMemo } from "react";
 import {
  DndContext,
  DragOverlay,
@@ -14,7 +14,7 @@ import {
 } from "@dnd-kit/modifiers";
 import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
-import PieceIcon from "@gopvp/chess/src/components/board/PieceIcon";
+import { PieceIcon } from "@gopvp/common/src/components/constants";
 import { playSound } from "@gopvp/chess/src/lib/sounds";
 import "./board.scss";
 import {
@@ -46,8 +46,8 @@ import {
  boardSweepFrames,
  entranceDelayMs,
  pieceEntranceFrames,
- prefersReducedMotion,
 } from "@gopvp/chess/src/utils";
+import { shouldReduceMotion } from "@gopvp/common/src/util/motion";
 import DroppableSquare from "@gopvp/chess/src/components/board/DroppableSquare";
 import DraggablePiece from "@gopvp/chess/src/components/board/DraggablePiece";
 import type { IChessBoardProps } from "@gopvp/chess/src/types/component";
@@ -99,7 +99,7 @@ function boardFromFen(fen: string): Record<string, string> {
  return board;
 }
 
-export default function Board({
+function Board({
  fen,
  selectedSquare,
  legalMoves = [],
@@ -213,7 +213,7 @@ export default function Board({
 
  useEffect(() => {
   if (!entranceGhosts || holdEntrance) return;
-  const isReducedMotion = prefersReducedMotion();
+  const isReducedMotion = shouldReduceMotion();
   const animations = entranceGhosts.map(({ square }) => {
    const col = files.indexOf(square[0]);
    const row = ranks.indexOf(square[1]);
@@ -237,12 +237,15 @@ export default function Board({
     () => {
      setEntranceGhosts(null);
      onEntranceEnd?.();
-     const sweep = sweepRef.current;
-     if (isReducedMotion || !sweep) return;
-     setIsSweeping(true);
-     sweep
-      .animate(boardSweepFrames(), BOARD_SWEEP_MS)
-      .finished.then(() => setIsSweeping(false), () => {});
+     if (isReducedMotion) return;
+     requestAnimationFrame(() => {
+      const sweep = sweepRef.current;
+      if (!sweep) return;
+      setIsSweeping(true);
+      sweep
+       .animate(boardSweepFrames(), BOARD_SWEEP_MS)
+       .finished.then(() => setIsSweeping(false), () => {});
+     });
     },
     BOARD_ENTRANCE_START_MS +
      entranceDelayMs(0, 1) +
@@ -266,7 +269,7 @@ export default function Board({
    ...q,
    { id, square: capturedSquare, code: prevBoard[capturedSquare] },
   ]);
-  if (!prefersReducedMotion())
+  if (!shouldReduceMotion())
    gridRef.current?.animate(boardNudgeFrames(), BOARD_NUDGE_MS);
  }, [lastMove]);
 
@@ -505,7 +508,7 @@ export default function Board({
         <DroppableSquare
          key={square}
          square={square}
-         className={classNames("chess-board-square", {
+         className={classNames("chess-board-square clickable", {
           "square-selected": isSelected,
           "square-premove-from": premoveFromSquares.has(square),
           "square-premove-queued": premoveToSquares.has(square),
@@ -514,7 +517,6 @@ export default function Board({
          style={{
           backgroundColor: bg,
           background: squareBg,
-          cursor: "pointer",
          }}
          onClick={() => onSquareClick?.(square)}
          premoveMode={premoveMode}
@@ -661,17 +663,7 @@ export default function Board({
      })}
 
      {(highlights.length > 0 || arrows.length > 0) && (
-      <svg
-       viewBox="0 0 800 800"
-       style={{
-        position: "absolute",
-        inset: 0,
-        width: "100%",
-        height: "100%",
-        pointerEvents: "none",
-        zIndex: 4,
-       }}
-      >
+      <svg className="board-annotations" viewBox="0 0 800 800">
        <defs>
         {Object.entries(ANNOTATION_COLORS).map(([key, color]) => (
          <marker
@@ -751,3 +743,5 @@ export default function Board({
   </DndContext>
  );
 }
+
+export default memo(Board);

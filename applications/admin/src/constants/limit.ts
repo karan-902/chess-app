@@ -1,0 +1,8 @@
+export const ADMIN_OTP_LENGTH = 6;
+export const ADMIN_TOAST_AUTO_HIDE_MS = 2400;
+export const SPEED_CHECK_STALE_DAYS = 2;
+export const DASHBOARD_NOW_SKELETON_TILES = 6;
+export const DASHBOARD_TOTAL_SKELETON_CELLS = 4;
+export const DASHBOARD_RECENT_LIMIT = 5;
+export const PROBLEMS_SKELETON_ROWS = 5;
+export const MAX_ADJUSTMENT_USD = 100;

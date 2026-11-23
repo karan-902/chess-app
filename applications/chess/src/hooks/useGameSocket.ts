@@ -5,7 +5,6 @@ import {
  showBackdropLoader,
  hideBackdropLoader,
 } from "@gopvp/common/src/util/injectStore";
-import { useCountdown } from "@gopvp/common/src/hooks/useCountdown";
 import {
  useChessDispatch,
  useChessSelector,
@@ -38,11 +37,12 @@ import {
 } from "@gopvp/chess/src/utils/storage";
 import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
 import { SOCKET_EVENTS } from "@gopvp/common/src/constants/event";
+import { ERROR_TYPES } from "@gopvp/common/src/constants/mapper";
 import { GAME_EVENTS } from "@gopvp/chess/src/constants/event";
-import { MATCH_END_FALLBACK_MS } from "@gopvp/chess/src/constants/limit";
-
-const toDeadlineAt = (deadlineMs?: number) =>
- deadlineMs === undefined ? null : Date.now() + deadlineMs;
+import {
+ MATCH_END_FALLBACK_MS,
+ OPPONENT_RECONNECTED_SHOW_MS,
+} from "@gopvp/chess/src/constants/limit";
 
 interface IProps {
  isPvc: boolean;
@@ -76,18 +76,24 @@ export function useGameSocket({
  const [clockReady, setClockReady] = useState(isPvc);
  const [drawOffer, setDrawOffer] = useState<IDrawOfferEvent | null>(null);
  const [isDrawOffered, setIsDrawOffered] = useState(false);
- const [isOpponentOffline, setIsOpponentOffline] = useState(false);
- const [firstMoveDeadlineAt, setFirstMoveDeadlineAt] = useState<number | null>(
-  null,
- );
- const firstMoveSeconds = useCountdown(firstMoveDeadlineAt);
+ const [opponentStatus, setOpponentStatus] = useState<
+  "offline" | "reconnected" | null
+ >(null);
+
+ useEffect(() => {
+  if (opponentStatus !== "reconnected") return;
+  const timer = setTimeout(
+   () => setOpponentStatus(null),
+   OPPONENT_RECONNECTED_SHOW_MS,
+  );
+  return () => clearTimeout(timer);
+ }, [opponentStatus]);
 
  const applyResult = useCallback(
   (result: IMatchResultResponse) => {
    if (result.id !== matchId || resultReceivedRef.current) return;
    resultReceivedRef.current = true;
    hideBackdropLoader();
-   setFirstMoveDeadlineAt(null);
    setGameEnded(result);
   },
   [matchId, setGameEnded],
@@ -95,7 +101,6 @@ export function useGameSocket({
 
  const endMatch = useCallback(async () => {
   if (resultReceivedRef.current) return;
-  setFirstMoveDeadlineAt(null);
   showBackdropLoader();
   try {
    applyResult(
@@ -159,7 +164,6 @@ export function useGameSocket({
   setClockReady(true);
   setDrawOffer(opponent?.draw_offer ? { offererId: opponent.user_id } : null);
   setIsDrawOffered(!!self?.draw_offer);
-  setFirstMoveDeadlineAt(toDeadlineAt(matchState.first_move_deadline_ms));
  }, [
   isPvc,
   matchState,
@@ -200,8 +204,7 @@ export function useGameSocket({
   };
 
   const onStart = (data: IGameStartEvent) => {
-   if (data.matchId === matchId)
-    dispatch(startMatch(data.firstMoveDeadlineMs));
+   if (data.matchId === matchId) dispatch(startMatch());
   };
 
   const onOpponentForfeit = () => {
@@ -217,7 +220,6 @@ export function useGameSocket({
    } else hideBackdropLoader();
    if (!applyServerFen(data.fen, data)) resync();
    syncClock(data.remainingTime.white, data.remainingTime.black);
-   setFirstMoveDeadlineAt(toDeadlineAt(data.firstMoveDeadlineMs));
   };
   const onDrawDecline = () => {
    setIsDrawOffered(false);
@@ -226,8 +228,11 @@ export function useGameSocket({
     toastVariant: "info",
    });
   };
-  const onOpponentOffline = () => setIsOpponentOffline(true);
-  const onOpponentOnline = () => setIsOpponentOffline(false);
+  const onOpponentOffline = () => setOpponentStatus("offline");
+  const onOpponentOnline = () =>
+   setOpponentStatus((status) =>
+    status === "offline" ? "reconnected" : status,
+   );
 
   socket.on(SOCKET_EVENTS.CONNECT, onReconnect);
   socket.on(GAME_EVENTS.START, onStart);
@@ -255,6 +260,11 @@ export function useGameSocket({
  }, [socket, isPvc, matchId, applyServerFen, syncClock, resync, dispatch]);
 
  const handleMoveAck = (err: ISocketAckError | null, data: IMoveResponse) => {
+  if (err?.errors[0]?.type === ERROR_TYPES.MATCH_NOT_FOUND) {
+   showBackdropLoader();
+   setIsAwaitingResult(true);
+   return;
+  }
   if (err) {
    showAckErrorToast(err);
    resync();
@@ -265,13 +275,11 @@ export function useGameSocket({
    return;
   }
   syncClock(data.remaining_time.white, data.remaining_time.black);
-  setFirstMoveDeadlineAt(toDeadlineAt(data.first_move_deadline_ms));
  };
 
  const sendMove = (from: string, to: string, promotion?: string) => {
   const body: IMoveBody = { from, to, promotion };
   setDrawOffer(null);
-  setFirstMoveDeadlineAt(null);
   socket?.emit(GAME_EVENTS.MOVE, body, handleMoveAck);
  };
 
@@ -315,8 +323,7 @@ export function useGameSocket({
   clockReady,
   drawOffer,
   isDrawOffered,
-  isOpponentOffline,
-  firstMoveSeconds,
+  opponentStatus,
   sendMove,
   resign,
   offerDraw,

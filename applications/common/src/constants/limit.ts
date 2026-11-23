@@ -1,3 +1,5 @@
+export const LOW_END_DEVICE_MEMORY_GB = 4;
+export const COMPACT_AMOUNT_FROM = 1000;
 export const DRAWER_ENTER_MS = 420;
 export const DRAWER_EXIT_MS = 260;
 export const DRAWER_ENTER_EASING = "cubic-bezier(0.22, 1, 0.36, 1)";
@@ -6,6 +8,9 @@ export const DRAWER_RESIZE_MS = 380;
 export const DRAWER_RESIZE_MIN_PX = 4;
 export const SELECT_SKELETON_ROWS = 6;
 export const SLIDE_CONFIRM_THRESHOLD = 0.85;
+export const CANVAS_MAX_FRAME_MS = 100;
+export const LOGO_LOADER_SWEEP_MS = 1800;
+export const LOGO_LOADER_BAND_RATIO = 0.3;
 export const SPLIT_REVEAL_PRESS_MS = 120;
 export const SPLIT_REVEAL_SHORT_MS = 300;
 export const SPLIT_REVEAL_LONG_MS = 600;

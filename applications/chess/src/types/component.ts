@@ -36,7 +36,6 @@ export interface IPlayerRowProps {
  clock: string;
  clockReady: boolean;
  lowTime: boolean;
- firstMoveSeconds?: number | null;
 }
 
 export interface IPromotionOverlayProps {
@@ -114,13 +113,6 @@ export interface IDraggablePieceProps {
 
 export interface IMatchLoaderProps {
  matchId: string;
-}
-
-export interface IPieceIconProps {
- code: string;
- className?: string;
- style?: React.CSSProperties;
- onPointerDown?: (e: React.PointerEvent<SVGSVGElement>) => void;
 }
 
 export interface IChessBoardProps {

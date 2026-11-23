@@ -32,7 +32,6 @@ import {
  startingInText,
  tryAgainText,
  pickAnotherBetText,
- timeText,
  entryText,
  winText,
  poolMinutesText,
@@ -123,32 +122,30 @@ export default function PoolConfirmSheet({
         </Text>
        ))} */}
       </Box>
+     </Box>
+     {/* <MatchDeck isRevealed={isRevealed} opponentName={opponentName} /> */}
+     <MatchTicket
+      status={status}
+      chip={poolMinutesText(Math.round(queuedPool.time / MS_PER_MINUTE))}
+      stats={[
+       { label: entryText, value: formatAmount(queuedPool.bet) },
+       { label: winText, value: formatAmount(queuedPool.prize), isWin: true },
+      ]}
+      myName={myName}
+      opponentName={opponentName}
+     />
+     {!isRevealed && (
       <Text
        customClass={classNames(
         "match-timer",
         isLowTime && "low",
-        (isRevealed || isTimeout) && "settled",
+        isTimeout && "settled",
        )}
       >
        <icons.timer />
        {formatMMSS(isTimeout ? 0 : secondsLeft)}
       </Text>
-     </Box>
-     {/* <MatchDeck isRevealed={isRevealed} opponentName={opponentName} /> */}
-     <MatchTicket
-      status={status}
-      stats={[
-       {
-        label: timeText,
-        value: poolMinutesText(Math.round(queuedPool.time / MS_PER_MINUTE)),
-       },
-       { label: entryText, value: formatAmount(queuedPool.bet) },
-       { label: winText, value: formatAmount(queuedPool.prize), isWin: true },
-      ]}
-      tone={confirmTone}
-      myName={myName}
-      opponentName={opponentName}
-     />
+     )}
      {/* <PoolCard pool={queuedPool} PoolLabel={PoolLabel} tone={confirmTone} /> */}
      {isTimeout ? (
       <Box customClass="match-retry">
@@ -171,14 +168,20 @@ export default function PoolConfirmSheet({
        </Button>
       </Box>
      ) : isRevealed ? (
-      <Text customClass="match-starting" aria-live="polite">
-       {startingInText}{" "}
-       <span className="match-countdown">
-        {MATCH_COUNTDOWN_STEPS.map((step) => (
-         <b key={step}>{step}</b>
-        ))}
-       </span>
-      </Text>
+      <Box customClass="match-starting" aria-live="polite">
+       <Text component="span" customClass="match-starting-label">
+        {startingInText}
+       </Text>
+       <Box customClass="match-countdown-ring">
+        <span className="ring-half right" />
+        <span className="ring-half left" />
+        <span className="match-countdown">
+         {MATCH_COUNTDOWN_STEPS.map((step) => (
+          <b key={step}>{step}</b>
+         ))}
+        </span>
+       </Box>
+      </Box>
      ) : (
       <Button
        type="button"

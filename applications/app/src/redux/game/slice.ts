@@ -55,10 +55,9 @@ const gameSlice = createSlice({
   },
   startGameLoad: (state, action: PayloadAction<string>) => {
    state.requestedSlug = action.payload;
-   state.details = null;
    state.isLoading = true;
   },
-  setGameDetails: (state, action: PayloadAction<IGameResponse>) => {
+  setGameDetails: (state, action: PayloadAction<IGameResponse | null>) => {
    state.details = action.payload;
   },
   finishGameLoad: (state) => {

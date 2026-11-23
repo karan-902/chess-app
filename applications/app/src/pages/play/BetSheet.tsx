@@ -100,11 +100,6 @@ export default function BetSheet({
     <icons.shieldCheck />
     {winItWithdrawItText}
    </Text>
-   {/* <Text customClass="sheet-tip meta-text">
-    <>
-     <b>{tipText}</b> {largestPrizesTipText}
-    </>
-   </Text> */}
   </CustomDrawer>
  );
 }

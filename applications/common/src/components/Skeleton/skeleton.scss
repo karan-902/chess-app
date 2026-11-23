@@ -6,7 +6,7 @@
  &.MuiSkeleton-root {
   position: relative;
   overflow: hidden;
-  background: alpha($appText, 0.05);
+  background: textOpacity($textPrimary, 0.05);
   animation: none;
 
   &::after {
@@ -16,19 +16,23 @@
    background: linear-gradient(
     90deg,
     transparent,
-    alpha($appText, 0.05) 50%,
+    textOpacity($textPrimary, 0.05) 50%,
     transparent
    );
    transform: translate3d(-100%, 0, 0);
    animation: skeleton-shimmer 1.4s ease-in-out infinite;
   }
 
-  @media (prefers-reduced-motion: reduce) {
+  @include reduced-motion {
    &::after {
     animation: none;
     opacity: 0;
    }
   }
+ }
+
+ &.MuiSkeleton-text {
+  border-radius: 4px;
  }
 
  &.icon {
@@ -66,7 +70,8 @@
  }
 
  &.wallet-btn-skeleton {
-  flex: 1;
+  flex: 0 0 8.75rem;
+  border-radius: 999px;
  }
 
  &.username-suggestion-skeleton {
@@ -75,18 +80,24 @@
  }
 
  &.appbar-balance-skeleton {
-  width: 7rem;
-  height: 2rem;
+  width: 100px;
+  height: 2.25rem;
+  margin-left: 1rem;
+  border-radius: 999px;
+
+  @include from(phone) {
+   width: 106px;
+  }
  }
 
  .pool-card &.MuiSkeleton-root {
-  background: alpha($poolInk, 0.06);
+  background: textOpacity($textPrimary, 0.06);
 
   &::after {
    background: linear-gradient(
     90deg,
     transparent,
-    alpha($poolInk, 0.06) 50%,
+    textOpacity($textPrimary, 0.06) 50%,
     transparent
    );
   }
@@ -94,9 +105,9 @@
 
  &.pool-art-skeleton {
   grid-area: icon;
-  align-self: stretch;
-  width: 100%;
-  height: 100%;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 10px;
  }
 
  &.pool-time-skeleton {
@@ -120,6 +131,7 @@
   right: 0;
   width: 4.5rem;
   height: 1.25rem;
+  border-bottom-left-radius: 8px;
  }
 
  &.face-off-bar {

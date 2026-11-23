@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { CircularProgress } from "@mui/material";
 import { useReduxDispatch, useReduxSelector } from "@gopvp/app/src/redux/hooks";
 import { showToast } from "@gopvp/app/src/redux/common/slice";
 import Box from "@gopvp/common/src/components/Box/Box";
@@ -7,33 +8,46 @@ import Button from "@gopvp/common/src/components/Button/Button";
 import Input from "@gopvp/common/src/components/Input/Input";
 import WalletSheetShell from "@gopvp/app/src/components/common/WalletSheetShell";
 import WalletSuccessStage from "@gopvp/app/src/components/common/WalletSuccessStage";
-import WalletInfoNote from "@gopvp/app/src/components/common/WalletInfoNote";
+// import WalletInfoNote from "@gopvp/app/src/components/common/WalletInfoNote";
 import { useWalletModal } from "@gopvp/app/src/context/WalletModalContext";
 import {
  useWalletBalance,
  withdrawRequest,
 } from "@gopvp/app/src/hooks/useWallet";
-import { showApiErrorToast } from "@gopvp/common/src/util/api";
+import {
+ getApiErrorResponse,
+ showApiErrorToast,
+} from "@gopvp/common/src/util/api";
+import { ERROR_TYPES } from "@gopvp/common/src/constants/mapper";
 import {
  withdrawText,
- onlyWinningsWithdrawableText,
+ withdrawalFailedText,
+ // onlyWinningsWithdrawableText,
  destinationText,
- btcAddressOrInvoiceText,
- requestWithdrawalText,
+ lightningAddressText,
+ // requestWithdrawalText,
  maxWithdrawalAmountText,
  insufficientWithdrawableText,
  enterDestinationText,
  withdrawalCompletedText,
- withdrawalProcessingText,
  enterAmountText,
 } from "@gopvp/app/src/constants/message";
 import {
  MAX_WITHDRAW_USD,
  MAX_AMOUNT_INPUT_USD,
+ WALLET_LOADER_SIZE,
 } from "@gopvp/app/src/constants/limit";
 import { sanitizeAmountInput } from "@gopvp/app/src/utils";
 
 type Stage = "amount" | "processing" | "success";
+
+const AMOUNT_ERROR_TYPES: string[] = [
+ ERROR_TYPES.AMOUNT_REQUIRED,
+ ERROR_TYPES.INVALID_AMOUNT,
+ ERROR_TYPES.AMOUNT_BELOW_MINIMUM,
+ ERROR_TYPES.AMOUNT_ABOVE_MAXIMUM,
+ ERROR_TYPES.DAILY_WITHDRAW_LIMIT_REACHED,
+];
 
 export default function WithdrawSheet() {
  const dispatch = useReduxDispatch();
@@ -50,6 +64,7 @@ export default function WithdrawSheet() {
  const [stage, setStage] = useState<Stage>("amount");
  const [withdrawId, setWithdrawId] = useState<string | null>(null);
  const [amount, setAmount] = useState("");
+ const [amountApiError, setAmountApiError] = useState("");
 
  const [destination, setDestination] = useState("");
  const [submitting, setSubmitting] = useState(false);
@@ -59,19 +74,26 @@ export default function WithdrawSheet() {
   setStage("amount");
   setWithdrawId(null);
   setAmount("");
+  setAmountApiError("");
 
   setDestination("");
   setSubmitting(false);
  }, [open]);
 
  useEffect(() => {
-  if (
-   stage === "processing" &&
-   lastTransaction?.id === withdrawId &&
-   lastTransaction?.status === "COMPLETED"
-  )
-   setStage("success");
- }, [stage, withdrawId, lastTransaction]);
+  if (stage !== "processing" || lastTransaction?.id !== withdrawId) return;
+  if (lastTransaction?.status === "COMPLETED") setStage("success");
+  if (lastTransaction?.status === "FAILED") {
+   dispatch(
+    showToast({
+     isToastOpen: true,
+     toastMessage: withdrawalFailedText,
+     toastVariant: "error",
+    }),
+   );
+   setStage("amount");
+  }
+ }, [stage, withdrawId, lastTransaction, dispatch]);
 
  useEffect(() => {
   if (!open) return;
@@ -84,18 +106,21 @@ export default function WithdrawSheet() {
   Math.round(amountUsd * 100) > Math.round(withdrawableUsd * 100);
  const amountError = submitting
   ? undefined
-  : exceedsBalance
-    ? insufficientWithdrawableText
-    : amountUsd > MAX_WITHDRAW_USD
-      ? maxWithdrawalAmountText(MAX_WITHDRAW_USD)
-      : undefined;
+  : amountApiError ||
+    (exceedsBalance
+     ? insufficientWithdrawableText
+     : amountUsd > MAX_WITHDRAW_USD
+       ? maxWithdrawalAmountText(MAX_WITHDRAW_USD)
+       : undefined);
  const withdrawDestination = (speedLightningAddress || destination).trim();
  const canSubmit =
   hasWithdrawable && amount !== "" && !amountError && withdrawDestination !== "";
 
  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   const nextAmount = sanitizeAmountInput(e.target.value, MAX_AMOUNT_INPUT_USD);
-  if (nextAmount !== null) setAmount(nextAmount);
+  if (nextAmount === null) return;
+  setAmount(nextAmount);
+  setAmountApiError("");
  };
 
  const handleWithdraw = async () => {
@@ -118,7 +143,10 @@ export default function WithdrawSheet() {
    setWithdrawId(withdraw_id);
    setStage(status === "COMPLETED" ? "success" : "processing");
   } catch (err) {
-   showApiErrorToast(err);
+   const errorData = getApiErrorResponse(err)?.data;
+   if (AMOUNT_ERROR_TYPES.includes(errorData?.type ?? ""))
+    setAmountApiError(errorData?.message ?? "");
+   else showApiErrorToast(err);
   } finally {
    setSubmitting(false);
   }
@@ -128,8 +156,8 @@ export default function WithdrawSheet() {
   <WalletSheetShell open={open} isSuccess={stage === "success"} onClose={close}>
    {stage === "amount" && (
     <Box customClass="wallet-modal-layout">
-     <Text customClass="modal-heading value-heading">{withdrawText}</Text>
-     <WalletInfoNote text={onlyWinningsWithdrawableText} />
+     <Text customClass="sheet-title dialog-title">{withdrawText}</Text>
+     {/* <WalletInfoNote text={onlyWinningsWithdrawableText} /> */}
 
      <Box customClass="hero-input-wrapper">
       <Input
@@ -157,8 +185,8 @@ export default function WithdrawSheet() {
        label={destinationText}
        labelClassName="wallet-field-label"
        fullWidth
-       customClass="wallet-input"
-       placeholder={btcAddressOrInvoiceText}
+       customClass="form-input"
+       placeholder={lightningAddressText}
        value={destination}
        onChange={(e) => setDestination(e.target.value)}
        disabled={submitting || !hasWithdrawable}
@@ -174,17 +202,17 @@ export default function WithdrawSheet() {
       isLoading={submitting}
       disabled={!canSubmit || submitting}
      >
-      {requestWithdrawalText}
+      {withdrawText}
      </Button>
     </Box>
    )}
 
    {stage === "processing" && (
-    <WalletSuccessStage
-     amountUsd={amountUsd}
-     title={withdrawalProcessingText}
-     isProcessing
-    />
+    <Box customClass="modal-success-stage">
+     <Box customClass="modal-success-icon">
+      <CircularProgress size={WALLET_LOADER_SIZE} />
+     </Box>
+    </Box>
    )}
 
    {stage === "success" && (

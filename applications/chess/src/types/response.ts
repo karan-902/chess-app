@@ -22,7 +22,6 @@ export type IMoveResponse =
     is_timeout: boolean;
     turn_user_id: string;
     remaining_time: IRemainingTime;
-    first_move_deadline_ms?: number;
    });
 
 export type IMoveEvent = IMovePlayed & {
@@ -33,7 +32,6 @@ export type IMoveEvent = IMovePlayed & {
  isTimeout: boolean;
  turnUserId: string;
  remainingTime: IRemainingTime;
- firstMoveDeadlineMs?: number;
 };
 
 export type IGameStatePlayer = {
@@ -55,10 +53,8 @@ export type IGameStateResponse = {
  time: number;
  players: IGameStatePlayer[];
  is_started: boolean;
- first_move_deadline_ms?: number;
 };
 
 export type IGameStartEvent = {
  matchId: string;
- firstMoveDeadlineMs: number;
 };

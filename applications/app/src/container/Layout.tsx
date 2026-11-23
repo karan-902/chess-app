@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 import { setNavigator } from "@gopvp/common/src/util/navigationService";
 import Box from "@gopvp/common/src/components/Box/Box";
+import LogoLoader from "@gopvp/common/src/components/LogoLoader/LogoLoader";
 import BackdropLoader from "@gopvp/app/src/components/common/BackdropLoader/BackdropLoader";
 import Notification from "@gopvp/app/src/components/common/Notification/Notification";
 import { useReduxDispatch, useReduxSelector } from "@gopvp/app/src/redux/hooks";
@@ -106,7 +107,7 @@ export default function Layout() {
   return (
    <>
     <Box customClass="gopvp-circular-loader">
-     <Box customClass="logo-loader" role="progressbar" />
+     <LogoLoader role="progressbar" />
     </Box>
     <Notification />
    </>

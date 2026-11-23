@@ -1,12 +1,17 @@
 import * as yup from "yup";
 import { useFormik } from "formik";
+import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Input from "@gopvp/common/src/components/Input/Input";
+import Text from "@gopvp/common/src/components/Text/Text";
+import { InfoCircle } from "@gopvp/common/src/components/images";
 import Button from "@gopvp/common/src/components/Button/Button";
 import {
  callAPIInterface,
+ getApiErrorResponse,
  showApiErrorToast,
 } from "@gopvp/common/src/util/api";
+import { ERROR_TYPES } from "@gopvp/common/src/constants/mapper";
 import type { IRegisterBody } from "@gopvp/common/src/types/payload";
 import type { IRegisterResponse } from "@gopvp/common/src/types/response";
 import {
@@ -14,12 +19,20 @@ import {
  enterEmailText,
  passwordText,
  enterPasswordText,
+ passwordStrengthText,
+ passwordHintText,
  registerText,
 } from "@gopvp/app/src/constants/message";
+import {
+ PASSWORD_MIN_LENGTH,
+ PASSWORD_STRENGTH_LEVELS,
+} from "@gopvp/app/src/constants/limit";
 import type { IEmailFormScreenProps } from "@gopvp/common/src/types/component";
 import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
 import { formSubmitHandler } from "@gopvp/common/src/util/form";
+import { PASSWORD_STRENGTH_LABELS } from "@gopvp/app/src/constants/label";
 import {
+ PASSWORD_CHAR_PATTERNS,
  countryRule,
  emailRule,
  newPasswordRule,
@@ -46,9 +59,9 @@ export default function EmailFormScreen({
    country: "",
   },
   validationSchema: registerSchema,
-  onSubmit: async (values, { setSubmitting }) => {
+  onSubmit: async (values, { setSubmitting, setStatus }) => {
    try {
-    await callAPIInterface<IRegisterResponse, IRegisterBody>(
+    const response = await callAPIInterface<IRegisterResponse, IRegisterBody>(
      "POST",
      ENDPOINTS.REGISTER,
      {
@@ -58,14 +71,29 @@ export default function EmailFormScreen({
       country: values.country,
      },
     );
-    onRegistered(values.email, values.password);
+    onRegistered(values.email, values.password, response.message);
    } catch (err) {
-    showApiErrorToast(err);
+    if (getApiErrorResponse(err)?.data?.type === ERROR_TYPES.USERNAME_TAKEN)
+     setStatus({ takenUsername: values.username.trim() });
+    else showApiErrorToast(err);
    } finally {
     setSubmitting(false);
    }
   },
  });
+ const { password } = formik.values;
+ const hasPasswordError = formik.touched.password && !!formik.errors.password;
+ const { lower, upper, digit, symbol } = PASSWORD_CHAR_PATTERNS;
+ const passwordScore =
+  password.length < PASSWORD_MIN_LENGTH
+   ? 1
+   : 1 +
+     [
+      lower.test(password) && upper.test(password),
+      digit.test(password),
+      symbol.test(password),
+     ].filter(Boolean).length;
+ const passwordStrengthLabel = PASSWORD_STRENGTH_LABELS[passwordScore];
 
  return (
   <Box
@@ -73,7 +101,7 @@ export default function EmailFormScreen({
    component="form"
    onSubmit={formSubmitHandler(formik.handleSubmit)}
   >
-   <UsernameField formik={formik} customClass="form-input" />
+   <UsernameField formik={formik} customClass="form-input" showHint />
 
    <Input
     id="email"
@@ -91,21 +119,56 @@ export default function EmailFormScreen({
     fullWidth
    />
 
-   <Input
-    id="password"
-    name="password"
-    type="password"
-    label={passwordText}
-    placeholder={enterPasswordText}
-    value={formik.values.password}
-    onChange={formik.handleChange}
-    onBlur={formik.handleBlur}
-    disabled={formik.isSubmitting}
-    isError={formik.touched.password && !!formik.errors.password}
-    helperText={formik.errors.password}
-    customClass="form-input"
-    fullWidth
-   />
+   <Box customClass="password-field">
+    <Input
+     id="password"
+     name="password"
+     type="password"
+     label={
+      <>
+       {passwordText}
+       <Text component="span" customClass="field-hint">
+        <InfoCircle aria-hidden />
+        {passwordHintText(PASSWORD_MIN_LENGTH)}
+       </Text>
+      </>
+     }
+     placeholder={enterPasswordText}
+     value={password}
+     onChange={formik.handleChange}
+     onBlur={formik.handleBlur}
+     disabled={formik.isSubmitting}
+     isError={hasPasswordError}
+     helperText={formik.errors.password}
+     customClass="form-input"
+     fullWidth
+    />
+    {password && (
+     <Box
+      customClass={classNames(
+       "password-strength",
+       `level-${passwordScore}`,
+       hasPasswordError && "hidden",
+      )}
+      role="meter"
+      aria-label={passwordStrengthText}
+      aria-valuemin={1}
+      aria-valuemax={PASSWORD_STRENGTH_LEVELS}
+      aria-valuenow={passwordScore}
+      aria-valuetext={passwordStrengthLabel}
+     >
+      {Array.from({ length: PASSWORD_STRENGTH_LEVELS }, (_, index) => (
+       <span
+        key={index}
+        className={classNames("strength-bar", index < passwordScore && "filled")}
+       />
+      ))}
+      <Text component="span" customClass="password-strength-label">
+       {passwordStrengthLabel}
+      </Text>
+     </Box>
+    )}
+   </Box>
 
    <CountrySelect formik={formik} />
 

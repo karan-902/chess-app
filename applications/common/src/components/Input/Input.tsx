@@ -1,12 +1,16 @@
 import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import type { InputHTMLAttributes, ReactNode } from "react";
-import { InputField as NeoPopInputField } from "@cred/neopop-web/lib/components";
+import { InputBase } from "@mui/material";
 import classNames from "classnames";
 import Box from "@gopvp/common/src/components/Box/Box";
 import CustomLabel from "@gopvp/common/src/components/Label/Label";
 import AlertMessage from "@gopvp/common/src/components/AlertMessage/AlertMessage";
 import "./input.scss";
 import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
+import {
+ hidePasswordText,
+ showPasswordText,
+} from "@gopvp/common/src/constants/message";
 
 interface IInputProps
  extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
@@ -19,14 +23,6 @@ interface IInputProps
  labelClassName?: string;
  fullWidth?: boolean;
 }
-
-const INPUT_COLORS = {
- textColor: "inherit",
- labelColor: "inherit",
- caretColor: "var(--gold)",
- errorColor: "var(--pale-red)",
- placeholderColor: "var(--app-text-placeholder)",
-};
 
 export const Input = forwardRef<HTMLInputElement, IInputProps>(
  (
@@ -67,14 +63,11 @@ export const Input = forwardRef<HTMLInputElement, IInputProps>(
     )}
     <Box customClass="input-row">
      {startIcon && <span className="input-adornment start">{startIcon}</span>}
-     <NeoPopInputField
-      {...props}
+     <InputBase
+      inputProps={{ ...props, "aria-invalid": isError || undefined }}
       type={isPassword && showPassword ? "text" : type}
       disabled={disabled}
-      isDisabled={disabled}
       inputRef={inputRef}
-      colorConfig={INPUT_COLORS}
-      aria-invalid={isError || undefined}
      />
      {isPassword ? (
       <span className="input-adornment end">
@@ -82,6 +75,7 @@ export const Input = forwardRef<HTMLInputElement, IInputProps>(
         type="button"
         disableRipple
         customClass="input-password-toggle"
+        aria-label={showPassword ? hidePasswordText : showPasswordText}
         onClick={() => setShowPassword((p) => !p)}
         tabIndex={-1}
         icon={showPassword ? "eyeOff" : "eye"}

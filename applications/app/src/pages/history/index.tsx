@@ -12,7 +12,7 @@ import { useGameHistory } from "@gopvp/app/src/hooks/useGameHistory";
 import { useReduxDispatch, useReduxSelector } from "@gopvp/app/src/redux/hooks";
 import { setMatchesSubtab } from "@gopvp/app/src/redux/game/slice";
 // import { useGame } from "@gopvp/app/src/hooks/useGame";
-import { formatAmount } from "@gopvp/common/src/util/format";
+import { formatCompactAmount } from "@gopvp/common/src/util/format";
 import type { IMatchHistoryItem } from "@gopvp/common/src/types/response";
 import {
  welcomeText,
@@ -156,7 +156,9 @@ export default function MyMatches() {
            },
            {
             label: totalEarningsText,
-            value: formatAmount(stats?.gross_income ?? MATCHES_STATS_FALLBACK),
+            value: formatCompactAmount(
+             stats?.gross_income ?? MATCHES_STATS_FALLBACK,
+            ),
             ...STAT_ICONS.gross_income,
             isPrize: true,
            },

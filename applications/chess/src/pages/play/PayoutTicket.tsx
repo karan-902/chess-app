@@ -17,17 +17,14 @@ import {
  cancelledText,
  vsText,
 } from "@gopvp/chess/src/constants/message";
-import { COIN_PATH } from "@gopvp/chess/src/constants/asset";
+import { CoinStarIcon } from "@gopvp/common/src/components/constants";
 import {
  PAYOUT_TIMING,
  PAYOUT_COIN_COUNT,
  PAYOUT_SPARK_COUNT,
 } from "@gopvp/chess/src/constants/limit";
-import {
- clamp01,
- easeOutCubic,
- prefersReducedMotion,
-} from "@gopvp/chess/src/utils/index";
+import { clamp01, easeOutCubic } from "@gopvp/chess/src/utils/index";
+import { shouldReduceMotion } from "@gopvp/common/src/util/motion";
 import type { IPayoutTicketProps } from "@gopvp/chess/src/types/component";
 
 const STAMPS = {
@@ -70,7 +67,7 @@ export default function PayoutTicket({
  const stageRef = useRef<HTMLDivElement>(null);
  const slotRef = useRef<HTMLDivElement>(null);
  const amountRef = useRef<HTMLSpanElement>(null);
- const coinRefs = useRef<(HTMLImageElement | null)[]>([]);
+ const coinRefs = useRef<(SVGSVGElement | null)[]>([]);
  const sparkRefs = useRef<(HTMLDivElement | null)[]>([]);
  const scoreChange = Math.round(gameEnded.score_change);
  const amount = gameEnded.amount;
@@ -121,7 +118,7 @@ export default function PayoutTicket({
   measure();
   let isActive = true;
   document.fonts.ready.then(() => isActive && measure());
-  if (prefersReducedMotion()) {
+  if (shouldReduceMotion()) {
    stage.classList.add("rising", "stamped");
    return () => {
     isActive = false;
@@ -166,6 +163,7 @@ export default function PayoutTicket({
    fire("rise", timing.rise, t, () => stage.classList.add("rising"));
    fire("stamp", timing.stamp, t, () => stage.classList.add("stamped"));
    fire("glare", timing.glare, t, () => stage.classList.add("glare"));
+   fire("shake", timing.shake, t, () => stage.classList.add("shaking"));
 
    if (timing.count !== undefined && timing.countDur && t >= timing.count)
     paintCount(
@@ -284,14 +282,12 @@ export default function PayoutTicket({
    <Box ref={slotRef} customClass="payout-slot" />
    {hasCoins &&
     COINS.map((coin, i) => (
-     <img
+     <CoinStarIcon
       key={i}
-      ref={(el) => {
+      ref={(el: SVGSVGElement | null) => {
        coinRefs.current[i] = el;
       }}
       className="payout-coin"
-      src={COIN_PATH}
-      alt=""
       style={{ width: coin.size, height: coin.size }}
      />
     ))}

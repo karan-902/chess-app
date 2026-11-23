@@ -10,3 +10,5 @@ tsconfig.tsbuildinfo
 storybook-static/
 flow.md
 .playwright-mcp/
+test-results/
+playwright-report/

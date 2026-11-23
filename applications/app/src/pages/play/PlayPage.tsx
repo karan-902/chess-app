@@ -1,6 +1,7 @@
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import Box from "@gopvp/common/src/components/Box/Box";
+import LogoLoader from "@gopvp/common/src/components/LogoLoader/LogoLoader";
 // import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
 import Skeleton from "@gopvp/common/src/components/Skeleton/Skeleton";
@@ -22,6 +23,7 @@ import {
  playNowText,
 } from "@gopvp/app/src/constants/message";
 import { ROUTES } from "@gopvp/app/src/constants/route";
+import { PLAYERS_PER_MATCH } from "@gopvp/app/src/constants/limit";
 import { poolTone } from "@gopvp/app/src/utils";
 
 export default function PlayPage() {
@@ -61,6 +63,7 @@ export default function PlayPage() {
   opponentName,
   myName,
   roomFee,
+  roomWin,
   roomTimeMs,
   expiresInSeconds,
   createRoom,
@@ -72,6 +75,11 @@ export default function PlayPage() {
   setRoomOpen(false);
   navigate(gamePath, { replace: true });
  });
+ const [pricedPool] = pools;
+ const roomWinAmount =
+  roomWin ??
+  roomFee *
+   (pricedPool ? pricedPool.prize / pricedPool.bet : PLAYERS_PER_MATCH);
 
  useEffect(() => {
   dispatch(setFindingMatch(isSearching || isRoomActive));
@@ -109,7 +117,7 @@ export default function PlayPage() {
    <Suspense
     fallback={
      <Box customClass="modal-loader game-loader">
-      <Box customClass="logo-loader" role="progressbar" />
+      <LogoLoader role="progressbar" />
      </Box>
     }
    >
@@ -176,7 +184,9 @@ export default function PlayPage() {
      <Suspense
       fallback={<Skeleton variant="rounded" customClass="board-skeleton" />}
      >
-      <Preview />
+      <Preview
+       isPaused={sheetOpen || confirmOpen || practiceOpen || roomOpen}
+      />
      </Suspense>
     </Box>
    </Box>
@@ -231,6 +241,7 @@ export default function PlayPage() {
     opponentName={opponentName}
     myName={myName}
     roomFee={roomFee}
+    roomWin={roomWinAmount}
     roomTimeMs={roomTimeMs}
     expiresInSeconds={expiresInSeconds}
     onCreateRoom={createRoom}

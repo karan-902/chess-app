@@ -16,7 +16,6 @@ export function useGameClock(
  const [whiteMs, setWhiteMs] = useState(startingMs);
  const [blackMs, setBlackMs] = useState(startingMs);
  const [timedOut, setTimedOut] = useState<"w" | "b" | null>(null);
- const [elapsed, setElapsed] = useState(0);
  const timedOutRef = useRef<"w" | "b" | null>(null);
 
  const snapshot = useCallback(() => {
@@ -34,12 +33,6 @@ export function useGameClock(
   setWhiteMs(w);
   setBlackMs(b);
  }, [turn, snapshot]);
-
- useEffect(() => {
-  if (paused) return;
-  const id = setInterval(() => setElapsed((s) => s + 1), 1000);
-  return () => clearInterval(id);
- }, [paused]);
 
  useEffect(() => {
   if (paused) return;
@@ -79,7 +72,6 @@ export function useGameClock(
   setWhiteMs(startingMs);
   setBlackMs(startingMs);
   setTimedOut(null);
-  setElapsed(0);
   timedOutRef.current = null;
  }, [startingMs, turn]);
 
@@ -103,10 +95,6 @@ export function useGameClock(
   const s = Math.max(0, Math.floor(ms / 1000));
   return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
  };
- const fmtElapsed = (s: number) => {
-  const m = Math.floor(s / 60);
-  return m > 0 ? `${m}m ${s % 60}s` : `${s}s`;
- };
 
  return {
   whiteTimer: fmt(whiteMs),
@@ -114,7 +102,6 @@ export function useGameClock(
   whiteTimeMs: whiteMs,
   blackTimeMs: blackMs,
   timedOut,
-  elapsedFormatted: fmtElapsed(elapsed),
   reset,
   syncClock,
  };

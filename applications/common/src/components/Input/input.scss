@@ -12,51 +12,59 @@
   gap: 0.5rem;
   width: 100%;
   height: 3.375rem;
-  border-bottom: 1px solid alpha($appText, 0.22);
+  border-bottom: 1px solid textOpacity($textPrimary, 0.22);
   font-family: $fontOutfitSemiBold;
-  font-size: max(#{$input-font-min}, #{$font18});
-  color: $appText;
+  font-size: 18px;
+  color: $textPrimary;
   transition: border-color 0.15s ease;
 
-  > div {
+  @include from(phone) {
+   font-size: 19px;
+  }
+
+  @include from(tablet) {
+   font-size: 20px;
+  }
+
+  .MuiInputBase-root {
    flex: 1;
    min-width: 0;
    height: 100%;
-
-   > div {
-    height: 100%;
-    font: inherit !important;
-    letter-spacing: inherit !important;
-    color: inherit !important;
-   }
+   font: inherit;
+   letter-spacing: inherit;
+   color: inherit;
   }
 
   input {
+   box-sizing: border-box;
    height: 100%;
-   font-family: inherit !important;
-   font-size: inherit !important;
-   font-weight: inherit !important;
-   line-height: normal !important;
-   letter-spacing: inherit !important;
-   color: inherit !important;
+   padding: 0;
+   caret-color: $gold;
+   -webkit-text-fill-color: currentColor;
+   font-family: inherit;
+   font-size: inherit;
+   font-weight: inherit;
+   line-height: normal;
+   letter-spacing: inherit;
+   color: inherit;
    text-align: inherit;
 
    &::placeholder {
-    color: $appTextPlaceholder !important;
+    color: $textTertiary;
     opacity: 1;
    }
 
    &:where(
-     :-webkit-autofill,
-     :-webkit-autofill:hover,
-     :-webkit-autofill:focus,
-     :autofill
-    ) {
-    -webkit-text-fill-color: $appText;
+    :-webkit-autofill,
+    :-webkit-autofill:hover,
+    :-webkit-autofill:focus,
+    :autofill
+   ) {
+    -webkit-text-fill-color: $textPrimary;
     caret-color: $gold;
     -webkit-box-shadow: none;
     box-shadow: none;
-    background-color: transparent !important;
+    background-color: transparent;
     background-clip: text;
     -webkit-background-clip: text;
     transition:
@@ -67,7 +75,7 @@
 
   @media (hover: hover) {
    &:hover {
-    border-color: alpha($appText, 0.45);
+    border-color: textOpacity($textPrimary, 0.45);
    }
   }
 
@@ -78,7 +86,7 @@
 
  &.error .input-row,
  &.error .input-row:focus-within {
-  border-bottom: 1.5px solid $paleRed;
+  border-bottom: 1.5px solid $error;
  }
 
  &.disabled .input-row {
@@ -89,12 +97,12 @@
   display: inline-flex;
   flex-shrink: 0;
   align-items: center;
-  color: $appText;
+  color: $textPrimary;
  }
 
  .input-password-toggle {
-  color: alpha($appText, 0.7);
-
+  color: textOpacity($textPrimary, 0.7);
+  padding: 0;
   svg {
    width: 1.125rem;
    height: 1.125rem;
@@ -106,17 +114,30 @@
   padding: 0.25rem 0;
   border: none;
   font-family: $fontOutfitBlack;
-  font-size: $font44;
+  font-size: 44px;
   line-height: 1.1;
   text-align: center;
+  color: $textPrimary;
+
+  @include from(phone) {
+   font-size: 48px;
+  }
 
   @include from-height(medium) {
    padding: 0.5rem 0;
-   font-size: $font56;
+   font-size: 56px;
+
+   @include from(phone) {
+    font-size: 60px;
+   }
+  }
+
+  input {
+   caret-color: $gold;
   }
 
   input::placeholder {
-   color: alpha($appText, 0.35) !important;
+   color: textOpacity($textPrimary, 0.3);
   }
 
   &:focus-within {
@@ -127,22 +148,26 @@
  &.room-fee-input .input-row {
   height: auto;
   border: none;
-  font-family: $fontOutfitBlack;
-  font-size: $font40;
+  font-family: $fontOutfitExtraBold;
+  font-size: 40px;
   line-height: 1.1;
   background: transparent;
   text-align: center;
-  color: $appText;
+  color: $textPrimary;
+
+  @include from(phone) {
+   font-size: 44px;
+  }
 
   input {
    text-align: center;
    caret-color: $gold;
-   -webkit-text-fill-color: $appText;
+   -webkit-text-fill-color: $textPrimary;
   }
 
   input::placeholder {
-   color: alpha($appText, 0.3) !important;
-   -webkit-text-fill-color: alpha($appText, 0.3);
+   color: textOpacity($textPrimary, 0.3);
+   -webkit-text-fill-color: textOpacity($textPrimary, 0.3);
   }
 
   &:focus-within {
@@ -152,17 +177,17 @@
 
  &.amount-input-hero.error .input-row {
   border: none;
-  color: $paleRed;
+  color: $error;
  }
 
  &.match-id-input {
   .input-row {
    padding: 0 0.875rem;
-   background: $appSecondary;
-   color: $appTextMuted;
+   background: $surfaceElevated;
+   color: $textSecondary;
 
    input {
-    -webkit-text-fill-color: $appTextMuted;
+    -webkit-text-fill-color: $textSecondary;
    }
   }
 
@@ -173,28 +198,96 @@
 
  &.match-id-input .input-row {
   height: 3.125rem;
-  border: 1px solid alpha($appText, 0.1);
-  background: $appSurface;
-  color: $appText;
-  font-size: $font14;
+  border: 1px solid $inputBorder;
+  border-radius: 12px;
+  background: $inputBg;
+  color: $textPrimary;
+  font-size: 14px;
+
+  @include from(phone) {
+   font-size: 15px;
+  }
 
   input {
-   -webkit-text-fill-color: $appText;
+   -webkit-text-fill-color: $textPrimary;
   }
  }
 
- &.form-input {
+ &.form-input,
+ .username-field & {
   position: relative;
  }
- &.form-input .input-row {
-  height: 2.75rem;
+ &.form-input {
+  .input-row {
+   box-sizing: border-box;
+   height: 3.125rem;
+   padding: 0 1rem;
+   border: 1px solid $inputBorder;
+   border-radius: 12px;
+   background: $inputBg;
+   font-family: $fontOutfitMedium;
+   font-size: 16px;
+   color: $textPrimary;
+   transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
 
-  @include from-height(tall) {
-   height: 3rem;
+   @include from(phone) {
+    font-size: 17px;
+   }
+
+   .gopvp-signup-form & {
+    height: 2.75rem;
+   }
+
+   input {
+    caret-color: $textPrimary;
+
+    &::placeholder {
+     font-family: $fontOutfitRegular;
+     color: $textTertiary;
+    }
+
+    &:where(
+     :-webkit-autofill,
+     :-webkit-autofill:hover,
+     :-webkit-autofill:focus,
+     :autofill
+    ) {
+     -webkit-text-fill-color: $textPrimary;
+     caret-color: $textPrimary;
+    }
+   }
+
+   @media (hover: hover) {
+    &:hover {
+     border-color: $inputBorderHover;
+    }
+   }
+
+   &:focus-within {
+    border: 1px solid $borderFocus;
+   }
   }
 
-  .gopvp-signup-form & {
-   height: 2.75rem;
+  &.error .input-row,
+  &.error .input-row:focus-within {
+   border: 1px solid $error;
+  }
+
+  &.disabled .input-row {
+   opacity: 1;
+   background: $inputBgDisabled;
+   color: $textTertiary;
+  }
+
+  .input-password-toggle {
+   color: $textSecondary;
+
+   svg {
+    width: 1.375rem;
+    height: 1.375rem;
+   }
   }
  }
 }

@@ -14,7 +14,7 @@ import {
  setLeaderboardScope,
  setLeaderboardSort,
 } from "@gopvp/app/src/redux/game/slice";
-import { formatAmount, shortenUsername } from "@gopvp/common/src/util/format";
+import { formatCompactAmount, shortenUsername } from "@gopvp/common/src/util/format";
 import {
  LEADERBOARD_SCOPES,
  LEADERBOARD_SORTS,
@@ -62,7 +62,7 @@ export default function Leaderboard() {
    ? youLabel(shortenUsername(player.username))
    : shortenUsername(player.username);
  const playerValue = (player: ILeaderboardRowResponse) =>
-  "wins" in player ? player.wins : formatAmount(player.win_amount);
+  "wins" in player ? player.wins : formatCompactAmount(player.win_amount);
  const valueClass = classNames(
   "amount-value",
   sort === "earnings" && "lb-earnings",

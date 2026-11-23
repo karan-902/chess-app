@@ -7,8 +7,8 @@ import CustomDrawer from "@gopvp/common/src/components/Drawer/Drawer";
 import CustomBadge from "@gopvp/common/src/components/Badge/Badge";
 import StatTile from "@gopvp/common/src/components/StatTile/StatTile";
 import { icons } from "@gopvp/common/src/components/images";
-import { useGame } from "@gopvp/app/src/hooks/useGame";
 import { vsText } from "@gopvp/app/src/constants/message";
+import { BRAND_LOGO_PATH } from "@gopvp/app/src/constants/asset";
 import type { IResultSheetProps } from "@gopvp/app/src/types/component";
 
 export default function ResultSheet({
@@ -24,9 +24,6 @@ export default function ResultSheet({
  versus = false,
  children,
 }: IResultSheetProps) {
- const {
-  gameModule: { logoSrc },
- } = useGame();
  const TileIcon = tileIcon && icons[tileIcon];
  const isLoading = !tiles;
 
@@ -39,9 +36,9 @@ export default function ResultSheet({
   >
    <Box customClass="result-hero">
     {isLoading ? (
-     <Skeleton variant="rounded" customClass="result-logo-skeleton" />
+     <Skeleton variant="circular" customClass="result-logo-skeleton" />
     ) : (
-     <img src={logoSrc} alt="" />
+     <img src={BRAND_LOGO_PATH} alt="" />
     )}
     <Text customClass="result-title">
      {isLoading ? <Skeleton customClass="text" width={140} /> : title}
@@ -71,7 +68,7 @@ export default function ResultSheet({
         layout="label-top"
         label={tile ? tile.label : <Skeleton customClass="text" width={60} />}
         value={tile ? tile.value : <Skeleton customClass="text" width={50} />}
-        icon={tile && TileIcon && <TileIcon />}
+        icon={tile && (tile.icon ? <tile.icon /> : TileIcon && <TileIcon />)}
         customClass={classNames(tile?.highlight && "highlight")}
        />
       </Fragment>

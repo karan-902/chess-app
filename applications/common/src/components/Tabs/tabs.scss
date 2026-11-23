@@ -13,7 +13,7 @@
   transform: translate3d(var(--tab-x, 0), 0, 0) scaleX(var(--tab-w, 0));
   transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 
-  @media (prefers-reduced-motion: reduce) {
+  @include reduced-motion {
    transition: none;
   }
  }
@@ -21,34 +21,75 @@
  .common-tab {
   text-transform: none;
   min-height: 44px;
-  min-width: 0 !important;
+  min-width: 0;
   padding: 0.625rem 0.5rem 0.5625rem;
-  color: alpha($appText, 0.5);
+  color: textOpacity($textPrimary, 0.5);
   font-family: $fontOutfitSemiBold;
   font-weight: 600;
   font-size: 14px;
 
   &.Mui-selected {
-   color: $appText;
+   color: $textPrimary;
   }
  }
 
  &.appbar-nav-tabs {
   padding: 0 0.75rem;
-  border-bottom: 1px solid alpha($appText, 0.08);
+  border-bottom: 1px solid $borderSubtle;
   flex-shrink: 0;
 
   .MuiTabs-indicator {
    height: 2px;
+   background: $gold;
    transition-duration: 0.25s;
+  }
+
+  .common-tab {
+   color: $textSecondary;
+   transition: color 0.15s ease;
+
+   &.Mui-selected {
+    color: $textPrimary;
+   }
   }
 
   @include from(tablet) {
    padding: 0 1rem;
   }
+ }
 
-  :root[data-theme="light"] & .common-tab.Mui-selected {
-   font-family: $fontOutfitBold;
+ &.admin-range {
+  align-self: flex-start;
+  min-height: 0;
+  padding: 3px;
+  border: 1px solid $borderSubtle;
+  border-radius: 10px;
+  background: $cardBg;
+
+  .MuiTabs-indicator {
+   display: none;
+  }
+
+  .MuiTabs-flexContainer {
+   gap: 2px;
+  }
+
+  .common-tab {
+   min-height: 36px;
+   padding: 6px 14px;
+   border-radius: 8px;
+   color: $textSecondary;
+   font-size: 13px;
+   transition: color 0.15s ease;
+
+   &:hover {
+    color: $textPrimary;
+   }
+
+   &.Mui-selected {
+    background: $surfaceElevated;
+    color: $textPrimary;
+   }
   }
  }
 }

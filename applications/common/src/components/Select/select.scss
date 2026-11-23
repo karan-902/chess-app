@@ -4,78 +4,83 @@
  position: relative;
  width: 100%;
 
- .gopvp-signup-form & .MuiInputBase-root {
-  min-height: 2.75rem;
-  height: 2.75rem;
+ &.admin-filter {
+  @include from(tablet) {
+   width: 280px;
+  }
 
-  .MuiInputBase-input {
-   padding-block: 0;
-   height: 100%;
+  .MuiInputBase-root {
+   height: 42px;
   }
  }
 
  .MuiInputBase-root {
-  min-height: 3.25rem;
-  padding-left: 0;
-  padding-right: 0;
-  background: transparent;
-  border-radius: 0;
+  box-sizing: border-box;
+  height: 3.125rem;
+  padding: 0 1rem;
+  background: $inputBg;
+  border-radius: 12px;
   box-shadow: none;
-  font-family: $fontOutfitSemiBold;
-  font-size: max(#{$input-font-min}, #{$font18});
-  color: $appText;
+  font-family: $fontOutfitMedium;
+  font-size: 16px;
+  color: $textPrimary;
+
+  @include from(phone) {
+   font-size: 17px;
+  }
+
+  .gopvp-signup-form & {
+   height: 2.75rem;
+  }
 
   .MuiInputBase-input {
-   padding-left: 0;
+   height: 100%;
+   padding: 0;
+   caret-color: $textPrimary;
   }
 
   .MuiOutlinedInput-notchedOutline {
-   border-width: 0 0 1px;
-   border-style: solid;
-   border-color: alpha($appText, 0.22);
-   border-radius: 0;
+   border: 1px solid $inputBorder;
+   border-radius: 12px;
    transition: border-color 0.15s ease;
   }
 
   @media (hover: hover) {
    &:hover:not(.Mui-focused):not(.Mui-error):not(.Mui-disabled)
     .MuiOutlinedInput-notchedOutline {
-    border-color: alpha($appText, 0.45);
+    border-color: $inputBorderHover;
    }
   }
 
-  &.Mui-focused {
-   .MuiOutlinedInput-notchedOutline {
-    border-width: 0 0 1.5px;
-    border-color: $gold;
-   }
+  &.Mui-focused .MuiOutlinedInput-notchedOutline {
+   border-width: 1px;
+   border-color: $borderFocus;
   }
 
-  &.Mui-error {
-   .MuiOutlinedInput-notchedOutline {
-    border-width: 0 0 1.5px;
-    border-color: $paleRed;
-   }
-
-   &.Mui-focused {
-    .MuiOutlinedInput-notchedOutline {
-     border-color: $paleRed;
-    }
-   }
+  &.Mui-error .MuiOutlinedInput-notchedOutline {
+   border-color: $error;
   }
 
   &.Mui-disabled {
-   opacity: 0.4;
+   background: $inputBgDisabled;
+
+   .MuiInputBase-input {
+    -webkit-text-fill-color: $textTertiary;
+   }
   }
  }
 
  input::placeholder {
-  color: $appTextPlaceholder;
+  font-family: $fontOutfitRegular;
+  color: $textTertiary;
   opacity: 1;
  }
 
  .select-arrow {
-  color: alpha($appText, 0.6);
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: $textSecondary;
   cursor: pointer;
   transition: transform 0.2s ease;
 
@@ -86,7 +91,7 @@
 }
 
 .common-select-popper {
- z-index: $z-dropdown;
+ z-index: 1400;
 }
 
 .common-select-menu.MuiPaper-root {
@@ -98,19 +103,14 @@
  &::-webkit-scrollbar {
   display: none;
  }
- border-radius: 0;
- background: $appSheetFill;
- border: 1px solid alpha($appText, 0.12);
- box-shadow: 0 0.75rem 1.5rem alpha($black, 0.45);
+ border-radius: 8px;
+ background: $surfaceElevated;
+ border: 1px solid $borderStrong;
+ box-shadow: 0 0.75rem 1.5rem textOpacity($black, 0.45);
  animation: select-menu-in 0.14s ease-out;
 
- @media (prefers-reduced-motion: reduce) {
+ @include reduced-motion {
   animation: none;
- }
-
- :root[data-theme="light"] & {
-  background: $appSurface;
-  box-shadow: 0 0.75rem 1.5rem alpha($primaryContrast, 0.12);
  }
 
  .MuiList-root {
@@ -122,23 +122,27 @@
   min-height: 3rem;
   padding: 0 1rem;
   font-family: $fontOutfitMedium;
-  font-size: $font16;
-  color: alpha($appText, 0.75);
+  font-size: 16px;
+  color: $textSecondary;
+
+  @include from(phone) {
+   font-size: 17px;
+  }
 
   & + .MuiMenuItem-root {
-   border-top: 1px solid alpha($appText, 0.07);
+   border-top: 1px solid $borderSubtle;
   }
 
   &:hover,
   &.active {
-   background: alpha($appText, 0.06);
-   color: $appText;
+   background: textOpacity($textPrimary, 0.06);
+   color: $textPrimary;
   }
 
   &.Mui-selected,
   &.Mui-selected:hover,
   &.Mui-selected.active {
-   background: alpha($gold, 0.08);
+   background: textOpacity($gold, 0.08);
    color: $gold;
    font-family: $fontOutfitSemiBold;
 
@@ -151,15 +155,11 @@
     width: 3px;
     background: $gold;
    }
-
-   :root[data-theme="light"] & {
-    color: $appText;
-   }
   }
 
   &.Mui-disabled {
    opacity: 1;
-   color: $appTextMuted;
+   color: $textTertiary;
   }
  }
 }

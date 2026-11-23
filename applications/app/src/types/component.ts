@@ -23,7 +23,6 @@ export interface IWalletSheetShellProps {
 export interface IWalletSuccessStageProps {
  amountUsd: number;
  title: string;
- isProcessing?: boolean;
 }
 
 export interface IWalletInfoNoteProps {
@@ -44,6 +43,7 @@ export interface IUsernameFieldProps<TValues extends { username: string }> {
  inputRef?: Ref<HTMLInputElement>;
  customClass?: string;
  showHint?: boolean;
+ hideClear?: boolean;
 }
 
 export interface IStatRow {
@@ -73,6 +73,7 @@ export type TResultTone = "win" | "loss" | "neutral" | "gold";
 export interface IResultTile {
  label: string;
  value: string | number;
+ icon?: LucideIcon;
  highlight?: boolean;
 }
 
@@ -106,6 +107,7 @@ export interface IRoomSheetProps {
  opponentName: string;
  myName: string;
  roomFee: number;
+ roomWin: number;
  roomTimeMs: number;
  expiresInSeconds: number;
  onCreateRoom: (betUsd: number, durationSeconds: number) => void;
@@ -161,8 +163,8 @@ export interface IMatchTicketStat {
 export interface IMatchTicketProps {
  status: MatchmakingStatus;
  title?: string;
+ chip?: string;
  stats: IMatchTicketStat[];
- tone: number;
  myName: string;
  opponentName: string;
 }
@@ -176,16 +178,13 @@ export interface IChessLogoProps {
 
 export interface IAuthFooter {
  title: string;
- tagline: string;
  actionText: string;
  to: string;
 }
 
 export interface IAuthLayoutProps {
  title: string;
- titleAccent?: string;
  subtitle?: string;
- subtitleAccent?: string;
  footer?: ReactNode;
  footerCard?: IAuthFooter;
  children: ReactNode;

@@ -1,0 +1,60 @@
+@use "sass:list";
+@use "default.scss" as *;
+
+.common-canvas-animation {
+ display: block;
+ flex-shrink: 0;
+
+ &.logo-loader-band {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+ }
+
+ &.match-ticket-canvas {
+  --ticket-paper-top: #{$paper};
+  --ticket-paper-bottom: #{$paperShade};
+  --ticket-ink: #{$textInverse};
+  --ticket-muted: #{$textTertiary};
+  --ticket-gold: #{$gold};
+  --ticket-danger: #{$error};
+  --ticket-slot: #{$borderStrong};
+  --ticket-stub: #{list.nth(list.nth($poolBlocks, 1), 1)};
+  --ticket-stub-ink: #{list.nth(list.nth($poolBlocks, 1), 2)};
+  --ticket-confirmed: #{$goldSolid};
+  --ticket-void-stub: #c9ccd8;
+  --ticket-mask-1: #{$goldSolid};
+  --ticket-mask-2: #{$poolPink};
+  --ticket-mask-3: #{list.nth(list.nth($poolBlocks, 4), 1)};
+  --ticket-mask-4: #{$poolGreen};
+  --ticket-heavy-font: #{$fontOutfitExtraBold};
+  align-self: center;
+  width: calc(20.9375rem * 1.12);
+  height: calc(18.75rem * 1.12);
+  font-family: $fontOutfitBold;
+
+  @include from-height(tall) {
+   width: calc(20.9375rem * 1.22);
+   height: calc(18.75rem * 1.22);
+  }
+ }
+
+ &.board-preview-canvas {
+  --preview-edge: #{$borderStrong};
+  --preview-gold: #{$gold};
+  --preview-danger: #{$error};
+  width: 100%;
+  height: 100%;
+  font-family: $fontOutfitExtraBold;
+  font-size: 10px;
+
+  @include from(tablet) {
+   font-size: 12px;
+  }
+
+  @include from(laptop) {
+   font-size: 13px;
+  }
+ }
+}

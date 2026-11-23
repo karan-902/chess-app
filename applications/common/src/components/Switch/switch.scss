@@ -7,13 +7,9 @@
  width: 3.25rem;
  height: 2rem;
  border-radius: 999px;
- background: alpha($appText, 0.16);
- box-shadow: inset 0 0 0 1px alpha($appText, 0.08);
+ background: textOpacity($textPrimary, 0.16);
+ box-shadow: inset 0 0 0 1px textOpacity($textPrimary, 0.08);
  cursor: pointer;
-
- :root[data-theme="light"] & {
-  background: #e9e9eb;
- }
 
  &::before {
   content: "";
@@ -28,7 +24,7 @@
  input {
   position: absolute;
   inset: 0;
-  z-index: $z-raised;
+  z-index: 1;
   margin: 0;
   opacity: 0;
   cursor: pointer;
@@ -43,8 +39,8 @@
   border-radius: 50%;
   background: $white;
   box-shadow:
-   0 0 0 1px alpha($black, 0.06),
-   0 3px 6px alpha($black, 0.18);
+   0 0 0 1px textOpacity($black, 0.06),
+   0 3px 6px textOpacity($black, 0.18);
   transition: transform 0.28s cubic-bezier(0.3, 1.4, 0.5, 1);
  }
 
@@ -63,7 +59,20 @@
   }
  }
 
- @media (prefers-reduced-motion: reduce) {
+ :root &.square-toggle {
+  background: $borderStrong;
+  box-shadow: none;
+
+  &::before {
+   background: $gold;
+  }
+
+  &:has(input:focus-visible) {
+   outline-color: $gold;
+  }
+ }
+
+ @include reduced-motion {
   &::before,
   .switch-thumb {
    transition: none;

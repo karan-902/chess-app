@@ -2,8 +2,8 @@
 
 .common-modal {
  width: 100%;
- margin: $space-8 !important;
- background: $appSheet !important;
+ margin: 8px !important;
+ background: $cardBg !important;
  border-radius: 0 !important;
  @include neo-plunk;
  padding: 1.5rem;
@@ -14,21 +14,51 @@
 
  .modal-title {
   font-family: $fontOutfitRegular;
-  font-size: $font18;
+  font-size: 18px;
   font-weight: 700;
-  color: $appText;
+  color: $textPrimary;
   margin-bottom: 0.4rem;
+
+  @include from(phone) {
+   font-size: 19px;
+  }
+
+  @include from(tablet) {
+   font-size: 20px;
+  }
+ }
+
+ &.admin-modal {
+  max-width: 440px;
+  gap: 16px;
+  padding: 24px;
+  border: 1px solid $borderSubtle;
+  border-radius: 16px !important;
+  box-shadow: none;
+
+  .modal-title {
+   margin: 0;
+   padding: 0 32px 0 0;
+  }
+
+  form {
+   display: flex;
+   flex-direction: column;
+   gap: 16px;
+  }
+
+  .modal-actions {
+   justify-content: flex-end;
+   margin-top: 4px;
+  }
  }
 
  &.edit-profile-modal {
   max-width: 21.875rem;
   gap: 1.125rem;
   padding: 1.25rem;
- }
-
- &.rejoin-game-modal {
-  .modal-title {
-   padding: 0;
-  }
+  border: 1px solid $borderSubtle;
+  border-radius: 16px !important;
+  background: $cardBg !important;
  }
 }

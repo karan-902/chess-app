@@ -3,7 +3,6 @@ export const ENDPOINTS = {
  REGISTER: "/auth/register",
  SSO_LOGIN: "/auth/sso-login",
  SSO_REGISTER: "/auth/sso-register",
- VERIFY_USER: "/auth/verify-user",
  GENERATE_TOKEN: "/auth/generate-token",
  FIREBASE_TOKEN: "/auth/firebase-token",
  LOGOUT: "/auth/logout",
@@ -37,7 +36,6 @@ export const OPEN_ENDPOINTS: string[] = [
  ENDPOINTS.LOGIN,
  ENDPOINTS.SSO_LOGIN,
  ENDPOINTS.GENERATE_TOKEN,
- ENDPOINTS.VERIFY_USER,
  // ENDPOINTS.SSO_REGISTER,
  // "/device/approval-status",
 ];

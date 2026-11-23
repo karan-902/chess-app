@@ -1,0 +1,22 @@
+$fontOutfitThin: "Outfit-Thin";
+$fontOutfitExtraLight: "Outfit-ExtraLight";
+$fontOutfitLight: "Outfit-Light";
+$fontOutfitRegular: "Outfit-Regular";
+$fontOutfitMedium: "Outfit-Medium";
+$fontOutfitSemiBold: "Outfit-SemiBold";
+$fontOutfitBold: "Outfit-Bold";
+$fontOutfitExtraBold: "Outfit-ExtraBold";
+$fontOutfitBlack: "Outfit-Black";
+
+$outfitFaces:
+ "Outfit-Thin", "Outfit-ExtraLight", "Outfit-Light", "Outfit-Regular",
+ "Outfit-Medium", "Outfit-SemiBold", "Outfit-Bold", "Outfit-ExtraBold",
+ "Outfit-Black";
+
+@each $face in $outfitFaces {
+ @font-face {
+  font-family: "#{$face}";
+  src: url("/fonts/#{$face}.woff2") format("woff2");
+  font-display: swap;
+ }
+}

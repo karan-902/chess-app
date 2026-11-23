@@ -45,10 +45,8 @@ const matchSlice = createSlice({
     match.players.find((player) => player.user_id !== userId),
    );
   },
-  startMatch: (state, action: PayloadAction<number>) => {
-   if (!state.state) return;
-   state.state.is_started = true;
-   state.state.first_move_deadline_ms = action.payload;
+  startMatch: (state) => {
+   if (state.state) state.state.is_started = true;
   },
   clearMatchState: () => initialState,
  },

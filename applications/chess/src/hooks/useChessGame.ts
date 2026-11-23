@@ -9,9 +9,6 @@ import {
  STARTING_COUNTS,
  PIECE_VALUES,
  FILES,
- KNIGHT_STEPS,
- DIAGONAL_STEPS,
- ORTHOGONAL_STEPS,
 } from "@gopvp/chess/src/constants/board";
 
 const positionKey = (fen: string) => fen.split(" ").slice(0, 4).join(" ");
@@ -233,77 +230,53 @@ export function useChessGame() {
    priorMoves: PremoveEntry[] = [],
   ): string[] => {
    const board = simulatePremoves(priorMoves);
-   const piece = board.get(square);
-   if (!piece || piece.color !== asColor) return [];
+   if (board.get(square)?.color !== asColor) return [];
 
-   const file = FILES.indexOf(square[0]);
-   const rank = Number(square[1]);
-   const targets: string[] = [];
-   const add = (fileStep: number, rankStep: number) => {
-    const nextFile = file + fileStep;
-    const nextRank = rank + rankStep;
-    if (nextFile >= 0 && nextFile < 8 && nextRank >= 1 && nextRank <= 8) {
-     targets.push(`${FILES[nextFile]}${nextRank}`);
-    }
-   };
-   const isOwnPiece = (target: string) => board.get(target)?.color === asColor;
-   const slide = (steps: number[][]) =>
-    steps.forEach(([fileStep, rankStep]) => {
-     for (let distance = 1; distance < 8; distance++) {
-      const nextFile = file + fileStep * distance;
-      const nextRank = rank + rankStep * distance;
-      const target = `${FILES[nextFile]}${nextRank}`;
-      if (nextFile < 0 || nextFile > 7 || nextRank < 1 || nextRank > 8) break;
-      if (isOwnPiece(target)) break;
-      targets.push(target);
+   const placement = [8, 7, 6, 5, 4, 3, 2, 1]
+    .map((rank) => {
+     let row = "";
+     let empty = 0;
+     for (const file of FILES) {
+      const piece = board.get(`${file}${rank}`);
+      if (!piece) {
+       empty++;
+       continue;
+      }
+      row += `${empty || ""}${piece.color === "w" ? piece.type.toUpperCase() : piece.type}`;
+      empty = 0;
      }
-    });
-   const kingSteps = [...DIAGONAL_STEPS, ...ORTHOGONAL_STEPS];
+     return `${row}${empty || ""}`;
+    })
+    .join("/");
+   const movedFrom = new Set(priorMoves.map((move) => move.from));
+   const isUnmoved = (target: string, type: string, color: "w" | "b") =>
+    board.get(target)?.type === type &&
+    board.get(target)?.color === color &&
+    !movedFrom.has(target);
+   const castling =
+    [...fen.split(" ")[2]]
+     .filter((right) => {
+      const color = right === right.toUpperCase() ? "w" : "b";
+      const homeRank = color === "w" ? 1 : 8;
+      const rookFile = right.toLowerCase() === "k" ? "h" : "a";
+      return (
+       isUnmoved(`e${homeRank}`, "k", color) &&
+       isUnmoved(`${rookFile}${homeRank}`, "r", color)
+      );
+     })
+     .join("") || "-";
 
-   switch (piece.type) {
-    case "p": {
-     const forward = asColor === "w" ? 1 : -1;
-     add(0, forward);
-     if (
-      rank === (asColor === "w" ? 2 : 7) &&
-      !isOwnPiece(`${square[0]}${rank + forward}`)
-     )
-      add(0, forward * 2);
-     add(-1, forward);
-     add(1, forward);
-     break;
-    }
-    case "n":
-     KNIGHT_STEPS.forEach(([fileStep, rankStep]) => add(fileStep, rankStep));
-     break;
-    case "b":
-     slide(DIAGONAL_STEPS);
-     break;
-    case "r":
-     slide(ORTHOGONAL_STEPS);
-     break;
-    case "q":
-     slide(kingSteps);
-     break;
-    case "k": {
-     kingSteps.forEach(([fileStep, rankStep]) => add(fileStep, rankStep));
-     const homeRank = asColor === "w" ? 1 : 8;
-     if (square !== `e${homeRank}`) break;
-     const hasRook = (rookSquare: string) =>
-      board.get(rookSquare)?.type === "r" &&
-      board.get(rookSquare)?.color === asColor;
-     const isPathClear = (files: string) =>
-      [...files].every((pathFile) => !isOwnPiece(`${pathFile}${homeRank}`));
-     if (hasRook(`h${homeRank}`) && isPathClear("fg"))
-      targets.push(`g${homeRank}`);
-     if (hasRook(`a${homeRank}`) && isPathClear("bcd"))
-      targets.push(`c${homeRank}`);
-     break;
-    }
-   }
-   return targets.filter((target) => board.get(target)?.color !== asColor);
+   const position = new Chess(`${placement} ${asColor} ${castling} - 0 1`, {
+    skipValidation: true,
+   });
+   const targets = position
+    .moves({ square: square as Square, verbose: true })
+    .map((move) => move.to as string);
+   return [...new Set(targets)].filter(
+    (target) => board.get(target)?.type !== "k",
+   );
   },
-  [simulatePremoves],
+  [simulatePremoves, fen],
  );
 
  const getPremovePieceColor = useCallback(

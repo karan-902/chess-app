@@ -1,16 +1,20 @@
+import { NavLink } from "react-router-dom";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Input from "@gopvp/common/src/components/Input/Input";
 import Button from "@gopvp/common/src/components/Button/Button";
+import { formSubmitHandler } from "@gopvp/common/src/util/form";
 import type { IEmailScreenProps } from "@gopvp/common/src/types/component";
 import {
  emailText,
  enterEmailText,
+ passwordText,
+ enterPasswordText,
+ forgotPasswordText,
+ nextText,
  orText,
  continueWithGoogleText,
- nextText,
 } from "@gopvp/app/src/constants/message";
-import { formSubmitHandler } from "@gopvp/common/src/util/form";
 
 export default function EmailScreen({
  formik,
@@ -39,6 +43,28 @@ export default function EmailScreen({
     fullWidth
    />
 
+   <Input
+    id="password"
+    name="password"
+    type="password"
+    label={passwordText}
+    placeholder={enterPasswordText}
+    value={formik.values.password}
+    onChange={formik.handleChange}
+    onBlur={formik.handleBlur}
+    disabled={formik.isSubmitting}
+    isError={formik.touched.password && !!formik.errors.password}
+    helperText={formik.errors.password}
+    customClass="form-input"
+    fullWidth
+   />
+
+   <Text customClass="auth-forgot-row">
+    <NavLink to="/forgot-password" className="auth-link">
+     {forgotPasswordText}
+    </NavLink>
+   </Text>
+
    <Button
     type="submit"
     variant="contained"
@@ -58,7 +84,7 @@ export default function EmailScreen({
     <Button
      type="button"
      startIcon="google"
-     variant="outlined"
+     variant="contained"
      fullWidth
      customClass="auth-google-btn"
      onClick={onGoogleLogin}

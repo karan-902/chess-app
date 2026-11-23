@@ -27,7 +27,7 @@ import { SOCKET_EVENTS } from "@gopvp/common/src/constants/event";
 export type RoomStatus =
  "idle" | "creating" | "waiting" | "joining" | "ready" | "starting" | "found";
 
-type TRoomInfo = { code: string; bet: number; time: number };
+type TRoomInfo = { code: string; bet: number; time: number; win?: number };
 
 export function useRoomMatch(onRoomExpired?: () => void) {
  const [status, setStatus] = useState<RoomStatus>("idle");
@@ -114,7 +114,12 @@ export function useRoomMatch(onRoomExpired?: () => void) {
      }
      setExpiryAt(data.expiry);
      enterRoom(
-      { code: data.room_code, bet: data.bet, time: data.time },
+      {
+       code: data.room_code,
+       bet: data.bet,
+       time: data.time,
+       win: data.win_amount,
+      },
       true,
       "waiting",
      );
@@ -145,7 +150,12 @@ export function useRoomMatch(onRoomExpired?: () => void) {
       setPlayers(data.players);
       setExpiryAt(data.expiry);
       enterRoom(
-       { code: data.room_code, bet: data.bet, time: data.time },
+       {
+        code: data.room_code,
+        bet: data.bet,
+        time: data.time,
+        win: data.win_amount,
+       },
        false,
        "ready",
       );
@@ -177,14 +187,18 @@ export function useRoomMatch(onRoomExpired?: () => void) {
  const cancelRoom = () => {
   const socket = getSocket();
   const room = roomRef.current;
-  if (socket && room) {
-   socket.emit(
-    isOwner ? SOCKET_EVENTS.ROOM_CANCEL : SOCKET_EVENTS.ROOM_LEAVE,
-    { room_code: room.code },
-    () => {},
-   );
+  if (!socket?.connected || !room) {
+   resetStatus();
+   return;
   }
-  resetStatus();
+  socket.emit(
+   isOwner ? SOCKET_EVENTS.ROOM_CANCEL : SOCKET_EVENTS.ROOM_LEAVE,
+   { room_code: room.code },
+   (err: ISocketAckError | null) => {
+    if (err) showAckErrorToast(err);
+    else resetStatus();
+   },
+  );
  };
 
  useEffect(() => {
@@ -192,7 +206,8 @@ export function useRoomMatch(onRoomExpired?: () => void) {
   if (!socket) return;
 
   const onMatched = (data: IRoomMatchedEvent) => {
-   if (data.matchType !== "ROOM" || statusRef.current !== "waiting") return;
+   if (data.matchType !== "ROOM" || data.roomCode !== roomRef.current?.code)
+    return;
    setPlayers(data.players);
    setStatus("ready");
   };
@@ -242,6 +257,7 @@ export function useRoomMatch(onRoomExpired?: () => void) {
    players.find((player) => player.id === userId)?.username ?? sessionUsername,
   ),
   roomFee: roomRef.current?.bet ?? 0,
+  roomWin: roomRef.current?.win,
   roomTimeMs: roomRef.current?.time ?? 0,
   expiresInSeconds: expiresInSeconds ?? 0,
   createRoom,

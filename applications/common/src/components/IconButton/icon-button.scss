@@ -5,6 +5,30 @@
   width: 0.875rem;
   height: 0.875rem;
  }
+ &.username-refresh-btn {
+  position: relative;
+  width: 1.25rem;
+  height: 1.25rem;
+  padding: 0;
+  border: 1px solid textOpacity($textPrimary, 0.18);
+  color: $textPrimary;
+
+  :is(.gopvp-signup-form, .edit-profile-form) & {
+   border-color: $borderStrong;
+   color: $textSecondary;
+  }
+
+  svg {
+   width: 0.75rem;
+   height: 0.75rem;
+  }
+
+  &::after {
+   content: "";
+   position: absolute;
+   inset: -0.5rem;
+  }
+ }
  &.deposit-qr-back-btn {
   svg {
    width: 1rem;
@@ -15,7 +39,7 @@
   width: 1.875rem;
   height: 1.875rem;
   background: rgba(128, 128, 128, 0.18);
-  color: $appText;
+  color: $textPrimary;
   display: none !important;
   position: absolute;
   left: 0;
@@ -31,10 +55,10 @@
   width: 2.5rem;
   height: 2.5rem;
   padding: 0;
-  border: 1px solid alpha($appText, 0.16);
-  border-radius: 50%;
+  border: 1px solid $borderStrong;
+  border-radius: 10px;
   background: transparent;
-  color: alpha($appText, 0.8);
+  color: $textSecondary;
   transition:
    color 0.15s ease,
    border-color 0.15s ease;
@@ -46,17 +70,17 @@
 
   &:hover:not(.Mui-disabled) {
    background: transparent;
-   border-color: alpha($appText, 0.32);
-   color: $appText;
+   border-color: $textTertiary;
+   color: $textPrimary;
   }
 
   &.live {
-   border-color: alpha($gold, 0.5);
+   border-color: $gold;
    color: $gold;
   }
 
   &.Mui-disabled {
-   color: alpha($appText, 0.8);
+   color: $textTertiary;
    cursor: default;
   }
  }
@@ -65,9 +89,10 @@
   flex-shrink: 0;
   width: 2.5rem;
   height: 2.5rem;
-  border: 1px solid alpha($appText, 0.16);
+  border: 1px solid $borderStrong;
+  border-radius: 10px;
   background: transparent;
-  color: alpha($appText, 0.8);
+  color: $textSecondary;
 
   svg {
    width: 1rem;
@@ -76,21 +101,19 @@
 
   &.accept {
    border-color: transparent;
-   background: linear-gradient(180deg, #ffe27a, $gold);
-   color: $primaryContrast;
-   @include neo-edge($btnEdgeGold);
+   background: $btnPrimaryBg;
+   color: $textInverse;
 
    svg {
     stroke-width: 3;
    }
 
    &:hover {
-    background: linear-gradient(180deg, #ffe27a, $primaryHover);
+    background: $btnPrimaryHover;
    }
 
    &:active {
-    box-shadow: none;
-    transform: translate3d(3px, 3px, 0);
+    transform: scale(0.96);
    }
   }
  }
@@ -99,15 +122,15 @@
   position: absolute;
   top: 0.75rem;
   right: 1.25rem;
-  z-index: $z-raised;
+  z-index: 1;
   width: 2rem;
   height: 2rem;
   min-width: 0;
   padding: 0;
   border-radius: 0%;
-  border: 1px solid alpha($appText, 0.18);
-  background: $btnGhostBg;
-  color: $appText;
+  border: 1px solid textOpacity($textPrimary, 0.18);
+  background: $surfaceElevated;
+  color: $textPrimary;
 
   svg {
    width: 1rem;
@@ -120,26 +143,46 @@
   .bet-sheet &,
   .room-sheet &,
   .match-confirm-sheet &,
-  .practice-sheet & {
+  .practice-sheet &,
+  .wallet-sheet & {
    top: 1.75rem;
+  }
+
+  .bet-sheet &,
+  .match-confirm-sheet &,
+  .practice-sheet &,
+  .room-sheet &,
+  .result-sheet:not(.game-over-sheet) &,
+  .wallet-sheet &,
+  .common-drawer:has(.resign-sheet) &,
+  .game-over-sheet.loss &,
+  .game-over-sheet:has(.payout-stage.draw) & {
+   border-color: $borderStrong;
+   border-radius: 10px;
+   background: transparent;
+   color: $textSecondary;
+
+   &:hover:not(.Mui-disabled) {
+    background: textOpacity($textPrimary, 0.06);
+   }
   }
  }
  &.modal-close-icon {
   position: absolute;
   top: 0.75rem;
   right: 0.75rem;
-  z-index: $z-raised;
+  z-index: 1;
   display: flex;
   width: 1.75rem;
   height: 1.75rem;
   padding: 0;
-  color: alpha($appText, 0.55);
+  color: textOpacity($textPrimary, 0.55);
   transition:
    color 0.15s ease,
    background-color 0.15s ease;
 
   &:hover {
-   background: alpha($appText, 0.12);
+   background: textOpacity($textPrimary, 0.12);
   }
 
   svg {
@@ -152,9 +195,14 @@
    right: 1.25rem;
    width: 2rem;
    height: 2rem;
-   border: 1px solid $appCardBorder;
-   background: $appSecondary;
-   color: $appText;
+   border-radius: 10px;
+   border: 1px solid $borderStrong;
+   background: transparent;
+   color: $textSecondary;
+
+   &:hover {
+    background: textOpacity($textPrimary, 0.06);
+   }
 
    svg {
     width: 1rem;
@@ -166,7 +214,7 @@
   width: 2rem;
   height: 2rem;
   padding: 0;
-  color: $appTextMuted;
+  color: $textSecondary;
 
   svg {
    width: 1rem;
@@ -174,7 +222,7 @@
   }
 
   .match-id-input & {
-   color: $appText;
+   color: $textSecondary;
 
    svg {
     width: 1.125rem;
@@ -189,9 +237,9 @@
   width: 1.125rem;
   height: 1.125rem;
   padding: 0;
-  border-radius: 0;
+  border-radius: 4px;
   background: transparent;
-  color: alpha($appText, 0.7);
+  color: $textSecondary;
 
   svg {
    width: 0.5625rem;
@@ -206,16 +254,22 @@
   }
 
   &:hover {
-   background: alpha($appText, 0.2);
+   background: textOpacity($textPrimary, 0.12);
   }
  }
 
  &.appbar-menu-trigger {
   display: flex;
-  width: $font24;
-  height: $font24;
+  width: 24px;
+  height: 24px;
   padding: 0;
-  color: $appText;
+  color: $textPrimary;
+
+  @include from(phone) {
+   width: 26px;
+   height: 26px;
+  }
+
   svg {
    width: 100%;
    height: 100%;
@@ -225,14 +279,15 @@
  &.game-picker-nav {
   position: absolute;
   top: 9.125rem;
-  z-index: $z-overlay;
+  z-index: 2;
   width: 2.75rem;
   height: 2.75rem;
-  border: 1px solid alpha($white, 0.28);
-  background: alpha($white, 0.1);
-  backdrop-filter: blur(12px);
-  color: $white;
-  transition: transform 0.12s cubic-bezier(0.22, 1, 0.36, 1);
+  border: 1px solid $borderStrong;
+  background: $cardBg;
+  color: $textPrimary;
+  transition:
+   transform 0.12s cubic-bezier(0.22, 1, 0.36, 1),
+   border-color 0.15s ease;
 
   &.prev {
    left: 0;
@@ -249,7 +304,8 @@
   }
 
   &:hover:not(.Mui-disabled) {
-   background: alpha($white, 0.16);
+   border-color: $textTertiary;
+   background: $cardBg;
   }
 
   &:active:not(.Mui-disabled) {
@@ -257,20 +313,11 @@
   }
 
   &.Mui-disabled {
-   color: alpha($white, 0.6);
+   border-color: $borderSubtle;
+   color: $textTertiary;
   }
 
-  :root[data-theme="light"] & {
-   border-color: $appCardBorder;
-   background: $appSecondary;
-   color: $appText;
-
-   &.Mui-disabled {
-    color: $appTextMuted;
-   }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
+  @include reduced-motion {
    transition: none;
   }
  }

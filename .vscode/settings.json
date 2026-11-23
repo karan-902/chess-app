@@ -1,4 +1,10 @@
 {
  "js/ts.tsdk.path": "node_modules/typescript/lib",
- "liveServer.settings.multiRootWorkspaceName": "gopvp-app"
+ "liveServer.settings.multiRootWorkspaceName": "gopvp-app",
+ "files.exclude": {
+  "**/.git": true,
+  ".claude": true,
+  ".playwright-mcp": true,
+  ".vscode": true
+ }
 }

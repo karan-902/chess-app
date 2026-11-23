@@ -10,21 +10,13 @@ export default function StatList({
  customClass,
 }: IStatListProps) {
  return (
-  <Box customClass={classNames("stat-grid", customClass)}>
+  <Box customClass={classNames("result-tiles", customClass)}>
    {(rows ?? Array.from({ length: skeletonRows }, () => null)).map(
     (row, index) => (
      <StatTile
       key={row?.label ?? index}
-      layout="icon-card"
-      icon={
-       <Box customClass={classNames("stat-card-icon", row?.tone)}>
-        {row ? (
-         row.icon && <row.icon strokeWidth={2} />
-        ) : (
-         <Skeleton variant="rectangular" customClass="icon" />
-        )}
-       </Box>
-      }
+      layout="label-top"
+      icon={row?.icon && <row.icon />}
       label={row ? row.label : <Skeleton customClass="text" width={80} />}
       value={row ? row.value : <Skeleton customClass="text" width={60} />}
       valueClass={classNames(row?.isPrize && "prize")}

@@ -32,8 +32,7 @@ import {
  cancelRoomText,
  expiresText,
  entryText,
- timeText,
- codeText,
+ winText,
  minText,
  roomText,
  privateRoomTicketText,
@@ -63,6 +62,7 @@ export default function RoomSheet({
  opponentName,
  myName,
  roomFee,
+ roomWin,
  roomTimeMs,
  expiresInSeconds,
  onCreateRoom,
@@ -81,12 +81,11 @@ export default function RoomSheet({
   <MatchTicket
    status={roomStatus === "waiting" ? "queued" : "found"}
    title={privateRoomTicketText}
+   chip={roomMinutesLabel}
    stats={[
     { label: entryText, value: formatAmount(roomFee) },
-    { label: timeText, value: roomMinutesLabel },
-    { label: codeText, value: roomCode ?? "" },
+    { label: winText, value: formatAmount(roomWin), isWin: true },
    ]}
-   tone={1}
    myName={myName}
    opponentName={opponentName}
   />
@@ -185,12 +184,12 @@ export default function RoomSheet({
        <Text customClass="dialog-title">{waitingForOpponentText}</Text>
        <Text customClass="description">{shareCodeWithFriendText}</Text>
       </Box>
-      <Text customClass="match-timer" aria-label={expiresText}>
-       <icons.timer />
-       {formatMMSS(expiresInSeconds)}
-      </Text>
      </Box>
      {roomTicket}
+     <Text customClass="match-timer" aria-label={expiresText}>
+      <icons.timer />
+      {formatMMSS(expiresInSeconds)}
+     </Text>
      <Box customClass="room-actions">
       <Text
        component="button"

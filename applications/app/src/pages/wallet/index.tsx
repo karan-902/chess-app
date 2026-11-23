@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import dayjs from "dayjs";
 import classNames from "classnames";
+import { CircularProgress } from "@mui/material";
 import Box from "@gopvp/common/src/components/Box/Box";
 import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
@@ -10,7 +11,6 @@ import EmptyState from "@gopvp/app/src/components/common/EmptyState";
 import TxItemSkeleton from "@gopvp/app/src/components/common/TxItemSkeleton";
 import { useWallet } from "@gopvp/app/src/hooks/useWallet";
 import { useWalletModal } from "@gopvp/app/src/context/WalletModalContext";
-import CustomChip from "@gopvp/common/src/components/Chip/Chip";
 import {
  speedLogo,
  CallMadeIcon,
@@ -24,7 +24,6 @@ import {
  totalBalanceText,
  withdrawBalanceText,
  transactionsText,
- pendingText,
  processingText,
  noTransactionsYetText,
  transactionsEmptyText,
@@ -35,7 +34,11 @@ import {
  yesterdayText,
  speedText,
 } from "@gopvp/app/src/constants/message";
-import { TRANSACTIONS_SKELETON_ROWS } from "@gopvp/app/src/constants/limit";
+import {
+ TRANSACTIONS_SKELETON_ROWS,
+ WALLET_BALANCE_MEDIUM_CHARS,
+ WALLET_BALANCE_SMALL_CHARS,
+} from "@gopvp/app/src/constants/limit";
 import { renderSkeletons } from "@gopvp/app/src/utils/skeleton";
 
 function dayLabel(ms: number): string {
@@ -94,6 +97,14 @@ function txRow(tx: ITransactionResponse, groupEdgeClass: string) {
        <Text customClass="row-title">
         {TRANSACTION_CODE_DESCRIPTIONS[tx.transaction_code]}
        </Text>
+       {isPending && (
+        <CircularProgress
+         size={14}
+         color="inherit"
+         aria-label={processingText}
+         className="tx-pending-loader"
+        />
+       )}
       </Box>
       <Text customClass="meta-text">{formatTime(tx.created)}</Text>
      </Box>
@@ -109,12 +120,6 @@ function txRow(tx: ITransactionResponse, groupEdgeClass: string) {
       {isDebit ? "-" : "+"}
       {formatAmount(Math.abs(tx.amount))}
      </Text>
-     {isPending && (
-      <CustomChip
-       label={tx.status === "PROCESSING" ? processingText : pendingText}
-       customClass="tx-pending-chip"
-      />
-     )}
     </Box>
    </Box>
   </Box>
@@ -149,6 +154,7 @@ export default function Wallet() {
   () => buildTimelineEntries(transactions),
   [transactions],
  );
+ const balanceText = formatAmount(usdValue);
 
  return (
   <Box customClass="wallet-page">
@@ -159,11 +165,18 @@ export default function Wallet() {
        {totalBalanceText}
       </Text>
      </Box>
-     <Text customClass="wallet-hero-amount">
+     <Text
+      customClass={classNames(
+       "wallet-hero-amount",
+       balanceText.length > WALLET_BALANCE_SMALL_CHARS
+        ? "small"
+        : balanceText.length > WALLET_BALANCE_MEDIUM_CHARS && "medium",
+      )}
+     >
       {balanceLoading ? (
        <Skeleton customClass="text" width={160} />
       ) : (
-       formatAmount(usdValue)
+       balanceText
       )}
      </Text>
      {/* <Box customClass="wallet-hero-underline" /> */}

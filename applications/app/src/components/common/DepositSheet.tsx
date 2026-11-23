@@ -10,7 +10,7 @@ import {
  speedLogo,
  qrLogo,
  // Timer,
- Zap,
+ // Zap,
  icons,
 } from "@gopvp/common/src/components/images";
 import { formatAmount, formatMMSS } from "@gopvp/common/src/util/format";
@@ -22,22 +22,25 @@ import { useReduxSelector } from "@gopvp/app/src/redux/hooks";
 import { paymentRequest } from "@gopvp/app/src/hooks/useWallet";
 import { showApiErrorToast } from "@gopvp/common/src/util/api";
 import type { IPaymentRequestResponse } from "@gopvp/common/src/types/response";
+import type { ISpeedPaymentRequestBody } from "@gopvp/common/src/types/payload";
+import { SPEED_PAYMENT_REQUEST } from "@gopvp/app/src/config/speedWallet";
 import {
  depositText,
+ speedDepositNoteText,
  depositingText,
- instantPayViaText,
- lightningText,
+ // instantPayViaText,
+ // lightningText,
  lightningInvoiceText,
  expiresInLabelText,
  fastSecuredTransparentText,
  buyCryptoInstantlyText,
  enterAmountText,
  generateQrCodeText,
+ payText,
  amountRequiredText,
  maxDepositAmountText,
  // btcOnlyWarningText,
  // scanToDepositText,
- qrExpiredText,
  paymentReceivedText,
  depositsNotWithdrawableText,
  speedText,
@@ -57,6 +60,21 @@ import {
 
 type Stage = "amount" | "qr" | "success";
 
+type SpeedBridgeHandler = { postMessage: (data: string) => void };
+type SpeedWalletWindow = Window & {
+ Android?: SpeedBridgeHandler;
+ webkit?: { messageHandlers?: { iosInterface?: SpeedBridgeHandler } };
+};
+
+function postToSpeedWallet(request: ISpeedPaymentRequestBody) {
+ const data = JSON.stringify(request);
+ const speedWindow = window as SpeedWalletWindow;
+ const iosHandler = speedWindow.webkit?.messageHandlers?.iosInterface;
+ if (speedWindow.Android) speedWindow.Android.postMessage(data);
+ else if (iosHandler) iosHandler.postMessage(data);
+ else window.parent.postMessage(data, "*");
+}
+
 // function formatCountdown(ms: number) {
 //  const totalSeconds = Math.max(0, Math.floor(ms / 1000));
 //  const minutes = Math.floor(totalSeconds / 60);
@@ -69,6 +87,7 @@ export default function DepositSheet() {
  const lastTransaction = useReduxSelector(
   (state) => state.wallet.lastTransaction,
  );
+ const speedAccountId = useReduxSelector((state) => state.speed.acct);
  const open = openModal === "deposit";
 
  const [stage, setStage] = useState<Stage>("amount");
@@ -77,7 +96,6 @@ export default function DepositSheet() {
  const [submitting, setSubmitting] = useState(false);
  const [payment, setPayment] = useState<IPaymentRequestResponse | null>(null);
  const [remainingMs, setRemainingMs] = useState(0);
- const [expired, setExpired] = useState(false);
 
  useEffect(() => {
   if (open) return;
@@ -86,7 +104,6 @@ export default function DepositSheet() {
   setAmountError("");
   setSubmitting(false);
   setPayment(null);
-  setExpired(false);
  }, [open]);
 
  useEffect(() => {
@@ -96,7 +113,7 @@ export default function DepositSheet() {
   const tick = () => {
    const left = deadline - Date.now();
    setRemainingMs(Math.max(0, left));
-   if (left <= 0) setExpired(true);
+   if (left <= 0) setStage("amount");
   };
 
   tick();
@@ -106,8 +123,9 @@ export default function DepositSheet() {
 
  useEffect(() => {
   if (
-   stage === "qr" &&
-   lastTransaction?.id === payment?.deposit_id &&
+   stage !== "success" &&
+   payment &&
+   lastTransaction?.id === payment.deposit_id &&
    lastTransaction?.status === "COMPLETED"
   )
    setStage("success");
@@ -130,8 +148,22 @@ export default function DepositSheet() {
 
   try {
    const res = await paymentRequest(amountUsd);
+   if (speedAccountId) {
+    postToSpeedWallet({
+     version: SPEED_PAYMENT_REQUEST.version,
+     account_id: speedAccountId,
+     data: {
+      amount: amountUsd,
+      currency: SPEED_PAYMENT_REQUEST.currency,
+      target_currency: SPEED_PAYMENT_REQUEST.targetCurrency,
+      deposit_address: res.payment_request,
+      note: speedDepositNoteText,
+     },
+    });
+    close();
+    return;
+   }
    setPayment(res);
-   setExpired(false);
    setStage("qr");
   } catch (err) {
    showApiErrorToast(err);
@@ -146,7 +178,7 @@ export default function DepositSheet() {
   <WalletSheetShell open={open} isSuccess={stage === "success"} onClose={close}>
    {stage === "amount" && (
     <Box customClass="wallet-modal-layout">
-     <Text customClass="modal-heading value-heading">{depositText}</Text>
+     <Text customClass="sheet-title dialog-title">{depositText}</Text>
      <WalletInfoNote text={depositsNotWithdrawableText} />
 
      <Box customClass="hero-input-wrapper">
@@ -209,7 +241,7 @@ export default function DepositSheet() {
       isLoading={submitting}
       disabled={isAmountInvalid}
      >
-      {generateQrCodeText}
+      {speedAccountId ? payText : generateQrCodeText}
      </Button>
     </Box>
    )}
@@ -235,7 +267,7 @@ export default function DepositSheet() {
 
      {/* <Text customClass="deposit-scan-hint caption">{scanToDepositText}</Text> */}
 
-     <Box customClass="deposit-lightning-row">
+     {/* <Box customClass="deposit-lightning-row">
       <Zap size={14} strokeWidth={2.4} />
       <Text component="span" customClass="deposit-lightning-text">
        {instantPayViaText}{" "}
@@ -243,7 +275,7 @@ export default function DepositSheet() {
         {lightningText}
        </Text>
       </Text>
-     </Box>
+     </Box> */}
 
      <Box customClass="deposit-qr-wrap">
       <QRCodeSVG
@@ -261,18 +293,16 @@ export default function DepositSheet() {
       />
      </Box>
 
-     {!expired && (
-      <Text
-       customClass={classNames(
-        "match-timer",
-        remainingMs / 1000 <= MATCH_TIMER_LOW_SECONDS && "low",
-       )}
-       aria-label={expiresInLabelText}
-      >
-       <icons.timer />
-       {formatMMSS(Math.floor(remainingMs / 1000))}
-      </Text>
-     )}
+     <Text
+      customClass={classNames(
+       "match-timer",
+       remainingMs / 1000 <= MATCH_TIMER_LOW_SECONDS && "low",
+      )}
+      aria-label={expiresInLabelText}
+     >
+      <icons.timer />
+      {formatMMSS(Math.floor(remainingMs / 1000))}
+     </Text>
 
      <Text customClass="deposit-invoice-label">{lightningInvoiceText}</Text>
      <Box customClass="deposit-address-row">
@@ -280,9 +310,6 @@ export default function DepositSheet() {
       <CopyButton text={payment.payment_request} showLabel />
      </Box>
 
-     {expired && (
-      <Text customClass="deposit-timer caption expired">{qrExpiredText}</Text>
-     )}
      {/* {!expired && (
       <>
        <Box customClass="deposit-expiry-row">

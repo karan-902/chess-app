@@ -97,13 +97,14 @@ export function showApiErrorToast(err: unknown) {
  const isAlreadyToasted =
   !response ||
   response.status === 429 ||
+  response.status === 401 ||
   LOGOUT_ERROR_TYPES.has(response.data?.type ?? "");
- const toastMessage = response?.data?.message;
- if (isAlreadyToasted || !toastMessage) return;
+ const toastMessage = response?.data?.message || somethingWentWrongText;
+ if (isAlreadyToasted) return;
  showToastMessage({ toastMessage, toastVariant: "error" });
 }
 
-export function showAckErrorToast(err: ISocketAckError | null) {
+export function showAckErrorToast(err: Pick<ISocketAckError, "errors"> | null) {
  const toastMessage = err?.errors[0]?.message;
  if (!toastMessage) return;
  showToastMessage({ toastMessage, toastVariant: "error" });
@@ -133,10 +134,7 @@ async function getHeaders<TPayload = undefined>(
  };
 }
 
-export const callAPIInterface = async <
- TResponse = unknown,
- TPayload = undefined,
->(
+const requestAPI = async <TResponse = unknown, TPayload = undefined>(
  method: Method,
  path: string,
  data?: TPayload,
@@ -180,9 +178,10 @@ export const callAPIInterface = async <
     });
     return retryRes.data;
    } catch (retryErr) {
-    const retryStatus = getApiErrorResponse(retryErr)?.status;
-    if (!isAxiosError(retryErr) || retryStatus === 401)
-     await sessionService.deleteSession();
+    const retryResponse = getApiErrorResponse(retryErr);
+    if (!isAxiosError(retryErr) || retryResponse?.status === 401) {
+     await sessionService.endSession();
+    }
     throw retryErr;
    }
   }
@@ -191,13 +190,7 @@ export const callAPIInterface = async <
    LOGOUT_ERROR_TYPES.has(errorType ?? "") &&
    (path === ENDPOINTS.GENERATE_TOKEN || !OPEN_ENDPOINTS.includes(path))
   ) {
-   if (errorData?.message) {
-    showToastMessage({
-     toastMessage: errorData.message,
-     toastVariant: "error",
-    });
-   }
-   await sessionService.deleteSession();
+   await sessionService.endSession();
    throw err;
   }
 
@@ -209,5 +202,36 @@ export const callAPIInterface = async <
   }
 
   throw err;
+ }
+};
+
+let pendingApiCount = 0;
+const pendingApiListeners = new Set<() => void>();
+
+export const subscribeApiPending = (listener: () => void) => {
+ pendingApiListeners.add(listener);
+ return () => pendingApiListeners.delete(listener);
+};
+
+export const getIsApiPending = () => pendingApiCount > 0;
+
+const changePendingApiCount = (delta: number) => {
+ pendingApiCount += delta;
+ pendingApiListeners.forEach((listener) => listener());
+};
+
+export const callAPIInterface = async <
+ TResponse = unknown,
+ TPayload = undefined,
+>(
+ method: Method,
+ path: string,
+ data?: TPayload,
+): Promise<TResponse> => {
+ changePendingApiCount(1);
+ try {
+  return await requestAPI<TResponse, TPayload>(method, path, data);
+ } finally {
+  changePendingApiCount(-1);
  }
 };

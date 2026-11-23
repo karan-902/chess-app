@@ -2,8 +2,9 @@ import { useEffect, useLayoutEffect, useRef } from "react";
 import type { CSSProperties } from "react";
 import { useDraggable } from "@dnd-kit/core";
 import Box from "@gopvp/common/src/components/Box/Box";
-import PieceIcon from "@gopvp/chess/src/components/board/PieceIcon";
+import { PieceIcon } from "@gopvp/common/src/components/constants";
 import {
+ OPPONENT_MOVE_DURATION_SCALE,
  PIECE_LAND_MS,
  PIECE_SHAKE_MS,
 } from "@gopvp/chess/src/constants/limit";
@@ -12,8 +13,11 @@ import {
  pieceMoveFrames,
  pieceMoveMs,
  pieceShakeFrames,
- prefersReducedMotion,
 } from "@gopvp/chess/src/utils";
+import {
+ prefersReducedMotion,
+ shouldReduceMotion,
+} from "@gopvp/common/src/util/motion";
 import type { IDraggablePieceProps } from "@gopvp/chess/src/types/component";
 
 export default function DraggablePiece({
@@ -54,7 +58,8 @@ export default function DraggablePiece({
   el.classList.add("moving");
   const move = el.animate(
    pieceMoveFrames(from.col, from.row, col, row),
-   pieceMoveMs(from.col, from.row, col, row),
+   pieceMoveMs(from.col, from.row, col, row) *
+    (draggable ? 1 : OPPONENT_MOVE_DURATION_SCALE),
   );
   moveRef.current = move;
   move.finished.then(
@@ -64,10 +69,10 @@ export default function DraggablePiece({
    },
    () => el.classList.remove("moving"),
   );
- }, [col, row, instant, isCaptureMove]);
+ }, [col, row, instant, isCaptureMove, draggable]);
 
  useEffect(() => {
-  if (isInCheck && !prefersReducedMotion())
+  if (isInCheck && !shouldReduceMotion())
    slotRef.current?.animate(pieceShakeFrames(col, row), PIECE_SHAKE_MS);
  }, [isInCheck, col, row]);
 

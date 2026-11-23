@@ -2,6 +2,7 @@ import {
  getInjectedPersistor,
  getInjectedStore,
 } from "@gopvp/common/src/util/injectStore";
+import { disconnectSocket } from "@gopvp/common/src/util/socket";
 import {
  SET_SESSION_ACTION,
  UPDATE_SESSION_ACTION,
@@ -27,6 +28,10 @@ const sessionService = {
  deleteSession: async () => {
   store().dispatch({ type: CLEAR_SESSION_ACTION });
   await getInjectedPersistor()?.flush();
+ },
+ endSession: async () => {
+  disconnectSocket();
+  await sessionService.deleteSession();
  },
 };
 

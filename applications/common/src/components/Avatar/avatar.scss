@@ -5,27 +5,35 @@
  font-family: $fontOutfitRegular;
 
  &.primary {
-  border: 1px solid alpha($gold, 0.3);
+  border: 1px solid textOpacity($gold, 0.3);
   color: $gold;
  }
 
  &.neutral {
-  background: alpha($appText, 0.05);
-  border: 1px solid alpha($appText, 0.1);
-  color: alpha($appText, 0.5);
+  background: textOpacity($textPrimary, 0.05);
+  border: 1px solid textOpacity($textPrimary, 0.1);
+  color: textOpacity($textPrimary, 0.5);
  }
 
  &.sm {
   width: 1.75rem;
   height: 1.75rem;
-  font-size: $font15;
+  font-size: 15px;
   font-family: $fontOutfitExtraBold;
+
+  @include from(phone) {
+   font-size: 16px;
+  }
  }
 
  &.md {
   width: 2.25rem;
   height: 2.25rem;
-  font-size: $font14;
+  font-size: 14px;
+
+  @include from(phone) {
+   font-size: 15px;
+  }
  }
 
  &.header {
@@ -35,43 +43,50 @@
   background: $gold !important;
   box-shadow: none;
   font-family: $fontOutfitBlack;
-  font-size: $font18;
+  font-size: 18px;
   color: $poolInk;
 
-  :root[data-theme="light"] & {
-   background: linear-gradient(180deg, #222668, #11143c) !important;
-   color: $gold;
+  @include from(phone) {
+   font-size: 19px;
   }
 
-  &.lg,
-  :root[data-theme="light"] &.lg {
-   border: 1px solid alpha($appText, 0.18);
-   background: $poolInk !important;
-   color: $gold;
+  @include from(tablet) {
+   font-size: 20px;
   }
  }
 
  &.ticket-me,
- &.ticket-rival,
  &.payout-rival {
   width: 2.75rem;
   height: 2.75rem;
   font-family: $fontOutfitExtraBold;
-  font-size: $font20;
+  font-size: 20px;
+
+  @include from(phone) {
+   font-size: 21px;
+  }
+
+  @include from(tablet) {
+   font-size: 22px;
+  }
 
   .payout-paper & {
    width: 2.25rem;
    height: 2.25rem;
-   font-size: $font16;
+   font-size: 16px;
+
+   @include from(phone) {
+    font-size: 17px;
+   }
   }
  }
 
  &.payout-rival {
-  background-color: #ff7b9a !important;
+  background-color: $poolPink !important;
   color: $poolInk;
 
   .practice & {
-   background-color: #3bffad !important;
+   background-color: $poolGreen !important;
   }
  }
 
@@ -80,24 +95,22 @@
   color: $gold;
  }
 
- &.ticket-rival {
-  background-color: var(--pool-face) !important;
-  color: var(--pool-ink);
-  transform: rotateY(180deg);
- }
-
  &.gr-avatar {
   flex-shrink: 0;
   width: 2.625rem;
   height: 2.625rem;
-  border: 1px solid alpha($appText, 0.14);
-  background: linear-gradient(180deg, #2a2e7a, #14174a) !important;
+  border: 1px solid $borderStrong;
+  background: $surfaceElevated !important;
   font-family: $fontOutfitBlack;
-  font-size: $font18;
-  color: alpha($appText, 0.85);
+  font-size: 18px;
+  color: $textPrimary;
 
-  :root[data-theme="light"] & {
-   background: linear-gradient(180deg, #ffffff, #e3e6f5) !important;
+  @include from(phone) {
+   font-size: 19px;
+  }
+
+  @include from(tablet) {
+   font-size: 20px;
   }
 
   .gr-row:not(.active) & {
@@ -107,10 +120,6 @@
   .gr-row.active & {
    border: 2px solid $gold;
    color: $gold;
-
-   :root[data-theme="light"] & {
-    color: $appText;
-   }
   }
  }
 
@@ -118,48 +127,84 @@
   flex-shrink: 0;
   width: 2.75rem;
   height: 2.75rem;
-  border: 2px solid $primaryHover;
-  background: linear-gradient(180deg, #2d3290, #12153f) !important;
-  box-shadow: 0 0 12px alpha($gold, 0.45);
+  border: 2px solid $btnPrimaryHover;
+  background: linear-gradient(180deg, $surfaceElevated, $cardBg) !important;
+  box-shadow: 0 0 12px textOpacity($gold, 0.45);
   font-family: $fontOutfitBlack;
-  font-size: $font20;
+  font-size: 20px;
   color: $gold;
+
+  @include from(phone) {
+   font-size: 21px;
+  }
+
+  @include from(tablet) {
+   font-size: 22px;
+  }
  }
 
  &.account {
   flex-shrink: 0;
   width: 2.75rem;
   height: 2.75rem;
-  border: 1px solid alpha($appText, 0.18);
+  border: 1px solid textOpacity($textPrimary, 0.18);
   background: $poolInk !important;
   box-shadow: none;
   font-family: $fontOutfitBlack;
-  font-size: $font20;
+  font-size: 20px;
   color: $gold;
+
+  @include from(phone) {
+   font-size: 21px;
+  }
+
+  @include from(tablet) {
+   font-size: 22px;
+  }
+ }
+
+ .app-header &.header,
+ .appbar-account-popover &.header {
+  border: 1px solid $borderStrong;
+  background: $surfaceElevated !important;
+  font-family: $fontOutfitSemiBold;
+  color: $textPrimary;
  }
 
  &.header.md {
   width: 2.25rem;
   height: 2.25rem;
   box-shadow: none;
-  font-size: $font16;
+  font-size: 16px;
+
+  @include from(phone) {
+   font-size: 17px;
+  }
  }
 
  &.lg {
   width: 6rem;
   height: 6rem;
-  font-size: $font40;
+  font-size: 40px;
   font-family: $fontOutfitBlack;
+
+  @include from(phone) {
+   font-size: 44px;
+  }
 
   .profile-id-row & {
    width: 3rem;
    height: 3rem;
-   font-size: $font20;
+   font-size: 20px;
 
    @include from(phone) {
     width: 3.5rem;
     height: 3.5rem;
-    font-size: $font24;
+    font-size: 24px;
+
+    @include from(phone) {
+     font-size: 26px;
+    }
    }
   }
  }

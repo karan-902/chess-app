@@ -1,4 +1,4 @@
-import type { ComponentType, ReactNode } from "react";
+import type { CanvasHTMLAttributes, ComponentType, ReactNode } from "react";
 import type { FormikProps } from "formik";
 import type { Socket } from "socket.io-client";
 import type {
@@ -7,6 +7,7 @@ import type {
  IMatchResultResponse,
  IPoolResponse,
 } from "@gopvp/common/src/types/response";
+import type { ILoginBody } from "@gopvp/common/src/types/payload";
 
 export type LoginStep = "email" | "password" | "country"; // | "waiting-approval"
 export type ApproveDeviceStatus = "confirm" | "approved" | "invalid";
@@ -54,8 +55,12 @@ export interface IGamePracticeProps {
  onClose: () => void;
 }
 
+export interface IGamePreviewProps {
+ isPaused?: boolean;
+}
+
 export interface IGameModule {
- Preview: ComponentType;
+ Preview: ComponentType<IGamePreviewProps>;
  PoolLabel: ComponentType<IPoolLabelProps>;
  GameRoom: ComponentType;
  preloadGameRoom: () => Promise<unknown>;
@@ -65,12 +70,22 @@ export interface IGameModule {
  RevealSurface: ComponentType;
 }
 
-export interface IEmailValues {
- email: string;
+export interface IInputScreenProps<
+ TValues extends { [K in keyof TValues]: string },
+> {
+ formik: FormikProps<TValues>;
+ name: keyof TValues & string;
+ type?: string;
+ label: ReactNode;
+ placeholder?: string;
+ submitText: ReactNode;
+ customClass?: string;
+ top?: ReactNode;
+ children?: ReactNode;
 }
 
 export interface IEmailScreenProps {
- formik: FormikProps<IEmailValues>;
+ formik: FormikProps<ILoginBody>;
  isGoogleProcessing: boolean;
  onGoogleLogin: () => void;
 }
@@ -91,7 +106,7 @@ export interface IPasswordScreenProps {
 // }
 
 export interface IEmailFormScreenProps {
- onRegistered: (email: string, password: string) => void;
+ onRegistered: (email: string, password: string, message?: string) => void;
 }
 
 export interface ISelectCountryScreenProps {
@@ -138,6 +153,23 @@ export interface ISlideToConfirmProps {
  onConfirm: () => void;
  isLoading?: boolean;
  disabled?: boolean;
+ customClass?: string;
+}
+
+export interface ICanvasFrame {
+ elapsed: number;
+ width: number;
+ height: number;
+ style: CSSStyleDeclaration;
+ isReducedMotion: boolean;
+}
+
+export interface ICanvasAnimationProps extends Omit<
+ CanvasHTMLAttributes<HTMLCanvasElement>,
+ "className"
+> {
+ draw: (ctx: CanvasRenderingContext2D, frame: ICanvasFrame) => boolean;
+ isPaused?: boolean;
  customClass?: string;
 }
 

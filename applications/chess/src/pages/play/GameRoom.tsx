@@ -46,10 +46,11 @@ import {
  waitingForOpponentText,
  winText,
  isReconnectingText,
+ reconnectedText,
  moveOfText,
  startPositionText,
 } from "@gopvp/chess/src/constants/message";
-import { practiceText } from "@gopvp/common/src/constants/message";
+import { practiceText, cancelText } from "@gopvp/common/src/constants/message";
 import { formatAmount } from "@gopvp/common/src/util/format";
 import Button from "@gopvp/common/src/components/Button/Button";
 import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
@@ -233,8 +234,7 @@ export default function GameRoom({ mode }: IGameRoomProps) {
   clockReady,
   drawOffer,
   isDrawOffered,
-  isOpponentOffline,
-  firstMoveSeconds,
+  opponentStatus,
   sendMove,
   resign,
   offerDraw,
@@ -252,7 +252,10 @@ export default function GameRoom({ mode }: IGameRoomProps) {
   setGameEnded,
  });
 
- const legalMoves = selectedSquare ? getLegalMoves(selectedSquare) : [];
+ const legalMoves = useMemo(
+  () => (fen && selectedSquare ? getLegalMoves(selectedSquare) : []),
+  [selectedSquare, getLegalMoves, fen],
+ );
  const premoveTargets = useMemo(
   () =>
    premoveFrom ? getPremoveMoves(premoveFrom, playerSide, premoveQueue) : [],
@@ -333,10 +336,19 @@ export default function GameRoom({ mode }: IGameRoomProps) {
   setSelectedSquare(hasOwnPiece ? square : null);
  };
 
- const clearPremoves = () => {
+ const handleSquareClickRef = useRef(handleSquareClick);
+ useEffect(() => {
+  handleSquareClickRef.current = handleSquareClick;
+ });
+ const onBoardSquareClick = useCallback(
+  (square: string) => handleSquareClickRef.current(square),
+  [],
+ );
+
+ const clearPremoves = useCallback(() => {
   setPremoveQueue([]);
   setPremoveFrom(null);
- };
+ }, []);
 
  const handlePromotionSelect = (piece: string) => {
   if (!pendingPromotion) return;
@@ -379,7 +391,7 @@ export default function GameRoom({ mode }: IGameRoomProps) {
  const myTurnActive = turn === playerSide;
 
  return (
-  <Box customClass="game-room">
+  <Box customClass={classNames("game-room", gameEnded && "ended")}>
    <Box customClass="gr-win-counter">
     <Text component="span" customClass="gr-win-label">
      {isPvc ? practiceText : winText}
@@ -401,7 +413,6 @@ export default function GameRoom({ mode }: IGameRoomProps) {
     clock={oppClock}
     clockReady={clockReady}
     lowTime={clockReady && oppTimeMs < CLOCK_LOW_TIME_MS}
-    firstMoveSeconds={myTurnActive ? null : firstMoveSeconds}
    />
 
    <Box customClass="gr-board-wrap" data-reveal-target>
@@ -415,18 +426,24 @@ export default function GameRoom({ mode }: IGameRoomProps) {
      checkSquare={checkSquare}
      stalemateSquare={stalemateSquare}
      flashSquare={flashSquare}
-     onSquareClick={handleSquareClick}
+     onSquareClick={onBoardSquareClick}
      onSquareRightClick={clearPremoves}
      lastMove={isReviewing ? null : lastMove}
      flipped={playerSide === "b"}
      onEntranceEnd={markBoardReady}
      holdEntrance={isRevealing}
     />
-    {isOpponentOffline ? (
-     <Box customClass="gr-board-tag reconnecting">
-      <icons.wifiOff />
+    {opponentStatus ? (
+     <Box
+      customClass={classNames(
+       "gr-board-tag",
+       opponentStatus === "offline" ? "reconnecting" : "reconnected",
+      )}
+     >
+      {opponentStatus === "offline" ? <icons.wifiOff /> : <icons.wifi />}
       <Text component="span" customClass="gr-board-tag-text">
-       <b>{opponentName}</b> {isReconnectingText}
+       <b>{opponentName}</b>{" "}
+       {opponentStatus === "offline" ? isReconnectingText : reconnectedText}
       </Text>
      </Box>
     ) : (
@@ -479,7 +496,6 @@ export default function GameRoom({ mode }: IGameRoomProps) {
     clock={myClock}
     clockReady={clockReady}
     lowTime={clockReady && myTimeMs < CLOCK_LOW_TIME_MS}
-    firstMoveSeconds={myTurnActive ? firstMoveSeconds : null}
    />
 
    <Box customClass="gr-foot">
@@ -529,9 +545,9 @@ export default function GameRoom({ mode }: IGameRoomProps) {
       <Button
        variant="text"
        customClass="sheet-cancel-link gr-resign-btn"
-       onClick={() => setResignOpen(true)}
+       onClick={isStarted ? () => setResignOpen(true) : resign}
       >
-       {resignText}
+       {isStarted ? resignText : cancelText}
       </Button>
      </>
     )}
