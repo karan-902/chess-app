@@ -1,12 +1,7 @@
 @use "default.scss" as *;
 
 %gold-gradient-text {
- background: linear-gradient(
-  180deg,
-  $goldLight,
-  $gold 55%,
-  $btnPrimaryHover
- );
+ background: linear-gradient(180deg, $goldLight, $gold 55%, $btnPrimaryHover);
  -webkit-background-clip: text;
  background-clip: text;
  color: transparent;
@@ -496,12 +491,7 @@
  }
 
  &.public-title {
-  background: linear-gradient(
-   180deg,
-   $goldLight,
-   $gold 55%,
-   $btnPrimaryHover
-  );
+  background: linear-gradient(180deg, $goldLight, $gold 55%, $btnPrimaryHover);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -1242,15 +1232,15 @@
   gap: 0.25rem;
   padding: 0.25rem 0.625rem;
   border-bottom-left-radius: 8px;
-  background: $borderSubtle;
-  font-family: $fontOutfitSemiBold;
+  background: $btnPrimaryBg;
+  font-family: $fontOutfitBold;
   font-size: 12px;
   line-height: 1.2;
-  color: $textPrimary;
+  color: $btnPrimaryText;
 
   span {
    font-family: $fontOutfitMedium;
-   color: $textSecondary;
+   color: textOpacity($btnPrimaryText, 0.7);
   }
 
   @include from(phone) {
