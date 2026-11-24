@@ -83,7 +83,6 @@ export default function Header() {
        type="button"
        customClass="appbar-back-btn"
        startIcon="moveLeft"
-       ignoreApiPending
        onClick={goToPlay}
       >
        {backText}

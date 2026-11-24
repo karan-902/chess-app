@@ -134,7 +134,10 @@ async function getHeaders<TPayload = undefined>(
  };
 }
 
-const requestAPI = async <TResponse = unknown, TPayload = undefined>(
+export const callAPIInterface = async <
+ TResponse = unknown,
+ TPayload = undefined,
+>(
  method: Method,
  path: string,
  data?: TPayload,
@@ -202,36 +205,5 @@ const requestAPI = async <TResponse = unknown, TPayload = undefined>(
   }
 
   throw err;
- }
-};
-
-let pendingApiCount = 0;
-const pendingApiListeners = new Set<() => void>();
-
-export const subscribeApiPending = (listener: () => void) => {
- pendingApiListeners.add(listener);
- return () => pendingApiListeners.delete(listener);
-};
-
-export const getIsApiPending = () => pendingApiCount > 0;
-
-const changePendingApiCount = (delta: number) => {
- pendingApiCount += delta;
- pendingApiListeners.forEach((listener) => listener());
-};
-
-export const callAPIInterface = async <
- TResponse = unknown,
- TPayload = undefined,
->(
- method: Method,
- path: string,
- data?: TPayload,
-): Promise<TResponse> => {
- changePendingApiCount(1);
- try {
-  return await requestAPI<TResponse, TPayload>(method, path, data);
- } finally {
-  changePendingApiCount(-1);
  }
 };

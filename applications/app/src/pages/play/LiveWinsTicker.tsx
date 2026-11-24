@@ -16,7 +16,6 @@ import { LAST_LIVE_WIN_STORAGE_KEY } from "@gopvp/app/src/constants/storageKey";
 import {
  LIVE_WIN_SHOW_MS,
  LIVE_WIN_EXIT_MS,
- LIVE_WIN_MAX_AGE_MS,
 } from "@gopvp/app/src/constants/limit";
 
 export default function LiveWinsTicker() {
@@ -32,10 +31,8 @@ export default function LiveWinsTicker() {
   if (!seenIds) {
    seenIdsRef.current = new Set(liveWins.map(({ id }) => id));
    const [latest] = liveWins;
-   const isFresh = Date.now() - latest.created < LIVE_WIN_MAX_AGE_MS;
-   const isUnseen =
-    latest.id !== readStorage(sessionStorage, LAST_LIVE_WIN_STORAGE_KEY);
-   if (isFresh && isUnseen) setQueue([latest]);
+   if (latest.id !== readStorage(sessionStorage, LAST_LIVE_WIN_STORAGE_KEY))
+    setQueue([latest]);
    return;
   }
   const freshWins = liveWins.filter(({ id }) => !seenIds.has(id));

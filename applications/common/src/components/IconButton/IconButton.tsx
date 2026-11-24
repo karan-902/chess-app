@@ -1,32 +1,31 @@
-import { forwardRef, useSyncExternalStore } from "react";
+import { forwardRef } from "react";
 import { IconButton as MuiIconButton } from "@mui/material";
 import type { IconButtonProps } from "@mui/material";
 import classNames from "classnames";
 import { icons, type TIconName } from "@gopvp/common/src/components/images";
-import {
- getIsApiPending,
- subscribeApiPending,
-} from "@gopvp/common/src/util/api";
+import { usePendingClick } from "@gopvp/common/src/hooks/usePendingClick";
+import type { TButtonClickHandler } from "@gopvp/common/src/types/component";
 import "./icon-button.scss";
 
-interface IIconButtonProps extends Omit<IconButtonProps, "children"> {
+interface IIconButtonProps extends Omit<
+ IconButtonProps,
+ "children" | "onClick"
+> {
  customClass?: string;
  icon: TIconName;
- ignoreApiPending?: boolean;
+ onClick?: TButtonClickHandler;
 }
 
 export const CustomIconButton = forwardRef<HTMLButtonElement, IIconButtonProps>(
- ({ customClass, icon, onClick, ignoreApiPending, ...props }, ref) => {
+ ({ customClass, icon, onClick, ...props }, ref) => {
   const Icon = icons[icon];
-  const isApiLocked =
-   useSyncExternalStore(subscribeApiPending, getIsApiPending) &&
-   !ignoreApiPending;
+  const { isClickPending, handleClick } = usePendingClick(onClick);
   return (
    <MuiIconButton
     ref={ref}
     {...props}
-    onClick={isApiLocked ? undefined : onClick}
-    aria-disabled={isApiLocked || undefined}
+    onClick={isClickPending ? undefined : handleClick}
+    aria-disabled={isClickPending || undefined}
     className={classNames("common-icon-button", customClass)}
    >
     <Icon />

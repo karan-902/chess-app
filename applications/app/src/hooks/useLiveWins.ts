@@ -9,6 +9,7 @@ import type {
 import { FIRESTORE_COLLECTIONS } from "@gopvp/common/src/constants/endpoint";
 import { firebaseProjectId } from "@gopvp/common/src/constants/env";
 import { firebaseConfigMissingText } from "@gopvp/app/src/constants/message";
+import { LIVE_WIN_MAX_AGE_MS } from "@gopvp/app/src/constants/limit";
 
 export function useLiveWins() {
  const { game } = useGame();
@@ -28,8 +29,12 @@ export function useLiveWins() {
   return onSnapshot(
    doc(firestore, FIRESTORE_COLLECTIONS.LIVE_WINS, game),
    (snapshot) => {
+    const matches =
+     (snapshot.data() as ILiveWinsDocResponse | undefined)?.matches ?? [];
     setLiveWins(
-     (snapshot.data() as ILiveWinsDocResponse | undefined)?.matches ?? [],
+     matches.filter(
+      ({ created }) => Date.now() - created < LIVE_WIN_MAX_AGE_MS,
+     ),
     );
     setLoading(false);
    },

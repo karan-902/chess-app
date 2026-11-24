@@ -28,6 +28,12 @@ export default function CanvasAnimation({
 
   const paint = () => {
    const dpr = window.devicePixelRatio;
+   const pixelWidth = Math.round(width * dpr);
+   const pixelHeight = Math.round(height * dpr);
+   if (canvas.width !== pixelWidth || canvas.height !== pixelHeight) {
+    canvas.width = pixelWidth;
+    canvas.height = pixelHeight;
+   }
    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
    ctx.clearRect(0, 0, width, height);
    const frameData = { elapsed, width, height, style };
@@ -44,8 +50,6 @@ export default function CanvasAnimation({
 
   const resizeObserver = new ResizeObserver(([entry]) => {
    ({ width, height } = entry.contentRect);
-   canvas.width = Math.round(width * window.devicePixelRatio);
-   canvas.height = Math.round(height * window.devicePixelRatio);
    cancelAnimationFrame(frame);
    if (paint()) frame = requestAnimationFrame(tick);
   });

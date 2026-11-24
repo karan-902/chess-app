@@ -1,4 +1,9 @@
-import type { CanvasHTMLAttributes, ComponentType, ReactNode } from "react";
+import type {
+ CanvasHTMLAttributes,
+ ComponentType,
+ MouseEvent,
+ ReactNode,
+} from "react";
 import type { FormikProps } from "formik";
 import type { Socket } from "socket.io-client";
 import type {
@@ -10,6 +15,9 @@ import type {
 import type { ILoginBody } from "@gopvp/common/src/types/payload";
 
 export type LoginStep = "email" | "password" | "country"; // | "waiting-approval"
+export type TButtonClickHandler = (
+ event: MouseEvent<HTMLButtonElement>,
+) => unknown;
 export type ApproveDeviceStatus = "confirm" | "approved" | "invalid";
 export type MatchesSubtab = "history" | "global" | "stats";
 export type RoomTab = "create" | "join";

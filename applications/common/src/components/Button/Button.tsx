@@ -1,18 +1,19 @@
-import { forwardRef, useEffect, useRef, useSyncExternalStore } from "react";
+import { forwardRef, useEffect, useRef } from "react";
 import type { ButtonHTMLAttributes, MutableRefObject } from "react";
 import { ButtonBase } from "@mui/material";
 import classNames from "classnames";
 import "./button.scss";
 import Text from "@gopvp/common/src/components/Text/Text";
 import { icons, type TIconName } from "@gopvp/common/src/components/images";
-import {
- getIsApiPending,
- subscribeApiPending,
-} from "@gopvp/common/src/util/api";
+import { usePendingClick } from "@gopvp/common/src/hooks/usePendingClick";
+import type { TButtonClickHandler } from "@gopvp/common/src/types/component";
 
 type TButtonVariant = "contained" | "outlined" | "text";
 
-interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface IButtonProps extends Omit<
+ ButtonHTMLAttributes<HTMLButtonElement>,
+ "onClick"
+> {
  variant?: TButtonVariant;
  size?: "small" | "medium" | "large";
  fullWidth?: boolean;
@@ -21,7 +22,7 @@ interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
  loaderOnDark?: boolean;
  startIcon?: TIconName;
  endIcon?: TIconName;
- ignoreApiPending?: boolean;
+ onClick?: TButtonClickHandler;
 }
 
 export const Button = forwardRef<HTMLButtonElement, IButtonProps>(
@@ -38,7 +39,7 @@ export const Button = forwardRef<HTMLButtonElement, IButtonProps>(
    variant = "text",
    size = "medium",
    fullWidth,
-   ignoreApiPending,
+   onClick,
    ...props
   },
   ref,
@@ -79,16 +80,15 @@ export const Button = forwardRef<HTMLButtonElement, IButtonProps>(
   };
 
   const isDisabled = disabled || isLoading;
-  const isApiLocked =
-   useSyncExternalStore(subscribeApiPending, getIsApiPending) &&
-   !ignoreApiPending;
+  const { isClickPending, handleClick } = usePendingClick(onClick);
 
   return (
    <ButtonBase
     {...props}
     ref={setRefs}
     type={type}
-    disabled={isDisabled || isApiLocked}
+    onClick={handleClick}
+    disabled={isDisabled || isClickPending}
     disableRipple
     className={classNames(
      "common-button",

@@ -254,7 +254,6 @@ export default function DepositSheet() {
        onClick={() => setStage("amount")}
        aria-label={backText}
        icon="arrowLeft"
-       ignoreApiPending
       />
       <Text customClass="modal-heading value-heading">
        {depositingText}{" "}
