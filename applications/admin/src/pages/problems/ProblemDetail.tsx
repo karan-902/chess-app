@@ -79,6 +79,7 @@ export default function ProblemDetail() {
  const backButton = (
   <Button
    customClass="admin-btn admin-back-btn"
+   ignoreApiPending
    onClick={() => navigate(ROUTES.PROBLEMS)}
   >
    <ArrowLeft size={16} aria-hidden />

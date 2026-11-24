@@ -12,21 +12,21 @@ import "./icon-button.scss";
 interface IIconButtonProps extends Omit<IconButtonProps, "children"> {
  customClass?: string;
  icon: TIconName;
+ ignoreApiPending?: boolean;
 }
 
 export const CustomIconButton = forwardRef<HTMLButtonElement, IIconButtonProps>(
- ({ customClass, icon, onClick, ...props }, ref) => {
+ ({ customClass, icon, onClick, ignoreApiPending, ...props }, ref) => {
   const Icon = icons[icon];
-  const isApiPending = useSyncExternalStore(
-   subscribeApiPending,
-   getIsApiPending,
-  );
+  const isApiLocked =
+   useSyncExternalStore(subscribeApiPending, getIsApiPending) &&
+   !ignoreApiPending;
   return (
    <MuiIconButton
     ref={ref}
     {...props}
-    onClick={isApiPending ? undefined : onClick}
-    aria-disabled={isApiPending || undefined}
+    onClick={isApiLocked ? undefined : onClick}
+    aria-disabled={isApiLocked || undefined}
     className={classNames("common-icon-button", customClass)}
    >
     <Icon />

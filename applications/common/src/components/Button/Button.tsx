@@ -21,6 +21,7 @@ interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
  loaderOnDark?: boolean;
  startIcon?: TIconName;
  endIcon?: TIconName;
+ ignoreApiPending?: boolean;
 }
 
 export const Button = forwardRef<HTMLButtonElement, IButtonProps>(
@@ -37,6 +38,7 @@ export const Button = forwardRef<HTMLButtonElement, IButtonProps>(
    variant = "text",
    size = "medium",
    fullWidth,
+   ignoreApiPending,
    ...props
   },
   ref,
@@ -77,17 +79,16 @@ export const Button = forwardRef<HTMLButtonElement, IButtonProps>(
   };
 
   const isDisabled = disabled || isLoading;
-  const isApiPending = useSyncExternalStore(
-   subscribeApiPending,
-   getIsApiPending,
-  );
+  const isApiLocked =
+   useSyncExternalStore(subscribeApiPending, getIsApiPending) &&
+   !ignoreApiPending;
 
   return (
    <ButtonBase
     {...props}
     ref={setRefs}
     type={type}
-    disabled={isDisabled || isApiPending}
+    disabled={isDisabled || isApiLocked}
     disableRipple
     className={classNames(
      "common-button",
