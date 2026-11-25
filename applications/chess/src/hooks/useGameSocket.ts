@@ -20,6 +20,7 @@ import { drawOfferDeclinedText } from "@gopvp/chess/src/constants/message";
 import type {
  IDrawOfferEvent,
  IMatchResultResponse,
+ IOpponentOfflineEvent,
  ISocketAckError,
 } from "@gopvp/common/src/types/response";
 import type {
@@ -79,6 +80,9 @@ export function useGameSocket({
  const [opponentStatus, setOpponentStatus] = useState<
   "offline" | "reconnected" | null
  >(null);
+ const [opponentForfeitAt, setOpponentForfeitAt] = useState<number | null>(
+  null,
+ );
 
  useEffect(() => {
   if (opponentStatus !== "reconnected") return;
@@ -228,7 +232,10 @@ export function useGameSocket({
     toastVariant: "info",
    });
   };
-  const onOpponentOffline = () => setOpponentStatus("offline");
+  const onOpponentOffline = (data: IOpponentOfflineEvent) => {
+   setOpponentStatus("offline");
+   setOpponentForfeitAt(data.forfeitAt);
+  };
   const onOpponentOnline = () =>
    setOpponentStatus((status) =>
     status === "offline" ? "reconnected" : status,
@@ -328,6 +335,7 @@ export function useGameSocket({
   drawOffer,
   isDrawOffered,
   opponentStatus,
+  opponentForfeitAt,
   sendMove,
   resign,
   offerDraw,

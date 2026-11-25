@@ -54,7 +54,8 @@ import {
  cancelText,
  drawText,
 } from "@gopvp/common/src/constants/message";
-import { formatAmount } from "@gopvp/common/src/util/format";
+import { formatAmount, formatMMSS } from "@gopvp/common/src/util/format";
+import { useCountdown } from "@gopvp/common/src/hooks/useCountdown";
 import Button from "@gopvp/common/src/components/Button/Button";
 import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";
 import { icons } from "@gopvp/common/src/components/images";
@@ -238,6 +239,7 @@ export default function GameRoom({ mode }: IGameRoomProps) {
   drawOffer,
   isDrawOffered,
   opponentStatus,
+  opponentForfeitAt,
   sendMove,
   resign,
   offerDraw,
@@ -254,6 +256,9 @@ export default function GameRoom({ mode }: IGameRoomProps) {
   syncClock,
   setGameEnded,
  });
+ const opponentForfeitSeconds = useCountdown(
+  opponentStatus === "offline" && !gameEnded ? opponentForfeitAt : null,
+ );
 
  const legalMoves = useMemo(
   () => (fen && selectedSquare ? getLegalMoves(selectedSquare) : []),
@@ -447,6 +452,9 @@ export default function GameRoom({ mode }: IGameRoomProps) {
       <Text component="span" customClass="gr-board-tag-text">
        <b>{opponentName}</b>{" "}
        {opponentStatus === "offline" ? isReconnectingText : reconnectedText}
+       {opponentForfeitSeconds !== null && (
+        <b> {formatMMSS(opponentForfeitSeconds)}</b>
+       )}
       </Text>
      </Box>
     ) : (

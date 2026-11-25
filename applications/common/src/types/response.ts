@@ -303,6 +303,11 @@ export type IDrawOfferEvent = {
  offererId: string;
 };
 
+export type IOpponentOfflineEvent = {
+ userId: string;
+ forfeitAt: number | null;
+};
+
 export type IDrawDeclineEvent = {
  declinerId: string;
 };
