@@ -192,6 +192,8 @@ export type IRoomMatchedEvent = {
  time: number;
 };
 
+export type IRoomCancelledEvent = IPoolRemovedEvent & { roomCode: string };
+
 export type IMatchStartedEvent = {
  matchId: string;
  players: IMatchPlayer[];

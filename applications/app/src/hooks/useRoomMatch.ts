@@ -22,6 +22,7 @@ import type {
  IMatchPlayer,
  IMatchmakingResponse,
  IMatchStartedEvent,
+ IRoomCancelledEvent,
  IRoomMatchedEvent,
  ISocketAckError,
  IStartMatchResponse,
@@ -243,6 +244,13 @@ export function useRoomMatch(onRoomExpired?: () => void) {
    setStatus("waiting");
   };
 
+  const onRoomCancelled = (data: IRoomCancelledEvent) => {
+   if (data.roomCode !== roomRef.current?.code) return;
+   showAckErrorToast(data);
+   resetStatus();
+   onRoomExpiredRef.current?.();
+  };
+
   const onConnect = () => {
    const emit = pendingEmitRef.current;
    pendingEmitRef.current = null;
@@ -252,6 +260,7 @@ export function useRoomMatch(onRoomExpired?: () => void) {
   socket.on(SOCKET_EVENTS.MATCHED, onMatched);
   socket.on(SOCKET_EVENTS.MATCH_STARTED, onMatchStarted);
   socket.on(SOCKET_EVENTS.ROOM_LEFT, onRoomLeft);
+  socket.on(SOCKET_EVENTS.ROOM_CANCELLED, onRoomCancelled);
   socket.on(SOCKET_EVENTS.CONNECT, onConnect);
   if (socket.connected) onConnect();
 
@@ -260,8 +269,9 @@ export function useRoomMatch(onRoomExpired?: () => void) {
    socket.off(SOCKET_EVENTS.MATCHED, onMatched);
    socket.off(SOCKET_EVENTS.MATCH_STARTED, onMatchStarted);
    socket.off(SOCKET_EVENTS.ROOM_LEFT, onRoomLeft);
+   socket.off(SOCKET_EVENTS.ROOM_CANCELLED, onRoomCancelled);
   };
- }, [ctxSocket, openMatch]);
+ }, [ctxSocket, openMatch, resetStatus]);
 
  useEffect(() => {
   if (!savedRoom) return;

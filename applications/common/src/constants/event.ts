@@ -17,4 +17,5 @@ export const SOCKET_EVENTS = {
  ROOM_CANCEL: "room_cancel",
  ROOM_LEAVE: "room_leave",
  ROOM_LEFT: "room_left",
+ ROOM_CANCELLED: "room_cancelled",
 } as const;
