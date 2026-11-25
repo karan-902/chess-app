@@ -90,6 +90,12 @@ export default function RoomSheet({
    opponentName={opponentName}
   />
  );
+ const roomTimer = (
+  <Text customClass="match-timer" aria-label={expiresText}>
+   <icons.timer />
+   {formatMMSS(expiresInSeconds)}
+  </Text>
+ );
 
  useEffect(() => {
   if (!open) return;
@@ -152,6 +158,7 @@ export default function RoomSheet({
       {isOwner && <Text customClass="description">{startWhenReadyText}</Text>}
      </Box>
      {roomTicket}
+     {roomTimer}
      {!isOwner && <Box customClass="room-wait-spinner" aria-hidden />}
      <Box customClass="room-actions">
       {isOwner && (
@@ -186,10 +193,7 @@ export default function RoomSheet({
       </Box>
      </Box>
      {roomTicket}
-     <Text customClass="match-timer" aria-label={expiresText}>
-      <icons.timer />
-      {formatMMSS(expiresInSeconds)}
-     </Text>
+     {roomTimer}
      <Box customClass="room-actions">
       <Text
        component="button"
