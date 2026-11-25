@@ -1,5 +1,6 @@
 export const THEME_STORAGE_KEY = "gopvp_theme";
 export const LAST_LIVE_WIN_STORAGE_KEY = "gopvp_last_live_win";
+export const ROOM_STORAGE_KEY_PREFIX = "gopvp_room_";
 export const APP_STORAGE_NAME = "gopvp";
 export const APP_STORAGE_STORE_NAME = "app";
 export const SESSION_PERSIST_KEY = "GOPVP-SESSION";

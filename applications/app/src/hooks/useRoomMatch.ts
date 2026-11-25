@@ -15,6 +15,8 @@ import {
 } from "@gopvp/app/src/redux/hooks";
 import { setOpeningMatchId } from "@gopvp/app/src/redux/socketModals/slice";
 import { shortenUsername } from "@gopvp/common/src/util/format";
+import { readStorage, writeStorage } from "@gopvp/common/src/util/storage";
+import { ROOM_STORAGE_KEY_PREFIX } from "@gopvp/app/src/constants/storageKey";
 import type {
  ICreateRoomResponse,
  IMatchPlayer,
@@ -29,22 +31,37 @@ import { SOCKET_EVENTS } from "@gopvp/common/src/constants/event";
 export type RoomStatus =
  "idle" | "creating" | "waiting" | "joining" | "ready" | "starting" | "found";
 
-type TRoomInfo = { code: string; bet: number; time: number; win?: number };
+type TRoomInfo = {
+ code: string;
+ bet: number;
+ time: number;
+ win?: number;
+ expiry: number;
+ isOwner: boolean;
+};
 
 export function useRoomMatch(onRoomExpired?: () => void) {
- const [status, setStatus] = useState<RoomStatus>("idle");
- const [isOwner, setIsOwner] = useState(false);
- const [roomCode, setRoomCode] = useState<string | null>(null);
- const [players, setPlayers] = useState<IMatchPlayer[]>([]);
  const userId = useReduxSelector((state) => state.auth.session?.id);
+ const roomStorageKey = `${ROOM_STORAGE_KEY_PREFIX}${userId}`;
+ const [savedRoom] = useState<TRoomInfo | null>(() => {
+  const raw = readStorage(sessionStorage, roomStorageKey);
+  const room: TRoomInfo | null = raw ? JSON.parse(raw) : null;
+  return room && room.expiry > Date.now() ? room : null;
+ });
+ const [status, setStatus] = useState<RoomStatus>(
+  savedRoom ? (savedRoom.isOwner ? "waiting" : "ready") : "idle",
+ );
+ const [isOwner, setIsOwner] = useState(savedRoom?.isOwner ?? false);
+ const [roomCode, setRoomCode] = useState(savedRoom?.code ?? null);
+ const [players, setPlayers] = useState<IMatchPlayer[]>([]);
  const sessionUsername = useReduxSelector(
   (state) => state.auth.session?.username ?? "",
  );
- const [expiryAt, setExpiryAt] = useState<number | null>(null);
+ const [expiryAt, setExpiryAt] = useState(savedRoom?.expiry ?? null);
  const isRoomOpen =
   status === "waiting" || status === "ready" || status === "starting";
  const expiresInSeconds = useCountdown(isRoomOpen ? expiryAt : null);
- const roomRef = useRef<TRoomInfo | null>(null);
+ const roomRef = useRef(savedRoom);
  const pendingEmitRef = useRef<((socket: Socket) => void) | null>(null);
  const requestIdRef = useRef(0);
  const statusRef = useRef<RoomStatus>("idle");
@@ -62,37 +79,38 @@ export function useRoomMatch(onRoomExpired?: () => void) {
   setStatus("idle");
   setIsOwner(false);
   setRoomCode(null);
+  setPlayers([]);
   roomRef.current = null;
   pendingEmitRef.current = null;
- }, []);
+  writeStorage(sessionStorage, roomStorageKey, null);
+ }, [roomStorageKey]);
 
- const emitWhenConnected = (emit: (socket: Socket) => void) => {
+ const emitWhenConnected = useCallback((emit: (socket: Socket) => void) => {
   const socket = getSocket();
   if (socket?.connected) emit(socket);
   else pendingEmitRef.current = emit;
- };
+ }, []);
 
- const enterRoom = (
-  room: TRoomInfo,
-  owner: boolean,
-  nextStatus: RoomStatus,
- ) => {
+ const enterRoom = (room: TRoomInfo, nextStatus: RoomStatus) => {
   roomRef.current = room;
+  writeStorage(sessionStorage, roomStorageKey, JSON.stringify(room));
   setRoomCode(room.code);
-  setIsOwner(owner);
+  setIsOwner(room.isOwner);
+  setExpiryAt(room.expiry);
   setStatus(nextStatus);
  };
 
  const openMatch = useCallback(
   (matchId: string) => {
    if (!roomRef.current) return;
+   writeStorage(sessionStorage, roomStorageKey, null);
    const ticket = snapshotMatchTicket();
    if (ticket) startReveal?.(ticket);
    dispatch(setOpeningMatchId(matchId));
    setStatus("found");
    navigate(buildMatchUrl(game, matchId), { replace: true });
   },
-  [game, navigate, dispatch, startReveal],
+  [game, navigate, dispatch, startReveal, roomStorageKey],
  );
 
  const createRoom = (bet: number, timeSeconds: number) => {
@@ -117,15 +135,15 @@ export function useRoomMatch(onRoomExpired?: () => void) {
       resetStatus();
       return;
      }
-     setExpiryAt(data.expiry);
      enterRoom(
       {
        code: data.room_code,
        bet: data.bet,
        time: data.time,
        win: data.win_amount,
+       expiry: data.expiry,
+       isOwner: true,
       },
-      true,
       "waiting",
      );
     },
@@ -153,15 +171,15 @@ export function useRoomMatch(onRoomExpired?: () => void) {
      }
      if (data.status === "MATCHED" && data.match_type === "ROOM") {
       setPlayers(data.players);
-      setExpiryAt(data.expiry);
       enterRoom(
        {
         code: data.room_code,
         bet: data.bet,
         time: data.time,
         win: data.win_amount,
+        expiry: data.expiry,
+        isOwner: false,
        },
-       false,
        "ready",
       );
      }
@@ -220,7 +238,9 @@ export function useRoomMatch(onRoomExpired?: () => void) {
   const onMatchStarted = (data: IMatchStartedEvent) => openMatch(data.matchId);
 
   const onRoomLeft = () => {
-   if (statusRef.current === "ready") setStatus("waiting");
+   if (statusRef.current !== "ready") return;
+   setPlayers([]);
+   setStatus("waiting");
   };
 
   const onConnect = () => {
@@ -242,6 +262,29 @@ export function useRoomMatch(onRoomExpired?: () => void) {
    socket.off(SOCKET_EVENTS.ROOM_LEFT, onRoomLeft);
   };
  }, [ctxSocket, openMatch]);
+
+ useEffect(() => {
+  if (!savedRoom) return;
+  const requestId = requestIdRef.current;
+  emitWhenConnected((socket) =>
+   socket.emit(
+    SOCKET_EVENTS.ROOM_JOIN,
+    { room_code: savedRoom.code },
+    (err: ISocketAckError | null, data: IMatchmakingResponse) => {
+     if (requestId !== requestIdRef.current) return;
+     if (err) {
+      resetStatus();
+      onRoomExpiredRef.current?.();
+      return;
+     }
+     if (data.status === "MATCHED" && data.match_type === "ROOM") {
+      setPlayers(data.players);
+      setStatus("ready");
+     }
+    },
+   ),
+  );
+ }, [savedRoom, emitWhenConnected, resetStatus]);
 
  useEffect(() => {
   if ((status !== "waiting" && status !== "ready") || expiresInSeconds !== 0)

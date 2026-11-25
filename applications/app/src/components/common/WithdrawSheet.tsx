@@ -68,6 +68,7 @@ export default function WithdrawSheet() {
 
  const [destination, setDestination] = useState("");
  const [submitting, setSubmitting] = useState(false);
+ const [isBalanceLoading, setIsBalanceLoading] = useState(false);
 
  useEffect(() => {
   if (open) return;
@@ -97,7 +98,8 @@ export default function WithdrawSheet() {
 
  useEffect(() => {
   if (!open) return;
-  refetch();
+  setIsBalanceLoading(true);
+  refetch().finally(() => setIsBalanceLoading(false));
  }, [open, refetch]);
 
  const hasWithdrawable = withdrawableUsd > 0;
@@ -200,7 +202,7 @@ export default function WithdrawSheet() {
       customClass="modal-submit-btn"
       onClick={handleWithdraw}
       isLoading={submitting}
-      disabled={!canSubmit || submitting}
+      disabled={!canSubmit || submitting || isBalanceLoading}
      >
       {withdrawText}
      </Button>

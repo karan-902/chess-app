@@ -40,9 +40,7 @@ export function useWalletBalance() {
   (state) => state.wallet,
  );
 
- const refetch = useCallback(() => {
-  dispatch(fetchWalletBalance());
- }, [dispatch]);
+ const refetch = useCallback(() => dispatch(fetchWalletBalance()), [dispatch]);
 
  return {
   usdValue: balanceUsd,

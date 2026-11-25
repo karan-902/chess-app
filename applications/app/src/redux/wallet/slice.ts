@@ -1,4 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { clearSession } from "@gopvp/app/src/redux/auth/slice";
 import type {
  IBalanceResponse,
  IWalletDocResponse,
@@ -48,6 +49,9 @@ const walletSlice = createSlice({
   setWalletLoading: (state, action: PayloadAction<boolean>) => {
    state.loading = action.payload;
   },
+ },
+ extraReducers: (builder) => {
+  builder.addCase(clearSession, () => initialState);
  },
 });
 

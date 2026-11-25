@@ -296,10 +296,14 @@ export function useGameSocket({
  };
 
  const offerDraw = () =>
-  socket?.emit(GAME_EVENTS.DRAW_OFFER, (err: ISocketAckError | null) => {
-   if (err) showAckErrorToast(err);
-   else setIsDrawOffered(true);
-  });
+  socket &&
+  new Promise<void>((resolve) =>
+   socket.emit(GAME_EVENTS.DRAW_OFFER, (err: ISocketAckError | null) => {
+    if (err) showAckErrorToast(err);
+    else setIsDrawOffered(true);
+    resolve();
+   }),
+  );
 
  const acceptDraw = () => {
   setDrawOffer(null);

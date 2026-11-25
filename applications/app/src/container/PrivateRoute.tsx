@@ -30,7 +30,7 @@ function PrivateRoute() {
 
  useEffect(() => {
   if (isAppReady) dispatch(fetchWalletBalance());
- }, [isAppReady, dispatch]);
+ }, [isAppReady, location.pathname, dispatch]);
 
  useEffect(
   () =>

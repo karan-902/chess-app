@@ -108,6 +108,10 @@ export default function PlayPage() {
  }, [roomStatus]);
 
  useEffect(() => {
+  if (isRoomActive) setRoomOpen(true);
+ }, [isRoomActive]);
+
+ useEffect(() => {
   if (status === "queued" || status === "revealing" || roomOpen || practiceOpen)
    preloadGameRoom();
  }, [status, roomOpen, practiceOpen, preloadGameRoom]);
