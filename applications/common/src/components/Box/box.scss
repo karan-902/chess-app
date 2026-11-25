@@ -1601,15 +1601,6 @@
   gap: 8px;
  }
 
- &.room-wait-spinner {
-  align-self: center;
-  width: 1.5rem;
-  height: 1.5rem;
-  border: 2.5px solid $borderStrong;
-  border-top-color: $gold;
-  border-radius: 50%;
-  animation: room-wait-spin 0.8s linear infinite;
- }
  &.match-row-item {
   padding-bottom: 12px;
  }
@@ -3663,12 +3654,6 @@
  100% {
   opacity: 0;
   transform: rotate(-11deg) scale(0.9);
- }
-}
-
-@keyframes room-wait-spin {
- to {
-  transform: rotate(360deg);
  }
 }
 

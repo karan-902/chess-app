@@ -159,7 +159,6 @@ export default function RoomSheet({
      </Box>
      {roomTicket}
      {roomTimer}
-     {!isOwner && <Box customClass="room-wait-spinner" aria-hidden />}
      <Box customClass="room-actions">
       {isOwner && (
        <Button
