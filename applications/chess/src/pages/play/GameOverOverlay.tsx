@@ -6,7 +6,7 @@ import CustomDrawer from "@gopvp/common/src/components/Drawer/Drawer";
 import { MATCH_OUTCOME_SUBTITLES } from "@gopvp/common/src/constants/mapper";
 import { backText, chessText } from "@gopvp/common/src/constants/message";
 import { GAME_ICON_PATH } from "@gopvp/chess/src/constants/asset";
-import PayoutTicket from "@gopvp/chess/src/pages/play/PayoutTicket";
+import PayoutTicket from "@gopvp/common/src/components/PayoutTicket/PayoutTicket";
 import type { IGameOverOverlayProps } from "@gopvp/chess/src/types/component";
 
 export default function GameOverOverlay({

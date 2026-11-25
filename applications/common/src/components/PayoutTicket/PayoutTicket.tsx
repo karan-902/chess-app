@@ -5,8 +5,8 @@ import Text from "@gopvp/common/src/components/Text/Text";
 import CustomAvatar from "@gopvp/common/src/components/Avatar/Avatar";
 import Ticket from "@gopvp/common/src/components/Ticket/Ticket";
 import { formatAmount } from "@gopvp/common/src/util/format";
-import { scoreText } from "@gopvp/common/src/constants/message";
 import {
+ scoreText,
  payoutText,
  lossText,
  refundText,
@@ -16,15 +16,15 @@ import {
  drawText,
  cancelledText,
  vsText,
-} from "@gopvp/chess/src/constants/message";
+} from "@gopvp/common/src/constants/message";
 import { CoinStarIcon } from "@gopvp/common/src/components/constants";
 import {
  PAYOUT_TIMING,
  PAYOUT_COIN_COUNT,
  PAYOUT_SPARK_COUNT,
-} from "@gopvp/chess/src/constants/limit";
-import { clamp01, easeOutCubic } from "@gopvp/chess/src/utils/index";
-import type { IPayoutTicketProps } from "@gopvp/chess/src/types/component";
+} from "@gopvp/common/src/constants/limit";
+import { clamp01, easeOutCubic } from "@gopvp/common/src/util/easing";
+import type { IPayoutTicketProps } from "@gopvp/common/src/types/component";
 
 const STAMPS = {
  win: wonText,

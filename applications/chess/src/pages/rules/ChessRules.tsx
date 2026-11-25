@@ -11,6 +11,7 @@ import {
  Timer,
 } from "@gopvp/common/src/components/images";
 import type { LucideIcon } from "@gopvp/common/src/components/images";
+import { drawText } from "@gopvp/common/src/constants/message";
 import {
  howBettingWorksText,
  winnerTakeMostText,
@@ -20,7 +21,6 @@ import {
  payoutsText,
  anyWinText,
  potMinusFeeText,
- drawText,
  splitPotMinusFeeText,
  inactiveTooLongText,
  forfeitText,

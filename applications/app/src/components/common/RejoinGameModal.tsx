@@ -5,6 +5,7 @@ import Text from "@gopvp/common/src/components/Text/Text";
 import Button from "@gopvp/common/src/components/Button/Button";
 import { icons } from "@gopvp/common/src/components/images";
 import MatchTicket from "@gopvp/app/src/components/common/MatchTicket";
+import PayoutTicket from "@gopvp/common/src/components/PayoutTicket/PayoutTicket";
 import { useCountdown } from "@gopvp/common/src/hooks/useCountdown";
 import { useSocket } from "@gopvp/app/src/context/SocketContext";
 import { useReduxSelector, useReduxDispatch } from "@gopvp/app/src/redux/hooks";
@@ -27,7 +28,6 @@ import {
  leavingForfeitsText,
  forfeitAndExitText,
  matchOverText,
- amountText,
  entryText,
  winText,
  poolMinutesText,
@@ -161,22 +161,26 @@ export default function RejoinGameModal() {
       {sheet.description}
      </Text>
     </Box>
-    <MatchTicket
-     status="found"
-     chip={poolMinutesText(Math.round(shownGame.time / MS_PER_MINUTE))}
-     stats={[
-      { label: entryText, value: betAmount },
-      matchResult
-       ? {
-          label: amountText,
-          value: `${matchResult.amount > 0 ? "+" : ""}${formatAmount(matchResult.amount)}`,
-          isWin: matchResult.amount > 0,
-         }
-       : { label: winText, value: formatAmount(shownGame.prize), isWin: true },
-     ]}
-     myName={myName}
-     opponentName={opponentName}
-    />
+    {matchResult ? (
+     <PayoutTicket
+      gameEnded={matchResult}
+      outcome={MATCH_RESULT_OUTCOMES[matchResult.result]}
+      isPvc={false}
+      myName={myName}
+      opponentName={opponentName}
+     />
+    ) : (
+     <MatchTicket
+      status="found"
+      chip={poolMinutesText(Math.round(shownGame.time / MS_PER_MINUTE))}
+      stats={[
+       { label: entryText, value: betAmount },
+       { label: winText, value: formatAmount(shownGame.prize), isWin: true },
+      ]}
+      myName={myName}
+      opponentName={opponentName}
+     />
+    )}
     {forfeitSeconds !== null && !matchResult && (
      <Text customClass="match-timer low">
       <icons.timer />

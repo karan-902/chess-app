@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import Box from "@gopvp/common/src/components/Box/Box";
 import CanvasAnimation from "@gopvp/common/src/components/CanvasAnimation/CanvasAnimation";
 import { PieceIcon } from "@gopvp/common/src/components/constants";
+import { clamp01 } from "@gopvp/common/src/util/easing";
 import "./board.scss";
 import {
  FILES,
@@ -31,7 +32,6 @@ import {
 import {
  boardNudgeMotion,
  boardSweepMotion,
- clamp01,
  easeOutQuart,
  entranceDelayMs,
  fxMotion,

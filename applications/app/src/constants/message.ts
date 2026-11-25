@@ -14,7 +14,6 @@ export const usernameRequiredText = "Username is required";
 export const usernameMinLengthText = "Username must be at least 3 characters";
 export const forfeitAndExitText = "Forfeit & Exit";
 export const matchOverText = "Match Over";
-export const amountText = "Amount";
 export const backToSignInText = "← Back to Sign In";
 export const emailText = "Email";
 export const enterEmailText = "Enter your email";

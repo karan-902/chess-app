@@ -10,6 +10,7 @@ import {
  PIECE_MOVE_BASE_MS,
  PIECE_MOVE_PER_SQUARE_MS,
 } from "@gopvp/chess/src/constants/limit";
+import { clamp01, easeOutCubic } from "@gopvp/common/src/util/easing";
 
 export function oppositeSide(side: "w" | "b"): "w" | "b" {
  return side === "w" ? "b" : "w";
@@ -17,12 +18,10 @@ export function oppositeSide(side: "w" | "b"): "w" | "b" {
 export function msToSeconds(ms: number): number {
  return ms / 1000;
 }
-export const clamp01 = (value: number) => Math.max(0, Math.min(1, value));
 export const smoothStep = (value: number) => {
  const p = clamp01(value);
  return p * p * (3 - 2 * p);
 };
-export const easeOutCubic = (value: number) => 1 - (1 - clamp01(value)) ** 3;
 export const easeOutQuart = (p: number) => 1 - (1 - p) ** 4;
 export const easeOutBack = (p: number) =>
  1 + 2.2 * (p - 1) ** 3 + 1.2 * (p - 1) ** 2;

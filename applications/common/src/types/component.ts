@@ -13,6 +13,7 @@ import type {
  IPoolResponse,
 } from "@gopvp/common/src/types/response";
 import type { ILoginBody } from "@gopvp/common/src/types/payload";
+import type { MatchOutcome } from "@gopvp/common/src/types/index";
 
 export type LoginStep = "email" | "password" | "country"; // | "waiting-approval"
 export type TButtonClickHandler = (
@@ -214,4 +215,12 @@ export interface IBetSheetProps {
  onPracticeOpen?: () => void;
  onRoomOpen: () => void;
  onInsufficientBalance: () => void;
+}
+
+export interface IPayoutTicketProps {
+ gameEnded: IMatchResultResponse;
+ outcome: MatchOutcome;
+ isPvc: boolean;
+ myName: string;
+ opponentName: string;
 }

@@ -1,5 +1,4 @@
-import type { IMatchResultResponse } from "@gopvp/common/src/types/response";
-import type { MatchOutcome } from "@gopvp/common/src/types/index";
+import type { IPayoutTicketProps } from "@gopvp/common/src/types/component";
 import type {
  GameCategory,
  MoveRecord,
@@ -60,16 +59,9 @@ export interface IReviewControlsProps extends IMoveListProps {
  goForward: () => void;
 }
 
-export interface IGameOverOverlayProps {
- gameEnded: IMatchResultResponse;
- outcome: MatchOutcome;
- isPvc: boolean;
- myName: string;
- opponentName: string;
+export interface IGameOverOverlayProps extends IPayoutTicketProps {
  onNewGame: () => void;
 }
-
-export type IPayoutTicketProps = Omit<IGameOverOverlayProps, "onNewGame">;
 
 export interface IResignSheetProps {
  open: boolean;

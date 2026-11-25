@@ -38,7 +38,6 @@ import type { IMatchResultResponse } from "@gopvp/common/src/types/response";
 import type { IGameRoomProps } from "@gopvp/chess/src/types/component";
 import {
  resignText,
- drawText,
  drawOfferedText,
  offersDrawText,
  acceptText,
@@ -50,7 +49,11 @@ import {
  moveOfText,
  startPositionText,
 } from "@gopvp/chess/src/constants/message";
-import { practiceText, cancelText } from "@gopvp/common/src/constants/message";
+import {
+ practiceText,
+ cancelText,
+ drawText,
+} from "@gopvp/common/src/constants/message";
 import { formatAmount } from "@gopvp/common/src/util/format";
 import Button from "@gopvp/common/src/components/Button/Button";
 import CustomIconButton from "@gopvp/common/src/components/IconButton/IconButton";

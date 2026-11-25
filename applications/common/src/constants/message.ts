@@ -17,6 +17,15 @@ export const youLostToText = (name: string) => `You lost to ${name}`;
 export const drawWithText = (name: string) => `Draw with ${name}`;
 export const cancelledWithText = (name: string) => `Cancelled vs ${name}`;
 export const betReturnedText = () => "Your bet has been returned";
+export const freePlayTicketText = "Free ticket";
+export const payoutText = "Payout";
+export const lossText = "Loss";
+export const refundText = "Refund";
+export const wonText = "Won";
+export const lostText = "Lost";
+export const drawText = "Draw";
+export const cancelledText = "Cancelled";
+export const vsText = "VS";
 export const justNowText = "just now";
 export const timeAgoText = (value: number, unit: string) =>
  `${value}${unit} ago`;
