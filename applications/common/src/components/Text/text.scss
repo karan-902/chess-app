@@ -981,12 +981,9 @@
  }
 
  .match-sheet.lost &.public-title,
- .result-sheet:not(.win) &.public-title {
+ .result-sheet:not(.win) &.public-title,
+ .game-over-sheet &.public-title {
   background: none;
-  color: $textPrimary;
- }
-
- .game-over-sheet.loss &.public-title {
   color: $textPrimary;
  }
 
@@ -1100,7 +1097,7 @@
   width: fit-content;
   margin: 0 auto;
   padding: 0.25rem 0.75rem;
-  background: textOpacity($ticketPaperTop, 0.85);
+  background: textOpacity($paper, 0.85);
   border: 2.5px solid var(--payout-stamp);
   border-radius: 4px;
   font-family: $fontOutfitBlack;
@@ -1121,10 +1118,6 @@
    inset: 2px;
    border: 1px solid var(--payout-stamp);
    border-radius: 2px;
-  }
-
-  .payout-stage:is(.loss, .draw) & {
-   background: textOpacity($paper, 0.85);
   }
 
   .practice & {

@@ -152,11 +152,9 @@
   .match-confirm-sheet &,
   .practice-sheet &,
   .room-sheet &,
-  .result-sheet:not(.game-over-sheet) &,
+  .result-sheet &,
   .wallet-sheet &,
-  .common-drawer:has(.resign-sheet) &,
-  .game-over-sheet.loss &,
-  .game-over-sheet:has(.payout-stage.draw) & {
+  .common-drawer:has(.resign-sheet) & {
    border-color: $borderStrong;
    border-radius: 10px;
    background: transparent;

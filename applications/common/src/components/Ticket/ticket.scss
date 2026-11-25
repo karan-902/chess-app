@@ -47,10 +47,7 @@
   --ticket-stub: var(--payout-stub);
   max-width: none;
   padding-bottom: 1.125rem;
-
-  .payout-stage:is(.loss, .draw) & {
-   background: linear-gradient(180deg, $paper, $paperShade);
-  }
+  background: linear-gradient(180deg, $paper, $paperShade);
 
   .ticket-stub {
    height: 1.875rem;

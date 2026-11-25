@@ -217,13 +217,8 @@ export default function PayoutTicket({
    customClass={classNames(
     "payout-stage",
     isPvc ? `practice ${outcome}` : outcome,
-    {
-     lit: isWin,
-    },
    )}
   >
-   <Box customClass="payout-floor" />
-   <Box customClass="payout-beam" />
    <Box customClass="payout-rise">
     <Box customClass="payout-ticket">
      <Ticket

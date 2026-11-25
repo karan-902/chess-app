@@ -47,15 +47,6 @@
  }
 
 
- &.result-sheet.neutral .MuiDrawer-paper {
-  background: $cardBg;
- }
-
- &.game-over-sheet.win .MuiDrawer-paper,
- &.game-over-sheet.loss .MuiDrawer-paper {
-  background: $cardBg;
- }
-
  &.game-over-sheet .MuiDrawer-paper {
   padding-top: 1.5rem;
 
@@ -112,11 +103,9 @@
  &.match-confirm-sheet .MuiDrawer-paper,
  &.practice-sheet .MuiDrawer-paper,
  &.room-sheet .MuiDrawer-paper,
- &.result-sheet:not(.game-over-sheet) .MuiDrawer-paper,
+ &.result-sheet .MuiDrawer-paper,
  &.wallet-sheet .MuiDrawer-paper,
- &:has(.resign-sheet) .MuiDrawer-paper,
- &.game-over-sheet.loss .MuiDrawer-paper,
- &.game-over-sheet:has(.payout-stage.draw) .MuiDrawer-paper {
+ &:has(.resign-sheet) .MuiDrawer-paper {
   border-top: 1px solid $borderSubtle;
   border-radius: 16px 16px 0 0 !important;
   background: $cardBg;
