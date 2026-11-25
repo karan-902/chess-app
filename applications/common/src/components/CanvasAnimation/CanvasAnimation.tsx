@@ -13,6 +13,7 @@ export default function CanvasAnimation({
  const canvasRef = useRef<HTMLCanvasElement>(null);
  const latest = useRef({ draw, isPaused });
  latest.current = { draw, isPaused };
+ const wakeRef = useRef<(() => void) | null>(null);
 
  useEffect(() => {
   const canvas = canvasRef.current;
@@ -45,13 +46,17 @@ export default function CanvasAnimation({
    if (isRunning)
     elapsed += Math.min(Math.max(now - lastNow, 0), CANVAS_MAX_FRAME_MS);
    lastNow = now;
-   if (!isRunning || paint()) frame = requestAnimationFrame(tick);
+   frame = !isRunning || paint() ? requestAnimationFrame(tick) : 0;
+  };
+
+  wakeRef.current = () => {
+   if (!frame && width) frame = requestAnimationFrame(tick);
   };
 
   const resizeObserver = new ResizeObserver(([entry]) => {
    ({ width, height } = entry.contentRect);
    cancelAnimationFrame(frame);
-   if (paint()) frame = requestAnimationFrame(tick);
+   frame = paint() ? requestAnimationFrame(tick) : 0;
   });
   const intersectionObserver = new IntersectionObserver(([entry]) => {
    isOnScreen = entry.isIntersecting;
@@ -65,6 +70,8 @@ export default function CanvasAnimation({
    cancelAnimationFrame(frame);
   };
  }, []);
+
+ useEffect(() => wakeRef.current?.());
 
  return (
   <canvas
