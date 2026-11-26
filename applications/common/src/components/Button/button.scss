@@ -775,6 +775,7 @@
  }
 
  &.room-paste-btn,
+ &.auth-resend-btn,
  &.copy-label-btn {
   --btn-gap: 0.375rem;
   flex-shrink: 0;
@@ -794,7 +795,8 @@
   }
  }
 
- &.room-paste-btn {
+ &.room-paste-btn,
+ &.auth-resend-btn {
   --btn-pad: 4px 0;
   align-self: center;
   color: $gold;

@@ -219,7 +219,12 @@ export default function LoginForm() {
     title={checkYourEmailText}
     subtitle={codeSentToText(loginFormik.values.email)}
    >
-    <OtpScreen onVerify={handleVerifyCode} onBack={() => setChallenge(null)} />
+    <OtpScreen
+     key={challenge.ticket}
+     onVerify={handleVerifyCode}
+     onResend={loginFormik.submitForm}
+     onBack={() => setChallenge(null)}
+    />
    </AuthLayout>
   );
  }

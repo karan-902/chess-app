@@ -120,7 +120,12 @@ export default function ForgotPassword() {
     subtitle={codeSentToText(emailFormik.values.email)}
     footerCard={loginFooter}
    >
-    <OtpScreen onVerify={handleVerifyCode} onBack={() => setTicket("")} />
+    <OtpScreen
+     key={ticket}
+     onVerify={handleVerifyCode}
+     onResend={emailFormik.submitForm}
+     onBack={() => setTicket("")}
+    />
    </AuthLayout>
   );
  }

@@ -454,6 +454,19 @@
   margin-top: -0.25rem;
  }
 
+ &.auth-resend-hint {
+  align-self: center;
+  padding: 4px 0;
+  font-family: $fontOutfitMedium;
+  font-size: 13px;
+  white-space: nowrap;
+  color: $textSecondary;
+
+  @include from(phone) {
+   font-size: 14px;
+  }
+ }
+
  &.auth-footer-row {
   justify-content: center;
   flex-shrink: 0;

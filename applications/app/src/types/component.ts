@@ -184,6 +184,7 @@ export interface IAuthFooter {
 
 export interface IOtpScreenProps {
  onVerify: (otp: string) => Promise<void>;
+ onResend: () => Promise<unknown>;
  onBack: () => void;
 }
 

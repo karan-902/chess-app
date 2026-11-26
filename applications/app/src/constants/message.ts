@@ -59,6 +59,8 @@ export const checkYourEmailText = "Check your email";
 export const codeSentToText = (email: string) =>
  `Enter the code we sent to ${email}`;
 export const verifyText = "Verify";
+export const resendCodeText = "Resend code";
+export const resendCodeInText = (time: string) => `Resend code in ${time}`;
 export const resetPasswordText = "Reset password";
 export const enterEmailForCodeText = "Enter your email and we'll send you a code";
 export const sendCodeText = "Send code";
