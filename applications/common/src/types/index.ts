@@ -1,5 +1,6 @@
 export type SignupMethod = "EMAIL" | "GOOGLE";
 export type SessionState = "ACTIVE" | "INACTIVE" | "EXPIRED";
+export type TwoFactorType = "NEW_DEVICE" | "VERIFY_EMAIL" | "RESET_PASSWORD";
 
 export type TransactionType = "CREDIT" | "DEBIT";
 export type TransactionCode =

@@ -32,7 +32,8 @@
  }
 
  &.room-code-otp,
- &.admin-otp {
+ &.admin-otp,
+ &.auth-otp {
   align-self: stretch;
   gap: 0.5rem;
 

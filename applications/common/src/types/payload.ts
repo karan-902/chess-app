@@ -34,6 +34,21 @@ export type IGoogleLoginBody = {
  fingerprint?: string;
 };
 
+export type IVerifyCodeBody = {
+ ticket: string;
+ otp: string;
+};
+
+export type IForgotPasswordBody = {
+ email: string;
+ fingerprint: string;
+};
+
+export type IResetPasswordBody = {
+ ticket: string;
+ password: string;
+};
+
 export type IGenerateTokenBody = {
  refresh_token: string;
 };

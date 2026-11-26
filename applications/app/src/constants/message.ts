@@ -55,6 +55,15 @@ export const loginText = "Login";
 export const forgotPasswordText = "Forgot password?";
 export const verifyEmailToContinueText =
  "Please verify your email to continue.";
+export const checkYourEmailText = "Check your email";
+export const codeSentToText = (email: string) =>
+ `Enter the code we sent to ${email}`;
+export const verifyText = "Verify";
+export const resetPasswordText = "Reset password";
+export const enterEmailForCodeText = "Enter your email and we'll send you a code";
+export const sendCodeText = "Send code";
+export const newPasswordText = "New password";
+export const chooseNewPasswordText = "Choose a strong new password";
 export const signUpText = "Sign up";
 export const enterUsernameText = "Enter username";
 export const clearUsernameText = "Clear username";

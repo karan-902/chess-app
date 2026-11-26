@@ -4,6 +4,7 @@ import PrivateRoute from "@gopvp/app/src/container/PrivateRoute";
 import PublicRoute from "@gopvp/app/src/container/PublicRoute";
 import Login from "@gopvp/app/src/pages/login";
 import Register from "@gopvp/app/src/pages/register";
+import ForgotPassword from "@gopvp/app/src/pages/forgot-password";
 // import ApproveDevice from "@gopvp/app/src/pages/approve-device";
 import Wallet from "@gopvp/app/src/pages/wallet";
 import Profile from "@gopvp/app/src/pages/profile";
@@ -23,6 +24,7 @@ export const router = createBrowserRouter([
     children: [
      { path: ROUTES.LOGIN, element: <Login /> },
      { path: ROUTES.REGISTER, element: <Register /> },
+     { path: ROUTES.FORGOT_PASSWORD, element: <ForgotPassword /> },
     ],
    },
    // { path: ROUTES.APPROVE_DEVICE, element: <ApproveDevice /> },

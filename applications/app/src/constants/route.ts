@@ -3,6 +3,7 @@ export const ROUTES = {
  PICK_GAME: "/pick-game",
  LOGIN: "/login",
  REGISTER: "/register",
+ FORGOT_PASSWORD: "/forgot-password",
  WALLET: "/wallet",
  PROFILE: "/profile",
  APPROVE_DEVICE: "/approve-device",

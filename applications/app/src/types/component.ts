@@ -182,6 +182,11 @@ export interface IAuthFooter {
  to: string;
 }
 
+export interface IOtpScreenProps {
+ onVerify: (otp: string) => Promise<void>;
+ onBack: () => void;
+}
+
 export interface IAuthLayoutProps {
  title: string;
  subtitle?: string;

@@ -4,6 +4,7 @@ import type {
  SignupMethod,
  TransactionCode,
  TransactionType,
+ TwoFactorType,
 } from "@gopvp/common/src/types/index";
 
 export type IMessageResponse = {
@@ -56,6 +57,12 @@ export type ILoginResponse = {
  access_token: string;
  refresh_token: string;
  last_login: number;
+};
+
+export type IOtpRequiredResponse = {
+ status: "otp_required";
+ type: TwoFactorType;
+ ticket: string;
 };
 
 export type IGenerateTokenResponse = {

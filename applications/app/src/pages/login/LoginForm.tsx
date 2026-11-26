@@ -9,12 +9,23 @@ import AuthLayout from "@gopvp/app/src/container/AuthLayout";
 import { useGoogleAuth } from "@gopvp/app/src/hooks/useGoogleAuth";
 // import { useDeviceApprovalPoll } from "@gopvp/app/src/hooks/useDeviceApprovalPoll";
 import SelectCountryScreen from "@gopvp/app/src/pages/select-country/SelectCountryScreen";
+import OtpScreen from "@gopvp/app/src/components/common/OtpScreen";
 import { showToastMessage } from "@gopvp/common/src/util/injectStore";
-import type { IApiErrorInfo } from "@gopvp/common/src/types/response";
+import { callAPIInterface } from "@gopvp/common/src/util/api";
+import sessionService from "@gopvp/common/src/util/sessionService";
+import { ENDPOINTS } from "@gopvp/common/src/constants/endpoint";
+import type {
+ IApiErrorInfo,
+ ILoginResponse,
+ IOtpRequiredResponse,
+} from "@gopvp/common/src/types/response";
 import { useReduxDispatch } from "@gopvp/app/src/redux/hooks";
 import { login } from "@gopvp/app/src/redux/auth/thunk";
 import { showLoader, hideLoader } from "@gopvp/app/src/redux/common/slice";
-import type { ILoginBody } from "@gopvp/common/src/types/payload";
+import type {
+ ILoginBody,
+ IVerifyCodeBody,
+} from "@gopvp/common/src/types/payload";
 // import type { ILoginResponse } from "@gopvp/common/src/types/response";
 // import type { IPasswordValues } from "@gopvp/common/src/types/component";
 import type { LoginStep } from "@gopvp/common/src/types/component";
@@ -32,6 +43,8 @@ import {
  wherePlayingFromText,
  pickCountryToFinishText,
  signingInText,
+ checkYourEmailText,
+ codeSentToText,
 } from "@gopvp/app/src/constants/message";
 import { ROUTES } from "@gopvp/app/src/constants/route";
 import { emailRule, passwordRule } from "@gopvp/app/src/utils/validation";
@@ -73,6 +86,9 @@ export default function LoginForm() {
  const [step, setStep] = useState<LoginStep>(
   searchParams.get("step") === "country" ? "country" : "email",
  );
+ const [challenge, setChallenge] = useState<IOtpRequiredResponse | null>(
+  null,
+ );
  // const [verifiedEmail, setVerifiedEmail] = useState("");
  // const [verifiedUsername, setVerifiedUsername] = useState("");
  // const devicePoll = useDeviceApprovalPoll();
@@ -92,7 +108,8 @@ export default function LoginForm() {
    dispatch(showLoader({ text: signingInText }));
    try {
     const res = await dispatch(login({ email, password })).unwrap();
-    if (!res.country) setStep("country");
+    if ("status" in res) setChallenge(res);
+    else if (!res.country) setStep("country");
    } catch (err) {
     const { isNetworkError, status, message } = err as IApiErrorInfo;
     if (!isNetworkError && status !== 429 && message)
@@ -105,6 +122,19 @@ export default function LoginForm() {
  });
 
  const { googleLogin, isProcessing } = useGoogleAuth(loginFormik.values.email);
+
+ const handleVerifyCode = async (otp: string) => {
+  if (!challenge) return;
+  const res = await callAPIInterface<ILoginResponse, IVerifyCodeBody>(
+   "POST",
+   challenge.type === "NEW_DEVICE"
+    ? ENDPOINTS.VERIFY_DEVICE
+    : ENDPOINTS.VERIFY_EMAIL,
+   { ticket: challenge.ticket, otp },
+  );
+  await sessionService.saveSession(res);
+  if (!res.country) setStep("country");
+ };
 
  // useEffect(() => {
  //  if (!pendingApprovalToken) return;
@@ -182,6 +212,17 @@ export default function LoginForm() {
   actionText: signUpText,
   to: ROUTES.REGISTER,
  };
+
+ if (challenge) {
+  return (
+   <AuthLayout
+    title={checkYourEmailText}
+    subtitle={codeSentToText(loginFormik.values.email)}
+   >
+    <OtpScreen onVerify={handleVerifyCode} onBack={() => setChallenge(null)} />
+   </AuthLayout>
+  );
+ }
 
  // if (step === "waiting-approval") {
  //  return (

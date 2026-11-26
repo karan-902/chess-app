@@ -26,6 +26,7 @@ export const MATCH_HISTORY_RETRY_DELAY_MS = 1000;
 export const DEVICE_APPROVAL_POLL_MS = 45000;
 export const MS_PER_MINUTE = 60000;
 export const ROOM_CODE_LENGTH = 6;
+export const OTP_LENGTH = 6;
 export const HISTORY_SKELETON_ROWS = 15;
 export const MATCH_STATS_SKELETON_ROWS = 4;
 export const LEADERBOARD_SKELETON_ROWS = 20;

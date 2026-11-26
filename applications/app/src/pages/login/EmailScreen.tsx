@@ -15,6 +15,7 @@ import {
  orText,
  continueWithGoogleText,
 } from "@gopvp/app/src/constants/message";
+import { ROUTES } from "@gopvp/app/src/constants/route";
 
 export default function EmailScreen({
  formik,
@@ -60,7 +61,7 @@ export default function EmailScreen({
    />
 
    <Text customClass="auth-forgot-row">
-    <NavLink to="/forgot-password" className="auth-link">
+    <NavLink to={ROUTES.FORGOT_PASSWORD} className="auth-link">
      {forgotPasswordText}
     </NavLink>
    </Text>
